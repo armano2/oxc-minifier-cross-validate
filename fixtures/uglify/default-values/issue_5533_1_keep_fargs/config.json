@@ -1,0 +1,9 @@
+{
+  "evaluate": true,
+  "inline": true,
+  "join_vars": true,
+  "keep_fargs": true,
+  "loops": true,
+  "side_effects": true,
+  "unused": true
+}

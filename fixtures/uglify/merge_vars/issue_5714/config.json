@@ -1,0 +1,7 @@
+{
+  "inline": true,
+  "join_vars": true,
+  "loops": true,
+  "merge_vars": true,
+  "unused": true
+}

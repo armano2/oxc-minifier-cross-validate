@@ -1,0 +1,6 @@
+{
+  "keep_fargs": false,
+  "merge_vars": true,
+  "reduce_vars": true,
+  "unused": true
+}

@@ -1,0 +1,16 @@
+"undefined" == typeof A && "undefined" == typeof B && (A, B);
+"undefined" == typeof A && "undefined" != typeof B && (A, B);
+"undefined" != typeof A && "undefined" == typeof B && (A, B);
+"undefined" != typeof A && "undefined" != typeof B && (A, B);
+"undefined" == typeof A && "undefined" == typeof B || (A, B);
+"undefined" == typeof A && "undefined" != typeof B || (A, B);
+"undefined" != typeof A && "undefined" == typeof B || (A, B);
+"undefined" != typeof A && "undefined" != typeof B || (A, B);
+"undefined" == typeof A || "undefined" == typeof B && (A, B);
+"undefined" == typeof A || "undefined" != typeof B && (A, B);
+"undefined" != typeof A || "undefined" == typeof B && (A, B);
+"undefined" != typeof A || "undefined" != typeof B && (A, B);
+"undefined" == typeof A || "undefined" == typeof B || (A, B);
+"undefined" == typeof A || "undefined" != typeof B || (A, B);
+"undefined" != typeof A || "undefined" == typeof B || (A, B);
+"undefined" != typeof A || "undefined" != typeof B || (A, B);

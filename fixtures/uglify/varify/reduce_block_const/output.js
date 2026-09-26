@@ -1,0 +1,2 @@
+var a = typeof console;
+console.log(a);

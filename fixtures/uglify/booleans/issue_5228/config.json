@@ -1,0 +1,6 @@
+{
+  "booleans": true,
+  "evaluate": true,
+  "inline": true,
+  "passes": 2
+}

@@ -1,0 +1,7 @@
+{
+  "dead_code": true,
+  "evaluate": true,
+  "loops": true,
+  "merge_vars": true,
+  "switches": true
+}

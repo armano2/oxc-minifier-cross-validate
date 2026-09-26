@@ -1,0 +1,18 @@
+console.log(Array());
+console.log(Array(0));
+console.log(Array(1));
+console.log(Array(6));
+console.log(Array(7));
+console.log(Array(1, 2));
+console.log(Array(false));
+console.log(Array("foo"));
+console.log(Array(Array));
+console.log(new Array());
+console.log(new Array(0));
+console.log(new Array(1));
+console.log(new Array(6));
+console.log(new Array(7));
+console.log(new Array(1, 2));
+console.log(new Array(false));
+console.log(new Array("foo"));
+console.log(new Array(Array));

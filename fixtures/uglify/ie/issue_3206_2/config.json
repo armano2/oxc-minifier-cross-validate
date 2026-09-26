@@ -1,0 +1,7 @@
+{
+  "evaluate": true,
+  "ie": true,
+  "reduce_vars": true,
+  "typeofs": true,
+  "unused": true
+}

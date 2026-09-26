@@ -1,0 +1,11 @@
+{
+  "collapse_vars": true,
+  "conditionals": true,
+  "evaluate": true,
+  "if_return": true,
+  "inline": true,
+  "passes": 2,
+  "sequences": true,
+  "spreads": true,
+  "unused": true
+}

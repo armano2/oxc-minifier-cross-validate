@@ -1,0 +1,5 @@
+{
+  "evaluate": true,
+  "loops": true,
+  "unsafe": true
+}

@@ -1,0 +1,6 @@
+{
+  "booleans": true,
+  "collapse_vars": true,
+  "reduce_vars": true,
+  "unused": true
+}

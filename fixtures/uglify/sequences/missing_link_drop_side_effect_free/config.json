@@ -1,0 +1,6 @@
+{
+  "conditionals": true,
+  "evaluate": true,
+  "sequences": true,
+  "side_effects": true
+}

@@ -1,0 +1,7 @@
+{
+  "booleans": true,
+  "evaluate": true,
+  "reduce_vars": true,
+  "strings": true,
+  "toplevel": true
+}

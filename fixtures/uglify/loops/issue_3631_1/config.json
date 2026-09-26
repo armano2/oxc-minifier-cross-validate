@@ -1,0 +1,8 @@
+{
+  "dead_code": true,
+  "evaluate": true,
+  "loops": true,
+  "reduce_vars": true,
+  "toplevel": true,
+  "unused": true
+}

@@ -1,0 +1,7 @@
+{
+  "evaluate": true,
+  "hoist_exports": true,
+  "reduce_vars": true,
+  "toplevel": true,
+  "unused": true
+}

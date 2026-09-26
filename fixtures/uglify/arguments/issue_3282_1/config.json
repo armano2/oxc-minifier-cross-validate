@@ -1,0 +1,7 @@
+{
+  "arguments": true,
+  "reduce_funcs": true,
+  "reduce_vars": true,
+  "keep_fargs": false,
+  "unused": true
+}

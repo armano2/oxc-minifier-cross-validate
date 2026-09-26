@@ -1,0 +1,9 @@
+{
+  "functions": true,
+  "hoist_vars": true,
+  "join_vars": true,
+  "keep_fnames": true,
+  "reduce_vars": true,
+  "toplevel": true,
+  "unused": true
+}

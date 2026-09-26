@@ -1,0 +1,8 @@
+{
+  "evaluate": true,
+  "passes": 2,
+  "pure_getters": true,
+  "side_effects": true,
+  "unsafe": true,
+  "unused": true
+}

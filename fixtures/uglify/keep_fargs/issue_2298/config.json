@@ -1,0 +1,8 @@
+{
+  "collapse_vars": true,
+  "keep_fargs": false,
+  "passes": 2,
+  "reduce_funcs": true,
+  "reduce_vars": true,
+  "unused": true
+}

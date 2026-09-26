@@ -1,0 +1,9 @@
+{
+  "directives": true,
+  "ie": true,
+  "inline": true,
+  "passes": 2,
+  "reduce_funcs": true,
+  "reduce_vars": true,
+  "unused": true
+}

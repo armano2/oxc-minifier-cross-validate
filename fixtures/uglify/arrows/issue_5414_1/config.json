@@ -1,0 +1,6 @@
+{
+  "arrows": true,
+  "if_return": true,
+  "inline": true,
+  "toplevel": true
+}

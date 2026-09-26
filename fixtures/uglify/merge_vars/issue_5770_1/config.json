@@ -1,0 +1,6 @@
+{
+  "dead_code": true,
+  "loops": true,
+  "merge_vars": true,
+  "toplevel": true
+}

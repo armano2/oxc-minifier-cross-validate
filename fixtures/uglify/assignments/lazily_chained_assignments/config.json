@@ -1,0 +1,6 @@
+{
+  "assignments": true,
+  "collapse_vars": true,
+  "conditionals": true,
+  "unused": true
+}

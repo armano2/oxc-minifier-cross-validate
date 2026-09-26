@@ -1,0 +1,18 @@
+console.log([]);
+console.log([]);
+console.log([,]);
+console.log([,,,,,,]);
+console.log(Array(7));
+console.log([ 1, 2 ]);
+console.log([ false ]);
+console.log([ "foo" ]);
+console.log(Array(Array));
+console.log([]);
+console.log([]);
+console.log([,]);
+console.log([,,,,,,]);
+console.log(Array(7));
+console.log([ 1, 2 ]);
+console.log([ false ]);
+console.log([ "foo" ]);
+console.log(Array(Array));

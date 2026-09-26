@@ -1,0 +1,10 @@
+{
+  "conditionals": true,
+  "evaluate": true,
+  "passes": 2,
+  "reduce_funcs": true,
+  "reduce_vars": true,
+  "sequences": true,
+  "side_effects": true,
+  "unused": true
+}

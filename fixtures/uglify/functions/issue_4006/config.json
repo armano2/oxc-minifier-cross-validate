@@ -1,0 +1,10 @@
+{
+  "dead_code": true,
+  "evaluate": true,
+  "inline": true,
+  "keep_fargs": false,
+  "reduce_vars": true,
+  "sequences": true,
+  "side_effects": true,
+  "unused": true
+}

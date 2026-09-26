@@ -1,0 +1,14 @@
+var a = "PASS";
+Array.prototype[1] = a;
+console.log([, ].length);
+console.log("" + [, , ]);
+console.log([1, , 3][1]);
+console.log([1, 2, 3, a] + 1);
+console.log([1, 2, 3, 4] + 1);
+console.log([1, 2, 3, a][0] + 1);
+console.log([1, 2, 3, 4][0] + 1);
+console.log([1, 2, 3, 4][6 - 5] + 1);
+console.log([1, , 3, 4][6 - 5] + 1);
+console.log([[1, 2], [3, 4]][0] + 1);
+console.log([[1, 2], [3, 4]][6 - 5][1] + 1);
+console.log([[1, 2], , [3, 4]][6 - 5][1] + 1);

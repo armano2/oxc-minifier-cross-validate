@@ -1,0 +1,6 @@
+{
+  "passes": 2,
+  "reduce_vars": true,
+  "toplevel": true,
+  "unused": true
+}

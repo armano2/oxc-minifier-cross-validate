@@ -1,0 +1,1 @@
+console.log(`\ud801\udc37\ud801\ud801\udc37${42}\u{10437}`);

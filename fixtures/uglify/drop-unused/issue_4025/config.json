@@ -1,0 +1,8 @@
+{
+  "collapse_vars": true,
+  "evaluate": true,
+  "passes": 2,
+  "reduce_vars": true,
+  "toplevel": true,
+  "unused": true
+}

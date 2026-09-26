@@ -1,0 +1,6 @@
+{
+  "dead_code": true,
+  "pure_getters": "strict",
+  "sequences": true,
+  "side_effects": true
+}

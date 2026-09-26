@@ -1,0 +1,4 @@
+{
+  "pure_funcs": "Math.random",
+  "side_effects": true
+}

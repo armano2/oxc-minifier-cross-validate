@@ -1,0 +1,9 @@
+{
+  "collapse_vars": true,
+  "evaluate": true,
+  "inline": true,
+  "reduce_vars": true,
+  "sequences": true,
+  "toplevel": true,
+  "unused": true
+}

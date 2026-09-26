@@ -1,0 +1,6 @@
+{
+  "awaits": true,
+  "if_return": true,
+  "inline": true,
+  "side_effects": true
+}

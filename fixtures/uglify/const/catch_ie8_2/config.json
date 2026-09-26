@@ -1,0 +1,7 @@
+{
+  "dead_code": true,
+  "ie": true,
+  "passes": 2,
+  "toplevel": true,
+  "unused": true
+}

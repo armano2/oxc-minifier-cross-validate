@@ -1,0 +1,8 @@
+{
+  "if_return": true,
+  "inline": true,
+  "keep_fargs": false,
+  "reduce_vars": true,
+  "toplevel": true,
+  "unused": true
+}

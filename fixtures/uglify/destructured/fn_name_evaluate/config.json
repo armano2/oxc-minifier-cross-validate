@@ -1,0 +1,6 @@
+{
+  "evaluate": true,
+  "objects": true,
+  "reduce_vars": true,
+  "typeofs": true
+}

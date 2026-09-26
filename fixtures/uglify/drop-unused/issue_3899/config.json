@@ -1,0 +1,12 @@
+{
+  "assignments": true,
+  "evaluate": true,
+  "functions": true,
+  "inline": true,
+  "join_vars": true,
+  "passes": 2,
+  "reduce_vars": true,
+  "side_effects": true,
+  "toplevel": true,
+  "unused": true
+}

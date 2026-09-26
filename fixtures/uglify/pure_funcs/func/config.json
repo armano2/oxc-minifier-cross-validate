@@ -1,0 +1,4 @@
+{
+  "pure_funcs": "function(node) {\n            return !~node.args[0].print_to_string().indexOf(\"a\");\n        }",
+  "side_effects": true
+}

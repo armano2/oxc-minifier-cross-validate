@@ -1,0 +1,7 @@
+{
+  "inline": true,
+  "merge_vars": true,
+  "sequences": true,
+  "side_effects": true,
+  "toplevel": true
+}

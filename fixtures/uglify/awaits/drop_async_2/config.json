@@ -1,0 +1,7 @@
+{
+  "awaits": true,
+  "collapse_vars": true,
+  "evaluate": true,
+  "inline": true,
+  "side_effects": true
+}

@@ -1,0 +1,8 @@
+{
+  "collapse_vars": true,
+  "hoist_vars": true,
+  "join_vars": true,
+  "reduce_vars": true,
+  "toplevel": true,
+  "unused": true
+}

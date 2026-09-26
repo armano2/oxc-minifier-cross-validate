@@ -1,0 +1,6 @@
+{
+  "conditionals": true,
+  "negate_iife": true,
+  "sequences": true,
+  "side_effects": true
+}

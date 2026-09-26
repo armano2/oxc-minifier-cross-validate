@@ -1,0 +1,5 @@
+{
+  "evaluate": true,
+  "optional_chains": true,
+  "side_effects": true
+}

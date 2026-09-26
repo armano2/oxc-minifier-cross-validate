@@ -1,0 +1,6 @@
+{
+  "collapse_vars": true,
+  "conditionals": true,
+  "dead_code": true,
+  "evaluate": true
+}

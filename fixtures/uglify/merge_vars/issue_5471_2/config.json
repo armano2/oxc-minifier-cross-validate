@@ -1,0 +1,10 @@
+{
+  "conditionals": true,
+  "evaluate": true,
+  "inline": true,
+  "merge_vars": true,
+  "reduce_vars": true,
+  "sequences": true,
+  "toplevel": true,
+  "unused": true
+}

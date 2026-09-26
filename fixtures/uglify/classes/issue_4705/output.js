@@ -1,0 +1,3 @@
+(class {
+    [console.log("PASS")]() {}
+});

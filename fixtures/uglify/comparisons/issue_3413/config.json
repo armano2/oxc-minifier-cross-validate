@@ -1,0 +1,5 @@
+{
+  "comparisons": true,
+  "evaluate": true,
+  "side_effects": true
+}

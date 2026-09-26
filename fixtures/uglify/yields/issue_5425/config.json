@@ -1,0 +1,7 @@
+{
+  "assignments": true,
+  "ie": true,
+  "toplevel": true,
+  "unused": true,
+  "yields": true
+}

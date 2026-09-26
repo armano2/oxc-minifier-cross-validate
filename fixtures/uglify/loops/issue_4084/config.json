@@ -1,0 +1,6 @@
+{
+  "keep_fargs": false,
+  "loops": true,
+  "reduce_vars": true,
+  "unused": true
+}

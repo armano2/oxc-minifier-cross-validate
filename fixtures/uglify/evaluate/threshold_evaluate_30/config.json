@@ -1,0 +1,6 @@
+{
+  "evaluate": 30,
+  "reduce_vars": true,
+  "toplevel": true,
+  "unused": true
+}

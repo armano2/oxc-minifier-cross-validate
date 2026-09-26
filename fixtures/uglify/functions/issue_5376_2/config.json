@@ -1,0 +1,9 @@
+{
+  "evaluate": true,
+  "inline": true,
+  "join_vars": true,
+  "loops": true,
+  "side_effects": true,
+  "toplevel": true,
+  "unused": true
+}

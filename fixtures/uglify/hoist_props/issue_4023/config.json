@@ -1,0 +1,9 @@
+{
+  "comparisons": true,
+  "hoist_props": true,
+  "inline": true,
+  "reduce_vars": true,
+  "toplevel": true,
+  "typeofs": true,
+  "unused": true
+}

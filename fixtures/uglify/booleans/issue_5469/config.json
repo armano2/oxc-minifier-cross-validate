@@ -1,0 +1,9 @@
+{
+  "assignments": true,
+  "booleans": true,
+  "conditionals": true,
+  "dead_code": true,
+  "evaluate": true,
+  "pure_getters": "strict",
+  "side_effects": true
+}

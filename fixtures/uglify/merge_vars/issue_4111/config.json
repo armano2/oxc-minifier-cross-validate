@@ -1,0 +1,6 @@
+{
+  "join_vars": true,
+  "loops": true,
+  "merge_vars": true,
+  "toplevel": true
+}

@@ -1,0 +1,5 @@
+{
+  "conditionals": true,
+  "passes": 2,
+  "side_effects": true
+}

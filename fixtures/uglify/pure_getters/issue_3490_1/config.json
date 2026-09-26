@@ -1,0 +1,9 @@
+{
+  "conditionals": true,
+  "dead_code": true,
+  "inline": true,
+  "pure_getters": true,
+  "sequences": true,
+  "side_effects": true,
+  "toplevel": true
+}

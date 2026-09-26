@@ -1,0 +1,10 @@
+/* @__PURE__ */(function(){x})(), void/* @__PURE__ */(function(){y})();
+/* @__PURE__ */(function(){x})() || true ? foo() : bar();
+true || /* @__PURE__ */(function(){y})() ? foo() : bar();
+/* @__PURE__ */(function(){x})() && false ? foo() : bar();
+false && /* @__PURE__ */(function(){y})() ? foo() : bar();
+/* @__PURE__ */(function(){x})() + "foo" ? bar() : baz();
+"foo" + /* @__PURE__ */(function(){y})() ? bar() : baz();
+/* @__PURE__ */(function(){x})() ? foo() : foo();
+[/* @__PURE__ */(function(){x})()] ? foo() : bar();
+!{ foo: /* @__PURE__ */(function(){x})() } ? bar() : baz();

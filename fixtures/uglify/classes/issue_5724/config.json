@@ -1,0 +1,7 @@
+{
+  "arrows": true,
+  "inline": true,
+  "keep_fargs": true,
+  "toplevel": true,
+  "unused": true
+}

@@ -1,0 +1,8 @@
+{
+  "conditionals": true,
+  "if_return": true,
+  "inline": true,
+  "pure_getters": "strict",
+  "side_effects": true,
+  "unused": true
+}

@@ -1,0 +1,14 @@
+{
+  "collapse_vars": true,
+  "conditionals": true,
+  "dead_code": true,
+  "evaluate": true,
+  "inline": true,
+  "keep_fargs": false,
+  "negate_iife": true,
+  "passes": 2,
+  "reduce_vars": true,
+  "sequences": true,
+  "side_effects": true,
+  "unused": true
+}

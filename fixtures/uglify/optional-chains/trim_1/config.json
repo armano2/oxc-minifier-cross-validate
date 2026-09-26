@@ -1,0 +1,6 @@
+{
+  "evaluate": true,
+  "optional_chains": true,
+  "reduce_vars": true,
+  "unsafe": true
+}

@@ -1,0 +1,7 @@
+{
+  "collapse_vars": true,
+  "pure_getters": "strict",
+  "sequences": true,
+  "side_effects": true,
+  "unused": true
+}

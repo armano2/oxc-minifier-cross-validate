@@ -1,0 +1,5 @@
+{
+  "arrows": true,
+  "if_return": true,
+  "side_effects": true
+}

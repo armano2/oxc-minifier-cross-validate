@@ -1,0 +1,6 @@
+{
+  "reduce_vars": true,
+  "rests": true,
+  "toplevel": true,
+  "unused": true
+}

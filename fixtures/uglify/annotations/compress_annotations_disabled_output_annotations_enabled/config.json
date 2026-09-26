@@ -1,0 +1,6 @@
+{
+  "annotations": false,
+  "evaluate": true,
+  "sequences": true,
+  "side_effects": true
+}

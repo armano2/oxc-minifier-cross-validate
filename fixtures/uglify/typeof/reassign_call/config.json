@@ -1,0 +1,6 @@
+{
+  "comparisons": true,
+  "conditionals": true,
+  "passes": 2,
+  "typeofs": true
+}

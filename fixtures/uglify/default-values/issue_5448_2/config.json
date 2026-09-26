@@ -1,0 +1,5 @@
+{
+  "keep_fargs": true,
+  "reduce_vars": true,
+  "unused": true
+}

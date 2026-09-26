@@ -1,0 +1,9 @@
+{
+  "conditionals": true,
+  "evaluate": true,
+  "keep_fnames": true,
+  "passes": 2,
+  "reduce_vars": true,
+  "side_effects": true,
+  "toplevel": true
+}

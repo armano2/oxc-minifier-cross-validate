@@ -1,0 +1,10 @@
+{
+  "conditionals": true,
+  "dead_code": true,
+  "evaluate": true,
+  "inline": true,
+  "reduce_vars": true,
+  "sequences": true,
+  "side_effects": true,
+  "toplevel": true
+}

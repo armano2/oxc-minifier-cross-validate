@@ -1,0 +1,6 @@
+{
+  "reduce_funcs": false,
+  "reduce_vars": true,
+  "toplevel": true,
+  "unused": true
+}

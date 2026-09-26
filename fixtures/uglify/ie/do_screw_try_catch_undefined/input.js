@@ -1,0 +1,10 @@
+function a(b) {
+    try {
+        throw "Stuff";
+    } catch (undefined) {
+        console.log("caught: " + undefined);
+    }
+    console.log("undefined is " + undefined);
+    return b === undefined;
+}
+console.log(a(42), a(void 0));

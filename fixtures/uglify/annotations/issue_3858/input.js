@@ -1,0 +1,6 @@
+var f = function(a) {
+    return /*@__PURE__*/ function(b) {
+        console.log(b);
+    }(a);
+};
+f("PASS");

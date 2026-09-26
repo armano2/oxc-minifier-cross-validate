@@ -1,0 +1,10 @@
+{
+  "evaluate": true,
+  "keep_fargs": false,
+  "objects": true,
+  "pure_getters": "strict",
+  "reduce_vars": true,
+  "side_effects": true,
+  "toplevel": true,
+  "unused": true
+}

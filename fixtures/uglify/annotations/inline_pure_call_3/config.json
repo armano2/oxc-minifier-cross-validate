@@ -1,0 +1,11 @@
+{
+  "annotations": true,
+  "collapse_vars": true,
+  "evaluate": true,
+  "inline": true,
+  "keep_fargs": false,
+  "passes": 2,
+  "reduce_vars": true,
+  "toplevel": true,
+  "unused": true
+}

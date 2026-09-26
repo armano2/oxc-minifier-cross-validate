@@ -1,0 +1,8 @@
+{
+  "conditionals": true,
+  "dead_code": true,
+  "evaluate": true,
+  "reduce_vars": true,
+  "toplevel": true,
+  "unsafe": true
+}

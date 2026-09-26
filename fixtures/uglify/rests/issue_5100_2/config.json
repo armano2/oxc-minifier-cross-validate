@@ -1,0 +1,6 @@
+{
+  "passes": 2,
+  "pure_getters": "strict",
+  "side_effects": true,
+  "unused": true
+}

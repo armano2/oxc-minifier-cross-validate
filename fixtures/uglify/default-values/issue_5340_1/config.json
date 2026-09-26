@@ -1,0 +1,5 @@
+{
+  "keep_fargs": true,
+  "pure_getters": "strict",
+  "unused": true
+}

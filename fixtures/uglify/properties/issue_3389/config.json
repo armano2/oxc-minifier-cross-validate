@@ -1,0 +1,6 @@
+{
+  "evaluate": true,
+  "properties": true,
+  "reduce_vars": true,
+  "unsafe": true
+}

@@ -1,0 +1,10 @@
+var a = function*() {
+    yield;
+    console.log(yield);
+    yield
+    "FAIL 1";
+}();
+console.log(a.next("FAIL 2").value);
+console.log(a.next("FAIL 3").value);
+console.log(a.next("PASS").value);
+console.log(a.next("FAIL 4").done);

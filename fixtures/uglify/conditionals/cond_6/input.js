@@ -1,0 +1,14 @@
+x ? a : b;
+x ? a : a;
+
+x ? y ? a : b : c;
+x ? y ? a : a : b;
+x ? y ? a : b : b;
+x ? y ? a : b : a;
+x ? y ? a : a : a;
+
+x ? a : y ? b : c;
+x ? a : y ? a : b;
+x ? a : y ? b : b;
+x ? a : y ? b : a;
+x ? a : y ? a : a;

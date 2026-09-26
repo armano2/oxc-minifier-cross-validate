@@ -1,0 +1,6 @@
+{
+  "keep_fargs": false,
+  "passes": 2,
+  "reduce_vars": true,
+  "unused": true
+}

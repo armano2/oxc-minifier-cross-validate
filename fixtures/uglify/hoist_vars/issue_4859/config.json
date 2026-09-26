@@ -1,0 +1,10 @@
+{
+  "evaluate": true,
+  "hoist_vars": true,
+  "join_vars": true,
+  "keep_infinity": true,
+  "merge_vars": true,
+  "reduce_vars": true,
+  "toplevel": true,
+  "unused": true
+}

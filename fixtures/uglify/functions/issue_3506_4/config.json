@@ -1,0 +1,10 @@
+{
+  "collapse_vars": true,
+  "dead_code": true,
+  "evaluate": true,
+  "inline": 3,
+  "loops": true,
+  "reduce_vars": true,
+  "side_effects": true,
+  "unused": true
+}

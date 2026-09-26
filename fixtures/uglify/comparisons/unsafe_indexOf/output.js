@@ -1,0 +1,15 @@
+var a = Object.keys({ foo: 42 });
+if (!~a.indexOf("bar")) console.log("PASS");
+if (!~a.indexOf("bar")) console.log("PASS");
+if (~a.indexOf("foo")) console.log("PASS");
+if (~a.indexOf("foo")) console.log("PASS");
+if (~a.indexOf("foo")) console.log("PASS");
+if (~a.indexOf("foo")) console.log("PASS");
+if (!~a.indexOf("bar")) console.log("PASS");
+if (!~a.indexOf("bar")) console.log("PASS");
+if (!~a.indexOf("bar")) console.log("PASS");
+if (!~a.indexOf("bar")) console.log("PASS");
+if (~a.indexOf("foo")) console.log("PASS");
+if (~a.indexOf("foo")) console.log("PASS");
+if (~a.indexOf("foo")) console.log("PASS");
+if (~a.indexOf("foo")) console.log("PASS");

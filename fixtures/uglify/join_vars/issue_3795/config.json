@@ -1,0 +1,13 @@
+{
+  "booleans": true,
+  "collapse_vars": true,
+  "dead_code": true,
+  "evaluate": true,
+  "join_vars": true,
+  "keep_fargs": false,
+  "loops": true,
+  "passes": 2,
+  "reduce_vars": true,
+  "toplevel": true,
+  "unused": true
+}

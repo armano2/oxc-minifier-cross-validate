@@ -1,0 +1,5 @@
+{
+  "hoist_vars": true,
+  "inline": true,
+  "toplevel": true
+}

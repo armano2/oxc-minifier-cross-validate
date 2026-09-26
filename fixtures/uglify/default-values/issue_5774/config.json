@@ -1,0 +1,9 @@
+{
+  "collapse_vars": true,
+  "conditionals": true,
+  "evaluate": true,
+  "join_vars": true,
+  "reduce_vars": true,
+  "sequences": true,
+  "unsafe": true
+}

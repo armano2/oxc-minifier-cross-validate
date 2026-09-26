@@ -1,0 +1,10 @@
+{
+  "conditionals": true,
+  "dead_code": true,
+  "evaluate": true,
+  "reduce_vars": true,
+  "rests": true,
+  "side_effects": true,
+  "switches": true,
+  "unsafe": true
+}

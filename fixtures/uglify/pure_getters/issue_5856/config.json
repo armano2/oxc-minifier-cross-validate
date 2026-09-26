@@ -1,0 +1,6 @@
+{
+  "pure_getters": true,
+  "reduce_vars": true,
+  "side_effects": true,
+  "unused": true
+}

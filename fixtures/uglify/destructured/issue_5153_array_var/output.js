@@ -1,0 +1,4 @@
+var a = function*() {
+    yield b;
+}(), [ b ] = b = a;
+console.log(a === b ? "PASS" : "FAIL");

@@ -1,0 +1,11 @@
+{
+  "annotations": true,
+  "collapse_vars": true,
+  "inline": true,
+  "keep_fargs": false,
+  "reduce_vars": true,
+  "sequences": true,
+  "side_effects": true,
+  "toplevel": true,
+  "unused": true
+}

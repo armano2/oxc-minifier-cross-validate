@@ -1,0 +1,4 @@
+var a;
+a = console;
+a = A = ++a;
+console.log(A);

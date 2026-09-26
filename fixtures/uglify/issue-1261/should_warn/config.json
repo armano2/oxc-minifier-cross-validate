@@ -1,0 +1,7 @@
+{
+  "annotations": true,
+  "booleans": true,
+  "conditionals": true,
+  "evaluate": true,
+  "side_effects": true
+}

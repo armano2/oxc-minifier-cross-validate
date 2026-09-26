@@ -1,0 +1,6 @@
+{
+  "keep_fargs": false,
+  "reduce_vars": true,
+  "rests": true,
+  "toplevel": true
+}

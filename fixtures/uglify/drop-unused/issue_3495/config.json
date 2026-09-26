@@ -1,0 +1,6 @@
+{
+  "dead_code": true,
+  "pure_getters": "strict",
+  "side_effects": true,
+  "unused": true
+}

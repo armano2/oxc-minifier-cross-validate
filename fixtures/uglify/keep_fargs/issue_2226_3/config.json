@@ -1,0 +1,6 @@
+{
+  "collapse_vars": true,
+  "keep_fargs": false,
+  "side_effects": true,
+  "unused": true
+}

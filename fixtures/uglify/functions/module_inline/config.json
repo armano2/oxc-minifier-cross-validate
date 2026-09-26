@@ -1,0 +1,6 @@
+{
+  "inline": true,
+  "module": true,
+  "reduce_vars": true,
+  "toplevel": true
+}

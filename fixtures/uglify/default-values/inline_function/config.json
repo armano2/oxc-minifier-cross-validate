@@ -1,0 +1,8 @@
+{
+  "default_values": true,
+  "inline": true,
+  "sequences": true,
+  "side_effects": true,
+  "toplevel": true,
+  "unused": true
+}

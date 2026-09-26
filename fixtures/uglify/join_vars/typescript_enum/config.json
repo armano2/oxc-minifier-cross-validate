@@ -1,0 +1,14 @@
+{
+  "assignments": true,
+  "collapse_vars": true,
+  "evaluate": true,
+  "hoist_props": true,
+  "inline": true,
+  "join_vars": true,
+  "passes": 4,
+  "reduce_vars": true,
+  "sequences": true,
+  "side_effects": true,
+  "toplevel": true,
+  "unused": true
+}

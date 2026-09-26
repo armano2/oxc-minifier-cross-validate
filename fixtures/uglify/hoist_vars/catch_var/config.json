@@ -1,0 +1,7 @@
+{
+  "dead_code": true,
+  "hoist_vars": true,
+  "side_effects": true,
+  "toplevel": true,
+  "unused": true
+}

@@ -1,0 +1,8 @@
+{
+  "conditionals": true,
+  "dead_code": true,
+  "if_return": true,
+  "loops": true,
+  "merge_vars": true,
+  "toplevel": true
+}

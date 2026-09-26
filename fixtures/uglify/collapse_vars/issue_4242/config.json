@@ -1,0 +1,6 @@
+{
+  "collapse_vars": true,
+  "conditionals": true,
+  "reduce_vars": true,
+  "unused": true
+}

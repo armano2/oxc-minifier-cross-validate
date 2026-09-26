@@ -1,0 +1,14 @@
+{
+  "collapse_vars": true,
+  "conditionals": true,
+  "inline": true,
+  "join_vars": true,
+  "negate_iife": true,
+  "passes": 3,
+  "reduce_funcs": true,
+  "reduce_vars": true,
+  "sequences": true,
+  "side_effects": true,
+  "toplevel": true,
+  "unused": true
+}

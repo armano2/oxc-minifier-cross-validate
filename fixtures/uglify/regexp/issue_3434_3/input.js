@@ -1,0 +1,12 @@
+RegExp("\n");
+RegExp("\r");
+RegExp("\\n");
+RegExp("\\\n");
+RegExp("\\\\n");
+RegExp("\\\\\n");
+RegExp("\\\\\\n");
+RegExp("\\\\\\\n");
+RegExp("\u2028");
+RegExp("\u2029");
+RegExp("\n\r\u2028\u2029");
+RegExp("\\\nfo\n[\n]o\\bbb");

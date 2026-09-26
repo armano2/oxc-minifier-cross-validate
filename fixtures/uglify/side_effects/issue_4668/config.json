@@ -1,0 +1,9 @@
+{
+  "conditionals": true,
+  "keep_fargs": false,
+  "keep_fnames": true,
+  "reduce_vars": true,
+  "side_effects": true,
+  "toplevel": true,
+  "unused": true
+}

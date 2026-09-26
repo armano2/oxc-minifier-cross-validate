@@ -1,0 +1,5 @@
+{
+  "hoist_vars": true,
+  "join_vars": true,
+  "unused": true
+}

@@ -1,0 +1,16 @@
+"object" == typeof A && "object" == typeof B && (A, B);
+"object" == typeof A && "object" != typeof B && (A, B);
+"object" != typeof A && "object" == typeof B && (A, B);
+"object" != typeof A && "object" != typeof B && (A, B);
+"object" == typeof A && "object" == typeof B || (A, B);
+"object" == typeof A && "object" != typeof B || (A, B);
+"object" != typeof A && "object" == typeof B || (A, B);
+"object" != typeof A && "object" != typeof B || (A, B);
+"object" == typeof A || "object" == typeof B && (A, B);
+"object" == typeof A || "object" != typeof B && (A, B);
+"object" != typeof A || "object" == typeof B && (A, B);
+"object" != typeof A || "object" != typeof B && (A, B);
+"object" == typeof A || "object" == typeof B || (A, B);
+"object" == typeof A || "object" != typeof B || (A, B);
+"object" != typeof A || "object" == typeof B || (A, B);
+"object" != typeof A || "object" != typeof B || (A, B);

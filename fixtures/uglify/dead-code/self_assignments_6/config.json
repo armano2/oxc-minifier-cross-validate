@@ -1,0 +1,7 @@
+{
+  "dead_code": true,
+  "pure_getters": "strict",
+  "reduce_vars": true,
+  "side_effects": true,
+  "toplevel": true
+}

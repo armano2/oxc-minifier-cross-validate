@@ -1,0 +1,10 @@
+{
+  "booleans": true,
+  "evaluate": true,
+  "functions": true,
+  "inline": true,
+  "passes": 2,
+  "reduce_vars": true,
+  "toplevel": true,
+  "unused": true
+}

@@ -1,0 +1,6 @@
+{
+  "dead_code": true,
+  "evaluate": true,
+  "reduce_vars": true,
+  "switches": true
+}

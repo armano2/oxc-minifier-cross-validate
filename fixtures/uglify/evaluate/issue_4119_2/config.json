@@ -1,0 +1,6 @@
+{
+  "conditionals": true,
+  "evaluate": true,
+  "reduce_vars": true,
+  "unsafe": true
+}

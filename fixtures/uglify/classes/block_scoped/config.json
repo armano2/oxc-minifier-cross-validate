@@ -1,0 +1,5 @@
+{
+  "evaluate": true,
+  "dead_code": true,
+  "loops": true
+}

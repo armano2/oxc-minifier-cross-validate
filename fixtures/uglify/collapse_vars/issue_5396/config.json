@@ -1,0 +1,7 @@
+{
+  "collapse_vars": true,
+  "merge_vars": true,
+  "reduce_vars": true,
+  "side_effects": true,
+  "unused": true
+}

@@ -1,0 +1,9 @@
+{
+  "dead_code": true,
+  "evaluate": true,
+  "ie": true,
+  "inline": true,
+  "loops": true,
+  "sequences": true,
+  "toplevel": true
+}

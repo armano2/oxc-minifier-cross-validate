@@ -1,0 +1,9 @@
+{
+  "collapse_vars": true,
+  "evaluate": true,
+  "hoist_vars": true,
+  "loops": true,
+  "reduce_vars": true,
+  "toplevel": true,
+  "unused": true
+}

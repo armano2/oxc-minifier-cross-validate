@@ -1,0 +1,5 @@
+{
+  "loops": true,
+  "pure_getters": "strict",
+  "unused": true
+}

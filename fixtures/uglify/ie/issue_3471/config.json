@@ -1,0 +1,7 @@
+{
+  "ie": false,
+  "functions": true,
+  "reduce_vars": true,
+  "toplevel": true,
+  "unused": true
+}

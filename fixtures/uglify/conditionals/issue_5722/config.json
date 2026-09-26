@@ -1,0 +1,6 @@
+{
+  "conditionals": true,
+  "evaluate": true,
+  "keep_fnames": true,
+  "side_effects": true
+}

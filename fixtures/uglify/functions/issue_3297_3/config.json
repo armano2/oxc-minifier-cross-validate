@@ -1,0 +1,13 @@
+{
+  "collapse_vars": true,
+  "comparisons": true,
+  "conditionals": true,
+  "inline": true,
+  "join_vars": true,
+  "passes": 3,
+  "reduce_funcs": true,
+  "reduce_vars": true,
+  "sequences": true,
+  "side_effects": true,
+  "unused": true
+}

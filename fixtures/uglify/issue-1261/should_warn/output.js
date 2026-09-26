@@ -1,0 +1,9 @@
+foo();
+foo();
+bar();
+bar();
+bar();
+bar();
+foo();
+foo();
+baz();

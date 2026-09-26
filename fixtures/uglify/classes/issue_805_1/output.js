@@ -1,0 +1,3 @@
+"use strict";
+console.log("foo"),
+console.log("bar");

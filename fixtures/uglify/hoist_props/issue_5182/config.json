@@ -1,0 +1,9 @@
+{
+  "hoist_props": true,
+  "merge_vars": true,
+  "passes": 2,
+  "reduce_vars": true,
+  "side_effects": true,
+  "toplevel": true,
+  "unused": true
+}

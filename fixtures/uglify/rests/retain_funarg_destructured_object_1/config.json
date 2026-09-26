@@ -1,0 +1,6 @@
+{
+  "inline": true,
+  "keep_fargs": false,
+  "pure_getters": "strict",
+  "unused": true
+}

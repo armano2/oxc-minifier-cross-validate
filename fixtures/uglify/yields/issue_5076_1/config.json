@@ -1,0 +1,11 @@
+{
+  "evaluate": true,
+  "hoist_vars": true,
+  "keep_fargs": false,
+  "pure_getters": "strict",
+  "sequences": true,
+  "side_effects": true,
+  "toplevel": true,
+  "unused": true,
+  "yields": true
+}

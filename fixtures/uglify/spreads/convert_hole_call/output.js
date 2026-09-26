@@ -1,0 +1,1 @@
+console.log("PASS", void 0, 42);

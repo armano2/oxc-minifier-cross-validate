@@ -1,0 +1,6 @@
+{
+  "keep_fargs": false,
+  "keep_fnames": true,
+  "reduce_vars": true,
+  "unused": true
+}

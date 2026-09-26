@@ -1,0 +1,9 @@
+{
+  "collapse_vars": true,
+  "dead_code": true,
+  "passes": 2,
+  "sequences": true,
+  "side_effects": true,
+  "toplevel": true,
+  "unused": true
+}

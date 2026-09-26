@@ -1,0 +1,8 @@
+{
+  "evaluate": true,
+  "functions": true,
+  "keep_fnames": true,
+  "reduce_vars": true,
+  "toplevel": true,
+  "unused": true
+}

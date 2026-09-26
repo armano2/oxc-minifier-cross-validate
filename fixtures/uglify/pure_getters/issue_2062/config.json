@@ -1,0 +1,7 @@
+{
+  "booleans": true,
+  "collapse_vars": true,
+  "conditionals": true,
+  "pure_getters": true,
+  "side_effects": true
+}

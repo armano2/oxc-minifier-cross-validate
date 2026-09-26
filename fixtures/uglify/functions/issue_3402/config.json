@@ -1,0 +1,9 @@
+{
+  "evaluate": true,
+  "functions": true,
+  "reduce_vars": true,
+  "side_effects": true,
+  "toplevel": true,
+  "typeofs": true,
+  "unused": true
+}

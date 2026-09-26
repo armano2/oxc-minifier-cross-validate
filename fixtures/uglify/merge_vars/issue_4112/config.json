@@ -1,0 +1,6 @@
+{
+  "functions": true,
+  "merge_vars": true,
+  "reduce_vars": true,
+  "unused": true
+}

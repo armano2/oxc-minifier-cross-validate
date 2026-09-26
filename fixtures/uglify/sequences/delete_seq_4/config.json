@@ -1,0 +1,6 @@
+{
+  "booleans": true,
+  "evaluate": false,
+  "sequences": true,
+  "side_effects": true
+}

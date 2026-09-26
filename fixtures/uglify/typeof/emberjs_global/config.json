@@ -1,0 +1,10 @@
+{
+  "comparisons": true,
+  "conditionals": true,
+  "if_return": true,
+  "passes": 2,
+  "side_effects": true,
+  "toplevel": true,
+  "typeofs": true,
+  "unused": true
+}

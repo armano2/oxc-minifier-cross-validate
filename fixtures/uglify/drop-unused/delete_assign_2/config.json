@@ -1,0 +1,7 @@
+{
+  "booleans": true,
+  "evaluate": true,
+  "keep_infinity": true,
+  "toplevel": true,
+  "unused": true
+}

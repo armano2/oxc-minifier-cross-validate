@@ -1,0 +1,12 @@
+[workspace]
+resolver = "3"
+members = ["tasks/*"]
+
+# The conformance harness catches panics from individual fixtures.
+[profile.dev]
+panic = "unwind"
+opt-level = 2
+codegen-units = 256
+lto = "thin"
+debug-assertions = true
+overflow-checks = true

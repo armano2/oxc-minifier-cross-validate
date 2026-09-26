@@ -1,0 +1,9 @@
+{
+  "hoist_vars": true,
+  "inline": true,
+  "join_vars": true,
+  "reduce_vars": true,
+  "sequences": true,
+  "toplevel": true,
+  "unused": true
+}

@@ -1,0 +1,6 @@
+{
+  "conditionals": true,
+  "side_effects": true,
+  "toplevel": true,
+  "unsafe": true
+}
