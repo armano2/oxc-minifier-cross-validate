@@ -2,6 +2,9 @@
 resolver = "3"
 members = ["tasks/*"]
 
+[workspace.lints.clippy]
+all = "warn"
+
 # The conformance harness catches panics from individual fixtures.
 [profile.dev]
 panic = "unwind"

@@ -3,6 +3,9 @@ name = "reports"
 version = "0.1.0"
 edition = "2024"
 
+[lints]
+workspace = true
+
 [dependencies]
 pico-args = "0.5.0"
 similar = "3.2.0"

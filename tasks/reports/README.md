@@ -18,6 +18,12 @@ Run the task from the workspace root:
 cargo run -p reports -- [filter] [options]
 ```
 
+Check the Rust code with Clippy before changing the reports task:
+
+```bash
+cargo clippy --workspace --all-targets -- -D warnings
+```
+
 Options:
 
 - `--fixtures <dir>`: fixture root, defaults to `fixtures`
