@@ -103,58 +103,21 @@ export function Nj(a) {
 
 ```
 
-## `pass-1/6`
+## `pass-1/regexp/1`
 
-- size: oxc 449 vs reference 601 (-152 bytes)
+- size: oxc 29 vs reference 31 (-2 bytes)
 
 ```js
-export const loadScript = (options) => {
-	const { id, onLoad = () => null, ...rest } = options;
-	return new Promise((resolve) => {
-		let scriptEl = document.getElementById(id);
-		const isMounted = !!scriptEl;
-		if (!scriptEl) {
-			scriptEl = document.createElement('script');
-			Object.keys(rest).forEach((key) => scriptEl[key] = rest[key]);
-			scriptEl.id = id;
-			scriptEl.async = true;
-			scriptEl.type = 'text/javascript';
-		}
-		if (rest.src) {
-			scriptEl.addEventListener('load', () => {
-				onLoad();
-				return resolve();
-			});
-		}
-		if (!isMounted) {
-			// when enabling swcMinify, this section won't be executed
-			document.getElementsByTagName('head')[0].appendChild(scriptEl);
-		}
-		if (!rest.src) {
-			onLoad();
-			return resolve();
-		}
-	});
-};
+export const foo = new RegExp('');
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,7 +1,7 @@
--export const loadScript = (options) => {
--	let { id, onLoad = () => null, ...rest } = options;
--	return new Promise((resolve) => {
--		let scriptEl = document.getElementById(id), isMounted = !!scriptEl;
--		if (scriptEl || (scriptEl = document.createElement('script'), Object.keys(rest).forEach((key) => scriptEl[key] = rest[key]), scriptEl.id = id, scriptEl.async = !0, scriptEl.type = 'text/javascript'), rest.src && scriptEl.addEventListener('load', () => (onLoad(), resolve())), isMounted || document.getElementsByTagName('head')[0].appendChild(scriptEl), !rest.src) return onLoad(), resolve();
-+export const e = (e) => {
-+	let { id: t, onLoad: n = () => null, ...r } = e;
-+	return new Promise((e) => {
-+		let i = document.getElementById(t), a = !!i;
-+		if (i || (i = document.createElement('script'), Object.keys(r).forEach((e) => i[e] = r[e]), i.id = t, i.async = !0, i.type = 'text/javascript'), r.src && i.addEventListener('load', () => (n(), e())), a || document.getElementsByTagName('head')[0].appendChild(i), !r.src) return n(), e();
- 	});
- };
+@@ -1 +1 @@
+-export const foo = RegExp('');
++export const e = RegExp('');
 
 ```
 
@@ -242,6 +205,43 @@ const obj = {
 
 ```
 
+## `pass-1/joda/2`
+
+- size: oxc 216 vs reference 263 (-47 bytes)
+
+```js
+'use strict';
+(self.webpackChunk_N_E = self.webpackChunk_N_E || []).push([[715], { 3266: function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+	__webpack_require__.d(__webpack_exports__, { h: function() {
+		return LocalDate;
+	} });
+	var isInit = !1;
+	!function() {
+		if (!isInit) isInit = !0;
+	}();
+} }]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,10 @@
+ 'use strict';
+-(self.webpackChunk_N_E = self.webpackChunk_N_E || []).push([[715], { 3266: function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+-	__webpack_require__.d(__webpack_exports__, { h: function() {
++(self.webpackChunk_N_E = self.webpackChunk_N_E || []).push([[715], { 3266: function(e, t, n) {
++	n.d(t, { h: function() {
+ 		return LocalDate;
+ 	} });
++	var r = !1;
++	(function() {
++		r ||= !0;
++	})();
+ } }]);
+
+```
+
 ## `pass-1/issue-6405/1`
 
 - size: oxc 27 vs reference 114 (-87 bytes)
@@ -274,55 +274,6 @@ export const fn = () => {
 -	}
 -};
 +export const e = () => {};
-
-```
-
-## `pass-1/issues/6407/1`
-
-- size: oxc 236 vs reference 336 (-100 bytes)
-
-```js
-export default class Demo {
-	static encode(value) {
-		const ranges = [];
-		let range = [];
-		let retrString = A.encode(value);
-		let bitField = '';
-		value.forEach((curValue, i) => {
-			bitField += B.encode(curValue);
-			range.push(i);
-			ranges.push(range);
-		});
-		retrString += '.';
-		retrString += C.encode(ranges);
-		return retrString;
-	}
-}
-console.log(Deno.encode());
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,11 +1,9 @@
--export default class Demo {
--	static encode(value) {
--		let ranges = [], range = [], retrString = A.encode(value), bitField = '';
--		return value.forEach((curValue, i) => {
--			bitField += B.encode(curValue);
--			range.push(i);
--			ranges.push(range);
--		}), retrString += '.', retrString += C.encode(ranges);
-+export default class e {
-+	static encode(e) {
-+		let t = [], n = [], r = A.encode(e), i = '';
-+		return e.forEach((e, r) => {
-+			i += B.encode(e), n.push(r), t.push(n);
-+		}), r += '.', r += C.encode(t), r;
- 	}
- }
- console.log(Deno.encode());
 
 ```
 
@@ -376,58 +327,107 @@ console.log(Deno.encode());
 
 ```
 
-## `pass-1/joda/2`
+## `pass-1/issues/6407/1`
 
-- size: oxc 216 vs reference 263 (-47 bytes)
+- size: oxc 236 vs reference 336 (-100 bytes)
 
 ```js
-'use strict';
-(self.webpackChunk_N_E = self.webpackChunk_N_E || []).push([[715], { 3266: function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-	__webpack_require__.d(__webpack_exports__, { h: function() {
-		return LocalDate;
-	} });
-	var isInit = !1;
-	!function() {
-		if (!isInit) isInit = !0;
-	}();
-} }]);
+export default class Demo {
+	static encode(value) {
+		const ranges = [];
+		let range = [];
+		let retrString = A.encode(value);
+		let bitField = '';
+		value.forEach((curValue, i) => {
+			bitField += B.encode(curValue);
+			range.push(i);
+			ranges.push(range);
+		});
+		retrString += '.';
+		retrString += C.encode(ranges);
+		return retrString;
+	}
+}
+console.log(Deno.encode());
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,6 +1,10 @@
- 'use strict';
--(self.webpackChunk_N_E = self.webpackChunk_N_E || []).push([[715], { 3266: function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
--	__webpack_require__.d(__webpack_exports__, { h: function() {
-+(self.webpackChunk_N_E = self.webpackChunk_N_E || []).push([[715], { 3266: function(e, t, n) {
-+	n.d(t, { h: function() {
- 		return LocalDate;
- 	} });
-+	var r = !1;
-+	(function() {
-+		r ||= !0;
-+	})();
- } }]);
+@@ -1,11 +1,9 @@
+-export default class Demo {
+-	static encode(value) {
+-		let ranges = [], range = [], retrString = A.encode(value), bitField = '';
+-		return value.forEach((curValue, i) => {
+-			bitField += B.encode(curValue);
+-			range.push(i);
+-			ranges.push(range);
+-		}), retrString += '.', retrString += C.encode(ranges);
++export default class e {
++	static encode(e) {
++		let t = [], n = [], r = A.encode(e), i = '';
++		return e.forEach((e, r) => {
++			i += B.encode(e), n.push(r), t.push(n);
++		}), r += '.', r += C.encode(t), r;
+ 	}
+ }
+ console.log(Deno.encode());
 
 ```
 
-## `pass-1/regexp/1`
+## `pass-1/6`
 
-- size: oxc 29 vs reference 31 (-2 bytes)
+- size: oxc 449 vs reference 601 (-152 bytes)
 
 ```js
-export const foo = new RegExp('');
+export const loadScript = (options) => {
+	const { id, onLoad = () => null, ...rest } = options;
+	return new Promise((resolve) => {
+		let scriptEl = document.getElementById(id);
+		const isMounted = !!scriptEl;
+		if (!scriptEl) {
+			scriptEl = document.createElement('script');
+			Object.keys(rest).forEach((key) => scriptEl[key] = rest[key]);
+			scriptEl.id = id;
+			scriptEl.async = true;
+			scriptEl.type = 'text/javascript';
+		}
+		if (rest.src) {
+			scriptEl.addEventListener('load', () => {
+				onLoad();
+				return resolve();
+			});
+		}
+		if (!isMounted) {
+			// when enabling swcMinify, this section won't be executed
+			document.getElementsByTagName('head')[0].appendChild(scriptEl);
+		}
+		if (!rest.src) {
+			onLoad();
+			return resolve();
+		}
+	});
+};
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1 +1 @@
--export const foo = RegExp('');
-+export const e = RegExp('');
+@@ -1,7 +1,7 @@
+-export const loadScript = (options) => {
+-	let { id, onLoad = () => null, ...rest } = options;
+-	return new Promise((resolve) => {
+-		let scriptEl = document.getElementById(id), isMounted = !!scriptEl;
+-		if (scriptEl || (scriptEl = document.createElement('script'), Object.keys(rest).forEach((key) => scriptEl[key] = rest[key]), scriptEl.id = id, scriptEl.async = !0, scriptEl.type = 'text/javascript'), rest.src && scriptEl.addEventListener('load', () => (onLoad(), resolve())), isMounted || document.getElementsByTagName('head')[0].appendChild(scriptEl), !rest.src) return onLoad(), resolve();
++export const e = (e) => {
++	let { id: t, onLoad: n = () => null, ...r } = e;
++	return new Promise((e) => {
++		let i = document.getElementById(t), a = !!i;
++		if (i || (i = document.createElement('script'), Object.keys(r).forEach((e) => i[e] = r[e]), i.id = t, i.async = !0, i.type = 'text/javascript'), r.src && i.addEventListener('load', () => (n(), e())), a || document.getElementsByTagName('head')[0].appendChild(i), !r.src) return n(), e();
+ 	});
+ };
 
 ```
 

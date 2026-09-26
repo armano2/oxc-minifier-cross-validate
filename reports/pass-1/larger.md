@@ -4,29 +4,6 @@ Fixtures: 5
 
 [← pass-1](README.md) · [← all families](../README.md)
 
-## `pass-1/2`
-
-- size: oxc 88 vs reference 33 (+55 bytes)
-
-```js
-(function() {
-	var G = Object.prototype.hasOwnProperty, baselinePx = 4, faderWidth = 12 * baselinePx, faderHeight = 60 * baselinePx, trackWidth = faderWidth / 3, trackHeight = faderHeight - faderWidth, trackMargin = (faderWidth - trackWidth) / 2;
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,4 @@
--Object.prototype.hasOwnProperty;
-+(function() {
-+	var e = 4, t = 12 * e, n = 60 * e, r = t / 3;
-+	n - t, (t - r) / 2;
-+})();
-
-```
-
 ## `pass-1/3`
 
 - size: oxc 50 vs reference 43 (+7 bytes)
@@ -48,43 +25,26 @@ Fixtures: 5
 
 ```
 
-## `pass-1/9/1`
+## `pass-1/2`
 
-- size: oxc 166 vs reference 35 (+131 bytes)
+- size: oxc 88 vs reference 33 (+55 bytes)
 
 ```js
-function outer() {
-	function inner(value) {
-		function closure() {
-			return value;
-		}
-		return function() {
-			return closure();
-		};
-	}
-	return inner('Hello');
-}
-console.log('Greeting:', outer()());
+(function() {
+	var G = Object.prototype.hasOwnProperty, baselinePx = 4, faderWidth = 12 * baselinePx, faderHeight = 60 * baselinePx, trackWidth = faderWidth / 3, trackHeight = faderHeight - faderWidth, trackMargin = (faderWidth - trackWidth) / 2;
+})();
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1 +1,12 @@
--console.log('Greeting:', 'Hello');
-+function e() {
-+	function e(e) {
-+		function t() {
-+			return e;
-+		}
-+		return function() {
-+			return t();
-+		};
-+	}
-+	return e('Hello');
-+}
-+console.log('Greeting:', e()());
+@@ -1 +1,4 @@
+-Object.prototype.hasOwnProperty;
++(function() {
++	var e = 4, t = 12 * e, n = 60 * e, r = t / 3;
++	n - t, (t - r) / 2;
++})();
 
 ```
 
@@ -156,6 +116,46 @@ console.log(f().toString(16));
 +	return t |= e[0], t <<= 8, t |= e[1], t <<= 8, t |= e[2], t <<= 8, t |= e[3], t;
 +}
 +console.log(e().toString(16));
+
+```
+
+## `pass-1/9/1`
+
+- size: oxc 166 vs reference 35 (+131 bytes)
+
+```js
+function outer() {
+	function inner(value) {
+		function closure() {
+			return value;
+		}
+		return function() {
+			return closure();
+		};
+	}
+	return inner('Hello');
+}
+console.log('Greeting:', outer()());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,12 @@
+-console.log('Greeting:', 'Hello');
++function e() {
++	function e(e) {
++		function t() {
++			return e;
++		}
++		return function() {
++			return t();
++		};
++	}
++	return e('Hello');
++}
++console.log('Greeting:', e()());
 
 ```
 

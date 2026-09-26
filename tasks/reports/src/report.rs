@@ -45,14 +45,24 @@ fn should_write_kind(kind: Kind, only: Option<&str>) -> bool {
 }
 
 fn rows_for_kind<'a>(outcomes: &[&'a Outcome], kind: Kind) -> Vec<&'a Outcome> {
-    outcomes
+    let mut rows: Vec<&Outcome> = outcomes
         .iter()
         .copied()
         .filter(|outcome| {
             outcome.kind == kind
                 && (outcome.actual.is_empty() || outcome.actual != outcome.expected)
         })
-        .collect()
+        .collect();
+    if matches!(kind, Kind::Larger | Kind::Smaller) {
+        rows.sort_by(|left, right| {
+            left.actual
+                .len()
+                .abs_diff(left.expected.len())
+                .cmp(&right.actual.len().abs_diff(right.expected.len()))
+                .then_with(|| left.relative.cmp(&right.relative))
+        });
+    }
+    rows
 }
 
 fn family_dir_name(family: &str) -> String {
