@@ -1,0 +1,21252 @@
+# terser / smaller — Output shorter than expected (possible over-optimization / bug)
+
+Fixtures: 627
+
+[← terser](README.md) · [← all families](../README.md)
+
+## `terser/arguments/arguments_and_destructuring_1`
+
+- size: oxc 78 vs reference 79 (-1 bytes)
+
+```js
+(function({ d }) {
+	console.log(a = 'foo', arguments[0].d);
+})({ d: 'Bar' });
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-!(function({ d }) {
++(function({ d }) {
+ 	console.log(a = 'foo', arguments[0].d);
+ })({ d: 'Bar' });
+
+```
+
+## `terser/arguments/arguments_in_arrow_func_1`
+
+- size: oxc 258 vs reference 262 (-4 bytes)
+
+```js
+(function(a, b) {
+	console.log(arguments[0], a, arguments[1], arguments[3], b, arguments[2]);
+})('bar', 42, false);
+(function(a, b) {
+	(() => {
+		console.log(arguments[0], a, arguments[1], arguments[3], b, arguments[2]);
+	})(10, 20, 30, 40);
+})('bar', 42, false);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,8 @@
+-(function(a, b, argument_2, argument_3) {
+-	console.log(a, a, b, argument_3, b, argument_2);
+-})('bar', 42, false);
+ (function(a, b) {
++	console.log(arguments[0], a, arguments[1], arguments[3], b, arguments[2]);
++})('bar', 42, !1);
++(function(a, b) {
+ 	(() => {
+ 		console.log(arguments[0], a, arguments[1], arguments[3], b, arguments[2]);
+ 	})(10, 20, 30, 40);
+-})('bar', 42, false);
++})('bar', 42, !1);
+
+```
+
+## `terser/arguments/duplicate_parameter_with_arguments`
+
+- size: oxc 75 vs reference 76 (-1 bytes)
+
+```js
+(function(a, a) {
+	console.log(a = 'foo', arguments[0]);
+})('baz', 'Bar');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-!(function(a, a) {
++(function(a, a) {
+ 	console.log(a = 'foo', arguments[0]);
+ })('baz', 'Bar');
+
+```
+
+## `terser/arguments/modified_strict`
+
+- size: oxc 202 vs reference 212 (-10 bytes)
+
+```js
+'use strict';
+(function(a, b) {
+	var c = arguments[0];
+	var d = arguments[1];
+	var a = 'foo';
+	b++;
+	arguments[0] = 'moo';
+	arguments[1] *= 2;
+	console.log(a, b, c, d, arguments[0], arguments[1]);
+})('bar', 42);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,6 @@
+ 'use strict';
+ (function(a, b) {
+-	var c = arguments[0];
+-	var d = arguments[1];
+-	var a = 'foo';
++	var c = arguments[0], d = arguments[1], a = 'foo';
+ 	b++;
+ 	arguments[0] = 'moo';
+ 	arguments[1] *= 2;
+
+```
+
+## `terser/array_constructor/array_constructor_unsafe`
+
+- size: oxc 242 vs reference 306 (-64 bytes)
+
+```js
+console.log(new Array());
+console.log(new Array(0));
+console.log(new Array(1));
+console.log(new Array(11));
+console.log(Array(11));
+console.log(new Array(12));
+console.log(Array(12));
+console.log(new Array(foo));
+console.log(Array(foo));
+console.log(new Array('foo'));
+console.log(Array('foo'));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,35 +1,11 @@
+ console.log([]);
+ console.log([]);
+ console.log([,]);
+-console.log([
+-	,
+-	,
+-	,
+-	,
+-	,
+-	,
+-	,
+-	,
+-	,
+-	,
+-	,
+-]);
+-console.log([
+-	,
+-	,
+-	,
+-	,
+-	,
+-	,
+-	,
+-	,
+-	,
+-	,
+-	,
+-]);
++console.log(Array(11));
++console.log(Array(11));
+ console.log(Array(12));
+ console.log(Array(12));
+ console.log(Array(foo));
+ console.log(Array(foo));
+-console.log(Array('foo'));
+-console.log(Array('foo'));
++console.log(['foo']);
++console.log(['foo']);
+
+```
+
+## `terser/arrays/spread_with_variable_as_last_element`
+
+- size: oxc 36 vs reference 65 (-29 bytes)
+
+```js
+var values = [
+	4,
+	5,
+	6
+];
+var a = [
+	1,
+	2,
+	3,
+	...values
+];
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,8 @@
+-var values = [
+-	4,
+-	5,
+-	6
+-];
+ var a = [
+ 	1,
+ 	2,
+ 	3,
+-	...values
++	4,
++	5,
++	6
+ ];
+
+```
+
+## `terser/arrays/spread_with_variable_at_front`
+
+- size: oxc 36 vs reference 65 (-29 bytes)
+
+```js
+var values = [
+	1,
+	2,
+	3
+];
+var a = [
+	...values,
+	4,
+	5,
+	6
+];
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,7 @@
+-var values = [
++var a = [
+ 	1,
+ 	2,
+-	3
+-];
+-var a = [
+-	...values,
++	3,
+ 	4,
+ 	5,
+ 	6
+
+```
+
+## `terser/arrays/spread_with_variable_at_front_after_elisions`
+
+- size: oxc 45 vs reference 74 (-29 bytes)
+
+```js
+var values = [
+	1,
+	2,
+	3
+];
+var a = [
+	,
+	,
+	,
+	...values,
+	4,
+	5,
+	6
+];
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,13 +1,10 @@
+-var values = [
+-	1,
+-	2,
+-	3
+-];
+ var a = [
+ 	,
+ 	,
+ 	,
+-	...values,
++	1,
++	2,
++	3,
+ 	4,
+ 	5,
+ 	6
+
+```
+
+## `terser/arrays/spread_with_variable_in_middle`
+
+- size: oxc 47 vs reference 76 (-29 bytes)
+
+```js
+var values = [
+	4,
+	5,
+	6
+];
+var a = [
+	1,
+	2,
+	3,
+	...values,
+	7,
+	,
+	,
+];
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,13 +1,10 @@
+-var values = [
+-	4,
+-	5,
+-	6
+-];
+ var a = [
+ 	1,
+ 	2,
+ 	3,
+-	...values,
++	4,
++	5,
++	6,
+ 	7,
+ 	,
+ 	,
+
+```
+
+## `terser/arrow/arrow_functions_with_body`
+
+- size: oxc 324 vs reference 459 (-135 bytes)
+
+```js
+var a1 = () => {
+	var a = 42 * Math.random();
+	return a;
+};
+var a2 = (p) => {
+	var a = Math.random() * p;
+	return a;
+};
+var a3 = (p) => {
+	var a = Math.random() * p;
+	return a;
+};
+var a4 = (...p) => {
+	var a = Math.random() * p;
+	return a;
+};
+var a5 = (b, c) => {
+	var result = b * c + b / c;
+	return result;
+};
+var a6 = (b, ...c) => {
+	var result = b;
+	for (var i = 0; i < c.length; i++) result += c[i];
+	return result;
+};
+var a7 = (...b) => {
+	b.join();
+};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,23 +1,8 @@
+-var a1 = () => {
+-	var a = 42 * Math.random();
+-	return a;
+-};
+-var a2 = (p) => {
+-	var a = Math.random() * p;
+-	return a;
+-};
+-var a3 = (p) => {
+-	var a = Math.random() * p;
+-	return a;
+-};
+-var a4 = (...p) => {
+-	var a = Math.random() * p;
+-	return a;
+-};
+-var a5 = (b, c) => {
+-	var result = b * c + b / c;
+-	return result;
+-};
++var a1 = () => 42 * Math.random();
++var a2 = (p) => Math.random() * p;
++var a3 = (p) => Math.random() * p;
++var a4 = (...p) => Math.random() * p;
++var a5 = (b, c) => b * c + b / c;
+ var a6 = (b, ...c) => {
+ 	var result = b;
+ 	for (var i = 0; i < c.length; i++) result += c[i];
+
+```
+
+## `terser/arrow/arrow_unused`
+
+- size: oxc 141 vs reference 219 (-78 bytes)
+
+```js
+(top) => dog;
+let fn = (a) => {
+	console.log(a * a);
+};
+let u = (x, y) => x - y + g;
+(() => {
+	console.log('0');
+})();
+!(function(x) {
+	(() => {
+		console.log('1');
+	})();
+	let unused = (x) => {
+		console.log(x);
+	};
+	let baz = (e) => e + e;
+	console.log(baz(x));
+})(1);
+fn(3);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,15 +1,9 @@
+-let fn = (a) => {
+-	console.log(a * a);
++let fn = (e) => {
++	console.log(e * e);
+ };
+-let u = (x, y) => x - y + g;
+-(() => {
+-	console.log('0');
+-})();
+-!(function(x) {
+-	(() => {
+-		console.log('1');
+-	})();
+-	let baz = (e) => e + e;
+-	console.log(baz(x));
++console.log('0');
++(function(e) {
++	console.log('1');
++	console.log(((e) => e + e)(e));
+ })(1);
+ fn(3);
+
+```
+
+## `terser/arrow/arrow_unused_toplevel`
+
+- size: oxc 139 vs reference 190 (-51 bytes)
+
+```js
+(top) => dog;
+let fn = (a) => {
+	console.log(a * a);
+};
+let u = (x, y) => x - y + g;
+(() => {
+	console.log('0');
+})();
+!(function(x) {
+	(() => {
+		console.log('1');
+	})();
+	let unused = (x) => {
+		console.log(x);
+	};
+	let baz = (e) => e + e;
+	console.log(baz(x));
+})(1);
+fn(3);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,14 +1,9 @@
+-let fn = (a) => {
+-	console.log(a * a);
++let e = (e) => {
++	console.log(e * e);
+ };
+-(() => {
+-	console.log('0');
+-})();
+-!(function(x) {
+-	(() => {
+-		console.log('1');
+-	})();
+-	let baz = (e) => e + e;
+-	console.log(baz(x));
++console.log('0');
++(function(e) {
++	console.log('1');
++	console.log(((e) => e + e)(e));
+ })(1);
+-fn(3);
++e(3);
+
+```
+
+## `terser/arrow/arrow_with_regexp`
+
+- size: oxc 0 vs reference 32 (-32 bytes)
+
+```js
+(num) => /\d{11,14}/.test(num);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +0,0 @@
+-(num) => /\d{11,14}/.test(num);
+
+```
+
+## `terser/arrow/concise_methods_with_computed_property2`
+
+- size: oxc 55 vs reference 62 (-7 bytes)
+
+```js
+var foo = { [[1]](v) {
+	return v;
+} };
+console.log(foo[[1]]('PASS'));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,3 @@
+-var foo = { [[1]]: (v) => v };
+-console.log(foo[[1]]('PASS'));
++console.log({ [[1]](v) {
++	return v;
++} }[[1]]('PASS'));
+
+```
+
+## `terser/arrow/issue_3092b`
+
+- size: oxc 133 vs reference 140 (-7 bytes)
+
+```js
+var obj = {
+	async bar(x) {
+		return await x, 2;
+	},
+	*gen(x) {
+		return yield x.toUpperCase(), 2;
+	}
+};
+console.log(obj.gen('pass').next().value);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,8 @@
+-var obj = {
+-	bar: async (x) => (await x, 2),
++console.log({
++	async bar(x) {
++		return await x, 2;
++	},
+ 	*gen(x) {
+ 		return yield x.toUpperCase(), 2;
+ 	}
+-};
+-console.log(obj.gen('pass').next().value);
++}.gen('pass').next().value);
+
+```
+
+## `terser/arrow/no_leading_parentheses`
+
+- size: oxc 0 vs reference 44 (-44 bytes)
+
+```js
+(x, y) => x(y);
+async (x, y) => await x(y);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +0,0 @@
+-(x, y) => x(y);
+-async (x, y) => await x(y);
+
+```
+
+## `terser/arrow/object_parens`
+
+- size: oxc 0 vs reference 84 (-84 bytes)
+
+```js
+() => ({});
+() => ({});
+() => ({})[0];
+() => ({}) ? 1 : 0;
+() => ({}, 1);
+() => (1, 2);
+() => {
+	foo();
+};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +0,0 @@
+-() => ({});
+-() => ({});
+-() => void 0;
+-() => 1;
+-() => 1;
+-() => 2;
+-() => {
+-	foo();
+-};
+
+```
+
+## `terser/ascii/ascii_only_false_identifier_es2015`
+
+- size: oxc 44 vs reference 58 (-14 bytes)
+
+```js
+function f() {
+	var o = { 𝒜: true };
+	return o.𝒜;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,3 @@
+ function f() {
+-	var o = { 𝒜: true };
+-	return o.𝒜;
++	return { 𝒜: !0 }.𝒜;
+ }
+
+```
+
+## `terser/ascii/ascii_only_false_identifier_es5`
+
+- size: oxc 44 vs reference 61 (-17 bytes)
+
+```js
+function f() {
+	var o = { '𝒜': true };
+	return o['𝒜'];
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,3 @@
+ function f() {
+-	var o = { 𝒜: true };
+-	return o['𝒜'];
++	return { 𝒜: !0 }.𝒜;
+ }
+
+```
+
+## `terser/ascii/ascii_only_true_identifier_es2015`
+
+- size: oxc 44 vs reference 58 (-14 bytes)
+
+```js
+function f() {
+	var o = { 𝒜: true };
+	return o.𝒜;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,3 @@
+ function f() {
+-	var o = { 𝒜: true };
+-	return o.𝒜;
++	return { 𝒜: !0 }.𝒜;
+ }
+
+```
+
+## `terser/ascii/ascii_only_true_identifier_es5`
+
+- size: oxc 44 vs reference 61 (-17 bytes)
+
+```js
+function f() {
+	var o = { '𝒜': true };
+	return o['𝒜'];
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,3 @@
+ function f() {
+-	var o = { 𝒜: true };
+-	return o['𝒜'];
++	return { 𝒜: !0 }.𝒜;
+ }
+
+```
+
+## `terser/asm/asm_function_expression`
+
+- size: oxc 91 vs reference 100 (-9 bytes)
+
+```js
+0;
+var a = function() {
+	'use asm';
+	0;
+};
+function f() {
+	0;
+	return function() {
+		'use asm';
+		0;
+	};
+	0;
+}
+0;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,8 @@
+ var a = function() {
+ 	'use asm';
+-	0;
+ };
+ function f() {
+ 	return function() {
+ 		'use asm';
+-		0;
+ 	};
+ }
+
+```
+
+## `terser/asm/asm_mixed`
+
+- size: oxc 0 vs reference 1065 (-1065 bytes)
+
+```js
+function asm_GeometricMean(stdlib, foreign, buffer) {
+	'use asm';
+	var exp = stdlib.Math.exp;
+	var log = stdlib.Math.log;
+	var values = new stdlib.Float64Array(buffer);
+	function logSum(start, end) {
+		start = start | 0;
+		end = end | 0;
+		var sum = 0, p = 0, q = 0;
+		for (p = start << 3, q = end << 3; (p | 0) < (q | 0); p = p + 8 | 0) {
+			sum = sum + +log(values[p >> 3]);
+		}
+		return +sum;
+	}
+	function geometricMean(start, end) {
+		start = start | 0;
+		end = end | 0;
+		return +exp(+logSum(start, end) / +(end - start | 0));
+	}
+	return { geometricMean };
+}
+function no_asm_GeometricMean(stdlib, foreign, buffer) {
+	var exp = stdlib.Math.exp;
+	var log = stdlib.Math.log;
+	var values = new stdlib.Float64Array(buffer);
+	function logSum(start, end) {
+		start = start | 0;
+		end = end | 0;
+		var sum = 0, p = 0, q = 0;
+		for (p = start << 3, q = end << 3; (p | 0) < (q | 0); p = p + 8 | 0) {
+			sum = sum + +log(values[p >> 3]);
+		}
+		return +sum;
+	}
+	function geometricMean(start, end) {
+		start = start | 0;
+		end = end | 0;
+		return +exp(+logSum(start, end) / +(end - start | 0));
+	}
+	return { geometricMean };
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,34 +0,0 @@
+-function asm_GeometricMean(stdlib, foreign, buffer) {
+-	'use asm';
+-	var exp = stdlib.Math.exp;
+-	var log = stdlib.Math.log;
+-	var values = new stdlib.Float64Array(buffer);
+-	function logSum(start, end) {
+-		start = start | 0;
+-		end = end | 0;
+-		var sum = 0, p = 0, q = 0;
+-		for (p = start << 3, q = end << 3; (p | 0) < (q | 0); p = p + 8 | 0) {
+-			sum = sum + +log(values[p >> 3]);
+-		}
+-		return +sum;
+-	}
+-	function geometricMean(start, end) {
+-		start = start | 0;
+-		end = end | 0;
+-		return +exp(+logSum(start, end) / +(end - start | 0));
+-	}
+-	return { geometricMean };
+-}
+-function no_asm_GeometricMean(stdlib, foreign, buffer) {
+-	function logSum(start, end) {
+-		start |= 0, end |= 0;
+-		var sum = 0, p = 0, q = 0;
+-		for (p = start << 3, q = end << 3; (0 | p) < (0 | q); p = p + 8 | 0) sum += +log(values[p >> 3]);
+-		return +sum;
+-	}
+-	function geometricMean(start, end) {
+-		return start |= 0, end |= 0, +exp(+logSum(start, end) / +(end - start | 0));
+-	}
+-	var exp = stdlib.Math.exp, log = stdlib.Math.log, values = new stdlib.Float64Array(buffer);
+-	return { geometricMean };
+-}
+
+```
+
+## `terser/asm/asm_nested_functions`
+
+- size: oxc 95 vs reference 104 (-9 bytes)
+
+```js
+0;
+function a() {
+	'use asm';
+	0;
+}
+0;
+function b() {
+	0;
+	function c() {
+		'use asm';
+		0;
+	}
+	0;
+	function d() {
+		0;
+	}
+	0;
+}
+0;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,9 @@
+ function a() {
+ 	'use asm';
+-	0;
+ }
+ function b() {
+ 	function c() {
+ 		'use asm';
+-		0;
+ 	}
+ 	function d() {}
+ }
+
+```
+
+## `terser/asm/asm_toplevel`
+
+- size: oxc 27 vs reference 63 (-36 bytes)
+
+```js
+'use asm';
+0;
+function f() {
+	0;
+	(function() {
+		0;
+	});
+}
+0;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,2 @@
+ 'use asm';
+-0;
+-function f() {
+-	0;
+-	(function() {
+-		0;
+-	});
+-}
+-0;
++function f() {}
+
+```
+
+## `terser/async/async_arrow_iife_negate_iife`
+
+- size: oxc 46 vs reference 62 (-16 bytes)
+
+```js
+(async () => {
+	await fetch();
+})();
+(() => {
+	plain();
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,4 @@
+ (async () => {
+ 	await fetch();
+ })();
+-(() => {
+-	plain();
+-})();
++plain();
+
+```
+
+## `terser/async/async_function_declaration`
+
+- size: oxc 0 vs reference 276 (-276 bytes)
+
+```js
+async function f0() {}
+async function f1() {
+	await x + y;
+}
+async function f2() {
+	await (x + y);
+}
+async function f3() {
+	await x + await y;
+}
+async function f4() {
+	await (x + await y);
+}
+async function f5() {
+	await x;
+	await y;
+}
+async function f6() {
+	await x, await y;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,20 +0,0 @@
+-async function f0() {}
+-async function f1() {
+-	await x, y;
+-}
+-async function f2() {
+-	await (x + y);
+-}
+-async function f3() {
+-	await x, await y;
+-}
+-async function f4() {
+-	await (x + await y);
+-}
+-async function f5() {
+-	await x;
+-	await y;
+-}
+-async function f6() {
+-	await x, await y;
+-}
+
+```
+
+## `terser/async/async_function_expression`
+
+- size: oxc 0 vs reference 100 (-100 bytes)
+
+```js
+var named = async function foo() {
+	await bar(1 + 0) + (2 + 0);
+};
+var anon = async function() {
+	await (1 + 0) + bar(2 + 0);
+};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +0,0 @@
+-var named = async function() {
+-	await bar(1);
+-};
+-var anon = async function() {
+-	await 1, bar(2);
+-};
+
+```
+
+## `terser/async/async_generator_class_method`
+
+- size: oxc 0 vs reference 67 (-67 bytes)
+
+```js
+class Foo {
+	async *bar() {
+		yield await Promise.resolve(2);
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +0,0 @@
+-class Foo {
+-	async *bar() {
+-		yield await Promise.resolve(2);
+-	}
+-}
+
+```
+
+## `terser/async/async_generator_function`
+
+- size: oxc 0 vs reference 59 (-59 bytes)
+
+```js
+async function* baz() {
+	yield await Promise.resolve(1);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-async function* baz() {
+-	yield await Promise.resolve(1);
+-}
+
+```
+
+## `terser/async/async_generator_static_class_method`
+
+- size: oxc 0 vs reference 74 (-74 bytes)
+
+```js
+class Foo {
+	static async *bar() {
+		yield await Promise.resolve(4);
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +0,0 @@
+-class Foo {
+-	static async *bar() {
+-		yield await Promise.resolve(4);
+-	}
+-}
+
+```
+
+## `terser/async/for_await_of`
+
+- size: oxc 120 vs reference 122 (-2 bytes)
+
+```js
+async function f(x) {
+	for await (a of x) {}
+	for await (var b of x) {}
+	for await (let c of x) {}
+	for await (const d of x) {}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,5 +2,5 @@
+ 	for await (a of x);
+ 	for await (var b of x);
+ 	for await (let c of x);
+-	for await (const d of x);
++	for await (let d of x);
+ }
+
+```
+
+## `terser/async/for_await_of_2`
+
+- size: oxc 248 vs reference 252 (-4 bytes)
+
+```js
+async function foo(x) {
+	for await (a of x) {}
+	for await (var b of x) {}
+	for await (let c of x) {}
+	for await (const d of x) {}
+}
+const bar = async (x) => {
+	for await (a of x) {}
+	for await (var b of x) {}
+	for await (let c of x) {}
+	for await (const d of x) {}
+};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,11 +2,11 @@
+ 	for await (a of x);
+ 	for await (var b of x);
+ 	for await (let c of x);
+-	for await (const d of x);
++	for await (let d of x);
+ }
+ const bar = async (x) => {
+ 	for await (a of x);
+ 	for await (var b of x);
+ 	for await (let c of x);
+-	for await (const d of x);
++	for await (let d of x);
+ };
+
+```
+
+## `terser/async/issue_2344_1`
+
+- size: oxc 0 vs reference 55 (-55 bytes)
+
+```js
+async () => {
+	+await x;
+	await y;
+	return await z;
+};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +0,0 @@
+-async () => {
+-	+await x;
+-	await y;
+-	return await z;
+-};
+
+```
+
+## `terser/async/issue_2344_2`
+
+- size: oxc 0 vs reference 55 (-55 bytes)
+
+```js
+async () => {
+	+await x;
+	await y;
+	return await z;
+};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +0,0 @@
+-async () => {
+-	+await x;
+-	await y;
+-	return await z;
+-};
+
+```
+
+## `terser/async/issue_3079`
+
+- size: oxc 158 vs reference 174 (-16 bytes)
+
+```js
+(async) => 1;
+var async = (async) => async;
+console.log(async(1));
+async = (async) => async;
+console.log(async(2));
+console.log({ m: (async) => async ? '3' : '4' }.m(true));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,5 @@
+-(async) => 1;
+ var async = (async) => async;
+ console.log(async(1));
+ async = (async) => async;
+ console.log(async(2));
+-console.log({ m: (async) => async ? '3' : '4' }.m(true));
++console.log({ m: (async) => async ? '3' : '4' }.m(!0));
+
+```
+
+## `terser/async/issue_3079_2`
+
+- size: oxc 0 vs reference 48 (-48 bytes)
+
+```js
+async (async) => async;
+async (async) => async;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +0,0 @@
+-async (async) => async;
+-async (async) => async;
+
+```
+
+## `terser/big_int/big_int_math`
+
+- size: oxc 0 vs reference 107 (-107 bytes)
+
+```js
+const sum = 10n + 15n;
+const exp = 5n ** 10n;
+const sub = 1n - 3n;
+const mul = 5n * 5n;
+const div = 15n / 5n;
+const regular_number = 1 * 10;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +0,0 @@
+-const sum = 10n + 15n, exp = 5n ** 10n, sub = 1n - 3n, mul = 5n * 5n, div = 15n / 5n, regular_number = 10;
+
+```
+
+## `terser/big_int/big_int_negative`
+
+- size: oxc 0 vs reference 6 (-6 bytes)
+
+```js
+-15n;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +0,0 @@
+--15n;
+
+```
+
+## `terser/block_scope/do_not_remove_anon_blocks_if_they_have_decls`
+
+- size: oxc 93 vs reference 95 (-2 bytes)
+
+```js
+function x() {
+	{
+		let x;
+	}
+	{
+		var x;
+	}
+	{
+		const y = 1;
+		class Zee {}
+	}
+}
+{
+	let y;
+}
+{
+	var y;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -4,7 +4,7 @@
+ 	}
+ 	var x;
+ 	{
+-		const y = 1;
++		let y = 1;
+ 		class Zee {}
+ 	}
+ }
+
+```
+
+## `terser/block_scope/regression_block_scope_resolves`
+
+- size: oxc 188 vs reference 200 (-12 bytes)
+
+```js
+(function() {
+	if (1) {
+		let x;
+		const y = 1;
+		class Zee {}
+	}
+	if (1) {
+		let ex;
+		const why = 2;
+		class Zi {}
+	}
+	console.log(typeof x, typeof y, typeof Zee, typeof ex, typeof why, typeof Zi);
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,13 +1,13 @@
+ (function() {
+-	if (1) {
+-		let e;
+-		const o = 1;
+-		class t {}
++	{
++		let x;
++		let y = 1;
++		class Zee {}
+ 	}
+-	if (1) {
+-		let e;
+-		const o = 2;
+-		class t {}
++	{
++		let ex;
++		let why = 2;
++		class Zi {}
+ 	}
+ 	console.log(typeof x, typeof y, typeof Zee, typeof ex, typeof why, typeof Zi);
+ })();
+
+```
+
+## `terser/block_scope/remove_unused_in_global_block`
+
+- size: oxc 24 vs reference 76 (-52 bytes)
+
+```js
+{
+	let x;
+	const y = 1;
+	class Zee {}
+	var w;
+}
+let ex;
+const why = 2;
+class Zed {}
+var wut;
+console.log(x, y, Zee);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1 @@
+-var w;
+-let ex;
+-const why = 2;
+-class Zed {}
+-var wut;
+ console.log(x, y, Zee);
+
+```
+
+## `terser/blocks/issue_1664`
+
+- size: oxc 104 vs reference 119 (-15 bytes)
+
+```js
+var a = 1;
+function f() {
+	if (undefined) a = 2;
+	{
+		function undefined() {}
+		undefined();
+	}
+}
+f();
+console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,8 @@
+ var a = 1;
+ function f() {
+-	if (undefined) a = 2;
++	undefined && (a = 2);
+ 	{
+ 		function undefined() {}
+-		undefined();
+ 	}
+ }
+ f();
+
+```
+
+## `terser/blocks/issue_1672_for`
+
+- size: oxc 106 vs reference 119 (-13 bytes)
+
+```js
+switch (function() {
+	return xxx;
+}) {
+	case xxx:
+		for (; console.log('FAIL');) {
+			function xxx() {}
+		}
+		break;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,7 @@
+ switch (function() {
+ 	return xxx;
+ }) {
+-	case xxx:
+-		for (; console.log('FAIL');) {
+-			function xxx() {}
+-		}
+-		break;
++	case xxx: for (; console.log('FAIL');) {
++		function xxx() {}
++	}
+ }
+
+```
+
+## `terser/blocks/issue_1672_for_strict`
+
+- size: oxc 120 vs reference 134 (-14 bytes)
+
+```js
+'use strict';
+switch (function() {
+	return xxx;
+}) {
+	case xxx:
+		for (; console.log('FAIL');) {
+			function xxx() {}
+		}
+		break;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,9 +2,7 @@
+ switch (function() {
+ 	return xxx;
+ }) {
+-	case xxx:
+-		for (; console.log('FAIL');) {
+-			function xxx1() {}
+-		}
+-		break;
++	case xxx: for (; console.log('FAIL');) {
++		function xxx() {}
++	}
+ }
+
+```
+
+## `terser/blocks/issue_1672_if`
+
+- size: oxc 102 vs reference 106 (-4 bytes)
+
+```js
+switch (function() {
+	return xxx;
+}) {
+	case xxx:
+		if (console.log('FAIL')) {
+			function xxx() {}
+		}
+		break;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+ switch (function() {
+ 	return xxx;
+ }) {
+-	case xxx:
+-		if (console.log('FAIL')) function xxx() {}
+-		break;
++	case xxx: if (console.log('FAIL')) {
++		function xxx() {}
++	}
+ }
+
+```
+
+## `terser/blocks/issue_1672_if_strict`
+
+- size: oxc 116 vs reference 130 (-14 bytes)
+
+```js
+'use strict';
+switch (function() {
+	return xxx;
+}) {
+	case xxx:
+		if (console.log('FAIL')) {
+			function xxx() {}
+		}
+		break;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,9 +2,7 @@
+ switch (function() {
+ 	return xxx;
+ }) {
+-	case xxx:
+-		if (console.log('FAIL')) {
+-			function xxx1() {}
+-		}
+-		break;
++	case xxx: if (console.log('FAIL')) {
++		function xxx() {}
++	}
+ }
+
+```
+
+## `terser/blocks/issue_2946_else_const`
+
+- size: oxc 49 vs reference 139 (-90 bytes)
+
+```js
+if (1) {
+	const x = 6;
+} else {
+	const y = 12;
+}
+if (2) {
+	let z = 24;
+} else {
+	let w = 48;
+}
+if (3) {
+	class X {}
+} else {
+	class Y {}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,15 +1,9 @@
+-if (1) {
+-	const x = 6;
+-} else {
+-	const y = 12;
++{
++	let x = 6;
+ }
+-if (2) {
++{
+ 	let z = 24;
+-} else {
+-	let w = 48;
+ }
+-if (3) {
++{
+ 	class X {}
+-} else {
+-	class Y {}
+ }
+
+```
+
+## `terser/blocks/keep_some_blocks`
+
+- size: oxc 95 vs reference 116 (-21 bytes)
+
+```js
+if (foo) {
+	{
+		{
+			{}
+		}
+	}
+	if (bar) {
+		baz();
+	}
+	{
+		{}
+	}
+} else {
+	stuff();
+}
+if (foo) {
+	for (var i = 0; i < 5; ++i) if (bar) baz();
+} else {
+	stuff();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,3 @@
+-if (foo) {
+-	if (bar) baz();
+-} else stuff();
+-if (foo) {
+-	for (var i = 0; i < 5; ++i) if (bar) baz();
+-} else stuff();
++foo ? bar && baz() : stuff();
++if (foo) for (var i = 0; i < 5; ++i) bar && baz();
++else stuff();
+
+```
+
+## `terser/class_properties/static_means_execution`
+
+- size: oxc 169 vs reference 189 (-20 bytes)
+
+```js
+let x = 0;
+class NoProps {}
+class WithProps {
+	prop = x = x === 1 ? 'PASS' : 'FAIL';
+}
+class WithStaticProps {
+	static prop = x = x === 0 ? 1 : 'FAIL';
+}
+new NoProps();
+new WithProps();
+new WithStaticProps();
+console.log(x);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,12 @@
+-let x = 0;
+-class WithStaticProps {
+-	static prop = x = 0 === x ? 1 : 'FAIL';
++let e = 0;
++class t {}
++class n {
++	prop = e = e === 1 ? 'PASS' : 'FAIL';
++}
++class r {
++	static prop = e = e === 0 ? 1 : 'FAIL';
+ }
+-new class {}();
+-new class {
+-	prop = x = 1 === x ? 'PASS' : 'FAIL';
+-}();
+-new WithStaticProps();
+-console.log(x);
++new t();
++new n();
++new r();
++console.log(e);
+
+```
+
+## `terser/classes/class_duplication`
+
+- size: oxc 59 vs reference 63 (-4 bytes)
+
+```js
+class Foo {
+	foo() {
+		leak(new Foo());
+	}
+}
+export default Foo;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,6 @@
+-export default (class Foo {
++class e {
+ 	foo() {
+-		leak(new Foo());
++		leak(new e());
+ 	}
+-});
++}
++export default e;
+
+```
+
+## `terser/classes/class_duplication_2`
+
+- size: oxc 50 vs reference 52 (-2 bytes)
+
+```js
+class Foo {
+	foo() {
+		leak(new Foo());
+	}
+}
+leak(Foo);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,6 @@
+-leak(class Foo {
++class e {
+ 	foo() {
+-		leak(new Foo());
++		leak(new e());
+ 	}
+-});
++}
++leak(e);
+
+```
+
+## `terser/collapse_vars/assignment`
+
+- size: oxc 0 vs reference 28 (-28 bytes)
+
+```js
+function f() {
+	var a;
+	a = x;
+	return a;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f() {
+-	return x;
+-}
+
+```
+
+## `terser/collapse_vars/cascade_call`
+
+- size: oxc 0 vs reference 35 (-35 bytes)
+
+```js
+function f(a) {
+	var b;
+	return x((b = a, y(b)));
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f(a) {
+-	return x(y(a));
+-}
+
+```
+
+## `terser/collapse_vars/cascade_if_1`
+
+- size: oxc 35 vs reference 44 (-9 bytes)
+
+```js
+var a;
+if (a = x(), a) {
+	if (a == y()) z();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,2 @@
+-var a;
+-if (a = x()) {
+-	if (a == y()) z();
+-}
++var a = x();
++a && a == y() && z();
+
+```
+
+## `terser/collapse_vars/cascade_return`
+
+- size: oxc 35 vs reference 46 (-11 bytes)
+
+```js
+function f(a) {
+	return a = x();
+	return a;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,3 @@
+ function f(a) {
+ 	return a = x();
+-	return a;
+ }
+
+```
+
+## `terser/collapse_vars/cascade_switch`
+
+- size: oxc 69 vs reference 70 (-1 bytes)
+
+```js
+function f(a, b) {
+	switch (a = x(), a) {
+		case a = x(), b(a): break;
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ function f(a, b) {
+-	switch (a = x()) {
+-		case b(a = x()): break;
++	switch (a = x(), a) {
++		case a = x(), b(a):
+ 	}
+ }
+
+```
+
+## `terser/collapse_vars/chained_3`
+
+- size: oxc 77 vs reference 78 (-1 bytes)
+
+```js
+console.log((function(a, b) {
+	var c = a, c = b;
+	b++;
+	return c;
+})(1, 2));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,5 @@
+ console.log((function(a, b) {
+-	var c = 1;
+-	c = b;
++	var c = a, c = b;
+ 	b++;
+ 	return c;
+-})(0, 2));
++})(1, 2));
+
+```
+
+## `terser/collapse_vars/collapse_rhs_loop`
+
+- size: oxc 123 vs reference 126 (-3 bytes)
+
+```js
+var s;
+s = '<tpl>PASS</tpl>';
+for (var m, r = /<tpl>(.*)<\/tpl>/; m = s.match(r);) s = s.replace(m[0], m[1]);
+console.log(s);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,3 @@
+-var s;
+-s = '<tpl>PASS</tpl>';
++var s = '<tpl>PASS</tpl>';
+ for (var m, r = /<tpl>(.*)<\/tpl>/; m = s.match(r);) s = s.replace(m[0], m[1]);
+ console.log(s);
+
+```
+
+## `terser/collapse_vars/collapse_vars_arguments`
+
+- size: oxc 64 vs reference 72 (-8 bytes)
+
+```js
+var outer = function() {
+	var k = 7, arguments = 5, inner = function() {
+		console.log(arguments);
+	};
+	inner(k, 1);
+};
+outer();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ (function() {
+ 	(function() {
+-		console.log(arguments);
++		console.log(5);
+ 	})(7, 1);
+ })();
+
+```
+
+## `terser/collapse_vars/collapse_vars_array`
+
+- size: oxc 0 vs reference 189 (-189 bytes)
+
+```js
+function f1(x, y) {
+	var z = x + y;
+	return [z];
+}
+function f2(x, y) {
+	var z = x + y;
+	return [
+		x,
+		side_effect(),
+		z
+	];
+}
+function f3(x, y) {
+	var z = f(x + y);
+	return [
+		[3],
+		[
+			z,
+			x,
+			y
+		],
+		[g()]
+	];
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,21 +0,0 @@
+-function f1(x, y) {
+-	return [x + y];
+-}
+-function f2(x, y) {
+-	return [
+-		x,
+-		side_effect(),
+-		x + y
+-	];
+-}
+-function f3(x, y) {
+-	return [
+-		[3],
+-		[
+-			f(x + y),
+-			x,
+-			y
+-		],
+-		[g()]
+-	];
+-}
+
+```
+
+## `terser/collapse_vars/collapse_vars_assignment`
+
+- size: oxc 0 vs reference 370 (-370 bytes)
+
+```js
+function log(x) {
+	return console.log(x), x;
+}
+function f0(c) {
+	var a = 3 / c;
+	return a = a;
+}
+function f1(c) {
+	const a = 3 / c;
+	const b = 1 - a;
+	return b;
+}
+function f2(c) {
+	var a = 3 / c;
+	var b = a - 7;
+	return log(c = b);
+}
+function f3(c) {
+	var a = 3 / c;
+	var b = a - 7;
+	return log(c |= b);
+}
+function f4(c) {
+	var a = 3 / c;
+	var b = 2;
+	return log(b += a);
+}
+function f5(c) {
+	var b = 2;
+	var a = 3 / c;
+	return log(b += a);
+}
+function f6(c) {
+	var b = g();
+	var a = 3 / c;
+	return log(b += a);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,26 +0,0 @@
+-function log(x) {
+-	return console.log(x), x;
+-}
+-function f0(c) {
+-	return 3 / c;
+-}
+-function f1(c) {
+-	return 1 - 3 / c;
+-}
+-function f2(c) {
+-	return log(c = 3 / c - 7);
+-}
+-function f3(c) {
+-	var a = 3 / c;
+-	return log(c |= a - 7);
+-}
+-function f4(c) {
+-	return log(2 + 3 / c);
+-}
+-function f5(c) {
+-	return log(2 + 3 / c);
+-}
+-function f6(c) {
+-	var b = g();
+-	return log(b += 3 / c);
+-}
+
+```
+
+## `terser/collapse_vars/collapse_vars_closures`
+
+- size: oxc 0 vs reference 200 (-200 bytes)
+
+```js
+function constant_vars_can_be_replaced_in_any_scope() {
+	var outer = 3;
+	return function() {
+		return outer;
+	};
+}
+function non_constant_vars_can_only_be_replace_in_same_scope(x) {
+	var outer = x;
+	return function() {
+		return outer;
+	};
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +0,0 @@
+-function constant_vars_can_be_replaced_in_any_scope() {
+-	return function() {
+-		return 3;
+-	};
+-}
+-function non_constant_vars_can_only_be_replace_in_same_scope(x) {
+-	return function() {
+-		return x;
+-	};
+-}
+
+```
+
+## `terser/collapse_vars/collapse_vars_constants`
+
+- size: oxc 0 vs reference 355 (-355 bytes)
+
+```js
+function f1(x) {
+	var a = 4, b = x.prop, c = 5, d = sideeffect1(), e = sideeffect2();
+	return b + (function() {
+		return d - a * e - c;
+	})();
+}
+function f2(x) {
+	var a = 4, b = x.prop, c = 5, not_used = sideeffect1(), e = sideeffect2();
+	return b + (function() {
+		return -a * e - c;
+	})();
+}
+function f3(x) {
+	var a = 4, b = x.prop, c = 5, not_used = sideeffect1();
+	return b + (function() {
+		return -a - c;
+	})();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,19 +0,0 @@
+-function f1(x) {
+-	var b = x.prop, d = sideeffect1(), e = sideeffect2();
+-	return b + (function() {
+-		return d - 4 * e - 5;
+-	})();
+-}
+-function f2(x) {
+-	var b = x.prop, e = (sideeffect1(), sideeffect2());
+-	return b + (function() {
+-		return -4 * e - 5;
+-	})();
+-}
+-function f3(x) {
+-	var b = x.prop;
+-	sideeffect1();
+-	return b + (function() {
+-		return -9;
+-	})();
+-}
+
+```
+
+## `terser/collapse_vars/collapse_vars_do_while`
+
+- size: oxc 0 vs reference 386 (-386 bytes)
+
+```js
+function f1(y) {
+	var c = 9;
+	do {} while (c === 77);
+}
+function f2(y) {
+	var c = 5 - y;
+	do {} while (c);
+}
+function f3(y) {
+	function fn(n) {
+		console.log(n);
+	}
+	var a = 2, x = 7;
+	do {
+		fn(a = x);
+		break;
+	} while (y);
+}
+function f4(y) {
+	var a = y / 4;
+	do {
+		return a;
+	} while (y);
+}
+function f5(y) {
+	function p(x) {
+		console.log(x);
+	}
+	do {
+		var a = y - 3;
+		p(a);
+	} while (--y);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,32 +0,0 @@
+-function f1(y) {
+-	var c = 9;
+-	do {} while (77 === c);
+-}
+-function f2(y) {
+-	var c = 5 - y;
+-	do {} while (c);
+-}
+-function f3(y) {
+-	function fn(n) {
+-		console.log(n);
+-	}
+-	var a = 2, x = 7;
+-	do {
+-		fn(a = x);
+-		break;
+-	} while (y);
+-}
+-function f4(y) {
+-	var a = y / 4;
+-	do {
+-		return a;
+-	} while (y);
+-}
+-function f5(y) {
+-	function p(x) {
+-		console.log(x);
+-	}
+-	do {
+-		p(y - 3);
+-	} while (--y);
+-}
+
+```
+
+## `terser/collapse_vars/collapse_vars_do_while_drop_assign`
+
+- size: oxc 0 vs reference 375 (-375 bytes)
+
+```js
+function f1(y) {
+	var c = 9;
+	do {} while (c === 77);
+}
+function f2(y) {
+	var c = 5 - y;
+	do {} while (c);
+}
+function f3(y) {
+	function fn(n) {
+		console.log(n);
+	}
+	var a = 2, x = 7;
+	do {
+		fn(a = x);
+		break;
+	} while (y);
+}
+function f4(y) {
+	var a = y / 4;
+	do {
+		return a;
+	} while (y);
+}
+function f5(y) {
+	function p(x) {
+		console.log(x);
+	}
+	do {
+		var a = y - 3;
+		p(a);
+	} while (--y);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,32 +0,0 @@
+-function f1(y) {
+-	var c = 9;
+-	do {} while (77 === c);
+-}
+-function f2(y) {
+-	var c = 5 - y;
+-	do {} while (c);
+-}
+-function f3(y) {
+-	function fn(n) {
+-		console.log(n);
+-	}
+-	var x = 7;
+-	do {
+-		fn(x);
+-		break;
+-	} while (y);
+-}
+-function f4(y) {
+-	var a = y / 4;
+-	do {
+-		return a;
+-	} while (y);
+-}
+-function f5(y) {
+-	function p(x) {
+-		console.log(x);
+-	}
+-	do {
+-		p(y - 3);
+-	} while (--y);
+-}
+
+```
+
+## `terser/collapse_vars/collapse_vars_eval_and_with`
+
+- size: oxc 252 vs reference 258 (-6 bytes)
+
+```js
+(function f0() {
+	var a = 2;
+	console.log(a - 5);
+	eval('console.log(a);');
+})();
+(function f1() {
+	var o = { a: 1 }, a = 2;
+	with(o) console.log(a);
+})();
+(function f2() {
+	var o = { a: 1 }, a = 2;
+	return function() {
+		with(o) console.log(a);
+	};
+})()();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -3,11 +3,11 @@
+ 	console.log(a - 5);
+ 	eval('console.log(a);');
+ })();
+-(function f1() {
++(function() {
+ 	var o = { a: 1 }, a = 2;
+ 	with(o) console.log(a);
+ })();
+-(function f2() {
++(function() {
+ 	var o = { a: 1 }, a = 2;
+ 	return function() {
+ 		with(o) console.log(a);
+
+```
+
+## `terser/collapse_vars/collapse_vars_if`
+
+- size: oxc 0 vs reference 227 (-227 bytes)
+
+```js
+function f1() {
+	var not_used = sideeffect(), x = g1 + g2;
+	var y = x / 4, z = 'Bar' + y;
+	if ('x' != z) {
+		return g9;
+	} else return g5;
+}
+function f2() {
+	var x = g1 + g2, not_used = sideeffect();
+	var y = x / 4;
+	var z = 'Bar' + y;
+	if ('x' != z) {
+		return g9;
+	} else return g5;
+}
+function f3(x) {
+	if (x) {
+		var a = 1;
+		return a;
+	} else {
+		var b = 2;
+		return b;
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,15 +0,0 @@
+-function f1() {
+-	sideeffect();
+-	return 'x' != 'Bar' + (g1 + g2) / 4 ? g9 : g5;
+-}
+-function f2() {
+-	var x = g1 + g2;
+-	sideeffect();
+-	return 'x' != 'Bar' + x / 4 ? g9 : g5;
+-}
+-function f3(x) {
+-	if (x) {
+-		return 1;
+-	}
+-	return 2;
+-}
+
+```
+
+## `terser/collapse_vars/collapse_vars_lvalues`
+
+- size: oxc 0 vs reference 600 (-600 bytes)
+
+```js
+function f0(x) {
+	var i = ++x;
+	return x += i;
+}
+function f1(x) {
+	var a = x -= 3;
+	return x += a;
+}
+function f2(x) {
+	var z = x, a = ++z;
+	return z += a;
+}
+function f3(x) {
+	var a = x -= 3, b = x + a;
+	return b;
+}
+function f4(x) {
+	var a = x -= 3;
+	return x + a;
+}
+function f5(x) {
+	var w = e1(), v = e2(), c = v = --x, b = w = x;
+	return b - c;
+}
+function f6(x) {
+	var w = e1(), v = e2(), c = v = --x, b = w = x;
+	return c - b;
+}
+function f7(x) {
+	var w = e1(), v = e2(), c = v - x, b = w = x;
+	return b - c;
+}
+function f8(x) {
+	var w = e1(), v = e2(), b = w = x, c = v - x;
+	return b - c;
+}
+function f9(x) {
+	var w = e1(), v = e2(), b = w = x, c = v - x;
+	return c - b;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,40 +0,0 @@
+-function f0(x) {
+-	var i = ++x;
+-	return x += i;
+-}
+-function f1(x) {
+-	var a = x -= 3;
+-	return x += a;
+-}
+-function f2(x) {
+-	var z = x, a = ++z;
+-	return z += a;
+-}
+-function f3(x) {
+-	var a = x -= 3;
+-	return x + a;
+-}
+-function f4(x) {
+-	var a = x -= 3;
+-	return x + a;
+-}
+-function f5(x) {
+-	var w = e1(), v = e2(), c = v = --x;
+-	return (w = x) - c;
+-}
+-function f6(x) {
+-	var w = e1(), v = e2();
+-	return (v = --x) - (w = x);
+-}
+-function f7(x) {
+-	var w = e1();
+-	return (w = x) - (e2() - x);
+-}
+-function f8(x) {
+-	var w = e1();
+-	return (w = x) - (e2() - x);
+-}
+-function f9(x) {
+-	var w = e1();
+-	return e2() - x - (w = x);
+-}
+
+```
+
+## `terser/collapse_vars/collapse_vars_lvalues_drop_assign`
+
+- size: oxc 0 vs reference 513 (-513 bytes)
+
+```js
+function f0(x) {
+	var i = ++x;
+	return x += i;
+}
+function f1(x) {
+	var a = x -= 3;
+	return x += a;
+}
+function f2(x) {
+	var z = x, a = ++z;
+	return z += a;
+}
+function f3(x) {
+	var a = x -= 3, b = x + a;
+	return b;
+}
+function f4(x) {
+	var a = x -= 3;
+	return x + a;
+}
+function f5(x) {
+	var w = e1(), v = e2(), c = v = --x, b = w = x;
+	return b - c;
+}
+function f6(x) {
+	var w = e1(), v = e2(), c = v = --x, b = w = x;
+	return c - b;
+}
+function f7(x) {
+	var w = e1(), v = e2(), c = v - x, b = w = x;
+	return b - c;
+}
+function f8(x) {
+	var w = e1(), v = e2(), b = w = x, c = v - x;
+	return b - c;
+}
+function f9(x) {
+	var w = e1(), v = e2(), b = w = x, c = v - x;
+	return c - b;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,37 +0,0 @@
+-function f0(x) {
+-	var i = ++x;
+-	return x += i;
+-}
+-function f1(x) {
+-	var a = x -= 3;
+-	return x += a;
+-}
+-function f2(x) {
+-	var z = x, a = ++z;
+-	return z += a;
+-}
+-function f3(x) {
+-	var a = x -= 3;
+-	return x + a;
+-}
+-function f4(x) {
+-	var a = x -= 3;
+-	return x + a;
+-}
+-function f5(x) {
+-	e1(), e2();
+-	var c = --x;
+-	return x - c;
+-}
+-function f6(x) {
+-	return e1(), e2(), --x - x;
+-}
+-function f7(x) {
+-	return e1(), x - (e2() - x);
+-}
+-function f8(x) {
+-	return e1(), x - (e2() - x);
+-}
+-function f9(x) {
+-	return e1(), e2() - x - x;
+-}
+
+```
+
+## `terser/collapse_vars/collapse_vars_misc1`
+
+- size: oxc 0 vs reference 670 (-670 bytes)
+
+```js
+function f0(o, a, h) {
+	var b = 3 - a;
+	var obj = o;
+	var seven = 7;
+	var prop = 'run';
+	var t = obj[prop](b)[seven] = h;
+	return t;
+}
+function f1(x) {
+	var y = 5 - x;
+	return y;
+}
+function f2(x) {
+	const z = foo(), y = z / (5 - x);
+	return y;
+}
+function f3(x) {
+	var z = foo(), y = (5 - x) / z;
+	return y;
+}
+function f4(x) {
+	var z = foo(), y = (5 - u) / z;
+	return y;
+}
+function f5(x) {
+	const z = foo(), y = (5 - window.x) / z;
+	return y;
+}
+function f6() {
+	var b = window.a * window.z;
+	return b && zap();
+}
+function f7() {
+	var b = window.a * window.z;
+	return b + b;
+}
+function f8() {
+	var b = window.a * window.z;
+	var c = b + 5;
+	return b + c;
+}
+function f9() {
+	var b = window.a * window.z;
+	return bar() || b;
+}
+function f10(x) {
+	var a = 5, b = 3;
+	return a += b;
+}
+function f11(x) {
+	var a = 5, b = 3;
+	return a += --b;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,44 +0,0 @@
+-function f0(o, a, h) {
+-	var b = 3 - a;
+-	return o.run(b)[7] = h;
+-}
+-function f1(x) {
+-	return 5 - x;
+-}
+-function f2(x) {
+-	return foo() / (5 - x);
+-}
+-function f3(x) {
+-	return (5 - x) / foo();
+-}
+-function f4(x) {
+-	var z = foo();
+-	return (5 - u) / z;
+-}
+-function f5(x) {
+-	const z = foo();
+-	return (5 - window.x) / z;
+-}
+-function f6() {
+-	return window.a * window.z && zap();
+-}
+-function f7() {
+-	var b = window.a * window.z;
+-	return b + b;
+-}
+-function f8() {
+-	var b = window.a * window.z;
+-	return b + (b + 5);
+-}
+-function f9() {
+-	var b = window.a * window.z;
+-	return bar() || b;
+-}
+-function f10(x) {
+-	var a = 5;
+-	return a += 3;
+-}
+-function f11(x) {
+-	var a = 5, b = 3;
+-	return a += --b;
+-}
+
+```
+
+## `terser/collapse_vars/collapse_vars_object`
+
+- size: oxc 0 vs reference 328 (-328 bytes)
+
+```js
+function f0(x, y) {
+	var z = x + y;
+	return {
+		get b() {
+			return 7;
+		},
+		r: z
+	};
+}
+function f1(x, y) {
+	var z = x + y;
+	return {
+		r: z,
+		get b() {
+			return 7;
+		}
+	};
+}
+function f2(x, y) {
+	var z = x + y;
+	var k = x - y;
+	return {
+		q: k,
+		r: g(x),
+		s: z
+	};
+}
+function f3(x, y) {
+	var z = f(x + y);
+	return [{
+		a: {
+			q: x,
+			r: y,
+			s: z
+		},
+		b: g()
+	}];
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,34 +0,0 @@
+-function f0(x, y) {
+-	return {
+-		get b() {
+-			return 7;
+-		},
+-		r: x + y
+-	};
+-}
+-function f1(x, y) {
+-	return {
+-		r: x + y,
+-		get b() {
+-			return 7;
+-		}
+-	};
+-}
+-function f2(x, y) {
+-	var z = x + y;
+-	return {
+-		q: x - y,
+-		r: g(x),
+-		s: z
+-	};
+-}
+-function f3(x, y) {
+-	return [{
+-		a: {
+-			q: x,
+-			r: y,
+-			s: f(x + y)
+-		},
+-		b: g()
+-	}];
+-}
+
+```
+
+## `terser/collapse_vars/collapse_vars_properties`
+
+- size: oxc 0 vs reference 98 (-98 bytes)
+
+```js
+function f1(obj) {
+	var prop = 'LiteralProperty';
+	return !!-+obj[prop];
+}
+function f2(obj) {
+	var prop1 = 'One';
+	var prop2 = 'Two';
+	return ~!!-+obj[prop1 + prop2];
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +0,0 @@
+-function f1(obj) {
+-	return !!-obj.LiteralProperty;
+-}
+-function f2(obj) {
+-	return ~!!-obj.OneTwo;
+-}
+
+```
+
+## `terser/collapse_vars/collapse_vars_regexp`
+
+- size: oxc 316 vs reference 341 (-25 bytes)
+
+```js
+function f1() {
+	var k = 9;
+	var rx = /[A-Z]+/;
+	return [rx, k];
+}
+function f2() {
+	var rx = /ab*/g;
+	return function(s) {
+		return rx.exec(s);
+	};
+}
+(function() {
+	var result;
+	var s = 'acdabcdeabbb';
+	var rx = /ab*/g;
+	while (result = rx.exec(s)) {
+		console.log(result[0]);
+	}
+})();
+(function() {
+	var result;
+	var s = 'acdabcdeabbb';
+	var rx = f2();
+	while (result = rx(s)) {
+		console.log(result[0]);
+	}
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,3 @@
+-function f1() {
+-	return [/[A-Z]+/, 9];
+-}
+ function f2() {
+ 	var rx = /ab*/g;
+ 	return function(s) {
+@@ -8,10 +5,10 @@
+ 	};
+ }
+ (function() {
+-	var result, rx = /ab*/g;
+-	while (result = rx.exec('acdabcdeabbb')) console.log(result[0]);
++	var result, s = 'acdabcdeabbb', rx = /ab*/g;
++	for (; result = rx.exec(s);) console.log(result[0]);
+ })();
+ (function() {
+-	var result, rx = f2();
+-	while (result = rx('acdabcdeabbb')) console.log(result[0]);
++	var result, s = 'acdabcdeabbb', rx = f2();
++	for (; result = rx(s);) console.log(result[0]);
+ })();
+
+```
+
+## `terser/collapse_vars/collapse_vars_short_circuit`
+
+- size: oxc 0 vs reference 979 (-979 bytes)
+
+```js
+function f0(x) {
+	var a = foo(), b = bar();
+	return b || x;
+}
+function f1(x) {
+	var a = foo(), b = bar();
+	return b && x;
+}
+function f2(x) {
+	var a = foo(), b = bar();
+	return x && a && b;
+}
+function f3(x) {
+	var a = foo(), b = bar();
+	return a && x;
+}
+function f4(x) {
+	var a = foo(), b = bar();
+	return a && x && b;
+}
+function f5(x) {
+	var a = foo(), b = bar();
+	return x || a || b;
+}
+function f6(x) {
+	var a = foo(), b = bar();
+	return a || x || b;
+}
+function f7(x) {
+	var a = foo(), b = bar();
+	return a && b && x;
+}
+function f8(x, y) {
+	var a = foo(), b = bar();
+	return (x || a) && (y || b);
+}
+function f9(x, y) {
+	var a = foo(), b = bar();
+	return x && a || y && b;
+}
+function f10(x, y) {
+	var a = foo(), b = bar();
+	return x - a || y - b;
+}
+function f11(x, y) {
+	var a = foo(), b = bar();
+	return x - b || y - a;
+}
+function f12(x, y) {
+	var a = foo(), b = bar();
+	return x - y || b - a;
+}
+function f13(x, y) {
+	var a = foo(), b = bar();
+	return a - b || x - y;
+}
+function f14(x, y) {
+	var a = foo(), b = bar();
+	return b - a || x - y;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,60 +0,0 @@
+-function f0(x) {
+-	foo();
+-	return bar() || x;
+-}
+-function f1(x) {
+-	foo();
+-	return bar() && x;
+-}
+-function f2(x) {
+-	var a = foo(), b = bar();
+-	return x && a && b;
+-}
+-function f3(x) {
+-	var a = foo();
+-	bar();
+-	return a && x;
+-}
+-function f4(x) {
+-	var a = foo(), b = bar();
+-	return a && x && b;
+-}
+-function f5(x) {
+-	var a = foo(), b = bar();
+-	return x || a || b;
+-}
+-function f6(x) {
+-	var a = foo(), b = bar();
+-	return a || x || b;
+-}
+-function f7(x) {
+-	var a = foo(), b = bar();
+-	return a && b && x;
+-}
+-function f8(x, y) {
+-	var a = foo(), b = bar();
+-	return (x || a) && (y || b);
+-}
+-function f9(x, y) {
+-	var a = foo(), b = bar();
+-	return x && a || y && b;
+-}
+-function f10(x, y) {
+-	var a = foo(), b = bar();
+-	return x - a || y - b;
+-}
+-function f11(x, y) {
+-	var a = foo();
+-	return x - bar() || y - a;
+-}
+-function f12(x, y) {
+-	var a = foo(), b = bar();
+-	return x - y || b - a;
+-}
+-function f13(x, y) {
+-	return foo() - bar() || x - y;
+-}
+-function f14(x, y) {
+-	var a = foo();
+-	return bar() - a || x - y;
+-}
+
+```
+
+## `terser/collapse_vars/collapse_vars_short_circuited_conditions`
+
+- size: oxc 0 vs reference 974 (-974 bytes)
+
+```js
+function c1(x) {
+	var a = foo(), b = bar(), c = baz();
+	return a ? b : c;
+}
+function c2(x) {
+	var a = foo(), b = bar(), c = baz();
+	return a ? c : b;
+}
+function c3(x) {
+	var a = foo(), b = bar(), c = baz();
+	return b ? a : c;
+}
+function c4(x) {
+	var a = foo(), b = bar(), c = baz();
+	return b ? c : a;
+}
+function c5(x) {
+	var a = foo(), b = bar(), c = baz();
+	return c ? a : b;
+}
+function c6(x) {
+	var a = foo(), b = bar(), c = baz();
+	return c ? b : a;
+}
+function i1(x) {
+	var a = foo(), b = bar(), c = baz();
+	if (a) return b;
+	else return c;
+}
+function i2(x) {
+	var a = foo(), b = bar(), c = baz();
+	if (a) return c;
+	else return b;
+}
+function i3(x) {
+	var a = foo(), b = bar(), c = baz();
+	if (b) return a;
+	else return c;
+}
+function i4(x) {
+	var a = foo(), b = bar(), c = baz();
+	if (b) return c;
+	else return a;
+}
+function i5(x) {
+	var a = foo(), b = bar(), c = baz();
+	if (c) return a;
+	else return b;
+}
+function i6(x) {
+	var a = foo(), b = bar(), c = baz();
+	if (c) return b;
+	else return a;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,54 +0,0 @@
+-function c1(x) {
+-	var a = foo(), b = bar(), c = baz();
+-	return a ? b : c;
+-}
+-function c2(x) {
+-	var a = foo(), b = bar(), c = baz();
+-	return a ? c : b;
+-}
+-function c3(x) {
+-	var a = foo(), b = bar(), c = baz();
+-	return b ? a : c;
+-}
+-function c4(x) {
+-	var a = foo(), b = bar(), c = baz();
+-	return b ? c : a;
+-}
+-function c5(x) {
+-	var a = foo(), b = bar();
+-	return baz() ? a : b;
+-}
+-function c6(x) {
+-	var a = foo(), b = bar();
+-	return baz() ? b : a;
+-}
+-function i1(x) {
+-	var a = foo(), b = bar(), c = baz();
+-	if (a) return b;
+-	else return c;
+-}
+-function i2(x) {
+-	var a = foo(), b = bar(), c = baz();
+-	if (a) return c;
+-	else return b;
+-}
+-function i3(x) {
+-	var a = foo(), b = bar(), c = baz();
+-	if (b) return a;
+-	else return c;
+-}
+-function i4(x) {
+-	var a = foo(), b = bar(), c = baz();
+-	if (b) return c;
+-	else return a;
+-}
+-function i5(x) {
+-	var a = foo(), b = bar();
+-	if (baz()) return a;
+-	else return b;
+-}
+-function i6(x) {
+-	var a = foo(), b = bar();
+-	if (baz()) return b;
+-	else return a;
+-}
+
+```
+
+## `terser/collapse_vars/collapse_vars_switch`
+
+- size: oxc 0 vs reference 252 (-252 bytes)
+
+```js
+function f1() {
+	var not_used = sideeffect(), x = g1 + g2;
+	var y = x / 4, z = 'Bar' + y;
+	switch (z) {
+		case 0: return g9;
+	}
+}
+function f2() {
+	var x = g1 + g2, not_used = sideeffect();
+	var y = x / 4;
+	var z = 'Bar' + y;
+	switch (z) {
+		case 0: return g9;
+	}
+}
+function f3(x) {
+	switch (x) {
+		case 1:
+			var a = 3 - x;
+			return a;
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,18 +0,0 @@
+-function f1() {
+-	sideeffect();
+-	switch ('Bar' + (g1 + g2) / 4) {
+-		case 0: return g9;
+-	}
+-}
+-function f2() {
+-	var x = g1 + g2;
+-	sideeffect();
+-	switch ('Bar' + x / 4) {
+-		case 0: return g9;
+-	}
+-}
+-function f3(x) {
+-	switch (x) {
+-		case 1: return 3 - x;
+-	}
+-}
+
+```
+
+## `terser/collapse_vars/collapse_vars_try`
+
+- size: oxc 0 vs reference 201 (-201 bytes)
+
+```js
+function f1() {
+	try {
+		var a = 1;
+		return a;
+	} catch (ex) {
+		var b = 2;
+		return b;
+	} finally {
+		var c = 3;
+		return c;
+	}
+}
+function f2() {
+	var t = could_throw();
+	try {
+		return t + might_throw();
+	} catch (ex) {
+		return 3;
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,17 +0,0 @@
+-function f1() {
+-	try {
+-		return 1;
+-	} catch (ex) {
+-		return 2;
+-	} finally {
+-		return 3;
+-	}
+-}
+-function f2() {
+-	var t = could_throw();
+-	try {
+-		return t + might_throw();
+-	} catch (ex) {
+-		return 3;
+-	}
+-}
+
+```
+
+## `terser/collapse_vars/collapse_vars_unary`
+
+- size: oxc 0 vs reference 261 (-261 bytes)
+
+```js
+function f0(o, p) {
+	var x = o[p];
+	return delete x;
+}
+function f1(n) {
+	var k = !!n;
+	return n > +k;
+}
+function f2(n) {
+	var k = 7;
+	return k--;
+}
+function f3(n) {
+	var k = 7;
+	return ++k;
+}
+function f4(n) {
+	var k = 8 - n;
+	return k--;
+}
+function f5(n) {
+	var k = 9 - n;
+	return ++k;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,22 +0,0 @@
+-function f0(o, p) {
+-	return o[p], !0;
+-}
+-function f1(n) {
+-	return n > +!!n;
+-}
+-function f2(n) {
+-	var k = 7;
+-	return k--;
+-}
+-function f3(n) {
+-	var k = 7;
+-	return ++k;
+-}
+-function f4(n) {
+-	var k = 8 - n;
+-	return k--;
+-}
+-function f5(n) {
+-	var k = 9 - n;
+-	return ++k;
+-}
+
+```
+
+## `terser/collapse_vars/collapse_vars_while`
+
+- size: oxc 0 vs reference 197 (-197 bytes)
+
+```js
+function f1(y) {
+	var x = y, c = 3 - y;
+	while (c) {
+		return x;
+	}
+	var z = y * y;
+	return z;
+}
+function f2(y) {
+	var x = 7;
+	while (y) {
+		return x;
+	}
+	var z = y * y;
+	return z;
+}
+function f3(y) {
+	var n = 5 - y;
+	while (y) {
+		return n;
+	}
+	var z = y * y;
+	return z;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,14 +0,0 @@
+-function f1(y) {
+-	var c = 3 - y;
+-	while (c) return y;
+-	return y * y;
+-}
+-function f2(y) {
+-	while (y) return 7;
+-	return y * y;
+-}
+-function f3(y) {
+-	var n = 5 - y;
+-	while (y) return n;
+-	return y * y;
+-}
+
+```
+
+## `terser/collapse_vars/compound_assignment`
+
+- size: oxc 39 vs reference 42 (-3 bytes)
+
+```js
+var a;
+a = 1;
+a += a + 2;
+console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,3 @@
+-var a;
+-a = 1;
++var a = 1;
+ a += a + 2;
+ console.log(a);
+
+```
+
+## `terser/collapse_vars/cond_branch_switch`
+
+- size: oxc 38 vs reference 67 (-29 bytes)
+
+```js
+var c = 0;
+if (c = 1 + c, 0) switch (c = 1 + c) {}
+console.log(c);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ var c = 0;
+-if (c = 1 + c, 0) switch (c = 1 + c) {}
++c = 1 + c;
+ console.log(c);
+
+```
+
+## `terser/collapse_vars/double_def_1`
+
+- size: oxc 28 vs reference 29 (-1 bytes)
+
+```js
+var a = x, a = a && y;
+a();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+-var a;
+-(a = (a = x) && y)();
++var a = x, a = a && y;
++a();
+
+```
+
+## `terser/collapse_vars/for_init`
+
+- size: oxc 0 vs reference 47 (-47 bytes)
+
+```js
+function f(x, y) {
+	var a = x;
+	var b = y;
+	for (a; b;);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +0,0 @@
+-function f(x, y) {
+-	var b = y;
+-	for (x; b;);
+-}
+
+```
+
+## `terser/collapse_vars/iife_2`
+
+- size: oxc 43 vs reference 51 (-8 bytes)
+
+```js
+var foo = bar();
+!(function(x) {
+	console.log(x);
+})(foo);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,3 @@
+-var foo;
+-!function(x) {
+-	console.log(x);
+-}(bar());
++(function(e) {
++	console.log(e);
++})(bar());
+
+```
+
+## `terser/collapse_vars/inner_lvalues`
+
+- size: oxc 82 vs reference 87 (-5 bytes)
+
+```js
+var a, b = 10;
+var a = (--b || a || 3).toString(), c = --b + -a;
+console.log(null, a, b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-var b = 10;
+-var a = (--b || a || 3).toString(), c = --b + -a;
++var a, b = 10, a = (--b || a || 3).toString();
++--b + -a;
+ console.log(null, a, b);
+
+```
+
+## `terser/collapse_vars/issue_1605_1`
+
+- size: oxc 0 vs reference 52 (-52 bytes)
+
+```js
+function foo(x) {
+	var y = x;
+	return y;
+}
+var o = new Object();
+o.p = 1;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +0,0 @@
+-function foo(x) {
+-	return x;
+-}
+-var o = {};
+-o.p = 1;
+
+```
+
+## `terser/collapse_vars/issue_1605_2`
+
+- size: oxc 0 vs reference 51 (-51 bytes)
+
+```js
+function foo(x) {
+	var y = x;
+	return y;
+}
+var o = new Object();
+o.p = 1;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +0,0 @@
+-function foo(x) {
+-	return x;
+-}
+-new Object().p = 1;
+
+```
+
+## `terser/collapse_vars/issue_2187_1`
+
+- size: oxc 79 vs reference 89 (-10 bytes)
+
+```js
+var a = 1;
+!(function(foo) {
+	foo();
+	var a = 2;
+	console.log(a);
+})(function() {
+	console.log(a);
+});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,6 @@
+-var a = 1;
+-!function(foo) {
++(function(foo) {
+ 	foo();
+ 	console.log(2);
+-}(function() {
+-	console.log(a);
++})(function() {
++	console.log(1);
+ });
+
+```
+
+## `terser/collapse_vars/issue_2203_1`
+
+- size: oxc 117 vs reference 135 (-18 bytes)
+
+```js
+a = 'FAIL';
+console.log({
+	a: 'PASS',
+	b: function() {
+		return (function(c) {
+			return c.a;
+		})((String, Object, this));
+	}
+}.b());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -4,6 +4,6 @@
+ 	b: function() {
+ 		return (function(c) {
+ 			return c.a;
+-		})((String, Object, this));
++		})(this);
+ 	}
+ }.b());
+
+```
+
+## `terser/collapse_vars/issue_2203_2`
+
+- size: oxc 149 vs reference 168 (-19 bytes)
+
+```js
+a = 'PASS';
+console.log({
+	a: 'FAIL',
+	b: function() {
+		return (function(c) {
+			return c.a;
+		})((String, Object, (function() {
+			return this;
+		})()));
+	}
+}.b());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -3,9 +3,9 @@
+ 	a: 'FAIL',
+ 	b: function() {
+ 		return (function(c) {
+-			return (String, Object, (function() {
+-				return this;
+-			})()).a;
+-		})();
++			return c.a;
++		})((function() {
++			return this;
++		})());
+ 	}
+ }.b());
+
+```
+
+## `terser/collapse_vars/issue_2203_3`
+
+- size: oxc 117 vs reference 145 (-28 bytes)
+
+```js
+a = 'FAIL';
+console.log({
+	a: 'PASS',
+	b: function() {
+		return (function(c) {
+			return c.a;
+		})((String, Object, (() => this)()));
+	}
+}.b());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -4,6 +4,6 @@
+ 	b: function() {
+ 		return (function(c) {
+ 			return c.a;
+-		})((String, Object, (() => this)()));
++		})(this);
+ 	}
+ }.b());
+
+```
+
+## `terser/collapse_vars/issue_2203_4`
+
+- size: oxc 95 vs reference 122 (-27 bytes)
+
+```js
+a = 'FAIL';
+console.log({
+	a: 'PASS',
+	b: function() {
+		return ((c) => c.a)((String, Object, (() => this)()));
+	}
+}.b());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,6 +2,6 @@
+ console.log({
+ 	a: 'PASS',
+ 	b: function() {
+-		return ((c) => (String, Object, (() => this)()).a)();
++		return ((c) => c.a)(this);
+ 	}
+ }.b());
+
+```
+
+## `terser/collapse_vars/issue_2250_1`
+
+- size: oxc 0 vs reference 102 (-102 bytes)
+
+```js
+function f(x) {
+	if (x) {
+		const a = foo();
+		x(a);
+	}
+}
+function g(x) {
+	if (x) {
+		let a = foo();
+		x(a);
+	}
+}
+function h(x) {
+	if (x) {
+		var a = foo();
+		x(a);
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +0,0 @@
+-function f(x) {
+-	x && x(foo());
+-}
+-function g(x) {
+-	x && x(foo());
+-}
+-function h(x) {
+-	x && x(foo());
+-}
+
+```
+
+## `terser/collapse_vars/issue_2298`
+
+- size: oxc 200 vs reference 211 (-11 bytes)
+
+```js
+!(function() {
+	function f() {
+		var a = undefined;
+		var undefined = a++;
+		try {
+			!(function g(b) {
+				b[1] = 'foo';
+			})();
+			console.log('FAIL');
+		} catch (e) {
+			console.log('PASS');
+		}
+	}
+	f();
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,14 +1,14 @@
+-!function() {
+-	(function() {
+-		var a = undefined;
+-		var undefined = a++;
++(function() {
++	function f() {
++		var a = undefined, undefined = a++;
+ 		try {
+-			!function() {
+-				(void 0)[1] = 'foo';
+-			}();
++			(function(b) {
++				b[1] = 'foo';
++			})();
+ 			console.log('FAIL');
+-		} catch (e) {
++		} catch {
+ 			console.log('PASS');
+ 		}
+-	})();
+-}();
++	}
++	f();
++})();
+
+```
+
+## `terser/collapse_vars/issue_2313_1`
+
+- size: oxc 150 vs reference 163 (-13 bytes)
+
+```js
+var a = 0, b = 0;
+var foo = {
+	get c() {
+		a++;
+		return 42;
+	},
+	set c(c) {
+		b++;
+	},
+	d: function() {
+		this.c++;
+		if (this.c) console.log(a, b);
+	}
+};
+foo.d();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ var a = 0, b = 0;
+-var foo = {
++({
+ 	get c() {
+ 		a++;
+ 		return 42;
+@@ -11,5 +11,4 @@
+ 		this.c++;
+ 		this.c && console.log(a, b);
+ 	}
+-};
+-foo.d();
++}).d();
+
+```
+
+## `terser/collapse_vars/issue_2313_2`
+
+- size: oxc 70 vs reference 71 (-1 bytes)
+
+```js
+var c = 0;
+!(function a() {
+	a && c++;
+	var a = 0;
+	a && c++;
+})();
+console.log(c);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+ var c = 0;
+-!function a() {
++(function() {
+ 	a && c++;
+ 	var a = 0;
+-}();
++})();
+ console.log(c);
+
+```
+
+## `terser/collapse_vars/issue_2319_1`
+
+- size: oxc 78 vs reference 79 (-1 bytes)
+
+```js
+console.log((function(a) {
+	return a;
+})(!(function() {
+	return this;
+})()));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ console.log((function(a) {
+-	return !(function() {
+-		return this;
+-	})();
+-})());
++	return a;
++})(!(function() {
++	return this;
++})()));
+
+```
+
+## `terser/collapse_vars/issue_2319_3`
+
+- size: oxc 92 vs reference 93 (-1 bytes)
+
+```js
+'use strict';
+console.log((function(a) {
+	return a;
+})(!(function() {
+	return this;
+})()));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+ 'use strict';
+ console.log((function(a) {
+-	return !(function() {
+-		return this;
+-	})();
+-})());
++	return a;
++})(!(function() {
++	return this;
++})()));
+
+```
+
+## `terser/collapse_vars/issue_2364_1`
+
+- size: oxc 222 vs reference 239 (-17 bytes)
+
+```js
+function inc(obj) {
+	return obj.count++;
+}
+function foo() {
+	var first = arguments[0];
+	var result = inc(first);
+	return foo.amount = first.count, result;
+}
+var data = { count: 0 };
+var answer = foo(data);
+console.log(foo.amount, answer);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -6,6 +6,5 @@
+ 	var result = inc(first);
+ 	return foo.amount = first.count, result;
+ }
+-var data = { count: 0 };
+-var answer = foo(data);
++var answer = foo({ count: 0 });
+ console.log(foo.amount, answer);
+
+```
+
+## `terser/collapse_vars/issue_2364_3`
+
+- size: oxc 194 vs reference 211 (-17 bytes)
+
+```js
+function inc(obj) {
+	return obj.count++;
+}
+function foo(bar) {
+	var result = inc(bar);
+	return foo.amount = bar.count, result;
+}
+var data = { count: 0 };
+var answer = foo(data);
+console.log(foo.amount, answer);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -5,6 +5,5 @@
+ 	var result = inc(bar);
+ 	return foo.amount = bar.count, result;
+ }
+-var data = { count: 0 };
+-var answer = foo(data);
++var answer = foo({ count: 0 });
+ console.log(foo.amount, answer);
+
+```
+
+## `terser/collapse_vars/issue_2364_5`
+
+- size: oxc 0 vs reference 54 (-54 bytes)
+
+```js
+function f0(o, a, h) {
+	var b = 3 - a;
+	var obj = o;
+	var seven = 7;
+	var prop = 'run';
+	var t = obj[prop](b)[seven] = h;
+	return t;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f0(o, a, h) {
+-	return o.run(3 - a)[7] = h;
+-}
+
+```
+
+## `terser/collapse_vars/issue_2436_11`
+
+- size: oxc 0 vs reference 387 (-387 bytes)
+
+```js
+function matrix() {}
+function isCollection() {}
+function _randomDataForMatrix() {}
+function _randomInt() {}
+function f(arg1, arg2) {
+	if (isCollection(arg1)) {
+		var size = arg1;
+		var max = arg2;
+		var min = 0;
+		var res = _randomDataForMatrix(size.valueOf(), min, max, _randomInt);
+		return size && true === size.isMatrix ? matrix(res) : res;
+	} else {
+		var min = arg1;
+		var max = arg2;
+		return _randomInt(min, max);
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,12 +0,0 @@
+-function matrix() {}
+-function isCollection() {}
+-function _randomDataForMatrix() {}
+-function _randomInt() {}
+-function f(arg1, arg2) {
+-	if (isCollection(arg1)) {
+-		var size = arg1, max = arg2, min = 0, res = _randomDataForMatrix(size.valueOf(), min, max, _randomInt);
+-		return size && true === size.isMatrix ? matrix(res) : res;
+-	} else {
+-		return _randomInt(min = arg1, max = arg2);
+-	}
+-}
+
+```
+
+## `terser/collapse_vars/issue_2436_12`
+
+- size: oxc 0 vs reference 135 (-135 bytes)
+
+```js
+function isUndefined() {}
+function f() {
+	var viewValue = this.$$lastCommittedViewValue;
+	var modelValue = viewValue;
+	return isUndefined(modelValue) ? modelValue : null;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +0,0 @@
+-function isUndefined() {}
+-function f() {
+-	var modelValue = this.$$lastCommittedViewValue;
+-	return isUndefined() ? modelValue : null;
+-}
+
+```
+
+## `terser/collapse_vars/issue_2437`
+
+- size: oxc 391 vs reference 404 (-13 bytes)
+
+```js
+function foo() {
+	bar();
+}
+function bar() {
+	if (xhrDesc) {
+		var req = new XMLHttpRequest();
+		var result = !!req.onreadystatechange;
+		Object.defineProperty(XMLHttpRequest.prototype, 'onreadystatechange', xhrDesc || {});
+		return result;
+	} else {
+		var req = new XMLHttpRequest();
+		var detectFunc = function() {};
+		req.onreadystatechange = detectFunc;
+		var result = req[SYMBOL_FAKE_ONREADYSTATECHANGE_1] === detectFunc;
+		req.onreadystatechange = null;
+		return result;
+	}
+}
+foo();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,14 @@
+-!(function() {
++function e() {
++	t();
++}
++function t() {
+ 	if (xhrDesc) {
+-		var result = !!(req = new XMLHttpRequest()).onreadystatechange;
+-		return Object.defineProperty(XMLHttpRequest.prototype, 'onreadystatechange', xhrDesc || {}), result;
++		var e = new XMLHttpRequest(), t = !!e.onreadystatechange;
++		return Object.defineProperty(XMLHttpRequest.prototype, 'onreadystatechange', xhrDesc || {}), t;
+ 	}
+-	var req, detectFunc = function() {};
+-	(req = new XMLHttpRequest()).onreadystatechange = detectFunc, result = req[SYMBOL_FAKE_ONREADYSTATECHANGE_1] === detectFunc, req.onreadystatechange = null;
+-})();
++	var e = new XMLHttpRequest(), n = function() {};
++	e.onreadystatechange = n;
++	var t = e[SYMBOL_FAKE_ONREADYSTATECHANGE_1] === n;
++	return e.onreadystatechange = null, t;
++}
++e();
+
+```
+
+## `terser/collapse_vars/issue_2497`
+
+- size: oxc 0 vs reference 209 (-209 bytes)
+
+```js
+function sample() {
+	if (true) {
+		for (var i = 0; i < 1; ++i) {
+			for (var k = 0; k < 1; ++k) {
+				var value = 1;
+				var x = value;
+				value = x ? x + 1 : 0;
+			}
+		}
+	} else {
+		for (var i = 0; i < 1; ++i) {
+			for (var k = 0; k < 1; ++k) {
+				var value = 1;
+			}
+		}
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +0,0 @@
+-function sample() {
+-	if (true) for (var i = 0; i < 1; ++i) for (var k = 0; k < 1; ++k) {
+-		value = 1;
+-		value = value ? value + 1 : 0;
+-	}
+-	else for (i = 0; i < 1; ++i) for (k = 0; k < 1; ++k) var value = 1;
+-}
+
+```
+
+## `terser/collapse_vars/issue_2571_1`
+
+- size: oxc 105 vs reference 110 (-5 bytes)
+
+```js
+var b = 1;
+try {
+	var a = (function f0(c) {
+		throw c;
+	})(2);
+	var d = --b + a;
+} catch (e) {}
+console.log(b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,8 @@
+-var b = 1;
++var e = 1;
+ try {
+-	var a = function f0(c) {
+-		throw c;
+-	}(2);
+-	var d = --b + a;
+-} catch (e) {}
+-console.log(b);
++	var t = (function(e) {
++		throw e;
++	})(2);
++	var n = --e + t;
++} catch {}
++console.log(e);
+
+```
+
+## `terser/collapse_vars/issue_2571_2`
+
+- size: oxc 64 vs reference 68 (-4 bytes)
+
+```js
+try {
+	var a = A, b = 1;
+	throw a;
+} catch (e) {
+	console.log(b);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+ try {
+-	var a = A, b = 1;
+-	throw a;
+-} catch (e) {
+-	console.log(b);
++	var e = A, t = 1;
++	throw e;
++} catch {
++	console.log(t);
+ }
+
+```
+
+## `terser/collapse_vars/issue_27`
+
+- size: oxc 65 vs reference 67 (-2 bytes)
+
+```js
+(function(jQuery) {
+	var $;
+	$ = jQuery;
+	$('body').addClass('foo');
+})(jQuery);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-(function(jQuery1) {
+-	jQuery1('body').addClass('foo');
++(function(jQuery) {
++	jQuery('body').addClass('foo');
+ })(jQuery);
+
+```
+
+## `terser/collapse_vars/issue_2878`
+
+- size: oxc 117 vs reference 119 (-2 bytes)
+
+```js
+var c = 0;
+(function(a, b) {
+	function f2() {
+		if (a) c++;
+	}
+	b = f2();
+	a = 1;
+	b && b.b;
+	f2();
+})();
+console.log(c);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+ var c = 0;
+ (function(a, b) {
+ 	function f2() {
+-		if (a) c++;
++		a && c++;
+ 	}
+ 	b = f2(), a = 1, b && b.b, f2();
+ })(), console.log(c);
+
+```
+
+## `terser/collapse_vars/issue_2891_1`
+
+- size: oxc 85 vs reference 89 (-4 bytes)
+
+```js
+var a = 'PASS', b;
+try {
+	b = c.p = 0;
+	a = 'FAIL';
+	b();
+} catch (e) {}
+console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+-var b, a = 'PASS';
++var a = 'PASS', b;
+ try {
+ 	b = c.p = 0;
+ 	a = 'FAIL';
+ 	b();
+-} catch (e) {}
++} catch {}
+ console.log(a);
+
+```
+
+## `terser/collapse_vars/issue_2891_2`
+
+- size: oxc 97 vs reference 101 (-4 bytes)
+
+```js
+'use strict';
+var a = 'PASS', b;
+try {
+	b = c = 0;
+	a = 'FAIL';
+	b();
+} catch (e) {}
+console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,8 @@
+ 'use strict';
+-var b, a = 'PASS';
++var a = 'PASS', b;
+ try {
+ 	b = c = 0;
+ 	a = 'FAIL';
+ 	b();
+-} catch (e) {}
++} catch {}
+ console.log(a);
+
+```
+
+## `terser/collapse_vars/issue_2914_1`
+
+- size: oxc 192 vs reference 196 (-4 bytes)
+
+```js
+function read(input) {
+	var i = 0;
+	var e = 0;
+	var t = 0;
+	while (e < 32) {
+		var n = input[i++];
+		t |= (127 & n) << e;
+		if (0 === (128 & n)) return t;
+		e += 7;
+	}
+}
+console.log(read([129]));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,10 +2,10 @@
+ 	var i = 0;
+ 	var e = 0;
+ 	var t = 0;
+-	while (e < 32) {
++	for (; e < 32;) {
+ 		var n = input[i++];
+ 		t |= (127 & n) << e;
+-		if (0 === (128 & n)) return t;
++		if (!(128 & n)) return t;
+ 		e += 7;
+ 	}
+ }
+
+```
+
+## `terser/collapse_vars/issue_2931`
+
+- size: oxc 21 vs reference 72 (-51 bytes)
+
+```js
+console.log((function() {
+	var a = (function() {
+		return;
+	})();
+	return a;
+})());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1 @@
+-console.log((function() {
+-	return (function() {
+-		return;
+-	})();
+-})());
++console.log(void 0);
+
+```
+
+## `terser/collapse_vars/issue_2954_1`
+
+- size: oxc 138 vs reference 142 (-4 bytes)
+
+```js
+var a = 'PASS', b;
+try {
+	do {
+		b = (function() {
+			throw 0;
+		})();
+		a = 'FAIL';
+		b && b.c;
+	} while (0);
+} catch (e) {}
+console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+-var b, a = 'PASS';
++var a = 'PASS', b;
+ try {
+ 	do {
+ 		b = (function() {
+@@ -7,5 +7,5 @@
+ 		a = 'FAIL';
+ 		b && b.c;
+ 	} while (0);
+-} catch (e) {}
++} catch {}
+ console.log(a);
+
+```
+
+## `terser/collapse_vars/issue_2954_3`
+
+- size: oxc 130 vs reference 151 (-21 bytes)
+
+```js
+var a = 'FAIL_1', b;
+try {} finally {
+	do {
+		b = (function() {
+			throw new Error('PASS');
+		})();
+		a = 'FAIL_2';
+		b && b.c;
+	} while (0);
+}
+console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,9 @@
+-var b, a = 'FAIL_1';
+-try {} finally {
+-	do {
+-		a = 'FAIL_2';
+-		(b = function() {
+-			throw Error('PASS');
+-		}()) && b.c;
+-	} while (0);
+-}
++var a = 'FAIL_1', b;
++do {
++	b = (function() {
++		throw Error('PASS');
++	})();
++	a = 'FAIL_2';
++	b && b.c;
++} while (0);
+ console.log(a);
+
+```
+
+## `terser/collapse_vars/issue_315`
+
+- size: oxc 216 vs reference 226 (-10 bytes)
+
+```js
+console.log((function(s) {
+	var w, _i, _len, _ref, _results;
+	_ref = s.trim().split(' ');
+	_results = [];
+	for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+		w = _ref[_i];
+		_results.push(w.toLowerCase());
+	}
+	return _results;
+})('test'));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+-console.log((function() {
+-	var w, _i, _len, _ref, _results;
+-	for (_results = [], _i = 0, _len = (_ref = 'test'.trim().split(' ')).length; _i < _len; _i++) w = _ref[_i], _results.push(w.toLowerCase());
++console.log((function(s) {
++	var w, _i, _len, _ref = s.trim().split(' '), _results = [];
++	for (_i = 0, _len = _ref.length; _i < _len; _i++) w = _ref[_i], _results.push(w.toLowerCase());
+ 	return _results;
+-})());
++})('test'));
+
+```
+
+## `terser/collapse_vars/may_throw_2`
+
+- size: oxc 97 vs reference 101 (-4 bytes)
+
+```js
+function f(b) {
+	try {
+		var a = x();
+		++b;
+		return b(a);
+	} catch (e) {}
+	console.log(b);
+}
+f(0);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -3,7 +3,7 @@
+ 		var a = x();
+ 		++b;
+ 		return b(a);
+-	} catch (e) {}
++	} catch {}
+ 	console.log(b);
+ }
+ f(0);
+
+```
+
+## `terser/collapse_vars/noinline_annotation`
+
+- size: oxc 15 vs reference 36 (-21 bytes)
+
+```js
+const x = () => console.log();
+x();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-const x = () => console.log();
+-x();
++console.log();
+
+```
+
+## `terser/collapse_vars/return_2`
+
+- size: oxc 153 vs reference 158 (-5 bytes)
+
+```js
+var log = console.log;
+function f(b, c) {
+	var a = c();
+	if (b) return b;
+	log(a);
+}
+f(false, function() {
+	return 1;
+});
+f(true, function() {
+	return 2;
+});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -4,9 +4,9 @@
+ 	if (b) return b;
+ 	log(a);
+ }
+-f(false, function() {
++f(!1, function() {
+ 	return 1;
+ });
+-f(true, function() {
++f(!0, function() {
+ 	return 2;
+ });
+
+```
+
+## `terser/collapse_vars/return_3`
+
+- size: oxc 109 vs reference 114 (-5 bytes)
+
+```js
+var log = console.log;
+function f(b, c) {
+	var a = b <<= c;
+	if (b) return b;
+	log(a);
+}
+f(false, 1);
+f(true, 2);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -4,5 +4,5 @@
+ 	if (b) return b;
+ 	log(a);
+ }
+-f(false, 1);
+-f(true, 2);
++f(!1, 1);
++f(!0, 2);
+
+```
+
+## `terser/collapse_vars/return_4`
+
+- size: oxc 66 vs reference 82 (-16 bytes)
+
+```js
+var a = 'FAIL';
+(function(b) {
+	a = 'PASS';
+	return;
+	b(a);
+})();
+console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,5 @@
+ var a = 'FAIL';
+ (function(b) {
+ 	a = 'PASS';
+-	return;
+-	b(a);
+ })();
+ console.log(a);
+
+```
+
+## `terser/collapse_vars/switch_case_1`
+
+- size: oxc 0 vs reference 91 (-91 bytes)
+
+```js
+function f(x, y, z) {
+	var a = x();
+	var b = y();
+	var c = z;
+	switch (a) {
+		default: d();
+		case b: e();
+		case c: f();
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +0,0 @@
+-function f(x, y, z) {
+-	switch (x()) {
+-		default: d();
+-		case y(): e();
+-		case z: f();
+-	}
+-}
+
+```
+
+## `terser/collapse_vars/switch_case_2`
+
+- size: oxc 82 vs reference 85 (-3 bytes)
+
+```js
+var a = 1, b = 2;
+switch (b++) {
+	case b:
+		var c = a;
+		var a;
+		break;
+}
+console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+ var a = 1, b = 2;
+ switch (b++) {
+ 	case b:
+-		var a, c = a;
+-		break;
++		var c = a;
++		var a;
+ }
+ console.log(a);
+
+```
+
+## `terser/collapse_vars/toplevel_single_reference`
+
+- size: oxc 23 vs reference 40 (-17 bytes)
+
+```js
+var a;
+for (var b in x) {
+	var a = b;
+	b(a);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1 @@
+-for (var b in x) {
+-	var a;
+-	b(a = b);
+-}
++for (var b in x) b(b);
+
+```
+
+## `terser/collapse_vars/undeclared`
+
+- size: oxc 0 vs reference 44 (-44 bytes)
+
+```js
+function f(x, y) {
+	var a;
+	a = x;
+	b = y;
+	return b + a;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +0,0 @@
+-function f(x, y) {
+-	b = y;
+-	return b + x;
+-}
+
+```
+
+## `terser/collapse_vars/unsafe_builtin`
+
+- size: oxc 70 vs reference 78 (-8 bytes)
+
+```js
+function f(a) {
+	var b = Math.abs(a);
+	return Math.pow(b, 2);
+}
+console.log(f(-1), f(2));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ function f(a) {
+-	return Math.pow(Math.abs(a), 2);
++	return Math.abs(a) ** 2;
+ }
+ console.log(f(-1), f(2));
+
+```
+
+## `terser/collapse_vars/unused_orig`
+
+- size: oxc 121 vs reference 129 (-8 bytes)
+
+```js
+var a = 1;
+console.log((function(b) {
+	var a;
+	var c = b;
+	for (var d in c) {
+		var a;
+		return --b + c[0];
+	}
+	try {} catch (e) {
+		--b + a;
+	}
+	a && a.NaN;
+})([2]), a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,8 @@
+-var a = 1;
+ console.log((function(b) {
+-	var c = b;
++	var a, c = b;
+ 	for (var d in c) {
+ 		var a;
+ 		return --b + c[0];
+ 	}
+ 	a && a.NaN;
+-})([2]), a);
++})([2]), 1);
+
+```
+
+## `terser/collapse_vars/var_defs`
+
+- size: oxc 85 vs reference 86 (-1 bytes)
+
+```js
+var f1 = function(x, y) {
+	var a, b, r = x + y, q = r * r, z = q - r, a = z, b = 7;
+	console.log(a + b);
+};
+f1('1', 0);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+-var f1 = function(x, y) {
+-	var r = x + y;
+-	console.log(r * r - r + 7);
+-};
+-f1('1', 0);
++(function(x, y) {
++	var a, r = x + y, a = r * r - r;
++	console.log(a + 7);
++})('1', 0);
+
+```
+
+## `terser/comparing/issue_2857_1`
+
+- size: oxc 36 vs reference 386 (-350 bytes)
+
+```js
+function f1(a) {
+	a === undefined || a === null;
+	a === undefined || a !== null;
+	a !== undefined || a === null;
+	a !== undefined || a !== null;
+	a === undefined && a === null;
+	a === undefined && a !== null;
+	a !== undefined && a === null;
+	a !== undefined && a !== null;
+}
+function f2(a) {
+	a === null || a === undefined;
+	a === null || a !== undefined;
+	a !== null || a === undefined;
+	a !== null || a !== undefined;
+	a === null && a === undefined;
+	a === null && a !== undefined;
+	a !== null && a === undefined;
+	a !== null && a !== undefined;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,16 +1,2 @@
+-function f1(a) {
+-	void 0 === a || null !== a;
+-	void 0 !== a || null === a;
+-	void 0 !== a || null !== a;
+-	void 0 === a && null === a;
+-	void 0 === a && null !== a;
+-	void 0 !== a && null === a;
+-}
+-function f2(a) {
+-	null === a || void 0 !== a;
+-	null !== a || void 0 === a;
+-	null !== a || void 0 !== a;
+-	null === a && void 0 === a;
+-	null === a && void 0 !== a;
+-	null !== a && void 0 === a;
+-}
++function f1(a) {}
++function f2(a) {}
+
+```
+
+## `terser/comparing/issue_2857_2`
+
+- size: oxc 20 vs reference 259 (-239 bytes)
+
+```js
+function f(a, p) {
+	a === undefined || a === null || p;
+	a === undefined || a !== null || p;
+	a !== undefined || a === null || p;
+	a !== undefined || a !== null || p;
+	a === undefined && a === null || p;
+	a === undefined && a !== null || p;
+	a !== undefined && a === null || p;
+	a !== undefined && a !== null || p;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1 @@
+-function f(a, p) {
+-	null == a || p;
+-	void 0 === a || null !== a || p;
+-	void 0 !== a || null === a || p;
+-	void 0 !== a || null !== a || p;
+-	void 0 === a && null === a || p;
+-	void 0 === a && null !== a || p;
+-	void 0 !== a && null === a || p;
+-	null != a || p;
+-}
++function f(a, p) {}
+
+```
+
+## `terser/comparing/issue_2857_3`
+
+- size: oxc 20 vs reference 276 (-256 bytes)
+
+```js
+function f(a, p) {
+	a === undefined || a === null && p;
+	a === undefined || a !== null && p;
+	a !== undefined || a === null && p;
+	a !== undefined || a !== null && p;
+	a === undefined && a === null && p;
+	a === undefined && a !== null && p;
+	a !== undefined && a === null && p;
+	a !== undefined && a !== null && p;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1 @@
+-function f(a, p) {
+-	void 0 === a || null === a && p;
+-	void 0 === a || null !== a && p;
+-	void 0 !== a || null === a && p;
+-	void 0 !== a || null !== a && p;
+-	void 0 === a && null === a && p;
+-	void 0 === a && null !== a && p;
+-	void 0 !== a && null === a && p;
+-	null != a && p;
+-}
++function f(a, p) {}
+
+```
+
+## `terser/comparing/issue_2857_4`
+
+- size: oxc 20 vs reference 259 (-239 bytes)
+
+```js
+function f(a, p) {
+	p || a === undefined || a === null;
+	p || a === undefined || a !== null;
+	p || a !== undefined || a === null;
+	p || a !== undefined || a !== null;
+	p || a === undefined && a === null;
+	p || a === undefined && a !== null;
+	p || a !== undefined && a === null;
+	p || a !== undefined && a !== null;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1 @@
+-function f(a, p) {
+-	p || null == a;
+-	p || void 0 === a || null !== a;
+-	p || void 0 !== a || null === a;
+-	p || void 0 !== a || null !== a;
+-	p || void 0 === a && null === a;
+-	p || void 0 === a && null !== a;
+-	p || void 0 !== a && null === a;
+-	p || null != a;
+-}
++function f(a, p) {}
+
+```
+
+## `terser/comparing/issue_2857_5`
+
+- size: oxc 20 vs reference 276 (-256 bytes)
+
+```js
+function f(a, p) {
+	p && a === undefined || a === null;
+	p && a === undefined || a !== null;
+	p && a !== undefined || a === null;
+	p && a !== undefined || a !== null;
+	p && a === undefined && a === null;
+	p && a === undefined && a !== null;
+	p && a !== undefined && a === null;
+	p && a !== undefined && a !== null;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1 @@
+-function f(a, p) {
+-	p && void 0 === a || null === a;
+-	p && void 0 === a || null !== a;
+-	p && void 0 !== a || null === a;
+-	p && void 0 !== a || null !== a;
+-	p && void 0 === a && null === a;
+-	p && void 0 === a && null !== a;
+-	p && void 0 !== a && null === a;
+-	p && null != a;
+-}
++function f(a, p) {}
+
+```
+
+## `terser/comparing/self_comparison_1`
+
+- size: oxc 32 vs reference 42 (-10 bytes)
+
+```js
+a === a;
+a !== b;
+b.c === a.c;
+b.c !== b.c;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+-a == a;
+-a !== b;
+-b.c === a.c;
+-b.c != b.c;
++a, a;
++a, b;
++b.c, a.c;
++b.c, b.c;
+
+```
+
+## `terser/conditionals/cond_7_1`
+
+- size: oxc 16 vs reference 17 (-1 bytes)
+
+```js
+var x;
+if (y) {
+	x = 1 + 1;
+} else {
+	x = 2;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-var x;
+-y, x = 2;
++var x = (y, 2);
+
+```
+
+## `terser/conditionals/cond_8`
+
+- size: oxc 339 vs reference 340 (-1 bytes)
+
+```js
+var a;
+a = condition ? true : false;
+a = !condition ? true : false;
+a = condition() ? true : false;
+a = condition ? !0 : !1;
+a = !condition ? !null : !2;
+a = condition() ? !0 : !-3.5;
+if (condition) {
+	a = true;
+} else {
+	a = false;
+}
+if (condition) {
+	a = !0;
+} else {
+	a = !1;
+}
+a = condition ? false : true;
+a = !condition ? false : true;
+a = condition() ? false : true;
+a = condition ? !3 : !0;
+a = !condition ? !2 : !0;
+a = condition() ? !1 : !0;
+if (condition) {
+	a = false;
+} else {
+	a = true;
+}
+if (condition) {
+	a = !1;
+} else {
+	a = !0;
+}
+a = condition ? 1 : false;
+a = !condition ? true : 0;
+a = condition ? 1 : 0;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+-var a;
+-a = !!condition;
++var a = !!condition;
+ a = !condition;
+ a = !!condition();
+ a = !!condition;
+@@ -15,6 +14,6 @@
+ a = !condition();
+ a = !condition;
+ a = !condition;
+-a = !!condition && 1;
++a = condition ? 1 : !1;
+ a = !condition || 0;
+ a = +!!condition;
+
+```
+
+## `terser/conditionals/cond_8b`
+
+- size: oxc 339 vs reference 340 (-1 bytes)
+
+```js
+var a;
+a = condition ? true : false;
+a = !condition ? true : false;
+a = condition() ? true : false;
+a = condition ? !0 : !1;
+a = !condition ? !null : !2;
+a = condition() ? !0 : !-3.5;
+if (condition) {
+	a = true;
+} else {
+	a = false;
+}
+if (condition) {
+	a = !0;
+} else {
+	a = !1;
+}
+a = condition ? false : true;
+a = !condition ? false : true;
+a = condition() ? false : true;
+a = condition ? !3 : !0;
+a = !condition ? !2 : !0;
+a = condition() ? !1 : !0;
+if (condition) {
+	a = false;
+} else {
+	a = true;
+}
+if (condition) {
+	a = !1;
+} else {
+	a = !0;
+}
+a = condition ? 1 : false;
+a = !condition ? true : 0;
+a = condition ? 1 : 0;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+-var a;
+-a = !!condition;
++var a = !!condition;
+ a = !condition;
+ a = !!condition();
+ a = !!condition;
+@@ -15,6 +14,6 @@
+ a = !condition();
+ a = !condition;
+ a = !condition;
+-a = !!condition && 1;
++a = condition ? 1 : !1;
+ a = !condition || 0;
+ a = +!!condition;
+
+```
+
+## `terser/conditionals/cond_8c`
+
+- size: oxc 339 vs reference 340 (-1 bytes)
+
+```js
+var a;
+a = condition ? true : false;
+a = !condition ? true : false;
+a = condition() ? true : false;
+a = condition ? !0 : !1;
+a = !condition ? !null : !2;
+a = condition() ? !0 : !-3.5;
+if (condition) {
+	a = true;
+} else {
+	a = false;
+}
+if (condition) {
+	a = !0;
+} else {
+	a = !1;
+}
+a = condition ? false : true;
+a = !condition ? false : true;
+a = condition() ? false : true;
+a = condition ? !3 : !0;
+a = !condition ? !2 : !0;
+a = condition() ? !1 : !0;
+if (condition) {
+	a = false;
+} else {
+	a = true;
+}
+if (condition) {
+	a = !1;
+} else {
+	a = !0;
+}
+a = condition ? 1 : false;
+a = !condition ? true : 0;
+a = condition ? 1 : 0;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+-var a;
+-a = !!condition;
++var a = !!condition;
+ a = !condition;
+ a = !!condition();
+ a = !!condition;
+@@ -15,6 +14,6 @@
+ a = !condition();
+ a = !condition;
+ a = !condition;
+-a = !!condition && 1;
++a = condition ? 1 : !1;
+ a = !condition || 0;
+ a = +!!condition;
+
+```
+
+## `terser/conditionals/condition_symbol_matches_consequent`
+
+- size: oxc 154 vs reference 159 (-5 bytes)
+
+```js
+function foo(x, y) {
+	return x ? x : y;
+}
+function bar() {
+	return g ? g : h;
+}
+var g = 4;
+var h = 5;
+console.log(foo(3, null), foo(0, 7), foo(true, false), bar());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -6,4 +6,4 @@
+ }
+ var g = 4;
+ var h = 5;
+-console.log(foo(3, null), foo(0, 7), foo(true, false), bar());
++console.log(foo(3, null), foo(0, 7), foo(!0, !1), bar());
+
+```
+
+## `terser/conditionals/equality_conditionals_false`
+
+- size: oxc 221 vs reference 267 (-46 bytes)
+
+```js
+function f(a, b, c) {
+	console.log(a == (b ? a : a), a == (b ? a : c), a != (b ? a : a), a != (b ? a : c), a === (b ? a : a), a === (b ? a : c), a !== (b ? a : a), a !== (b ? a : c));
+}
+f(0, 0, 0);
+f(0, true, 0);
+f(1, 2, 3);
+f(1, null, 3);
+f(NaN);
+f(NaN, 'foo');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ function f(a, b, c) {
+-	console.log(a == (b ? a : a), a == (b ? a : c), a != (b ? a : a), a != (b ? a : c), a === (b ? a : a), a === (b ? a : c), a !== (b ? a : a), a !== (b ? a : c));
++	console.log(a == a, a == (b ? a : c), a != a, a != (b ? a : c), a === a, a === (b ? a : c), a !== a, a !== (b ? a : c));
+ }
+-f(0, 0, 0), f(0, true, 0), f(1, 2, 3), f(1, null, 3), f(0 / 0), f(0 / 0, 'foo');
++f(0, 0, 0), f(0, !0, 0), f(1, 2, 3), f(1, null, 3), f(NaN), f(NaN, 'foo');
+
+```
+
+## `terser/conditionals/equality_conditionals_true`
+
+- size: oxc 221 vs reference 227 (-6 bytes)
+
+```js
+function f(a, b, c) {
+	console.log(a == (b ? a : a), a == (b ? a : c), a != (b ? a : a), a != (b ? a : c), a === (b ? a : a), a === (b ? a : c), a !== (b ? a : a), a !== (b ? a : c));
+}
+f(0, 0, 0);
+f(0, true, 0);
+f(1, 2, 3);
+f(1, null, 3);
+f(NaN);
+f(NaN, 'foo');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ function f(a, b, c) {
+ 	console.log(a == a, a == (b ? a : c), a != a, a != (b ? a : c), a === a, a === (b ? a : c), a !== a, a !== (b ? a : c));
+ }
+-f(0, 0, 0), f(0, true, 0), f(1, 2, 3), f(1, null, 3), f(0 / 0), f(0 / 0, 'foo');
++f(0, 0, 0), f(0, !0, 0), f(1, 2, 3), f(1, null, 3), f(NaN), f(NaN, 'foo');
+
+```
+
+## `terser/conditionals/issue_1154`
+
+- size: oxc 382 vs reference 404 (-22 bytes)
+
+```js
+function f1(x) {
+	return x ? -1 : -1;
+}
+function f2(x) {
+	return x ? +2 : +2;
+}
+function f3(x) {
+	return x ? ~3 : ~3;
+}
+function f4(x) {
+	return x ? !4 : !4;
+}
+function f5(x) {
+	return x ? void 5 : void 5;
+}
+function f6(x) {
+	return x ? typeof 6 : typeof 6;
+}
+function g1() {
+	return g() ? -1 : -1;
+}
+function g2() {
+	return g() ? +2 : +2;
+}
+function g3() {
+	return g() ? ~3 : ~3;
+}
+function g4() {
+	return g() ? !4 : !4;
+}
+function g5() {
+	return g() ? void 5 : void 5;
+}
+function g6() {
+	return g() ? typeof 6 : typeof 6;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -10,9 +10,7 @@
+ function f4(x) {
+ 	return !1;
+ }
+-function f5(x) {
+-	return;
+-}
++function f5(x) {}
+ function f6(x) {
+ 	return 'number';
+ }
+@@ -29,7 +27,7 @@
+ 	return g(), !1;
+ }
+ function g5() {
+-	return void g();
++	g();
+ }
+ function g6() {
+ 	return g(), 'number';
+
+```
+
+## `terser/conditionals/issue_2535_2`
+
+- size: oxc 412 vs reference 452 (-40 bytes)
+
+```js
+function x() {}
+function y() {
+	return 'foo';
+}
+console.log(x() || true || y());
+console.log(y() || true || x());
+console.log((x() || true) && y());
+console.log((y() || true) && x());
+console.log(x() && true || y());
+console.log(y() && true || x());
+console.log(x() && true && y());
+console.log(y() && true && x());
+console.log(x() || false || y());
+console.log(y() || false || x());
+console.log((x() || false) && y());
+console.log((y() || false) && x());
+console.log(x() && false || y());
+console.log(y() && false || x());
+console.log(x() && false && y());
+console.log(y() && false && x());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,19 +2,19 @@
+ function y() {
+ 	return 'foo';
+ }
+-console.log(x() || !0);
++console.log(!0);
+ console.log(y() || !0);
+-console.log((x(), y()));
+-console.log((y(), x()));
+-console.log(!!x() || y());
+-console.log(!!y() || x());
+-console.log(x() && y());
+-console.log(y() && x());
+-console.log(x() || y());
+-console.log(y() || x());
+-console.log(!!x() && y());
+-console.log(!!y() && x());
+-console.log((x(), y()));
+-console.log((y(), x()));
+-console.log(x() && !1);
++console.log(y());
++console.log(void 0);
++console.log(y());
++console.log(y() && !0 || void 0);
++console.log(void 0);
++console.log(y() && void 0);
++console.log(y());
++console.log(y() || void 0);
++console.log(!1);
++console.log((y() || !1) && void 0);
++console.log(y());
++console.log(void 0);
++console.log(void 0);
+ console.log(y() && !1);
+
+```
+
+## `terser/conditionals/ternary_boolean_alternative`
+
+- size: oxc 0 vs reference 299 (-299 bytes)
+
+```js
+function f1() {
+	return a == b ? x : true;
+}
+function f2() {
+	return a == b ? x : false;
+}
+function f3() {
+	return a < b ? x : !0;
+}
+function f4() {
+	return a < b ? x : !1;
+}
+function f5() {
+	return c ? x : true;
+}
+function f6() {
+	return c ? x : !1;
+}
+function f7() {
+	return !c ? x : !0;
+}
+function f8() {
+	return !c ? x : false;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,24 +0,0 @@
+-function f1() {
+-	return a != b || x;
+-}
+-function f2() {
+-	return a == b && x;
+-}
+-function f3() {
+-	return !(a < b) || x;
+-}
+-function f4() {
+-	return a < b && x;
+-}
+-function f5() {
+-	return !c || x;
+-}
+-function f6() {
+-	return !!c && x;
+-}
+-function f7() {
+-	return !!c || x;
+-}
+-function f8() {
+-	return !c && x;
+-}
+
+```
+
+## `terser/conditionals/ternary_boolean_consequent`
+
+- size: oxc 0 vs reference 299 (-299 bytes)
+
+```js
+function f1() {
+	return a == b ? true : x;
+}
+function f2() {
+	return a == b ? false : x;
+}
+function f3() {
+	return a < b ? !0 : x;
+}
+function f4() {
+	return a < b ? !1 : x;
+}
+function f5() {
+	return c ? !0 : x;
+}
+function f6() {
+	return c ? false : x;
+}
+function f7() {
+	return !c ? true : x;
+}
+function f8() {
+	return !c ? !1 : x;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,24 +0,0 @@
+-function f1() {
+-	return a == b || x;
+-}
+-function f2() {
+-	return a != b && x;
+-}
+-function f3() {
+-	return a < b || x;
+-}
+-function f4() {
+-	return !(a < b) && x;
+-}
+-function f5() {
+-	return !!c || x;
+-}
+-function f6() {
+-	return !c && x;
+-}
+-function f7() {
+-	return !c || x;
+-}
+-function f8() {
+-	return !!c && x;
+-}
+
+```
+
+## `terser/conditionals/to_and_or`
+
+- size: oxc 198 vs reference 203 (-5 bytes)
+
+```js
+var values = [
+	0,
+	null,
+	true,
+	'foo',
+	false,
+	-1 / 0,
+	void 0
+];
+values.forEach(function(x) {
+	values.forEach(function(y) {
+		values.forEach(function(z) {
+			console.log(x ? y || z : z);
+		});
+	});
+});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,9 @@
+ var values = [
+ 	0,
+ 	null,
+-	true,
++	!0,
+ 	'foo',
+-	false,
++	!1,
+ 	-1 / 0,
+ 	void 0
+ ];
+
+```
+
+## `terser/const/issue_1191`
+
+- size: oxc 0 vs reference 63 (-63 bytes)
+
+```js
+function foo(rot) {
+	const rotTol = 5;
+	if (rot < -rotTol || rot > rotTol) bar();
+	baz();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +0,0 @@
+-function foo(rot) {
+-	(rot < -5 || rot > 5) && bar();
+-	baz();
+-}
+
+```
+
+## `terser/const/issue_1194`
+
+- size: oxc 0 vs reference 96 (-96 bytes)
+
+```js
+function f1() {
+	const a = 'X';
+	return a + a;
+}
+function f2() {
+	const aa = 'X';
+	return aa + aa;
+}
+function f3() {
+	const aaa = 'X';
+	return aaa + aaa;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +0,0 @@
+-function f1() {
+-	return 'XX';
+-}
+-function f2() {
+-	return 'XX';
+-}
+-function f3() {
+-	return 'XX';
+-}
+
+```
+
+## `terser/const/issue_1396`
+
+- size: oxc 0 vs reference 212 (-212 bytes)
+
+```js
+function foo(a) {
+	const VALUE = 1;
+	console.log(2 | VALUE);
+	console.log(VALUE + 1);
+	console.log(VALUE);
+	console.log(a & VALUE);
+}
+function bar() {
+	const s = '01234567890123456789';
+	console.log(s + s + s + s + s);
+	const CONSTANT = 'abc';
+	console.log(CONSTANT + CONSTANT + CONSTANT + CONSTANT + CONSTANT);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +0,0 @@
+-function foo(a) {
+-	console.log(3);
+-	console.log(2);
+-	console.log(1);
+-	console.log(1 & a);
+-}
+-function bar() {
+-	const s = '01234567890123456789';
+-	console.log(s + s + s + s + s);
+-	console.log('abcabcabcabcabc');
+-}
+
+```
+
+## `terser/const/regexp_literal_not_const`
+
+- size: oxc 142 vs reference 143 (-1 bytes)
+
+```js
+(function() {
+	var result;
+	const s = 'acdabcdeabbb';
+	const REGEXP_LITERAL = /ab*/g;
+	while (result = REGEXP_LITERAL.exec(s)) {
+		console.log(result[0]);
+	}
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ (function() {
+ 	var result;
+-	const REGEXP_LITERAL = /ab*/g;
+-	while (result = REGEXP_LITERAL.exec('acdabcdeabbb')) console.log(result[0]);
++	let REGEXP_LITERAL = /ab*/g;
++	for (; result = REGEXP_LITERAL.exec('acdabcdeabbb');) console.log(result[0]);
+ })();
+
+```
+
+## `terser/const/unused_regexp_literal`
+
+- size: oxc 0 vs reference 16 (-16 bytes)
+
+```js
+function f() {
+	var a = /b/;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +0,0 @@
+-function f() {}
+
+```
+
+## `terser/dead_code/collapse_vars_assignment`
+
+- size: oxc 0 vs reference 34 (-34 bytes)
+
+```js
+function f0(c) {
+	var a = 3 / c;
+	return a = a;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f0(c) {
+-	return 3 / c;
+-}
+
+```
+
+## `terser/dead_code/collapse_vars_lvalues_drop_assign`
+
+- size: oxc 0 vs reference 154 (-154 bytes)
+
+```js
+function f0(x) {
+	var i = ++x;
+	return x += i;
+}
+function f1(x) {
+	var a = x -= 3;
+	return x += a;
+}
+function f2(x) {
+	var z = x, a = ++z;
+	return z += a;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,12 +0,0 @@
+-function f0(x) {
+-	var i = ++x;
+-	return x + i;
+-}
+-function f1(x) {
+-	var a = x -= 3;
+-	return x + a;
+-}
+-function f2(x) {
+-	var z = x, a = ++z;
+-	return z + a;
+-}
+
+```
+
+## `terser/dead_code/collapse_vars_misc1`
+
+- size: oxc 0 vs reference 80 (-80 bytes)
+
+```js
+function f10(x) {
+	var a = 5, b = 3;
+	return a += b;
+}
+function f11(x) {
+	var a = 5, b = 3;
+	return a += --b;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +0,0 @@
+-function f10(x) {
+-	return 8;
+-}
+-function f11(x) {
+-	var b = 3;
+-	return 5 + --b;
+-}
+
+```
+
+## `terser/dead_code/dead_code_const_annotation`
+
+- size: oxc 29 vs reference 54 (-25 bytes)
+
+```js
+var unused;
+/** @const */ var CONST_FOO_ANN = false;
+if (CONST_FOO_ANN) {
+	console.log('unreachable');
+	var moo;
+	function bar() {}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,2 @@
+-var unused;
+-var CONST_FOO_ANN = !1;
+-var moo;
+-var bar;
++var e, t = !1;
++if (0) var n;
+
+```
+
+## `terser/dead_code/dead_code_const_annotation_complex_scope`
+
+- size: oxc 78 vs reference 151 (-73 bytes)
+
+```js
+var unused_var;
+/** @const */ var test = 'test';
+// @const
+var CONST_FOO_ANN = false;
+var unused_var_2;
+if (CONST_FOO_ANN) {
+	console.log('unreachable');
+	var moo;
+	function bar() {}
+}
+if (test === 'test') {
+	var beef = 'good';
+	/** @const */ var meat = 'beef';
+	var pork = 'bad';
+	if (meat === 'pork') {
+		console.log('also unreachable');
+	} else if (pork === 'good') {
+		console.log('reached, not const');
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,3 @@
+-var unused_var;
+-var test = 'test';
+-var CONST_FOO_ANN = !1;
+-var unused_var_2;
+-var moo;
+-var bar;
+-var beef = 'good';
+-var meat = 'beef';
+-var pork = 'bad';
++var e, t = 'test', n = !1, r;
++if (0) var i;
++if (t === 'test') var a = 'good';
+
+```
+
+## `terser/dead_code/dead_code_const_annotation_regex`
+
+- size: oxc 36 vs reference 79 (-43 bytes)
+
+```js
+var unused;
+var CONST_FOO_ANN = false;
+if (CONST_FOO_ANN) {
+	console.log('reachable');
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,2 @@
+ var unused;
+ var CONST_FOO_ANN = !1;
+-CONST_FOO_ANN && console.log('reachable');
+
+```
+
+## `terser/dead_code/issue_2233_2`
+
+- size: oxc 33 vs reference 92 (-59 bytes)
+
+```js
+var RegExp;
+Array.isArray;
+RegExp;
+UndeclaredGlobal;
+function foo() {
+	var Number;
+	AnotherUndeclaredGlobal;
+	Math.sin;
+	Number.isNaN;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,2 @@
+-var RegExp;
++Array.isArray;
+ UndeclaredGlobal;
+-function foo() {
+-	AnotherUndeclaredGlobal;
+-	(void 0).isNaN;
+-}
+
+```
+
+## `terser/dead_code/issue_2597`
+
+- size: oxc 157 vs reference 163 (-6 bytes)
+
+```js
+function f(b) {
+	try {
+		try {
+			throw 'foo';
+		} catch (e) {
+			return b = true;
+		}
+	} finally {
+		b && (a = 'PASS');
+	}
+}
+var a = 'FAIL';
+f();
+console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,8 +2,8 @@
+ 	try {
+ 		try {
+ 			throw 'foo';
+-		} catch (e) {
+-			return b = true;
++		} catch {
++			return b = !0;
+ 		}
+ 	} finally {
+ 		b && (a = 'PASS');
+
+```
+
+## `terser/dead_code/issue_2929`
+
+- size: oxc 110 vs reference 114 (-4 bytes)
+
+```js
+console.log((function(a) {
+	try {
+		return null.p = a = 1;
+	} catch (e) {
+		return a ? 'PASS' : 'FAIL';
+	}
+})());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+ console.log((function(a) {
+ 	try {
+ 		return null.p = a = 1;
+-	} catch (e) {
++	} catch {
+ 		return a ? 'PASS' : 'FAIL';
+ 	}
+ })());
+
+```
+
+## `terser/dead_code/throw_assignment`
+
+- size: oxc 945 vs reference 955 (-10 bytes)
+
+```js
+function f1() {
+	throw a = x();
+}
+function f2(a) {
+	throw a = x();
+}
+function f3() {
+	var a;
+	throw a = x();
+}
+function f4() {
+	try {
+		throw a = x();
+	} catch (b) {
+		console.log(a);
+	}
+}
+function f5(a) {
+	try {
+		throw a = x();
+	} catch (b) {
+		console.log(a);
+	}
+}
+function f6() {
+	var a;
+	try {
+		throw a = x();
+	} catch (b) {
+		console.log(a);
+	}
+}
+function f7() {
+	try {
+		throw a = x();
+	} finally {
+		console.log(a);
+	}
+}
+function f8(a) {
+	try {
+		throw a = x();
+	} finally {
+		console.log(a);
+	}
+}
+function f9() {
+	var a;
+	try {
+		throw a = x();
+	} finally {
+		console.log(a);
+	}
+}
+function test(inc) {
+	var counter = 0;
+	x = function() {
+		counter += inc;
+		if (inc < 0) throw counter;
+		return counter;
+	};
+	[
+		f1,
+		f2,
+		f3,
+		f4,
+		f5,
+		f6,
+		f7,
+		f8,
+		f9
+	].forEach(function(f, i) {
+		a = null;
+		try {
+			f(10 * (1 + i));
+		} catch (x) {
+			console.log('caught ' + x);
+		}
+		if (null !== a) console.log('a: ' + a);
+	});
+}
+var x, a;
+test(1);
+test(-1);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,7 +2,7 @@
+ 	throw a = x();
+ }
+ function f2(a) {
+-	throw x();
++	throw a = x();
+ }
+ function f3() {
+ 	throw x();
+@@ -10,14 +10,14 @@
+ function f4() {
+ 	try {
+ 		throw a = x();
+-	} catch (b) {
++	} catch {
+ 		console.log(a);
+ 	}
+ }
+ function f5(a) {
+ 	try {
+ 		throw a = x();
+-	} catch (b) {
++	} catch {
+ 		console.log(a);
+ 	}
+ }
+@@ -25,7 +25,7 @@
+ 	var a;
+ 	try {
+ 		throw a = x();
+-	} catch (b) {
++	} catch {
+ 		console.log(a);
+ 	}
+ }
+@@ -75,7 +75,7 @@
+ 		} catch (x) {
+ 			console.log('caught ' + x);
+ 		}
+-		if (null !== a) console.log('a: ' + a);
++		a !== null && console.log('a: ' + a);
+ 	});
+ }
+ var x, a;
+
+```
+
+## `terser/defaults/defaults_false`
+
+- size: oxc 16 vs reference 26 (-10 bytes)
+
+```js
+if (true) {
+	console.log(1 + 2);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-if (true) console.log(3);
++console.log(3);
+
+```
+
+## `terser/defaults/defaults_false_evaluate_true`
+
+- size: oxc 16 vs reference 26 (-10 bytes)
+
+```js
+if (true) {
+	console.log(1 + 2);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-if (true) console.log(3);
++console.log(3);
+
+```
+
+## `terser/defaults/defaults_undefined`
+
+- size: oxc 16 vs reference 26 (-10 bytes)
+
+```js
+if (true) {
+	console.log(1 + 2);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-if (true) console.log(3);
++console.log(3);
+
+```
+
+## `terser/destructuring/destructuring_arrays`
+
+- size: oxc 210 vs reference 214 (-4 bytes)
+
+```js
+{
+	const [aa, bb] = cc;
+}
+{
+	const [aa, [bb, cc]] = dd;
+}
+{
+	let [aa, bb] = cc;
+}
+{
+	let [aa, [bb, cc]] = dd;
+}
+var [aa, bb] = cc;
+var [aa, [bb, cc]] = dd;
+var [, [, , , , ,], , , zz] = xx;
+var [, , zzz, ,] = xxx;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,8 @@
+ {
+-	const [aa, bb] = cc;
++	let [aa, bb] = cc;
+ }
+ {
+-	const [aa, [bb, cc]] = dd;
++	let [aa, [bb, cc]] = dd;
+ }
+ {
+ 	let [aa, bb] = cc;
+
+```
+
+## `terser/destructuring/destructuring_assign_of_computed_key`
+
+- size: oxc 45 vs reference 70 (-25 bytes)
+
+```js
+let x;
+let four = 4;
+({[5 + 2 - four]: x} = { [1 + 2]: 42 });
+console.log(x);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,3 @@
+ let x;
+-let four = 4;
+-({[7 - four]: x} = { [3]: 42 });
++({3: x} = { 3: 42 });
+ console.log(x);
+
+```
+
+## `terser/destructuring/destructuring_assign_of_numeric_key`
+
+- size: oxc 45 vs reference 47 (-2 bytes)
+
+```js
+let x;
+({3: x} = { [1 + 2]: 42 });
+console.log(x);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ let x;
+-({3: x} = { [3]: 42 });
++({3: x} = { 3: 42 });
+ console.log(x);
+
+```
+
+## `terser/destructuring/destructuring_constdef_in_loops`
+
+- size: oxc 73 vs reference 79 (-6 bytes)
+
+```js
+for (const [x, y] in pairs);
+for (const [a] = 0;;);
+for (const { c } of cees);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-for (const [x, y] in pairs);
+-for (const [a] = 0;;);
+-for (const { c } of cees);
++for (let [x, y] in pairs);
++for (let [a] = 0;;);
++for (let { c } of cees);
+
+```
+
+## `terser/destructuring/destructuring_decl_of_computed_key`
+
+- size: oxc 42 vs reference 67 (-25 bytes)
+
+```js
+let four = 4;
+let { [7 - four]: x } = { [1 + 2]: 42 };
+console.log(x);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,2 @@
+-let four = 4;
+-let { [7 - four]: x } = { [3]: 42 };
++let { 3: x } = { 3: 42 };
+ console.log(x);
+
+```
+
+## `terser/destructuring/destructuring_decl_of_numeric_key`
+
+- size: oxc 42 vs reference 44 (-2 bytes)
+
+```js
+let { 3: x } = { [1 + 2]: 42 };
+console.log(x);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+-let { 3: x } = { [3]: 42 };
++let { 3: x } = { 3: 42 };
+ console.log(x);
+
+```
+
+## `terser/destructuring/destructuring_expressions`
+
+- size: oxc 19 vs reference 33 (-14 bytes)
+
+```js
+({
+	a,
+	b
+});
+[{ a }];
+f({ x });
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,3 @@
+-({
+-	a,
+-	b
+-});
+-[{ a }];
++a, b;
++a;
+ f({ x });
+
+```
+
+## `terser/destructuring/destructuring_objects`
+
+- size: oxc 356 vs reference 360 (-4 bytes)
+
+```js
+{
+	const { aa, bb } = {
+		aa: 1,
+		bb: 2
+	};
+}
+{
+	const { aa, bb: { cc, dd } } = {
+		aa: 1,
+		bb: {
+			cc: 2,
+			dd: 3
+		}
+	};
+}
+{
+	let { aa, bb } = {
+		aa: 1,
+		bb: 2
+	};
+}
+{
+	let { aa, bb: { cc, dd } } = {
+		aa: 1,
+		bb: {
+			cc: 2,
+			dd: 3
+		}
+	};
+}
+var { aa, bb } = {
+	aa: 1,
+	bb: 2
+};
+var { aa, bb: { cc, dd } } = {
+	aa: 1,
+	bb: {
+		cc: 2,
+		dd: 3
+	}
+};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,11 @@
+ {
+-	const { aa, bb } = {
++	let { aa, bb } = {
+ 		aa: 1,
+ 		bb: 2
+ 	};
+ }
+ {
+-	const { aa, bb: { cc, dd } } = {
++	let { aa, bb: { cc, dd } } = {
+ 		aa: 1,
+ 		bb: {
+ 			cc: 2,
+
+```
+
+## `terser/destructuring/destructuring_remove_unused_1`
+
+- size: oxc 0 vs reference 436 (-436 bytes)
+
+```js
+function a() {
+	var unused = 'foo';
+	var a = [1];
+	var [b] = a;
+	f(b);
+}
+function b() {
+	var unused = 'foo';
+	var a = { b: 1 };
+	var { b } = a;
+	f(b);
+}
+function c() {
+	var unused = 'foo';
+	var a = [[1]];
+	var [[b]] = a;
+	f(b);
+}
+function d() {
+	var unused = 'foo';
+	var a = { b: { b: 1 } };
+	var { b: { b } } = a;
+	f(b);
+}
+function e() {
+	var unused = 'foo';
+	var a = [
+		1,
+		2,
+		3,
+		4,
+		5
+	];
+	var x = [[
+		1,
+		2,
+		3
+	]];
+	var y = { h: 1 };
+	var [b, ...c] = a;
+	var [ ...[e, f]] = x;
+	var [ ...{ g: h }] = y;
+	f(b, c, e, f, g);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,39 +0,0 @@
+-function a() {
+-	var a = [1];
+-	var [b] = a;
+-	f(b);
+-}
+-function b() {
+-	var a = { b: 1 };
+-	var { b } = a;
+-	f(b);
+-}
+-function c() {
+-	var a = [[1]];
+-	var [[b]] = a;
+-	f(b);
+-}
+-function d() {
+-	var a = { b: { b: 1 } };
+-	var { b: { b } } = a;
+-	f(b);
+-}
+-function e() {
+-	var a = [
+-		1,
+-		2,
+-		3,
+-		4,
+-		5
+-	];
+-	var x = [[
+-		1,
+-		2,
+-		3
+-	]];
+-	var y = { h: 1 };
+-	var [b, ...c] = a;
+-	var [ ...[e, f1]] = x;
+-	var [ ...{ g: h }] = y;
+-	f1(b, c, e, f1, g);
+-}
+
+```
+
+## `terser/destructuring/destructuring_remove_unused_2`
+
+- size: oxc 0 vs reference 133 (-133 bytes)
+
+```js
+function a() {
+	var unused = 'foo';
+	var a = [
+		,
+		,
+		1
+	];
+	var [b] = a;
+	f(b);
+}
+function b() {
+	var unused = 'foo';
+	var a = [{ a: [1] }];
+	var [{ b: a }] = a;
+	f(b);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,14 +0,0 @@
+-function a() {
+-	var a = [
+-		,
+-		,
+-		1
+-	];
+-	var [b] = a;
+-	f(b);
+-}
+-function b() {
+-	var a = [{ a: [1] }];
+-	var [{ b: a }] = a;
+-	f(b);
+-}
+
+```
+
+## `terser/destructuring/issue_2044_ecma_5`
+
+- size: oxc 26 vs reference 48 (-22 bytes)
+
+```js
+({x: a = 1, y: y = 2 + b, z: z = 3 - c} = obj);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-({x: a = 1, y: y = 2 + b, z: z = 3 - c} = obj);
++({x: a = 1, y, z} = obj);
+
+```
+
+## `terser/destructuring/issue_2044_ecma_5_beautify`
+
+- size: oxc 26 vs reference 48 (-22 bytes)
+
+```js
+({x: a = 1, y: y = 2 + b, z: z = 3 - c} = obj);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-({x: a = 1, y: y = 2 + b, z: z = 3 - c} = obj);
++({x: a = 1, y, z} = obj);
+
+```
+
+## `terser/destructuring/issue_2140`
+
+- size: oxc 66 vs reference 67 (-1 bytes)
+
+```js
+!(function() {
+	var t = {};
+	console.log(([t.a] = [42])[0]);
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+-!(function() {
++(function() {
+ 	var t = {};
+ 	console.log(([t.a] = [42])[0]);
+ })();
+
+```
+
+## `terser/destructuring/mangle_destructuring_assign_toplevel_true`
+
+- size: oxc 223 vs reference 226 (-3 bytes)
+
+```js
+function test(opts) {
+	let s, o, r;
+	let a = opts.a || {
+		e: 7,
+		n: 8
+	};
+	({t, e, n, s = 5 + 4, o, r} = a);
+	console.log(t, e, n, s, o, r);
+}
+let t, e, n;
+test({ a: {
+	t: 1,
+	e: 2,
+	n: 3,
+	s: 4,
+	o: 5,
+	r: 6
+} });
+test({});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,13 +1,13 @@
+ function e(e) {
+-	let l, s, a;
+-	let c = e.a || {
++	let i, a, o;
++	let s = e.a || {
+ 		e: 7,
+ 		n: 8
+ 	};
+-	({t: n, e: o, n: t, s: l = 9, o: s, r: a} = c);
+-	console.log(n, o, t, l, s, a);
++	({t, e: n, n: r, s: i = 9, o: a, r: o} = s);
++	console.log(t, n, r, i, a, o);
+ }
+-let n, o, t;
++let t, n, r;
+ e({ a: {
+ 	t: 1,
+ 	e: 2,
+
+```
+
+## `terser/destructuring/mangle_destructuring_decl`
+
+- size: oxc 188 vs reference 212 (-24 bytes)
+
+```js
+function test(opts) {
+	let a = opts.a || {
+		e: 7,
+		n: 8
+	};
+	let { t, e, n, s = 5 + 4, o, r } = a;
+	console.log(t, e, n, s, o, r);
+}
+test({ a: {
+	t: 1,
+	e: 2,
+	n: 3,
+	s: 4,
+	o: 5,
+	r: 6
+} });
+test({});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,9 @@
+-function test(t) {
+-	let e = t.a || {
++function test(opts) {
++	let { t, e, n, s = 9, o, r } = opts.a || {
+ 		e: 7,
+ 		n: 8
+ 	};
+-	let { t: n, e: o, n: s, s: l = 9, o: a, r: c } = e;
+-	console.log(n, o, s, l, a, c);
++	console.log(t, e, n, s, o, r);
+ }
+ test({ a: {
+ 	t: 1,
+
+```
+
+## `terser/destructuring/mangle_destructuring_decl_collapse_vars`
+
+- size: oxc 188 vs reference 212 (-24 bytes)
+
+```js
+function test(opts) {
+	let a = opts.a || {
+		e: 7,
+		n: 8
+	};
+	let { t, e, n, s = 5 + 4, o, r } = a;
+	console.log(t, e, n, s, o, r);
+}
+test({ a: {
+	t: 1,
+	e: 2,
+	n: 3,
+	s: 4,
+	o: 5,
+	r: 6
+} });
+test({});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,9 @@
+-function test(t) {
+-	let e = t.a || {
++function test(opts) {
++	let { t, e, n, s = 9, o, r } = opts.a || {
+ 		e: 7,
+ 		n: 8
+ 	};
+-	let { t: n, e: o, n: s, s: l = 9, o: a, r: c } = e;
+-	console.log(n, o, s, l, a, c);
++	console.log(t, e, n, s, o, r);
+ }
+ test({ a: {
+ 	t: 1,
+
+```
+
+## `terser/destructuring/reduce_vars`
+
+- size: oxc 578 vs reference 599 (-21 bytes)
+
+```js
+{
+	const [aa, [bb, cc]] = dd;
+}
+{
+	let [aa, [bb, cc]] = dd;
+}
+var [aa, [bb, cc]] = dd;
+[aa, [bb, cc]] = dd;
+{
+	const { aa, bb: { cc, dd } } = {
+		aa: 1,
+		bb: {
+			cc: 2,
+			dd: 3
+		}
+	};
+}
+{
+	let { aa, bb: { cc, dd } } = {
+		aa: 1,
+		bb: {
+			cc: 2,
+			dd: 3
+		}
+	};
+}
+var { aa, bb: { cc, dd } } = {
+	aa: 1,
+	bb: {
+		cc: 2,
+		dd: 3
+	}
+};
+({aa: aa, bb: {cc: cc, dd: dd}} = {
+	aa: 1,
+	bb: {
+		cc: 2,
+		dd: 3
+	}
+});
+const [{ a }, b] = c;
+let [{ d }, e] = f;
+var [{ g }, h] = i;
+[{a: a}, b] = c;
+for (const [x, y] in pairs);
+for (let [x, y] in pairs);
+for (var [x, y] in pairs);
+for ([x, y] in pairs);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ {
+-	const [aa, [bb, cc]] = dd;
++	let [aa, [bb, cc]] = dd;
+ }
+ {
+ 	let [aa, [bb, cc]] = dd;
+@@ -7,7 +7,7 @@
+ var [aa, [bb, cc]] = dd;
+ [aa, [bb, cc]] = dd;
+ {
+-	const { aa, bb: { cc, dd } } = {
++	let { aa, bb: { cc, dd } } = {
+ 		aa: 1,
+ 		bb: {
+ 			cc: 2,
+@@ -31,7 +31,7 @@
+ 		dd: 3
+ 	}
+ };
+-({aa: aa, bb: {cc: cc, dd: dd}} = {
++({aa, bb: {cc, dd}} = {
+ 	aa: 1,
+ 	bb: {
+ 		cc: 2,
+@@ -41,8 +41,8 @@
+ const [{ a }, b] = c;
+ let [{ d }, e] = f;
+ var [{ g }, h] = i;
+-[{a: a}, b] = c;
+-for (const [x, y] in pairs);
++[{a}, b] = c;
++for (let [x, y] in pairs);
+ for (let [x, y] in pairs);
+ for (var [x, y] in pairs);
+ for ([x, y] in pairs);
+
+```
+
+## `terser/destructuring/unused_destructuring_arrow_param`
+
+- size: oxc 98 vs reference 105 (-7 bytes)
+
+```js
+let bar = ({ w = console.log('side effect'), x, y: z }) => {
+	console.log(x);
+};
+bar({
+	x: 4,
+	y: 5,
+	z: 6
+});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,6 @@
+-let bar = ({ w = console.log('side effect'), x }) => {
++(({ w = console.log('side effect'), x, y: z }) => {
+ 	console.log(x);
+-};
+-bar({
++})({
+ 	x: 4,
+ 	y: 5,
+ 	z: 6
+
+```
+
+## `terser/destructuring/unused_destructuring_assign_1`
+
+- size: oxc 122 vs reference 128 (-6 bytes)
+
+```js
+function extract(obj) {
+	var a;
+	let b;
+	({a: a, b: b} = obj);
+	console.log(b);
+}
+extract({
+	a: 1,
+	b: 2
+});
+extract({ b: 4 });
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+ function extract(obj) {
+ 	var a;
+ 	let b;
+-	({a: a, b: b} = obj);
++	({a, b} = obj);
+ 	console.log(b);
+ }
+ extract({
+
+```
+
+## `terser/destructuring/unused_destructuring_assign_2`
+
+- size: oxc 193 vs reference 199 (-6 bytes)
+
+```js
+function extract(obj) {
+	var a;
+	let b;
+	({a: a, b: b} = obj);
+	console.log(b);
+}
+extract({
+	a: 1,
+	b: 2
+});
+extract({
+	get a() {
+		var s = 'side effect';
+		console.log(s);
+		return s;
+	},
+	b: 4
+});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+ function extract(obj) {
+ 	var a;
+ 	let b;
+-	({a: a, b: b} = obj);
++	({a, b} = obj);
+ 	console.log(b);
+ }
+ extract({
+
+```
+
+## `terser/destructuring/unused_destructuring_getter_side_effect_1`
+
+- size: oxc 181 vs reference 183 (-2 bytes)
+
+```js
+function extract(obj) {
+	const { a, b } = obj;
+	console.log(b);
+}
+extract({
+	a: 1,
+	b: 2
+});
+extract({
+	get a() {
+		var s = 'side effect';
+		console.log(s);
+		return s;
+	},
+	b: 4
+});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ function extract(obj) {
+-	const { a, b } = obj;
++	let { a, b } = obj;
+ 	console.log(b);
+ }
+ extract({
+
+```
+
+## `terser/drop_console/unexpected_side_effects_dropping_console`
+
+- size: oxc 0 vs reference 29 (-29 bytes)
+
+```js
+function f() {
+	var a = 33;
+	console.log(a++);
+	alert(a);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f() {
+-	alert(33);
+-}
+
+```
+
+## `terser/drop_unused/assign_binding`
+
+- size: oxc 0 vs reference 30 (-30 bytes)
+
+```js
+function f() {
+	var a;
+	a = f.g, a();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f() {
+-	(0, f.g)();
+-}
+
+```
+
+## `terser/drop_unused/assign_chain`
+
+- size: oxc 0 vs reference 30 (-30 bytes)
+
+```js
+function f() {
+	var a, b;
+	x = a = y = b = 42;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f() {
+-	x = y = 42;
+-}
+
+```
+
+## `terser/drop_unused/const_assign`
+
+- size: oxc 0 vs reference 82 (-82 bytes)
+
+```js
+function f() {
+	const b = 2;
+	return 1 + b;
+}
+function g() {
+	const b = 2;
+	b = 3;
+	return 1 + b;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +0,0 @@
+-function f() {
+-	return 3;
+-}
+-function g() {
+-	const b = 2;
+-	b = 3;
+-	return 1 + b;
+-}
+
+```
+
+## `terser/drop_unused/drop_assign`
+
+- size: oxc 0 vs reference 122 (-122 bytes)
+
+```js
+function f1() {
+	var a;
+	a = 1;
+}
+function f2() {
+	var a = 1;
+	a = 2;
+}
+function f3(a) {
+	a = 1;
+}
+function f4() {
+	var a;
+	return a = 1;
+}
+function f5() {
+	var a;
+	return function() {
+		a = 1;
+	};
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +0,0 @@
+-function f1() {}
+-function f2() {}
+-function f3(a) {}
+-function f4() {
+-	return 1;
+-}
+-function f5() {
+-	return function() {};
+-}
+
+```
+
+## `terser/drop_unused/drop_fargs`
+
+- size: oxc 0 vs reference 16 (-16 bytes)
+
+```js
+function f(a) {
+	var b = a;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +0,0 @@
+-function f() {}
+
+```
+
+## `terser/drop_unused/drop_fnames`
+
+- size: oxc 0 vs reference 40 (-40 bytes)
+
+```js
+function f() {
+	return function g() {
+		var a = g;
+	};
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f() {
+-	return function() {};
+-}
+
+```
+
+## `terser/drop_unused/drop_toplevel_all_retain`
+
+- size: oxc 16 vs reference 71 (-55 bytes)
+
+```js
+var a, b = 1, c = g;
+function f(d) {
+	return function() {
+		c = 2;
+	};
+}
+a = 2;
+function g() {}
+function h() {}
+console.log(b = 3);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1 @@
+-var a;
+-function f(d) {
+-	return function() {};
+-}
+-a = 2;
+ console.log(3);
+
+```
+
+## `terser/drop_unused/drop_toplevel_funcs`
+
+- size: oxc 16 vs reference 64 (-48 bytes)
+
+```js
+var a, b = 1, c = g;
+function f(d) {
+	return function() {
+		c = 2;
+	};
+}
+a = 2;
+function g() {}
+function h() {}
+console.log(b = 3);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1 @@
+-var a, b = 1, c = g;
+-a = 2;
+-function g() {}
+-console.log(b = 3);
++console.log(3);
+
+```
+
+## `terser/drop_unused/drop_toplevel_funcs_retain`
+
+- size: oxc 16 vs reference 116 (-100 bytes)
+
+```js
+var a, b = 1, c = g;
+function f(d) {
+	return function() {
+		c = 2;
+	};
+}
+a = 2;
+function g() {}
+function h() {}
+console.log(b = 3);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1 @@
+-var a, b = 1, c = g;
+-function f(d) {
+-	return function() {
+-		c = 2;
+-	};
+-}
+-a = 2;
+-function g() {}
+-console.log(b = 3);
++console.log(3);
+
+```
+
+## `terser/drop_unused/drop_toplevel_keep_assign`
+
+- size: oxc 16 vs reference 41 (-25 bytes)
+
+```js
+var a, b = 1, c = g;
+function f(d) {
+	return function() {
+		c = 2;
+	};
+}
+a = 2;
+function g() {}
+function h() {}
+console.log(b = 3);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1 @@
+-var a, b = 1;
+-a = 2;
+-console.log(b = 3);
++console.log(3);
+
+```
+
+## `terser/drop_unused/drop_toplevel_retain`
+
+- size: oxc 16 vs reference 71 (-55 bytes)
+
+```js
+var a, b = 1, c = g;
+function f(d) {
+	return function() {
+		c = 2;
+	};
+}
+a = 2;
+function g() {}
+function h() {}
+console.log(b = 3);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1 @@
+-var a;
+-function f(d) {
+-	return function() {};
+-}
+-a = 2;
+ console.log(3);
+
+```
+
+## `terser/drop_unused/drop_toplevel_retain_array`
+
+- size: oxc 16 vs reference 71 (-55 bytes)
+
+```js
+var a, b = 1, c = g;
+function f(d) {
+	return function() {
+		c = 2;
+	};
+}
+a = 2;
+function g() {}
+function h() {}
+console.log(b = 3);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1 @@
+-var a;
+-function f(d) {
+-	return function() {};
+-}
+-a = 2;
+ console.log(3);
+
+```
+
+## `terser/drop_unused/drop_toplevel_retain_regex`
+
+- size: oxc 16 vs reference 78 (-62 bytes)
+
+```js
+var a, b = 1, c = g;
+function f(d) {
+	return function() {
+		c = 2;
+	};
+}
+a = 2;
+function g() {}
+function h() {}
+console.log(b = 3);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1 @@
+-var a;
+-function f(d) {
+-	return function() {
+-		2;
+-	};
+-}
+-a = 2;
+ console.log(3);
+
+```
+
+## `terser/drop_unused/drop_toplevel_vars`
+
+- size: oxc 16 vs reference 99 (-83 bytes)
+
+```js
+var a, b = 1, c = g;
+function f(d) {
+	return function() {
+		c = 2;
+	};
+}
+a = 2;
+function g() {}
+function h() {}
+console.log(b = 3);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1 @@
+-function f(d) {
+-	return function() {
+-		2;
+-	};
+-}
+-2;
+-function g() {}
+-function h() {}
+ console.log(3);
+
+```
+
+## `terser/drop_unused/drop_toplevel_vars_fargs`
+
+- size: oxc 16 vs reference 98 (-82 bytes)
+
+```js
+var a, b = 1, c = g;
+function f(d) {
+	return function() {
+		c = 2;
+	};
+}
+a = 2;
+function g() {}
+function h() {}
+console.log(b = 3);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1 @@
+-function f() {
+-	return function() {
+-		2;
+-	};
+-}
+-2;
+-function g() {}
+-function h() {}
+ console.log(3);
+
+```
+
+## `terser/drop_unused/drop_toplevel_vars_retain`
+
+- size: oxc 16 vs reference 110 (-94 bytes)
+
+```js
+var a, b = 1, c = g;
+function f(d) {
+	return function() {
+		c = 2;
+	};
+}
+a = 2;
+function g() {}
+function h() {}
+console.log(b = 3);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1 @@
+-var a;
+-function f(d) {
+-	return function() {
+-		2;
+-	};
+-}
+-a = 2;
+-function g() {}
+-function h() {}
+ console.log(3);
+
+```
+
+## `terser/drop_unused/global_var`
+
+- size: oxc 0 vs reference 60 (-60 bytes)
+
+```js
+var a;
+function foo(b) {
+	a;
+	b;
+	c;
+	typeof c === 'undefined';
+	c + b + a;
+	b && b.ar();
+	return b;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +0,0 @@
+-var a;
+-function foo(b) {
+-	c;
+-	c;
+-	b && b.ar();
+-	return b;
+-}
+
+```
+
+## `terser/drop_unused/iife`
+
+- size: oxc 0 vs reference 21 (-21 bytes)
+
+```js
+function f() {
+	var a;
+	~(function() {})(b);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f() {
+-	b;
+-}
+
+```
+
+## `terser/drop_unused/issue_1539`
+
+- size: oxc 0 vs reference 29 (-29 bytes)
+
+```js
+function f() {
+	var a, b;
+	a = b = 42;
+	return a;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f() {
+-	return 42;
+-}
+
+```
+
+## `terser/drop_unused/issue_1583`
+
+- size: oxc 0 vs reference 127 (-127 bytes)
+
+```js
+function m(t) {
+	(function(e) {
+		t = e();
+	})(function() {
+		return (function(a) {
+			return a;
+		})(function(a) {});
+	});
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +0,0 @@
+-function m(t) {
+-	(function(e) {
+-		(function() {
+-			return (function(a) {
+-				return a;
+-			})(function(a) {});
+-		})();
+-	})();
+-}
+
+```
+
+## `terser/drop_unused/issue_1709`
+
+- size: oxc 123 vs reference 149 (-26 bytes)
+
+```js
+console.log((function x() {
+	var x = 1;
+	return x;
+})(), (function y() {
+	const y = 2;
+	return y;
+})(), (function z() {
+	function z() {}
+	return z;
+})());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,7 @@
+ console.log((function() {
+-	var x = 1;
+-	return x;
++	return 1;
+ })(), (function() {
+-	const y = 2;
+-	return y;
++	return 2;
+ })(), (function() {
+ 	function z() {}
+ 	return z;
+
+```
+
+## `terser/drop_unused/issue_1715_3`
+
+- size: oxc 87 vs reference 107 (-20 bytes)
+
+```js
+var a = 1;
+function f() {
+	a++;
+	try {
+		console;
+	} catch (a) {
+		var a = 2 + x();
+	}
+}
+f();
+console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,8 @@
+ var a = 1;
+ function f() {
+ 	a++;
+-	try {
+-		console;
+-	} catch (a) {
++	try {} catch (a) {
+ 		var a;
+-		x();
+ 	}
+ }
+ f();
+
+```
+
+## `terser/drop_unused/issue_1830_1`
+
+- size: oxc 48 vs reference 63 (-15 bytes)
+
+```js
+!(function() {
+	L: for (var b = console.log(1); !1;) continue L;
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-!(function() {
+-	L: for (console.log(1); !1;) continue L;
++(function() {
++	L: var b = console.log(1);
+ })();
+
+```
+
+## `terser/drop_unused/issue_1838`
+
+- size: oxc 0 vs reference 31 (-31 bytes)
+
+```js
+function f() {
+	var b = a;
+	while (c);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f() {
+-	for (a; c;);
+-}
+
+```
+
+## `terser/drop_unused/issue_2063`
+
+- size: oxc 0 vs reference 7 (-7 bytes)
+
+```js
+var a;
+var a;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +0,0 @@
+-var a;
+
+```
+
+## `terser/drop_unused/issue_2226_1`
+
+- size: oxc 0 vs reference 144 (-144 bytes)
+
+```js
+function f1() {
+	var a = b;
+	a += c;
+}
+function f2(a) {
+	a <<= b;
+}
+function f3(a) {
+	--a;
+}
+function f4() {
+	var a = b;
+	return a *= c;
+}
+function f5(a) {
+	x(a /= b);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,15 +0,0 @@
+-function f1() {
+-	b;
+-	c;
+-}
+-function f2(a) {
+-	b;
+-}
+-function f3(a) {}
+-function f4() {
+-	var a = b;
+-	return a *= c;
+-}
+-function f5(a) {
+-	x(a /= b);
+-}
+
+```
+
+## `terser/drop_unused/issue_2288`
+
+- size: oxc 0 vs reference 82 (-82 bytes)
+
+```js
+function foo(o) {
+	for (var j = o.a, i = 0; i < 0; i++);
+	for (var i = 0; i < 0; i++);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +0,0 @@
+-function foo(o) {
+-	o.a;
+-	for (var i = 0; i < 0; i++);
+-	for (i = 0; i < 0; i++);
+-}
+
+```
+
+## `terser/drop_unused/issue_2418_1`
+
+- size: oxc 0 vs reference 27 (-27 bytes)
+
+```js
+class C {}
+function F() {}
+(class c {});
+(function f() {});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +0,0 @@
+-class C {}
+-function F() {}
+
+```
+
+## `terser/drop_unused/issue_2418_2`
+
+- size: oxc 0 vs reference 27 (-27 bytes)
+
+```js
+class C {}
+function F() {}
+(class c {});
+(function f() {});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +0,0 @@
+-class C {}
+-function F() {}
+
+```
+
+## `terser/drop_unused/issue_2418_3`
+
+- size: oxc 0 vs reference 27 (-27 bytes)
+
+```js
+class C {}
+function F() {}
+(class c {});
+(function f() {});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +0,0 @@
+-class C {}
+-function F() {}
+
+```
+
+## `terser/drop_unused/issue_2418_4`
+
+- size: oxc 0 vs reference 27 (-27 bytes)
+
+```js
+class C {}
+function F() {}
+(class c {});
+(function f() {});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +0,0 @@
+-class C {}
+-function F() {}
+
+```
+
+## `terser/drop_unused/issue_2418_5`
+
+- size: oxc 0 vs reference 27 (-27 bytes)
+
+```js
+class C {}
+function F() {}
+(class c {});
+(function f() {});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +0,0 @@
+-class C {}
+-function F() {}
+
+```
+
+## `terser/drop_unused/issue_3146_1`
+
+- size: oxc 111 vs reference 117 (-6 bytes)
+
+```js
+(function(f) {
+	f('g()');
+})(function(a) {
+	eval(a);
+	function g(b) {
+		if (!b) b = 'PASS';
+		console.log(b);
+	}
+});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -3,7 +3,7 @@
+ })(function(a) {
+ 	eval(a);
+ 	function g(b) {
+-		if (!b) b = 'PASS';
++		b ||= 'PASS';
+ 		console.log(b);
+ 	}
+ });
+
+```
+
+## `terser/drop_unused/issue_3146_2`
+
+- size: oxc 111 vs reference 117 (-6 bytes)
+
+```js
+(function(f) {
+	f('g()');
+})(function(a) {
+	eval(a);
+	function g(b) {
+		if (!b) b = 'PASS';
+		console.log(b);
+	}
+});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -3,7 +3,7 @@
+ })(function(a) {
+ 	eval(a);
+ 	function g(b) {
+-		if (!b) b = 'PASS';
++		b ||= 'PASS';
+ 		console.log(b);
+ 	}
+ });
+
+```
+
+## `terser/drop_unused/keep_assign`
+
+- size: oxc 0 vs reference 200 (-200 bytes)
+
+```js
+function f1() {
+	var a;
+	a = 1;
+}
+function f2() {
+	var a = 1;
+	a = 2;
+}
+function f3(a) {
+	a = 1;
+}
+function f4() {
+	var a;
+	return a = 1;
+}
+function f5() {
+	var a;
+	return function() {
+		a = 1;
+	};
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,21 +0,0 @@
+-function f1() {
+-	var a;
+-	a = 1;
+-}
+-function f2() {
+-	var a = 1;
+-	a = 2;
+-}
+-function f3(a) {
+-	a = 1;
+-}
+-function f4() {
+-	var a;
+-	return a = 1;
+-}
+-function f5() {
+-	var a;
+-	return function() {
+-		a = 1;
+-	};
+-}
+
+```
+
+## `terser/drop_unused/keep_fnames`
+
+- size: oxc 0 vs reference 49 (-49 bytes)
+
+```js
+function foo() {
+	return function bar(baz) {};
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function foo() {
+-	return function bar(baz) {};
+-}
+
+```
+
+## `terser/drop_unused/unused_block_decls`
+
+- size: oxc 0 vs reference 39 (-39 bytes)
+
+```js
+function foo() {
+	{
+		const x = 1;
+	}
+	{
+		let y;
+	}
+	console.log(x, y);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function foo() {
+-	console.log(x, y);
+-}
+
+```
+
+## `terser/drop_unused/unused_block_decls_in_catch`
+
+- size: oxc 0 vs reference 52 (-52 bytes)
+
+```js
+function foo() {
+	try {
+		foo();
+	} catch (ex) {
+		let x = 10;
+		const y = 10;
+		class Zee {}
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +0,0 @@
+-function foo() {
+-	try {
+-		foo();
+-	} catch (ex) {}
+-}
+
+```
+
+## `terser/drop_unused/unused_circular_references_1`
+
+- size: oxc 0 vs reference 36 (-36 bytes)
+
+```js
+function f(x, y) {
+	function g() {
+		return h();
+	}
+	function h() {
+		return g();
+	}
+	return x + y;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f(x, y) {
+-	return x + y;
+-}
+
+```
+
+## `terser/drop_unused/unused_circular_references_2`
+
+- size: oxc 0 vs reference 44 (-44 bytes)
+
+```js
+function f(x, y) {
+	var foo = 1, bar = baz, baz = foo + bar, qwe = moo();
+	return x + y;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +0,0 @@
+-function f(x, y) {
+-	moo();
+-	return x + y;
+-}
+
+```
+
+## `terser/drop_unused/unused_circular_references_3`
+
+- size: oxc 0 vs reference 36 (-36 bytes)
+
+```js
+function f(x, y) {
+	var g = function() {
+		return h();
+	};
+	var h = function() {
+		return g();
+	};
+	return x + y;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f(x, y) {
+-	return x + y;
+-}
+
+```
+
+## `terser/drop_unused/unused_funarg_1`
+
+- size: oxc 0 vs reference 36 (-36 bytes)
+
+```js
+function f(a, b, c, d, e) {
+	return a + b;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f(a, b) {
+-	return a + b;
+-}
+
+```
+
+## `terser/drop_unused/unused_funarg_2`
+
+- size: oxc 0 vs reference 39 (-39 bytes)
+
+```js
+function f(a, b, c, d, e) {
+	return a + c;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f(a, b, c) {
+-	return a + c;
+-}
+
+```
+
+## `terser/drop_unused/unused_keep_harmony_destructuring`
+
+- size: oxc 0 vs reference 40 (-40 bytes)
+
+```js
+function foo() {
+	var { x, y } = foo;
+	var a = foo;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function foo() {
+-	var { x, y } = foo;
+-}
+
+```
+
+## `terser/drop_unused/unused_keep_setter_arg`
+
+- size: oxc 0 vs reference 80 (-80 bytes)
+
+```js
+var x = {
+	_foo: null,
+	set foo(val) {},
+	get foo() {
+		return this._foo;
+	}
+};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +0,0 @@
+-var x = {
+-	_foo: null,
+-	set foo(val) {},
+-	get foo() {
+-		return this._foo;
+-	}
+-};
+
+```
+
+## `terser/drop_unused/unused_nested_function`
+
+- size: oxc 0 vs reference 36 (-36 bytes)
+
+```js
+function f(x, y) {
+	function g() {
+		something();
+	}
+	return x + y;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f(x, y) {
+-	return x + y;
+-}
+
+```
+
+## `terser/drop_unused/unused_var_in_catch`
+
+- size: oxc 0 vs reference 52 (-52 bytes)
+
+```js
+function foo() {
+	try {
+		foo();
+	} catch (ex) {
+		var x = 10;
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +0,0 @@
+-function foo() {
+-	try {
+-		foo();
+-	} catch (ex) {}
+-}
+
+```
+
+## `terser/drop_unused/used_block_decls_in_catch`
+
+- size: oxc 0 vs reference 77 (-77 bytes)
+
+```js
+function foo() {
+	try {
+		foo();
+	} catch (ex) {
+		let x = 10;
+		const y = 10;
+		class Zee {}
+	}
+	console.log(x, y, Zee);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +0,0 @@
+-function foo() {
+-	try {
+-		foo();
+-	} catch (ex) {}
+-	console.log(x, y, Zee);
+-}
+
+```
+
+## `terser/drop_unused/used_var_in_catch`
+
+- size: oxc 0 vs reference 79 (-79 bytes)
+
+```js
+function foo() {
+	try {
+		foo();
+	} catch (ex) {
+		var x = 10;
+	}
+	return x;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +0,0 @@
+-function foo() {
+-	try {
+-		foo();
+-	} catch (ex) {
+-		var x = 10;
+-	}
+-	return x;
+-}
+
+```
+
+## `terser/drop_unused/vardef_value`
+
+- size: oxc 0 vs reference 64 (-64 bytes)
+
+```js
+function f() {
+	function g() {
+		return x();
+	}
+	var a = g();
+	return a(42);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +0,0 @@
+-function f() {
+-	return (function() {
+-		return x();
+-	})()(42);
+-}
+
+```
+
+## `terser/evaluate/and`
+
+- size: oxc 460 vs reference 481 (-21 bytes)
+
+```js
+var a;
+a = true && condition;
+a = 1 && console.log('a');
+a = 2 * 3 && 2 * condition;
+a = 5 == 5 && condition + 3;
+a = 'string' && 4 - condition;
+a = 5 + '' && condition / 5;
+a = -4.5 && 6 << condition;
+a = 6 && 7;
+a = false && condition;
+a = NaN && console.log('b');
+a = 0 && console.log('c');
+a = undefined && 2 * condition;
+a = null && condition + 3;
+a = 2 * 3 - 6 && 4 - condition;
+a = 10 == 7 && condition / 5;
+a = !'string' && 6 % condition;
+a = 0 && 7;
+a = condition && true;
+a = console.log('a') && 2;
+a = 4 - condition && 'string';
+a = 6 << condition && -4.5;
+a = condition && false;
+a = console.log('b') && NaN;
+a = console.log('c') && 0;
+a = 2 * condition && undefined;
+a = condition + 3 && null;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+-var a;
+-a = condition;
++var a = condition;
+ a = console.log('a');
+ a = 2 * condition;
+ a = condition + 3;
+@@ -7,21 +6,21 @@
+ a = condition / 5;
+ a = 6 << condition;
+ a = 7;
+-a = false;
+-a = 0 / 0;
++a = !1;
++a = NaN;
+ a = 0;
+ a = void 0;
+ a = null;
+ a = 0;
+-a = false;
+-a = false;
++a = !1;
++a = !1;
+ a = 0;
+-a = condition && true;
++a = condition && !0;
+ a = console.log('a') && 2;
+ a = 4 - condition && 'string';
+ a = 6 << condition && -4.5;
+-a = condition && false;
+-a = console.log('b') && 0 / 0;
++a = condition && !1;
++a = console.log('b') && NaN;
+ a = console.log('c') && 0;
+ a = 2 * condition && void 0;
+ a = condition + 3 && null;
+
+```
+
+## `terser/evaluate/global_hasOwnProperty`
+
+- size: oxc 85 vs reference 88 (-3 bytes)
+
+```js
+hasOwnProperty.call(a, b);
+hasOwnProperty.call(a.b, b);
+hasOwnProperty.call(a['b'], b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ hasOwnProperty.call(a, b);
+ hasOwnProperty.call(a.b, b);
+-hasOwnProperty.call(a['b'], b);
++hasOwnProperty.call(a.b, b);
+
+```
+
+## `terser/evaluate/issue_2535_1`
+
+- size: oxc 129 vs reference 156 (-27 bytes)
+
+```js
+if (x() || true || y()) z();
+if ((x() || true) && y()) z();
+if (x() && true || y()) z();
+if (x() && true && y()) z();
+if (x() || false || y()) z();
+if ((x() || false) && y()) z();
+if (x() && false || y()) z();
+if (x() && false && y()) z();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1 @@
+-if (x(), 1) z();
+-if (x(), y()) z();
+-if (x() || y()) z();
+-if (x() && y()) z();
+-if (x() || y()) z();
+-if (x() && y()) z();
+-if (x(), y()) z();
+-if (x(), 0) z();
++x(), z(), x(), y() && z(), (x() || y()) && z(), x() && y() && z(), (x() || y()) && z(), x() && y() && z(), x(), y() && z(), x();
+
+```
+
+## `terser/evaluate/issue_2535_2`
+
+- size: oxc 78 vs reference 90 (-12 bytes)
+
+```js
+x() || true || y();
+(x() || true) && y();
+x() && true || y();
+x() && true && y();
+x() || false || y();
+(x() || false) && y();
+x() && false || y();
+x() && false && y();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-x(), x(), y(), x() && 1 || y(), x() && y(), x() || y(), (x() || 0) && y(), x(), y(), x();
++x(), x(), y(), x() || y(), x() && y(), x() || y(), x() && y(), x(), y(), x();
+
+```
+
+## `terser/evaluate/or`
+
+- size: oxc 534 vs reference 548 (-14 bytes)
+
+```js
+var a;
+a = true || condition;
+a = 1 || console.log('a');
+a = 2 * 3 || 2 * condition;
+a = 5 == 5 || condition + 3;
+a = 'string' || 4 - condition;
+a = 5 + '' || condition / 5;
+a = -4.5 || 6 << condition;
+a = 6 || 7;
+a = false || condition;
+a = 0 || console.log('b');
+a = NaN || console.log('c');
+a = undefined || 2 * condition;
+a = null || condition + 3;
+a = 2 * 3 - 6 || 4 - condition;
+a = 10 == 7 || condition / 5;
+a = !'string' || 6 % condition;
+a = null || 7;
+a = console.log(undefined && condition || null);
+a = console.log(undefined || condition && null);
+a = condition || true;
+a = console.log('a') || 2;
+a = 4 - condition || 'string';
+a = 6 << condition || -4.5;
+a = condition || false;
+a = console.log('b') || NaN;
+a = console.log('c') || 0;
+a = 2 * condition || undefined;
+a = condition + 3 || null;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,7 @@
+-var a;
+-a = true;
++var a = !0;
+ a = 1;
+ a = 6;
+-a = true;
++a = !0;
+ a = 'string';
+ a = '5';
+ a = -4.5;
+@@ -18,12 +17,12 @@
+ a = 7;
+ a = console.log(null);
+ a = console.log(condition && null);
+-a = condition || true;
++a = condition || !0;
+ a = console.log('a') || 2;
+ a = 4 - condition || 'string';
+ a = 6 << condition || -4.5;
+-a = condition || false;
+-a = console.log('b') || 0 / 0;
++a = condition || !1;
++a = console.log('b') || NaN;
+ a = console.log('c') || 0;
+ a = 2 * condition || void 0;
+ a = condition + 3 || null;
+
+```
+
+## `terser/evaluate/pow_nan`
+
+- size: oxc 36 vs reference 40 (-4 bytes)
+
+```js
+console.log(Math.pow(1, NaN));
+console.log(1 ** NaN);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+-console.log(0 / 0);
+-console.log(0 / 0);
++console.log(NaN);
++console.log(NaN);
+
+```
+
+## `terser/evaluate/string_charCodeAt`
+
+- size: oxc 18 vs reference 20 (-2 bytes)
+
+```js
+console.log('foo'.charCodeAt('bar'.length));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-console.log(0 / 0);
++console.log(NaN);
+
+```
+
+## `terser/evaluate/unsafe_array`
+
+- size: oxc 123 vs reference 125 (-2 bytes)
+
+```js
+console.log([
+	1,
+	,
+	3
+][1], [
+	1,
+	2,
+	3,
+	a
+] + 1, [
+	1,
+	2,
+	3,
+	4
+] + 1, [
+	1,
+	2,
+	3,
+	a
+][0] + 1, [
+	1,
+	2,
+	3,
+	4
+][0] + 1, [
+	1,
+	2,
+	3,
+	4
+][6 - 5] + 1, [
+	1,
+	,
+	3,
+	4
+][6 - 5] + 1, [[1, 2], [3, 4]][0] + 1, [[1, 2], [3, 4]][6 - 5][1] + 1, [
+	[1, 2],
+	,
+	[3, 4]
+][6 - 5][1] + 1);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -8,4 +8,4 @@
+ 	2,
+ 	3,
+ 	a
+-][0] + 1, 2, 3, 0 / 0, '1,21', 5, (void 0)[1] + 1);
++][0] + 1, 2, 3, NaN, '1,21', 5, (void 0)[1] + 1);
+
+```
+
+## `terser/evaluate/unsafe_constant`
+
+- size: oxc 49 vs reference 50 (-1 bytes)
+
+```js
+console.log(true.a, false.a, null.a, undefined.a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-console.log(true.a, false.a, null.a, (void 0).a);
++console.log((!0).a, (!1).a, null.a, (void 0).a);
+
+```
+
+## `terser/expansions/expand_parameters`
+
+- size: oxc 0 vs reference 48 (-48 bytes)
+
+```js
+(function(a, ...b) {});
+(function(...args) {});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +0,0 @@
+-(function(a, ...b) {});
+-(function(...args) {});
+
+```
+
+## `terser/export/export_default_anonymous_function_not_call`
+
+- size: oxc 30 vs reference 37 (-7 bytes)
+
+```js
+export default (function() {})(foo);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-export default (function() {})(foo);
++export default (foo, void 0);
+
+```
+
+## `terser/export/export_default_named_async_function`
+
+- size: oxc 59 vs reference 65 (-6 bytes)
+
+```js
+export default async function bar() {
+	return await foo();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-export default async function _$BAR$_() {
++export default async function e() {
+ 	return await foo();
+ }
+
+```
+
+## `terser/export/export_default_named_generator`
+
+- size: oxc 47 vs reference 53 (-6 bytes)
+
+```js
+export default function* gen() {
+	yield foo();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-export default function* _$GEN$_() {
++export default function* e() {
+ 	yield foo();
+ }
+
+```
+
+## `terser/export/issue_2131`
+
+- size: oxc 66 vs reference 70 (-4 bytes)
+
+```js
+function no() {
+	console.log(42);
+}
+function go() {
+	console.log(42);
+}
+var X = 1, Y = 2;
+export function main() {
+	go(X);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+-function go() {
++function e() {
+ 	console.log(42);
+ }
+-export function main() {
+-	go();
++export function t() {
++	e(1);
+ }
+
+```
+
+## `terser/export/issue_2134_1`
+
+- size: oxc 42 vs reference 45 (-3 bytes)
+
+```js
+export function Foo(x) {}
+Foo.prototype = {};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+-export function Foo() {}
+-Foo.prototype = {};
++export function e(e) {}
++e.prototype = {};
+
+```
+
+## `terser/export/issue_2134_2`
+
+- size: oxc 48 vs reference 51 (-3 bytes)
+
+```js
+export async function Foo(x) {}
+Foo.prototype = {};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+-export async function Foo() {}
+-Foo.prototype = {};
++export async function e(e) {}
++e.prototype = {};
+
+```
+
+## `terser/export/issue_2977`
+
+- size: oxc 23 vs reference 34 (-11 bytes)
+
+```js
+export default (function() {})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-export default (function() {})();
++export default void 0;
+
+```
+
+## `terser/export/issue_333`
+
+- size: oxc 158 vs reference 166 (-8 bytes)
+
+```js
+function shortOut() {
+	return function() {};
+}
+var setToString = shortOut();
+var _setToString = setToString;
+export function baseRest() {
+	return _setToString();
+}
+export { _setToString };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+-var setToString;
+-var _setToString = function shortOut() {
++function shortOut() {
+ 	return function() {};
+-}();
++}
++var _setToString = shortOut();
+ export function baseRest() {
+ 	return _setToString();
+ }
+
+```
+
+## `terser/export/name_cache_do_not_mangle_export_class_name`
+
+- size: oxc 66 vs reference 78 (-12 bytes)
+
+```js
+export class add {}
+class sub {}
+console.log(add, add, sub, sub);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ export class add {}
+-class _$SUB$_ {}
+-console.log(add, add, _$SUB$_, _$SUB$_);
++class sub {}
++console.log(add, add, sub, sub);
+
+```
+
+## `terser/export/name_cache_do_not_mangle_export_const_name`
+
+- size: oxc 51 vs reference 95 (-44 bytes)
+
+```js
+export const add = 1;
+const sub = 2, mul = 3;
+console.log(add, add, sub, sub, mul, mul);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,2 @@
+-export const add = 1;
+-const _$SUB$_ = 2, d = 3;
+-console.log(add, add, _$SUB$_, _$SUB$_, d, d);
++export const e = 1;
++console.log(1, 1, 2, 2, 3, 3);
+
+```
+
+## `terser/export/name_cache_do_not_mangle_export_destructuring_name`
+
+- size: oxc 115 vs reference 121 (-6 bytes)
+
+```js
+export const [add] = [
+	1,
+	2,
+	3
+];
+const [mul, sub] = [
+	1,
+	2,
+	3
+];
+console.log(add, add, sub, sub, mul, mul);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -3,9 +3,9 @@
+ 	2,
+ 	3
+ ];
+-const [d, _$SUB$_] = [
++const [mul, sub] = [
+ 	1,
+ 	2,
+ 	3
+ ];
+-console.log(add, add, _$SUB$_, _$SUB$_, d, d);
++console.log(add, add, sub, sub, mul, mul);
+
+```
+
+## `terser/export/name_cache_do_not_mangle_export_from_names`
+
+- size: oxc 131 vs reference 147 (-16 bytes)
+
+```js
+function add() {
+	console.log('should be dropped');
+}
+function div() {
+	console.log('should be dropped');
+}
+function mul() {
+	console.log('should be dropped');
+}
+function divide() {
+	console.log('should be dropped');
+}
+function minus() {
+	console.log('should be dropped');
+}
+function keep() {
+	console.log('should be kept');
+}
+export { add, div as divide, sub as minus, mul } from 'path';
+export { keep };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+-function _$KEEP$_() {
++function keep() {
+ 	console.log('should be kept');
+ }
+ export { add, div as divide, sub as minus, mul } from 'path';
+-export { _$KEEP$_ as keep };
++export { keep };
+
+```
+
+## `terser/export/name_cache_do_not_mangle_export_function_name`
+
+- size: oxc 140 vs reference 152 (-12 bytes)
+
+```js
+export function add(x, y) {
+	return x + y;
+}
+function sub(x, y) {
+	return x - y;
+}
+console.log(add(1, 2), add(3, 4), sub(5, 6), sub(7, 8));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+-export function add(n, d) {
+-	return n + d;
++export function add(x, y) {
++	return x + y;
+ }
+-function _$SUB$_(n, d) {
+-	return n - d;
++function sub(x, y) {
++	return x - y;
+ }
+-console.log(add(1, 2), add(3, 4), _$SUB$_(5, 6), _$SUB$_(7, 8));
++console.log(add(1, 2), add(3, 4), sub(5, 6), sub(7, 8));
+
+```
+
+## `terser/export/name_cache_do_not_mangle_export_let_name`
+
+- size: oxc 49 vs reference 91 (-42 bytes)
+
+```js
+export let add = 1;
+let sub = 2, mul = 3;
+console.log(add, add, sub, sub, mul, mul);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,2 @@
+-export let add = 1;
+-let _$SUB$_ = 2, d = 3;
+-console.log(add, add, _$SUB$_, _$SUB$_, d, d);
++export let e = 1;
++console.log(1, 1, 2, 2, 3, 3);
+
+```
+
+## `terser/export/name_cache_do_not_mangle_export_var_name`
+
+- size: oxc 67 vs reference 91 (-24 bytes)
+
+```js
+export var add = 1;
+var sub = 2, mul = 3;
+console.log(add, add, sub, sub, mul, mul);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-export var add = 1;
+-var _$SUB$_ = 2, d = 3;
+-console.log(add, add, _$SUB$_, _$SUB$_, d, d);
++export var e = 1;
++var t = 2, n = 3;
++console.log(e, e, t, t, n, n);
+
+```
+
+## `terser/export/name_cache_import_star_as_name_from_module`
+
+- size: oxc 121 vs reference 136 (-15 bytes)
+
+```js
+import * as fs from 'filesystem';
+import * as stuff from 'whatever';
+fs.resolve();
+stuff.search();
+export { fs, stuff };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+-import * as _$FS$_ from 'filesystem';
+-import * as e from 'whatever';
+-_$FS$_.resolve(), e.search();
+-export { _$FS$_ as fs, e as stuff };
++import * as fs from 'filesystem';
++import * as stuff from 'whatever';
++fs.resolve(), stuff.search();
++export { fs, stuff };
+
+```
+
+## `terser/export/name_cache_mangle_export_default_class`
+
+- size: oxc 124 vs reference 136 (-12 bytes)
+
+```js
+export default class foo {}
+export class bar {}
+class baz {
+	meth() {}
+}
+class qux {}
+console.log(foo, bar, baz, qux, qux);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,7 @@
+-export default class _$FOO$_ {}
++export default class foo {}
+ export class bar {}
+-class _$QUX$_ {}
+-console.log(_$FOO$_, bar, class {
++class baz {
+ 	meth() {}
+-}, _$QUX$_, _$QUX$_);
++}
++class qux {}
++console.log(foo, bar, baz, qux, qux);
+
+```
+
+## `terser/export/name_cache_mangle_local_import_and_export_aliases`
+
+- size: oxc 117 vs reference 176 (-59 bytes)
+
+```js
+import { foo as bar, cat as dog, bird } from 'stuff';
+console.log(bar, dog, bird);
+export { bar as qux, dog, bird };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-import { foo as _$BAR$_, cat as _$DOG$_, bird as _$BIRD$_ } from 'stuff';
+-console.log(_$BAR$_, _$DOG$_, _$BIRD$_);
+-export { _$BAR$_ as qux, _$DOG$_ as dog, _$BIRD$_ as bird };
++import { foo as bar, cat as dog, bird } from 'stuff';
++console.log(bar, dog, bird);
++export { bar as qux, dog, bird };
+
+```
+
+## `terser/expression/pow_with_number_constants`
+
+- size: oxc 77 vs reference 78 (-1 bytes)
+
+```js
+var a = 5 ** NaN;
+var b = 42 ** +0;
+var c = 42 ** -0;
+var d = NaN ** 1;
+var e = 2 ** Infinity;
+var f = 2 ** -Infinity;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+-var a = 0 / 0;
++var a = NaN;
+ var b = 1;
+ var c = 1;
+-var d = 0 / 0;
+-var e = 1 / 0;
++var d = NaN;
++var e = Infinity;
+ var f = 0;
+
+```
+
+## `terser/functions/drop_lone_use_strict_arrows_2`
+
+- size: oxc 0 vs reference 56 (-56 bytes)
+
+```js
+let f0 = () => 0;
+let f1 = () => {
+	'use strict';
+};
+let f2 = () => {
+	'use strict';
+	let f3 = () => {
+		'use strict';
+	};
+};
+(() => {
+	'use strict';
+	return undefined;
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-let f0 = () => 0;
+-let f1 = () => {};
+-let f2 = () => {};
+
+```
+
+## `terser/functions/inline_0`
+
+- size: oxc 115 vs reference 127 (-12 bytes)
+
+```js
+(function() {
+	console.log(1);
+})();
+(function(a) {
+	console.log(a);
+})(2);
+(function(b) {
+	var c = b;
+	console.log(c);
+})(3);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,9 @@
+ (function() {
+ 	console.log(1);
+ })();
+-(function(a) {
+-	console.log(a);
++(function(e) {
++	console.log(e);
+ })(2);
+-(function(b) {
+-	var c = b;
+-	console.log(c);
++(function(e) {
++	console.log(e);
+ })(3);
+
+```
+
+## `terser/functions/inline_false`
+
+- size: oxc 115 vs reference 127 (-12 bytes)
+
+```js
+(function() {
+	console.log(1);
+})();
+(function(a) {
+	console.log(a);
+})(2);
+(function(b) {
+	var c = b;
+	console.log(c);
+})(3);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,9 @@
+ (function() {
+ 	console.log(1);
+ })();
+-(function(a) {
+-	console.log(a);
++(function(e) {
++	console.log(e);
+ })(2);
+-(function(b) {
+-	var c = b;
+-	console.log(c);
++(function(e) {
++	console.log(e);
+ })(3);
+
+```
+
+## `terser/functions/issue_2097`
+
+- size: oxc 84 vs reference 87 (-3 bytes)
+
+```js
+function f() {
+	try {
+		throw 0;
+	} catch (e) {
+		console.log(arguments[0]);
+	}
+}
+f(1);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,8 @@
+-!(function() {
++function e() {
+ 	try {
+ 		throw 0;
+-	} catch (e) {
++	} catch {
+ 		console.log(arguments[0]);
+ 	}
+-})(1);
++}
++e(1);
+
+```
+
+## `terser/functions/issue_2476`
+
+- size: oxc 140 vs reference 144 (-4 bytes)
+
+```js
+function foo(x, y, z) {
+	return x < y ? x * y + z : x * z - y;
+}
+for (var sum = 0, i = 0; i < 10; i++) sum += foo(i, i + 1, 3 * i);
+console.log(sum);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+-for (var sum = 0, i = 0; i < 10; i++) {
+-	var x, y, z;
+-	sum += (x = i, y = i + 1, z = 3 * i, x < y ? x * y + z : x * z - y);
++function e(e, t, n) {
++	return e < t ? e * t + n : e * n - t;
+ }
+-console.log(sum);
++for (var t = 0, n = 0; n < 10; n++) t += e(n, n + 1, 3 * n);
++console.log(t);
+
+```
+
+## `terser/functions/issue_2898`
+
+- size: oxc 105 vs reference 125 (-20 bytes)
+
+```js
+var c = 0;
+(function() {
+	while (f());
+	function f() {
+		var b = (c = 1 + c, void (c = 1 + c));
+		b && b[0];
+	}
+})();
+console.log(c);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,7 @@
+ var c = 0;
+ (function() {
+-	while (b = void 0, void ((b = void (c = 1 + (c = 1 + c))) && b[0]));
+-	var b;
++	for (; f(););
++	function f() {
++		c = 1 + c, c = 1 + c;
++	}
+ })(), console.log(c);
+
+```
+
+## `terser/functions/no_webkit`
+
+- size: oxc 34 vs reference 36 (-2 bytes)
+
+```js
+console.log(function() {
+	1 + 1;
+}.a = 1);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-console.log((function() {}).a = 1);
++console.log(function() {}.a = 1);
+
+```
+
+## `terser/functions/unsafe_apply_expansion_2`
+
+- size: oxc 48 vs reference 65 (-17 bytes)
+
+```js
+var values = [2, 3];
+console.log.apply(console, [
+	1,
+	...values,
+	4
+]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,6 @@
+-var values = [2, 3];
+-console.log.call(console, 1, ...values, 4);
++console.log.apply(console, [
++	1,
++	2,
++	3,
++	4
++]);
+
+```
+
+## `terser/functions/unsafe_call_expansion_2`
+
+- size: oxc 68 vs reference 89 (-21 bytes)
+
+```js
+var values = [2, 3];
+(function(...a) {
+	console.log(...a);
+}).call(console, 1, ...values, 4);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,3 @@
+-var values = [2, 3];
+-console, (function(...a) {
++(function(...a) {
+ 	console.log(...a);
+-})(1, ...values, 4);
++}).call(console, 1, 2, 3, 4);
+
+```
+
+## `terser/functions/webkit`
+
+- size: oxc 34 vs reference 36 (-2 bytes)
+
+```js
+console.log(function() {
+	1 + 1;
+}.a = 1);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-console.log((function() {}).a = 1);
++console.log(function() {}.a = 1);
+
+```
+
+## `terser/global_defs/issue_1986`
+
+- size: oxc 11 vs reference 17 (-6 bytes)
+
+```js
+alert(42);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-console.log(42);
++alert(42);
+
+```
+
+## `terser/global_defs/issue_3217`
+
+- size: oxc 8 vs reference 17 (-9 bytes)
+
+```js
+o.fn();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-console.log(42);
++o.fn();
+
+```
+
+## `terser/global_defs/mixed`
+
+- size: oxc 199 vs reference 204 (-5 bytes)
+
+```js
+const FOO = { BAR: 0 };
+console.log(FOO.BAR);
+console.log(++CONFIG.DEBUG);
+console.log(++CONFIG.VALUE);
+console.log(++CONFIG['VAL' + 'UE']);
+console.log(++DEBUG[CONFIG.VALUE]);
+CONFIG.VALUE.FOO = 'bar';
+console.log(CONFIG);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,7 @@
+-const FOO = { BAR: 0 };
+-console.log('moo');
++console.log({ BAR: 0 }.BAR);
+ console.log(++CONFIG.DEBUG);
+ console.log(++CONFIG.VALUE);
+ console.log(++CONFIG.VALUE);
+-console.log(++DEBUG[42]);
++console.log(++DEBUG[CONFIG.VALUE]);
+ CONFIG.VALUE.FOO = 'bar';
+ console.log(CONFIG);
+
+```
+
+## `terser/global_defs/must_replace`
+
+- size: oxc 16 vs reference 24 (-8 bytes)
+
+```js
+console.log(D);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-console.log('foo bar');
++console.log(D);
+
+```
+
+## `terser/harmony/array_literal_with_spread_1`
+
+- size: oxc 43 vs reference 52 (-9 bytes)
+
+```js
+var f = (x) => [...x][0];
+console.log(f(['PASS']));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-var f = (x) => [...x][0];
+-console.log(f(['PASS']));
++console.log(((x) => [...x][0])(['PASS']));
+
+```
+
+## `terser/harmony/arrow_function_parens`
+
+- size: oxc 11 vs reference 25 (-14 bytes)
+
+```js
+something && (() => {});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-something && (() => {});
++something;
+
+```
+
+## `terser/harmony/arrow_function_parens_2`
+
+- size: oxc 0 vs reference 16 (-16 bytes)
+
+```js
+(() => null)();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +0,0 @@
+-(() => null)();
+
+```
+
+## `terser/harmony/class_expression_statement`
+
+- size: oxc 32 vs reference 88 (-56 bytes)
+
+```js
+(class {});
+(class NamedClassExpr {});
+let expr = class AnotherClassExpr {};
+class C {}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,2 @@
+-(class {});
+-(class NamedClassExpr {});
+-let expr = class AnotherClassExpr {};
++let expr = class {};
+ class C {}
+
+```
+
+## `terser/harmony/class_expression_statement_unused`
+
+- size: oxc 0 vs reference 32 (-32 bytes)
+
+```js
+(class {});
+(class NamedClassExpr {});
+let expr = class AnotherClassExpr {};
+class C {}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +0,0 @@
+-let expr = class {};
+-class C {}
+
+```
+
+## `terser/harmony/class_extends_class`
+
+- size: oxc 63 vs reference 68 (-5 bytes)
+
+```js
+class anon extends class {} {}
+class named extends class base {} {}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+ class anon extends class {} {}
+-class named extends class base {} {}
++class named extends class {} {}
+
+```
+
+## `terser/harmony/class_extends_function`
+
+- size: oxc 73 vs reference 78 (-5 bytes)
+
+```js
+class anon extends function() {} {}
+class named extends function base() {} {}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+ class anon extends function() {} {}
+-class named extends function base() {} {}
++class named extends function() {} {}
+
+```
+
+## `terser/harmony/class_name_can_be_preserved`
+
+- size: oxc 31 vs reference 48 (-17 bytes)
+
+```js
+function x() {
+	(class Baz {});
+	class Foo {}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,3 @@
+ function x() {
+-	(class Baz {});
+ 	class Foo {}
+ }
+
+```
+
+## `terser/harmony/class_name_can_be_preserved_with_reserved`
+
+- size: oxc 116 vs reference 142 (-26 bytes)
+
+```js
+function x() {
+	class Foo {}
+	Foo.bar;
+	class Bar {}
+	Bar.foo;
+}
+function y() {
+	var Foo = class Foo {};
+	Foo.bar;
+	var Bar = class Bar {};
+	Bar.bar;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,12 +1,10 @@
+ function x() {
+ 	class Foo {}
+ 	Foo.bar;
+-	class a {}
+-	a.foo;
++	class Bar {}
++	Bar.foo;
+ }
+ function y() {
+-	var Foo = class Foo {};
+-	Foo.bar;
+-	var a = class a {};
+-	a.bar;
++	(class {}).bar;
++	(class {}).bar;
+ }
+
+```
+
+## `terser/harmony/classes_can_have_computed_static`
+
+- size: oxc 38 vs reference 42 (-4 bytes)
+
+```js
+class C4 {
+	static ['constructor']() {}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ class C4 {
+-	static ['constructor']() {}
++	static constructor() {}
+ }
+
+```
+
+## `terser/harmony/default_assign`
+
+- size: oxc 71 vs reference 173 (-102 bytes)
+
+```js
+function f(a, b = 3) {
+	console.log(a);
+}
+g = ([[] = 123]) => {};
+h = ([[x, y, z] = [
+	4,
+	5,
+	6
+]] = []) => {};
+function i([[x, y, z] = [
+	4,
+	5,
+	6
+]] = []) {
+	console.log(b);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,16 +1,6 @@
+-function f(a) {
+-	console.log(a);
+-}
+ g = ([[] = 123]) => {};
+ h = ([[x, y, z] = [
+ 	4,
+ 	5,
+ 	6
+ ]] = []) => {};
+-function i([[x, y, z] = [
+-	4,
+-	5,
+-	6
+-]] = []) {
+-	console.log(b);
+-}
+
+```
+
+## `terser/harmony/expansion`
+
+- size: oxc 0 vs reference 35 (-35 bytes)
+
+```js
+function f(a, ...b) {
+	console.log(a);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f(a) {
+-	console.log(a);
+-}
+
+```
+
+## `terser/harmony/export_default_class_decl`
+
+- size: oxc 44 vs reference 48 (-4 bytes)
+
+```js
+export default class Car {}
+export class Cab {}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+-export default class Car {}
+-export class Cab {}
++export default class e {}
++export class t {}
+
+```
+
+## `terser/harmony/export_default_function_decl`
+
+- size: oxc 54 vs reference 58 (-4 bytes)
+
+```js
+export default function Foo() {}
+export function Far() {}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+-export default function Foo() {}
+-export function Far() {}
++export default function e() {}
++export function t() {}
+
+```
+
+## `terser/harmony/import_meta`
+
+- size: oxc 17 vs reference 30 (-13 bytes)
+
+```js
+import.meta;
+import.meta.url;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-import.meta;
+ import.meta.url;
+
+```
+
+## `terser/harmony/issue_1898`
+
+- size: oxc 133 vs reference 155 (-22 bytes)
+
+```js
+class Foo {
+	bar() {
+		for (const x of [6, 5]) {
+			for (let y of [4, 3]) {
+				for (var z of [2, 1]) {
+					console.log(x, y, z);
+				}
+			}
+		}
+	}
+}
+new Foo().bar();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,6 @@
+ class Foo {
+ 	bar() {
+-		for (const f of [6, 5]) {
+-			for (let r of [4, 3]) {
+-				for (var o of [2, 1]) console.log(f, r, o);
+-			}
+-		}
++		for (let x of [6, 5]) for (let y of [4, 3]) for (var z of [2, 1]) console.log(x, y, z);
+ 	}
+ }
+ new Foo().bar();
+
+```
+
+## `terser/harmony/issue_2349`
+
+- size: oxc 132 vs reference 134 (-2 bytes)
+
+```js
+function foo(boo, key) {
+	const value = boo.get();
+	return value.map(({ [key]: bar }) => bar);
+}
+console.log(foo({ get: () => [{ blah: 42 }] }, 'blah'));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+-function foo(o, n) {
+-	const t = o.get();
+-	return t.map(({ [n]: o }) => o);
++function foo(boo, key) {
++	return boo.get().map(({ [key]: bar }) => bar);
+ }
+ console.log(foo({ get: () => [{ blah: 42 }] }, 'blah'));
+
+```
+
+## `terser/harmony/issue_2676`
+
+- size: oxc 0 vs reference 21 (-21 bytes)
+
+```js
+class A {}
+A.a = 42;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +0,0 @@
+-class A {}
+-A.a = 42;
+
+```
+
+## `terser/harmony/issue_2762`
+
+- size: oxc 154 vs reference 183 (-29 bytes)
+
+```js
+var bar = 1, T = true;
+(function() {
+	if (T) {
+		const a = function() {
+			var foo = bar;
+			console.log(foo, a.prop, b.prop);
+		};
+		a.prop = 2;
+		const b = { prop: 3 };
+		a();
+	}
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,12 +1,11 @@
+-var bar = 1, T = true;
++var bar = 1, T = !0;
+ (function() {
+-	if (T) {
+-		const o = function() {
+-			var p = bar;
+-			console.log(p, o.prop, r.prop);
++	{
++		let a = function() {
++			console.log(1, a.prop, b.prop);
+ 		};
+-		o.prop = 2;
+-		const r = { prop: 3 };
+-		o();
++		a.prop = 2;
++		let b = { prop: 3 };
++		a();
+ 	}
+ })();
+
+```
+
+## `terser/harmony/module_enables_strict_mode`
+
+- size: oxc 23 vs reference 30 (-7 bytes)
+
+```js
+if (1) {
+	function xyz() {}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-if (1) {
++{
+ 	function xyz() {}
+ }
+
+```
+
+## `terser/harmony/new_target`
+
+- size: oxc 17 vs reference 29 (-12 bytes)
+
+```js
+new.target;
+new.target.name;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-new.target;
+ new.target.name;
+
+```
+
+## `terser/harmony/object_rest_spread`
+
+- size: oxc 509 vs reference 536 (-27 bytes)
+
+```js
+var { w: w1, ...V } = {
+	w: 7,
+	x: 1,
+	y: 2
+};
+console.log(w1, V);
+let { w: w2, ...L } = {
+	w: 8,
+	x: 3,
+	y: 4
+};
+console.log(w2, L);
+const { w: w3, ...C } = {
+	w: 9,
+	x: 5,
+	y: 6
+};
+console.log(w3, C);
+let b;
+({b: b, ...V} = {
+	a: 1,
+	b: 2,
+	c: 3
+});
+console.log(V);
+({b: b, ...L} = {
+	a: 4,
+	b: 5,
+	c: 6
+});
+console.log(L);
+(function({ y, ...p }) {
+	console.log(p);
+})({
+	x: 1,
+	y: 2,
+	z: 3
+});
+(({ y, ...p }) => {
+	console.log(p);
+})({
+	x: 4,
+	y: 5,
+	z: 6
+});
+const T = {
+	a: 1,
+	b: 2
+};
+console.log({
+	...T,
+	w: 0,
+	...{},
+	...L,
+	...{ K: 9 }
+});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,55 +1,52 @@
+-var { w: o, ...l } = {
++var { w: w1, ...V } = {
+ 	w: 7,
+ 	x: 1,
+ 	y: 2
+ };
+-console.log(o, l);
+-let { w: c, ...n } = {
++console.log(w1, V);
++let { w: w2, ...L } = {
+ 	w: 8,
+ 	x: 3,
+ 	y: 4
+ };
+-console.log(c, n);
+-const { w: e, ...s } = {
++console.log(w2, L);
++const { w: w3, ...C } = {
+ 	w: 9,
+ 	x: 5,
+ 	y: 6
+ };
+-console.log(e, s);
+-let g;
+-({b: g, ...l} = {
++console.log(w3, C);
++let b;
++({b, ...V} = {
+ 	a: 1,
+ 	b: 2,
+ 	c: 3
+ });
+-console.log(l);
+-({b: g, ...n} = {
++console.log(V);
++({b, ...L} = {
+ 	a: 4,
+ 	b: 5,
+ 	c: 6
+ });
+-console.log(n);
+-(function({ y: o, ...l }) {
+-	console.log(l);
++console.log(L);
++(function({ y, ...p }) {
++	console.log(p);
+ })({
+ 	x: 1,
+ 	y: 2,
+ 	z: 3
+ });
+-(({ y: o, ...l }) => {
+-	console.log(l);
++(({ y, ...p }) => {
++	console.log(p);
+ })({
+ 	x: 4,
+ 	y: 5,
+ 	z: 6
+ });
+-const w = {
+-	a: 1,
+-	b: 2
+-};
+ console.log({
+-	...w,
++	a: 1,
++	b: 2,
+ 	w: 0,
+-	...n,
++	...L,
+ 	K: 9
+ });
+
+```
+
+## `terser/harmony/object_spread_of_sequence`
+
+- size: oxc 125 vs reference 128 (-3 bytes)
+
+```js
+var a = { x: 1 };
+console.log({ ...(a, a) });
+console.log({
+	...a,
+	a
+});
+console.log({ ...a || a });
+console.log({ ...a || a });
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,8 @@
+-var o = { x: 1 };
+-console.log({ ...o });
++var a = { x: 1 };
++console.log({ ...a });
+ console.log({
+-	...o,
+-	a: o
++	...a,
++	a
+ });
+-console.log({ ...o || o });
+-console.log({ ...o || o });
++console.log({ ...a || a });
++console.log({ ...a || a });
+
+```
+
+## `terser/harmony/regression_cannot_destructure`
+
+- size: oxc 22 vs reference 31 (-9 bytes)
+
+```js
+var x = { x: 3 };
+x({ x: 3 });
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-var x = { x: 3 };
+-x({ x: 3 });
++({ x: 3 })({ x: 3 });
+
+```
+
+## `terser/harmony/regression_for_of_const`
+
+- size: oxc 36 vs reference 40 (-4 bytes)
+
+```js
+for (const x of y) {}
+for (const x in y) {}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+-for (const x of y);
+-for (const x in y);
++for (let x of y);
++for (let x in y);
+
+```
+
+## `terser/harmony/shorthand_keywords`
+
+- size: oxc 215 vs reference 295 (-80 bytes)
+
+```js
+var foo = 0, async = 1, await = 2, implements = 3, package = 4, private = 5, protected = 6, static = 7, yield = 8;
+console.log({
+	foo,
+	0: 0,
+	NaN,
+	async,
+	await,
+	false: false,
+	implements,
+	null: null,
+	package,
+	private,
+	protected,
+	static,
+	this: this,
+	true: true,
+	undefined,
+	yield
+});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,19 +1,18 @@
+-var foo = 0, async = 1, await = 2, implements = 3, package = 4, private = 5, protected = 6, static = 7, yield = 8;
+ console.log({
+-	foo,
++	foo: 0,
+ 	0: 0,
+-	NaN,
+-	async,
+-	await,
+-	false: false,
+-	implements,
++	NaN: NaN,
++	async: 1,
++	await: 2,
++	false: !1,
++	implements: 3,
+ 	null: null,
+-	package,
+-	private,
+-	protected,
+-	static,
++	package: 4,
++	private: 5,
++	protected: 6,
++	static: 7,
+ 	this: this,
+-	true: true,
+-	undefined,
+-	yield
++	true: !0,
++	undefined: void 0,
++	yield: 8
+ });
+
+```
+
+## `terser/harmony/typeof_arrow_functions`
+
+- size: oxc 25 vs reference 40 (-15 bytes)
+
+```js
+var foo = typeof ((x) => null);
+console.log(foo);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-var foo = 'function';
+-console.log(foo);
++console.log('function');
+
+```
+
+## `terser/hoist_props/direct_access_1`
+
+- size: oxc 76 vs reference 86 (-10 bytes)
+
+```js
+var a = 0;
+var obj = {
+	a: 1,
+	b: 2
+};
+for (var k in obj) a++;
+console.log(a, obj.a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,6 @@
+-var a = 0;
+-var obj = {
++var e = 0, t = {
+ 	a: 1,
+ 	b: 2
+ };
+-for (var k in obj) a++;
+-console.log(a, obj.a);
++for (var n in t) e++;
++console.log(e, t.a);
+
+```
+
+## `terser/hoist_props/hoist_function_with_call`
+
+- size: oxc 123 vs reference 132 (-9 bytes)
+
+```js
+var o = {
+	p: function Foo(value) {
+		return 10 * value;
+	},
+	x: 1,
+	y: 2
+};
+console.log(o.p.name, o.p === o.p, o.p(o.x), o.p(o.y));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,8 @@
+-var o = {
+-	p: function Foo(value) {
+-		return 10 * value;
++var e = {
++	p: function e(t) {
++		return 10 * t;
+ 	},
+ 	x: 1,
+ 	y: 2
+ };
+-console.log(o.p.name, o.p == o.p, o.p(o.x), o.p(o.y));
++console.log(e.p.name, e.p === e.p, e.p(e.x), e.p(e.y));
+
+```
+
+## `terser/hoist_props/issue_2473_1`
+
+- size: oxc 0 vs reference 24 (-24 bytes)
+
+```js
+var x = {};
+var y = [];
+var z = {};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +0,0 @@
+-var x = {};
+-var y = [];
+
+```
+
+## `terser/hoist_props/issue_2473_2`
+
+- size: oxc 0 vs reference 24 (-24 bytes)
+
+```js
+var x = {};
+var y = [];
+var z = {};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +0,0 @@
+-var x = {};
+-var y = [];
+
+```
+
+## `terser/hoist_props/issue_3021`
+
+- size: oxc 108 vs reference 113 (-5 bytes)
+
+```js
+var a = 1, b = 2;
+(function() {
+	b = a;
+	if (a++ + b--) return 1;
+	return;
+	var b = {};
+})();
+console.log(a, b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -3,6 +3,6 @@
+ 	b = a;
+ 	if (a++ + b--) return 1;
+ 	return;
+-	var b = {};
++	var b;
+ })();
+ console.log(a, b);
+
+```
+
+## `terser/hoist_props/issue_3046`
+
+- size: oxc 91 vs reference 95 (-4 bytes)
+
+```js
+console.log((function(a) {
+	do {
+		var b = { c: a++ };
+	} while (b.c && a);
+	return a;
+})(0));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+ console.log((function(a) {
+-	do {
++	do
+ 		var b = { c: a++ };
+-	} while (b.c && a);
++	while (b.c && a);
+ 	return a;
+ })(0));
+
+```
+
+## `terser/hoist_vars/sequences`
+
+- size: oxc 65 vs reference 84 (-19 bytes)
+
+```js
+function f() {
+	var a = 1, b = 2;
+	function g() {}
+	var c = 3;
+	return g(a, b, c);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,5 @@
+ function f() {
+-	var a = 1, b = 2, c;
++	var a = 1, b = 2;
+ 	function g() {}
+-	c = 3;
+-	return g(a, b, c);
++	var c = 3;
+ }
+
+```
+
+## `terser/hoist_vars/sequences_funs`
+
+- size: oxc 65 vs reference 80 (-15 bytes)
+
+```js
+function f() {
+	var a = 1, b = 2;
+	function g() {}
+	var c = 3;
+	return g(a, b, c);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ function f() {
++	var a = 1, b = 2;
+ 	function g() {}
+-	var a = 1, b = 2, c = 3;
+-	return g(a, b, c);
++	var c = 3;
+ }
+
+```
+
+## `terser/hoist_vars/statements`
+
+- size: oxc 70 vs reference 90 (-20 bytes)
+
+```js
+function f() {
+	var a = 1;
+	var b = 2;
+	var c = 3;
+	function g() {}
+	return g(a, b, c);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -3,5 +3,4 @@
+ 	var b = 2;
+ 	var c = 3;
+ 	function g() {}
+-	return g(a, b, c);
+ }
+
+```
+
+## `terser/hoist_vars/statements_funs`
+
+- size: oxc 70 vs reference 80 (-10 bytes)
+
+```js
+function f() {
+	var a = 1;
+	var b = 2;
+	var c = 3;
+	function g() {}
+	return g(a, b, c);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,6 @@
+ function f() {
++	var a = 1;
++	var b = 2;
++	var c = 3;
+ 	function g() {}
+-	var a = 1, b = 2, c = 3;
+-	return g(a, b, c);
+ }
+
+```
+
+## `terser/identity/inline_identity_lose_this`
+
+- size: oxc 229 vs reference 268 (-39 bytes)
+
+```js
+'use strict';
+const id = (x) => x;
+const func_bag = { func: function() {
+	return this === undefined ? 'PASS' : 'FAIL';
+} };
+func_bag.func2 = function() {
+	return this === undefined ? 'PASS' : 'FAIL';
+};
+console.log(id(func_bag.func)());
+console.log(id(func_bag.func2)());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,9 @@
+ 'use strict';
+-const id = (x) => x;
+-const func_bag = { func: function() {
+-	return void 0 === this ? 'PASS' : 'FAIL';
++const e = (e) => e, t = { func: function() {
++	return this === void 0 ? 'PASS' : 'FAIL';
+ } };
+-func_bag.func2 = function() {
+-	return void 0 === this ? 'PASS' : 'FAIL';
++t.func2 = function() {
++	return this === void 0 ? 'PASS' : 'FAIL';
+ };
+-console.log((0, func_bag.func)());
+-console.log((0, func_bag.func2)());
++console.log(e(t.func)());
++console.log(e(t.func2)());
+
+```
+
+## `terser/ie8/issue_2120_1`
+
+- size: oxc 136 vs reference 140 (-4 bytes)
+
+```js
+'aaaaaaaa';
+var a = 1, b = 'FAIL';
+try {
+	throw 1;
+} catch (c) {
+	try {
+		throw 0;
+	} catch (a) {
+		if (c) b = 'PASS';
+	}
+}
+console.log(b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,11 +2,11 @@
+ var a = 1, b = 'FAIL';
+ try {
+ 	throw 1;
+-} catch (t) {
++} catch (c) {
+ 	try {
+ 		throw 0;
+-	} catch (a) {
+-		if (t) b = 'PASS';
++	} catch {
++		c && (b = 'PASS');
+ 	}
+ }
+ console.log(b);
+
+```
+
+## `terser/ie8/issue_2120_2`
+
+- size: oxc 136 vs reference 140 (-4 bytes)
+
+```js
+'aaaaaaaa';
+var a = 1, b = 'FAIL';
+try {
+	throw 1;
+} catch (c) {
+	try {
+		throw 0;
+	} catch (a) {
+		if (c) b = 'PASS';
+	}
+}
+console.log(b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -5,8 +5,8 @@
+ } catch (c) {
+ 	try {
+ 		throw 0;
+-	} catch (a) {
+-		if (c) b = 'PASS';
++	} catch {
++		c && (b = 'PASS');
+ 	}
+ }
+ console.log(b);
+
+```
+
+## `terser/ie8/issue_2254_1`
+
+- size: oxc 119 vs reference 127 (-8 bytes)
+
+```js
+'eeeeee';
+try {
+	console.log(f('PASS'));
+} catch (e) {}
+function f(s) {
+	try {
+		throw 'FAIL';
+	} catch (e) {
+		return s;
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,11 @@
+ 'eeeeee';
+ try {
+ 	console.log(f('PASS'));
+-} catch (e) {}
+-function f(e) {
++} catch {}
++function f(s) {
+ 	try {
+ 		throw 'FAIL';
+-	} catch (t) {
+-		return e;
++	} catch {
++		return s;
+ 	}
+ }
+
+```
+
+## `terser/ie8/issue_2254_2`
+
+- size: oxc 119 vs reference 127 (-8 bytes)
+
+```js
+'eeeeee';
+try {
+	console.log(f('PASS'));
+} catch (e) {}
+function f(s) {
+	try {
+		throw 'FAIL';
+	} catch (e) {
+		return s;
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,11 @@
+ 'eeeeee';
+ try {
+ 	console.log(f('PASS'));
+-} catch (e) {}
+-function f(t) {
++} catch {}
++function f(s) {
+ 	try {
+ 		throw 'FAIL';
+-	} catch (e) {
+-		return t;
++	} catch {
++		return s;
+ 	}
+ }
+
+```
+
+## `terser/if_return/if_return_1`
+
+- size: oxc 0 vs reference 37 (-37 bytes)
+
+```js
+function f(x) {
+	if (x) {
+		return true;
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f(x) {
+-	if (x) return !0;
+-}
+
+```
+
+## `terser/if_return/if_return_2`
+
+- size: oxc 0 vs reference 55 (-55 bytes)
+
+```js
+function f(x, y) {
+	if (x) return 3;
+	if (y) return c();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f(x, y) {
+-	return x ? 3 : y ? c() : void 0;
+-}
+
+```
+
+## `terser/if_return/if_return_3`
+
+- size: oxc 0 vs reference 47 (-47 bytes)
+
+```js
+function f(x) {
+	a();
+	if (x) {
+		b();
+		return false;
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f(x) {
+-	if (a(), x) return b(), !1;
+-}
+
+```
+
+## `terser/if_return/if_return_4`
+
+- size: oxc 0 vs reference 67 (-67 bytes)
+
+```js
+function f(x, y) {
+	a();
+	if (x) return 3;
+	b();
+	if (y) return c();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f(x, y) {
+-	return a(), x ? 3 : (b(), y ? c() : void 0);
+-}
+
+```
+
+## `terser/if_return/if_return_5`
+
+- size: oxc 0 vs reference 36 (-36 bytes)
+
+```js
+function f() {
+	if (x) return;
+	return 7;
+	if (y) return j;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f() {
+-	if (!x) return 7;
+-}
+
+```
+
+## `terser/if_return/if_return_6`
+
+- size: oxc 0 vs reference 41 (-41 bytes)
+
+```js
+function f(x) {
+	return x ? true : void 0;
+	return y;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f(x) {
+-	return !!x || void 0;
+-}
+
+```
+
+## `terser/if_return/if_return_7`
+
+- size: oxc 0 vs reference 52 (-52 bytes)
+
+```js
+function f(x) {
+	if (x) {
+		return true;
+	}
+	foo();
+	bar();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +0,0 @@
+-function f(x) {
+-	if (x) return !0;
+-	foo(), bar();
+-}
+
+```
+
+## `terser/if_return/if_return_same_value`
+
+- size: oxc 137 vs reference 143 (-6 bytes)
+
+```js
+function f() {
+	if (foo) {
+		return x();
+	}
+	if (bar) {
+		return x();
+	}
+}
+function g() {
+	if (foo) {
+		return x();
+	}
+	if (bar) {
+		return x();
+	}
+	return x();
+}
+function h() {
+	if (foo) {
+		return x();
+	}
+	if (bar) {
+		return x();
+	}
+	return y();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ function f() {
+-	return foo || bar ? x() : void 0;
++	if (foo || bar) return x();
+ }
+ function g() {
+ 	return foo || bar, x();
+
+```
+
+## `terser/if_return/issue_1089`
+
+- size: oxc 0 vs reference 128 (-128 bytes)
+
+```js
+function x() {
+	var f = document.getElementById('fname');
+	if (f.files[0].size > 12345) {
+		alert('alert');
+		f.focus();
+		return false;
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +0,0 @@
+-function x() {
+-	var f = document.getElementById('fname');
+-	if (f.files[0].size > 12345) return alert('alert'), f.focus(), !1;
+-}
+
+```
+
+## `terser/if_return/issue_1317`
+
+- size: oxc 99 vs reference 100 (-1 bytes)
+
+```js
+!(function(a) {
+	if (a) return;
+	let b = 1;
+	function g() {
+		return b;
+	}
+	console.log(g());
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,8 @@
+-!(function(a) {
++(function(a) {
+ 	if (a) return;
+ 	let b = 1;
+ 	function g() {
+-		return b;
++		return 1;
+ 	}
+ 	console.log(g());
+ })();
+
+```
+
+## `terser/if_return/issue_1317_strict`
+
+- size: oxc 113 vs reference 114 (-1 bytes)
+
+```js
+'use strict';
+!(function(a) {
+	if (a) return;
+	let b = 1;
+	function g() {
+		return b;
+	}
+	console.log(g());
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,9 @@
+ 'use strict';
+-!(function(a) {
++(function(a) {
+ 	if (a) return;
+ 	let b = 1;
+ 	function g() {
+-		return b;
++		return 1;
+ 	}
+ 	console.log(g());
+ })();
+
+```
+
+## `terser/inline/inline_within_extends_2`
+
+- size: oxc 338 vs reference 372 (-34 bytes)
+
+```js
+class Baz extends foo(bar(Array)) {
+	constructor() {
+		super(...arguments);
+	}
+}
+function foo(foo_base) {
+	return class extends foo_base {
+		constructor() {
+			super(...arguments);
+		}
+		second() {
+			return this[1];
+		}
+	};
+}
+function bar(bar_base) {
+	return class extends bar_base {
+		constructor(...args) {
+			super(...args);
+		}
+	};
+}
+console.log(new Baz(1, 'PASS', 3).second());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,10 @@
+-class Baz extends (function(foo_base) {
+-	return class extends foo_base {
++class e extends t(n(Array)) {
++	constructor() {
++		super(...arguments);
++	}
++}
++function t(e) {
++	return class extends e {
+ 		constructor() {
+ 			super(...arguments);
+ 		}
+@@ -7,15 +12,12 @@
+ 			return this[1];
+ 		}
+ 	};
+-})((function(bar_base) {
+-	return class extends bar_base {
+-		constructor(...args) {
+-			super(...args);
++}
++function n(e) {
++	return class extends e {
++		constructor(...e) {
++			super(...e);
+ 		}
+ 	};
+-})(Array)) {
+-	constructor() {
+-		super(...arguments);
+-	}
+ }
+-console.log(new Baz(1, 'PASS', 3).second());
++console.log(new e(1, 'PASS', 3).second());
+
+```
+
+## `terser/inline/noinline_annotation`
+
+- size: oxc 30 vs reference 64 (-34 bytes)
+
+```js
+function no_inline() {
+	return 123;
+}
+/*#__NOINLINE__*/ no_inline();
+/*#__NOINLINE__*/ no_inline();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,3 @@
+-function no_inline() {
++function e() {
+ 	return 123;
+ }
+-no_inline();
+-no_inline();
+
+```
+
+## `terser/issue_1034/non_hoisted_function_after_return`
+
+- size: oxc 0 vs reference 113 (-113 bytes)
+
+```js
+function foo(x) {
+	if (x) {
+		return bar();
+		not_called1();
+	} else {
+		return baz();
+		not_called2();
+	}
+	function bar() {
+		return 7;
+	}
+	return not_reached;
+	function UnusedFunction() {}
+	function baz() {
+		return 8;
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +0,0 @@
+-function foo(x) {
+-	return x ? bar() : baz();
+-	function bar() {
+-		return 7;
+-	}
+-	function baz() {
+-		return 8;
+-	}
+-}
+
+```
+
+## `terser/issue_1034/non_hoisted_function_after_return_2a`
+
+- size: oxc 0 vs reference 82 (-82 bytes)
+
+```js
+function foo(x) {
+	if (x) {
+		return bar(1);
+		var a = not_called(1);
+	} else {
+		return bar(2);
+		var b = not_called(2);
+	}
+	var c = bar(3);
+	function bar(x) {
+		return 7 - x;
+	}
+	function nope() {}
+	return b || c;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +0,0 @@
+-function foo(x) {
+-	return bar(x ? 1 : 2);
+-	function bar(x) {
+-		return 7 - x;
+-	}
+-}
+
+```
+
+## `terser/issue_1034/non_hoisted_function_after_return_2b`
+
+- size: oxc 0 vs reference 82 (-82 bytes)
+
+```js
+function foo(x) {
+	if (x) {
+		return bar(1);
+	} else {
+		return bar(2);
+		var b;
+	}
+	var c = bar(3);
+	function bar(x) {
+		return 7 - x;
+	}
+	return b || c;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +0,0 @@
+-function foo(x) {
+-	return bar(x ? 1 : 2);
+-	function bar(x) {
+-		return 7 - x;
+-	}
+-}
+
+```
+
+## `terser/issue_1052/deeply_nested`
+
+- size: oxc 0 vs reference 106 (-106 bytes)
+
+```js
+(function() {
+	if (!window) {
+		return;
+	}
+	function f() {}
+	function g() {}
+	if (!document) {
+		return;
+	}
+	function h() {}
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +0,0 @@
+-(function() {
+-	if (window) {
+-		if (document);
+-	}
+-	function f() {}
+-	function g() {}
+-	function h() {}
+-})();
+
+```
+
+## `terser/issue_1052/multiple_functions`
+
+- size: oxc 0 vs reference 68 (-68 bytes)
+
+```js
+(function() {
+	if (!window) {
+		return;
+	}
+	function f() {}
+	function g() {}
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +0,0 @@
+-(function() {
+-	if (window);
+-	function f() {}
+-	function g() {}
+-})();
+
+```
+
+## `terser/issue_1052/single_function`
+
+- size: oxc 0 vs reference 51 (-51 bytes)
+
+```js
+(function() {
+	if (!window) {
+		return;
+	}
+	function f() {}
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +0,0 @@
+-(function() {
+-	if (window);
+-	function f() {}
+-})();
+
+```
+
+## `terser/issue_1105/Infinity_in_with_scope`
+
+- size: oxc 46 vs reference 93 (-47 bytes)
+
+```js
+var o = { Infinity: 'oInfinity' };
+var vInfinity = 'Infinity';
+with(o) {
+	vInfinity = Infinity;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,2 @@
+ var o = { Infinity: 'oInfinity' };
+-var vInfinity = 'Infinity';
+-with(o) vInfinity = Infinity;
++with(o) {}
+
+```
+
+## `terser/issue_1105/Infinity_not_in_with_scope`
+
+- size: oxc 0 vs reference 82 (-82 bytes)
+
+```js
+var o = { Infinity: 'oInfinity' };
+var vInfinity = 'Infinity';
+vInfinity = Infinity;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-var o = { Infinity: 'oInfinity' };
+-var vInfinity = 'Infinity';
+-vInfinity = 1 / 0;
+
+```
+
+## `terser/issue_1105/assorted_Infinity_NaN_undefined_in_with_scope`
+
+- size: oxc 280 vs reference 290 (-10 bytes)
+
+```js
+var f = console.log;
+var o = {
+	undefined: 3,
+	NaN: 4,
+	Infinity: 5
+};
+if (o) {
+	f(undefined, void 0);
+	f(NaN, 0 / 0);
+	f(Infinity, 1 / 0);
+	f(-Infinity, -(1 / 0));
+	f(2 + 7 + undefined, 2 + 7 + void 0);
+}
+with(o) {
+	f(undefined, void 0);
+	f(NaN, 0 / 0);
+	f(Infinity, 1 / 0);
+	f(-Infinity, -(1 / 0));
+	f(2 + 7 + undefined, 2 + 7 + void 0);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -6,14 +6,14 @@
+ if (o) {
+ 	f(void 0, void 0);
+ 	f(NaN, NaN);
+-	f(1 / 0, 1 / 0);
+-	f(-1 / 0, -1 / 0);
++	f(Infinity, 1 / 0);
++	f(-Infinity, -Infinity);
+ 	f(NaN, NaN);
+ }
+ with(o) {
+-	f(undefined, void 0);
+-	f(NaN, 0 / 0);
++	f(void 0, void 0);
++	f(NaN, NaN);
+ 	f(Infinity, 1 / 0);
+-	f(-Infinity, -1 / 0);
+-	f(9 + undefined, 9 + void 0);
++	f(-Infinity, -Infinity);
++	f(NaN, NaN);
+ }
+
+```
+
+## `terser/issue_1105/assorted_Infinity_NaN_undefined_in_with_scope_keep_infinity`
+
+- size: oxc 280 vs reference 296 (-16 bytes)
+
+```js
+var f = console.log;
+var o = {
+	undefined: 3,
+	NaN: 4,
+	Infinity: 5
+};
+if (o) {
+	f(undefined, void 0);
+	f(NaN, 0 / 0);
+	f(Infinity, 1 / 0);
+	f(-Infinity, -(1 / 0));
+	f(2 + 7 + undefined, 2 + 7 + void 0);
+}
+with(o) {
+	f(undefined, void 0);
+	f(NaN, 0 / 0);
+	f(Infinity, 1 / 0);
+	f(-Infinity, -(1 / 0));
+	f(2 + 7 + undefined, 2 + 7 + void 0);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -7,13 +7,13 @@
+ 	f(void 0, void 0);
+ 	f(NaN, NaN);
+ 	f(Infinity, 1 / 0);
+-	f(-Infinity, -1 / 0);
++	f(-Infinity, -Infinity);
+ 	f(NaN, NaN);
+ }
+ with(o) {
+-	f(undefined, void 0);
+-	f(NaN, 0 / 0);
++	f(void 0, void 0);
++	f(NaN, NaN);
+ 	f(Infinity, 1 / 0);
+-	f(-Infinity, -1 / 0);
+-	f(9 + undefined, 9 + void 0);
++	f(-Infinity, -Infinity);
++	f(NaN, NaN);
+ }
+
+```
+
+## `terser/issue_1105/check_drop_unused_in_peer_function`
+
+- size: oxc 0 vs reference 227 (-227 bytes)
+
+```js
+function outer() {
+	var o = {};
+	var unused = {};
+	function foo() {
+		function not_in_use() {
+			var nested_unused = 'foo';
+			return 24;
+		}
+		var unused = {};
+		with(o) {
+			var foo = 'something';
+		}
+		doSomething(o);
+	}
+	function bar() {
+		var unused = {};
+		doSomethingElse();
+	}
+	foo();
+	bar();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,16 +0,0 @@
+-function outer() {
+-	var o = {};
+-	function foo() {
+-		function not_in_use() {
+-			return 24;
+-		}
+-		var unused = {};
+-		with(o) var foo = 'something';
+-		doSomething(o);
+-	}
+-	function bar() {
+-		doSomethingElse();
+-	}
+-	foo();
+-	bar();
+-}
+
+```
+
+## `terser/issue_1105/compress_with_with_in_other_scope`
+
+- size: oxc 0 vs reference 121 (-121 bytes)
+
+```js
+function foo() {
+	var o = 42;
+	with(o) {
+		var foo = 'something';
+	}
+	doSomething(o);
+}
+function bar() {
+	var unused = 42;
+	return something();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +0,0 @@
+-function foo() {
+-	var o = 42;
+-	with(o) var foo = 'something';
+-	doSomething(o);
+-}
+-function bar() {
+-	return something();
+-}
+
+```
+
+## `terser/issue_1105/with_in_function_scope`
+
+- size: oxc 0 vs reference 81 (-81 bytes)
+
+```js
+function foo() {
+	var o = 42;
+	with(o) {
+		var foo = 'something';
+	}
+	doSomething(o);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +0,0 @@
+-function foo() {
+-	var o = 42;
+-	with(o) var foo = 'something';
+-	doSomething(o);
+-}
+
+```
+
+## `terser/issue_1105/with_in_global_scope`
+
+- size: oxc 39 vs reference 59 (-20 bytes)
+
+```js
+var o = 42;
+with(o) {
+	var foo = 'something';
+}
+doSomething(o);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ var o = 42;
+-with(o) var foo = 'something';
++with(o) {}
+ doSomething(o);
+
+```
+
+## `terser/issue_1105/with_using_existing_variable_outside_scope`
+
+- size: oxc 0 vs reference 128 (-128 bytes)
+
+```js
+function f() {
+	var o = {};
+	var unused = {};
+	function foo() {
+		with(o) {
+			var foo = 'something';
+		}
+		doSomething(o);
+	}
+	foo();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +0,0 @@
+-function f() {
+-	var o = {};
+-	var unused = {};
+-	function foo() {
+-		with(o) var foo = 'something';
+-		doSomething(o);
+-	}
+-	foo();
+-}
+
+```
+
+## `terser/issue_126/concatenate_rhs_strings`
+
+- size: oxc 245 vs reference 261 (-16 bytes)
+
+```js
+foo(bar() + 123 + 'Hello' + 'World');
+foo(bar() + (123 + 'Hello') + 'World');
+foo(bar() + 123 + 'Hello' + 'World');
+foo(bar() + 123 + 'Hello' + 'World' + ('Foo' + 'Bar'));
+foo('Foo' + 'Bar' + bar() + 123 + 'Hello' + 'World' + ('Foo' + 'Bar'));
+foo('Hello' + bar() + 123 + 'World');
+foo(bar() + 'Foo' + (10 + parseInt('10')));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,6 +2,6 @@
+ foo(bar() + '123HelloWorld');
+ foo(bar() + 123 + 'HelloWorld');
+ foo(bar() + 123 + 'HelloWorldFooBar');
+-foo('FooBar' + bar() + '123HelloWorldFooBar');
+-foo('Hello' + bar() + '123World');
+-foo(bar() + 'Foo' + (10 + parseInt('10')));
++foo('FooBar' + bar() + 123 + 'HelloWorldFooBar');
++foo('Hello' + bar() + 123 + 'World');
++foo(bar() + 'Foo20');
+
+```
+
+## `terser/issue_143/tranformation_sort_order_equal`
+
+- size: oxc 12 vs reference 28 (-16 bytes)
+
+```js
+(a = parseInt('100')) == a;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-(a = parseInt('100')) == a;
++a = 100, a;
+
+```
+
+## `terser/issue_143/tranformation_sort_order_greater_or_equal`
+
+- size: oxc 12 vs reference 28 (-16 bytes)
+
+```js
+(a = parseInt('100')) >= a;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-(a = parseInt('100')) >= a;
++a = 100, a;
+
+```
+
+## `terser/issue_143/tranformation_sort_order_lesser_or_equal`
+
+- size: oxc 12 vs reference 28 (-16 bytes)
+
+```js
+(a = parseInt('100')) <= a;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-(a = parseInt('100')) <= a;
++a = 100, a;
+
+```
+
+## `terser/issue_143/tranformation_sort_order_unequal`
+
+- size: oxc 12 vs reference 28 (-16 bytes)
+
+```js
+(a = parseInt('100')) != a;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-(a = parseInt('100')) != a;
++a = 100, a;
+
+```
+
+## `terser/issue_1446/typeof_eq_undefined`
+
+- size: oxc 64 vs reference 132 (-68 bytes)
+
+```js
+var a = typeof b != 'undefined';
+b = typeof a != 'undefined';
+var c = typeof d.e !== 'undefined';
+var f = 'undefined' === typeof g;
+g = 'undefined' === typeof f;
+var h = 'undefined' == typeof i.j;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,4 @@
+-var a = 'u' > typeof b;
+-b = void 0 !== a;
+-var c = void 0 !== d.e;
+-var f = 'u' < typeof g;
+-g = void 0 === f;
+-var h = void 0 === i.j;
++b = !0;
++var c = d.e !== void 0;
++g = !1;
++var h = i.j === void 0;
+
+```
+
+## `terser/issue_1446/undefined_redefined`
+
+- size: oxc 38 vs reference 60 (-22 bytes)
+
+```js
+function f(undefined) {
+	var n = 1;
+	return typeof n == 'undefined';
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,3 @@
+ function f(undefined) {
+-	var n = 1;
+-	return void 0 === n;
++	return !1;
+ }
+
+```
+
+## `terser/issue_1446/undefined_redefined_mangle`
+
+- size: oxc 38 vs reference 52 (-14 bytes)
+
+```js
+function f(undefined) {
+	var n = 1;
+	return typeof n == 'undefined';
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,3 @@
+-function f(n) {
+-	var r = 1;
+-	return void 0 === r;
++function f(undefined) {
++	return !1;
+ }
+
+```
+
+## `terser/issue_1447/else_with_empty_block`
+
+- size: oxc 12 vs reference 14 (-2 bytes)
+
+```js
+if (x) yes();
+else {}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-if (x) yes();
++x && yes();
+
+```
+
+## `terser/issue_1447/else_with_empty_statement`
+
+- size: oxc 12 vs reference 14 (-2 bytes)
+
+```js
+if (x) yes();
+else;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-if (x) yes();
++x && yes();
+
+```
+
+## `terser/issue_1466/different_variable_in_multiple_forOf`
+
+- size: oxc 118 vs reference 147 (-29 bytes)
+
+```js
+var test = [
+	'a',
+	'b',
+	'c'
+];
+for (let tmp of test) {
+	console.log(tmp);
+	let dd;
+	dd = [
+		'e',
+		'f',
+		'g'
+	];
+	for (let t of dd) {
+		console.log(t);
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,15 +1,12 @@
+-var test = [
++for (let tmp of [
+ 	'a',
+ 	'b',
+ 	'c'
+-];
+-for (let o of test) {
+-	console.log(o);
+-	let e;
+-	e = [
++]) {
++	console.log(tmp);
++	for (let t of [
+ 		'e',
+ 		'f',
+ 		'g'
+-	];
+-	for (let o of e) console.log(o);
++	]) console.log(t);
+ }
+
+```
+
+## `terser/issue_1466/different_variable_in_multiple_for_loop`
+
+- size: oxc 129 vs reference 152 (-23 bytes)
+
+```js
+for (let i = 0; i < 3; i++) {
+	let a = 100;
+	console.log(i, a);
+	for (let j = 0; j < 2; j++) {
+		console.log(j, a);
+		let c = 2;
+		console.log(c);
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,7 @@
+-for (let o = 0; o < 3; o++) {
+-	let l = 100;
+-	console.log(o, l);
+-	for (let o = 0; o < 2; o++) {
+-		console.log(o, l);
+-		let e = 2;
+-		console.log(e);
++for (let i = 0; i < 3; i++) {
++	console.log(i, 100);
++	for (let j = 0; j < 2; j++) {
++		console.log(j, 100);
++		console.log(2);
+ 	}
+ }
+
+```
+
+## `terser/issue_1466/same_variable_in_multiple_forOf`
+
+- size: oxc 122 vs reference 147 (-25 bytes)
+
+```js
+var test = [
+	'a',
+	'b',
+	'c'
+];
+for (let tmp of test) {
+	console.log(tmp);
+	let dd;
+	dd = [
+		'e',
+		'f',
+		'g'
+	];
+	for (let tmp of dd) {
+		console.log(tmp);
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,15 +1,12 @@
+-var test = [
++for (let tmp of [
+ 	'a',
+ 	'b',
+ 	'c'
+-];
+-for (let o of test) {
+-	console.log(o);
+-	let e;
+-	e = [
++]) {
++	console.log(tmp);
++	for (let tmp of [
+ 		'e',
+ 		'f',
+ 		'g'
+-	];
+-	for (let o of e) console.log(o);
++	]) console.log(tmp);
+ }
+
+```
+
+## `terser/issue_1466/same_variable_in_multiple_forOf_sequences_const`
+
+- size: oxc 122 vs reference 150 (-28 bytes)
+
+```js
+var test = [
+	'a',
+	'b',
+	'c'
+];
+for (const tmp of test) {
+	console.log(tmp);
+	let dd;
+	dd = [
+		'e',
+		'f',
+		'g'
+	];
+	for (const tmp of dd) {
+		console.log(tmp);
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,14 +1,12 @@
+-var test = [
++for (let tmp of [
+ 	'a',
+ 	'b',
+ 	'c'
+-];
+-for (const o of test) {
+-	let t;
+-	console.log(o), t = [
++]) {
++	console.log(tmp);
++	for (let tmp of [
+ 		'e',
+ 		'f',
+ 		'g'
+-	];
+-	for (const o of t) console.log(o);
++	]) console.log(tmp);
+ }
+
+```
+
+## `terser/issue_1466/same_variable_in_multiple_forOf_sequences_let`
+
+- size: oxc 122 vs reference 146 (-24 bytes)
+
+```js
+var test = [
+	'a',
+	'b',
+	'c'
+];
+for (let tmp of test) {
+	console.log(tmp);
+	let dd;
+	dd = [
+		'e',
+		'f',
+		'g'
+	];
+	for (let tmp of dd) {
+		console.log(tmp);
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,14 +1,12 @@
+-var test = [
++for (let tmp of [
+ 	'a',
+ 	'b',
+ 	'c'
+-];
+-for (let o of test) {
+-	let e;
+-	console.log(o), e = [
++]) {
++	console.log(tmp);
++	for (let tmp of [
+ 		'e',
+ 		'f',
+ 		'g'
+-	];
+-	for (let o of e) console.log(o);
++	]) console.log(tmp);
+ }
+
+```
+
+## `terser/issue_1466/same_variable_in_multiple_for_loop`
+
+- size: oxc 129 vs reference 152 (-23 bytes)
+
+```js
+for (let i = 0; i < 3; i++) {
+	let a = 100;
+	console.log(i, a);
+	for (let i = 0; i < 2; i++) {
+		console.log(i, a);
+		let c = 2;
+		console.log(c);
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,7 @@
+-for (let o = 0; o < 3; o++) {
+-	let l = 100;
+-	console.log(o, l);
+-	for (let o = 0; o < 2; o++) {
+-		console.log(o, l);
+-		let e = 2;
+-		console.log(e);
++for (let i = 0; i < 3; i++) {
++	console.log(i, 100);
++	for (let i = 0; i < 2; i++) {
++		console.log(i, 100);
++		console.log(2);
+ 	}
+ }
+
+```
+
+## `terser/issue_1569/inner_reference`
+
+- size: oxc 52 vs reference 62 (-10 bytes)
+
+```js
+!(function f(a) {
+	return a && f(a - 1) + a;
+})(42);
+!(function g(a) {
+	return a;
+})(42);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,3 @@
+-!(function f(a) {
++(function f(a) {
+ 	return a && f(a - 1) + a;
+ })(42);
+-!void 0;
+
+```
+
+## `terser/issue_1639/issue_1639_1`
+
+- size: oxc 88 vs reference 92 (-4 bytes)
+
+```js
+var a = 100, b = 10;
+var L1 = 5;
+while (--L1 > 0) {
+	if (--b, false) {
+		if (b) {
+			var ignore = 0;
+		}
+	}
+}
+console.log(a, b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+-for (var a = 100, b = 10, L1 = 5; --L1 > 0;) if (--b, 0) var ignore = 0;
++for (var a = 100, b = 10, L1 = 5; --L1 > 0;) if (--b, 0) var ignore;
+ console.log(a, b);
+
+```
+
+## `terser/issue_1639/issue_1639_3`
+
+- size: oxc 38 vs reference 42 (-4 bytes)
+
+```js
+var a = 100, b = 10;
+a++ && false && a ? 0 : 0;
+console.log(a, b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+-var a = 100, b = 10;
+-console.log(++a, b);
++var a = 100;
++a++, console.log(a, 10);
+
+```
+
+## `terser/issue_1673/side_effects_catch`
+
+- size: oxc 107 vs reference 108 (-1 bytes)
+
+```js
+function f() {
+	function g() {
+		try {
+			throw 0;
+		} catch (e) {
+			console.log('PASS');
+		}
+	}
+	g();
+}
+f();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,11 @@
+ function f() {
+-	(function() {
++	function g() {
+ 		try {
+ 			throw 0;
+-		} catch (e) {
++		} catch {
+ 			console.log('PASS');
+ 		}
+-	})();
++	}
++	g();
+ }
+ f();
+
+```
+
+## `terser/issue_1673/side_effects_finally`
+
+- size: oxc 114 vs reference 115 (-1 bytes)
+
+```js
+function f() {
+	function g() {
+		try {
+			x();
+		} catch (e) {} finally {
+			console.log('PASS');
+		}
+	}
+	g();
+}
+f();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,11 @@
+ function f() {
+-	(function() {
++	function g() {
+ 		try {
+ 			x();
+-		} catch (e) {} finally {
++		} catch {} finally {
+ 			console.log('PASS');
+ 		}
+-	})();
++	}
++	g();
+ }
+ f();
+
+```
+
+## `terser/issue_1733/function_catch_catch`
+
+- size: oxc 155 vs reference 159 (-4 bytes)
+
+```js
+var o = 0;
+function f() {
+	try {
+		throw 1;
+	} catch (c) {
+		try {
+			throw 2;
+		} catch (o) {
+			var o = 3;
+			console.log(o);
+		}
+	}
+	console.log(o);
+}
+f();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,14 +2,14 @@
+ function f() {
+ 	try {
+ 		throw 1;
+-	} catch (t) {
++	} catch {
+ 		try {
+ 			throw 2;
+-		} catch (c) {
+-			var c = 3;
+-			console.log(c);
++		} catch (o) {
++			var o = 3;
++			console.log(o);
+ 		}
+ 	}
+-	console.log(c);
++	console.log(o);
+ }
+ f();
+
+```
+
+## `terser/issue_1733/function_catch_catch_ie8`
+
+- size: oxc 155 vs reference 159 (-4 bytes)
+
+```js
+var o = 0;
+function f() {
+	try {
+		throw 1;
+	} catch (c) {
+		try {
+			throw 2;
+		} catch (o) {
+			var o = 3;
+			console.log(o);
+		}
+	}
+	console.log(o);
+}
+f();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,7 +2,7 @@
+ function f() {
+ 	try {
+ 		throw 1;
+-	} catch (c) {
++	} catch {
+ 		try {
+ 			throw 2;
+ 		} catch (o) {
+
+```
+
+## `terser/issue_1733/function_iife_catch`
+
+- size: oxc 107 vs reference 120 (-13 bytes)
+
+```js
+function f(n) {
+	!(function() {
+		try {
+			throw 0;
+		} catch (n) {
+			var a = 1;
+			console.log(n, a);
+		}
+	})();
+}
+f();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,10 @@
+ function f(n) {
+-	!function() {
++	(function() {
+ 		try {
+ 			throw 0;
+-		} catch (o) {
+-			var n = 1;
+-			console.log(o, n);
++		} catch (n) {
++			console.log(n, 1);
+ 		}
+-	}();
++	})();
+ }
+ f();
+
+```
+
+## `terser/issue_1733/function_iife_catch_ie8`
+
+- size: oxc 107 vs reference 122 (-15 bytes)
+
+```js
+function f(n) {
+	!(function() {
+		try {
+			throw 0;
+		} catch (n) {
+			var a = 1;
+			console.log(n, a);
+		}
+	})();
+}
+f();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,9 @@
+-function f(o) {
+-	!(function() {
++function f(n) {
++	(function() {
+ 		try {
+ 			throw 0;
+-		} catch (o) {
+-			var c = 1;
+-			console.log(o, c);
++		} catch (n) {
++			console.log(n, 1);
+ 		}
+ 	})();
+ }
+
+```
+
+## `terser/issue_1770/mangle_props`
+
+- size: oxc 271 vs reference 279 (-8 bytes)
+
+```js
+var obj = {
+	undefined: 1,
+	NaN: 2,
+	Infinity: 3,
+	'-Infinity': 4,
+	null: 5
+};
+console.log(obj[void 0], obj[undefined], obj['undefined'], obj[0 / 0], obj[NaN], obj['NaN'], obj[1 / 0], obj[Infinity], obj['Infinity'], obj[-1 / 0], obj[-Infinity], obj['-Infinity'], obj[null], obj['null']);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -5,4 +5,4 @@
+ 	'-Infinity': 4,
+ 	null: 5
+ };
+-console.log(obj[void 0], obj[void 0], obj['undefined'], obj[0 / 0], obj[NaN], obj['NaN'], obj[1 / 0], obj[1 / 0], obj['Infinity'], obj[-1 / 0], obj[-1 / 0], obj['-Infinity'], obj[null], obj['null']);
++console.log(obj[void 0], obj[void 0], obj.undefined, obj[NaN], obj[NaN], obj.NaN, obj[1 / 0], obj[Infinity], obj.Infinity, obj[-1 / 0], obj[-Infinity], obj['-Infinity'], obj[null], obj.null);
+
+```
+
+## `terser/issue_1833/iife_do`
+
+- size: oxc 0 vs reference 73 (-73 bytes)
+
+```js
+function f() {
+	function g() {
+		L: do {
+			break L;
+		} while (1);
+	}
+	g();
+}
+f();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +0,0 @@
+-!function() {
+-	!function() {
+-		L: do
+-			break L;
+-		while (1);
+-	}();
+-}();
+
+```
+
+## `terser/issue_1833/label_do`
+
+- size: oxc 30 vs reference 34 (-4 bytes)
+
+```js
+L: do {
+	continue L;
+} while (0);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-L: do {
++L: do
+ 	continue L;
+-} while (0);
++while (0);
+
+```
+
+## `terser/issue_1833/label_while`
+
+- size: oxc 16 vs reference 24 (-8 bytes)
+
+```js
+function f() {
+	L: while (0) continue L;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1 @@
+-function f() {
+-	L: 0;
+-}
++function f() {}
+
+```
+
+## `terser/issue_229/template_strings`
+
+- size: oxc 31 vs reference 49 (-18 bytes)
+
+```js
+var x = {};
+var y = { ...x };
+y.hello = 'world';
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,2 @@
+-var x = {};
+-var y = { ...x };
++var y = {};
+ y.hello = 'world';
+
+```
+
+## `terser/issue_281/collapse_vars_constants`
+
+- size: oxc 0 vs reference 193 (-193 bytes)
+
+```js
+function f1(x) {
+	var a = 4, b = x.prop, c = 5, d = sideeffect1(), e = sideeffect2();
+	return b + (function() {
+		return d - a * e - c;
+	})();
+}
+function f2(x) {
+	var a = 4, b = x.prop, c = 5, not_used = sideeffect1(), e = sideeffect2();
+	return b + (function() {
+		return -a * e - c;
+	})();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +0,0 @@
+-function f1(x) {
+-	var b = x.prop, d = sideeffect1(), e = sideeffect2();
+-	return b + (d - 4 * e - 5);
+-}
+-function f2(x) {
+-	var b = x.prop;
+-	sideeffect1();
+-	return b + (-4 * sideeffect2() - 5);
+-}
+
+```
+
+## `terser/issue_2871/comparison_with_undefined`
+
+- size: oxc 36 vs reference 150 (-114 bytes)
+
+```js
+a == undefined;
+a != undefined;
+a === undefined;
+a !== undefined;
+undefined == a;
+undefined != a;
+undefined === a;
+undefined !== a;
+void 0 == a;
+void 0 != a;
+void 0 === a;
+void 0 !== a;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,12 +1,12 @@
+-null == a;
+-null != a;
+-void 0 === a;
+-void 0 !== a;
+-null == a;
+-null != a;
+-void 0 === a;
+-void 0 !== a;
+-null == a;
+-null != a;
+-void 0 === a;
+-void 0 !== a;
++a;
++a;
++a;
++a;
++a;
++a;
++a;
++a;
++a;
++a;
++a;
++a;
+
+```
+
+## `terser/issue_368/collapse`
+
+- size: oxc 0 vs reference 331 (-331 bytes)
+
+```js
+function f1() {
+	var a;
+	a = typeof b === 'function' ? b() : b;
+	return a !== undefined && c();
+}
+function f2(b) {
+	var a;
+	b = c();
+	a = typeof b === 'function' ? b() : b;
+	return 'stirng' == typeof a && d();
+}
+function f3(c) {
+	var a;
+	a = b(a / 2);
+	if (a < 0) {
+		a++;
+		++c;
+		return c / 2;
+	}
+}
+function f4(c) {
+	var a;
+	a = b(a / 2);
+	if (a < 0) {
+		a++;
+		c++;
+		return c / 2;
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,14 +0,0 @@
+-function f1() {
+-	return void 0 !== ('function' == typeof b ? b() : b) && c();
+-}
+-function f2(b1) {
+-	return 'stirng' == typeof ('function' == typeof (b1 = c()) ? b1() : b1) && d();
+-}
+-function f3(c1) {
+-	var a;
+-	if ((a = b(a / 2)) < 0) return a++, ++c1 / 2;
+-}
+-function f4(c1) {
+-	var a;
+-	if ((a = b(a / 2)) < 0) return a++, ++c1 / 2;
+-}
+
+```
+
+## `terser/issue_44/issue_44_valid_ast_1`
+
+- size: oxc 0 vs reference 52 (-52 bytes)
+
+```js
+function a(b) {
+	for (var i = 0, e = b.qoo();; i++) {}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +0,0 @@
+-function a(b) {
+-	var i = 0;
+-	for (b.qoo();; i++);
+-}
+
+```
+
+## `terser/issue_44/issue_44_valid_ast_2`
+
+- size: oxc 0 vs reference 69 (-69 bytes)
+
+```js
+function a(b) {
+	if (foo) for (var i = 0, e = b.qoo();; i++) {}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +0,0 @@
+-function a(b) {
+-	if (foo) {
+-		var i = 0;
+-		for (b.qoo();; i++);
+-	}
+-}
+
+```
+
+## `terser/issue_59/keep_continue`
+
+- size: oxc 84 vs reference 85 (-1 bytes)
+
+```js
+while (a) {
+	if (b) {
+		switch (true) {
+			case c(): d();
+		}
+		continue;
+	}
+	f();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+-while (a) {
++for (; a;) {
+ 	if (b) {
+-		switch (true) {
++		switch (!0) {
+ 			case c(): d();
+ 		}
+ 		continue;
+
+```
+
+## `terser/issue_597/NaN_and_Infinity_must_have_parens`
+
+- size: oxc 0 vs reference 41 (-41 bytes)
+
+```js
+Infinity.toString();
+NaN.toString();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +0,0 @@
+-Infinity.toString();
+-(0 / 0).toString();
+
+```
+
+## `terser/issue_597/NaN_and_Infinity_must_have_parens_evaluate`
+
+- size: oxc 0 vs reference 19 (-19 bytes)
+
+```js
+(123456789 / 0).toString();
+(+'foo').toString();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +0,0 @@
+-'Infinity';
+-'NaN';
+
+```
+
+## `terser/issue_597/NaN_and_Infinity_should_not_be_replaced_when_they_are_redefined`
+
+- size: oxc 56 vs reference 60 (-4 bytes)
+
+```js
+var Infinity, NaN;
+Infinity.toString();
+NaN.toString();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ var Infinity, NaN;
+ Infinity.toString();
+-(0 / 0).toString();
++NaN.toString();
+
+```
+
+## `terser/issue_597/NaN_and_Infinity_should_not_be_replaced_when_they_are_redefined_evaluate`
+
+- size: oxc 19 vs reference 38 (-19 bytes)
+
+```js
+var Infinity, NaN;
+(123456789 / 0).toString();
+(+'foo').toString();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1 @@
+ var Infinity, NaN;
+-'Infinity';
+-'NaN';
+
+```
+
+## `terser/issue_611/issue_611`
+
+- size: oxc 42 vs reference 71 (-29 bytes)
+
+```js
+define(function() {
+	function fn() {}
+	if (fn()) {
+		fn();
+		return void 0;
+	}
+});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,3 @@
+ define(function() {
+ 	function fn() {}
+-	if (fn()) return void fn();
+ });
+
+```
+
+## `terser/issue_637/wrongly_optimized`
+
+- size: oxc 43 vs reference 48 (-5 bytes)
+
+```js
+function func() {
+	foo();
+}
+if (func() || true) {
+	bar();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ function func() {
+ 	foo();
+ }
+-func() || 1, bar();
++func(), bar();
+
+```
+
+## `terser/issue_640/dead_code_const_annotation_regex`
+
+- size: oxc 36 vs reference 79 (-43 bytes)
+
+```js
+var unused;
+var CONST_FOO_ANN = false;
+if (CONST_FOO_ANN) {
+	console.log('reachable');
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,2 @@
+ var unused;
+ var CONST_FOO_ANN = !1;
+-CONST_FOO_ANN && console.log('reachable');
+
+```
+
+## `terser/issue_640/negate_iife_3`
+
+- size: oxc 67 vs reference 71 (-4 bytes)
+
+```js
+(function() {
+	return t;
+})() ? console.log(true) : console.log(false);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-!function() {
++(function() {
+ 	return t;
+-}() ? console.log(false) : console.log(true);
++})() ? console.log(!0) : console.log(!1);
+
+```
+
+## `terser/issue_640/negate_iife_3_off`
+
+- size: oxc 67 vs reference 72 (-5 bytes)
+
+```js
+(function() {
+	return t;
+})() ? console.log(true) : console.log(false);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ (function() {
+ 	return t;
+-})() ? console.log(true) : console.log(false);
++})() ? console.log(!0) : console.log(!1);
+
+```
+
+## `terser/issue_640/negate_iife_4`
+
+- size: oxc 114 vs reference 120 (-6 bytes)
+
+```js
+(function() {
+	return t;
+})() ? console.log(true) : console.log(false);
+(function() {
+	console.log('something');
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+-!(function() {
++(function() {
+ 	return t;
+-})() ? console.log(false) : console.log(true), (function() {
++})() ? console.log(!0) : console.log(!1), (function() {
+ 	console.log('something');
+ })();
+
+```
+
+## `terser/issue_640/negate_iife_5`
+
+- size: oxc 98 vs reference 104 (-6 bytes)
+
+```js
+if ((function() {
+	return t;
+})()) {
+	foo(true);
+} else {
+	bar(false);
+}
+(function() {
+	console.log('something');
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+-!(function() {
++(function() {
+ 	return t;
+-})() ? bar(false) : foo(true), (function() {
++})() ? foo(!0) : bar(!1), (function() {
+ 	console.log('something');
+ })();
+
+```
+
+## `terser/issue_640/negate_iife_5_off`
+
+- size: oxc 98 vs reference 101 (-3 bytes)
+
+```js
+if ((function() {
+	return t;
+})()) {
+	foo(true);
+} else {
+	bar(false);
+}
+(function() {
+	console.log('something');
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ (function() {
+ 	return t;
+-})() ? foo(true) : bar(false), function() {
++})() ? foo(!0) : bar(!1), (function() {
+ 	console.log('something');
+-}();
++})();
+
+```
+
+## `terser/issue_892/dont_mangle_arguments`
+
+- size: oxc 83 vs reference 90 (-7 bytes)
+
+```js
+(function() {
+	var arguments = arguments, not_arguments = 9;
+	console.log(not_arguments, arguments);
+})(5, 6, 7);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ (function() {
+-	var arguments = arguments, o = 9;
+-	console.log(o, arguments);
++	var arguments = arguments;
++	console.log(9, arguments);
+ })(5, 6, 7);
+
+```
+
+## `terser/issue_973/this_binding_side_effects`
+
+- size: oxc 178 vs reference 183 (-5 bytes)
+
+```js
+(function(foo) {
+	(0, foo)();
+	(0, foo.bar)();
+	(0, eval)('console.log(foo);');
+})();
+(function(foo) {
+	var eval = console;
+	(0, foo)();
+	(0, foo.bar)();
+	(0, eval)('console.log(foo);');
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -7,5 +7,5 @@
+ 	var eval = console;
+ 	foo();
+ 	(0, foo.bar)();
+-	(0, eval)('console.log(foo);');
++	eval('console.log(foo);');
+ })();
+
+```
+
+## `terser/issue_979/issue979_reported`
+
+- size: oxc 0 vs reference 92 (-92 bytes)
+
+```js
+function f1() {
+	if (a == 1 || b == 2) {
+		foo();
+	}
+}
+function f2() {
+	if (!(a == 1 || b == 2)) {} else {
+		foo();
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +0,0 @@
+-function f1() {
+-	1 != a && 2 != b || foo();
+-}
+-function f2() {
+-	1 != a && 2 != b || foo();
+-}
+
+```
+
+## `terser/issue_979/issue979_test_negated_is_best`
+
+- size: oxc 0 vs reference 245 (-245 bytes)
+
+```js
+function f3() {
+	if (a == 1 | b == 2) {
+		foo();
+	}
+}
+function f4() {
+	if (!(a == 1 | b == 2)) {} else {
+		foo();
+	}
+}
+function f5() {
+	if (a == 1 && b == 2) {
+		foo();
+	}
+}
+function f6() {
+	if (!(a == 1 && b == 2)) {} else {
+		foo();
+	}
+}
+function f7() {
+	if (a == 1 || b == 2) {
+		foo();
+	} else {
+		return bar();
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,16 +0,0 @@
+-function f3() {
+-	1 == a | 2 == b && foo();
+-}
+-function f4() {
+-	1 == a | 2 == b && foo();
+-}
+-function f5() {
+-	1 == a && 2 == b && foo();
+-}
+-function f6() {
+-	1 != a || 2 != b || foo();
+-}
+-function f7() {
+-	if (1 != a && 2 != b) return bar();
+-	foo();
+-}
+
+```
+
+## `terser/keep_names/keep_some_fnames_reduce`
+
+- size: oxc 0 vs reference 218 (-218 bytes)
+
+```js
+function foo() {
+	var array = [];
+	function bar() {}
+	array.map(bar);
+	function barElement() {}
+	array.map(barElement);
+	var aElement = () => {};
+	array.map(aElement);
+	array.map(aElement);
+	var bElement = function() {};
+	array.map(bElement);
+	array.map(bElement);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +0,0 @@
+-function foo() {
+-	var a = [];
+-	a.map(function() {});
+-	a.map(function barElement() {});
+-	var aElement = () => {};
+-	a.map(aElement);
+-	a.map(aElement);
+-	var bElement = function() {};
+-	a.map(bElement);
+-	a.map(bElement);
+-}
+
+```
+
+## `terser/labels/labels_5`
+
+- size: oxc 105 vs reference 108 (-3 bytes)
+
+```js
+while (foo) {
+	if (bar) break;
+	console.log('foo');
+}
+out: while (foo) {
+	if (bar) break out;
+	console.log('foo');
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,5 @@
+-while (foo) {
+-	if (bar) break;
+-	console.log('foo');
+-}
+-while (foo) {
+-	if (bar) break;
++for (; foo && !bar;) console.log('foo');
++out: for (; foo;) {
++	if (bar) break out;
+ 	console.log('foo');
+ }
+
+```
+
+## `terser/logical_assignment/assign_in_conditional_part`
+
+- size: oxc 129 vs reference 152 (-23 bytes)
+
+```js
+var status = 'PASS';
+var nil = null;
+var nil_prop = { prop: null };
+nil &&= console.log(status = 'FAIL');
+nil_prop.prop &&= console.log(status = 'FAIL');
+console.log(status);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+-var status = 'PASS';
+-var nil = null;
+-nil &&= console.log(status = 'FAIL');
+-({ prop: null }).prop &&= console.log(status = 'FAIL');
+-console.log(status);
++var e = 'PASS', t = null, n = { prop: null };
++t &&= console.log(e = 'FAIL');
++n.prop &&= console.log(e = 'FAIL');
++console.log(e);
+
+```
+
+## `terser/logical_assignment/assign_in_conditional_part_reused`
+
+- size: oxc 140 vs reference 195 (-55 bytes)
+
+```js
+var status = 'PASS';
+var nil = null;
+var nil_prop = { prop: null };
+nil &&= console.log(status = 'FAIL');
+nil_prop.prop &&= console.log(status = 'FAIL');
+console.log(status, nil, nil_prop.prop);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,4 @@
+-var status = 'PASS';
+-var nil = null;
+-var nil_prop = { prop: null };
+-nil &&= console.log(status = 'FAIL');
+-nil_prop.prop &&= console.log(status = 'FAIL');
+-console.log(status, nil, nil_prop.prop);
++var e = 'PASS', t = null, n = { prop: null };
++t &&= console.log(e = 'FAIL');
++n.prop &&= console.log(e = 'FAIL');
++console.log(e, t, n.prop);
+
+```
+
+## `terser/logical_assignment/assignment_in_left_part_2`
+
+- size: oxc 88 vs reference 101 (-13 bytes)
+
+```js
+var status = 'FAIL';
+var x = { PASS: false };
+x[status = id('PASS')] ||= 'PASS';
+console.log(status, x.PASS);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,3 @@
+-var status;
+-var x = { PASS: false };
+-x[status = id('PASS')] ||= 'PASS';
+-console.log(status, x.PASS);
++var e = 'FAIL', t = { PASS: !1 };
++t[e = id('PASS')] ||= 'PASS';
++console.log(e, t.PASS);
+
+```
+
+## `terser/logical_assignment/prematurely_evaluate_assignment`
+
+- size: oxc 100 vs reference 153 (-53 bytes)
+
+```js
+var or = null;
+var null_coalesce = null;
+var and = 'FAIL';
+or ||= 'PASS';
+null_coalesce ??= 'PASS';
+and &&= 'PASS';
+console.log(or, null_coalesce, and);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,5 @@
+-var or = null;
+-var null_coalesce = null;
+-var and = 'FAIL';
+-or ||= 'PASS';
+-null_coalesce ??= 'PASS';
+-and &&= 'PASS';
+-console.log(or, null_coalesce, and);
++var e = null, t = null, n = 'FAIL';
++e ||= 'PASS';
++t ??= 'PASS';
++n &&= 'PASS';
++console.log(e, t, n);
+
+```
+
+## `terser/logical_assignment/prematurely_evaluate_assignment_inv`
+
+- size: oxc 104 vs reference 157 (-53 bytes)
+
+```js
+var or = 'PASS';
+var null_coalesce = 'PASS';
+var and = 'FAIL';
+or ||= 'FAIL';
+null_coalesce ??= 'FAIL';
+and &&= 'PASS';
+console.log(or, null_coalesce, and);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,5 @@
+-var or = 'PASS';
+-var null_coalesce = 'PASS';
+-var and = 'FAIL';
+-or ||= 'FAIL';
+-null_coalesce ??= 'FAIL';
+-and &&= 'PASS';
+-console.log(or, null_coalesce, and);
++var e = 'PASS', t = 'PASS', n = 'FAIL';
++e ||= 'FAIL';
++t ??= 'FAIL';
++n &&= 'PASS';
++console.log(e, t, n);
+
+```
+
+## `terser/loops/do_switch`
+
+- size: oxc 51 vs reference 59 (-8 bytes)
+
+```js
+do {
+	switch (a) {
+		case b: continue;
+	}
+} while (false);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+-do {
++do
+ 	switch (a) {
+ 		case b: continue;
+ 	}
+-} while (false);
++while (0);
+
+```
+
+## `terser/loops/in_parenthesis_2`
+
+- size: oxc 0 vs reference 40 (-40 bytes)
+
+```js
+for (function() {
+	'foo' in {};
+}; 0;);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-for (function() {
+-	'foo' in {};
+-}; 0;);
+
+```
+
+## `terser/loops/issue_1532`
+
+- size: oxc 66 vs reference 70 (-4 bytes)
+
+```js
+function f(x, y) {
+	do {
+		if (x) break;
+		foo();
+	} while (false);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,5 +2,5 @@
+ 	do {
+ 		if (x) break;
+ 		foo();
+-	} while (false);
++	} while (0);
+ }
+
+```
+
+## `terser/loops/issue_1648`
+
+- size: oxc 0 vs reference 31 (-31 bytes)
+
+```js
+function f() {
+	x();
+	var b = 1;
+	while (1);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f() {
+-	for (x();;);
+-}
+
+```
+
+## `terser/loops/issue_186`
+
+- size: oxc 78 vs reference 82 (-4 bytes)
+
+```js
+var x = 3;
+if (foo()) do {
+	do {
+		alert(x);
+	} while (--x);
+} while (x);
+else bar();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+ var x = 3;
+-if (foo()) do {
++if (foo()) do
+ 	do
+ 		alert(x);
+ 	while (--x);
+-} while (x);
++while (x);
+ else bar();
+
+```
+
+## `terser/loops/issue_186_beautify`
+
+- size: oxc 78 vs reference 82 (-4 bytes)
+
+```js
+var x = 3;
+if (foo()) do {
+	do {
+		alert(x);
+	} while (--x);
+} while (x);
+else bar();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+ var x = 3;
+-if (foo()) do {
++if (foo()) do
+ 	do
+ 		alert(x);
+ 	while (--x);
+-} while (x);
++while (x);
+ else bar();
+
+```
+
+## `terser/loops/issue_186_beautify_braces`
+
+- size: oxc 78 vs reference 91 (-13 bytes)
+
+```js
+var x = 3;
+if (foo()) {
+	do {
+		do {
+			alert(x);
+		} while (--x);
+	} while (x);
+} else {
+	bar();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,7 @@
+ var x = 3;
+-if (foo()) {
+-	do {
+-		do
+-			alert(x);
+-		while (--x);
+-	} while (x);
+-} else bar();
++if (foo()) do
++	do
++		alert(x);
++	while (--x);
++while (x);
++else bar();
+
+```
+
+## `terser/loops/issue_186_beautify_braces_ie8`
+
+- size: oxc 78 vs reference 91 (-13 bytes)
+
+```js
+var x = 3;
+if (foo()) {
+	do {
+		do {
+			alert(x);
+		} while (--x);
+	} while (x);
+} else {
+	bar();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,7 @@
+ var x = 3;
+-if (foo()) {
+-	do {
+-		do
+-			alert(x);
+-		while (--x);
+-	} while (x);
+-} else bar();
++if (foo()) do
++	do
++		alert(x);
++	while (--x);
++while (x);
++else bar();
+
+```
+
+## `terser/loops/issue_186_beautify_ie8`
+
+- size: oxc 78 vs reference 91 (-13 bytes)
+
+```js
+var x = 3;
+if (foo()) {
+	do {
+		do {
+			alert(x);
+		} while (--x);
+	} while (x);
+} else bar();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,7 @@
+ var x = 3;
+-if (foo()) {
+-	do {
+-		do
+-			alert(x);
+-		while (--x);
+-	} while (x);
+-} else bar();
++if (foo()) do
++	do
++		alert(x);
++	while (--x);
++while (x);
++else bar();
+
+```
+
+## `terser/loops/issue_186_braces`
+
+- size: oxc 78 vs reference 91 (-13 bytes)
+
+```js
+var x = 3;
+if (foo()) {
+	do {
+		do {
+			alert(x);
+		} while (--x);
+	} while (x);
+} else {
+	bar();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,7 @@
+ var x = 3;
+-if (foo()) {
+-	do {
+-		do
+-			alert(x);
+-		while (--x);
+-	} while (x);
+-} else bar();
++if (foo()) do
++	do
++		alert(x);
++	while (--x);
++while (x);
++else bar();
+
+```
+
+## `terser/loops/issue_186_braces_ie8`
+
+- size: oxc 78 vs reference 91 (-13 bytes)
+
+```js
+var x = 3;
+if (foo()) {
+	do {
+		do {
+			alert(x);
+		} while (--x);
+	} while (x);
+} else {
+	bar();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,7 @@
+ var x = 3;
+-if (foo()) {
+-	do {
+-		do
+-			alert(x);
+-		while (--x);
+-	} while (x);
+-} else bar();
++if (foo()) do
++	do
++		alert(x);
++	while (--x);
++while (x);
++else bar();
+
+```
+
+## `terser/loops/issue_186_ie8`
+
+- size: oxc 78 vs reference 91 (-13 bytes)
+
+```js
+var x = 3;
+if (foo()) {
+	do {
+		do {
+			alert(x);
+		} while (--x);
+	} while (x);
+} else bar();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,7 @@
+ var x = 3;
+-if (foo()) {
+-	do {
+-		do
+-			alert(x);
+-		while (--x);
+-	} while (x);
+-} else bar();
++if (foo()) do
++	do
++		alert(x);
++	while (--x);
++while (x);
++else bar();
+
+```
+
+## `terser/loops/parse_do_while_with_semicolon`
+
+- size: oxc 25 vs reference 29 (-4 bytes)
+
+```js
+do {
+	x();
+} while (false);
+y();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ do
+ 	x();
+-while (false);
++while (0);
+ y();
+
+```
+
+## `terser/loops/parse_do_while_without_semicolon`
+
+- size: oxc 25 vs reference 29 (-4 bytes)
+
+```js
+do {
+	x();
+} while (false);
+y();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ do
+ 	x();
+-while (false);
++while (0);
+ y();
+
+```
+
+## `terser/negate_iife/issue_1254_negate_iife_nested`
+
+- size: oxc 76 vs reference 77 (-1 bytes)
+
+```js
+(function() {
+	return function() {
+		console.log('test');
+	};
+})()()()()();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+-!(function() {
++(function() {
+ 	return function() {
+ 		console.log('test');
+ 	};
+
+```
+
+## `terser/negate_iife/issue_1254_negate_iife_true`
+
+- size: oxc 70 vs reference 71 (-1 bytes)
+
+```js
+(function() {
+	return function() {
+		console.log('test');
+	};
+})()();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+-!(function() {
++(function() {
+ 	return function() {
+ 		console.log('test');
+ 	};
+
+```
+
+## `terser/negate_iife/issue_1288`
+
+- size: oxc 40 vs reference 121 (-81 bytes)
+
+```js
+if (w);
+else {
+	(function f() {})();
+}
+if (!x) {
+	(function() {
+		x = {};
+	})();
+}
+if (y) (function() {})();
+else (function(z) {
+	return z;
+})(0);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,5 @@
+-w || !(function f() {})();
+-x || !(function() {
++w;
++x || (function() {
+ 	x = {};
+ })();
+-y ? !(function() {})() : !(function(z) {
+-	return z;
+-})(0);
++y;
+
+```
+
+## `terser/negate_iife/negate_iife_1`
+
+- size: oxc 30 vs reference 31 (-1 bytes)
+
+```js
+(function() {
+	stuff();
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-!(function() {
++(function() {
+ 	stuff();
+ })();
+
+```
+
+## `terser/negate_iife/negate_iife_3`
+
+- size: oxc 67 vs reference 73 (-6 bytes)
+
+```js
+(function() {
+	return t;
+})() ? console.log(true) : console.log(false);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-!(function() {
++(function() {
+ 	return t;
+-})() ? console.log(false) : console.log(true);
++})() ? console.log(!0) : console.log(!1);
+
+```
+
+## `terser/negate_iife/negate_iife_3_off`
+
+- size: oxc 67 vs reference 73 (-6 bytes)
+
+```js
+(function() {
+	return t;
+})() ? console.log(true) : console.log(false);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-!(function() {
++(function() {
+ 	return t;
+-})() ? console.log(false) : console.log(true);
++})() ? console.log(!0) : console.log(!1);
+
+```
+
+## `terser/negate_iife/negate_iife_3_side_effects`
+
+- size: oxc 67 vs reference 73 (-6 bytes)
+
+```js
+(function() {
+	return t;
+})() ? console.log(true) : console.log(false);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-!(function() {
++(function() {
+ 	return t;
+-})() ? console.log(false) : console.log(true);
++})() ? console.log(!0) : console.log(!1);
+
+```
+
+## `terser/negate_iife/negate_iife_4`
+
+- size: oxc 114 vs reference 120 (-6 bytes)
+
+```js
+(function() {
+	return t;
+})() ? console.log(true) : console.log(false);
+(function() {
+	console.log('something');
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+-!(function() {
++(function() {
+ 	return t;
+-})() ? console.log(false) : console.log(true), (function() {
++})() ? console.log(!0) : console.log(!1), (function() {
+ 	console.log('something');
+ })();
+
+```
+
+## `terser/negate_iife/negate_iife_5`
+
+- size: oxc 98 vs reference 104 (-6 bytes)
+
+```js
+if ((function() {
+	return t;
+})()) {
+	foo(true);
+} else {
+	bar(false);
+}
+(function() {
+	console.log('something');
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+-!(function() {
++(function() {
+ 	return t;
+-})() ? bar(false) : foo(true), (function() {
++})() ? foo(!0) : bar(!1), (function() {
+ 	console.log('something');
+ })();
+
+```
+
+## `terser/negate_iife/negate_iife_5_off`
+
+- size: oxc 98 vs reference 101 (-3 bytes)
+
+```js
+if ((function() {
+	return t;
+})()) {
+	foo(true);
+} else {
+	bar(false);
+}
+(function() {
+	console.log('something');
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ (function() {
+ 	return t;
+-})() ? foo(true) : bar(false), function() {
++})() ? foo(!0) : bar(!1), (function() {
+ 	console.log('something');
+-}();
++})();
+
+```
+
+## `terser/negate_iife/negate_iife_issue_1073`
+
+- size: oxc 88 vs reference 92 (-4 bytes)
+
+```js
+new ((function(a) {
+	return function Foo() {
+		this.x = a;
+		console.log(this);
+	};
+})(7))();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ new ((function(a) {
+-	return function Foo() {
++	return function() {
+ 		this.x = a, console.log(this);
+ 	};
+ })(7))();
+
+```
+
+## `terser/negate_iife/negate_iife_nested`
+
+- size: oxc 131 vs reference 133 (-2 bytes)
+
+```js
+function Foo(f) {
+	this.f = f;
+}
+new Foo(function() {
+	(function(x) {
+		(function(y) {
+			console.log(y);
+		})(x);
+	})(7);
+}).f();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,8 +2,8 @@
+ 	this.f = f;
+ }
+ new Foo(function() {
+-	!(function(x) {
+-		!(function(y) {
++	(function(x) {
++		(function(y) {
+ 			console.log(y);
+ 		})(x);
+ 	})(7);
+
+```
+
+## `terser/negate_iife/sequence_off`
+
+- size: oxc 272 vs reference 283 (-11 bytes)
+
+```js
+function f() {
+	(function() {
+		return t;
+	})() ? console.log(true) : console.log(false);
+	(function() {
+		console.log('something');
+	})();
+}
+function g() {
+	(function() {
+		console.log('something');
+	})();
+	(function() {
+		return t;
+	})() ? console.log(true) : console.log(false);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+ function f() {
+-	!(function() {
++	(function() {
+ 		return t;
+-	})() ? console.log(false) : console.log(true), (function() {
++	})() ? console.log(!0) : console.log(!1), (function() {
+ 		console.log('something');
+ 	})();
+ }
+@@ -10,5 +10,5 @@
+ 		console.log('something');
+ 	})(), (function() {
+ 		return t;
+-	})() ? console.log(true) : console.log(false);
++	})() ? console.log(!0) : console.log(!1);
+ }
+
+```
+
+## `terser/new/dot_parenthesis_2`
+
+- size: oxc 53 vs reference 55 (-2 bytes)
+
+```js
+console.log(typeof new function() {
+	Math.random();
+}.constructor());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-console.log(typeof new (function() {}).constructor());
++console.log(typeof new function() {}.constructor());
+
+```
+
+## `terser/new/new_statements_3`
+
+- size: oxc 178 vs reference 188 (-10 bytes)
+
+```js
+new (function(foo) {
+	this.foo = foo;
+})(1);
+new (function(foo) {
+	this.foo = foo;
+})();
+new (function test(foo) {
+	this.foo = foo;
+})(1);
+new (function test(foo) {
+	this.foo = foo;
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -4,9 +4,9 @@
+ new (function(foo) {
+ 	this.foo = foo;
+ })();
+-new (function test(foo) {
++new (function(foo) {
+ 	this.foo = foo;
+ })(1);
+-new (function test(foo) {
++new (function(foo) {
+ 	this.foo = foo;
+ })();
+
+```
+
+## `terser/nullish/conditional_to_nullish_coalescing`
+
+- size: oxc 43 vs reference 47 (-4 bytes)
+
+```js
+const foo = id('something');
+leak(foo == null ? bar : foo);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+-const foo = id('something');
+-leak(foo ?? bar);
++const e = id('something');
++leak(e ?? bar);
+
+```
+
+## `terser/nullish/conditional_to_nullish_coalescing_2`
+
+- size: oxc 252 vs reference 327 (-75 bytes)
+
+```js
+const foo = id('something');
+console.log('negative cases');
+foo === null || foo === null ? bar : foo;
+foo === undefined || foo === undefined ? bar : foo;
+foo === null || foo === undefined ? foo : bar;
+some_global === null || some_global === undefined ? bar : some_global;
+console.log('positive cases');
+foo === null || foo === void 0 ? bar : foo;
+foo === null || foo === undefined ? bar : foo;
+foo === undefined || foo === null ? bar : foo;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,10 @@
+-const foo = id('something');
++const e = id('something');
+ console.log('negative cases');
+-null === foo || null === foo ? bar : foo;
+-void 0 === foo || void 0 === foo ? bar : foo;
+-null === foo || void 0 === foo ? foo : bar;
+-null === some_global || void 0 === some_global ? bar : some_global;
++(e === null || e === null) && bar;
++(e === void 0 || e === void 0) && bar;
++e == null || bar;
++some_global == null ? bar : some_global;
+ console.log('positive cases');
+-foo ?? bar;
+-foo ?? bar;
+-foo ?? bar;
++e ?? bar;
++e ?? bar;
++e ?? bar;
+
+```
+
+## `terser/numbers/no_number_function_transform_without_unsafe_math`
+
+- size: oxc 0 vs reference 14 (-14 bytes)
+
+```js
+Number(1234);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +0,0 @@
+-Number(1234);
+
+```
+
+## `terser/numbers/unary_binary_parenthesis`
+
+- size: oxc 217 vs reference 221 (-4 bytes)
+
+```js
+var v = [
+	0,
+	1,
+	NaN,
+	Infinity,
+	null,
+	undefined,
+	true,
+	false,
+	'',
+	'foo',
+	/foo/
+];
+v.forEach(function(x) {
+	v.forEach(function(y) {
+		console.log(+(x * y), +(x / y), +(x % y), -(x * y), -(x / y), -(x % y));
+	});
+});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,12 +1,12 @@
+ var v = [
+ 	0,
+ 	1,
+-	0 / 0,
+-	1 / 0,
++	NaN,
++	Infinity,
+ 	null,
+ 	void 0,
+-	true,
+-	false,
++	!0,
++	!1,
+ 	'',
+ 	'foo',
+ 	/foo/
+
+```
+
+## `terser/object/computed_property_names`
+
+- size: oxc 16 vs reference 20 (-4 bytes)
+
+```js
+obj({ ['x' + 'x']: 6 });
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-obj({ ['xx']: 6 });
++obj({ xx: 6 });
+
+```
+
+## `terser/object/computed_property_names_evaluated_1`
+
+- size: oxc 24 vs reference 30 (-6 bytes)
+
+```js
+obj({
+	[1 + 1]: 2,
+	['x' + 'x']: 6
+});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ obj({
+-	[2]: 2,
+-	['xx']: 6
++	2: 2,
++	xx: 6
+ });
+
+```
+
+## `terser/object/computed_property_names_evaluated_2`
+
+- size: oxc 51 vs reference 66 (-15 bytes)
+
+```js
+var foo = something();
+var obj = { [foo]() {
+	return 'blah';
+} };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,3 @@
+-var foo = something();
+-var obj = { [foo]() {
++var obj = { [something()]() {
+ 	return 'blah';
+ } };
+
+```
+
+## `terser/object/concise_methods_with_computed_property`
+
+- size: oxc 102 vs reference 108 (-6 bytes)
+
+```js
+var foo = {
+	[Symbol.iterator]() {
+		return {};
+	},
+	[1 + 2]() {
+		return 3;
+	},
+	['1' + '4']() {
+		return 14;
+	}
+};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,10 +2,10 @@
+ 	[Symbol.iterator]() {
+ 		return {};
+ 	},
+-	[3]() {
++	3() {
+ 		return 3;
+ 	},
+-	['14']() {
++	14() {
+ 		return 14;
+ 	}
+ };
+
+```
+
+## `terser/object/getter_setter`
+
+- size: oxc 532 vs reference 550 (-18 bytes)
+
+```js
+var get = 'bar';
+var a = {
+	get,
+	set: 'foo',
+	get bar() {
+		return this.get;
+	},
+	get 5() {
+		return 'five';
+	},
+	get 3925() {
+		return 'f five five';
+	},
+	get five() {
+		return 5;
+	},
+	set one(value) {
+		this._one = value;
+	},
+	set 9(value) {
+		this._nine = value;
+	},
+	set 10(value) {
+		this._ten = value;
+	},
+	set eleven(value) {
+		this._eleven = value;
+	}
+};
+var b = {
+	get() {
+		return 'gift';
+	},
+	set: function(code) {
+		return 'Storing code ' + code;
+	}
+};
+var c = {
+	['get']: 'foo',
+	['set']: 'bar'
+};
+var d = {
+	get: 'foo',
+	set: 'bar'
+};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,5 @@
+-var get = 'bar';
+ var a = {
+-	get,
++	get: 'bar',
+ 	set: 'foo',
+ 	get bar() {
+ 		return this.get;
+@@ -36,8 +35,8 @@
+ 	}
+ };
+ var c = {
+-	['get']: 'foo',
+-	['set']: 'bar'
++	get: 'foo',
++	set: 'bar'
+ };
+ var d = {
+ 	get: 'foo',
+
+```
+
+## `terser/object/getter_setter_mangler`
+
+- size: oxc 104 vs reference 106 (-2 bytes)
+
+```js
+function f(get, set) {
+	return {
+		get,
+		set,
+		get g() {},
+		set s(n) {},
+		c,
+		a: 1,
+		m() {}
+	};
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,9 @@
+-function f(t, e) {
++function f(get, set) {
+ 	return {
+-		get: t,
+-		set: e,
++		get,
++		set,
+ 		get g() {},
+-		set s(t) {},
++		set s(n) {},
+ 		c,
+ 		a: 1,
+ 		m() {}
+
+```
+
+## `terser/object/getter_setter_with_computed_value`
+
+- size: oxc 196 vs reference 204 (-8 bytes)
+
+```js
+class C {
+	get ['a']() {
+		return 'A';
+	}
+	set ['a'](value) {
+		do_something(a);
+	}
+}
+var x = { get [a.b]() {
+	return 42;
+} };
+class MyArray extends Array {
+	get [Symbol.species]() {
+		return Array;
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,8 @@
+ class C {
+-	get ['a']() {
++	get a() {
+ 		return 'A';
+ 	}
+-	set ['a'](value) {
++	set a(value) {
+ 		do_something(a);
+ 	}
+ }
+
+```
+
+## `terser/object/prop_arrow_with_nested_this`
+
+- size: oxc 368 vs reference 383 (-15 bytes)
+
+```js
+function run(arg) {
+	console.log(arg === this ? 'global' : arg === foo ? 'foo' : arg);
+}
+var foo = {
+	func_func_this: function() {
+		(function() {
+			run(this);
+		})();
+	},
+	func_arrow_this: function() {
+		(() => {
+			run(this);
+		})();
+	},
+	arrow_func_this: () => {
+		(function() {
+			run(this);
+		})();
+	},
+	arrow_arrow_this: () => {
+		(() => {
+			run(this);
+		})();
+	}
+};
+for (var key in foo) foo[key]();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,25 +2,21 @@
+ 	console.log(arg === this ? 'global' : arg === foo ? 'foo' : arg);
+ }
+ var foo = {
+-	func_func_this() {
++	func_func_this: function() {
+ 		(function() {
+ 			run(this);
+ 		})();
+ 	},
+-	func_arrow_this() {
+-		(() => {
+-			run(this);
+-		})();
++	func_arrow_this: function() {
++		run(this);
+ 	},
+-	arrow_func_this() {
++	arrow_func_this: () => {
+ 		(function() {
+ 			run(this);
+ 		})();
+ 	},
+ 	arrow_arrow_this: () => {
+-		(() => {
+-			run(this);
+-		})();
++		run(this);
+ 	}
+ };
+ for (var key in foo) foo[key]();
+
+```
+
+## `terser/object/prop_arrows_to_concise_method_various`
+
+- size: oxc 8 vs reference 208 (-200 bytes)
+
+```js
+({
+	null: (x, y) => {
+		x(y);
+	},
+	123: (x, y) => {
+		x(y);
+	},
+	'A B': (x, y) => {
+		x(y);
+	},
+	p1: (x, y) => {
+		x(y);
+	},
+	p3: async (x, y) => {
+		await x(y);
+	},
+	[c1]: (x, y) => {
+		x(y);
+	},
+	[c3]: async (x, y) => {
+		await x(y);
+	}
+});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,23 +1 @@
+-({
+-	null(x, y) {
+-		x(y);
+-	},
+-	123(x, y) {
+-		x(y);
+-	},
+-	'A B'(x, y) {
+-		x(y);
+-	},
+-	p1(x, y) {
+-		x(y);
+-	},
+-	async p3(x, y) {
+-		await x(y);
+-	},
+-	[c1](x, y) {
+-		x(y);
+-	},
+-	async [c3](x, y) {
+-		await x(y);
+-	}
+-});
++c1, c3;
+
+```
+
+## `terser/object/prop_func_to_concise_method`
+
+- size: oxc 97 vs reference 111 (-14 bytes)
+
+```js
+({
+	emit: function NamedFunctionExpression() {
+		console.log('PASS');
+	},
+	run: function() {
+		this.emit();
+	}
+}).run();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,8 @@
+ ({
+-	emit: function NamedFunctionExpression() {
++	emit: function() {
+ 		console.log('PASS');
+ 	},
+-	run() {
++	run: function() {
+ 		this.emit();
+ 	}
+ }).run();
+
+```
+
+## `terser/object/prop_func_to_concise_method_various`
+
+- size: oxc 12 vs reference 272 (-260 bytes)
+
+```js
+({
+	null: function(x, y) {
+		x(y);
+	},
+	123: function(x, y) {
+		x(y);
+	},
+	'A B': function(x, y) {
+		x(y);
+	},
+	p1: function(x, y) {
+		x(y);
+	},
+	p2: function* (x, y) {
+		yield x(y);
+	},
+	p3: async function(x, y) {
+		await x(y);
+	},
+	[c1]: function(x, y) {
+		x(y);
+	},
+	[c2]: function* (x, y) {
+		yield x(y);
+	},
+	[c3]: async function(x, y) {
+		await x(y);
+	}
+});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,29 +1 @@
+-({
+-	null(x, y) {
+-		x(y);
+-	},
+-	123(x, y) {
+-		x(y);
+-	},
+-	'A B'(x, y) {
+-		x(y);
+-	},
+-	p1(x, y) {
+-		x(y);
+-	},
+-	*p2(x, y) {
+-		yield x(y);
+-	},
+-	async p3(x, y) {
+-		await x(y);
+-	},
+-	[c1](x, y) {
+-		x(y);
+-	},
+-	*[c2](x, y) {
+-		yield x(y);
+-	},
+-	async [c3](x, y) {
+-		await x(y);
+-	}
+-});
++c1, c2, c3;
+
+```
+
+## `terser/object/shorthand_properties`
+
+- size: oxc 0 vs reference 67 (-67 bytes)
+
+```js
+(function() {
+	var prop = 1;
+	const value = { prop };
+	return value;
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +0,0 @@
+-(function() {
+-	var n = 1;
+-	const r = { prop: n };
+-	return r;
+-})();
+
+```
+
+## `terser/object/use_shorthand_opportunity`
+
+- size: oxc 24 vs reference 34 (-10 bytes)
+
+```js
+var foo = 123;
+var obj = { foo };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-var foo = 123;
+-var obj = { foo };
++var obj = { foo: 123 };
+
+```
+
+## `terser/parameters/arrow_functions`
+
+- size: oxc 0 vs reference 114 (-114 bytes)
+
+```js
+(a) => b;
+(a, b) => c;
+() => b;
+(a) => (b) => c;
+(a) => (b) => c;
+() => (b, c) => d;
+(a) => b;
+(a) => 'lel';
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +0,0 @@
+-(a) => b;
+-(a, b1) => c;
+-() => b;
+-(a) => (b1) => c;
+-(a) => (b1) => c;
+-() => (b1, c1) => d;
+-(a) => b;
+-(a) => 'lel';
+
+```
+
+## `terser/parameters/arrow_return`
+
+- size: oxc 0 vs reference 91 (-91 bytes)
+
+```js
+() => {};
+() => {};
+(a) => 1;
+(a) => -b;
+(a) => {
+	return b;
+	var b;
+};
+(x, y) => x - y;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +0,0 @@
+-() => {};
+-() => {};
+-(a) => 1;
+-(a) => -b;
+-(a) => {
+-	return b1;
+-	var b1;
+-};
+-(x, y) => x - y;
+
+```
+
+## `terser/parameters/destructuring_arguments_1`
+
+- size: oxc 0 vs reference 473 (-473 bytes)
+
+```js
+(function(a) {});
+(function([a]) {});
+(function([a, b]) {});
+(function([[a]]) {});
+(function([[a, b]]) {});
+(function([a, [b]]) {});
+(function([[b], a]) {});
+(function({ a }) {});
+(function({ a, b }) {});
+(function([{ a }]) {});
+(function([{ a, b }]) {});
+(function([a, { b }]) {});
+(function([{ b }, a]) {});
+([a]) => {};
+([a, b]) => {};
+({ a }) => {};
+({ a, b, c, d, e }) => {};
+([a]) => b;
+([a, b]) => c;
+({ a }) => b;
+({ a, b }) => c;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,21 +0,0 @@
+-(function(a) {});
+-(function([a]) {});
+-(function([a, b1]) {});
+-(function([[a]]) {});
+-(function([[a, b1]]) {});
+-(function([a, [b1]]) {});
+-(function([[b1], a]) {});
+-(function({ a }) {});
+-(function({ a, b: b1 }) {});
+-(function([{ a }]) {});
+-(function([{ a, b: b1 }]) {});
+-(function([a, { b: b1 }]) {});
+-(function([{ b: b1 }, a]) {});
+-([a]) => {};
+-([a, b1]) => {};
+-({ a }) => {};
+-({ a, b: b1, c: c1, d, e }) => {};
+-([a]) => b;
+-([a, b1]) => c;
+-({ a }) => b;
+-({ a, b: b1 }) => c;
+
+```
+
+## `terser/parameters/destructuring_arguments_2`
+
+- size: oxc 131 vs reference 276 (-145 bytes)
+
+```js
+(function([]) {});
+(function({}) {});
+(function([, , , , ,]) {});
+(function([a, { b: c }]) {});
+(function([ ...args]) {});
+(function({ x }) {});
+class a {
+	*method({ [thrower()]: x } = {}) {}
+}
+(function(a, b, c, d, [{ e: [ ...f] }]) {})(1, 2, 3, 4, [{ e: [
+	1,
+	2,
+	3
+] }]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,3 @@
+-(function([]) {});
+-(function({}) {});
+-(function([, , , , ,]) {});
+-(function([a, { b: c }]) {});
+-(function([ ...args]) {});
+-(function({ x }) {});
+ class a {
+ 	*method({ [thrower()]: x } = {}) {}
+ }
+
+```
+
+## `terser/parameters/regression_arrow_functions_and_hoist`
+
+- size: oxc 0 vs reference 10 (-10 bytes)
+
+```js
+(a) => b;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +0,0 @@
+-(a) => b;
+
+```
+
+## `terser/parameters/regression_assign_arrow_functions`
+
+- size: oxc 45 vs reference 51 (-6 bytes)
+
+```js
+oninstall = (e) => false;
+oninstall = () => false;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+-oninstall = (e) => false;
+-oninstall = () => false;
++oninstall = (e) => !1;
++oninstall = () => !1;
+
+```
+
+## `terser/properties/dot_properties`
+
+- size: oxc 108 vs reference 114 (-6 bytes)
+
+```js
+a['foo'] = 'bar';
+a['if'] = 'if';
+a['*'] = 'asterisk';
+a['ຳ'] = 'unicode';
+a[''] = 'whitespace';
+a['1_1'] = 'foo';
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+ a.foo = 'bar';
+-a['if'] = 'if';
++a.if = 'if';
+ a['*'] = 'asterisk';
+-a['ຳ'] = 'unicode';
++a.ຳ = 'unicode';
+ a[''] = 'whitespace';
+ a['1_1'] = 'foo';
+
+```
+
+## `terser/properties/dot_properties_es5`
+
+- size: oxc 90 vs reference 93 (-3 bytes)
+
+```js
+a['foo'] = 'bar';
+a['if'] = 'if';
+a['*'] = 'asterisk';
+a['ຳ'] = 'unicode';
+a[''] = 'whitespace';
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ a.foo = 'bar';
+ a.if = 'if';
+ a['*'] = 'asterisk';
+-a['ຳ'] = 'unicode';
++a.ຳ = 'unicode';
+ a[''] = 'whitespace';
+
+```
+
+## `terser/properties/join_object_assignments_NaN_1`
+
+- size: oxc 65 vs reference 73 (-8 bytes)
+
+```js
+var o = {};
+o[NaN] = 1;
+o[0 / 0] = 2;
+console.log(o[NaN], o[NaN]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ var o = {};
+-o[0 / 0] = 1;
+-o[0 / 0] = 2;
+-console.log(o[0 / 0], o[0 / 0]);
++o[NaN] = 1;
++o[NaN] = 2;
++console.log(o[NaN], o[NaN]);
+
+```
+
+## `terser/properties/join_object_assignments_for`
+
+- size: oxc 104 vs reference 105 (-1 bytes)
+
+```js
+console.log((function() {
+	var o = { p: 3 };
+	for (o.q = 'foo'; console.log(o.q););
+	return o.p;
+})());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,5 @@
+ console.log((function() {
+-	for (var o = {
+-		p: 3,
+-		q: 'foo'
+-	}; console.log(o.q););
++	var o = { p: 3 };
++	for (o.q = 'foo'; console.log(o.q););
+ 	return o.p;
+ })());
+
+```
+
+## `terser/properties/join_object_assignments_if`
+
+- size: oxc 77 vs reference 79 (-2 bytes)
+
+```js
+console.log((function() {
+	var o = {};
+	if (o.a = 'PASS') return o.a;
+})());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ console.log((function() {
+-	var o = { a: 'PASS' };
+-	if (o.a) return o.a;
++	var o = {};
++	if (o.a = 'PASS') return o.a;
+ })());
+
+```
+
+## `terser/properties/join_object_assignments_return_1`
+
+- size: oxc 73 vs reference 80 (-7 bytes)
+
+```js
+console.log((function() {
+	var o = { p: 3 };
+	return o.q = 'foo';
+})());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,4 @@
+ console.log((function() {
+-	var o = {
+-		p: 3,
+-		q: 'foo'
+-	};
+-	return o.q;
++	var o = { p: 3 };
++	return o.q = 'foo';
+ })());
+
+```
+
+## `terser/properties/join_object_assignments_return_2`
+
+- size: oxc 86 vs reference 92 (-6 bytes)
+
+```js
+console.log((function() {
+	var o = { p: 3 };
+	return o.q = /foo/, o.r = 'bar';
+})());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,4 @@
+ console.log((function() {
+-	var o = {
+-		p: 3,
+-		q: /foo/,
+-		r: 'bar'
+-	};
+-	return o.r;
++	var o = { p: 3 };
++	return o.q = /foo/, o.r = 'bar';
+ })());
+
+```
+
+## `terser/properties/join_object_assignments_return_3`
+
+- size: oxc 107 vs reference 109 (-2 bytes)
+
+```js
+console.log((function() {
+	var o = { p: 3 };
+	return o.q = 'foo', o.p += '', console.log(o.q), o.p;
+})());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,4 @@
+ console.log((function() {
+-	var o = {
+-		p: 3,
+-		q: 'foo'
+-	};
+-	return o.p += '', console.log(o.q), o.p;
++	var o = { p: 3 };
++	return o.q = 'foo', o.p += '', console.log(o.q), o.p;
+ })());
+
+```
+
+## `terser/properties/keep_properties`
+
+- size: oxc 15 vs reference 18 (-3 bytes)
+
+```js
+a['foo'] = 'bar';
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-a['foo'] = 'bar';
++a.foo = 'bar';
+
+```
+
+## `terser/properties/mangle_debug`
+
+- size: oxc 47 vs reference 55 (-8 bytes)
+
+```js
+var a = {};
+a.foo = 'bar';
+x = { baz: 'ban' };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ var a = {};
+-a._$foo$_ = 'bar';
+-x = { _$baz$_: 'ban' };
++a.foo = 'bar';
++x = { baz: 'ban' };
+
+```
+
+## `terser/properties/mangle_debug_suffix`
+
+- size: oxc 47 vs reference 61 (-14 bytes)
+
+```js
+var a = {};
+a.foo = 'bar';
+x = { baz: 'ban' };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ var a = {};
+-a._$foo$XYZ_ = 'bar';
+-x = { _$baz$XYZ_: 'ban' };
++a.foo = 'bar';
++x = { baz: 'ban' };
+
+```
+
+## `terser/properties/mangle_debug_suffix_keep_quoted`
+
+- size: oxc 245 vs reference 300 (-55 bytes)
+
+```js
+var a = {};
+a.top = 1;
+function f1() {
+	a['foo'] = 'bar';
+	a.color = 'red';
+	a.stuff = 2;
+	x = {
+		bar: 10,
+		size: 7
+	};
+	a.size = 9;
+}
+function f2() {
+	a.foo = 'bar';
+	a['color'] = 'red';
+	x = {
+		bar: 10,
+		size: 7
+	};
+	a.size = 9;
+	a.stuff = 3;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,22 +1,22 @@
+ var a = {};
+-a._$top$XYZ_ = 1;
++a.top = 1;
+ function f1() {
+-	a['foo'] = 'bar';
++	a.foo = 'bar';
+ 	a.color = 'red';
+-	a._$stuff$XYZ_ = 2;
++	a.stuff = 2;
+ 	x = {
+ 		bar: 10,
+-		_$size$XYZ_: 7
++		size: 7
+ 	};
+-	a._$size$XYZ_ = 9;
++	a.size = 9;
+ }
+ function f2() {
+ 	a.foo = 'bar';
+-	a['color'] = 'red';
++	a.color = 'red';
+ 	x = {
+ 		bar: 10,
+-		_$size$XYZ_: 7
++		size: 7
+ 	};
+-	a._$size$XYZ_ = 9;
+-	a._$stuff$XYZ_ = 3;
++	a.size = 9;
++	a.stuff = 3;
+ }
+
+```
+
+## `terser/properties/mangle_debug_true`
+
+- size: oxc 47 vs reference 55 (-8 bytes)
+
+```js
+var a = {};
+a.foo = 'bar';
+x = { baz: 'ban' };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ var a = {};
+-a._$foo$_ = 'bar';
+-x = { _$baz$_: 'ban' };
++a.foo = 'bar';
++x = { baz: 'ban' };
+
+```
+
+## `terser/properties/mangle_private_properties`
+
+- size: oxc 13 vs reference 59 (-46 bytes)
+
+```js
+class Foo {
+	#foo = 123;
+	#privMethod() {}
+	get #privProp() {}
+	set #privProp(a) {}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1 @@
+-class o {
+-	#o = 123;
+-	#p() {}
+-	get #r() {}
+-	set #r(o) {}
+-}
++class Foo {}
+
+```
+
+## `terser/properties/mangle_properties_which_matches_pattern`
+
+- size: oxc 65 vs reference 74 (-9 bytes)
+
+```js
+var acd = {
+	get asd() {
+		return this._asd;
+	},
+	_asd: true
+};
+console.log(acd);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,6 @@
+-var acd = {
++console.log({
+ 	get asd() {
+-		return this.a;
++		return this._asd;
+ 	},
+-	a: !0
+-};
+-console.log(acd);
++	_asd: !0
++});
+
+```
+
+## `terser/pure_funcs/babel`
+
+- size: oxc 0 vs reference 172 (-172 bytes)
+
+```js
+function _classCallCheck(instance, Constructor) {
+	if (!(instance instanceof Constructor)) throw new TypeError('Cannot call a class as a function');
+}
+var Foo = function Foo() {
+	_classCallCheck(this, Foo);
+};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +0,0 @@
+-function _classCallCheck(instance, Constructor) {
+-	if (!(instance instanceof Constructor)) throw TypeError('Cannot call a class as a function');
+-}
+-var Foo = function() {};
+
+```
+
+## `terser/pure_funcs/boolean_and`
+
+- size: oxc 53 vs reference 62 (-9 bytes)
+
+```js
+foo() && foo();
+foo() && bar();
+foo() && 'bar';
+bar() && foo();
+bar() && bar();
+bar() && 'bar';
+'bar' && foo();
+'bar' && bar();
+'bar' && 'bar';
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,4 +2,4 @@
+ bar();
+ bar() && bar();
+ bar();
+-'bar' && bar();
++bar();
+
+```
+
+## `terser/pure_funcs/boolean_or`
+
+- size: oxc 46 vs reference 62 (-16 bytes)
+
+```js
+foo() || foo();
+foo() || bar();
+foo() || 'bar';
+bar() || foo();
+bar() || bar();
+bar() || 'bar';
+'bar' || foo();
+'bar' || bar();
+'bar' || 'bar';
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,4 +2,3 @@
+ bar();
+ bar() || bar();
+ bar();
+-'bar' || bar();
+
+```
+
+## `terser/pure_funcs/issue_2629_1`
+
+- size: oxc 0 vs reference 5 (-5 bytes)
+
+```js
+a();
+b();
+c();
+d();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +0,0 @@
+-c();
+
+```
+
+## `terser/pure_funcs/issue_2629_2`
+
+- size: oxc 0 vs reference 36 (-36 bytes)
+
+```js
+a(1)(2)(3);
+b(1)(2)(3);
+c(1)(2)(3);
+d(1)(2)(3);
+e(1)(2)(3);
+f(1)(2)(3);
+g(1)(2)(3);
+h(1)(2)(3);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-e(1)(2)(3);
+-f(1)(2)(3);
+-g(1)(2)(3);
+
+```
+
+## `terser/pure_funcs/issue_2629_3`
+
+- size: oxc 0 vs reference 108 (-108 bytes)
+
+```js
+a.x(1).y(2).z(3);
+b.x(1).y(2).z(3);
+c.x(1).y(2).z(3);
+d.x(1).y(2).z(3);
+e.x(1).y(2).z(3);
+f.x(1).y(2).z(3);
+g.x(1).y(2).z(3);
+h.x(1).y(2).z(3);
+i.x(1).y(2).z(3);
+j.x(1).y(2).z(3);
+k.x(1).y(2).z(3);
+l.x(1).y(2).z(3);
+m.x(1).y(2).z(3);
+n.x(1).y(2).z(3);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +0,0 @@
+-h.x(1).y(2).z(3);
+-i.x(1).y(2).z(3);
+-j.x(1).y(2).z(3);
+-k.x(1).y(2).z(3);
+-l.x(1).y(2).z(3);
+-m.x(1).y(2).z(3);
+
+```
+
+## `terser/pure_funcs/issue_2638`
+
+- size: oxc 20 vs reference 34 (-14 bytes)
+
+```js
+(g() || h())(x(), y());
+(a() || b())(c(), d());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+ x(), y();
+-(a() || b())(c(), d());
++c(), d();
+
+```
+
+## `terser/pure_funcs/issue_2705_2`
+
+- size: oxc 16 vs reference 48 (-32 bytes)
+
+```js
+new a(1)(2)(3);
+new (b(1))(2)(3);
+new (c(1)(2))(3);
+new (d(1)(2)(3))();
+new e(1)(2)(3);
+new f(1)(2)(3);
+new g(1)(2)(3);
+new h(1)(2)(3);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1 @@
+ new e(1)(2)(3);
+-new f(1)(2)(3);
+-new g(1)(2)(3);
+
+```
+
+## `terser/pure_funcs/issue_2705_3`
+
+- size: oxc 44 vs reference 132 (-88 bytes)
+
+```js
+new a.x(1).y(2).z(3);
+new b.x(1).y(2).z(3);
+new (c.x(1)).y(2).z(3);
+new (d.x(1)).y(2).z(3);
+new (e.x(1).y(2)).z(3);
+new (f.x(1).y(2)).z(3);
+new (g.x(1).y(2).z(3))();
+new h.x(1).y(2).z(3);
+new i.x(1).y(2).z(3);
+new j.x(1).y(2).z(3);
+new k.x(1).y(2).z(3);
+new l.x(1).y(2).z(3);
+new m.x(1).y(2).z(3);
+new n.x(1).y(2).z(3);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,2 @@
+ new h.x(1).y(2).z(3);
+ new i.x(1).y(2).z(3);
+-new j.x(1).y(2).z(3);
+-new k.x(1).y(2).z(3);
+-new l.x(1).y(2).z(3);
+-new m.x(1).y(2).z(3);
+
+```
+
+## `terser/pure_funcs/unused`
+
+- size: oxc 0 vs reference 53 (-53 bytes)
+
+```js
+function foo() {
+	var u = pure(1);
+	var x = pure(2);
+	var y = pure(x);
+	var z = pure(pure(side_effects()));
+	return pure(3);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +0,0 @@
+-function foo() {
+-	side_effects();
+-	return pure(3);
+-}
+
+```
+
+## `terser/pure_getters/collapse_vars_1_false`
+
+- size: oxc 0 vs reference 89 (-89 bytes)
+
+```js
+function f(a, b) {
+	for (;;) {
+		var c = a.g();
+		var d = b.p;
+		if (c || d) break;
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +0,0 @@
+-function f(a, b) {
+-	for (;;) {
+-		var c = a.g();
+-		var d = b.p;
+-		if (c || d) break;
+-	}
+-}
+
+```
+
+## `terser/pure_getters/collapse_vars_1_strict`
+
+- size: oxc 0 vs reference 89 (-89 bytes)
+
+```js
+function f(a, b) {
+	for (;;) {
+		var c = a.g();
+		var d = b.p;
+		if (c || d) break;
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +0,0 @@
+-function f(a, b) {
+-	for (;;) {
+-		var c = a.g();
+-		var d = b.p;
+-		if (c || d) break;
+-	}
+-}
+
+```
+
+## `terser/pure_getters/collapse_vars_1_true`
+
+- size: oxc 0 vs reference 63 (-63 bytes)
+
+```js
+function f(a, b) {
+	for (;;) {
+		var c = a.g();
+		var d = b.p;
+		if (c || d) break;
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +0,0 @@
+-function f(a, b) {
+-	for (;;) {
+-		if (a.g() || b.p) break;
+-	}
+-}
+
+```
+
+## `terser/pure_getters/issue_2938_2`
+
+- size: oxc 159 vs reference 174 (-15 bytes)
+
+```js
+var Parser = function Parser() {};
+var p = Parser.prototype;
+p.initialContext = function initialContext() {
+	console.log('PASS');
+};
+p.braceIsBlock = function() {};
+new Parser().initialContext();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+-var Parser = function() {};
+-var p = Parser.prototype;
+-p.initialContext = function() {
++var e = function() {};
++var t = e.prototype;
++t.initialContext = function() {
+ 	console.log('PASS');
+ };
+-p.braceIsBlock = function() {};
+-new Parser().initialContext();
++t.braceIsBlock = function() {};
++new e().initialContext();
+
+```
+
+## `terser/pure_getters/issue_2938_4`
+
+- size: oxc 159 vs reference 174 (-15 bytes)
+
+```js
+var Parser = function Parser() {};
+var p = Parser.prototype;
+var unused = p.x;
+p.initialContext = function initialContext() {
+	p.y;
+	console.log('PASS');
+};
+p.braceIsBlock = function() {};
+new Parser().initialContext();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+-var Parser = function() {};
+-var p = Parser.prototype;
+-p.initialContext = function() {
++var e = function() {};
++var t = e.prototype;
++t.initialContext = function() {
+ 	console.log('PASS');
+ };
+-p.braceIsBlock = function() {};
+-new Parser().initialContext();
++t.braceIsBlock = function() {};
++new e().initialContext();
+
+```
+
+## `terser/pure_getters/set_mutable_1`
+
+- size: oxc 88 vs reference 89 (-1 bytes)
+
+```js
+!(function a() {
+	a.foo += '';
+	if (a.foo) console.log('PASS');
+	else console.log('FAIL');
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+-!(function a() {
+-	if (a.foo += '') console.log('PASS');
+-	else console.log('FAIL');
++(function a() {
++	a.foo += '';
++	a.foo ? console.log('PASS') : console.log('FAIL');
+ })();
+
+```
+
+## `terser/pure_getters/unsafe`
+
+- size: oxc 33 vs reference 69 (-36 bytes)
+
+```js
+var a, b = null, c = {};
+a.prop;
+b.prop;
+c.prop;
+d.prop;
+null.prop;
+(void 0).prop;
+undefined.prop;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,2 @@
+-var a, b = null, c = {};
+-d;
+-null.prop;
+-(void 0).prop;
+-(void 0).prop;
++var e, t = null, n = {};
++d.prop;
+
+```
+
+## `terser/pure_getters/unsafe_reduce_vars`
+
+- size: oxc 33 vs reference 69 (-36 bytes)
+
+```js
+var a, b = null, c = {};
+a.prop;
+b.prop;
+c.prop;
+d.prop;
+null.prop;
+(void 0).prop;
+undefined.prop;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,2 @@
+-var a, b = null, c = {};
+-d;
+-null.prop;
+-(void 0).prop;
+-(void 0).prop;
++var e, t = null, n = {};
++d.prop;
+
+```
+
+## `terser/reduce_vars/booleans`
+
+- size: oxc 104 vs reference 118 (-14 bytes)
+
+```js
+console.log((function(a) {
+	if (a != 0);
+	switch (a) {
+		case 0: return 'FAIL';
+		case false: return 'PASS';
+	}
+})(false));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+ console.log((function(a) {
+-	if (0 != a);
+ 	switch (a) {
+ 		case 0: return 'FAIL';
+ 		case !1: return 'PASS';
+
+```
+
+## `terser/reduce_vars/conditional_chain_call`
+
+- size: oxc 76 vs reference 82 (-6 bytes)
+
+```js
+global.a = { b: null };
+let foo = 'PASS';
+a.b?.c(foo = 'FAIL');
+console.log(foo);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ global.a = { b: null };
+-let foo = 'PASS';
+-a.b?.c(foo = 'FAIL');
+-console.log(foo);
++let e = 'PASS';
++a.b?.c(e = 'FAIL');
++console.log(e);
+
+```
+
+## `terser/reduce_vars/conditional_chain_call_direct`
+
+- size: oxc 75 vs reference 81 (-6 bytes)
+
+```js
+global.a = { b: null };
+let foo = 'PASS';
+a.b?.(foo = 'FAIL');
+console.log(foo);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ global.a = { b: null };
+-let foo = 'PASS';
+-a.b?.(foo = 'FAIL');
+-console.log(foo);
++let e = 'PASS';
++a.b?.(e = 'FAIL');
++console.log(e);
+
+```
+
+## `terser/reduce_vars/conditional_chain_certain_and_uncertain_part`
+
+- size: oxc 90 vs reference 98 (-8 bytes)
+
+```js
+global.a = { b: null };
+let foo = 'FAIL';
+a.b?.[foo = 'PASS']?.d(foo = 'FAIL');
+console.log(foo);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ global.a = { b: null };
+-let foo = 'FAIL';
+-a.b?.[foo = 'PASS']?.d(foo = 'FAIL');
+-console.log(foo);
++let e = 'FAIL';
++a.b?.[e = 'PASS']?.d(e = 'FAIL');
++console.log(e);
+
+```
+
+## `terser/reduce_vars/conditional_chain_certain_part`
+
+- size: oxc 78 vs reference 87 (-9 bytes)
+
+```js
+global.a = { b: null };
+let foo = 'FAIL';
+a.b.c(foo = 'PASS')?.x;
+console.log(foo);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ global.a = { b: null };
+-let foo = 'FAIL';
+-a.b.c(foo = 'PASS')?.x;
+-console.log('PASS');
++let e = 'FAIL';
++a.b.c(e = 'PASS')?.x;
++console.log(e);
+
+```
+
+## `terser/reduce_vars/conditional_chain_prop`
+
+- size: oxc 67 vs reference 73 (-6 bytes)
+
+```js
+global.a = null;
+let foo = 'PASS';
+a?.b[foo = 'FAIL'];
+console.log(foo);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ global.a = null;
+-let foo = 'PASS';
+-a?.b[foo = 'FAIL'];
+-console.log(foo);
++let e = 'PASS';
++a?.b[e = 'FAIL'];
++console.log(e);
+
+```
+
+## `terser/reduce_vars/conditional_chain_prop_direct`
+
+- size: oxc 75 vs reference 81 (-6 bytes)
+
+```js
+global.a = { b: null };
+let foo = 'PASS';
+a.b?.[foo = 'FAIL'];
+console.log(foo);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ global.a = { b: null };
+-let foo = 'PASS';
+-a.b?.[foo = 'FAIL'];
+-console.log(foo);
++let e = 'PASS';
++a.b?.[e = 'FAIL'];
++console.log(e);
+
+```
+
+## `terser/reduce_vars/defun_call`
+
+- size: oxc 0 vs reference 28 (-28 bytes)
+
+```js
+function f() {
+	return g() + h(1) - h(g(), 2, 3);
+	function g() {
+		return 4;
+	}
+	function h(a) {
+		return a;
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f() {
+-	return 1;
+-}
+
+```
+
+## `terser/reduce_vars/defun_inline_1`
+
+- size: oxc 0 vs reference 92 (-92 bytes)
+
+```js
+function f() {
+	return g(2) + h();
+	function g(b) {
+		return b;
+	}
+	function h() {
+		return h();
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +0,0 @@
+-function f() {
+-	return function() {
+-		return 2;
+-	}() + function h() {
+-		return h();
+-	}();
+-}
+
+```
+
+## `terser/reduce_vars/defun_inline_2`
+
+- size: oxc 0 vs reference 92 (-92 bytes)
+
+```js
+function f() {
+	function g(b) {
+		return b;
+	}
+	function h() {
+		return h();
+	}
+	return g(2) + h();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +0,0 @@
+-function f() {
+-	return function() {
+-		return 2;
+-	}() + function h() {
+-		return h();
+-	}();
+-}
+
+```
+
+## `terser/reduce_vars/defun_inline_3`
+
+- size: oxc 0 vs reference 28 (-28 bytes)
+
+```js
+function f() {
+	return g(2);
+	function g(b) {
+		return b;
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f() {
+-	return 2;
+-}
+
+```
+
+## `terser/reduce_vars/defun_redefine`
+
+- size: oxc 0 vs reference 64 (-64 bytes)
+
+```js
+function f() {
+	function g() {
+		return 1;
+	}
+	function h() {
+		return 2;
+	}
+	g = function() {
+		return 3;
+	};
+	return g() + h();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +0,0 @@
+-function f() {
+-	(function() {
+-		return 3;
+-	});
+-	return 3 + 2;
+-}
+
+```
+
+## `terser/reduce_vars/double_reference`
+
+- size: oxc 0 vs reference 48 (-48 bytes)
+
+```js
+function f() {
+	var g = function g() {
+		g();
+	};
+	g();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +0,0 @@
+-function f() {
+-	(function g() {
+-		g();
+-	})();
+-}
+
+```
+
+## `terser/reduce_vars/escape_await`
+
+- size: oxc 204 vs reference 237 (-33 bytes)
+
+```js
+function main() {
+	var thing;
+	baz().then((x) => {
+		thing = x;
+	});
+	baz().then((x) => {
+		if (thing !== (thing = x)) console.log('FAIL');
+		else console.log('PASS');
+	});
+}
+function foo() {}
+async function baz() {
+	return await foo;
+}
+main();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,14 +1,14 @@
+-function foo() {}
+-async function baz() {
+-	return await foo;
+-}
+-(function() {
+-	var thing;
+-	baz().then((x) => {
+-		thing = x;
++function e() {
++	var e;
++	n().then((t) => {
++		e = t;
+ 	});
+-	baz().then((x) => {
+-		if (thing !== (thing = x)) console.log('FAIL');
+-		else console.log('PASS');
++	n().then((t) => {
++		e === (e = t) ? console.log('PASS') : console.log('FAIL');
+ 	});
+-})();
++}
++function t() {}
++async function n() {
++	return await t;
++}
++e();
+
+```
+
+## `terser/reduce_vars/escape_conditional`
+
+- size: oxc 167 vs reference 199 (-32 bytes)
+
+```js
+function main() {
+	var thing = baz();
+	if (thing !== (thing = baz())) console.log('FAIL');
+	else console.log('PASS');
+}
+function baz(s) {
+	return s ? foo : bar;
+}
+function foo() {}
+function bar() {}
+main();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,10 @@
+-function baz(s) {
+-	return s ? foo : bar;
++function e() {
++	var e = t();
++	e === (e = t()) ? console.log('PASS') : console.log('FAIL');
+ }
+-function foo() {}
+-function bar() {}
+-(function() {
+-	var thing = baz();
+-	if (thing !== (thing = baz())) console.log('FAIL');
+-	else console.log('PASS');
+-})();
++function t(e) {
++	return e ? n : r;
++}
++function n() {}
++function r() {}
++e();
+
+```
+
+## `terser/reduce_vars/escape_expansion`
+
+- size: oxc 180 vs reference 208 (-28 bytes)
+
+```js
+function main() {
+	var thing = baz();
+	if (thing !== (thing = baz())) console.log('FAIL');
+	else console.log('PASS');
+}
+function foo() {}
+function bar(...x) {
+	return x[0];
+}
+function baz() {
+	return bar(...[foo]);
+}
+main();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,12 @@
+-function foo() {}
+-function baz() {
+-	return (function(...x) {
+-		return x[0];
+-	})(foo);
++function e() {
++	var e = r();
++	e === (e = r()) ? console.log('PASS') : console.log('FAIL');
+ }
+-(function() {
+-	var thing = baz();
+-	if (thing !== (thing = baz())) console.log('FAIL');
+-	else console.log('PASS');
+-})();
++function t() {}
++function n(...e) {
++	return e[0];
++}
++function r() {
++	return n(t);
++}
++e();
+
+```
+
+## `terser/reduce_vars/escape_local_conditional`
+
+- size: oxc 169 vs reference 183 (-14 bytes)
+
+```js
+function main() {
+	var thing = baz();
+	if (thing !== (thing = baz())) console.log('PASS');
+	else console.log('FAIL');
+}
+function baz(s) {
+	function foo() {}
+	function bar() {}
+	return s ? foo : bar;
+}
+main();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,10 @@
+-function baz(s) {
+-	return s ? function() {} : function() {};
++function e() {
++	var e = t();
++	e === (e = t()) ? console.log('FAIL') : console.log('PASS');
++}
++function t(e) {
++	function t() {}
++	function n() {}
++	return e ? t : n;
+ }
+-(function() {
+-	var thing = baz();
+-	if (thing !== (thing = baz())) console.log('PASS');
+-	else console.log('FAIL');
+-})();
++e();
+
+```
+
+## `terser/reduce_vars/escape_local_sequence`
+
+- size: oxc 143 vs reference 162 (-19 bytes)
+
+```js
+function main() {
+	var thing = baz();
+	if (thing !== (thing = baz())) console.log('PASS');
+	else console.log('FAIL');
+}
+function baz() {
+	function foo() {}
+	function bar() {}
+	return foo, bar;
+}
+main();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,9 @@
+-function baz() {
+-	return function() {};
++function e() {
++	var e = t();
++	e === (e = t()) ? console.log('FAIL') : console.log('PASS');
+ }
+-(function() {
+-	var thing = baz();
+-	if (thing !== (thing = baz())) console.log('PASS');
+-	else console.log('FAIL');
+-})();
++function t() {
++	function e() {}
++	return e;
++}
++e();
+
+```
+
+## `terser/reduce_vars/escape_local_throw`
+
+- size: oxc 180 vs reference 203 (-23 bytes)
+
+```js
+function main() {
+	var thing = baz();
+	if (thing !== (thing = baz())) console.log('PASS');
+	else console.log('FAIL');
+}
+function baz() {
+	function foo() {}
+	try {
+		throw foo;
+	} catch (bar) {
+		return bar;
+	}
+}
+main();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,12 +1,13 @@
+-function baz() {
++function e() {
++	var e = t();
++	e === (e = t()) ? console.log('FAIL') : console.log('PASS');
++}
++function t() {
++	function e() {}
+ 	try {
+-		throw function() {};
+-	} catch (bar) {
+-		return bar;
++		throw e;
++	} catch (e) {
++		return e;
+ 	}
+ }
+-(function() {
+-	var thing = baz();
+-	if (thing !== (thing = baz())) console.log('PASS');
+-	else console.log('FAIL');
+-})();
++e();
+
+```
+
+## `terser/reduce_vars/escape_throw`
+
+- size: oxc 179 vs reference 211 (-32 bytes)
+
+```js
+function main() {
+	var thing = baz();
+	if (thing !== (thing = baz())) console.log('FAIL');
+	else console.log('PASS');
+}
+function baz() {
+	try {
+		throw foo;
+	} catch (bar) {
+		return bar;
+	}
+}
+function foo() {}
+main();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,13 +1,13 @@
+-function baz() {
++function e() {
++	var e = t();
++	e === (e = t()) ? console.log('PASS') : console.log('FAIL');
++}
++function t() {
+ 	try {
+-		throw foo;
+-	} catch (bar) {
+-		return bar;
++		throw n;
++	} catch (e) {
++		return e;
+ 	}
+ }
+-function foo() {}
+-(function() {
+-	var thing = baz();
+-	if (thing !== (thing = baz())) console.log('FAIL');
+-	else console.log('PASS');
+-})();
++function n() {}
++e();
+
+```
+
+## `terser/reduce_vars/escape_yield`
+
+- size: oxc 187 vs reference 211 (-24 bytes)
+
+```js
+function main() {
+	var thing = gen.next().value;
+	if (thing !== (thing = gen.next().value)) console.log('FAIL');
+	else console.log('PASS');
+}
+function foo() {}
+function* baz(s) {
+	for (;;) yield foo;
+}
+var gen = baz();
+main();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,10 @@
+-function foo() {}
+-var gen = function* () {
+-	for (;;) yield foo;
+-}();
+-(function() {
+-	var thing = gen.next().value;
+-	if (thing !== (thing = gen.next().value)) console.log('FAIL');
+-	else console.log('PASS');
+-})();
++function e() {
++	var e = r.next().value;
++	e === (e = r.next().value) ? console.log('PASS') : console.log('FAIL');
++}
++function t() {}
++function* n(e) {
++	for (;;) yield t;
++}
++var r = n();
++e();
+
+```
+
+## `terser/reduce_vars/escaped_prop_3`
+
+- size: oxc 122 vs reference 125 (-3 bytes)
+
+```js
+var a;
+function f(b) {
+	if (a) console.log(a === b.c);
+	a = b.c;
+}
+function g() {}
+function h() {
+	f({ c: g });
+}
+h();
+h();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,11 @@
+-var a;
+-function g() {}
+-function h() {
+-	(function(b) {
+-		if (a) console.log(a === b.c);
+-		a = b.c;
+-	})({ c: g });
++var e;
++function t(t) {
++	e && console.log(e === t.c);
++	e = t.c;
+ }
+-h();
+-h();
++function n() {}
++function r() {
++	t({ c: n });
++}
++r();
++r();
+
+```
+
+## `terser/reduce_vars/func_inline`
+
+- size: oxc 0 vs reference 78 (-78 bytes)
+
+```js
+function f() {
+	var g = function() {
+		return 1;
+	};
+	console.log(g() + h());
+	var h = function() {
+		return 2;
+	};
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +0,0 @@
+-function f() {
+-	console.log(1 + h());
+-	var h = function() {
+-		return 2;
+-	};
+-}
+
+```
+
+## `terser/reduce_vars/func_modified`
+
+- size: oxc 0 vs reference 116 (-116 bytes)
+
+```js
+function f(a) {
+	function a() {
+		return 1;
+	}
+	function b() {
+		return 2;
+	}
+	function c() {
+		return 3;
+	}
+	b.inject = [];
+	c = function() {
+		return 4;
+	};
+	return a() + b() + c();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +0,0 @@
+-function f(a) {
+-	function b() {
+-		return 2;
+-	}
+-	b.inject = [];
+-	(function() {
+-		return 4;
+-	});
+-	return 1 + 2 + 4;
+-}
+
+```
+
+## `terser/reduce_vars/inner_var_catch`
+
+- size: oxc 75 vs reference 79 (-4 bytes)
+
+```js
+function f() {
+	try {
+		a();
+	} catch (e) {
+		var b = 1;
+	}
+	console.log(b);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+ function f() {
+ 	try {
+ 		a();
+-	} catch (e) {
++	} catch {
+ 		var b = 1;
+ 	}
+ 	console.log(b);
+
+```
+
+## `terser/reduce_vars/inner_var_if`
+
+- size: oxc 59 vs reference 62 (-3 bytes)
+
+```js
+function f(a) {
+	if (a) var t = 1;
+	if (!t) console.log(t);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ function f(a) {
+ 	if (a) var t = 1;
+-	if (!t) console.log(t);
++	t || console.log(t);
+ }
+
+```
+
+## `terser/reduce_vars/issue_1595_4`
+
+- size: oxc 87 vs reference 89 (-2 bytes)
+
+```js
+(function iife(a, b, c) {
+	console.log(a, b, c);
+	if (a) iife(a - 1, b, c);
+})(3, 4, 5);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ (function iife(a, b, c) {
+ 	console.log(a, b, c);
+-	if (a) iife(a - 1, b, c);
++	a && iife(a - 1, b, c);
+ })(3, 4, 5);
+
+```
+
+## `terser/reduce_vars/issue_1606`
+
+- size: oxc 49 vs reference 52 (-3 bytes)
+
+```js
+function f() {
+	var a;
+	function g() {}
+	var b = 2;
+	x(b);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ function f() {
+-	var a, b;
++	var a;
+ 	function g() {}
+ 	x(2);
+ }
+
+```
+
+## `terser/reduce_vars/issue_1814_1`
+
+- size: oxc 68 vs reference 71 (-3 bytes)
+
+```js
+const a = 42;
+!(function() {
+	var b = a;
+	!(function(a) {
+		console.log(a++, b);
+	})(0);
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+-const a = 42;
+-!function() {
+-	var a;
+-	a = 0, console.log(a++, 42);
+-}();
++(function() {
++	(function(a) {
++		console.log(a++, 42);
++	})(0);
++})();
+
+```
+
+## `terser/reduce_vars/issue_1814_2`
+
+- size: oxc 71 vs reference 76 (-5 bytes)
+
+```js
+const a = '32';
+!(function() {
+	var b = a + 1;
+	!(function(a) {
+		console.log(b, a++);
+	})(0);
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+-const a = '32';
+-!function() {
+-	var a;
+-	a = 0, console.log('321', a++);
+-}();
++(function() {
++	(function(a) {
++		console.log('321', a++);
++	})(0);
++})();
+
+```
+
+## `terser/reduce_vars/issue_1865`
+
+- size: oxc 129 vs reference 134 (-5 bytes)
+
+```js
+function f(some) {
+	some.thing = false;
+}
+console.log((function() {
+	var some = { thing: true };
+	f(some);
+	return some.thing;
+})());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,8 @@
+ function f(some) {
+-	some.thing = false;
++	some.thing = !1;
+ }
+ console.log((function() {
+-	var some = { thing: true };
++	var some = { thing: !0 };
+ 	f(some);
+ 	return some.thing;
+ })());
+
+```
+
+## `terser/reduce_vars/issue_2406_1`
+
+- size: oxc 142 vs reference 177 (-35 bytes)
+
+```js
+const c = { fn: function() {
+	return this;
+} };
+let l = { fn: function() {
+	return this;
+} };
+var v = { fn: function() {
+	return this;
+} };
+console.log(c.fn(), l.fn(), v.fn());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,7 @@
+-const c = { fn: function() {
++console.log({ fn: function() {
+ 	return this;
+-} };
+-let l = { fn: function() {
++} }.fn(), { fn: function() {
+ 	return this;
+-} };
+-var v = { fn: function() {
++} }.fn(), { fn: function() {
+ 	return this;
+-} };
+-console.log(c.fn(), l.fn(), v.fn());
++} }.fn());
+
+```
+
+## `terser/reduce_vars/issue_2416`
+
+- size: oxc 32 vs reference 36 (-4 bytes)
+
+```js
+class Foo {}
+console.log(Foo.name);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+-class Foo {}
+-console.log(Foo.name);
++class e {}
++console.log(e.name);
+
+```
+
+## `terser/reduce_vars/issue_2440_with_1`
+
+- size: oxc 71 vs reference 75 (-4 bytes)
+
+```js
+function foo() {
+	return bar();
+}
+baz = { quux: foo };
+with(o) whatever();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+-function foo() {
++function e() {
+ 	return bar();
+ }
+-baz = { quux: foo };
++baz = { quux: e };
+ with(o) whatever();
+
+```
+
+## `terser/reduce_vars/issue_2440_with_2`
+
+- size: oxc 71 vs reference 75 (-4 bytes)
+
+```js
+baz = { quux: foo };
+with(o) whatever();
+function foo() {
+	return bar();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+-baz = { quux: foo };
++baz = { quux: e };
+ with(o) whatever();
+-function foo() {
++function e() {
+ 	return bar();
+ }
+
+```
+
+## `terser/reduce_vars/issue_2450_5`
+
+- size: oxc 119 vs reference 120 (-1 bytes)
+
+```js
+var a;
+function f(b) {
+	console.log(a === b);
+	a = b;
+}
+function g() {}
+[
+	1,
+	2,
+	3
+].forEach(function() {
+	f(g);
+});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,12 +1,13 @@
+-var a;
+-function g() {}
++var e;
++function t(t) {
++	console.log(e === t);
++	e = t;
++}
++function n() {}
+ [
+ 	1,
+ 	2,
+ 	3
+ ].forEach(function() {
+-	(function(b) {
+-		console.log(a === b);
+-		a = b;
+-	})(g);
++	t(n);
+ });
+
+```
+
+## `terser/reduce_vars/issue_2455`
+
+- size: oxc 0 vs reference 41 (-41 bytes)
+
+```js
+function foo() {
+	var that = this;
+	for (;;) that.bar();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function foo() {
+-	for (;;) this.bar();
+-}
+
+```
+
+## `terser/reduce_vars/issue_2485`
+
+- size: oxc 320 vs reference 327 (-7 bytes)
+
+```js
+var foo = function(bar) {
+	var n = function(a, b) {
+		return a + b;
+	};
+	var sumAll = function(arg) {
+		return arg.reduce(n, 0);
+	};
+	var runSumAll = function(arg) {
+		return sumAll(arg);
+	};
+	bar.baz = function(arg) {
+		var n = runSumAll(arg);
+		return n.get = 1, n;
+	};
+	return bar;
+};
+var bar = foo({});
+console.log(bar.baz([
+	1,
+	2,
+	3
+]));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,19 +1,17 @@
+-var foo = function(bar) {
++var bar = function(bar) {
+ 	var n = function(a, b) {
+ 		return a + b;
++	}, sumAll = function(arg) {
++		return arg.reduce(n, 0);
++	}, runSumAll = function(arg) {
++		return sumAll(arg);
+ 	};
+-	var runSumAll = function(arg) {
+-		return (function(arg) {
+-			return arg.reduce(n, 0);
+-		})(arg);
+-	};
+ 	bar.baz = function(arg) {
+ 		var n = runSumAll(arg);
+ 		return n.get = 1, n;
+ 	};
+ 	return bar;
+-};
+-var bar = foo({});
++}({});
+ console.log(bar.baz([
+ 	1,
+ 	2,
+
+```
+
+## `terser/reduce_vars/issue_2496`
+
+- size: oxc 207 vs reference 239 (-32 bytes)
+
+```js
+function execute(callback) {
+	callback();
+}
+class Foo {
+	constructor(message) {
+		this.message = message;
+	}
+	go() {
+		this.message = 'PASS';
+		console.log(this.message);
+	}
+	run() {
+		execute(() => {
+			this.go();
+		});
+	}
+}
+new Foo('FAIL').run();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,17 +1,18 @@
+-class Foo {
+-	constructor(message) {
+-		this.message = message;
++function e(e) {
++	e();
++}
++class t {
++	constructor(e) {
++		this.message = e;
+ 	}
+ 	go() {
+ 		this.message = 'PASS';
+ 		console.log(this.message);
+ 	}
+ 	run() {
+-		(function(callback) {
+-			callback();
+-		})(() => {
++		e(() => {
+ 			this.go();
+ 		});
+ 	}
+ }
+-new Foo('FAIL').run();
++new t('FAIL').run();
+
+```
+
+## `terser/reduce_vars/issue_2598`
+
+- size: oxc 82 vs reference 85 (-3 bytes)
+
+```js
+function f() {}
+function g(a) {
+	return a || f;
+}
+console.log(g(false) === g(null));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+-function f() {}
+-function g(a) {
+-	return a || f;
++function e() {}
++function t(t) {
++	return t || e;
+ }
+-console.log(g(false) === g(null));
++console.log(t(!1) === t(null));
+
+```
+
+## `terser/reduce_vars/issue_2669`
+
+- size: oxc 43 vs reference 47 (-4 bytes)
+
+```js
+let foo;
+console.log(([foo] = ['PASS']) && foo);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+-let foo;
+-console.log(([foo] = ['PASS'], foo));
++let e;
++console.log(([e] = ['PASS']) && e);
+
+```
+
+## `terser/reduce_vars/issue_2670`
+
+- size: oxc 70 vs reference 84 (-14 bytes)
+
+```js
+const obj = {};
+obj.prop = 'PASS';
+const { prop: value } = obj;
+console.log(value);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+-const obj = {};
+-obj.prop = 'PASS';
+-const { prop: value } = obj;
+-console.log(value);
++const e = {};
++e.prop = 'PASS';
++const { prop: t } = e;
++console.log(t);
+
+```
+
+## `terser/reduce_vars/issue_2869`
+
+- size: oxc 99 vs reference 100 (-1 bytes)
+
+```js
+var c = 'FAIL';
+(function f(a) {
+	var a;
+	if (!f) a = 0;
+	if (a) c = 'PASS';
+})(1);
+console.log(c);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+ var c = 'FAIL';
+ (function f(a) {
+ 	var a;
+-	if (!f) a = 0;
+-	if (a) c = 'PASS';
++	f || (a = 0);
++	a && (c = 'PASS');
+ })(1);
+ console.log(c);
+
+```
+
+## `terser/reduce_vars/issue_2992`
+
+- size: oxc 73 vs reference 115 (-42 bytes)
+
+```js
+var c = 'PASS';
+(function f(b) {
+	switch (0) {
+		case 0:
+		case b = 1: b && (c = 'FAIL');
+	}
+})();
+console.log(c);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,5 @@
+ var c = 'PASS';
+-(function f(b) {
+-	switch (0) {
+-		case 0:
+-		case b = 1: b && (c = 'FAIL');
+-	}
++(function(b) {
++	b && (c = 'FAIL');
+ })();
+ console.log(c);
+
+```
+
+## `terser/reduce_vars/issue_3042_2`
+
+- size: oxc 332 vs reference 442 (-110 bytes)
+
+```js
+function Foo() {
+	this.isFoo = function(o) {
+		return o instanceof Foo;
+	};
+}
+function FooCollection() {
+	this.foos = [1, 1].map(function() {
+		return new Foo();
+	});
+}
+var fooCollection = new FooCollection();
+console.log(fooCollection.foos[0].isFoo(fooCollection.foos[0]));
+console.log(fooCollection.foos[0].isFoo(fooCollection.foos[1]));
+console.log(fooCollection.foos[1].isFoo(fooCollection.foos[0]));
+console.log(fooCollection.foos[1].isFoo(fooCollection.foos[1]));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,14 +1,15 @@
+-function Foo() {
+-	this.isFoo = function(o) {
+-		return o instanceof Foo;
++function e() {
++	this.isFoo = function(t) {
++		return t instanceof e;
+ 	};
+ }
+-var fooCollection = new function() {
++function t() {
+ 	this.foos = [1, 1].map(function() {
+-		return new Foo();
++		return new e();
+ 	});
+-}();
+-console.log(fooCollection.foos[0].isFoo(fooCollection.foos[0]));
+-console.log(fooCollection.foos[0].isFoo(fooCollection.foos[1]));
+-console.log(fooCollection.foos[1].isFoo(fooCollection.foos[0]));
+-console.log(fooCollection.foos[1].isFoo(fooCollection.foos[1]));
++}
++var n = new t();
++console.log(n.foos[0].isFoo(n.foos[0]));
++console.log(n.foos[0].isFoo(n.foos[1]));
++console.log(n.foos[1].isFoo(n.foos[0]));
++console.log(n.foos[1].isFoo(n.foos[1]));
+
+```
+
+## `terser/reduce_vars/issue_3068_1`
+
+- size: oxc 68 vs reference 80 (-12 bytes)
+
+```js
+(function() {
+	do {
+		continue;
+		var b = 'defined';
+	} while (b && b.c);
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+ (function() {
+ 	do {
+ 		continue;
+-		var b = 'defined';
++		var b;
+ 	} while (b && b.c);
+ })();
+
+```
+
+## `terser/reduce_vars/issue_3068_2`
+
+- size: oxc 68 vs reference 134 (-66 bytes)
+
+```js
+(function() {
+	do {
+		try {
+			while ('' == typeof a);
+		} finally {
+			continue;
+		}
+		var b = 'defined';
+	} while (b && b.c);
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,6 @@
+ (function() {
+ 	do {
+-		try {
+-			while ('' == typeof a);
+-		} finally {
+-			continue;
+-		}
+-		var b = 'defined';
++		continue;
++		var b;
+ 	} while (b && b.c);
+ })();
+
+```
+
+## `terser/reduce_vars/issue_3110_3`
+
+- size: oxc 140 vs reference 142 (-2 bytes)
+
+```js
+(function() {
+	function foo() {
+		return isDev ? 'foo' : 'bar';
+	}
+	console.log(foo());
+	var isDev = true;
+	var obj = { foo };
+	console.log(obj.foo());
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -3,6 +3,6 @@
+ 		return isDev ? 'foo' : 'bar';
+ 	}
+ 	console.log(foo());
+-	var isDev = true;
++	var isDev = !0;
+ 	console.log({ foo }.foo());
+ })();
+
+```
+
+## `terser/reduce_vars/issue_3110_shorthand_3`
+
+- size: oxc 140 vs reference 142 (-2 bytes)
+
+```js
+(function() {
+	function foo() {
+		return isDev ? 'foo' : 'bar';
+	}
+	console.log(foo());
+	var isDev = true;
+	var obj = { foo };
+	console.log(obj.foo());
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -3,6 +3,6 @@
+ 		return isDev ? 'foo' : 'bar';
+ 	}
+ 	console.log(foo());
+-	var isDev = true;
++	var isDev = !0;
+ 	console.log({ foo }.foo());
+ })();
+
+```
+
+## `terser/reduce_vars/issue_3140_1`
+
+- size: oxc 201 vs reference 206 (-5 bytes)
+
+```js
+(function() {
+	var a;
+	function f() {}
+	f.g = function g() {
+		function h() {
+			console.log(a ? 'PASS' : 'FAIL');
+		}
+		a = true;
+		this();
+		a = false;
+		h.g = g;
+		return h;
+	};
+	return f;
+})().g().g();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -5,9 +5,9 @@
+ 		function h() {
+ 			console.log(a ? 'PASS' : 'FAIL');
+ 		}
+-		a = true;
++		a = !0;
+ 		this();
+-		a = false;
++		a = !1;
+ 		h.g = g;
+ 		return h;
+ 	};
+
+```
+
+## `terser/reduce_vars/issue_3140_3`
+
+- size: oxc 252 vs reference 257 (-5 bytes)
+
+```js
+(function() {
+	var a;
+	function f() {}
+	f.g = function g() {
+		var self = this;
+		function h() {
+			console.log(a ? 'PASS' : 'FAIL');
+		}
+		a = true;
+		(function() {
+			return self;
+		})()();
+		a = false;
+		h.g = g;
+		return h;
+	};
+	return f;
+})().g().g();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -6,11 +6,11 @@
+ 		function h() {
+ 			console.log(a ? 'PASS' : 'FAIL');
+ 		}
+-		a = true;
++		a = !0;
+ 		(function() {
+ 			return self;
+ 		})()();
+-		a = false;
++		a = !1;
+ 		h.g = g;
+ 		return h;
+ 	};
+
+```
+
+## `terser/reduce_vars/issue_3140_4`
+
+- size: oxc 223 vs reference 228 (-5 bytes)
+
+```js
+(function() {
+	var a;
+	function f() {}
+	f.g = function g() {
+		var o = { p: this };
+		function h() {
+			console.log(a ? 'PASS' : 'FAIL');
+		}
+		a = true;
+		o.p();
+		a = false;
+		h.g = g;
+		return h;
+	};
+	return f;
+})().g().g();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -6,9 +6,9 @@
+ 		function h() {
+ 			console.log(a ? 'PASS' : 'FAIL');
+ 		}
+-		a = true;
++		a = !0;
+ 		o.p();
+-		a = false;
++		a = !1;
+ 		h.g = g;
+ 		return h;
+ 	};
+
+```
+
+## `terser/reduce_vars/issue_379`
+
+- size: oxc 66 vs reference 67 (-1 bytes)
+
+```js
+global.a = ((...args) => (a1, a2) => a1.foo === a2.foo)(...args);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-global.a = ((...args1) => (a1, a2) => a1.foo === a2.foo)(...args);
++global.a = ((...args) => (a1, a2) => a1.foo === a2.foo)(...args);
+
+```
+
+## `terser/reduce_vars/lvalues_def_1`
+
+- size: oxc 48 vs reference 54 (-6 bytes)
+
+```js
+var b = 1;
+var a = b++, b = NaN;
+console.log(a, b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,2 @@
+-var b = 1;
+-var a = b++, b = 0 / 0;
+-console.log(a, b);
++var e = 1, t = e++, e = NaN;
++console.log(t, e);
+
+```
+
+## `terser/reduce_vars/lvalues_def_2`
+
+- size: oxc 51 vs reference 52 (-1 bytes)
+
+```js
+var b = 1;
+var a = b += 1, b = NaN;
+console.log(a, b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,2 @@
+-var b;
+-var a = b = 2, b = 0 / 0;
+-console.log(a, b);
++var e = 1, t = e += 1, e = NaN;
++console.log(t, e);
+
+```
+
+## `terser/reduce_vars/named_function_with_recursive_ref_reuse`
+
+- size: oxc 97 vs reference 149 (-52 bytes)
+
+```js
+var result = [];
+var do_not_inline = function foo() {
+	result.push(foo);
+};
+[0, 1].map(() => do_not_inline());
+console.log(result[0] === result[1]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,5 @@
+-var result = [];
+-var do_not_inline = function foo() {
+-	result.push(foo);
++var e = [], t = function t() {
++	e.push(t);
+ };
+-[0, 1].map(() => do_not_inline());
+-console.log(result[0] === result[1]);
++[0, 1].map(() => t());
++console.log(e[0] === e[1]);
+
+```
+
+## `terser/reduce_vars/passes`
+
+- size: oxc 0 vs reference 89 (-89 bytes)
+
+```js
+function f() {
+	var a = 1, b = 2, c = 3;
+	if (a) {
+		b = c;
+	} else {
+		c = b;
+	}
+	console.log(a + b);
+	console.log(b + c);
+	console.log(a + c);
+	console.log(a + b + c);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +0,0 @@
+-function f() {
+-	3;
+-	console.log(4);
+-	console.log(6);
+-	console.log(4);
+-	console.log(7);
+-}
+
+```
+
+## `terser/reduce_vars/perf_3`
+
+- size: oxc 195 vs reference 224 (-29 bytes)
+
+```js
+var foo = function(x, y, z) {
+	return x < y ? x * y + z : x * z - y;
+};
+var indirect_foo = function(x, y, z) {
+	return foo(x, y, z);
+};
+var sum = 0;
+for (var i = 0; i < 100; ++i) sum += indirect_foo(i, i + 1, 3 * i);
+console.log(sum);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,7 @@
+-var indirect_foo = function(x, y, z) {
+-	return (function(x, y, z) {
+-		return x < y ? x * y + z : x * z - y;
+-	})(x, y, z);
+-};
+-var sum = 0;
+-for (var i = 0; i < 100; ++i) sum += indirect_foo(i, i + 1, 3 * i);
+-console.log(sum);
++var e = function(e, t, n) {
++	return e < t ? e * t + n : e * n - t;
++}, t = function(t, n, r) {
++	return e(t, n, r);
++}, n = 0;
++for (var r = 0; r < 100; ++r) n += t(r, r + 1, 3 * r);
++console.log(n);
+
+```
+
+## `terser/reduce_vars/perf_7`
+
+- size: oxc 190 vs reference 224 (-34 bytes)
+
+```js
+var indirect_foo = function(x, y, z) {
+	var foo = function(x, y, z) {
+		return x < y ? x * y + z : x * z - y;
+	};
+	return foo(x, y, z);
+};
+var sum = 0;
+for (var i = 0; i < 100; ++i) sum += indirect_foo(i, i + 1, 3 * i);
+console.log(sum);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,7 @@
+-var indirect_foo = function(x, y, z) {
+-	return (function(x, y, z) {
+-		return x < y ? x * y + z : x * z - y;
+-	})(x, y, z);
+-};
+-var sum = 0;
+-for (var i = 0; i < 100; ++i) sum += indirect_foo(i, i + 1, 3 * i);
+-console.log(sum);
++var e = function(e, t, n) {
++	return function(e, t, n) {
++		return e < t ? e * t + n : e * n - t;
++	}(e, t, n);
++}, t = 0;
++for (var n = 0; n < 100; ++n) t += e(n, n + 1, 3 * n);
++console.log(t);
+
+```
+
+## `terser/reduce_vars/pure_getters_1`
+
+- size: oxc 52 vs reference 56 (-4 bytes)
+
+```js
+try {
+	var a = (a.b, 2);
+} catch (e) {}
+console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ try {
+-	var a = (a.b, 2);
+-} catch (e) {}
+-console.log(a);
++	var e = (e.b, 2);
++} catch {}
++console.log(e);
+
+```
+
+## `terser/reduce_vars/recursive_inlining_1`
+
+- size: oxc 42 vs reference 43 (-1 bytes)
+
+```js
+!(function() {
+	function foo() {
+		bar();
+	}
+	function bar() {
+		foo();
+	}
+	console.log('PASS');
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-!(function() {
++(function() {
+ 	console.log('PASS');
+ })();
+
+```
+
+## `terser/reduce_vars/recursive_inlining_2`
+
+- size: oxc 42 vs reference 43 (-1 bytes)
+
+```js
+!(function() {
+	function foo() {
+		qux();
+	}
+	function bar() {
+		foo();
+	}
+	function qux() {
+		bar();
+	}
+	console.log('PASS');
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-!(function() {
++(function() {
+ 	console.log('PASS');
+ })();
+
+```
+
+## `terser/reduce_vars/recursive_inlining_4`
+
+- size: oxc 236 vs reference 239 (-3 bytes)
+
+```js
+!(function() {
+	function foo(x) {
+		console.log('foo', x);
+		if (x) bar(x - 1);
+	}
+	function bar(x) {
+		console.log('bar', x);
+		if (x) qux(x - 1);
+	}
+	function qux(x) {
+		console.log('qux', x);
+		if (x) foo(x - 1);
+	}
+	qux(4);
+	bar(5);
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,14 +1,15 @@
+-!(function() {
++(function() {
++	function foo(x) {
++		console.log('foo', x);
++		x && bar(x - 1);
++	}
+ 	function bar(x) {
+ 		console.log('bar', x);
+-		if (x) qux(x - 1);
++		x && qux(x - 1);
+ 	}
+ 	function qux(x) {
+ 		console.log('qux', x);
+-		if (x) (function(x) {
+-			console.log('foo', x);
+-			if (x) bar(x - 1);
+-		})(x - 1);
++		x && foo(x - 1);
+ 	}
+ 	qux(4);
+ 	bar(5);
+
+```
+
+## `terser/reduce_vars/recursive_inlining_5`
+
+- size: oxc 245 vs reference 252 (-7 bytes)
+
+```js
+!(function() {
+	function foo(x) {
+		console.log('foo', x);
+		if (x) bar(x - 1);
+	}
+	function bar(x) {
+		console.log('bar', x);
+		if (x) qux(x - 1);
+	}
+	function qux(x) {
+		console.log('qux', x);
+		if (x) foo(x - 1);
+	}
+	qux(4);
+	bar(5);
+	foo(3);
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,15 +1,15 @@
+-!(function() {
++(function() {
+ 	function foo(x) {
+ 		console.log('foo', x);
+-		if (x) bar(x - 1);
++		x && bar(x - 1);
+ 	}
+ 	function bar(x) {
+ 		console.log('bar', x);
+-		if (x) qux(x - 1);
++		x && qux(x - 1);
+ 	}
+ 	function qux(x) {
+ 		console.log('qux', x);
+-		if (x) foo(x - 1);
++		x && foo(x - 1);
+ 	}
+ 	qux(4);
+ 	bar(5);
+
+```
+
+## `terser/reduce_vars/redefine_arguments_1`
+
+- size: oxc 158 vs reference 215 (-57 bytes)
+
+```js
+function f() {
+	var arguments;
+	return typeof arguments;
+}
+function g() {
+	var arguments = 42;
+	return typeof arguments;
+}
+function h(x) {
+	var arguments = x;
+	return typeof arguments;
+}
+console.log(f(), g(), h());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -3,11 +3,9 @@
+ 	return typeof arguments;
+ }
+ function g() {
+-	var arguments = 42;
+-	return typeof arguments;
++	return 'number';
+ }
+ function h(x) {
+-	var arguments = x;
+-	return typeof arguments;
++	return typeof x;
+ }
+ console.log(f(), g(), h());
+
+```
+
+## `terser/reduce_vars/redefine_arguments_2`
+
+- size: oxc 158 vs reference 203 (-45 bytes)
+
+```js
+function f() {
+	var arguments;
+	return typeof arguments;
+}
+function g() {
+	var arguments = 42;
+	return typeof arguments;
+}
+function h(x) {
+	var arguments = x;
+	return typeof arguments;
+}
+console.log(f(), g(), h());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,11 @@
+-console.log(function() {
++function e() {
+ 	var arguments;
+ 	return typeof arguments;
+-}(), function() {
+-	var arguments = 42;
+-	return typeof arguments;
+-}(), function(x) {
+-	var arguments = x;
+-	return typeof arguments;
+-}());
++}
++function t() {
++	return 'number';
++}
++function n(e) {
++	return typeof e;
++}
++console.log(e(), t(), n());
+
+```
+
+## `terser/reduce_vars/redefine_arguments_3`
+
+- size: oxc 158 vs reference 203 (-45 bytes)
+
+```js
+function f() {
+	var arguments;
+	return typeof arguments;
+}
+function g() {
+	var arguments = 42;
+	return typeof arguments;
+}
+function h(x) {
+	var arguments = x;
+	return typeof arguments;
+}
+console.log(f(), g(), h());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,11 @@
+-console.log(function() {
++function e() {
+ 	var arguments;
+ 	return typeof arguments;
+-}(), function() {
+-	var arguments = 42;
+-	return typeof arguments;
+-}(), function(x) {
+-	var arguments = x;
+-	return typeof arguments;
+-}());
++}
++function t() {
++	return 'number';
++}
++function n(e) {
++	return typeof e;
++}
++console.log(e(), t(), n());
+
+```
+
+## `terser/reduce_vars/reduce_vars`
+
+- size: oxc 262 vs reference 269 (-7 bytes)
+
+```js
+var A = 1;
+(function f0() {
+	var a = 2;
+	console.log(a - 5);
+	console.log(A - 5);
+})();
+(function f1() {
+	var a = 2;
+	console.log(a - 5);
+	eval('console.log(a);');
+})();
+(function f2(eval) {
+	var a = 2;
+	console.log(a - 5);
+	eval('console.log(a);');
+})(eval);
+(function f3() {
+	var b = typeof C !== 'undefined';
+	var c = 4;
+	if (b) {
+		return 'yes';
+	} else {
+		return 'no';
+	}
+})();
+console.log(A + 1);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -13,5 +13,4 @@
+ 	console.log(a - 5);
+ 	eval('console.log(a);');
+ })(eval);
+-'yes';
+ console.log(A + 1);
+
+```
+
+## `terser/reduce_vars/shorthand_inline_proto`
+
+- size: oxc 30 vs reference 53 (-23 bytes)
+
+```js
+var __proto__ = null;
+var o = { __proto__ };
+foo(o);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1 @@
+-var __proto__ = null;
+-var o = { __proto__ };
+-foo(o);
++foo({ ['__proto__']: null });
+
+```
+
+## `terser/reduce_vars/toplevel_off`
+
+- size: oxc 16 vs reference 27 (-11 bytes)
+
+```js
+var x = 3;
+console.log(x);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-var x = 3;
+-console.log(x);
++console.log(3);
+
+```
+
+## `terser/reduce_vars/try_abort`
+
+- size: oxc 93 vs reference 102 (-9 bytes)
+
+```js
+!(function() {
+	try {
+		var a = 1;
+		throw '';
+		var b = 2;
+	} catch (e) {}
+	console.log(a, b);
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,8 @@
+-!(function() {
++(function() {
+ 	try {
+ 		var a = 1;
+ 		throw '';
+-		var b = 2;
+-	} catch (e) {}
++		var b;
++	} catch {}
+ 	console.log(a, b);
+ })();
+
+```
+
+## `terser/reduce_vars/unary_delete`
+
+- size: oxc 76 vs reference 78 (-2 bytes)
+
+```js
+var b = 10;
+function f() {
+	var a;
+	if (delete a) b--;
+}
+f();
+console.log(b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+ var b = 10;
+ function f() {
+ 	var a;
+-	if (delete a) b--;
++	delete a && b--;
+ }
+ f();
+ console.log(b);
+
+```
+
+## `terser/reduce_vars/unsafe_evaluate`
+
+- size: oxc 0 vs reference 129 (-129 bytes)
+
+```js
+function f0() {
+	var a = { b: 1 };
+	console.log(a.b + 3);
+}
+function f1() {
+	var a = {
+		b: { c: 1 },
+		d: 2
+	};
+	console.log(a.b + 3, a.d + 4, a.b.c + 5, a.d.c + 6);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +0,0 @@
+-function f0() {
+-	console.log(4);
+-}
+-function f1() {
+-	var a = {
+-		b: { c: 1 },
+-		d: 2
+-	};
+-	console.log(a.b + 3, 6, 6, 2 .c + 6);
+-}
+
+```
+
+## `terser/reduce_vars/unsafe_evaluate_array_3`
+
+- size: oxc 94 vs reference 106 (-12 bytes)
+
+```js
+var arr = [
+	1,
+	2,
+	function() {
+		return ++arr[0];
+	}
+];
+console.log(arr[0], arr[1], arr[2](), arr[0]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,8 @@
+-var arr = [
++var e = [
+ 	1,
+ 	2,
+ 	function() {
+-		return ++arr[0];
++		return ++e[0];
+ 	}
+ ];
+-console.log(arr[0], arr[1], arr[2](), arr[0]);
++console.log(e[0], e[1], e[2](), e[0]);
+
+```
+
+## `terser/reduce_vars/unsafe_evaluate_array_5`
+
+- size: oxc 97 vs reference 107 (-10 bytes)
+
+```js
+var arr = [
+	1,
+	2,
+	function() {
+		return ++this[0];
+	}
+];
+console.log(arr[0], arr[1], arr[2](), arr[0]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,8 @@
+-var arr = [
++var e = [
+ 	1,
+ 	2,
+ 	function() {
+ 		return ++this[0];
+ 	}
+ ];
+-console.log(arr[0], arr[1], arr[2](), arr[0]);
++console.log(e[0], e[1], e[2](), e[0]);
+
+```
+
+## `terser/reduce_vars/unsafe_evaluate_object_3`
+
+- size: oxc 186 vs reference 196 (-10 bytes)
+
+```js
+var obj = {
+	get foo() {
+		return 1;
+	},
+	bar: 2,
+	square: function(x) {
+		return x * x;
+	},
+	cube: function(x) {
+		return x * x * x;
+	}
+};
+console.log(obj.foo, obj.bar, obj.square(2), obj.cube);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,13 +1,13 @@
+-var obj = {
++var e = {
+ 	get foo() {
+ 		return 1;
+ 	},
+ 	bar: 2,
+-	square: function(x) {
+-		return x * x;
++	square: function(e) {
++		return e * e;
+ 	},
+-	cube: function(x) {
+-		return x * x * x;
++	cube: function(e) {
++		return e * e * e;
+ 	}
+ };
+-console.log(obj.foo, obj.bar, obj.square(2), obj.cube);
++console.log(e.foo, e.bar, e.square(2), e.cube);
+
+```
+
+## `terser/reduce_vars/var_assign_4`
+
+- size: oxc 46 vs reference 47 (-1 bytes)
+
+```js
+!(function a() {
+	a = 2;
+	console.log(a);
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-!(function a() {
++(function a() {
+ 	a = 2, console.log(a);
+ })();
+
+```
+
+## `terser/reduce_vars/var_if`
+
+- size: oxc 0 vs reference 75 (-75 bytes)
+
+```js
+function f() {
+	if (x()) {
+		var a;
+		if (!g) a = true;
+		if (a) g();
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +0,0 @@
+-function f() {
+-	if (x()) {
+-		var a;
+-		if (!g) a = true;
+-		if (a) g();
+-	}
+-}
+
+```
+
+## `terser/rename/function_catch_catch`
+
+- size: oxc 155 vs reference 159 (-4 bytes)
+
+```js
+var o = 0;
+function f() {
+	try {
+		throw 1;
+	} catch (c) {
+		try {
+			throw 2;
+		} catch (o) {
+			var o = 3;
+			console.log(o);
+		}
+	}
+	console.log(o);
+}
+f();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,14 +2,14 @@
+ function f() {
+ 	try {
+ 		throw 1;
+-	} catch (t) {
++	} catch {
+ 		try {
+ 			throw 2;
+-		} catch (c) {
+-			var c = 3;
+-			console.log(c);
++		} catch (o) {
++			var o = 3;
++			console.log(o);
+ 		}
+ 	}
+-	console.log(c);
++	console.log(o);
+ }
+ f();
+
+```
+
+## `terser/rename/function_catch_catch_ie8`
+
+- size: oxc 155 vs reference 159 (-4 bytes)
+
+```js
+var o = 0;
+function f() {
+	try {
+		throw 1;
+	} catch (c) {
+		try {
+			throw 2;
+		} catch (o) {
+			var o = 3;
+			console.log(o);
+		}
+	}
+	console.log(o);
+}
+f();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,7 +2,7 @@
+ function f() {
+ 	try {
+ 		throw 1;
+-	} catch (c) {
++	} catch {
+ 		try {
+ 			throw 2;
+ 		} catch (o) {
+
+```
+
+## `terser/rename/function_iife_catch`
+
+- size: oxc 107 vs reference 120 (-13 bytes)
+
+```js
+function f(n) {
+	!(function() {
+		try {
+			throw 0;
+		} catch (n) {
+			var a = 1;
+			console.log(n, a);
+		}
+	})();
+}
+f();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,10 @@
+ function f(n) {
+-	!function() {
++	(function() {
+ 		try {
+ 			throw 0;
+-		} catch (o) {
+-			var n = 1;
+-			console.log(o, n);
++		} catch (n) {
++			console.log(n, 1);
+ 		}
+-	}();
++	})();
+ }
+ f();
+
+```
+
+## `terser/rename/function_iife_catch_ie8`
+
+- size: oxc 107 vs reference 122 (-15 bytes)
+
+```js
+function f(n) {
+	!(function() {
+		try {
+			throw 0;
+		} catch (n) {
+			var a = 1;
+			console.log(n, a);
+		}
+	})();
+}
+f();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,9 @@
+-function f(o) {
+-	!(function() {
++function f(n) {
++	(function() {
+ 		try {
+ 			throw 0;
+-		} catch (o) {
+-			var c = 1;
+-			console.log(o, c);
++		} catch (n) {
++			console.log(n, 1);
+ 		}
+ 	})();
+ }
+
+```
+
+## `terser/rename/issue_2120_1`
+
+- size: oxc 136 vs reference 140 (-4 bytes)
+
+```js
+'aaaaaaaa';
+var a = 1, b = 'FAIL';
+try {
+	throw 1;
+} catch (c) {
+	try {
+		throw 0;
+	} catch (a) {
+		if (c) b = 'PASS';
+	}
+}
+console.log(b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -5,8 +5,8 @@
+ } catch (c) {
+ 	try {
+ 		throw 0;
+-	} catch (t) {
+-		if (c) b = 'PASS';
++	} catch {
++		c && (b = 'PASS');
+ 	}
+ }
+ console.log(b);
+
+```
+
+## `terser/rename/issue_2120_2`
+
+- size: oxc 136 vs reference 140 (-4 bytes)
+
+```js
+'aaaaaaaa';
+var a = 1, b = 'FAIL';
+try {
+	throw 1;
+} catch (c) {
+	try {
+		throw 0;
+	} catch (a) {
+		if (c) b = 'PASS';
+	}
+}
+console.log(b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -5,8 +5,8 @@
+ } catch (c) {
+ 	try {
+ 		throw 0;
+-	} catch (a) {
+-		if (c) b = 'PASS';
++	} catch {
++		c && (b = 'PASS');
+ 	}
+ }
+ console.log(b);
+
+```
+
+## `terser/return_undefined/return_undefined`
+
+- size: oxc 0 vs reference 484 (-484 bytes)
+
+```js
+function f0() {}
+function f1() {
+	return undefined;
+}
+function f2() {
+	return void 0;
+}
+function f3() {
+	return void 123;
+}
+function f4() {
+	return;
+}
+function f5(a, b) {
+	console.log(a, b);
+	baz(a);
+	return;
+}
+function f6(a, b) {
+	console.log(a, b);
+	if (a) {
+		foo(b);
+		baz(a);
+		return a + b;
+	}
+	return undefined;
+}
+function f7(a, b) {
+	console.log(a, b);
+	if (a) {
+		foo(b);
+		baz(a);
+		return void 0;
+	}
+	return a + b;
+}
+function f8(a, b) {
+	foo(a);
+	bar(b);
+	return void 0;
+}
+function f9(a, b) {
+	foo(a);
+	bar(b);
+	return undefined;
+}
+function f10() {
+	return false;
+}
+function f11() {
+	return null;
+}
+function f12() {
+	return 0;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,40 +0,0 @@
+-function f0() {}
+-function f1() {}
+-function f2() {}
+-function f3() {}
+-function f4() {}
+-function f5(a, b) {
+-	console.log(a, b);
+-	baz(a);
+-}
+-function f6(a, b) {
+-	console.log(a, b);
+-	if (a) {
+-		foo(b);
+-		baz(a);
+-		return a + b;
+-	}
+-}
+-function f7(a, b) {
+-	console.log(a, b);
+-	if (!a) return a + b;
+-	foo(b);
+-	baz(a);
+-}
+-function f8(a, b) {
+-	foo(a);
+-	bar(b);
+-}
+-function f9(a, b) {
+-	foo(a);
+-	bar(b);
+-}
+-function f10() {
+-	return !1;
+-}
+-function f11() {
+-	return null;
+-}
+-function f12() {
+-	return 0;
+-}
+
+```
+
+## `terser/return_undefined/return_void`
+
+- size: oxc 0 vs reference 23 (-23 bytes)
+
+```js
+function f() {
+	function g() {
+		h();
+	}
+	return g();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f() {
+-	h();
+-}
+
+```
+
+## `terser/sequences/cascade_assignment_in_return`
+
+- size: oxc 0 vs reference 37 (-37 bytes)
+
+```js
+function f(a, b) {
+	return a = x(), b(a);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function f(a, b) {
+-	return b(x());
+-}
+
+```
+
+## `terser/sequences/for_sequences`
+
+- size: oxc 148 vs reference 186 (-38 bytes)
+
+```js
+foo();
+bar();
+for (; false;);
+foo();
+bar();
+for (x = 5; false;);
+x = foo in bar;
+for (; false;);
+x = foo in bar;
+for (y = 5; false;);
+x = function() {
+	foo in bar;
+};
+for (y = 5; false;);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,5 @@
+-for (foo(), bar(); false;);
+-for (foo(), bar(), x = 5; false;);
+-x = foo in bar;
+-for (; false;);
+-x = foo in bar;
+-for (y = 5; false;);
++for (foo(), bar(), foo(), bar(), x = 5; 0;);
++for (x = (foo in bar), x = (foo in bar), y = 5; 0;);
+ for (x = function() {
+ 	foo in bar;
+-}, y = 5; false;);
++}, y = 5; 0;);
+
+```
+
+## `terser/sequences/func_def_1`
+
+- size: oxc 55 vs reference 57 (-2 bytes)
+
+```js
+function f() {
+	return f = 0, !!f;
+}
+console.log(f());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ function f() {
+-	return f = 0, false;
++	return f = 0, !!f;
+ }
+ console.log(f());
+
+```
+
+## `terser/sequences/func_def_3`
+
+- size: oxc 72 vs reference 74 (-2 bytes)
+
+```js
+function f() {
+	function g() {}
+	return g = 0, !!g;
+}
+console.log(f());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ function f() {
+ 	function g() {}
+-	return g = 0, false;
++	return g = 0, !!g;
+ }
+ console.log(f());
+
+```
+
+## `terser/sequences/func_def_4`
+
+- size: oxc 88 vs reference 90 (-2 bytes)
+
+```js
+function f() {
+	function g() {
+		return g = 0, !!g;
+	}
+	return g();
+}
+console.log(f());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+ function f() {
+ 	function g() {
+-		return g = 0, false;
++		return g = 0, !!g;
+ 	}
+ 	return g();
+ }
+
+```
+
+## `terser/sequences/hoist_decl`
+
+- size: oxc 40 vs reference 50 (-10 bytes)
+
+```js
+var a;
+w();
+var b = x();
+y();
+for (var c; 0;) z();
+var d;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,5 @@
+ var a;
+ w();
+-var b = x(), c, d;
+-for (y(); 0;) z();
++var b = x();
++y();
++var c, d;
+
+```
+
+## `terser/sequences/issue_2313`
+
+- size: oxc 146 vs reference 161 (-15 bytes)
+
+```js
+var a = 0, b = 0;
+var foo = {
+	get c() {
+		a++;
+		return 42;
+	},
+	set c(c) {
+		b++;
+	},
+	d: function() {
+		this.c++;
+		if (this.c) console.log(a, b);
+	}
+};
+foo.d();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ var a = 0, b = 0;
+-var foo = {
++({
+ 	get c() {
+ 		return a++, 42;
+ 	},
+@@ -7,7 +7,6 @@
+ 		b++;
+ 	},
+ 	d: function() {
+-		if (this.c++, this.c) console.log(a, b);
++		this.c++, this.c && console.log(a, b);
+ 	}
+-};
+-foo.d();
++}).d();
+
+```
+
+## `terser/sequences/issue_27`
+
+- size: oxc 65 vs reference 67 (-2 bytes)
+
+```js
+(function(jQuery) {
+	var $;
+	$ = jQuery;
+	$('body').addClass('foo');
+})(jQuery);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-(function(jQuery1) {
+-	jQuery1('body').addClass('foo');
++(function(jQuery) {
++	jQuery('body').addClass('foo');
+ })(jQuery);
+
+```
+
+## `terser/sequences/lift_sequences_1`
+
+- size: oxc 41 vs reference 44 (-3 bytes)
+
+```js
+var foo, x, y, bar;
+foo = !(x(), y(), bar());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-var foo, x, y, bar;
+-x(), y(), foo = !bar();
++var foo = (x(), y(), !bar()), x, y, bar;
+
+```
+
+## `terser/sequences/lift_sequences_3`
+
+- size: oxc 56 vs reference 57 (-1 bytes)
+
+```js
+var x, foo, bar, baz;
+x = (foo(), bar(), baz()) ? 10 : 20;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-var x, foo, bar, baz;
+-foo(), bar(), x = baz() ? 10 : 20;
++var x = (foo(), bar(), baz() ? 10 : 20), foo, bar, baz;
+
+```
+
+## `terser/sequences/lift_sequences_4`
+
+- size: oxc 28 vs reference 31 (-3 bytes)
+
+```js
+var x, foo, bar, baz;
+x = (foo, bar, baz);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-var x, foo, bar, baz;
+-x = baz;
++var x = baz, foo, bar, baz;
+
+```
+
+## `terser/sequences/make_sequences_2`
+
+- size: oxc 47 vs reference 50 (-3 bytes)
+
+```js
+if (boo) {
+	foo();
+	bar();
+	baz();
+} else {
+	x();
+	y();
+	z();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-if (boo) foo(), bar(), baz();
+-else x(), y(), z();
++boo ? (foo(), bar(), baz()) : (x(), y(), z());
+
+```
+
+## `terser/sequences/make_sequences_4`
+
+- size: oxc 134 vs reference 145 (-11 bytes)
+
+```js
+x = 5;
+if (y) z();
+x = 5;
+for (i = 0; i < 5; i++) console.log(i);
+x = 5;
+for (; i < 5; i++) console.log(i);
+x = 5;
+switch (y) {}
+x = 5;
+with(obj) {}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+-if (x = 5, y) z();
+-for (i = 0, x = 5; i < 5; i++) console.log(i);
++for (x = 5, y && z(), x = 5, i = 0; i < 5; i++) console.log(i);
+ for (x = 5; i < 5; i++) console.log(i);
+-switch (x = 5, y) {}
+-with(x = 5, obj);
++x = 5, y, x = 5;
++with(obj) {}
+
+```
+
+## `terser/switch/beautify`
+
+- size: oxc 36 vs reference 118 (-82 bytes)
+
+```js
+switch (a) {
+	case 0:
+	case 1: break;
+	case 2:
+	default:
+}
+switch (b) {
+	case 3:
+		foo();
+		bar();
+	default: break;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,12 +1,5 @@
+-switch (a) {
+-	case 0:
+-	case 1: break;
+-	case 2:
+-	default:
+-}
+-switch (b) {
+-	case 3:
+-		foo();
+-		bar();
+-	default: break;
++a;
++if (b === 3) {
++	foo();
++	bar();
+ }
+
+```
+
+## `terser/switch/constant_switch_7`
+
+- size: oxc 116 vs reference 131 (-15 bytes)
+
+```js
+OUT: {
+	foo();
+	switch (1) {
+		case 1:
+			x();
+			if (foo) break OUT;
+			for (var x = 0; x < 10; x++) {
+				if (x > 5) break;
+				console.log(x);
+			}
+			y();
+		case 1 + 1:
+			bar();
+			break;
+		default: def();
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,10 +2,7 @@
+ 	foo();
+ 	x();
+ 	if (foo) break OUT;
+-	for (var x = 0; x < 10; x++) {
+-		if (x > 5) break;
+-		console.log(x);
+-	}
++	for (var x = 0; x < 10 && !(x > 5); x++) console.log(x);
+ 	y();
+ 	bar();
+ }
+
+```
+
+## `terser/switch/drop_case`
+
+- size: oxc 24 vs reference 26 (-2 bytes)
+
+```js
+switch (foo) {
+	case 'bar':
+		baz();
+		break;
+	case 'moo': break;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-if ('bar' === foo) baz();
++foo === 'bar' && baz();
+
+```
+
+## `terser/switch/drop_default_1`
+
+- size: oxc 24 vs reference 26 (-2 bytes)
+
+```js
+switch (foo) {
+	case 'bar': baz();
+	default:
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-if ('bar' === foo) baz();
++foo === 'bar' && baz();
+
+```
+
+## `terser/switch/drop_default_2`
+
+- size: oxc 24 vs reference 26 (-2 bytes)
+
+```js
+switch (foo) {
+	case 'bar':
+		baz();
+		break;
+	default: break;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-if ('bar' === foo) baz();
++foo === 'bar' && baz();
+
+```
+
+## `terser/switch/issue_1083_1`
+
+- size: oxc 202 vs reference 213 (-11 bytes)
+
+```js
+function test(definitely_true, maybe_true) {
+	switch (true) {
+		case definitely_true:
+		default:
+			console.log('PASS');
+			break;
+		case maybe_true:
+			console.log('FAIL');
+			break;
+	}
+}
+test(true, false);
+test(true, true);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ function test(definitely_true, maybe_true) {
+-	switch (true) {
++	switch (!0) {
+ 		case definitely_true:
+ 		default:
+ 			console.log('PASS');
+@@ -7,5 +7,5 @@
+ 		case maybe_true: console.log('FAIL');
+ 	}
+ }
+-test(true, false);
+-test(true, true);
++test(!0, !1);
++test(!0, !0);
+
+```
+
+## `terser/switch/issue_1083_2`
+
+- size: oxc 202 vs reference 213 (-11 bytes)
+
+```js
+function test(definitely_true, maybe_true) {
+	switch (true) {
+		case definitely_true:
+		default:
+			console.log('PASS');
+			break;
+		case maybe_true:
+			console.log('FAIL');
+			break;
+	}
+}
+test(true, false);
+test(true, true);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ function test(definitely_true, maybe_true) {
+-	switch (true) {
++	switch (!0) {
+ 		case definitely_true:
+ 		default:
+ 			console.log('PASS');
+@@ -7,5 +7,5 @@
+ 		case maybe_true: console.log('FAIL');
+ 	}
+ }
+-test(true, false);
+-test(true, true);
++test(!0, !1);
++test(!0, !0);
+
+```
+
+## `terser/switch/issue_1083_5`
+
+- size: oxc 249 vs reference 260 (-11 bytes)
+
+```js
+function test(definitely_true, maybe_true) {
+	switch (true) {
+		default:
+			console.log('definitely');
+			break;
+		case maybe_true:
+			console.log('maybe');
+			break;
+		case definitely_true:
+			console.log('definitely');
+			break;
+	}
+}
+test(true, false);
+test(true, true);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ function test(definitely_true, maybe_true) {
+-	switch (true) {
++	switch (!0) {
+ 		default:
+ 			console.log('definitely');
+ 			break;
+@@ -9,5 +9,5 @@
+ 		case definitely_true: console.log('definitely');
+ 	}
+ }
+-test(true, false);
+-test(true, true);
++test(!0, !1);
++test(!0, !0);
+
+```
+
+## `terser/switch/issue_1083_6`
+
+- size: oxc 249 vs reference 260 (-11 bytes)
+
+```js
+function test(definitely_true, maybe_true) {
+	switch (true) {
+		case definitely_true:
+			console.log('definitely');
+			break;
+		case maybe_true:
+			console.log('maybe');
+			break;
+		default:
+			console.log('definitely');
+			break;
+	}
+}
+test(true, false);
+test(true, true);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ function test(definitely_true, maybe_true) {
+-	switch (true) {
++	switch (!0) {
+ 		case definitely_true:
+ 			console.log('definitely');
+ 			break;
+@@ -9,5 +9,5 @@
+ 		default: console.log('definitely');
+ 	}
+ }
+-test(true, false);
+-test(true, true);
++test(!0, !1);
++test(!0, !0);
+
+```
+
+## `terser/switch/issue_1705_1`
+
+- size: oxc 0 vs reference 45 (-45 bytes)
+
+```js
+var a = 0;
+switch (a) {
+	default: console.log('FAIL');
+	case 0: break;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +0,0 @@
+-var a = 0;
+-if (0 !== a) console.log('FAIL');
+
+```
+
+## `terser/template_string/allow_null_character`
+
+- size: oxc 8 vs reference 16 (-8 bytes)
+
+```js
+`\0`;
+`\0${x}`;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-'\0';
+-`\0${x}`;
++`${x}`;
+
+```
+
+## `terser/template_string/regex_1`
+
+- size: oxc 43 vs reference 49 (-6 bytes)
+
+```js
+console.log(`${/a/} ${6 / 2} ${/b/.test('b')} ${1 ? /c/ : /d/}`);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-console.log(`${/a/} 3 ${/b/.test('b')} ${/c/}`);
++console.log(`/a/ 3 ${/b/.test('b')} /c/`);
+
+```
+
+## `terser/template_string/return_template_string_with_trailing_backslash`
+
+- size: oxc 176 vs reference 206 (-30 bytes)
+
+```js
+function a() {
+	return `foo`;
+}
+function b() {
+	return `\nbar`;
+}
+function c() {
+	return;
+	`baz`;
+}
+function d() {
+	return;
+	`qux`;
+}
+function e() {
+	return `\nfin`;
+}
+console.log(a(), b(), c(), d(), e());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,17 +2,11 @@
+ 	return 'foo';
+ }
+ function b() {
+-	return `\nbar`;
+-}
+-function c() {
+-	return;
+-	'baz';
+-}
+-function d() {
+-	return;
+-	'qux';
++	return '\nbar';
+ }
++function c() {}
++function d() {}
+ function e() {
+-	return `\nfin`;
++	return '\nfin';
+ }
+-console.log(a(), b(), c(), d(), e());
++console.log(a(), b(), void 0, void 0, e());
+
+```
+
+## `terser/template_string/semicolons`
+
+- size: oxc 5 vs reference 12 (-7 bytes)
+
+```js
+foo;
+`bar`;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+ foo;
+-'bar';
+
+```
+
+## `terser/template_string/sequence_1`
+
+- size: oxc 22 vs reference 25 (-3 bytes)
+
+```js
+console.log(`${1, 2} ${/a/, /b/}`);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-console.log(`2 ${/b/}`);
++console.log('2 /b/');
+
+```
+
+## `terser/template_string/special_chars_in_string`
+
+- size: oxc 124 vs reference 126 (-2 bytes)
+
+```js
+var str = `foo ${'`;\n`${any}'} bar`;
+var concat = `foo ${any} bar` + '`;\n`${any}';
+var template = `foo ${'`;\n`${any}'} ${any} bar`;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,5 @@
+ var str = 'foo `;\n`${any} bar';
+-var concat = `foo ${any} bar\`;\n\`\${any}`;
+-var template = `foo \`;\n\`\${any} ${any} bar`;
++var concat = `foo ${any} bar\`;
++\`\${any}`;
++var template = `foo \`;
++\`\${any} ${any} bar`;
+
+```
+
+## `terser/template_string/tagged_call_with_invalid_escape`
+
+- size: oxc 36 vs reference 55 (-19 bytes)
+
+```js
+let z = () => String.raw;
+console.log(z()`\4321\u\x`);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-let z = () => String.raw;
+-console.log(z()`\4321\u\x`);
++console.log(String.raw`\4321\u\x`);
+
+```
+
+## `terser/template_string/tagged_call_with_invalid_escape_2`
+
+- size: oxc 89 vs reference 94 (-5 bytes)
+
+```js
+var x = { y: () => String.raw };
+console.log(x.y()`\4321\u\x`);
+let z = () => String.raw;
+console.log(z()`\4321\u\x`);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-console.log({ y: () => String.raw }.y()`\4321\u\x`), console.log((0, String.raw)`\4321\u\x`);
++console.log({ y: () => String.raw }.y()`\4321\u\x`), console.log(String.raw`\4321\u\x`);
+
+```
+
+## `terser/template_string/tagged_template_parens`
+
+- size: oxc 108 vs reference 112 (-4 bytes)
+
+```js
+a`0`;
+((a) => b)`1`;
+(a = b)`2`;
+(a + b)`3`;
+(a ? b : c)`4`;
+(a, b, c)`5`;
+(~a)`6`;
+a.b`7`;
+a['b']`8`;
+a()`9`;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,10 @@
+ a`0`;
+-((a1) => b)`1`;
++((a) => b)`1`;
+ (a = b)`2`;
+ (a + b)`3`;
+ (a ? b : c)`4`;
+ (a, b, c)`5`;
+ (~a)`6`;
+ a.b`7`;
+-a['b']`8`;
++a.b`8`;
+ a()`9`;
+
+```
+
+## `terser/template_string/tagged_template_with_comment`
+
+- size: oxc 58 vs reference 68 (-10 bytes)
+
+```js
+console.log(String.raw`\u`);
+console.log((() => String.raw)()`\x`);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+ console.log(String.raw`\u`);
+-console.log((() => String.raw)()`\x`);
++console.log(String.raw`\x`);
+
+```
+
+## `terser/template_string/template_evaluate_undefined`
+
+- size: oxc 0 vs reference 63 (-63 bytes)
+
+```js
+() => {
+	let x;
+	console.log(x + `?ts=${Date.now()}`);
+};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +0,0 @@
+-() => {
+-	let x;
+-	console.log(`undefined?ts=${Date.now()}`);
+-};
+
+```
+
+## `terser/template_string/template_strings`
+
+- size: oxc 34 vs reference 56 (-22 bytes)
+
+```js
+``;
+`xx\`x`;
+`${foo + 2}`;
+` foo ${bar + `baz ${qux}`}`;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,2 @@
+-'';
+-'xx`x';
+ `${foo + 2}`;
+-` foo ${bar + `baz ${qux}`}`;
++bar + `baz ${qux}`;
+
+```
+
+## `terser/template_string/template_strings_ascii_only`
+
+- size: oxc 63 vs reference 73 (-10 bytes)
+
+```js
+var foo = `foo\n        bar\n        \u2182\u03c9\u2182`;
+var bar = `\``;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+-var foo = `foo\n        bar\n        \u2182\u03c9\u2182`;
++var foo = 'foo\n        bar\n        ↂωↂ';
+ var bar = '`';
+
+```
+
+## `terser/transform/condition_evaluate`
+
+- size: oxc 10 vs reference 31 (-21 bytes)
+
+```js
+while (1 === 2);
+for (; 1 == true;);
+if (void 0 == null);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1 @@
+-while (0);
+-for (; 1;);
+-if (1);
++for (;;);
+
+```
+
+## `terser/typeof/issue_1668`
+
+- size: oxc 0 vs reference 8 (-8 bytes)
+
+```js
+if (typeof bar);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +0,0 @@
+-if (1);
+
+```
+
+## `terser/typeof/issue_2728_5`
+
+- size: oxc 61 vs reference 71 (-10 bytes)
+
+```js
+(function arguments(arguments) {
+	console.log(typeof arguments);
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-(function arguments(arguments) {
++(function(arguments) {
+ 	console.log(typeof arguments);
+ })();
+
+```
+
+## `terser/unsafe_symbols/unsafe_symbols_1`
+
+- size: oxc 0 vs reference 16 (-16 bytes)
+
+```js
+Symbol('kDog');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +0,0 @@
+-Symbol('kDog');
+
+```
+
+## `terser/unsafe_symbols/unsafe_symbols_2`
+
+- size: oxc 0 vs reference 10 (-10 bytes)
+
+```js
+Symbol('kDog');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +0,0 @@
+-Symbol();
+
+```
+
+## `terser/yield/issue_2689`
+
+- size: oxc 0 vs reference 45 (-45 bytes)
+
+```js
+function* y() {
+	var t = yield x();
+	return new t();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function* y() {
+-	return new (yield x())();
+-}
+
+```
+
+## `terser/yield/issue_2832`
+
+- size: oxc 200 vs reference 202 (-2 bytes)
+
+```js
+function* gen(i) {
+	const result = yield (x = i, -x);
+	var x;
+	console.log(x);
+	console.log(result);
+	yield 2;
+}
+var x = gen(1);
+console.log(x.next('first').value);
+console.log(x.next('second').value);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ function* gen(i) {
+-	const result = yield (x = i, -x);
++	let result = (x = i, yield -x);
+ 	var x;
+ 	console.log(x);
+ 	console.log(result);
+
+```
+
+## `terser/yield/issue_t60`
+
+- size: oxc 115 vs reference 117 (-2 bytes)
+
+```js
+function* t() {
+	const v = yield 1;
+	yield 2;
+	return v;
+}
+var g = t();
+console.log(g.next().value, g.next().value);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ function* t() {
+-	const v = yield 1;
++	let v = yield 1;
+ 	yield 2;
+ 	return v;
+ }
+
+```
+
+## `terser/yield/yield_as_identifier_outside_strict_mode`
+
+- size: oxc 182 vs reference 244 (-62 bytes)
+
+```js
+import yield from 'bar';
+yield = 123;
+while (true) {
+	yield: for (;;) break yield;
+	foo();
+}
+while (true) yield: for (;;) continue yield;
+function yield() {}
+function foo(...yield) {}
+try {
+	new Error('');
+} catch (yield) {}
+var yield = 'foo';
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,13 +1,7 @@
+ import yield from 'bar';
+ yield = 123;
+-while (true) {
+-	yield: for (;;) break yield;
+-	foo();
+-}
+-while (true) yield: for (;;) continue yield;
++for (;;) yield: for (;;) break yield;
++for (;;) yield: for (;;) continue yield;
+ function yield() {}
+ function foo(...yield) {}
+-try {
+-	new Error('');
+-} catch (yield) {}
+ var yield = 'foo';
+
+```
+
+## `terser/yield/yield_before_punctuators`
+
+- size: oxc 192 vs reference 205 (-13 bytes)
+
+```js
+iter = (function* () {
+	assignmentResult = [x = yield] = value;
+})();
+function* g1() {
+	yield;
+}
+function* g2() {
+	[yield];
+}
+function* g3() {
+	yield, yield;
+}
+function* g4() {
+	(yield) ? yield : yield;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -5,11 +5,11 @@
+ 	yield;
+ }
+ function* g2() {
+-	[yield];
++	yield;
+ }
+ function* g3() {
+ 	yield, yield;
+ }
+ function* g4() {
+-	(yield) ? yield : yield;
++	yield, yield;
+ }
+
+```
+
+## `terser/yield/yield_sub`
+
+- size: oxc 82 vs reference 91 (-9 bytes)
+
+```js
+function* foo() {
+	yield x['foo'];
+	(yield x)['foo'];
+	yield (yield obj.foo())['bar']();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ function* foo() {
+-	yield x['foo'];
+-	(yield x)['foo'];
+-	yield (yield obj.foo())['bar']();
++	yield x.foo;
++	(yield x).foo;
++	yield (yield obj.foo()).bar();
+ }
+
+```
+
