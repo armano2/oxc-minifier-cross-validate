@@ -8,13 +8,14 @@ Fixtures run: 18
 
 | config | smaller | not-idempotent | panic | larger | differs | input-parse-error | expected-parse-error | config-error | no-expected | pass | total |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| clean | 9 | 0 | 0 | 5 | 0 | 0 | 0 | 0 | 0 | 2 | 16 |
-| unsupported keys | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| **all** | 11 | 0 | 0 | 5 | 0 | 0 | 0 | 0 | 0 | 2 | 18 |
+| clean | 2 | 0 | 0 | 8 | 2 | 0 | 0 | 0 | 0 | 5 | 17 |
+| unsupported keys | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| **all** | 2 | 0 | 0 | 9 | 2 | 0 | 0 | 0 | 0 | 5 | 18 |
 
 ## Reports
 
 | kind | fixtures | file |
 |---|---:|---|
-| smaller | 11 | [smaller.md](smaller.md) |
-| larger | 5 | [larger.md](larger.md) |
+| smaller | 2 | [smaller.md](smaller.md) |
+| larger | 9 | [larger.md](larger.md) |
+| differs | 2 | [differs.md](differs.md) |

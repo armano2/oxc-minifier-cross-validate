@@ -1,6 +1,6 @@
 # uglify / smaller — Output shorter than expected (possible over-optimization / bug)
 
-Fixtures: 1386
+Fixtures: 1309
 
 [← uglify](README.md) · [← all families](../README.md)
 
@@ -84,16 +84,13 @@ console.log(typeof a);
 --- reference
 +++ oxc
 @@ -1,5 +1,5 @@
--var a;
+ var a;
 -(class {
--	static p = void (a = this);
++class A {
+ 	static p = void (a = this);
 -});
--console.log(typeof a);
-+var e;
-+class t {
-+	static p = void (e = this);
 +}
-+console.log(typeof e);
+ console.log(typeof a);
 
 ```
 
@@ -114,16 +111,13 @@ console.log(typeof a);
 --- reference
 +++ oxc
 @@ -1,5 +1,5 @@
--var a;
+ var a;
 -(class {
--	static p = void (a = this);
++class A {
+ 	static p = void (a = this);
 -});
--console.log(typeof a);
-+var e;
-+class t {
-+	static p = void (e = this);
 +}
-+console.log(typeof e);
+ console.log(typeof a);
 
 ```
 
@@ -214,13 +208,11 @@ class A {
 --- reference
 +++ oxc
 @@ -1,7 +1,7 @@
--var a = 41;
+ var a = 41;
 -(class {
-+var e = 41;
-+class t {
++class A {
  	static p() {
--		console.log(++a);
-+		console.log(++e);
+ 		console.log(++a);
  	}
  	static q = this.p();
 -});
@@ -567,15 +559,12 @@ switch (0) {
 ```diff
 --- reference
 +++ oxc
-@@ -1,7 +1,7 @@
- switch (0) {
--	case console.log(a, a): try {
-+	case console.log(e, e): try {
+@@ -2,6 +2,6 @@
+ 	case console.log(a, a): try {
  		throw 42;
--	} catch (a) {
+ 	} catch (a) {
 -		var a = [][0];
-+	} catch (e) {
-+		var [e] = [];
++		var [a] = [];
  	}
  }
 
@@ -711,10 +700,9 @@ console.log(delete +a);
 --- reference
 +++ oxc
 @@ -1,2 +1,2 @@
--var a = -console;
+ var a = -console;
 -console.log((+a, true));
-+var e = -console;
-+console.log(delete +e);
++console.log(delete +a);
 
 ```
 
@@ -767,7 +755,7 @@ f(1);
 +++ oxc
 @@ -1,7 +1,8 @@
 -!function() {
-+function e() {
++function f() {
  	try {
  		throw 0;
 -	} catch (e) {
@@ -776,7 +764,7 @@ f(1);
  	}
 -}(1);
 +}
-+e(1);
++f(1);
 
 ```
 
@@ -870,13 +858,13 @@ f();
 -		b = { 0: a++ };
 -	} while (console.log(b[b ^= 0]));
 -})();
-+function e() {
-+	var e = 42;
++function f() {
++	var a = 42;
 +	do
-+		var t = { 0: e++ };
-+	while (console.log(t[t ^= 0]));
++		var b = { 0: a++ };
++	while (console.log(b[b ^= 0]));
 +}
-+e();
++f();
 
 ```
 
@@ -905,13 +893,13 @@ f();
 -		b = { p: a };
 -	} while (console.log(b += ''));
 -})();
-+function e() {
-+	var e;
++function f() {
++	var a;
 +	do
-+		var t = { p: e };
-+	while (console.log(t += ''));
++		var b = { p: a };
++	while (console.log(b += ''));
 +}
-+e();
++f();
 
 ```
 
@@ -1277,6 +1265,36 @@ console.log(function() {
 
 ```
 
+## `uglify/merge_vars/issue_5772_2`
+
+- size: oxc 114 vs reference 115 (-1 bytes)
+
+```js
+(function(a) {
+	while (--a) return;
+	var b;
+	var c = console.log('foo') && (b = 1) ? 2 : 3;
+	console.log(b, c);
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,5 @@
+ (function(a) {
+-	if (--a) return;
+-	var b;
+-	var a = console.log('foo') && (b = 1) ? 2 : 3;
+-	console.log(b, a);
++	for (; --a;) return;
++	var b, c = console.log('foo') && (b = 1) ? 2 : 3;
++	console.log(b, c);
+ })();
+
+```
+
 ## `uglify/new/call_with_unary_arguments`
 
 - size: oxc 107 vs reference 108 (-1 bytes)
@@ -1335,6 +1353,31 @@ new (-1)(-2);
 
 ```
 
+## `uglify/pure_getters/lvalues_def`
+
+- size: oxc 68 vs reference 69 (-1 bytes)
+
+```js
+var a = 0, b = 1;
+var a = b++, b = +function() {}();
+a && a[a++];
+console.log(a, b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,3 @@
+-var a = 0, b = 1;
+-a = b++, b = +void 0;
+-a && a++;
++var a = 0, b = 1, a = b++, b = NaN;
++a && a[a++];
+ console.log(a, b);
+
+```
+
 ## `uglify/reduce_vars/issue_2450_5`
 
 - size: oxc 119 vs reference 120 (-1 bytes)
@@ -1360,14 +1403,12 @@ function g() {}
 --- reference
 +++ oxc
 @@ -1,12 +1,13 @@
--var a;
--function g() {}
-+var e;
-+function t(t) {
-+	console.log(e === t);
-+	e = t;
+ var a;
++function f(b) {
++	console.log(a === b);
++	a = b;
 +}
-+function n() {}
+ function g() {}
  [
  	1,
  	2,
@@ -1377,7 +1418,7 @@ function g() {}
 -		console.log(a === b);
 -		a = b;
 -	})(g);
-+	t(n);
++	f(g);
  });
 
 ```
@@ -2001,68 +2042,6 @@ new class {
 
 ```
 
-## `uglify/classes/issue_4720`
-
-- size: oxc 74 vs reference 76 (-2 bytes)
-
-```js
-class A {
-	static p = function f() {};
-}
-console.log(typeof A.p, typeof f);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
--class A {
--	static p = function f() {};
-+class e {
-+	static p = function() {};
- }
--console.log(typeof A.p, typeof f);
-+console.log(typeof e.p, typeof f);
-
-```
-
-## `uglify/classes/issue_4962_1`
-
-- size: oxc 118 vs reference 120 (-2 bytes)
-
-```js
-(function() {
-	function f() {
-		while (console.log(typeof g));
-	}
-	class A {
-		static p = f();
-	}
-})(function g() {});
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,8 @@
- (function() {
- 	function f() {
--		while (console.log(typeof g));
-+		for (; console.log(typeof g););
-+	}
-+	class A {
-+		static p = f();
- 	}
--	(class {
--		static c = f();
--	});
--})(function g() {});
-+})(function() {});
-
-```
-
 ## `uglify/classes/issue_5142`
 
 - size: oxc 114 vs reference 116 (-2 bytes)
@@ -2082,19 +2061,15 @@ if (++a) new class {
 --- reference
 +++ oxc
 @@ -1,7 +1,7 @@
--var a = 0, b;
+ var a = 0, b;
 -if (++a) new class {
--	p = b = null;
--	constructor(c) {
--		console.log(c ? 'FAIL' : 'PASS');
-+var e = 0, t;
-+++e && new class {
-+	p = t = null;
-+	constructor(e) {
-+		console.log(e ? 'FAIL' : 'PASS');
++++a && new class {
+ 	p = b = null;
+ 	constructor(c) {
+ 		console.log(c ? 'FAIL' : 'PASS');
  	}
 -}(b, 1);
-+}(t, e);
++}(b, a);
 
 ```
 
@@ -2114,14 +2089,12 @@ if (A) console.log('PASS');
 ```diff
 --- reference
 +++ oxc
-@@ -1,5 +1,5 @@
--class A {
-+class e {
+@@ -2,4 +2,4 @@
  	static p = this.q;
  	f() {}
  }
 -if (A) console.log('PASS');
-+e && console.log('PASS');
++A && console.log('PASS');
 
 ```
 
@@ -2141,12 +2114,61 @@ if (A) console.log('bar');
 --- reference
 +++ oxc
 @@ -1,4 +1,4 @@
--class A {
-+class e {
+ class A {
  	static p = console.log('foo');
  }
 -if (A) console.log('bar');
-+e && console.log('bar');
++A && console.log('bar');
+
+```
+
+## `uglify/collapse_vars/collapse_and_assign`
+
+- size: oxc 72 vs reference 74 (-2 bytes)
+
+```js
+var log = console.log;
+var a = { p: 'PASS' };
+console && (a = a.p);
+log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-var log = console.log;
+-var a = { p: 'PASS' };
+-log(a = console ? a.p : a);
++var log = console.log, a = { p: 'PASS' };
++console && (a = a.p);
++log(a);
+
+```
+
+## `uglify/collapse_vars/collapse_or_assign`
+
+- size: oxc 68 vs reference 70 (-2 bytes)
+
+```js
+var log = console.log;
+var a = { p: 'PASS' };
+a.q || (a = a.p);
+log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-var log = console.log;
+-var a = { p: 'PASS' };
+-log(a = a.q ? a : a.p);
++var log = console.log, a = { p: 'PASS' };
++a.q || (a = a.p);
++log(a);
 
 ```
 
@@ -2238,51 +2260,42 @@ console.log((b = a) || b, b += 0);
 --- reference
 +++ oxc
 @@ -1,5 +1,5 @@
--var a, b;
+ var a, b;
 -(function f() {
--	a = 42;
-+var e, t;
 +(function() {
-+	e = 42;
+ 	a = 42;
  })();
--console.log((b = a) || b, b += 0);
-+console.log((t = e) || t, t += 0);
+ console.log((b = a) || b, b += 0);
 
 ```
 
-## `uglify/collapse_vars/issue_4920_3`
+## `uglify/collapse_vars/issue_4920_2`
 
-- size: oxc 97 vs reference 99 (-2 bytes)
+- size: oxc 82 vs reference 84 (-2 bytes)
 
 ```js
-var log = console.log;
 var o = { get PASS() {
 	a = 'FAIL';
 } };
 var a = 'PASS', b;
 o[b = a];
-log(b);
+console.log(b);
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,7 +1,7 @@
--var log = console.log;
+@@ -1,6 +1,5 @@
 -var o;
 -var a = 'PASS', b;
 -({ get PASS() {
--	a = 'FAIL';
++var o = { get PASS() {
+ 	a = 'FAIL';
 -} })[b = a];
--log(b);
-+var e = console.log;
-+var t = { get PASS() {
-+	n = 'FAIL';
-+} };
-+var n = 'PASS', r;
-+t[r = n];
-+e(r);
++} }, a = 'PASS', b;
++o[b = a];
+ console.log(b);
 
 ```
 
@@ -2439,9 +2452,9 @@ new A().f();
 ```diff
 --- reference
 +++ oxc
-@@ -1,16 +1,15 @@
--function A() {}
--A.prototype.f = function() {
+@@ -1,14 +1,13 @@
+ function A() {}
+ A.prototype.f = function() {
 -	if (this) {
 -		const a = 'PA';
 -		['SS'].forEach(function(c) {
@@ -2450,24 +2463,17 @@ new A().f();
 -		function g(b) {
 -			h(a + b);
 -		}
-+function e() {}
-+e.prototype.f = function() {
 +	if (!this) return;
-+	let e = 'PA';
-+	function n(e) {
-+		t('PA' + e);
++	let a = 'PA';
++	function g(b) {
++		h('PA' + b);
  	}
-+	['SS'].forEach(function(e) {
-+		n(e);
++	['SS'].forEach(function(c) {
++		g(c);
 +	});
  };
--function h(d) {
--	console.log(d);
-+function t(e) {
-+	console.log(e);
- }
--new A().f();
-+new e().f();
+ function h(d) {
+ 	console.log(d);
 
 ```
 
@@ -2691,31 +2697,8 @@ console.log(b);
 @@ -1,3 +1,2 @@
 -var a, b;
 -console && ([a = 'FAIL'] = [], b = 'PASS');
--console.log(b);
-+if (console) var [e = 'FAIL'] = [], t = e = 'PASS';
-+console.log(t);
-
-```
-
-## `uglify/default-values/issue_5192`
-
-- size: oxc 61 vs reference 63 (-2 bytes)
-
-```js
-(function a(a, [] = a = 'PASS') {
-	console.log(a);
-})('FAIL');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,3 @@
--(function a(a, [] = a = 'PASS') {
-+(function(a, [] = a = 'PASS') {
- 	console.log(a);
- })('FAIL');
++if (console) var [a = 'FAIL'] = [], b = a = 'PASS';
+ console.log(b);
 
 ```
 
@@ -2824,9 +2807,8 @@ console.log(a[0] === b ? 'PASS' : 'FAIL');
 @@ -1,3 +1,2 @@
 -var a = [{}, 42];
 -var b = a[0];
--console.log(a[0] === b ? 'PASS' : 'FAIL');
-+var e = [{}, 42], [t, n] = e;
-+console.log(e[0] === t ? 'PASS' : 'FAIL');
++var a = [{}, 42], [b, c] = a;
+ console.log(a[0] === b ? 'PASS' : 'FAIL');
 
 ```
 
@@ -2847,12 +2829,10 @@ console.log(typeof a);
 +++ oxc
 @@ -1,4 +1,4 @@
 -var a = function f(b) {
--	return b[b += this] = b;
-+var e = function(e) {
-+	return e[e += this] = e;
++var a = function(b) {
+ 	return b[b += this] = b;
  }(0);
--console.log(typeof a);
-+console.log(typeof e);
+ console.log(typeof a);
 
 ```
 
@@ -2951,29 +2931,26 @@ console.log(a);
 ```diff
 --- reference
 +++ oxc
-@@ -1,14 +1,14 @@
+@@ -1,8 +1,8 @@
 -(function() {
--	function g(b) {
++var a = function() {
+ 	function g(b) {
 -		if (b) console.log('FAIL');
-+var e = function() {
-+	function e(e) {
-+		e && console.log('FAIL');
++		b && console.log('FAIL');
  	}
 -	while (1) {
 +	for (;;) {
  		console.log('PASS');
  		try {
  			if (console) return;
--		} catch (e) {
--			return g(e);
-+		} catch (t) {
-+			return e(t);
+@@ -10,5 +10,5 @@
+ 			return g(e);
  		}
  	}
 -})();
 -console.log(void 0);
 +}();
-+console.log(e);
++console.log(a);
 
 ```
 
@@ -3021,8 +2998,8 @@ do {
 +do
 +	for (A in {});
 +while (function() {
-+	console.log(e);
-+	var e = e;
++	console.log(b);
++	var b = b;
 +}());
 
 ```
@@ -3053,8 +3030,8 @@ do {
 +do
 +	for (A in 42 in []);
 +while (function() {
-+	console.log(++e);
-+	var e = e;
++	console.log(++b);
++	var b = b;
 +}());
 
 ```
@@ -3111,15 +3088,15 @@ f();
 +++ oxc
 @@ -1,6 +1,6 @@
 -(function() {
-+function e() {
++function f() {
  	(function() {
 -		0;
  		console.log(1 << 30);
 -	})();
 -})();
-+	})(e);
++	})(f);
 +}
-+e();
++f();
 
 ```
 
@@ -3246,155 +3223,6 @@ f();
 +		console.log(typeof f);
  	})();
  })();
-
-```
-
-## `uglify/ie/issue_3493`
-
-- size: oxc 146 vs reference 148 (-2 bytes)
-
-```js
-var c = 'PASS';
-(function() {
-	try {
-		(function a() {
-			throw {};
-		})();
-	} catch (a) {
-		a >>= 0;
-		a && (c = 'FAIL');
-	}
-})();
-console.log(c);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
- var c = 'PASS';
- (function() {
- 	try {
--		(function a() {
-+		(function() {
- 			throw {};
- 		})();
- 	} catch (a) {
-
-```
-
-## `uglify/ie/issue_3493_ie8`
-
-- size: oxc 146 vs reference 148 (-2 bytes)
-
-```js
-var c = 'PASS';
-(function() {
-	try {
-		(function a() {
-			throw {};
-		})();
-	} catch (a) {
-		a >>= 0;
-		a && (c = 'FAIL');
-	}
-})();
-console.log(c);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
- var c = 'PASS';
- (function() {
- 	try {
--		(function a() {
-+		(function() {
- 			throw {};
- 		})();
- 	} catch (a) {
-
-```
-
-## `uglify/ie/issue_3889`
-
-- size: oxc 80 vs reference 82 (-2 bytes)
-
-```js
-function f(a) {
-	a = 0;
-	(function a() {
-		var a;
-		console.log(a);
-	})();
-}
-f();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,6 @@
- function f(a) {
- 	a = 0;
--	(function a() {
-+	(function() {
- 		var a;
- 		console.log(a);
- 	})();
-
-```
-
-## `uglify/ie/issue_4250`
-
-- size: oxc 90 vs reference 92 (-2 bytes)
-
-```js
-console.log(function f() {
-	(function() {
-		for (f in 'f');
-	})();
-	return f;
-	var f;
-}());
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
--console.log(function f() {
-+console.log(function() {
- 	(function() {
- 		for (f in 'f');
- 	})();
-
-```
-
-## `uglify/ie/issue_4568`
-
-- size: oxc 75 vs reference 77 (-2 bytes)
-
-```js
-console.log(typeof f, function(a) {
-	return a.length;
-}([function f() {}]));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,3 @@
- console.log(typeof f, function(a) {
- 	return a.length;
--}([function f() {}]));
-+}([function() {}]));
 
 ```
 
@@ -3976,67 +3804,6 @@ console.log(b);
 
 ```
 
-## `uglify/merge_vars/collapse_vars_1`
-
-- size: oxc 63 vs reference 65 (-2 bytes)
-
-```js
-var a = a && a.p;
-var b = 'PASS';
-var b = b && console.log(b);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,3 @@
--var a = a && a.p;
--var a;
--var a = (a = 'PASS') && console.log(a);
-+var e = e && e.p;
-+var t = 'PASS';
-+var t = t && console.log(t);
-
-```
-
-## `uglify/merge_vars/collapse_vars_2`
-
-- size: oxc 132 vs reference 134 (-2 bytes)
-
-```js
-'use strict';
-var log = console.log;
-(function g(a) {
-	var b = a;
-	var c = Math.random();
-	var c = b;
-	log(c);
-	return c;
-})('PASS');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,9 +1,9 @@
- 'use strict';
- var log = console.log;
--(function g(a) {
--	var a = a;
-+(function(a) {
-+	var b = a;
- 	var c = Math.random();
--	var c;
--	log(c = a);
-+	var c = b;
-+	log(c);
- 	return c;
- })('PASS');
-
-```
-
 ## `uglify/merge_vars/cross_branch_2a_2`
 
 - size: oxc 192 vs reference 194 (-2 bytes)
@@ -4341,22 +4108,12 @@ if (console.log(typeof b)) console.log(b);
 ```diff
 --- reference
 +++ oxc
-@@ -1,8 +1,8 @@
--var a, b, f = function() {
--	console.log(a);
-+var e, t, n = function() {
-+	console.log(e);
- };
--f();
--a = 'PASS';
--b = 'FAIL';
--f();
+@@ -5,4 +5,4 @@
+ a = 'PASS';
+ b = 'FAIL';
+ f();
 -if (console.log(typeof b)) console.log(b);
-+n();
-+e = 'PASS';
-+t = 'FAIL';
-+n();
-+console.log(typeof t) && console.log(t);
++console.log(typeof b) && console.log(b);
 
 ```
 
@@ -4637,29 +4394,6 @@ console.log({
 
 ```
 
-## `uglify/optional-chains/issue_5039`
-
-- size: oxc 49 vs reference 51 (-2 bytes)
-
-```js
-var a = a?.[function f() {
-	f;
-	a;
-}];
-console.log('PASS');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,2 @@
--var a = a?.[function f() {}];
-+var e = e?.[function() {}];
- console.log('PASS');
-
-```
-
 ## `uglify/optional-chains/unary_parentheses`
 
 - size: oxc 72 vs reference 74 (-2 bytes)
@@ -4683,30 +4417,6 @@ console.log(o.p);
 -}?.()).p++;
 +})().p++;
  console.log(o.p);
-
-```
-
-## `uglify/properties/keep_sandboxed_variable`
-
-- size: oxc 53 vs reference 55 (-2 bytes)
-
-```js
-var foo = 'PASS';
-global.foo = 'FAIL';
-console.log(foo);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,3 @@
--var foo = 'PASS';
--global.o = 'FAIL';
--console.log(foo);
-+var e = 'PASS';
-+global.foo = 'FAIL';
-+console.log(e);
 
 ```
 
@@ -4762,19 +4472,11 @@ function f() {}
 ```diff
 --- reference
 +++ oxc
-@@ -1,7 +1,6 @@
--for (var x, i = 2; --i >= 0;) {
--	var y = x;
--	x = f;
--	console.log(x === y);
-+for (var e, t = 2; --t >= 0;) {
-+	var n = e;
-+	e = r;
-+	console.log(e === n);
+@@ -4,4 +4,3 @@
+ 	console.log(x === y);
  }
--function f() {}
+ function f() {}
 -;
-+function r() {}
 
 ```
 
@@ -5061,27 +4763,6 @@ h = typeof undefined;
 
 ```
 
-## `uglify/varify/escaped_const`
-
-- size: oxc 34 vs reference 36 (-2 bytes)
-
-```js
-const log = console.log;
-log('PASS');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,2 @@
--var log = console.log;
--log('PASS');
-+const e = console.log;
-+e('PASS');
-
-```
-
 ## `uglify/varify/loop_scope_1`
 
 - size: oxc 196 vs reference 198 (-2 bytes)
@@ -5105,21 +4786,16 @@ for (let k in o) setTimeout(function() {
 ```diff
 --- reference
 +++ oxc
-@@ -1,10 +1,10 @@
- 'use strict';
--var o = {
-+var e = {
+@@ -3,8 +3,8 @@
  	foo: 1,
  	bar: 2
  };
 -for (var i in o) console.log(i);
 -for (const j in o) setTimeout(() => console.log(j), 0);
--for (let k in o) setTimeout(function() {
--	console.log(k);
-+for (let t in e) console.log(t);
-+for (let t in e) setTimeout(() => console.log(t), 0);
-+for (let t in e) setTimeout(function() {
-+	console.log(t);
++for (let i in o) console.log(i);
++for (let j in o) setTimeout(() => console.log(j), 0);
+ for (let k in o) setTimeout(function() {
+ 	console.log(k);
  }, 0);
 
 ```
@@ -5147,27 +4823,20 @@ for (var i = 0; i < a.length; i++) {
 ```diff
 --- reference
 +++ oxc
-@@ -1,12 +1,12 @@
+@@ -1,11 +1,11 @@
  'use strict';
--var a = ['foo', 'bar'];
--for (var i = 0; i < a.length; i++) {
+ var a = ['foo', 'bar'];
+ for (var i = 0; i < a.length; i++) {
 -	var x = a[i];
--	console.log(x);
--	let y = a[i];
--	setTimeout(() => console.log(y), 0);
++	let x = a[i];
+ 	console.log(x);
+ 	let y = a[i];
+ 	setTimeout(() => console.log(y), 0);
 -	const z = a[i];
-+var e = ['foo', 'bar'];
-+for (var t = 0; t < e.length; t++) {
-+	let n = e[t];
-+	console.log(n);
-+	let r = e[t];
-+	setTimeout(() => console.log(r), 0);
-+	let i = e[t];
++	let z = a[i];
  	setTimeout(function() {
--		console.log(z);
-+		console.log(i);
+ 		console.log(z);
  	}, 0);
- }
 
 ```
 
@@ -5568,11 +5237,11 @@ console.log(typeof a);
 -{
 -	const a = 42;
 +(function() {
-+	function e() {
++	function f() {
 +		console.log(42);
 +	}
-+	function t() {
-+		for (; e(););
++	function g() {
++		for (; f(););
 +	}
  	(function() {
 -		function g() {
@@ -5581,7 +5250,7 @@ console.log(typeof a);
 -		(function() {
 -			while (g());
 -		})();
-+		for (; t(););
++		for (; g(););
  	})();
 -}
 +})();
@@ -5777,13 +5446,10 @@ console.log(a);
 --- reference
 +++ oxc
 @@ -1,4 +1,3 @@
--var a = 'foo';
--a++ + a;
+ var a = 'foo';
+ a++ + a;
 -a;
--console.log(a);
-+var e = 'foo';
-+e++ + e;
-+console.log(e);
+ console.log(a);
 
 ```
 
@@ -5802,12 +5468,10 @@ console.log(a, b);
 --- reference
 +++ oxc
 @@ -1,3 +1,3 @@
--var a = 123;
+ var a = 123;
 -(a++ + (b = a))[b], 0, b;
--console.log(a, b);
-+var e = 123;
-+(e++ + (b = e))[b], b;
-+console.log(e, b);
++(a++ + (b = a))[b], b;
+ console.log(a, b);
 
 ```
 
@@ -5833,11 +5497,9 @@ if (+b + 1) {
 @@ -1,4 +1,3 @@
 -var a, b;
 -b = a = [];
--a[0] += 0;
--+b + 1 ? console.log('FAIL') : console.log('PASS');
-+var e, t = e = [];
-+e[0] += 0;
-++t + 1 ? console.log('FAIL') : console.log('PASS');
++var a, b = a = [];
+ a[0] += 0;
+ +b + 1 ? console.log('FAIL') : console.log('PASS');
 
 ```
 
@@ -5859,11 +5521,9 @@ console.log(b.p ? 'FAIL' : 'PASS');
 @@ -1,4 +1,3 @@
 -var a, b;
 -b = a = { p: 42 };
--delete a.p;
--console.log(b.p ? 'FAIL' : 'PASS');
-+var e, t = e = { p: 42 };
-+delete e.p;
-+console.log(t.p ? 'FAIL' : 'PASS');
++var a, b = a = { p: 42 };
+ delete a.p;
+ console.log(b.p ? 'FAIL' : 'PASS');
 
 ```
 
@@ -5949,13 +5609,12 @@ for (var a in 'foo') {
 -for (var a in 'foo') {
 -	f = void 0;
 -	var f = function() {};
--	var f;
++for (var a in 'foo') (function() {
++	function f() {}
+ 	var f;
 -	while (console.log(typeof f, a - f));
 -}
-+for (var e in 'foo') (function() {
-+	function t() {}
-+	var t;
-+	for (; console.log(typeof t, e - t););
++	for (; console.log(typeof f, a - f););
 +})();
 
 ```
@@ -5982,13 +5641,12 @@ for (var a in 'foo') {
 -for (var a in 'foo') {
 -	f = void 0;
 -	var f = function() {};
--	var f;
++for (var a in 'foo') (function() {
+ 	var f;
 -	while (console.log(typeof f, a - f));
 -}
-+for (var e in 'foo') (function() {
-+	var t;
-+	function t() {}
-+	for (; console.log(typeof t, e - t););
++	function f() {}
++	for (; console.log(typeof f, a - f););
 +})();
 
 ```
@@ -6025,32 +5683,6 @@ console.log(function() {
 
 ```
 
-## `uglify/functions/issue_3777_2`
-
-- size: oxc 56 vs reference 59 (-3 bytes)
-
-```js
-ff(ff.p);
-function ff(a) {
-	var a = console.log('PASS');
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
--ff(ff.p);
--function ff(a) {
--	var a = console.log('PASS');
-+e(e.p);
-+function e(e) {
-+	var e = console.log('PASS');
- }
-
-```
-
 ## `uglify/functions/issue_5851_1`
 
 - size: oxc 58 vs reference 61 (-3 bytes)
@@ -6067,13 +5699,9 @@ f;
 ```diff
 --- reference
 +++ oxc
-@@ -1,5 +1,4 @@
--console.log('PASS') && f();
--function f() {
--	return f();
-+console.log('PASS') && e();
-+function e() {
-+	return e();
+@@ -2,4 +2,3 @@
+ function f() {
+ 	return f();
  }
 -f;
 
@@ -6131,11 +5759,9 @@ console.log(a++);
 -var a;
 -a = 'FAIL';
 -a = [42];
--console || FAIL(a);
--console.log(a++);
-+var e = 'FAIL', e = [42];
-+console || FAIL(e);
-+console.log(e++);
++var a = 'FAIL', a = [42];
+ console || FAIL(a);
+ console.log(a++);
 
 ```
 
@@ -6158,29 +5784,69 @@ console.log(a *= 7);
 -var a;
 -a = 'FAIL';
 -a = [6];
--console || FAIL(a);
--console.log(a *= 7);
-+var e = 'FAIL', e = [6];
-+console || FAIL(e);
-+console.log(e *= 7);
++var a = 'FAIL', a = [6];
+ console || FAIL(a);
+ console.log(a *= 7);
 
 ```
 
-## `uglify/ie/dont_screw_constants`
+## `uglify/hoist_vars/issue_5638_3`
 
-- size: oxc 21 vs reference 24 (-3 bytes)
+- size: oxc 95 vs reference 98 (-3 bytes)
 
 ```js
-f(undefined, Infinity);
+var log = console.log;
+var o = { foo: 42 };
+for (var k in o) {
+	var v = o[k];
+	log(k || v, v++);
+}
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1 +1 @@
--f(undefined, Infinity);
-+f(void 0, Infinity);
+@@ -1,6 +1,5 @@
+-var log, o, k, v;
+-log = console.log;
+-for (k in o = { foo: 42 }) {
+-	v = o[k];
++var log = console.log, o = { foo: 42 };
++for (var k in o) {
++	var v = o[k];
+ 	log(k || v, v++);
+ }
+
+```
+
+## `uglify/hoist_vars/issue_5638_4`
+
+- size: oxc 97 vs reference 100 (-3 bytes)
+
+```js
+var log = console.log;
+var o = { foo: 6 };
+for (var k in o) {
+	var v = o[k];
+	log(k || v, v *= 7);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,5 @@
+-var log, o, k, v;
+-log = console.log;
+-for (k in o = { foo: 6 }) {
+-	v = o[k];
++var log = console.log, o = { foo: 6 };
++for (var k in o) {
++	var v = o[k];
+ 	log(k || v, v *= 7);
+ }
 
 ```
 
@@ -6331,12 +5997,10 @@ console.log(a);
 --- reference
 +++ oxc
 @@ -1,3 +1,3 @@
--var a = 0;
+ var a = 0;
 -(a = (0, 'PASS')).toString();
--console.log(a);
-+var e = 0;
-+(e ||= 'PASS').toString();
-+console.log(e);
++(a ||= 'PASS').toString();
+ console.log(a);
 
 ```
 
@@ -6472,20 +6136,12 @@ console.log(a);
 ```diff
 --- reference
 +++ oxc
-@@ -1,9 +1,8 @@
- 'use strict';
- {
--	let f = function() {
--		return f && 'PASS';
-+	let t = function() {
-+		return t && 'PASS';
+@@ -5,5 +5,4 @@
  	};
--	var a = f();
-+	var e = t();
+ 	var a = f();
  }
 -a;
--console.log(a);
-+console.log(e);
+ console.log(a);
 
 ```
 
@@ -6508,8 +6164,8 @@ for (let c of [a, b]) console.log(c);
  'use strict';
 -let a = 'foo', b = 'bar';
 -for (let c of [a, b]) console.log(c);
-+let e = 'foo';
-+for (let e of ['foo', 'bar']) console.log(e);
++let a = 'foo';
++for (let c of ['foo', 'bar']) console.log(c);
 
 ```
 
@@ -6564,32 +6220,25 @@ console.log(a);
 ```diff
 --- reference
 +++ oxc
-@@ -1,15 +1,15 @@
--var i = 2, a = 1, b, c, d;
+@@ -1,7 +1,7 @@
+ var i = 2, a = 1, b, c, d;
 -while (i--) {
-+var e = 2, t = 1, n, r, i;
-+for (; e--;) {
++for (; i--;) {
  	try {
 -		if (1 != b) {
--			d = [];
-+		if (n != 1) {
-+			i = [];
++		if (b != 1) {
+ 			d = [];
  			null.p;
--			c = d;
-+			r = i;
- 		} else {
--			b = 0;
--			a = c;
-+			n = 0;
-+			t = r;
+ 			c = d;
+@@ -9,7 +9,7 @@
+ 			b = 0;
+ 			a = c;
  		}
 -	} catch (e) {}
--	b = a;
 +	} catch {}
-+	n = t;
+ 	b = a;
  }
--console.log(a);
-+console.log(t);
+ console.log(a);
 
 ```
 
@@ -6614,11 +6263,9 @@ L: do {
 -		var a = 'FAIL 1';
 -		if (a) continue L;
 -	}
--	var b = 'FAIL 2';
--} while (console.log(b || 'PASS'));
-+	if (console) for (var e = 'FAIL 1'; e; e--) continue L;
-+	var t = 'FAIL 2';
-+} while (console.log(t || 'PASS'));
++	if (console) for (var a = 'FAIL 1'; a; a--) continue L;
+ 	var b = 'FAIL 2';
+ } while (console.log(b || 'PASS'));
 
 ```
 
@@ -6869,26 +6516,21 @@ h();
 --- reference
 +++ oxc
 @@ -1,10 +1,11 @@
--var a;
--function g() {}
--function h() {
+ var a;
++function f(b) {
++	a && console.log(a === b.c);
++	a = b.c;
++}
+ function g() {}
+ function h() {
 -	(function(b) {
 -		if (a) console.log(a === b.c);
 -		a = b.c;
 -	})({ c: g });
-+var e;
-+function t(t) {
-+	e && console.log(e === t.c);
-+	e = t.c;
++	f({ c: g });
  }
--h();
--h();
-+function n() {}
-+function r() {
-+	t({ c: n });
-+}
-+r();
-+r();
+ h();
+ h();
 
 ```
 
@@ -6932,16 +6574,12 @@ console.log(g(false) === g(null));
 ```diff
 --- reference
 +++ oxc
-@@ -1,5 +1,5 @@
--function f() {}
--function g(a) {
--	return a || f;
-+function e() {}
-+function t(t) {
-+	return t || e;
+@@ -2,4 +2,4 @@
+ function g(a) {
+ 	return a || f;
  }
 -console.log(g(false) === g(null));
-+console.log(t(!1) === t(null));
++console.log(g(!1) === g(null));
 
 ```
 
@@ -7002,18 +6640,14 @@ console.log(a);
 --- reference
 +++ oxc
 @@ -1,7 +1,6 @@
--var a = 0;
--function f() {
+ var a = 0;
+ function f() {
 -	var b;
--	a = a;
-+var e = 0;
-+function t() {
-+	e = e;
+ 	a = a;
  }
 -f((a++ && a).toString());
--console.log(a);
-+t && t((e++ && e).toString());
-+console.log(e);
++f && f((a++ && a).toString());
+ console.log(a);
 
 ```
 
@@ -7041,21 +6675,13 @@ try {
 ```diff
 --- reference
 +++ oxc
-@@ -1,13 +1,13 @@
--function f() {
--	a.p;
--	a = null;
-+function e() {
-+	t.p;
-+	t = null;
+@@ -4,10 +4,10 @@
  }
--var a = 42;
-+var t = 42;
+ var a = 42;
  try {
 -	while (!f(a.q)) {
--		a.r;
-+	for (; !e(t.q);) {
-+		t.r;
++	for (; !f(a.q);) {
+ 		a.r;
  		console.log('FAIL');
  	}
 -} catch (e) {
@@ -7124,9 +6750,8 @@ console.log(a, b);
 @@ -1,3 +1,2 @@
 -var b = 1;
 -var a = +b, b = NaN;
--console.log(a, b);
-+var e = 1, t = e++, e = NaN;
-+console.log(t, e);
++var b = 1, a = b++, b = NaN;
+ console.log(a, b);
 
 ```
 
@@ -7151,8 +6776,8 @@ console.log(function(a, ...[b, c]) {
 -	'P'
 -], c + b + a));
 -var a, b, c;
-+console.log(function(e, ...[t, n]) {
-+	return n + t + e;
++console.log(function(a, ...[b, c]) {
++	return c + b + a;
 +}('SS', 'A', 'P'));
 
 ```
@@ -7839,14 +7464,8 @@ try {
 ```diff
 --- reference
 +++ oxc
-@@ -1,10 +1,10 @@
- 'use strict';
- try {
--	console.log(new class A {
-+	console.log(new class e {
- 		constructor() {
--			A = 42;
-+			e = 42;
+@@ -5,6 +5,6 @@
+ 			A = 42;
  		}
  	}());
 -} catch (e) {
@@ -7877,14 +7496,8 @@ try {
 ```diff
 --- reference
 +++ oxc
-@@ -1,10 +1,10 @@
- 'use strict';
- try {
--	console.log(new class A {
-+	console.log(new class e {
- 		f() {
--			A = 42;
-+			e = 42;
+@@ -5,6 +5,6 @@
+ 			A = 42;
  		}
  	}().f());
 -} catch (e) {
@@ -7912,12 +7525,9 @@ try {
 ```diff
 --- reference
 +++ oxc
-@@ -1,7 +1,7 @@
- try {
--	console.log(new class A {
--		p = A = 42;
-+	console.log(new class e {
-+		p = e = 42;
+@@ -2,6 +2,6 @@
+ 	console.log(new class A {
+ 		p = A = 42;
  	}().p);
 -} catch (e) {
 +} catch {
@@ -7948,19 +7558,11 @@ try {
 ```diff
 --- reference
 +++ oxc
-@@ -1,11 +1,11 @@
- 'use strict';
--class A {
-+class e {
- 	constructor() {
--		A = 42;
-+		e = 42;
- 	}
+@@ -6,6 +6,6 @@
  }
  try {
--	console.log(new A());
+ 	console.log(new A());
 -} catch (e) {
-+	console.log(new e());
 +} catch {
  	console.log('PASS');
  }
@@ -8021,12 +7623,32 @@ console.log(new B().p === new B().p ? 'PASS' : 'FAIL');
  'use strict';
 -var A = class {};
 -var B = class {
--	p = A;
-+var e = class {}, t = class {
-+	p = e;
++var A = class {}, B = class {
+ 	p = A;
  };
--console.log(new B().p === new B().p ? 'PASS' : 'FAIL');
-+console.log(new t().p === new t().p ? 'PASS' : 'FAIL');
+ console.log(new B().p === new B().p ? 'PASS' : 'FAIL');
+
+```
+
+## `uglify/classes/keep_fnames`
+
+- size: oxc 65 vs reference 69 (-4 bytes)
+
+```js
+'use strict';
+class Foo {}
+console.log(Foo.name, class Bar {}.name);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ 'use strict';
+ class Foo {}
+-console.log(Foo.name, class Bar {}.name);
++console.log(Foo.name, class {}.name);
 
 ```
 
@@ -8055,6 +7677,28 @@ console.log(new B().p === new B().p ? 'PASS' : 'FAIL');
 +	a = console;
 +	a.log(typeof f);
  })();
+
+```
+
+## `uglify/collapse_vars/chained_4`
+
+- size: oxc 60 vs reference 64 (-4 bytes)
+
+```js
+var a = 'foo', b = 42;
+var b = void (b = a);
+console.log(a, b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,2 @@
+-var a = 'foo', b = 42;
+-var b = void (b = a);
++var a = 'foo', b = 42, b = void (b = a);
+ console.log(a, b);
 
 ```
 
@@ -8139,6 +7783,38 @@ console.log(a);
 
 ```
 
+## `uglify/collapse_vars/issue_2364_4`
+
+- size: oxc 218 vs reference 222 (-4 bytes)
+
+```js
+function inc(obj) {
+	return obj.count++;
+}
+function foo(bar, baz) {
+	var result = inc(bar);
+	return foo.amount = baz.count, result;
+}
+var data = { count: 0 };
+var answer = foo(data, data);
+console.log(foo.amount, answer);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -5,6 +5,5 @@
+ 	var result = inc(bar);
+ 	return foo.amount = baz.count, result;
+ }
+-var data = { count: 0 };
+-var answer = foo(data, data);
++var data = { count: 0 }, answer = foo(data, data);
+ console.log(foo.amount, answer);
+
+```
+
 ## `uglify/collapse_vars/issue_2571_2`
 
 - size: oxc 64 vs reference 68 (-4 bytes)
@@ -8158,14 +7834,11 @@ try {
 +++ oxc
 @@ -1,6 +1,6 @@
  try {
--	var a = A, b = 1;
--	throw a;
+ 	var a = A, b = 1;
+ 	throw a;
 -} catch (e) {
--	console.log(b);
-+	var e = A, t = 1;
-+	throw e;
 +} catch {
-+	console.log(t);
+ 	console.log(b);
  }
 
 ```
@@ -8224,45 +7897,6 @@ console.log(a);
 -} catch (e) {}
 +} catch {}
  console.log(a);
-
-```
-
-## `uglify/collapse_vars/issue_2914_1`
-
-- size: oxc 192 vs reference 196 (-4 bytes)
-
-```js
-function read(input) {
-	var i = 0;
-	var e = 0;
-	var t = 0;
-	while (e < 32) {
-		var n = input[i++];
-		t |= (127 & n) << e;
-		if (0 === (128 & n)) return t;
-		e += 7;
-	}
-}
-console.log(read([129]));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -2,10 +2,10 @@
- 	var i = 0;
- 	var e = 0;
- 	var t = 0;
--	while (e < 32) {
-+	for (; e < 32;) {
- 		var n = input[i++];
- 		t |= (127 & n) << e;
--		if (0 === (128 & n)) return t;
-+		if (!(128 & n)) return t;
- 		e += 7;
- 	}
- }
 
 ```
 
@@ -8418,6 +8052,33 @@ try {
 
 ```
 
+## `uglify/collapse_vars/issue_3698_1`
+
+- size: oxc 97 vs reference 101 (-4 bytes)
+
+```js
+var log = console.log;
+var a, b = 0, c = 0;
+(function() {
+	a = b;
+})(b++, (b++, c++));
+log(a, b, c);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+-var log = console.log;
+-var a, b = 0, c = 0;
++var log = console.log, a, b = 0, c = 0;
+ (function() {
+ 	a = b;
+ })(b++, (b++, c++));
+
+```
+
 ## `uglify/collapse_vars/issue_3698_2`
 
 - size: oxc 122 vs reference 126 (-4 bytes)
@@ -8529,38 +8190,52 @@ try {
 
 ```
 
-## `uglify/collapse_vars/issue_4920_4`
+## `uglify/collapse_vars/issue_4865`
 
-- size: oxc 119 vs reference 123 (-4 bytes)
+- size: oxc 48 vs reference 52 (-4 bytes)
 
 ```js
-var log = console.log;
-var o = { get [(a = 'FAIL 1', 'PASS')]() {
-	a = 'FAIL 2';
-} };
-var a = 'PASS', b;
-o[b = a];
-log(b);
+var NaN;
+var a = NaN = 'PASS';
+console.log(a, NaN);
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,7 +1,7 @@
--var log = console.log;
--var o = { get [(a = 'FAIL 1', 'PASS')]() {
--	a = 'FAIL 2';
-+var e = console.log;
-+var t = { get [(n = 'FAIL 1', 'PASS')]() {
-+	n = 'FAIL 2';
+@@ -1,3 +1,2 @@
+-var NaN;
+-var a = NaN = 'PASS';
++var NaN, a = NaN = 'PASS';
+ console.log(a, NaN);
+
+```
+
+## `uglify/collapse_vars/issue_4977_1`
+
+- size: oxc 81 vs reference 85 (-4 bytes)
+
+```js
+var a = 'FAIL';
+var o = { get p() {
+	return a;
+} };
+a = 'PASS';
+console.log(o.p, a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+-var a = 'FAIL';
+-var o = { get p() {
++var a = 'FAIL', o = { get p() {
+ 	return a;
  } };
--var a = 'PASS', b;
--o[b = a];
--log(b);
-+var n = 'PASS', r;
-+t[r = n];
-+e(r);
+ a = 'PASS';
 
 ```
 
@@ -8632,6 +8307,84 @@ console.log(function(a) {
 
 ```
 
+## `uglify/collapse_vars/issue_5638_3`
+
+- size: oxc 94 vs reference 98 (-4 bytes)
+
+```js
+var log = console.log;
+var a = { foo: 42 }, b;
+for (var k in a) {
+	b = a[k];
+	log(k || b, b++);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+-var log = console.log;
+-var a = { foo: 42 }, b;
++var log = console.log, a = { foo: 42 }, b;
+ for (var k in a) {
+ 	b = a[k];
+ 	log(k || b, b++);
+
+```
+
+## `uglify/collapse_vars/issue_5638_4`
+
+- size: oxc 96 vs reference 100 (-4 bytes)
+
+```js
+var log = console.log;
+var a = { foo: 6 }, b;
+for (var k in a) {
+	b = a[k];
+	log(k || b, b *= 7);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+-var log = console.log;
+-var a = { foo: 6 }, b;
++var log = console.log, a = { foo: 6 }, b;
+ for (var k in a) {
+ 	b = a[k];
+ 	log(k || b, b *= 7);
+
+```
+
+## `uglify/collapse_vars/lvalues_def`
+
+- size: oxc 68 vs reference 72 (-4 bytes)
+
+```js
+var a = 0, b = 1;
+var a = b++, b = +function() {}();
+a && a[a++];
+console.log(a, b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,3 @@
+-var a = 0, b = 1;
+-a = b++, b = +void 0;
++var a = 0, b = 1, a = b++, b = NaN;
+ a && a[a++];
+ console.log(a, b);
+
+```
+
 ## `uglify/collapse_vars/operator_in`
 
 - size: oxc 124 vs reference 128 (-4 bytes)
@@ -8660,6 +8413,34 @@ log(a);
 -} catch (e) {}
 +} catch {}
  log(a);
+
+```
+
+## `uglify/collapse_vars/side_effects_property`
+
+- size: oxc 90 vs reference 94 (-4 bytes)
+
+```js
+var a = [];
+var b = 0;
+a[b++] = function() {
+	return 42;
+};
+var c = a[b++]();
+console.log(c);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+-var a = [];
+-var b = 0;
++var a = [], b = 0;
+ a[b++] = function() {
+ 	return 42;
+ };
 
 ```
 
@@ -8747,10 +8528,10 @@ f();
 -	var o;
 -	console.log('PASS') && (o = true, o = { p: o += console.log('FAIL') });
 -})();
-+function e() {
-+	if (console.log('PASS')) var e = !0, e = { p: e += console.log('FAIL') };
++function f() {
++	if (console.log('PASS')) var o = !0, o = { p: o += console.log('FAIL') };
 +}
-+e();
++f();
 
 ```
 
@@ -8856,14 +8637,12 @@ const a = 'bar';
 +++ oxc
 @@ -1,6 +1,6 @@
  try {
--	a = 'foo';
+ 	a = 'foo';
 -} catch (e) {
-+	e = 'foo';
 +} catch {
  	console.log('PASS');
  }
--const a = 'bar';
-+const e = 'bar';
+ const a = 'bar';
 
 ```
 
@@ -9008,6 +8787,28 @@ try {
 
 ```
 
+## `uglify/default-values/issue_4460`
+
+- size: oxc 74 vs reference 78 (-4 bytes)
+
+```js
+var log = console.log, a = 'FAIL';
+var [b = a] = (a = 'PASS', []);
+log(a, b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,2 @@
+-var log = console.log, a = 'FAIL';
+-var [b = a] = (a = 'PASS', []);
++var log = console.log, a = 'FAIL', [b = a] = (a = 'PASS', []);
+ log(a, b);
+
+```
+
 ## `uglify/default-values/issue_4485_1`
 
 - size: oxc 108 vs reference 112 (-4 bytes)
@@ -9101,6 +8902,32 @@ try {
 
 ```
 
+## `uglify/default-values/issue_4548_2`
+
+- size: oxc 90 vs reference 94 (-4 bytes)
+
+```js
+A = 'foo';
+var a = A;
+var [b = c = 'bar'] = [console, console.log(a)];
+console.log(c);
+var c;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+ A = 'foo';
+-var a = A;
+-var [b = c = 'bar'] = [console, console.log(a)];
++var a = A, [b = c = 'bar'] = [console, console.log(a)];
+ console.log(c);
+ var c;
+
+```
+
 ## `uglify/default-values/issue_4916`
 
 - size: oxc 86 vs reference 90 (-4 bytes)
@@ -9157,6 +8984,34 @@ do {
 
 ```
 
+## `uglify/default-values/issue_5444_1`
+
+- size: oxc 123 vs reference 127 (-4 bytes)
+
+```js
+var a = 42;
+var b = function({} = setImmediate(function() {
+	console.log(a++);
+})) {
+	return this;
+}();
+console.log(typeof b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+-var a = 42;
+-var b = function({} = setImmediate(function() {
++var a = 42, b = function({} = setImmediate(function() {
+ 	console.log(a++);
+ })) {
+ 	return this;
+
+```
+
 ## `uglify/default-values/issue_5536`
 
 - size: oxc 80 vs reference 84 (-4 bytes)
@@ -9206,6 +9061,26 @@ try {
 +} catch {
  	console.log('PASS');
  }
+
+```
+
+## `uglify/destructured/collapse_vars_1`
+
+- size: oxc 48 vs reference 52 (-4 bytes)
+
+```js
+var a = 'PASS';
+var { [a.p]: a } = !console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-var a = 'PASS';
+-var { [a.p]: a } = !console.log(a);
++var a = 'PASS', { [a.p]: a } = !console.log(a);
 
 ```
 
@@ -9540,27 +9415,23 @@ try {
 
 ```
 
-## `uglify/destructured/issue_4286_1`
+## `uglify/destructured/issue_4284_2`
 
-- size: oxc 54 vs reference 58 (-4 bytes)
+- size: oxc 57 vs reference 61 (-4 bytes)
 
 ```js
-var a = 'PASS', b;
-(0 && a)[{a} = b = a];
-console.log(b);
+var a, { [console.log(a)]: b } = (a = 'PASS', 0);
+var c = a;
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,3 +1,3 @@
--var a = 'PASS', b;
--(0 && a)[{a} = b = a];
--console.log(b);
-+var e = 'PASS', t;
-+0[{a: e} = t = e];
-+console.log(t);
+@@ -1,2 +1 @@
+-var a, { [console.log(a)]: b } = (a = 'PASS', 0);
+-var c = a;
++var a, { [console.log(a)]: b } = (a = 'PASS', 0), c = a;
 
 ```
 
@@ -9815,6 +9686,33 @@ try {
 
 ```
 
+## `uglify/destructured/issue_5573`
+
+- size: oxc 110 vs reference 114 (-4 bytes)
+
+```js
+var log = console.log;
+var a = 'FAIL';
+(function([{ [log(a)]: b }]) {
+	A = 42;
+})((a = 'PASS', [{}]));
+log(a, A);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+-var log = console.log;
+-var a = 'FAIL';
++var log = console.log, a = 'FAIL';
+ (function([{ [log(a)]: b }]) {
+ 	A = 42;
+ })((a = 'PASS', [{}]));
+
+```
+
 ## `uglify/destructured/issue_5844`
 
 - size: oxc 73 vs reference 77 (-4 bytes)
@@ -9911,21 +9809,15 @@ console.log(a);
 ```diff
 --- reference
 +++ oxc
-@@ -1,9 +1,9 @@
--var a = function f(b) {
-+var e = function e(t) {
- 	return function() {
--		b++;
-+		t++;
+@@ -3,7 +3,7 @@
+ 		b++;
  		try {
--			return b;
+ 			return b;
 -		} catch (e) {}
-+			return t;
 +		} catch {}
  	}();
  }();
--console.log(a);
-+console.log(e);
+ console.log(a);
 
 ```
 
@@ -9944,10 +9836,9 @@ export default function f() {
 --- reference
 +++ oxc
 @@ -1,3 +1,3 @@
--export default function f() {
+ export default function f() {
 -	if (!(this instanceof f)) throw new Error('must instantiate');
-+export default function e() {
-+	if (!(this instanceof e)) throw Error('must instantiate');
++	if (!(this instanceof f)) throw Error('must instantiate');
  }
 
 ```
@@ -10079,16 +9970,13 @@ while (a--) new function(b) {
 --- reference
 +++ oxc
 @@ -1,9 +1,7 @@
--var a = 1;
+ var a = 1;
 -while (a--) {
 -	b = void 0;
 -	var b = function() {};
--	switch (b) {
--		case b.p:
-+var e = 1;
-+for (; e--;) new function(e) {
-+	switch (e) {
-+		case e.p:
++for (; a--;) new function(b) {
+ 	switch (b) {
+ 		case b.p:
  		case console.log('PASS'):
  	}
 -}
@@ -10115,22 +10003,44 @@ console.log(a);
 ```diff
 --- reference
 +++ oxc
-@@ -1,8 +1,8 @@
--var a;
--function f(b) {
--	a = b;
-+var e;
-+function t(t) {
-+	e = t;
+@@ -2,7 +2,7 @@
+ function f(b) {
+ 	a = b;
  }
 -a = 'foo';
 -console.log(a) || (a = 'bar');
--console.log(a, f('baz'));
--console.log(a);
-+t('foo');
-+console.log(e) || t('bar');
-+console.log(e, t('baz'));
-+console.log(e);
++f('foo');
++console.log(a) || f('bar');
+ console.log(a, f('baz'));
+ console.log(a);
+
+```
+
+## `uglify/hoist_props/direct_access_1`
+
+- size: oxc 82 vs reference 86 (-4 bytes)
+
+```js
+var a = 0;
+var obj = {
+	a: 1,
+	b: 2
+};
+for (var k in obj) a++;
+console.log(a, obj.a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+-var a = 0;
+-var obj = {
++var a = 0, obj = {
+ 	a: 1,
+ 	b: 2
+ };
 
 ```
 
@@ -10488,102 +10398,6 @@ console.log(c);
 
 ```
 
-## `uglify/ie/issue_3484_1_ie8`
-
-- size: oxc 40 vs reference 44 (-4 bytes)
-
-```js
-(function f() {})();
-// IE8: function
-console.log(typeof f);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,2 @@
--(function f() {})();
-+// IE8: function
- console.log(typeof f);
-
-```
-
-## `uglify/ie/issue_3484_1_ie8_toplevel`
-
-- size: oxc 40 vs reference 44 (-4 bytes)
-
-```js
-(function f() {})();
-// IE8: function
-console.log(typeof f);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,2 @@
--(function f() {})();
-+// IE8: function
- console.log(typeof f);
-
-```
-
-## `uglify/ie/issue_3486`
-
-- size: oxc 79 vs reference 83 (-4 bytes)
-
-```js
-(function a() {
-	(function a(a) {
-		console.log(a ? 'FAIL' : 'PASS');
-	})();
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,5 @@
--(function a() {
--	(function a(a) {
-+(function() {
-+	(function(a) {
- 		console.log(a ? 'FAIL' : 'PASS');
- 	})();
- })();
-
-```
-
-## `uglify/ie/issue_3486_ie8`
-
-- size: oxc 79 vs reference 83 (-4 bytes)
-
-```js
-(function a() {
-	(function a(a) {
-		console.log(a ? 'FAIL' : 'PASS');
-	})();
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,5 @@
--(function a() {
--	(function a(a) {
-+(function() {
-+	(function(a) {
- 		console.log(a ? 'FAIL' : 'PASS');
- 	})();
- })();
-
-```
-
 ## `uglify/ie/issue_4028`
 
 - size: oxc 80 vs reference 84 (-4 bytes)
@@ -10603,17 +10417,14 @@ console.log(typeof b);
 --- reference
 +++ oxc
 @@ -1,7 +1,7 @@
--function a() {
-+function e() {
+ function a() {
  	try {
  		A;
 -	} catch (a) {}
 +	} catch {}
  }
--var b = a += a;
--console.log(typeof b);
-+var t = e += e;
-+console.log(typeof t);
+ var b = a += a;
+ console.log(typeof b);
 
 ```
 
@@ -10684,219 +10495,6 @@ f(42);
  }
  f();
  f(42);
-
-```
-
-## `uglify/imports/keep_ref`
-
-- size: oxc 26 vs reference 30 (-4 bytes)
-
-```js
-import foo from 'bar';
-foo();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,2 @@
--import foo from 'bar';
--foo();
-+import e from 'bar';
-+e();
-
-```
-
-## `uglify/issue-1704/mangle_catch`
-
-- size: oxc 73 vs reference 77 (-4 bytes)
-
-```js
-var a = 'FAIL';
-try {
-	throw 1;
-} catch (args) {
-	a = 'PASS';
-}
-console.log(a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
- var a = 'FAIL';
- try {
- 	throw 1;
--} catch (o) {
-+} catch {
- 	a = 'PASS';
- }
- console.log(a);
-
-```
-
-## `uglify/issue-1704/mangle_catch_ie8_toplevel`
-
-- size: oxc 73 vs reference 77 (-4 bytes)
-
-```js
-var a = 'FAIL';
-try {
-	throw 1;
-} catch (args) {
-	a = 'PASS';
-}
-console.log(a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
--var o = 'FAIL';
-+var e = 'FAIL';
- try {
- 	throw 1;
--} catch (c) {
--	o = 'PASS';
-+} catch {
-+	e = 'PASS';
- }
--console.log(o);
-+console.log(e);
-
-```
-
-## `uglify/issue-1704/mangle_catch_toplevel`
-
-- size: oxc 73 vs reference 77 (-4 bytes)
-
-```js
-var a = 'FAIL';
-try {
-	throw 1;
-} catch (args) {
-	a = 'PASS';
-}
-console.log(a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
--var c = 'FAIL';
-+var e = 'FAIL';
- try {
- 	throw 1;
--} catch (o) {
--	c = 'PASS';
-+} catch {
-+	e = 'PASS';
- }
--console.log(c);
-+console.log(e);
-
-```
-
-## `uglify/issue-1704/mangle_catch_var`
-
-- size: oxc 77 vs reference 81 (-4 bytes)
-
-```js
-var a = 'FAIL';
-try {
-	throw 1;
-} catch (args) {
-	var a = 'PASS';
-}
-console.log(a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
- var a = 'FAIL';
- try {
- 	throw 1;
--} catch (o) {
-+} catch {
- 	var a = 'PASS';
- }
- console.log(a);
-
-```
-
-## `uglify/issue-1704/mangle_catch_var_ie8_toplevel`
-
-- size: oxc 77 vs reference 81 (-4 bytes)
-
-```js
-var a = 'FAIL';
-try {
-	throw 1;
-} catch (args) {
-	var a = 'PASS';
-}
-console.log(a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
--var o = 'FAIL';
-+var e = 'FAIL';
- try {
- 	throw 1;
--} catch (r) {
--	var o = 'PASS';
-+} catch {
-+	var e = 'PASS';
- }
--console.log(o);
-+console.log(e);
-
-```
-
-## `uglify/issue-1704/mangle_catch_var_toplevel`
-
-- size: oxc 77 vs reference 81 (-4 bytes)
-
-```js
-var a = 'FAIL';
-try {
-	throw 1;
-} catch (args) {
-	var a = 'PASS';
-}
-console.log(a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
--var r = 'FAIL';
-+var e = 'FAIL';
- try {
- 	throw 1;
--} catch (o) {
--	var r = 'PASS';
-+} catch {
-+	var e = 'PASS';
- }
--console.log(r);
-+console.log(e);
 
 ```
 
@@ -11124,22 +10722,21 @@ console.log(c);
 --- reference
 +++ oxc
 @@ -1,21 +1,20 @@
--var s = 2, c = 0;
+ var s = 2, c = 0;
 -(function o() {
-+var e = 2, t = 0;
-+function n(r, i, a) {
++function f(p, e, r) {
  	try {
 -		for (var r = 1; r-- > 0;) var n = function() {
 -			(function(r) {
 -				r && r[n++];
 -			})(--s >= 0 && o(c++));
 -			for (var r = 1; --r > 0;);
-+		for (var o = 1; o-- > 0;) var s = function(r) {
-+			function i(e) {
-+				e && e[s++];
++		for (var i = 1; i-- > 0;) var a = function(x) {
++			function g(y) {
++				y && y[a++];
 +			}
-+			i(--e >= 0 && n(t++));
-+			for (var a = 1; --a > 0;);
++			g(--s >= 0 && f(c++));
++			for (var j = 1; --j > 0;);
  		}();
 -	} catch (r) {
 +	} catch {
@@ -11151,14 +10748,13 @@ console.log(c);
 -				for (var a in t);
 -			}
 +		} catch {
-+			for (var c = 1; --c > 0;) for (var l = 1; l > 0; --l) for (var c in function() {}) var u = c;
++			for (var k = 1; --k > 0;) for (var l = 1; l > 0; --l) for (var k in function() {}) var o = k;
  		}
  	}
 -})();
--console.log(c);
 +}
-+n();
-+console.log(t);
++f();
+ console.log(c);
 
 ```
 
@@ -11392,14 +10988,12 @@ let a = 'bar';
 @@ -1,7 +1,7 @@
  'use strict';
  try {
--	a = 'foo';
+ 	a = 'foo';
 -} catch (e) {
-+	e = 'foo';
 +} catch {
  	console.log('PASS');
  }
--let a = 'bar';
-+let e = 'bar';
+ let a = 'bar';
 
 ```
 
@@ -11870,6 +11464,33 @@ f();
 
 ```
 
+## `uglify/merge_vars/issue_4103`
+
+- size: oxc 91 vs reference 95 (-4 bytes)
+
+```js
+function f(a) {
+	console.log(a);
+}
+var b = 0;
+var c = f(b++ + (c %= 1 >> console.log(c = 0)));
+b;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+ function f(a) {
+ 	console.log(a);
+ }
+-var b = 0;
+-var c = f(b++ + (c %= 1 >> console.log(c = 0)));
++var b = 0, c = f(b++ + (c %= 1 >> console.log(c = 0)));
+
+```
+
 ## `uglify/merge_vars/issue_4126_1`
 
 - size: oxc 129 vs reference 133 (-4 bytes)
@@ -11926,12 +11547,10 @@ try {
 --- reference
 +++ oxc
 @@ -1,4 +1,4 @@
--var a = 'FAIL', b;
-+var e = 'FAIL', t;
+ var a = 'FAIL', b;
  try {
--	!a && --a && (b = 0)[console] || console.log(b);
+ 	!a && --a && (b = 0)[console] || console.log(b);
 -} catch (e) {}
-+	!e && --e && (t = 0)[console] || console.log(t);
 +} catch {}
 
 ```
@@ -11956,22 +11575,14 @@ do {
 ```diff
 --- reference
 +++ oxc
-@@ -1,9 +1,9 @@
- do {
--	var a = 'FAIL 1';
--	a && a.p;
--	a = 'FAIL 2';
-+	var e = 'FAIL 1';
-+	e && e.p;
-+	e = 'FAIL 2';
+@@ -4,6 +4,6 @@
+ 	a = 'FAIL 2';
  	try {
  		continue;
 -	} catch (e) {}
--	var b = 'FAIL 3';
--} while (console.log(b || 'PASS'));
 +	} catch {}
-+	var t = 'FAIL 3';
-+} while (console.log(t || 'PASS'));
+ 	var b = 'FAIL 3';
+ } while (console.log(b || 'PASS'));
 
 ```
 
@@ -12119,10 +11730,9 @@ do {
 +++ oxc
 @@ -1,3 +1,3 @@
 -do {
--	var a = a?.[42];
--} while (console.log('PASS'));
 +do
-+	var e = e?.[42];
+ 	var a = a?.[42];
+-} while (console.log('PASS'));
 +while (console.log('PASS'));
 
 ```
@@ -12382,19 +11992,9 @@ try {
 ```diff
 --- reference
 +++ oxc
-@@ -1,11 +1,11 @@
--var a;
--console || (a = function() {})(f);
--function f() {
--	a.p;
-+var e;
-+console || (e = function() {})(t);
-+function t() {
-+	e.p;
- }
+@@ -6,6 +6,6 @@
  try {
--	f();
-+	t();
+ 	f();
  	console.log('FAIL');
 -} catch (e) {
 +} catch {
@@ -12428,23 +12028,9 @@ try {
 ```diff
 --- reference
 +++ oxc
-@@ -1,14 +1,14 @@
--var b;
-+var e;
- if (!console) {
--	b = function() {};
--	FAIL(f);
-+	e = function() {};
-+	FAIL(t);
- }
--function f() {
--	b.p;
-+function t() {
-+	e.p;
- }
+@@ -9,6 +9,6 @@
  try {
--	f();
-+	t();
+ 	f();
  	console.log('FAIL');
 -} catch (e) {
 +} catch {
@@ -12489,49 +12075,6 @@ console.log(c);
 
 ```
 
-## `uglify/reduce_vars/escape_local_conditional`
-
-- size: oxc 169 vs reference 173 (-4 bytes)
-
-```js
-function main() {
-	var thing = baz();
-	if (thing !== (thing = baz())) console.log('PASS');
-	else console.log('FAIL');
-}
-function baz(s) {
-	function foo() {}
-	function bar() {}
-	return s ? foo : bar;
-}
-main();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,10 @@
--function baz(s) {
--	return s ? function() {} : function() {};
-+function e() {
-+	var e = t();
-+	e === (e = t()) ? console.log('FAIL') : console.log('PASS');
-+}
-+function t(e) {
-+	function t() {}
-+	function n() {}
-+	return e ? t : n;
- }
--(function() {
--	var thing = baz();
--	if (thing !== baz()) console.log('PASS');
--	else console.log('FAIL');
--})();
-+e();
-
-```
-
 ## `uglify/reduce_vars/inner_var_catch`
 
 - size: oxc 75 vs reference 79 (-4 bytes)
@@ -12560,60 +12103,6 @@ function f() {
  		var b = 1;
  	}
  	console.log(b);
-
-```
-
-## `uglify/reduce_vars/issue_2440_with_1`
-
-- size: oxc 71 vs reference 75 (-4 bytes)
-
-```js
-function foo() {
-	return bar();
-}
-baz = { quux: foo };
-with(o) whatever();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,5 @@
--function foo() {
-+function e() {
- 	return bar();
- }
--baz = { quux: foo };
-+baz = { quux: e };
- with(o) whatever();
-
-```
-
-## `uglify/reduce_vars/issue_2440_with_2`
-
-- size: oxc 71 vs reference 75 (-4 bytes)
-
-```js
-baz = { quux: foo };
-with(o) whatever();
-function foo() {
-	return bar();
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,5 @@
--baz = { quux: foo };
-+baz = { quux: e };
- with(o) whatever();
--function foo() {
-+function e() {
- 	return bar();
- }
 
 ```
 
@@ -12669,9 +12158,40 @@ console.log(a, b);
 @@ -1,3 +1,2 @@
 -var b = 1;
 -var a = b += 1, b = NaN;
--console.log(a, b);
-+var e = 1, t = e += 1, e = NaN;
-+console.log(t, e);
++var b = 1, a = b += 1, b = NaN;
+ console.log(a, b);
+
+```
+
+## `uglify/reduce_vars/perf_8`
+
+- size: oxc 218 vs reference 222 (-4 bytes)
+
+```js
+var indirect_foo = function(x, y, z) {
+	var foo = function(x, y, z) {
+		return x < y ? x * y + z : x * z - y;
+	};
+	return foo(x, y, z);
+};
+var sum = 0;
+for (var i = 0; i < 100; ++i) sum += indirect_foo(i, i + 1, 3 * i);
+console.log(sum);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,7 +2,6 @@
+ 	return function(x, y, z) {
+ 		return x < y ? x * y + z : x * z - y;
+ 	}(x, y, z);
+-};
+-var sum = 0;
++}, sum = 0;
+ for (var i = 0; i < 100; ++i) sum += indirect_foo(i, i + 1, 3 * i);
+ console.log(sum);
 
 ```
 
@@ -12692,12 +12212,10 @@ console.log(a);
 +++ oxc
 @@ -1,4 +1,4 @@
  try {
--	var a = (a.b, 2);
+ 	var a = (a.b, 2);
 -} catch (e) {}
--console.log(a);
-+	var e = (e.b, 2);
 +} catch {}
-+console.log(e);
+ console.log(a);
 
 ```
 
@@ -12863,198 +12381,6 @@ console.log(b);
  	}
  }
  console.log(b);
-
-```
-
-## `uglify/rename/mangle_catch`
-
-- size: oxc 73 vs reference 77 (-4 bytes)
-
-```js
-var a = 'FAIL';
-try {
-	throw 1;
-} catch (args) {
-	a = 'PASS';
-}
-console.log(a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
- var a = 'FAIL';
- try {
- 	throw 1;
--} catch (o) {
-+} catch {
- 	a = 'PASS';
- }
- console.log(a);
-
-```
-
-## `uglify/rename/mangle_catch_ie8_toplevel`
-
-- size: oxc 73 vs reference 77 (-4 bytes)
-
-```js
-var a = 'FAIL';
-try {
-	throw 1;
-} catch (args) {
-	a = 'PASS';
-}
-console.log(a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
--var o = 'FAIL';
-+var e = 'FAIL';
- try {
- 	throw 1;
--} catch (c) {
--	o = 'PASS';
-+} catch {
-+	e = 'PASS';
- }
--console.log(o);
-+console.log(e);
-
-```
-
-## `uglify/rename/mangle_catch_toplevel`
-
-- size: oxc 73 vs reference 77 (-4 bytes)
-
-```js
-var a = 'FAIL';
-try {
-	throw 1;
-} catch (args) {
-	a = 'PASS';
-}
-console.log(a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
--var c = 'FAIL';
-+var e = 'FAIL';
- try {
- 	throw 1;
--} catch (o) {
--	c = 'PASS';
-+} catch {
-+	e = 'PASS';
- }
--console.log(c);
-+console.log(e);
-
-```
-
-## `uglify/rename/mangle_catch_var`
-
-- size: oxc 77 vs reference 81 (-4 bytes)
-
-```js
-var a = 'FAIL';
-try {
-	throw 1;
-} catch (args) {
-	var a = 'PASS';
-}
-console.log(a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
- var a = 'FAIL';
- try {
- 	throw 1;
--} catch (o) {
-+} catch {
- 	var a = 'PASS';
- }
- console.log(a);
-
-```
-
-## `uglify/rename/mangle_catch_var_ie8_toplevel`
-
-- size: oxc 77 vs reference 81 (-4 bytes)
-
-```js
-var a = 'FAIL';
-try {
-	throw 1;
-} catch (args) {
-	var a = 'PASS';
-}
-console.log(a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
--var o = 'FAIL';
-+var e = 'FAIL';
- try {
- 	throw 1;
--} catch (r) {
--	var o = 'PASS';
-+} catch {
-+	var e = 'PASS';
- }
--console.log(o);
-+console.log(e);
-
-```
-
-## `uglify/rename/mangle_catch_var_toplevel`
-
-- size: oxc 77 vs reference 81 (-4 bytes)
-
-```js
-var a = 'FAIL';
-try {
-	throw 1;
-} catch (args) {
-	var a = 'PASS';
-}
-console.log(a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
--var r = 'FAIL';
-+var e = 'FAIL';
- try {
- 	throw 1;
--} catch (o) {
--	var r = 'PASS';
-+} catch {
-+	var e = 'PASS';
- }
--console.log(r);
-+console.log(e);
 
 ```
 
@@ -13417,82 +12743,29 @@ new RegExp('[\udc42-\udcaa\udd74-\udd96\ude45-\ude4f\udea3-\udecc]');
 
 ```
 
-## `uglify/varify/escaped_let`
+## `uglify/yields/collapse_vars_4`
 
-- size: oxc 46 vs reference 50 (-4 bytes)
+- size: oxc 93 vs reference 97 (-4 bytes)
 
 ```js
-'use strict';
-let log = console.log;
-log('PASS');
+var a = 'FAIL';
+var b = function* (c) {
+	return c;
+}(a = 'PASS');
+console.log(a, b.next().done);
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,3 +1,3 @@
- 'use strict';
--var log = console.log;
--log('PASS');
-+let e = console.log;
-+e('PASS');
-
-```
-
-## `uglify/yields/functions_anonymous`
-
-- size: oxc 74 vs reference 78 (-4 bytes)
-
-```js
-var yield = function* () {
-	return 'PASS';
-};
-console.log(yield().next(yield).value);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
--function* yield() {
-+var e = function* () {
- 	return 'PASS';
--}
--console.log(yield().next(yield).value);
-+};
-+console.log(e().next(e).value);
-
-```
-
-## `uglify/yields/functions_inner_var`
-
-- size: oxc 67 vs reference 71 (-4 bytes)
-
-```js
-var yield = function* a() {
-	var a;
-	console.log(a, a);
-};
-yield().next(yield);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,5 @@
--function* yield() {
--	var a;
--	console.log(a, a);
--}
--yield().next(yield);
-+var e = function* () {
-+	var e;
-+	console.log(e, e);
-+};
-+e().next(e);
+@@ -1,5 +1,4 @@
+-var a = 'FAIL';
+-var b = function* (c) {
++var a = 'FAIL', b = function* (c) {
+ 	return c;
+ }(a = 'PASS');
+ console.log(a, b.next().done);
 
 ```
 
@@ -13563,6 +12836,32 @@ console.log(a);
  		FAIL;
  	})();
  })().next();
+
+```
+
+## `uglify/arrows/issue_4401`
+
+- size: oxc 98 vs reference 103 (-5 bytes)
+
+```js
+(function() {
+	var a = ((b) => b(a))(console.log || a);
+	var c = console.log;
+	c && c(typeof b);
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+ (function() {
+-	var a = ((b) => b(a))(console.log || a);
+-	var c = console.log;
++	var a = ((b) => b(a))(console.log || a), c = console.log;
+ 	c && c(typeof b);
+ })();
 
 ```
 
@@ -13715,7 +13014,7 @@ try {
 @@ -1,7 +1,7 @@
  try {
 -	(class extends 42 {
-+	class e extends 42 {
++	class A extends 42 {
  		static [console.log('foo')] = console.log('bar');
 -	});
 -} catch (e) {
@@ -13749,7 +13048,7 @@ try {
  'use strict';
  try {
 -	(class extends 42 {
-+	class e extends 42 {
++	class A extends 42 {
  		static [console.log('foo')] = console.log('bar');
 -	});
 -} catch (e) {
@@ -13810,23 +13109,16 @@ new A();
 ```diff
 --- reference
 +++ oxc
-@@ -1,10 +1,10 @@
--class A {
-+class e {
+@@ -1,7 +1,7 @@
+ class A {
  	p = function() {
 -		var a = function f() {
 -			if (!a) console.log('foo');
-+		var e = function() {
-+			e || console.log('foo');
++		var a = function() {
++			a || console.log('foo');
  			return 42;
--		}(a++);
-+		}(e++);
+ 		}(a++);
  	}();
- }
--new A();
--new A();
-+new e();
-+new e();
 
 ```
 
@@ -13880,6 +13172,67 @@ console.log(null, a, b);
 
 ```
 
+## `uglify/collapse_vars/issue_2364_2`
+
+- size: oxc 163 vs reference 168 (-5 bytes)
+
+```js
+function callValidate() {
+	var validate = compilation.validate;
+	var result = validate.apply(null, arguments);
+	return callValidate.errors = validate.errors, result;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+ function callValidate() {
+-	var validate = compilation.validate;
+-	var result = validate.apply(null, arguments);
++	var validate = compilation.validate, result = validate.apply(null, arguments);
+ 	return callValidate.errors = validate.errors, result;
+ }
+
+```
+
+## `uglify/collapse_vars/issue_2858`
+
+- size: oxc 116 vs reference 121 (-5 bytes)
+
+```js
+var b;
+(function() {
+	function f() {
+		a++;
+	}
+	f();
+	var c = f();
+	var a = void 0;
+	c || (b = a);
+})();
+console.log(b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -4,8 +4,7 @@
+ 		a++;
+ 	}
+ 	f();
+-	var c = f();
+-	var a = void 0;
++	var c = f(), a = void 0;
+ 	c || (b = a);
+ })();
+ console.log(b);
+
+```
+
 ## `uglify/collapse_vars/issue_2954_2`
 
 - size: oxc 163 vs reference 168 (-5 bytes)
@@ -13922,6 +13275,32 @@ console.log(a);
  	} while (0);
  }
  console.log(a);
+
+```
+
+## `uglify/collapse_vars/issue_3096`
+
+- size: oxc 96 vs reference 101 (-5 bytes)
+
+```js
+console.log(function() {
+	var ar = ['a', 'b'];
+	var first = ar.pop();
+	return ar + '' + first;
+}());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+ console.log(function() {
+-	var ar = ['a', 'b'];
+-	var first = ar.pop();
++	var ar = ['a', 'b'], first = ar.pop();
+ 	return ar + '' + first;
+ }());
 
 ```
 
@@ -14157,13 +13536,11 @@ console.log(a);
 --- reference
 +++ oxc
 @@ -1,4 +1,3 @@
--var a = 42;
+ var a = 42;
 -[b = --a] = [console], void 0;
 -var b;
--console.log(a);
-+var e = 42;
-+(function(t = --e) {})(console);
-+console.log(e);
++(function(b = --a) {})(console);
+ console.log(a);
 
 ```
 
@@ -14188,6 +13565,34 @@ console.log(function(a, {}) {
 -}(0, {}));
 +	return typeof a;
 +}(console, {}));
+
+```
+
+## `uglify/destructured/issue_4294`
+
+- size: oxc 103 vs reference 108 (-5 bytes)
+
+```js
+A = 'PASS';
+(function() {
+	var a = function({ [a]: {} }) {}({ [a]: 0 });
+	var b = A;
+	console.log(b);
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,5 @@
+ A = 'PASS';
+ (function() {
+-	var a = function({ [a]: {} }) {}({ [a]: 0 });
+-	var b = A;
++	var a = function({ [a]: {} }) {}({ [a]: 0 }), b = A;
+ 	console.log(b);
+ })();
 
 ```
 
@@ -14275,13 +13680,11 @@ f([A = 42, [] + '' || (A = f)]);
 --- reference
 +++ oxc
 @@ -1,4 +1,4 @@
--function f(a, b) {
--	console.log(b);
-+function e(e, t) {
-+	console.log(t);
+ function f(a, b) {
+ 	console.log(b);
  }
 -f(A = [] + '' ? 42 : f);
-+e([A = 42, A = e]);
++f([A = 42, A = f]);
 
 ```
 
@@ -14341,61 +13744,13 @@ f();
 -		b = { 0: a++ };
 -	} while (console.log(b[b ^= 0]));
 -})();
-+function e() {
-+	var e = 42;
++function f() {
++	var a = 42;
 +	do
-+		var t = { 0: e++ };
-+	while (console.log(t[t ^= 0]));
++		var b = { 0: a++ };
++	while (console.log(b[b ^= 0]));
 +}
-+e();
-
-```
-
-## `uglify/ie/issue_3703`
-
-- size: oxc 114 vs reference 119 (-5 bytes)
-
-```js
-var a = 'PASS';
-function f() {
-	var b;
-	function g() {
-		a = 'FAIL';
-	}
-	var c = g;
-	function h() {
-		f;
-	}
-	a ? b |= c : b.p;
-}
-f();
-console.log(a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,9 +1,10 @@
--var a = 'PASS';
--(function() {
--	var b;
--	var c = function() {
--		a = 'FAIL';
--	};
--	a ? b |= c : b.p;
--})();
--console.log(a);
-+var e = 'PASS';
-+function t() {
-+	var t;
-+	function n() {
-+		e = 'FAIL';
-+	}
-+	e ? t |= n : t.p;
-+}
-+t();
-+console.log(e);
++f();
 
 ```
 
@@ -14586,6 +13941,38 @@ console?.log((void 0)?.p);
 
 ```
 
+## `uglify/optional-chains/issue_5091`
+
+- size: oxc 107 vs reference 112 (-5 bytes)
+
+```js
+function f(a) {
+	var b = a.p;
+	var c;
+	b?.[c = 'FAIL 2'];
+	return b || c;
+}
+console.log(f('FAIL 1') || 'PASS');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,6 @@
+ function f(a) {
+-	var a = a.p;
+-	var c;
+-	a?.[c = 'FAIL 2'];
+-	return a || c;
++	var b = a.p, c;
++	b?.[c = 'FAIL 2'];
++	return b || c;
+ }
+ console.log(f('FAIL 1') || 'PASS');
+
+```
+
 ## `uglify/pure_getters/collapse_rhs_call`
 
 - size: oxc 44 vs reference 49 (-5 bytes)
@@ -14605,11 +13992,11 @@ f();
 +++ oxc
 @@ -1,3 +1,4 @@
 -({}.f = function() {
-+function e() {
++function f() {
  	console.log('PASS');
 -})();
 +}
-+e();
++f();
 
 ```
 
@@ -14630,12 +14017,12 @@ for (var k in o) o[k];
 +++ oxc
 @@ -1,4 +1,4 @@
 -var k, o = { get f() {
-+var e = { get f() {
++var o = { get f() {
  	console.log('PASS');
 -} } || 42;
 -for (k in o) o[k];
 +} };
-+for (var t in e) e[t];
++for (var k in o) o[k];
 
 ```
 
@@ -14673,6 +14060,47 @@ function f() {
  	return a + b;
  	function h() {
  		y();
+
+```
+
+## `uglify/reduce_vars/escape_sequence`
+
+- size: oxc 170 vs reference 175 (-5 bytes)
+
+```js
+function main() {
+	var thing = baz();
+	if (thing !== (thing = baz())) console.log('FAIL');
+	else console.log('PASS');
+}
+function baz() {
+	return foo, bar;
+}
+function foo() {}
+function bar() {}
+main();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,9 @@
++function main() {
++	var thing = baz();
++	thing === (thing = baz()) ? console.log('PASS') : console.log('FAIL');
++}
+ function baz() {
+-	return function() {}, bar;
++	return bar;
+ }
+ function bar() {}
+-(function() {
+-	var thing = baz();
+-	if (thing !== baz()) console.log('FAIL');
+-	else console.log('PASS');
+-})();
++main();
 
 ```
 
@@ -14917,15 +14345,12 @@ f(0 && (a = 0)(f(this)));
 --- reference
 +++ oxc
 @@ -1,5 +1,5 @@
--var a = 'PASS';
--function f() {
+ var a = 'PASS';
+ function f() {
 -	console.log(a || 'FAIL');
-+var e = 'PASS';
-+function t() {
 +	console.log('PASS');
  }
--f(0);
-+t(0);
+ f(0);
 
 ```
 
@@ -15159,15 +14584,12 @@ console.log(g() === g() ? 'PASS' : 'FAIL');
 --- reference
 +++ oxc
 @@ -1,5 +1,5 @@
--function f() {}
--function g() {
+ function f() {}
+ function g() {
 -	return ((a) => a)(...[f]);
-+function e() {}
-+function t() {
-+	return ((e) => e)(e);
++	return ((a) => a)(f);
  }
--console.log(g() === g() ? 'PASS' : 'FAIL');
-+console.log(t() === t() ? 'PASS' : 'FAIL');
+ console.log(g() === g() ? 'PASS' : 'FAIL');
 
 ```
 
@@ -15324,12 +14746,11 @@ console.log(b);
 +++ oxc
 @@ -1,4 +1,3 @@
 -var a = console;
--console.log(typeof a);
++const a = console;
++console.log(typeof a);
+ console.log(typeof a);
 -a = typeof a;
 -console.log(a);
-+const e = console;
-+console.log(typeof e);
-+console.log(typeof e);
 
 ```
 
@@ -15582,46 +15003,6 @@ console.log('PASS');
 
 ```
 
-## `uglify/classes/issue_5389_1`
-
-- size: oxc 123 vs reference 129 (-6 bytes)
-
-```js
-function log(m, n) {
-	console.log(m, n);
-}
-var a = log;
-class A {
-	[a = 'FAIL'] = a = 'PASS';
-}
-var b = new A();
-log(a, b.FAIL);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,9 +1,9 @@
--function log(m, n) {
--	console.log(m, n);
-+function e(e, t) {
-+	console.log(e, t);
- }
--var a = log;
--class A {
--	[a = 'FAIL'] = a = 'PASS';
-+var t = e;
-+class n {
-+	[t = 'FAIL'] = t = 'PASS';
- }
--var b = new A();
--log(a, b.FAIL);
-+var r = new n();
-+e(t, r.FAIL);
-
-```
-
 ## `uglify/collapse_vars/collapse_vars_repeated`
 
 - size: oxc 144 vs reference 150 (-6 bytes)
@@ -15735,6 +15116,38 @@ console.log(function(b) {
 -	} catch (e) {}
 +	} catch {}
  }());
+
+```
+
+## `uglify/collapse_vars/issue_4920_3`
+
+- size: oxc 93 vs reference 99 (-6 bytes)
+
+```js
+var log = console.log;
+var o = { get PASS() {
+	a = 'FAIL';
+} };
+var a = 'PASS', b;
+o[b = a];
+log(b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,5 @@
+-var log = console.log;
+-var o;
+-var a = 'PASS', b;
+-({ get PASS() {
++var log = console.log, o = { get PASS() {
+ 	a = 'FAIL';
+-} })[b = a];
++} }, a = 'PASS', b;
++o[b = a];
+ log(b);
 
 ```
 
@@ -16878,19 +16291,14 @@ do {
 ```diff
 --- reference
 +++ oxc
-@@ -1,8 +1,9 @@
- 'use strict';
- do {
--	function f() {
--		return b;
-+	function t() {
-+		return n;
+@@ -3,6 +3,7 @@
+ 	function f() {
+ 		return b;
  	}
 -	let a = 'PASS'.toString(), b;
--	console.log(a);
-+	var e = 'PASS';
-+	let n;
-+	console.log(e);
++	var a = 'PASS';
++	let b;
+ 	console.log(a);
  } while (!console);
 
 ```
@@ -17523,16 +16931,12 @@ f(console.log(2), f(), a = 3);
 --- reference
 +++ oxc
 @@ -1,6 +1,5 @@
--function f() {
--	console.log(a);
-+function e() {
-+	console.log(t);
+ function f() {
+ 	console.log(a);
  }
 -this;
--var a = 1;
--f(console.log(2), f(), a = 3);
-+var t = 1;
-+e(console.log(2), e(), t = 3);
+ var a = 1;
+ f(console.log(2), f(), a = 3);
 
 ```
 
@@ -17895,43 +17299,6 @@ try {
 
 ```
 
-## `uglify/collapse_vars/issue_2571_1`
-
-- size: oxc 103 vs reference 110 (-7 bytes)
-
-```js
-var b = 1;
-try {
-	var a = function f0(c) {
-		throw c;
-	}(2);
-	var d = --b + a;
-} catch (e) {}
-console.log(b);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,8 @@
--var b = 1;
-+var e = 1;
- try {
--	var a = function f0(c) {
--		throw c;
-+	var t = function(e) {
-+		throw e;
- 	}(2);
--	var d = --b + a;
--} catch (e) {}
--console.log(b);
-+	var n = --e + t;
-+} catch {}
-+console.log(e);
-
-```
-
 ## `uglify/collapse_vars/issue_3651`
 
 - size: oxc 180 vs reference 187 (-7 bytes)
@@ -17958,30 +17325,22 @@ try {
 ```diff
 --- reference
 +++ oxc
-@@ -1,15 +1,15 @@
--var a, b = 'PASS';
-+var e, t = 'PASS';
- try {
--	a = function() {
-+	e = function() {
+@@ -3,13 +3,13 @@
+ 	a = function() {
  		try {
--			var c = 1;
+ 			var c = 1;
 -			while (0 < --c);
 -		} catch (e) {} finally {
-+			var e = 1;
-+			for (; 0 < --e;);
++			for (; 0 < --c;);
 +		} catch {} finally {
  			throw 42;
  		}
  	}();
--	b = 'FAIL';
--	a.p;
+ 	b = 'FAIL';
+ 	a.p;
 -} catch (e) {
--	console.log(b);
-+	t = 'FAIL';
-+	e.p;
 +} catch {
-+	console.log(t);
+ 	console.log(b);
  }
 
 ```
@@ -18042,6 +17401,28 @@ console.log(b);
 
 ```
 
+## `uglify/destructured/issue_4286_1`
+
+- size: oxc 51 vs reference 58 (-7 bytes)
+
+```js
+var a = 'PASS', b;
+(0 && a)[{a} = b = a];
+console.log(b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ var a = 'PASS', b;
+-(0 && a)[{a} = b = a];
++0[{a} = b = a];
+ console.log(b);
+
+```
+
 ## `uglify/drop-unused/issue_3986`
 
 - size: oxc 110 vs reference 117 (-7 bytes)
@@ -18063,23 +17444,18 @@ console.log(b);
 ```diff
 --- reference
 +++ oxc
-@@ -1,10 +1,10 @@
--var a = 0, b = 0;
-+var e = 0, t = 0;
+@@ -2,9 +2,9 @@
  (function() {
  	try {
  		throw 42;
 -	} catch (e) {
--		a++;
 +	} catch {
-+		e++;
+ 		a++;
  	}
 -	b = b && 0;
--})(b *= a);
--console.log(b);
-+	t &&= 0;
-+})(t *= e);
-+console.log(t);
++	b &&= 0;
+ })(b *= a);
+ console.log(b);
 
 ```
 
@@ -18099,13 +17475,12 @@ console.log(f(0), f(1));
 --- reference
 +++ oxc
 @@ -1,4 +1,4 @@
--function f(a) {
+ function f(a) {
 -	return a && 'undefined' != typeof A ? A : 42;
-+function e(e) {
-+	return e && typeof A < 'u' ? A : 42;
++	return a && typeof A < 'u' ? A : 42;
  }
 -console.log(42, f(1));
-+console.log(e(0), e(1));
++console.log(f(0), f(1));
 
 ```
 
@@ -18173,72 +17548,10 @@ do {
 -} while (!console);
 +do
 +	(function() {
-+		var e, t = console[e = t] = e++;
++		var a, b = console[a = b] = a++;
 +		for (; console.log('PASS'););
 +	})();
 +while (!console);
-
-```
-
-## `uglify/hoist_vars/issue_5638_3`
-
-- size: oxc 91 vs reference 98 (-7 bytes)
-
-```js
-var log = console.log;
-var o = { foo: 42 };
-for (var k in o) {
-	var v = o[k];
-	log(k || v, v++);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,5 @@
--var log, o, k, v;
--log = console.log;
--for (k in o = { foo: 42 }) {
--	v = o[k];
--	log(k || v, v++);
-+var e = console.log, t = { foo: 42 };
-+for (var n in t) {
-+	var r = t[n];
-+	e(n || r, r++);
- }
-
-```
-
-## `uglify/hoist_vars/issue_5638_4`
-
-- size: oxc 93 vs reference 100 (-7 bytes)
-
-```js
-var log = console.log;
-var o = { foo: 6 };
-for (var k in o) {
-	var v = o[k];
-	log(k || v, v *= 7);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,5 @@
--var log, o, k, v;
--log = console.log;
--for (k in o = { foo: 6 }) {
--	v = o[k];
--	log(k || v, v *= 7);
-+var e = console.log, t = { foo: 6 };
-+for (var n in t) {
-+	var r = t[n];
-+	e(n || r, r *= 7);
- }
 
 ```
 
@@ -18382,66 +17695,6 @@ f(0);
 
 ```
 
-## `uglify/issue-1704/mangle_catch_ie8`
-
-- size: oxc 73 vs reference 80 (-7 bytes)
-
-```js
-var a = 'FAIL';
-try {
-	throw 1;
-} catch (args) {
-	a = 'PASS';
-}
-console.log(a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
- var a = 'FAIL';
- try {
- 	throw 1;
--} catch (args) {
-+} catch {
- 	a = 'PASS';
- }
- console.log(a);
-
-```
-
-## `uglify/issue-1704/mangle_catch_var_ie8`
-
-- size: oxc 77 vs reference 84 (-7 bytes)
-
-```js
-var a = 'FAIL';
-try {
-	throw 1;
-} catch (args) {
-	var a = 'PASS';
-}
-console.log(a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
- var a = 'FAIL';
- try {
- 	throw 1;
--} catch (args) {
-+} catch {
- 	var a = 'PASS';
- }
- console.log(a);
-
-```
-
 ## `uglify/join_vars/join_expr`
 
 - size: oxc 112 vs reference 119 (-7 bytes)
@@ -18562,19 +17815,16 @@ console.log(b);
 @@ -1,10 +1,10 @@
  switch (0) {
  	default:
--		var a = 'FAIL';
+ 		var a = 'FAIL';
 -		a = a && a;
-+		var e = 'FAIL';
-+		e &&= e;
++		a &&= a;
  		try {
  			break;
 -		} catch (e) {}
--		var b = 42;
 +		} catch {}
-+		var t = 42;
+ 		var b = 42;
  }
--console.log(b);
-+console.log(t);
+ console.log(b);
 
 ```
 
@@ -18669,63 +17919,33 @@ console.log(f(o) ? 'PASS' : 'FAIL');
 
 ```
 
-## `uglify/rename/mangle_catch_ie8`
+## `uglify/sandbox/timers`
 
-- size: oxc 73 vs reference 80 (-7 bytes)
+- size: oxc 173 vs reference 180 (-7 bytes)
 
 ```js
-var a = 'FAIL';
-try {
-	throw 1;
-} catch (args) {
-	a = 'PASS';
-}
-console.log(a);
+var count = 0, interval = 1e3, duration = 3210;
+var timer = setInterval(function() {
+	if (!count++) setTimeout(function() {
+		clearInterval(timer);
+		console.log(count <= 4 ? 'PASS' : 'FAIL');
+	}, duration);
+}, interval);
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,7 +1,7 @@
- var a = 'FAIL';
- try {
- 	throw 1;
--} catch (args) {
-+} catch {
- 	a = 'PASS';
- }
- console.log(a);
-
-```
-
-## `uglify/rename/mangle_catch_var_ie8`
-
-- size: oxc 77 vs reference 84 (-7 bytes)
-
-```js
-var a = 'FAIL';
-try {
-	throw 1;
-} catch (args) {
-	var a = 'PASS';
-}
-console.log(a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
- var a = 'FAIL';
- try {
- 	throw 1;
--} catch (args) {
-+} catch {
- 	var a = 'PASS';
- }
- console.log(a);
+@@ -1,6 +1,5 @@
+-var count = 0;
+-var timer = setInterval(function() {
+-	if (!count++) setTimeout(function() {
++var count = 0, timer = setInterval(function() {
++	count++ || setTimeout(function() {
+ 		clearInterval(timer);
+ 		console.log(count <= 4 ? 'PASS' : 'FAIL');
+ 	}, 3210);
 
 ```
 
@@ -18844,7 +18064,7 @@ if (A = console, 'undefined' != typeof A) for (var a = A, i = 0; i < 2; i++) con
 +++ oxc
 @@ -1 +1 @@
 -if (A = console, 'undefined' != typeof A) for (var a = A, i = 0; i < 2; i++) console.log(void 0 === A, (a, false)), A = void 0;
-+if (A = console, typeof A < 'u') for (var e = A, t = 0; t < 2; t++) console.log(A === void 0, e === void 0), A = void 0;
++if (A = console, typeof A < 'u') for (var a = A, i = 0; i < 2; i++) console.log(A === void 0, a === void 0), A = void 0;
 
 ```
 
@@ -18925,12 +18145,11 @@ console.log(b);
 @@ -1,5 +1,4 @@
  'use strict';
 -var a = console;
--console.log(typeof a);
++let a = console;
++console.log(typeof a);
+ console.log(typeof a);
 -a = typeof a;
 -console.log(a);
-+let e = console;
-+console.log(typeof e);
-+console.log(typeof e);
 
 ```
 
@@ -18952,7 +18171,7 @@ for (var k in [42]) console.log(function f() {
 +++ oxc
 @@ -1 +1 @@
 -for (var k in [42]) console.log(void (k && 0));
-+for (var e in [42]) console.log(void 0);
++for (var k in [42]) console.log(void 0);
 
 ```
 
@@ -18976,7 +18195,7 @@ for (var k in [42]) console.log(function f() {
 @@ -1,2 +1,2 @@
  'use strict';
 -for (var k in [42]) console.log(void (k && 0));
-+for (var e in [42]) console.log(void 0);
++for (var k in [42]) console.log(void 0);
 
 ```
 
@@ -19044,58 +18263,10 @@ console.log(typeof f());
 -console.log(typeof function f() {
 -	return (() => f)();
 -}());
-+function e() {
-+	return e;
++function f() {
++	return f;
 +}
-+console.log(typeof e());
-
-```
-
-## `uglify/awaits/keep_fname`
-
-- size: oxc 50 vs reference 58 (-8 bytes)
-
-```js
-async function await() {
-	console.log('PASS');
-}
-await();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
--async function await() {
-+async function e() {
- 	console.log('PASS');
- }
--await();
-+e();
-
-```
-
-## `uglify/classes/keep_fnames`
-
-- size: oxc 61 vs reference 69 (-8 bytes)
-
-```js
-'use strict';
-class Foo {}
-console.log(Foo.name, class Bar {}.name);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,3 @@
- 'use strict';
--class Foo {}
--console.log(Foo.name, class Bar {}.name);
-+class e {}
-+console.log(e.name, class {}.name);
++console.log(typeof f());
 
 ```
 
@@ -19146,11 +18317,41 @@ var foo = bar();
 @@ -1,4 +1,3 @@
 -var foo;
 -!function(x) {
--	console.log(x);
++(function(x) {
+ 	console.log(x);
 -}(bar());
-+(function(e) {
-+	console.log(e);
 +})(bar());
+
+```
+
+## `uglify/collapse_vars/issue_4920_4`
+
+- size: oxc 115 vs reference 123 (-8 bytes)
+
+```js
+var log = console.log;
+var o = { get [(a = 'FAIL 1', 'PASS')]() {
+	a = 'FAIL 2';
+} };
+var a = 'PASS', b;
+o[b = a];
+log(b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,5 @@
+-var log = console.log;
+-var o = { get [(a = 'FAIL 1', 'PASS')]() {
++var log = console.log, o = { get [(a = 'FAIL 1', 'PASS')]() {
+ 	a = 'FAIL 2';
+-} };
+-var a = 'PASS', b;
++} }, a = 'PASS', b;
+ o[b = a];
+ log(b);
 
 ```
 
@@ -19176,74 +18377,10 @@ console.log(a, b);
 -var b;
 -var c = b = a;
 -console || a(a++);
----b;
--console.log(a, b);
-+var e = 1, t, n = t = e;
-+console || n(e++);
-+--t;
-+console.log(e, t);
-
-```
-
-## `uglify/collapse_vars/issue_5638_3`
-
-- size: oxc 90 vs reference 98 (-8 bytes)
-
-```js
-var log = console.log;
-var a = { foo: 42 }, b;
-for (var k in a) {
-	b = a[k];
-	log(k || b, b++);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,5 @@
--var log = console.log;
--var a = { foo: 42 }, b;
--for (var k in a) {
--	b = a[k];
--	log(k || b, b++);
-+var e = console.log, t = { foo: 42 }, n;
-+for (var r in t) {
-+	n = t[r];
-+	e(r || n, n++);
- }
-
-```
-
-## `uglify/collapse_vars/issue_5638_4`
-
-- size: oxc 92 vs reference 100 (-8 bytes)
-
-```js
-var log = console.log;
-var a = { foo: 6 }, b;
-for (var k in a) {
-	b = a[k];
-	log(k || b, b *= 7);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,5 @@
--var log = console.log;
--var a = { foo: 6 }, b;
--for (var k in a) {
--	b = a[k];
--	log(k || b, b *= 7);
-+var e = console.log, t = { foo: 6 }, n;
-+for (var r in t) {
-+	n = t[r];
-+	e(r || n, n *= 7);
- }
++var a = 1, b, c = b = a;
++console || c(a++);
+ --b;
+ console.log(a, b);
 
 ```
 
@@ -19542,9 +18679,8 @@ console.log(c[0] === a ? 'PASS' : 'FAIL');
 -var a = function() {};
 -var b = a;
 -var c = [c] = [c = a];
--console.log(c[0] === a ? 'PASS' : 'FAIL');
-+var e = function() {}, t = n = e, n = [n] = [n];
-+console.log(n[0] === e ? 'PASS' : 'FAIL');
++var a = function() {}, b = c = a, c = [c] = [c];
+ console.log(c[0] === a ? 'PASS' : 'FAIL');
 
 ```
 
@@ -19922,6 +19058,40 @@ function f() {
 -	a, 1;
 -}
 +function f() {}
+
+```
+
+## `uglify/let/issue_5756_3`
+
+- size: oxc 93 vs reference 101 (-8 bytes)
+
+```js
+'use strict';
+console.log(f()());
+function f() {
+	const a = 'PASS';
+	return function() {
+		return a;
+	};
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+ 'use strict';
+-console.log(function() {
+-	let a = 'PASS';
++console.log(f()());
++function f() {
+ 	return function() {
+-		return a;
++		return 'PASS';
+ 	};
+-}()());
++}
 
 ```
 
@@ -20309,6 +19479,41 @@ console.log(c);
 
 ```
 
+## `uglify/reduce_vars/perf_4`
+
+- size: oxc 227 vs reference 235 (-8 bytes)
+
+```js
+var foo = function(x, y, z) {
+	return x < y ? x * y + z : x * z - y;
+};
+var indirect_foo = function(x, y, z) {
+	return foo(x, y, z);
+};
+var sum = 0;
+for (var i = 0; i < 100; ++i) sum += indirect_foo(i, i + 1, 3 * i);
+console.log(sum);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,7 @@
+ var foo = function(x, y, z) {
+ 	return x < y ? x * y + z : x * z - y;
+-};
+-var indirect_foo = function(x, y, z) {
++}, indirect_foo = function(x, y, z) {
+ 	return foo(x, y, z);
+-};
+-var sum = 0;
++}, sum = 0;
+ for (var i = 0; i < 100; ++i) sum += indirect_foo(i, i + 1, 3 * i);
+ console.log(sum);
+
+```
+
 ## `uglify/regexp/regexp_simple`
 
 - size: oxc 0 vs reference 8 (-8 bytes)
@@ -20547,31 +19752,6 @@ else {
 
 ```
 
-## `uglify/yields/keep_fname`
-
-- size: oxc 52 vs reference 60 (-8 bytes)
-
-```js
-function* yield() {
-	console.log('PASS');
-}
-yield().next();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
--function* yield() {
-+function* e() {
- 	console.log('PASS');
- }
--yield().next();
-+e().next();
-
-```
-
 ## `uglify/arrows/assign_arrow`
 
 - size: oxc 29 vs reference 38 (-9 bytes)
@@ -20652,7 +19832,48 @@ for (var a = (Math, console), b = a.log('PASS'); b;);
 @@ -1,2 +1 @@
 -Math;
 -for (var a, b = console.log('PASS'); b;);
-+for (var e = console.log('PASS'); e;);
++for (var b = console.log('PASS'); b;);
+
+```
+
+## `uglify/collapse_vars/issue_2914_2`
+
+- size: oxc 181 vs reference 190 (-9 bytes)
+
+```js
+function read(input) {
+	var i = 0;
+	var e = 0;
+	var t = 0;
+	while (e < 32) {
+		var n = input[i++];
+		t = (127 & n) << e;
+		if (0 === (128 & n)) return t;
+		e += 7;
+	}
+}
+console.log(read([129]));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,9 @@
+ function read(input) {
+-	var i = 0;
+-	var e = 0;
+-	var t = 0;
+-	while (e < 32) {
++	var i = 0, e = 0, t = 0;
++	for (; e < 32;) {
+ 		var n = input[i++];
+-		if (0 === (128 & n)) return t = (127 & n) << e;
++		t = (127 & n) << e;
++		if (!(128 & n)) return t;
+ 		e += 7;
+ 	}
+ }
 
 ```
 
@@ -20675,9 +19896,8 @@ console.log(b);
 @@ -1,3 +1,2 @@
 -var a = 0 == typeof f, b = 0;
 -var a = void (b |= ++a);
--console.log(b);
-+var e = !1, t = 0, e = void (e++ + (t |= e));
-+console.log(t);
++var a = !1, b = 0, a = void (a++ + (b |= a));
+ console.log(b);
 
 ```
 
@@ -20698,13 +19918,12 @@ console.log(+function(a) {
 --- reference
 +++ oxc
 @@ -1,3 +1,4 @@
--var b = 1;
+ var b = 1;
 -var a;
 -console.log((a = --b + (0 !== typeof A), +void ((a >>= 0) && console.log('PASS'))));
-+var e = 1;
-+console.log(+function(t) {
-+	e = t, (t >>= 0) && console.log('PASS');
-+}(--e + !0));
++console.log(+function(a) {
++	b = a, (a >>= 0) && console.log('PASS');
++}(--b + !0));
 
 ```
 
@@ -20728,35 +19947,6 @@ console.log(function() {
 @@ -1 +1 @@
 -console.log(function() {}());
 +console.log(void 0);
-
-```
-
-## `uglify/collapse_vars/switch_case_2`
-
-- size: oxc 82 vs reference 91 (-9 bytes)
-
-```js
-var a = 1, b = 2;
-switch (b++) {
-	case b:
-		var c = a;
-		var a;
-		break;
-}
-console.log(a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -3,6 +3,5 @@
- 	case b:
- 		var c = a;
- 		var a;
--		break;
- }
- console.log(a);
 
 ```
 
@@ -20950,11 +20140,10 @@ o.f(42);
 +++ oxc
 @@ -1,4 +1,3 @@
 -var o = { f(a) {
--	return a ? console.log('PASS') : super.log('PASS');
++({ f(a) {
+ 	return a ? console.log('PASS') : super.log('PASS');
 -} };
 -o.f(42);
-+({ f(e) {
-+	return e ? console.log('PASS') : super.log('PASS');
 +} }).f(42);
 
 ```
@@ -20976,11 +20165,10 @@ var b = a();
 +++ oxc
 @@ -1,4 +1,3 @@
 -var a = function f() {
--	var f = console.log(typeof f);
++(function f() {
+ 	var f = console.log(typeof f);
 -};
 -a();
-+(function e() {
-+	var e = console.log(typeof e);
 +})();
 
 ```
@@ -21154,8 +20342,8 @@ console.log(typeof a, b);
  'use strict';
 -var b = 0 * function() {};
 -console.log(typeof void 0, b);
-+var e;
-+console.log(typeof e, 0 * function() {});
++var a;
++console.log(typeof a, 0 * function() {});
 
 ```
 
@@ -21252,22 +20440,14 @@ for (var i = 0; i < 2; i++) switch (--a) {
 ```diff
 --- reference
 +++ oxc
-@@ -1,10 +1,9 @@
--var a = 0;
--for (var i = 0; i < 2; i++) switch (--a) {
-+var e = 0;
-+for (var t = 0; t < 2; t++) switch (--e) {
+@@ -3,7 +3,6 @@
  	case 0:
--		var b = 0;
-+		var n = 0;
+ 		var b = 0;
  		break;
 -	case 0:
  	default:
--		var c = 1 + (0 | (b && A));
--		console.log(c);
-+		var r = 1 + (0 | (n && A));
-+		console.log(r);
- }
+ 		var c = 1 + (0 | (b && A));
+ 		console.log(c);
 
 ```
 
@@ -21461,13 +20641,12 @@ console.log(a, b);
 --- reference
 +++ oxc
 @@ -1,4 +1,3 @@
--var a = 0, b = 0;
+ var a = 0, b = 0;
 -var o = ((c) => +a + c)([b]);
 -for (var k in o) b++;
 -console.log(1, b);
-+var e = 0, t = 0;
-+for (var n in ((...t) => e++ + t)(t)) t++;
-+console.log(e, t);
++for (var k in ((...c) => a++ + c)(b)) b++;
++console.log(a, b);
 
 ```
 
@@ -21491,14 +20670,12 @@ console.log(b);
 @@ -1,6 +1,5 @@
 -var a = 'PASS', b;
 -console;
-+var e = 'PASS', t = e;
++var a = 'PASS', b = a;
  (function() {
--	a++;
+ 	a++;
 -})(...b = a);
--console.log(b);
-+	e++;
-+})(...e);
-+console.log(t);
++})(...a);
+ console.log(b);
 
 ```
 
@@ -22050,67 +21227,6 @@ test(-1);
 
 ```
 
-## `uglify/destructured/issue_4323`
-
-- size: oxc 112 vs reference 122 (-10 bytes)
-
-```js
-var a = 0;
-(function b({ [function a() {
-	console.log(typeof a);
-}()]: d }) {})(0);
-(function c(e) {
-	e.p;
-})(1, console.log);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,6 @@
--var a = 0;
--[{[function a() {
--	console.log(typeof a);
--}()]: d}] = [0], void 0;
--var d;
--e = 1, console.log, void e.p;
--var e;
-+(function({ [function e() {
-+	console.log(typeof e);
-+}()]: e }) {})(0);
-+(function(e) {
-+	e.p;
-+})(1, console.log);
-
-```
-
-## `uglify/destructured/issue_5370`
-
-- size: oxc 70 vs reference 80 (-10 bytes)
-
-```js
-console.log(function arguments({}) {
-	return arguments;
-	try {} catch (e) {
-		var arguments;
-	}
-}(42));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
--console.log(function arguments({}) {
-+console.log(function({}) {
- 	return arguments;
- 	var arguments;
- }(42));
-
-```
-
 ## `uglify/functions/issue_3512`
 
 - size: oxc 97 vs reference 107 (-10 bytes)
@@ -22160,38 +21276,6 @@ console.log(N, N);
 
 ```
 
-## `uglify/hoist_props/direct_access_1`
-
-- size: oxc 76 vs reference 86 (-10 bytes)
-
-```js
-var a = 0;
-var obj = {
-	a: 1,
-	b: 2
-};
-for (var k in obj) a++;
-console.log(a, obj.a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,6 @@
--var a = 0;
--var obj = {
-+var e = 0, t = {
- 	a: 1,
- 	b: 2
- };
--for (var k in obj) a++;
--console.log(a, obj.a);
-+for (var n in t) e++;
-+console.log(e, t.a);
-
-```
-
 ## `uglify/imports/forbid_merge`
 
 - size: oxc 79 vs reference 89 (-10 bytes)
@@ -22209,14 +21293,11 @@ f();
 --- reference
 +++ oxc
 @@ -1,5 +1,3 @@
--import A from 'foo';
--export default class extends A {}
--var f = () => () => {};
+ import A from 'foo';
+ export default class extends A {}
+ var f = () => () => {};
 -f();
 -f();
-+import e from 'foo';
-+export default class extends e {}
-+var t = () => () => {};
 
 ```
 
@@ -22300,6 +21381,28 @@ console.log(obj[void 0], obj[undefined], obj['undefined'], obj[0 / 0], obj[NaN],
  };
 -console.log(obj[void 0], obj[void 0], obj['undefined'], obj[0 / 0], obj[NaN], obj['NaN'], obj[1 / 0], obj[1 / 0], obj['Infinity'], obj[-1 / 0], obj[-(1 / 0)], obj['-Infinity'], obj[null], obj['null']);
 +console.log(obj[void 0], obj[void 0], obj.undefined, obj[NaN], obj[NaN], obj.NaN, obj[1 / 0], obj[Infinity], obj.Infinity, obj[-1 / 0], obj[-Infinity], obj['-Infinity'], obj[null], obj.null);
+
+```
+
+## `uglify/merge_vars/collapse_vars_1`
+
+- size: oxc 55 vs reference 65 (-10 bytes)
+
+```js
+var a = a && a.p;
+var b = 'PASS';
+var b = b && console.log(b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1 @@
+-var a = a && a.p;
+-var a;
+-var a = (a = 'PASS') && console.log(a);
++var a = a && a.p, b = 'PASS', b = b && console.log(b);
 
 ```
 
@@ -22495,112 +21598,6 @@ console.log(function(a) {
  		case 0: return 'FAIL';
  		case !1: return 'PASS';
  	}
-
-```
-
-## `uglify/reduce_vars/unsafe_evaluate_array_5`
-
-- size: oxc 97 vs reference 107 (-10 bytes)
-
-```js
-var arr = [
-	1,
-	2,
-	function() {
-		return ++this[0];
-	}
-];
-console.log(arr[0], arr[1], arr[2](), arr[0]);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,8 @@
--var arr = [
-+var e = [
- 	1,
- 	2,
- 	function() {
- 		return ++this[0];
- 	}
- ];
--console.log(arr[0], arr[1], arr[2](), arr[0]);
-+console.log(e[0], e[1], e[2](), e[0]);
-
-```
-
-## `uglify/reduce_vars/unsafe_evaluate_object_3`
-
-- size: oxc 186 vs reference 196 (-10 bytes)
-
-```js
-var obj = {
-	get foo() {
-		return 1;
-	},
-	bar: 2,
-	square: function(x) {
-		return x * x;
-	},
-	cube: function(x) {
-		return x * x * x;
-	}
-};
-console.log(obj.foo, obj.bar, obj.square(2), obj.cube);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,13 +1,13 @@
--var obj = {
-+var e = {
- 	get foo() {
- 		return 1;
- 	},
- 	bar: 2,
--	square: function(x) {
--		return x * x;
-+	square: function(e) {
-+		return e * e;
- 	},
--	cube: function(x) {
--		return x * x * x;
-+	cube: function(e) {
-+		return e * e * e;
- 	}
- };
--console.log(obj.foo, obj.bar, obj.square(2), obj.cube);
-+console.log(e.foo, e.bar, e.square(2), e.cube);
-
-```
-
-## `uglify/rests/issue_5370`
-
-- size: oxc 70 vs reference 80 (-10 bytes)
-
-```js
-console.log(function arguments(...a) {
-	return arguments;
-	try {} catch (e) {
-		var arguments;
-	}
-}());
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
--console.log(function arguments(...a) {
-+console.log(function(...a) {
- 	return arguments;
- 	var arguments;
- }());
 
 ```
 
@@ -22844,6 +21841,40 @@ console.log(A);
 
 ```
 
+## `uglify/classes/issue_5389_2`
+
+- size: oxc 121 vs reference 132 (-11 bytes)
+
+```js
+function log(m, n) {
+	console.log(m, n);
+}
+var a = log;
+var A = class {
+	[a = 'FAIL'] = a = 'PASS';
+};
+var b = new A();
+log(a, b.FAIL);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,7 @@
+ function log(m, n) {
+ 	console.log(m, n);
+ }
+-var a = log;
+-var A;
+-var b = new class {
++var a = log, b = new class {
+ 	[a = 'FAIL'] = a = 'PASS';
+ }();
+ log(a, b.FAIL);
+
+```
+
 ## `uglify/collapse_vars/cascade_return`
 
 - size: oxc 35 vs reference 46 (-11 bytes)
@@ -22867,30 +21898,6 @@ function f(a) {
 
 ```
 
-## `uglify/collapse_vars/chained_5`
-
-- size: oxc 50 vs reference 61 (-11 bytes)
-
-```js
-var a = 'PASS';
-var a = (console, console.log(a));
-a && ++a;
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,3 @@
- var a = 'PASS';
--console;
--var a;
--(a = console.log(a)) && ++a;
-+var a = console.log(a);
-+a && ++a;
-
-```
-
 ## `uglify/collapse_vars/issue_4874`
 
 - size: oxc 69 vs reference 80 (-11 bytes)
@@ -22909,11 +21916,10 @@ a = null;
 +++ oxc
 @@ -1,4 +1,3 @@
 -null;
--(function(b) {
+ (function(b) {
 -	for (var c in 42, 42[console.log('PASS')]) console;
 -})();
-+(function(e) {
-+	for (var t in e &&= e[console.log('PASS')]);
++	for (var c in b &&= b[console.log('PASS')]);
 +})(42);
 
 ```
@@ -22964,13 +21970,11 @@ console.log(b);
 --- reference
 +++ oxc
 @@ -1,4 +1,3 @@
--const a = console;
--console.log(typeof a);
+ const a = console;
+ console.log(typeof a);
 -var b = typeof a;
 -console.log(b);
-+const e = console;
-+console.log(typeof e);
-+console.log(typeof e);
++console.log(typeof a);
 
 ```
 
@@ -23053,37 +22057,6 @@ try {
 
 ```
 
-## `uglify/destructured/side_effects_object`
-
-- size: oxc 80 vs reference 91 (-11 bytes)
-
-```js
-var a = null, b = console, { c } = 42;
-try {
-	c[a = 'PASS'];
-} catch (e) {
-	console.log(a);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,6 @@
--var a = null, c = (console, 42 .c);
-+var e = null, { c: t } = 42;
- try {
--	c[a = 'PASS'];
--} catch (e) {
--	console.log(a);
-+	t[e = 'PASS'];
-+} catch {
-+	console.log(e);
- }
-
-```
-
 ## `uglify/drop-unused/cascade_drop_assign`
 
 - size: oxc 21 vs reference 32 (-11 bytes)
@@ -23124,20 +22097,11 @@ console.log(g());
 ```diff
 --- reference
 +++ oxc
-@@ -1,9 +1,8 @@
+@@ -1,4 +1,3 @@
 -var a = 1;
  try {
  	throw 2;
--} catch (a) {
--	function g() {
--		return a;
-+} catch (t) {
-+	function e() {
-+		return t;
- 	}
- }
--console.log(g());
-+console.log(e());
+ } catch (a) {
 
 ```
 
@@ -23193,110 +22157,6 @@ console.log(typeof o.f());
 
 ```
 
-## `uglify/ie/single_use_catch_redefined`
-
-- size: oxc 81 vs reference 92 (-11 bytes)
-
-```js
-var a = 1;
-try {
-	throw 2;
-} catch (a) {
-	function g() {
-		return a;
-	}
-}
-console.log(g());
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,9 +1,8 @@
--var a = 1;
- try {
- 	throw 2;
--} catch (a) {
--	function g() {
--		return a;
-+} catch (t) {
-+	function e() {
-+		return t;
- 	}
- }
--console.log(g());
-+console.log(e());
-
-```
-
-## `uglify/ie/single_use_inline_catch_redefined`
-
-- size: oxc 81 vs reference 92 (-11 bytes)
-
-```js
-var a = 1;
-try {
-	throw 2;
-} catch (a) {
-	function g() {
-		return a;
-	}
-}
-console.log(g());
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,9 +1,8 @@
--var a = 1;
- try {
- 	throw 2;
--} catch (a) {
--	function g() {
--		return a;
-+} catch (t) {
-+	function e() {
-+		return t;
- 	}
- }
--console.log(g());
-+console.log(e());
-
-```
-
-## `uglify/ie/typeof_getAttribute_ie6`
-
-- size: oxc 253 vs reference 264 (-11 bytes)
-
-```js
-document = {
-	createElement: function() {
-		return { getAttribute: function() {} };
-	},
-	write: console.log
-};
-document.write(function(element) {
-	if (element) return 'undefined' === typeof element.getAttribute;
-}(document.createElement('foo')) ? 'FAIL' : 'PASS');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -5,5 +5,5 @@
- 	write: console.log
- };
- document.write(function(element) {
--	if (element) return 'undefined' == typeof element.getAttribute;
-+	if (element) return element.getAttribute === void 0;
- }(document.createElement('foo')) ? 'FAIL' : 'PASS');
-
-```
-
 ## `uglify/issue-2719/warn`
 
 - size: oxc 112 vs reference 123 (-11 bytes)
@@ -23319,16 +22179,15 @@ console.log(f(1, 2, 3).length);
 @@ -1,4 +1,8 @@
 -// TypeError: Cannot read property 'arguments' of null
 -console.log(function g() {
--	return g.caller.arguments;
--}().length);
-+function e() {
-+	return t();
++function f() {
++	return g();
 +}
-+function t() {
-+	return t.caller.arguments;
++function g() {
+ 	return g.caller.arguments;
+-}().length);
 +}
 +// 3
-+console.log(e(1, 2, 3).length);
++console.log(f(1, 2, 3).length);
 
 ```
 
@@ -23374,13 +22233,11 @@ console.log(b);
 +++ oxc
 @@ -1,5 +1,4 @@
  'use strict';
--let a = console;
--console.log(typeof a);
+ let a = console;
+ console.log(typeof a);
 -var b = typeof a;
 -console.log(b);
-+let e = console;
-+console.log(typeof e);
-+console.log(typeof e);
++console.log(typeof a);
 
 ```
 
@@ -23614,21 +22471,19 @@ function g() {
 +++ oxc
 @@ -1,10 +1,10 @@
 -var a = 'PASS';
--function g() {
++function f() {
++	return 'PASS';
++}
+ function g() {
 -	return function() {
 -		return a;
 -	}();
-+function e() {
-+	return 'PASS';
-+}
-+function t() {
-+	return e();
++	return f();
  }
  (function() {
--	var a = 'FAIL';
+ 	var a = 'FAIL';
 -	if (a == a) console.log(g());
-+	var e = 'FAIL';
-+	e == e && console.log(t());
++	a == a && console.log(g());
  })();
 
 ```
@@ -23959,6 +22814,102 @@ console.log((() => ({ 4: 2 }))()[4]);
 
 ```
 
+## `uglify/collapse_vars/issue_2571_1`
+
+- size: oxc 98 vs reference 110 (-12 bytes)
+
+```js
+var b = 1;
+try {
+	var a = function f0(c) {
+		throw c;
+	}(2);
+	var d = --b + a;
+} catch (e) {}
+console.log(b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,7 @@
+ var b = 1;
+ try {
+-	var a = function f0(c) {
++	var a = function(c) {
+ 		throw c;
+-	}(2);
+-	var d = --b + a;
+-} catch (e) {}
++	}(2), d = --b + a;
++} catch {}
+ console.log(b);
+
+```
+
+## `uglify/collapse_vars/issue_3526_1`
+
+- size: oxc 82 vs reference 94 (-12 bytes)
+
+```js
+var b = function() {
+	this.a = 'FAIL';
+}();
+var a = 'PASS';
+var b;
+var c = b;
+console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,4 @@
+ var b = function() {
+ 	this.a = 'FAIL';
+-}();
+-var a = 'PASS';
+-var b;
+-var c = b;
++}(), a = 'PASS', b, c = b;
+ console.log(a);
+
+```
+
+## `uglify/collapse_vars/issue_3526_2`
+
+- size: oxc 86 vs reference 98 (-12 bytes)
+
+```js
+function f() {
+	this.a = 'FAIL';
+}
+var b = f();
+var a = 'PASS';
+var b;
+var c = b;
+console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,5 @@
+ function f() {
+ 	this.a = 'FAIL';
+ }
+-var b = f();
+-var a = 'PASS';
+-var b;
+-var c = b;
++var b = f(), a = 'PASS', b, c = b;
+ console.log(a);
+
+```
+
 ## `uglify/collapse_vars/issue_4038`
 
 - size: oxc 71 vs reference 83 (-12 bytes)
@@ -24006,11 +22957,9 @@ console.log(a++);
 -var a;
 -console;
 -a = [42];
--console || FAIL(a);
--console.log(a++);
-+var e = [42];
-+console || FAIL(e);
-+console.log(e++);
++var a = [42];
+ console || FAIL(a);
+ console.log(a++);
 
 ```
 
@@ -24034,11 +22983,9 @@ console.log(a *= 7);
 -var a;
 -console;
 -a = [6];
--console || FAIL(a);
--console.log(a *= 7);
-+var e = [6];
-+console || FAIL(e);
-+console.log(e *= 7);
++var a = [6];
+ console || FAIL(a);
+ console.log(a *= 7);
 
 ```
 
@@ -24179,20 +23126,13 @@ console.log(function() {
 ```diff
 --- reference
 +++ oxc
-@@ -1,10 +1,9 @@
- (function() {
- 	console.log(1);
- })();
--(function(a) {
--	console.log(a);
-+(function(e) {
-+	console.log(e);
+@@ -5,6 +5,5 @@
+ 	console.log(a);
  })(2);
--(function(b) {
+ (function(b) {
 -	var c = b;
 -	console.log(c);
-+(function(e) {
-+	console.log(e);
++	console.log(b);
  })(3);
 
 ```
@@ -24218,20 +23158,13 @@ console.log(function() {
 ```diff
 --- reference
 +++ oxc
-@@ -1,10 +1,9 @@
- (function() {
- 	console.log(1);
- })();
--(function(a) {
--	console.log(a);
-+(function(e) {
-+	console.log(e);
+@@ -5,6 +5,5 @@
+ 	console.log(a);
  })(2);
--(function(b) {
+ (function(b) {
 -	var c = b;
 -	console.log(c);
-+(function(e) {
-+	console.log(e);
++	console.log(b);
  })(3);
 
 ```
@@ -24273,22 +23206,21 @@ console.log(c);
 --- reference
 +++ oxc
 @@ -1,21 +1,20 @@
--var s = 2, c = 0;
+ var s = 2, c = 0;
 -(function n(r, o, a) {
-+var e = 2, t = 0;
-+function n(r, i, a) {
++function f(p, e, r) {
  	try {
 -		for (var f = 1; f-- > 0;) var t = function(r) {
 -			(function(r) {
 -				r && r[t++];
 -			})(--s >= 0 && n(c++));
 -			for (var o = 1; --o > 0;);
-+		for (var o = 1; o-- > 0;) var s = function(r) {
-+			function i(e) {
-+				e && e[s++];
++		for (var i = 1; i-- > 0;) var a = function(x) {
++			function g(y) {
++				y && y[a++];
 +			}
-+			i(--e >= 0 && n(t++));
-+			for (var a = 1; --a > 0;);
++			g(--s >= 0 && f(c++));
++			for (var j = 1; --j > 0;);
  		}();
 -	} catch (o) {
 +	} catch {
@@ -24300,14 +23232,13 @@ console.log(c);
 -				for (var v in u);
 -			}
 +		} catch {
-+			for (var c = 1; --c > 0;) for (var l = 1; l > 0; --l) for (var c in function() {}) var u = c;
++			for (var k = 1; --k > 0;) for (var l = 1; l > 0; --l) for (var k in function() {}) var o = k;
  		}
  	}
 -})();
--console.log(c);
 +}
-+n();
-+console.log(t);
++f();
+ console.log(c);
 
 ```
 
@@ -24340,18 +23271,17 @@ f();
 -			var g = 42;
 -			f();
 -		}
--		g || console.log('PASS');
++function f() {
++	var a = function g() {
++		if (0) var g;
+ 		g || console.log('PASS');
 -	}
 -	a();
 -})();
-+function e() {
-+	var e = function e() {
-+		if (0) var e;
-+		e || console.log('PASS');
 +	};
-+	e(e);
++	a(a);
 +}
-+e();
++f();
 
 ```
 
@@ -24382,11 +23312,11 @@ while (function() {
 -})(f));
 -var f;
 +for (; function() {
-+	function e(e) {
-+		var t = 42;
-+		for (var n in [e]) console.log(t++);
++	function f(a) {
++		var b = 42;
++		for (var k in [a]) console.log(b++);
 +	}
-+	e(e);
++	f(f);
 +}(););
 
 ```
@@ -24553,37 +23483,6 @@ console.log((a = parseInt('100')) != a);
 
 ```
 
-## `uglify/let/issue_4531_2`
-
-- size: oxc 106 vs reference 118 (-12 bytes)
-
-```js
-var a = console;
-console.log(typeof a, function a() {
-	let { [console]: a } = 0 && a;
-	var b = console;
-	while (!b);
-}());
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,5 @@
--var o = console;
--console.log(typeof o, function o() {
--	let { [console]: o } = 0;
--	var e = console;
--	while (!e);
-+console.log(typeof console, function() {
-+	let { [console]: e } = 0;
-+	var t = console;
-+	for (; !t;);
- }());
-
-```
-
 ## `uglify/let/retain_assignment`
 
 - size: oxc 92 vs reference 104 (-12 bytes)
@@ -24617,6 +23516,42 @@ try {
 +} catch {
  	console.log('PASS');
  }
+
+```
+
+## `uglify/merge_vars/collapse_vars_2`
+
+- size: oxc 122 vs reference 134 (-12 bytes)
+
+```js
+'use strict';
+var log = console.log;
+(function g(a) {
+	var b = a;
+	var c = Math.random();
+	var c = b;
+	log(c);
+	return c;
+})('PASS');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,7 @@
+ 'use strict';
+ var log = console.log;
+-(function g(a) {
+-	var a = a;
+-	var c = Math.random();
+-	var c;
+-	log(c = a);
++(function(a) {
++	var b = a, c = Math.random(), c = b;
++	log(c);
+ 	return c;
+ })('PASS');
 
 ```
 
@@ -24715,12 +23650,10 @@ console.log(typeof a);
  L: {
 -	var o = typeof console;
 -	for (var k in o) break L;
--	var a = 0;
-+	for (var e in typeof console) break L;
-+	var t = 0;
++	for (var k in typeof console) break L;
+ 	var a = 0;
  }
--console.log(typeof a);
-+console.log(typeof t);
+ console.log(typeof a);
 
 ```
 
@@ -24781,37 +23714,30 @@ console.log(typeof a);
 
 ```
 
-## `uglify/reduce_vars/unsafe_evaluate_array_3`
+## `uglify/rests/issue_5552_1`
 
-- size: oxc 94 vs reference 106 (-12 bytes)
+- size: oxc 96 vs reference 108 (-12 bytes)
 
 ```js
-var arr = [
-	1,
-	2,
-	function() {
-		return ++arr[0];
-	}
-];
-console.log(arr[0], arr[1], arr[2](), arr[0]);
+var log = console.log;
+var a = f, b = log();
+function f(...[c = a = 'PASS']) {}
+f((a = 'FAIL', b));
+log(a);
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,8 +1,8 @@
--var arr = [
-+var e = [
- 	1,
- 	2,
- 	function() {
--		return ++arr[0];
-+		return ++e[0];
- 	}
- ];
--console.log(arr[0], arr[1], arr[2](), arr[0]);
-+console.log(e[0], e[1], e[2](), e[0]);
+@@ -1,5 +1,4 @@
+-var log = console.log;
+-var a = f, b = log();
++var log = console.log, a = f, b = log();
+ function f(...[c = a = 'PASS']) {}
+-f((a = 'FAIL', b));
++a = 'FAIL';
+ log(a);
 
 ```
 
@@ -24967,14 +23893,12 @@ console.log(a);
 --- reference
 +++ oxc
 @@ -1,6 +1,5 @@
--var a = 'PASS';
-+var e = 'PASS';
+ var a = 'PASS';
  (async function() {
  	throw 42;
 -	a = 'FAIL';
  })();
--console.log(a);
-+console.log(e);
+ console.log(a);
 
 ```
 
@@ -25009,45 +23933,6 @@ try {
 +} catch {
  	console.log('PASS');
  }
-
-```
-
-## `uglify/classes/issue_5389_2`
-
-- size: oxc 119 vs reference 132 (-13 bytes)
-
-```js
-function log(m, n) {
-	console.log(m, n);
-}
-var a = log;
-var A = class {
-	[a = 'FAIL'] = a = 'PASS';
-};
-var b = new A();
-log(a, b.FAIL);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,9 +1,8 @@
--function log(m, n) {
--	console.log(m, n);
-+function e(e, t) {
-+	console.log(e, t);
- }
--var a = log;
--var A;
--var b = new class {
--	[a = 'FAIL'] = a = 'PASS';
-+var t = e;
-+var n = new class {
-+	[t = 'FAIL'] = t = 'PASS';
- }();
--log(a, b.FAIL);
-+e(t, n.FAIL);
 
 ```
 
@@ -25273,13 +24158,11 @@ f([A = 42, [] + '' || (A = f)]);
 --- reference
 +++ oxc
 @@ -1,4 +1,4 @@
--function f(a, b) {
--	console.log(b);
-+function e(e, t) {
-+	console.log(t);
+ function f(a, b) {
+ 	console.log(b);
  }
 -f([A = 42, [] + '' || (A = f)]);
-+e([A = 42, A = e]);
++f([A = 42, A = f]);
 
 ```
 
@@ -25483,99 +24366,6 @@ console.log(typeof a);
 
 ```
 
-## `uglify/merge_vars/issue_4168`
-
-- size: oxc 211 vs reference 224 (-13 bytes)
-
-```js
-var o = {
-	f: function(a, b, c) {
-		var d = a.d;
-		var e = b.e;
-		var f = c.f;
-		this.g(arguments);
-		if (d) console.log(e, f);
-	},
-	g: function(args) {
-		console.log(args[0], args[1], args[2]);
-	}
-};
-o.f('PASS', true, 42);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,13 +1,12 @@
--var o = {
-+({
- 	f: function(a, b, c) {
- 		var d = a.d;
- 		var e = b.e;
- 		var f = c.f;
- 		this.g(arguments);
--		if (d) console.log(e, f);
-+		d && console.log(e, f);
- 	},
- 	g: function(args) {
- 		console.log(args[0], args[1], args[2]);
- 	}
--};
--o.f('PASS', true, 42);
-+}).f('PASS', !0, 42);
-
-```
-
-## `uglify/merge_vars/issue_4168_use_strict`
-
-- size: oxc 225 vs reference 238 (-13 bytes)
-
-```js
-'use strict';
-var o = {
-	f: function(a, b, c) {
-		var d = a.d;
-		var e = b.e;
-		var f = c.f;
-		this.g(arguments);
-		if (d) console.log(e, f);
-	},
-	g: function(args) {
-		console.log(args[0], args[1], args[2]);
-	}
-};
-o.f('PASS', true, 42);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,14 +1,13 @@
- 'use strict';
--var o = {
-+({
- 	f: function(a, b, c) {
--		var a = a.d;
--		var b = b.e;
--		var c = c.f;
-+		var d = a.d;
-+		var e = b.e;
-+		var f = c.f;
- 		this.g(arguments);
--		if (a) console.log(b, c);
-+		d && console.log(e, f);
- 	},
- 	g: function(args) {
- 		console.log(args[0], args[1], args[2]);
- 	}
--};
--o.f('PASS', true, 42);
-+}).f('PASS', !0, 42);
-
-```
-
 ## `uglify/optional-chains/ternary_decimal`
 
 - size: oxc 21 vs reference 34 (-13 bytes)
@@ -25591,57 +24381,6 @@ null ? .42 : console.log('PASS');
 @@ -1 +1 @@
 -null ? .42 : console.log('PASS');
 +console.log('PASS');
-
-```
-
-## `uglify/reduce_vars/escape_local_throw`
-
-- size: oxc 180 vs reference 193 (-13 bytes)
-
-```js
-function main() {
-	var thing = baz();
-	if (thing !== (thing = baz())) console.log('PASS');
-	else console.log('FAIL');
-}
-function baz() {
-	function foo() {}
-	try {
-		throw foo;
-	} catch (bar) {
-		return bar;
-	}
-}
-main();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,12 +1,13 @@
--function baz() {
-+function e() {
-+	var e = t();
-+	e === (e = t()) ? console.log('FAIL') : console.log('PASS');
-+}
-+function t() {
-+	function e() {}
- 	try {
--		throw function() {};
--	} catch (bar) {
--		return bar;
-+		throw e;
-+	} catch (e) {
-+		return e;
- 	}
- }
--(function() {
--	var thing = baz();
--	if (thing !== baz()) console.log('PASS');
--	else console.log('FAIL');
--})();
-+e();
 
 ```
 
@@ -25755,6 +24494,33 @@ f();
 +	})();
  }
  f();
+
+```
+
+## `uglify/rests/issue_5552_2`
+
+- size: oxc 88 vs reference 101 (-13 bytes)
+
+```js
+var log = console.log;
+var a = f;
+function f(...{ [a = 'PASS']: b }) {}
+f((a = 'FAIL', 42));
+log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+-var log = console.log;
+-var a = f;
++var log = console.log, a = f;
+ function f(...{ [a = 'PASS']: b }) {}
+-f((a = 'FAIL', 42));
++a = 'FAIL';
+ log(a);
 
 ```
 
@@ -26040,12 +24806,11 @@ try {
 +++ oxc
 @@ -1,7 +1,6 @@
  try {
--	var a = null;
+ 	var a = null;
 -	var b = a &&= 42;
 -	b.p;
 -} catch (e) {
-+	var e = null;
-+	(e &&= 42).p;
++	(a &&= 42).p;
 +} catch {
  	console.log('PASS');
  }
@@ -26129,6 +24894,47 @@ console.log(c);
 
 ```
 
+## `uglify/collapse_vars/issue_2914_1`
+
+- size: oxc 182 vs reference 196 (-14 bytes)
+
+```js
+function read(input) {
+	var i = 0;
+	var e = 0;
+	var t = 0;
+	while (e < 32) {
+		var n = input[i++];
+		t |= (127 & n) << e;
+		if (0 === (128 & n)) return t;
+		e += 7;
+	}
+}
+console.log(read([129]));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,9 @@
+ function read(input) {
+-	var i = 0;
+-	var e = 0;
+-	var t = 0;
+-	while (e < 32) {
++	var i = 0, e = 0, t = 0;
++	for (; e < 32;) {
+ 		var n = input[i++];
+ 		t |= (127 & n) << e;
+-		if (0 === (128 & n)) return t;
++		if (!(128 & n)) return t;
+ 		e += 7;
+ 	}
+ }
+
+```
+
 ## `uglify/collapse_vars/issue_3908`
 
 - size: oxc 21 vs reference 35 (-14 bytes)
@@ -26166,13 +24972,11 @@ console.log(a, b);
 --- reference
 +++ oxc
 @@ -1,4 +1,3 @@
--var a = 'foo', b;
+ var a = 'foo', b;
 -var c = b = a;
 -1 && b[a = 'bar'];
--console.log(a, b);
-+var e = 'foo', t;
-+(t = e)[e = 'bar'];
-+console.log(e, t);
++(b = a)[a = 'bar'];
+ console.log(a, b);
 
 ```
 
@@ -26222,35 +25026,38 @@ for (var i = 0; i < 2; i++) (function f([a]) {
 @@ -1,2 +1,3 @@
 -for (var i = 0; i < 2; i++) [[a]] = [['PASS']], b = void 0, a = console.log(a) && b, b = null, void 0;
 -var a, b;
-+for (var e = 0; e < 2; e++) (function([e]) {
-+	var e = console.log(e) && t, t = null;
++for (var i = 0; i < 2; i++) (function([a]) {
++	var a = console.log(a) && b, b = null;
 +})(['PASS']);
 
 ```
 
-## `uglify/evaluate/recursive_function_1`
+## `uglify/destructured/side_effects_object`
 
-- size: oxc 71 vs reference 85 (-14 bytes)
+- size: oxc 77 vs reference 91 (-14 bytes)
 
 ```js
-function factorial(a) {
-	return a > 0 ? a * factorial(a - 1) : 1;
+var a = null, b = console, { c } = 42;
+try {
+	c[a = 'PASS'];
+} catch (e) {
+	console.log(a);
 }
-console.log(factorial(5));
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,3 +1,4 @@
--console.log(function factorial(a) {
--	return a > 0 ? a * factorial(a - 1) : 1;
--}(5));
-+function e(t) {
-+	return t > 0 ? t * e(t - 1) : 1;
-+}
-+console.log(e(5));
+@@ -1,6 +1,6 @@
+-var a = null, c = (console, 42 .c);
++var a = null, { c } = 42;
+ try {
+ 	c[a = 'PASS'];
+-} catch (e) {
++} catch {
+ 	console.log(a);
+ }
 
 ```
 
@@ -26420,11 +25227,10 @@ console.log(function() {
 +++ oxc
 @@ -1,5 +1,3 @@
  'use strict';
--let a = { p: 42 };
+ let a = { p: 42 };
 -console.log(function() {
 -	a;
 -}());
-+let e = { p: 42 };
 +console.log(void 0);
 
 ```
@@ -26598,40 +25404,6 @@ console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
 
 ```
 
-## `uglify/varify/forin_const_3`
-
-- size: oxc 94 vs reference 108 (-14 bytes)
-
-```js
-'use strict';
-const o = {
-	p: 42,
-	q: 'PASS'
-};
-for (const k in o) (function f() {
-	console.log(k, o[k]);
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,7 @@
--'use strict';
--let o = {
-+const e = {
- 	p: 42,
- 	q: 'PASS'
- };
--for (let k in o) (function f() {
--	console.log(k, o[k]);
-+for (let t in e) (function() {
-+	console.log(t, e[t]);
- })();
-
-```
-
 ## `uglify/annotations/compress_and_output_annotations_disabled`
 
 - size: oxc 26 vs reference 41 (-15 bytes)
@@ -26775,28 +25547,27 @@ console.log(a, b, typeof c);
 
 ```
 
-## `uglify/collapse_vars/issue_3215_2`
+## `uglify/collapse_vars/chained_5`
 
-- size: oxc 49 vs reference 64 (-15 bytes)
+- size: oxc 46 vs reference 61 (-15 bytes)
 
 ```js
-console.log(function a() {
-	var a = 42;
-	return typeof a;
-}());
+var a = 'PASS';
+var a = (console, console.log(a));
+a && ++a;
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,4 +1,3 @@
--console.log(function a() {
--	var a = 42;
--	return typeof a;
-+console.log(function() {
-+	return 'number';
- }());
+@@ -1,4 +1,2 @@
+-var a = 'PASS';
+-console;
+-var a;
+-(a = console.log(a)) && ++a;
++var a = 'PASS', a = console.log(a);
++a && ++a;
 
 ```
 
@@ -27001,9 +25772,9 @@ console.log(typeof a);
 -	for (var k in console);
 -} else {
 -	const a = 0;
-+if (console) for (var e in console);
++if (console) for (var k in console);
 +else {
-+	let e = 0;
++	let a = 0;
  }
  console.log(typeof a);
 
@@ -27025,37 +25796,11 @@ console.log(b('1'), b(2), b(b(b('ABCDEFGHIJK'))));
 --- reference
 +++ oxc
 @@ -1,4 +1,4 @@
--function b(x) {
--	return x + x + x;
-+function e(e) {
-+	return e + e + e;
+ function b(x) {
+ 	return x + x + x;
  }
 -console.log('111', 6, b(b('ABCDEFGHIJKABCDEFGHIJKABCDEFGHIJK')));
-+console.log(e('1'), e(2), e(e(e('ABCDEFGHIJK'))));
-
-```
-
-## `uglify/functions/functions_keep_fnames`
-
-- size: oxc 61 vs reference 76 (-15 bytes)
-
-```js
-var FAIL = function PASS() {};
-FAIL.p = 42;
-console.log(FAIL.name, FAIL.p);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,3 @@
--var FAIL = function PASS() {};
--FAIL.p = 42;
--console.log(FAIL.name, FAIL.p);
-+var e = function e() {};
-+e.p = 42;
-+console.log(e.name, e.p);
++console.log(b('1'), b(2), b(b(b('ABCDEFGHIJK'))));
 
 ```
 
@@ -27079,7 +25824,7 @@ console.log(function() {
 -console.log(function() {
 -	({});
 -}());
-+var e = { p: 42 };
++var a = { p: 42 };
 +console.log(void 0);
 
 ```
@@ -27186,76 +25931,6 @@ typeof function g() {}();
 -	(!a ?? (b = 0)) || console.log(b || 'PASS');
 +	!a || console.log(b || 'PASS');
  })('FAIL');
-
-```
-
-## `uglify/pure_getters/issue_2938_2`
-
-- size: oxc 159 vs reference 174 (-15 bytes)
-
-```js
-var Parser = function Parser() {};
-var p = Parser.prototype;
-p.initialContext = function initialContext() {
-	console.log('PASS');
-};
-p.braceIsBlock = function() {};
-new Parser().initialContext();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
--var Parser = function() {};
--var p = Parser.prototype;
--p.initialContext = function() {
-+var e = function() {};
-+var t = e.prototype;
-+t.initialContext = function() {
- 	console.log('PASS');
- };
--p.braceIsBlock = function() {};
--new Parser().initialContext();
-+t.braceIsBlock = function() {};
-+new e().initialContext();
-
-```
-
-## `uglify/pure_getters/issue_2938_4`
-
-- size: oxc 159 vs reference 174 (-15 bytes)
-
-```js
-var Parser = function Parser() {};
-var p = Parser.prototype;
-var unused = p.x;
-p.initialContext = function initialContext() {
-	p.y;
-	console.log('PASS');
-};
-p.braceIsBlock = function() {};
-new Parser().initialContext();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
--var Parser = function() {};
--var p = Parser.prototype;
--p.initialContext = function() {
-+var e = function() {};
-+var t = e.prototype;
-+t.initialContext = function() {
- 	console.log('PASS');
- };
--p.braceIsBlock = function() {};
--new Parser().initialContext();
-+t.braceIsBlock = function() {};
-+new e().initialContext();
 
 ```
 
@@ -27581,30 +26256,47 @@ var a = 0;
 
 ```
 
-## `uglify/ie/issue_5081_property_access`
+## `uglify/hoist_props/name_collision_1`
 
-- size: oxc 88 vs reference 104 (-16 bytes)
+- size: oxc 195 vs reference 211 (-16 bytes)
 
 ```js
-function f(a) {
-	var b;
-	return a[b = 'A'] + (b += 'SS');
+var obj_foo = 1;
+var obj_bar = 2;
+function f() {
+	var obj = {
+		foo: 3,
+		bar: 4,
+		'b-r': 5,
+		'b+r': 6,
+		'b!r': 7
+	};
+	console.log(obj_foo, obj.foo, obj.bar, obj['b-r'], obj['b+r'], obj['b!r']);
 }
-console.log(f({ A: 'P' }));
+f();
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,5 +1,5 @@
- function f(a) {
--	return a[a = 'A'] + (a += 'SS');
-+	var b;
-+	return a[b = 'A'] + (b += 'SS');
+@@ -1,7 +1,12 @@
+-var obj_foo = 1;
+-var obj_bar = 2;
++var obj_foo = 1, obj_bar = 2;
+ function f() {
+-	var obj, obj_foo$0 = 3, obj_bar = 4, obj_b_r = 5, obj_b_r$0 = 6, obj_b_r$1 = 7;
+-	console.log(obj_foo, obj_foo$0, obj_bar, obj_b_r, obj_b_r$0, obj_b_r$1);
++	var obj = {
++		foo: 3,
++		bar: 4,
++		'b-r': 5,
++		'b+r': 6,
++		'b!r': 7
++	};
++	console.log(1, obj.foo, obj.bar, obj['b-r'], obj['b+r'], obj['b!r']);
  }
--// IE9-11: undefinedASS
- console.log(f({ A: 'P' }));
+ f();
 
 ```
 
@@ -28079,39 +26771,6 @@ console.log({
 
 ```
 
-## `uglify/collapse_vars/issue_2364_1`
-
-- size: oxc 222 vs reference 239 (-17 bytes)
-
-```js
-function inc(obj) {
-	return obj.count++;
-}
-function foo() {
-	var first = arguments[0];
-	var result = inc(first);
-	return foo.amount = first.count, result;
-}
-var data = { count: 0 };
-var answer = foo(data);
-console.log(foo.amount, answer);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -6,6 +6,5 @@
- 	var result = inc(first);
- 	return foo.amount = first.count, result;
- }
--var data = { count: 0 };
--var answer = foo(data);
-+var answer = foo({ count: 0 });
- console.log(foo.amount, answer);
-
-```
-
 ## `uglify/collapse_vars/issue_2364_3`
 
 - size: oxc 194 vs reference 211 (-17 bytes)
@@ -28141,6 +26800,38 @@ console.log(foo.amount, answer);
 -var answer = foo(data);
 +var answer = foo({ count: 0 });
  console.log(foo.amount, answer);
+
+```
+
+## `uglify/collapse_vars/switch_case_2`
+
+- size: oxc 74 vs reference 91 (-17 bytes)
+
+```js
+var a = 1, b = 2;
+switch (b++) {
+	case b:
+		var c = a;
+		var a;
+		break;
+}
+console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,5 @@
+ var a = 1, b = 2;
+ switch (b++) {
+-	case b:
+-		var c = a;
+-		var a;
+-		break;
++	case b: var c = a, a;
+ }
+ console.log(a);
 
 ```
 
@@ -28826,26 +27517,6 @@ console.log(typeof new function() {
 
 ```
 
-## `uglify/nullish/issue_4679`
-
-- size: oxc 44 vs reference 61 (-17 bytes)
-
-```js
-var a;
-if (void 0 === (undefined ?? a)) console.log('PASS');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,2 @@
- var a;
--if (void 0 === (undefined ?? a)) console.log('PASS');
-+a === void 0 && console.log('PASS');
-
-```
-
 ## `uglify/properties/keep_substituted_property_quotes`
 
 - size: oxc 62 vs reference 79 (-17 bytes)
@@ -28931,35 +27602,6 @@ console.log(f({ p: 'PASS' }));
 +(function() {
 +	console.log(1);
 +})();
-
-```
-
-## `uglify/rests/issue_5552_2`
-
-- size: oxc 84 vs reference 101 (-17 bytes)
-
-```js
-var log = console.log;
-var a = f;
-function f(...{ [a = 'PASS']: b }) {}
-f((a = 'FAIL', 42));
-log(a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,4 @@
--var log = console.log;
--var a = f;
--function f(...{ [a = 'PASS']: b }) {}
--f((a = 'FAIL', 42));
--log(a);
-+var e = console.log, t = n;
-+function n(...{ [t = 'PASS']: e }) {}
-+t = 'FAIL';
-+e(t);
 
 ```
 
@@ -29422,7 +28064,7 @@ do {
 -} while (b = a = void 0, b = (42, console[a = a] = a++), void 0);
 -var a, b;
 +while (function() {
-+	var e, t = console[e = t] = e++;
++	var a, b = console[a = b] = a++;
 +}());
 
 ```
@@ -29457,35 +28099,6 @@ do {
 +	var isDev = !0;
 +	console.log({ foo }.foo());
  })();
-
-```
-
-## `uglify/rests/issue_5552_1`
-
-- size: oxc 90 vs reference 108 (-18 bytes)
-
-```js
-var log = console.log;
-var a = f, b = log();
-function f(...[c = a = 'PASS']) {}
-f((a = 'FAIL', b));
-log(a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,4 @@
--var log = console.log;
--var a = f, b = log();
--function f(...[c = a = 'PASS']) {}
--f((a = 'FAIL', b));
--log(a);
-+var e = console.log, t = r, n = e();
-+function r(...[e = t = 'PASS']) {}
-+t = 'FAIL';
-+e(t);
 
 ```
 
@@ -29831,50 +28444,6 @@ console.log(typeof a);
 -}
 +console.log(typeof console);
  console.log(typeof a);
-
-```
-
-## `uglify/ie/issue_3542`
-
-- size: oxc 32 vs reference 51 (-19 bytes)
-
-```js
-var a = 0;
-var b = a++;
-var c = b && function a() {} || b;
-console.log(a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,3 @@
--var a = 0;
--a++;
--(function a() {});
--console.log(a);
-+var e = 0;
-+e++;
-+console.log(e);
-
-```
-
-## `uglify/ie/issue_5350_ie`
-
-- size: oxc 27 vs reference 46 (-19 bytes)
-
-```js
-console.log(typeof f, [42, function f() {}][0]);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--console.log(typeof f, (function f() {}, 42));
-+console.log(typeof f, 42);
 
 ```
 
@@ -30437,24 +29006,19 @@ f(1);
 --- reference
 +++ oxc
 @@ -1,11 +1,8 @@
--var a, b;
--function f(c) {
+ var a, b;
+ function f(c) {
 -	if (0 == c) {
 -		console;
 -		a = { p: 42 };
 -	}
--	b = a.p;
++	c == 0 && (a = { p: 42 });
+ 	b = a.p;
 -	if (1 == c) console.log(b);
-+var e, t;
-+function n(n) {
-+	n == 0 && (e = { p: 42 });
-+	t = e.p;
-+	n == 1 && console.log(t);
++	c == 1 && console.log(b);
  }
--f(0);
--f(1);
-+n(0);
-+n(1);
+ f(0);
+ f(1);
 
 ```
 
@@ -30648,16 +29212,16 @@ console.log(o.p === o.p, o['+'](4), o['-'](5), o__$0, o__$1);
 -	return x + 1;
 -}, o__$0 = 2, o__$1 = 3;
 -console.log(o_p === o_p, o__(4), o__$2(5), o__$0, o__$1);
-+var e = {
++var o = {
 +	p: 1,
-+	'+': function(e) {
-+		return e;
++	'+': function(x) {
++		return x;
 +	},
-+	'-': function(e) {
-+		return e + 1;
++	'-': function(x) {
++		return x + 1;
 +	}
 +};
-+console.log(e.p === e.p, e['+'](4), e['-'](5), 2, 3);
++console.log(o.p === o.p, o['+'](4), o['-'](5), 2, 3);
 
 ```
 
@@ -30688,31 +29252,6 @@ f(null);
  	console.log('baz');
  }
  f(42);
-
-```
-
-## `uglify/let/issue_4231`
-
-- size: oxc 39 vs reference 60 (-21 bytes)
-
-```js
-'use strict';
-typeof a == 0;
-console.log(typeof function a() {
-	let a;
-});
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,2 @@
- 'use strict';
--console.log(typeof function a() {
--	let a;
--});
-+console.log('function');
 
 ```
 
@@ -30949,6 +29488,44 @@ f('PASS');
 
 ```
 
+## `uglify/collapse_vars/issue_2364_1`
+
+- size: oxc 217 vs reference 239 (-22 bytes)
+
+```js
+function inc(obj) {
+	return obj.count++;
+}
+function foo() {
+	var first = arguments[0];
+	var result = inc(first);
+	return foo.amount = first.count, result;
+}
+var data = { count: 0 };
+var answer = foo(data);
+console.log(foo.amount, answer);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,10 +2,8 @@
+ 	return obj.count++;
+ }
+ function foo() {
+-	var first = arguments[0];
+-	var result = inc(first);
++	var first = arguments[0], result = inc(first);
+ 	return foo.amount = first.count, result;
+ }
+-var data = { count: 0 };
+-var answer = foo(data);
++var answer = foo({ count: 0 });
+ console.log(foo.amount, answer);
+
+```
+
 ## `uglify/conditionals/equality_conditionals_true`
 
 - size: oxc 221 vs reference 243 (-22 bytes)
@@ -31066,31 +29643,6 @@ const arguments = 42;
 
 ```
 
-## `uglify/ie/issue_3206_2`
-
-- size: oxc 65 vs reference 87 (-22 bytes)
-
-```js
-console.log(function() {
-	var foo = function bar() {};
-	var baz = function moo() {};
-	return 'function' == typeof bar;
-}());
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,3 @@
- console.log(function() {
--	(function bar() {});
--	return 'function' == typeof bar;
-+	return typeof bar == 'function';
- }());
-
-```
-
 ## `uglify/issue-1446/undefined_redefined`
 
 - size: oxc 38 vs reference 60 (-22 bytes)
@@ -31112,40 +29664,6 @@ function f(undefined) {
 -	return void 0 === n;
 +	return !1;
  }
-
-```
-
-## `uglify/let/issue_5756_3`
-
-- size: oxc 79 vs reference 101 (-22 bytes)
-
-```js
-'use strict';
-console.log(f()());
-function f() {
-	const a = 'PASS';
-	return function() {
-		return a;
-	};
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,6 @@
--'use strict';
--console.log(function() {
--	let a = 'PASS';
-+console.log(e()());
-+function e() {
- 	return function() {
--		return a;
-+		return 'PASS';
- 	};
--}()());
-+}
 
 ```
 
@@ -31326,17 +29844,15 @@ console.log(d);
 @@ -1,11 +1,9 @@
 -var a = 'foo';
 -console.log(a);
--function f(b) {
++console.log('foo');
+ function f(b) {
 -	var b;
 -	console.log(b);
 -	b = 'bar';
--	console.log(b);
-+console.log('foo');
-+function f(e) {
-+	var t;
-+	console.log(e);
-+	t = 'bar';
-+	console.log(t);
++	var c;
+ 	console.log(b);
++	c = 'bar';
++	console.log(c);
  }
  f('baz');
 -var d = 'moo';
@@ -31370,22 +29886,19 @@ console.log(d);
 @@ -1,11 +1,9 @@
 -var a = 'foo';
 -console.log(a);
--function f(b) {
++console.log('foo');
+ function f(b) {
 -	var b;
 -	console.log(b);
 -	b = 'bar';
--	console.log(b);
-+console.log('foo');
-+function e(e) {
-+	var t;
-+	console.log(e);
-+	t = 'bar';
-+	console.log(t);
++	var c;
+ 	console.log(b);
++	c = 'bar';
++	console.log(c);
  }
--f('baz');
+ f('baz');
 -var a = 'moo';
 -console.log(a);
-+e('baz');
 +console.log('moo');
 
 ```
@@ -31455,103 +29968,6 @@ _is_selected = function(tags, slug) {
 -	return null != (ref = _.find(tags, { slug })) ? ref.selected : void 0;
 +	return (ref = _.find(tags, { slug }))?.selected;
  };
-
-```
-
-## `uglify/reduce_vars/escape_conditional`
-
-- size: oxc 167 vs reference 189 (-22 bytes)
-
-```js
-function main() {
-	var thing = baz();
-	if (thing !== (thing = baz())) console.log('FAIL');
-	else console.log('PASS');
-}
-function baz(s) {
-	return s ? foo : bar;
-}
-function foo() {}
-function bar() {}
-main();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,10 +1,10 @@
--function baz(s) {
--	return s ? foo : bar;
-+function e() {
-+	var e = t();
-+	e === (e = t()) ? console.log('PASS') : console.log('FAIL');
- }
--function foo() {}
--function bar() {}
--(function() {
--	var thing = baz();
--	if (thing !== baz()) console.log('FAIL');
--	else console.log('PASS');
--})();
-+function t(e) {
-+	return e ? n : r;
-+}
-+function n() {}
-+function r() {}
-+e();
-
-```
-
-## `uglify/reduce_vars/escape_throw`
-
-- size: oxc 179 vs reference 201 (-22 bytes)
-
-```js
-function main() {
-	var thing = baz();
-	if (thing !== (thing = baz())) console.log('FAIL');
-	else console.log('PASS');
-}
-function baz() {
-	try {
-		throw foo;
-	} catch (bar) {
-		return bar;
-	}
-}
-function foo() {}
-main();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,13 +1,13 @@
--function baz() {
-+function e() {
-+	var e = t();
-+	e === (e = t()) ? console.log('PASS') : console.log('FAIL');
-+}
-+function t() {
- 	try {
--		throw foo;
--	} catch (bar) {
--		return bar;
-+		throw n;
-+	} catch (e) {
-+		return e;
- 	}
- }
--function foo() {}
--(function() {
--	var thing = baz();
--	if (thing !== baz()) console.log('FAIL');
--	else console.log('PASS');
--})();
-+function n() {}
-+e();
 
 ```
 
@@ -31815,10 +30231,9 @@ console.log(typeof a);
 @@ -1,8 +1,6 @@
  'use strict';
  {
--	let a = 0;
+ 	let a = 0;
 -	var b = console;
 -	console.log(typeof b);
-+	let e = 0;
 +	console.log(typeof console);
  }
 -var b = 1;
@@ -31854,9 +30269,8 @@ console.log(typeof a);
  {
 -	var b = console;
 -	console.log(typeof b);
--	let a = 0;
 +	console.log(typeof console);
-+	let e = 0;
+ 	let a = 0;
  }
 
 ```
@@ -31880,61 +30294,16 @@ try {
 ```diff
 --- reference
 +++ oxc
-@@ -1,8 +1,6 @@
+@@ -1,7 +1,5 @@
 -try {
 -	console.log;
 -} catch (e) {
 -	var a, arguments = 0;
 +try {} catch {
-+	var e, arguments;
++	var a, arguments;
  } finally {
--	a = typeof arguments;
--	console.log(a);
-+	e = typeof arguments;
-+	console.log(e);
- }
-
-```
-
-## `uglify/reduce_vars/perf_6`
-
-- size: oxc 192 vs reference 215 (-23 bytes)
-
-```js
-function indirect_foo(x, y, z) {
-	function foo(x, y, z) {
-		return x < y ? x * y + z : x * z - y;
-	}
-	return foo(x, y, z);
-}
-var sum = 0;
-for (var i = 0; i < 100; ++i) {
-	sum += indirect_foo(i, i + 1, 3 * i);
-}
-console.log(sum);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,9 @@
--function indirect_foo(x, y, z) {
--	return function(x, y, z) {
--		return x < y ? x * y + z : x * z - y;
--	}(x, y, z);
-+function e(e, t, n) {
-+	function r(e, t, n) {
-+		return e < t ? e * t + n : e * n - t;
-+	}
-+	return r(e, t, n);
- }
--var sum = 0;
--for (var i = 0; i < 100; ++i) sum += indirect_foo(i, i + 1, 3 * i);
--console.log(sum);
-+var t = 0;
-+for (var n = 0; n < 100; ++n) t += e(n, n + 1, 3 * n);
-+console.log(t);
+ 	a = typeof arguments;
+ 	console.log(a);
 
 ```
 
@@ -32035,32 +30404,6 @@ function f() {
 
 ```
 
-## `uglify/evaluate/recursive_function_2`
-
-- size: oxc 78 vs reference 102 (-24 bytes)
-
-```js
-var factorial = function(a) {
-	return a > 0 ? a * factorial(a - 1) : 1;
-};
-console.log(factorial(5));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
--var factorial = function(a) {
--	return a > 0 ? a * factorial(a - 1) : 1;
-+var e = function(t) {
-+	return t > 0 ? t * e(t - 1) : 1;
- };
--console.log(factorial(5));
-+console.log(e(5));
-
-```
-
 ## `uglify/hoist_props/issue_2473_1`
 
 - size: oxc 0 vs reference 24 (-24 bytes)
@@ -32152,48 +30495,6 @@ console.log(typeof (a + 1 - .1 - .1 - .1));
 
 ```
 
-## `uglify/reduce_vars/escape_local_sequence`
-
-- size: oxc 143 vs reference 167 (-24 bytes)
-
-```js
-function main() {
-	var thing = baz();
-	if (thing !== (thing = baz())) console.log('PASS');
-	else console.log('FAIL');
-}
-function baz() {
-	function foo() {}
-	function bar() {}
-	return foo, bar;
-}
-main();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,9 @@
--function baz() {
--	return function() {}, function() {};
-+function e() {
-+	var e = t();
-+	e === (e = t()) ? console.log('FAIL') : console.log('PASS');
- }
--(function() {
--	var thing = baz();
--	if (thing !== baz()) console.log('PASS');
--	else console.log('FAIL');
--})();
-+function t() {
-+	function e() {}
-+	return e;
-+}
-+e();
-
-```
-
 ## `uglify/templates/issue_5199`
 
 - size: oxc 44 vs reference 68 (-24 bytes)
@@ -32264,7 +30565,7 @@ console.log(typeof a);
 -	const a = 0;
 -	var b = console;
 -	console.log(typeof b);
-+	let e = 0;
++	let a = 0;
 +	console.log(typeof console);
  }
 -var a = 1;
@@ -32300,7 +30601,7 @@ console.log(typeof a);
 -	console.log(typeof b);
 -	const a = 0;
 +	console.log(typeof console);
-+	let e = 0;
++	let a = 0;
  }
 
 ```
@@ -32404,6 +30705,98 @@ console.log(b = 3);
  		console.log('FAIL');
  	} while (0);
  	console.log('PASS');
+
+```
+
+## `uglify/merge_vars/issue_4168`
+
+- size: oxc 199 vs reference 224 (-25 bytes)
+
+```js
+var o = {
+	f: function(a, b, c) {
+		var d = a.d;
+		var e = b.e;
+		var f = c.f;
+		this.g(arguments);
+		if (d) console.log(e, f);
+	},
+	g: function(args) {
+		console.log(args[0], args[1], args[2]);
+	}
+};
+o.f('PASS', true, 42);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,13 +1,10 @@
+-var o = {
++({
+ 	f: function(a, b, c) {
+-		var d = a.d;
+-		var e = b.e;
+-		var f = c.f;
++		var d = a.d, e = b.e, f = c.f;
+ 		this.g(arguments);
+-		if (d) console.log(e, f);
++		d && console.log(e, f);
+ 	},
+ 	g: function(args) {
+ 		console.log(args[0], args[1], args[2]);
+ 	}
+-};
+-o.f('PASS', true, 42);
++}).f('PASS', !0, 42);
+
+```
+
+## `uglify/merge_vars/issue_4168_use_strict`
+
+- size: oxc 213 vs reference 238 (-25 bytes)
+
+```js
+'use strict';
+var o = {
+	f: function(a, b, c) {
+		var d = a.d;
+		var e = b.e;
+		var f = c.f;
+		this.g(arguments);
+		if (d) console.log(e, f);
+	},
+	g: function(args) {
+		console.log(args[0], args[1], args[2]);
+	}
+};
+o.f('PASS', true, 42);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,14 +1,11 @@
+ 'use strict';
+-var o = {
++({
+ 	f: function(a, b, c) {
+-		var a = a.d;
+-		var b = b.e;
+-		var c = c.f;
++		var d = a.d, e = b.e, f = c.f;
+ 		this.g(arguments);
+-		if (a) console.log(b, c);
++		d && console.log(e, f);
+ 	},
+ 	g: function(args) {
+ 		console.log(args[0], args[1], args[2]);
+ 	}
+-};
+-o.f('PASS', true, 42);
++}).f('PASS', !0, 42);
 
 ```
 
@@ -32666,29 +31059,6 @@ console.log(a);
 
 ```
 
-## `uglify/const/issue_4231`
-
-- size: oxc 25 vs reference 52 (-27 bytes)
-
-```js
-typeof a == 0;
-console.log(typeof function a() {
-	const a = 0;
-});
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1 @@
--console.log(typeof function a() {
--	const a = 0;
--});
-+console.log('function');
-
-```
-
 ## `uglify/const/issue_4305_1`
 
 - size: oxc 74 vs reference 101 (-27 bytes)
@@ -32748,58 +31118,6 @@ if (x() && false && y()) z();
 -if (x(), y()) z();
 -if (x(), 0) z();
 +x(), z(), x(), y() && z(), (x() || y()) && z(), x() && y() && z(), (x() || y()) && z(), x() && y() && z(), x(), y() && z(), x();
-
-```
-
-## `uglify/ie/issue_3484_2_ie8`
-
-- size: oxc 57 vs reference 84 (-27 bytes)
-
-```js
-(function Infinity() {
-	var Infinity;
-})();
-// IE8: number function
-console.log(typeof (1 / 0), typeof Infinity);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,2 @@
--(function Infinity() {
--	var Infinity;
--})();
--console.log('number', typeof Infinity);
-+// IE8: number function
-+console.log('number', 'number');
-
-```
-
-## `uglify/ie/issue_3484_2_ie8_toplevel`
-
-- size: oxc 57 vs reference 84 (-27 bytes)
-
-```js
-(function Infinity() {
-	var Infinity;
-})();
-// IE8: number function
-console.log(typeof (1 / 0), typeof Infinity);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,2 @@
--(function Infinity() {
--	var Infinity;
--})();
--console.log('number', typeof Infinity);
-+// IE8: number function
-+console.log('number', 'number');
 
 ```
 
@@ -32910,46 +31228,13 @@ a();
 @@ -1,6 +1,4 @@
 -try {} catch (a) {
 -	var a;
-+function e() {
++function a() {
 +	console.log('PASS');
  }
 -(function() {
 -	console.log('PASS');
 -})();
-+e();
-
-```
-
-## `uglify/sandbox/timers`
-
-- size: oxc 153 vs reference 180 (-27 bytes)
-
-```js
-var count = 0, interval = 1e3, duration = 3210;
-var timer = setInterval(function() {
-	if (!count++) setTimeout(function() {
-		clearInterval(timer);
-		console.log(count <= 4 ? 'PASS' : 'FAIL');
-	}, duration);
-}, interval);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,6 @@
--var count = 0;
--var timer = setInterval(function() {
--	if (!count++) setTimeout(function() {
--		clearInterval(timer);
--		console.log(count <= 4 ? 'PASS' : 'FAIL');
-+var e = 0, t = setInterval(function() {
-+	e++ || setTimeout(function() {
-+		clearInterval(t);
-+		console.log(e <= 4 ? 'PASS' : 'FAIL');
- 	}, 3210);
- }, 1e3);
++a();
 
 ```
 
@@ -33273,28 +31558,6 @@ console.log(c);
 
 ```
 
-## `uglify/const/catch_ie8_1`
-
-- size: oxc 21 vs reference 50 (-29 bytes)
-
-```js
-try {} catch (a) {}
-console.log(function a() {
-	const a = 0;
-}());
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1 @@
--try {} catch (a) {}
--console.log(function() {}());
-+console.log(void 0);
-
-```
-
 ## `uglify/drop-unused/issue_1539`
 
 - size: oxc 0 vs reference 29 (-29 bytes)
@@ -33446,9 +31709,9 @@ function f() {
 -		const b = a;
 -	}
 -}());
-+console.log(e());
-+function e() {
-+	for (console in [e]);
++console.log(f());
++function f() {
++	for (console in [f]);
 +}
 
 ```
@@ -33780,35 +32043,6 @@ f();
 
 ```
 
-## `uglify/classes/issue_4962_2_strict`
-
-- size: oxc 35 vs reference 66 (-31 bytes)
-
-```js
-'use strict';
-console.log(function f() {}(function g() {
-	function h() {
-		f;
-	}
-	class A {
-		static p = h();
-	}
-}, typeof g));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,2 @@
- 'use strict';
--console.log(function f() {}(function g() {
--	f;
--}));
-+console.log(void 0);
-
-```
-
 ## `uglify/classes/issue_5878_4`
 
 - size: oxc 39 vs reference 70 (-31 bytes)
@@ -33854,140 +32088,6 @@ function f() {
 -function f() {
 -	for (a; c;);
 -}
-
-```
-
-## `uglify/ie/issue_4235`
-
-- size: oxc 21 vs reference 52 (-31 bytes)
-
-```js
-try {} catch (e) {}
-console.log(function e() {
-	var e = 0;
-}());
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1 @@
--try {} catch (e) {}
--console.log(function e() {}());
-+console.log(void 0);
-
-```
-
-## `uglify/ie/issue_5269_2`
-
-- size: oxc 112 vs reference 143 (-31 bytes)
-
-```js
-for (var i = 0; i < 2; i++) (function() {
-	console.log(e);
-	try {
-		console;
-	} catch (e) {
-		var e = 'FAIL 1';
-	}
-	e = 'FAIL 2';
-	console;
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,11 +1,7 @@
--for (var i = 0; i < 2; i++) {
--	e = void 0;
-+for (var e = 0; e < 2; e++) (function() {
- 	console.log(e);
--	try {
--		console;
--	} catch (e) {
--		var e = 'FAIL 1';
-+	try {} catch (e) {
-+		var e;
- 	}
- 	e = 'FAIL 2';
--	console;
--}
-+})();
-
-```
-
-## `uglify/ie/issue_5269_2_ie`
-
-- size: oxc 112 vs reference 143 (-31 bytes)
-
-```js
-for (var i = 0; i < 2; i++) (function() {
-	console.log(e);
-	try {
-		console;
-	} catch (e) {
-		var e = 'FAIL 1';
-	}
-	e = 'FAIL 2';
-	console;
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,11 +1,7 @@
--for (var i = 0; i < 2; i++) {
--	e = void 0;
-+for (var e = 0; e < 2; e++) (function() {
- 	console.log(e);
--	try {
--		console;
--	} catch (e) {
--		var e = 'FAIL 1';
-+	try {} catch (e) {
-+		var e;
- 	}
- 	e = 'FAIL 2';
--	console;
--}
-+})();
-
-```
-
-## `uglify/ie/typeof_getAttribute`
-
-- size: oxc 253 vs reference 284 (-31 bytes)
-
-```js
-document = {
-	createElement: function() {
-		return { getAttribute: function() {} };
-	},
-	write: console.log
-};
-document.write(function(element) {
-	if (element) return 'undefined' === typeof element.getAttribute;
-}(document.createElement('foo')) ? 'FAIL' : 'PASS');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -5,7 +5,5 @@
- 	write: console.log
- };
- document.write(function(element) {
--	if (element)
-- // IE6~10: Access is denied.
--	return void 0 === element.getAttribute;
-+	if (element) return element.getAttribute === void 0;
- }(document.createElement('foo')) ? 'FAIL' : 'PASS');
 
 ```
 
@@ -34150,185 +32250,6 @@ console.log(f());
 
 ```
 
-## `uglify/reduce_vars/issue_1666_undefined`
-
-- size: oxc 86 vs reference 118 (-32 bytes)
-
-```js
-var undefined = 42;
-{
-	undefined();
-	function undefined() {
-		console.log('foo');
-	}
-}
-console.log(typeof undefined);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,8 @@
--var undefined = 42;
-+var e = 42;
- {
--	undefined();
--	function undefined() {
-+	e();
-+	function e() {
- 		console.log('foo');
- 	}
- }
--console.log(typeof undefined);
-+console.log(typeof e);
-
-```
-
-## `uglify/reduce_vars/issue_1666_undefined_strict`
-
-- size: oxc 100 vs reference 132 (-32 bytes)
-
-```js
-'use strict';
-var undefined = 42;
-{
-	undefined();
-	function undefined() {
-		console.log('foo');
-	}
-}
-console.log(typeof undefined);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,9 +1,9 @@
- 'use strict';
--var undefined = 42;
-+var e = 42;
- {
--	undefined();
--	function undefined() {
-+	e();
-+	function e() {
- 		console.log('foo');
- 	}
- }
--console.log(typeof undefined);
-+console.log(typeof e);
-
-```
-
-## `uglify/reduce_vars/perf_2`
-
-- size: oxc 189 vs reference 221 (-32 bytes)
-
-```js
-function foo(x, y, z) {
-	return x < y ? x * y + z : x * z - y;
-}
-function indirect_foo(x, y, z) {
-	return foo(x, y, z);
-}
-var sum = 0;
-for (var i = 0; i < 100; ++i) {
-	sum += indirect_foo(i, i + 1, 3 * i);
-}
-console.log(sum);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,9 +1,9 @@
--function foo(x, y, z) {
--	return x < y ? x * y + z : x * z - y;
-+function e(e, t, n) {
-+	return e < t ? e * t + n : e * n - t;
- }
--function indirect_foo(x, y, z) {
--	return foo(x, y, z);
-+function t(t, n, r) {
-+	return e(t, n, r);
- }
--var sum = 0;
--for (var i = 0; i < 100; ++i) sum += indirect_foo(i, i + 1, 3 * i);
--console.log(sum);
-+var n = 0;
-+for (var r = 0; r < 100; ++r) n += t(r, r + 1, 3 * r);
-+console.log(n);
-
-```
-
-## `uglify/reduce_vars/perf_8`
-
-- size: oxc 190 vs reference 222 (-32 bytes)
-
-```js
-var indirect_foo = function(x, y, z) {
-	var foo = function(x, y, z) {
-		return x < y ? x * y + z : x * z - y;
-	};
-	return foo(x, y, z);
-};
-var sum = 0;
-for (var i = 0; i < 100; ++i) sum += indirect_foo(i, i + 1, 3 * i);
-console.log(sum);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,7 @@
--var indirect_foo = function(x, y, z) {
--	return function(x, y, z) {
--		return x < y ? x * y + z : x * z - y;
--	}(x, y, z);
--};
--var sum = 0;
--for (var i = 0; i < 100; ++i) sum += indirect_foo(i, i + 1, 3 * i);
--console.log(sum);
-+var e = function(e, t, n) {
-+	return function(e, t, n) {
-+		return e < t ? e * t + n : e * n - t;
-+	}(e, t, n);
-+}, t = 0;
-+for (var n = 0; n < 100; ++n) t += e(n, n + 1, 3 * n);
-+console.log(t);
-
-```
-
-## `uglify/collapse_vars/issue_3215_4`
-
-- size: oxc 49 vs reference 82 (-33 bytes)
-
-```js
-console.log(function() {
-	var a = 42;
-	(function a() {});
-	return typeof a;
-}());
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,3 @@
- console.log(function() {
--	var a = 42;
--	(function a() {});
--	return typeof a;
-+	return 'number';
- }());
-
-```
-
 ## `uglify/conditionals/issue_3808_1`
 
 - size: oxc 21 vs reference 54 (-33 bytes)
@@ -34377,59 +32298,6 @@ console.log(f());
 
 ```
 
-## `uglify/ie/issue_4928_1`
-
-- size: oxc 23 vs reference 56 (-33 bytes)
-
-```js
-var a = function f() {
-	f(a);
-};
-console.log(typeof f);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1 @@
--var a = function f() {
--	f(a);
--};
- console.log(typeof f);
-
-```
-
-## `uglify/ie/issue_5081_call`
-
-- size: oxc 105 vs reference 138 (-33 bytes)
-
-```js
-function f(a) {
-	var b;
-	return a(b = 'A') + (b += 'SS');
-}
-console.log(f(function() {
-	return 'P';
-}));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,6 @@
- function f(a) {
--	// IE5-10: TypeError: Function expected
--	return a(a = 'A') + (a += 'SS');
-+	var b;
-+	return a(b = 'A') + (b += 'SS');
- }
- console.log(f(function() {
- 	return 'P';
-
-```
-
 ## `uglify/loops/issue_1648`
 
 - size: oxc 0 vs reference 33 (-33 bytes)
@@ -34450,49 +32318,6 @@ function f() {
 -function f() {
 -	for (x(); 1;);
 -}
-
-```
-
-## `uglify/reduce_vars/escape_sequence`
-
-- size: oxc 142 vs reference 175 (-33 bytes)
-
-```js
-function main() {
-	var thing = baz();
-	if (thing !== (thing = baz())) console.log('FAIL');
-	else console.log('PASS');
-}
-function baz() {
-	return foo, bar;
-}
-function foo() {}
-function bar() {}
-main();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,9 +1,9 @@
--function baz() {
--	return function() {}, bar;
-+function e() {
-+	var e = t();
-+	e === (e = t()) ? console.log('PASS') : console.log('FAIL');
-+}
-+function t() {
-+	return n;
- }
--function bar() {}
--(function() {
--	var thing = baz();
--	if (thing !== baz()) console.log('FAIL');
--	else console.log('PASS');
--})();
-+function n() {}
-+e();
 
 ```
 
@@ -34611,10 +32436,10 @@ console.log(d);
 -	b = 'baz';
 -	console.log(b);
 +console.log('foo');
-+for (var e, t = 0; t < 1; t++) {
++for (var c, i = 0; i < 1; i++) {
 +	console.log('bar');
-+	e = 'baz';
-+	console.log(e);
++	c = 'baz';
++	console.log(c);
  }
 -var a = 'moo';
 -console.log(a);
@@ -35028,12 +32853,11 @@ undefined.prop;
 --- reference
 +++ oxc
 @@ -1,5 +1,2 @@
--var a, b = null, c = {};
+ var a, b = null, c = {};
 -d;
 -null.prop;
 -(void 0).prop;
 -(void 0).prop;
-+var e, t = null, n = {};
 +d.prop;
 
 ```
@@ -35058,12 +32882,11 @@ undefined.prop;
 --- reference
 +++ oxc
 @@ -1,5 +1,2 @@
--var a, b = null, c = {};
+ var a, b = null, c = {};
 -d;
 -null.prop;
 -(void 0).prop;
 -(void 0).prop;
-+var e, t = null, n = {};
 +d.prop;
 
 ```
@@ -35290,13 +33113,12 @@ f(0 && (a = 0)(f(this)));
 +++ oxc
 @@ -1,5 +1,4 @@
 -var a = 'PASS';
--function f() {
+ function f() {
 -	console.log(a || 'FAIL');
-+function e() {
 +	console.log('PASS');
  }
 -f(0 && (a = 0)(f()));
-+e(0);
++f(0);
 
 ```
 
@@ -35416,79 +33238,6 @@ f();
 +	var x;
  }
  f();
-
-```
-
-## `uglify/ie/issue_4928_2`
-
-- size: oxc 62 vs reference 101 (-39 bytes)
-
-```js
-switch (42) {
-	case console: var a = function f() {
-		f(a);
-	};
-	case 42: var a = console.log('PASS');
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,4 @@
- switch (42) {
--	case console: var a = function f() {
--		f(a);
--	};
--	case 42: a = console.log('PASS');
-+	case console:
-+	case 42: console.log('PASS');
- }
-
-```
-
-## `uglify/merge_vars/issue_4109`
-
-- size: oxc 115 vs reference 154 (-39 bytes)
-
-```js
-var a = 'foo';
-try {
-	throw 'bar';
-} catch (e) {
-	console.log(e);
-} finally {
-	var o = a;
-	for (var k in o);
-	(function() {
-		a++;
-	});
-}
-console.log(a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,13 +1,9 @@
--var a = 'foo';
-+var e = 'foo';
- try {
- 	throw 'bar';
- } catch (e) {
- 	console.log(e);
- } finally {
--	var o = a;
--	for (var k in o);
--	(function() {
--		a++;
--	});
-+	for (var t in e);
- }
--console.log(a);
-+console.log(e);
 
 ```
 
@@ -35709,52 +33458,6 @@ function f() {
 
 ```
 
-## `uglify/hoist_props/name_collision_1`
-
-- size: oxc 171 vs reference 211 (-40 bytes)
-
-```js
-var obj_foo = 1;
-var obj_bar = 2;
-function f() {
-	var obj = {
-		foo: 3,
-		bar: 4,
-		'b-r': 5,
-		'b+r': 6,
-		'b!r': 7
-	};
-	console.log(obj_foo, obj.foo, obj.bar, obj['b-r'], obj['b+r'], obj['b!r']);
-}
-f();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,12 @@
--var obj_foo = 1;
--var obj_bar = 2;
--function f() {
--	var obj, obj_foo$0 = 3, obj_bar = 4, obj_b_r = 5, obj_b_r$0 = 6, obj_b_r$1 = 7;
--	console.log(obj_foo, obj_foo$0, obj_bar, obj_b_r, obj_b_r$0, obj_b_r$1);
-+var e = 1, t = 2;
-+function n() {
-+	var e = {
-+		foo: 3,
-+		bar: 4,
-+		'b-r': 5,
-+		'b+r': 6,
-+		'b!r': 7
-+	};
-+	console.log(1, e.foo, e.bar, e['b-r'], e['b+r'], e['b!r']);
- }
--f();
-+n();
-
-```
-
 ## `uglify/issue-5614/reassign_2`
 
 - size: oxc 21 vs reference 61 (-40 bytes)
@@ -35861,12 +33564,12 @@ f();
 -		};
 -	}
 -})();
-+function e() {
++function f() {
 +	console.log('PASS');
-+	var e;
-+	for (var t in e);
++	var b;
++	for (var c in b);
 +}
-+e();
++f();
 
 ```
 
@@ -35888,69 +33591,6 @@ for ((function() {
 -for (function() {
 -	'foo' in {};
 -}; 0;);
-
-```
-
-## `uglify/reduce_vars/perf_4`
-
-- size: oxc 195 vs reference 235 (-40 bytes)
-
-```js
-var foo = function(x, y, z) {
-	return x < y ? x * y + z : x * z - y;
-};
-var indirect_foo = function(x, y, z) {
-	return foo(x, y, z);
-};
-var sum = 0;
-for (var i = 0; i < 100; ++i) sum += indirect_foo(i, i + 1, 3 * i);
-console.log(sum);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,9 +1,7 @@
--var foo = function(x, y, z) {
--	return x < y ? x * y + z : x * z - y;
--};
--var indirect_foo = function(x, y, z) {
--	return foo(x, y, z);
--};
--var sum = 0;
--for (var i = 0; i < 100; ++i) sum += indirect_foo(i, i + 1, 3 * i);
--console.log(sum);
-+var e = function(e, t, n) {
-+	return e < t ? e * t + n : e * n - t;
-+}, t = function(t, n, r) {
-+	return e(t, n, r);
-+}, n = 0;
-+for (var r = 0; r < 100; ++r) n += t(r, r + 1, 3 * r);
-+console.log(n);
-
-```
-
-## `uglify/const/issue_4229`
-
-- size: oxc 0 vs reference 41 (-41 bytes)
-
-```js
-(function f() {
-	f;
-	const f = 42;
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +0,0 @@
--(function f() {
--	f;
--	const f = 42;
--})();
 
 ```
 
@@ -36143,21 +33783,18 @@ while (a) try {
 --- reference
 +++ oxc
 @@ -1,10 +1,8 @@
--var a = 2;
+ var a = 2;
 -while (a) try {
--	console.log(a);
++for (; a;) try {
+ 	console.log(a);
 -} catch (e) {
--	var b = 0;
-+var e = 2;
-+for (; e;) try {
-+	console.log(e);
 +} catch {
-+	var t = 0;
+ 	var b = 0;
  } finally {
 -	b && console.log('FAIL');
 -	var c = --a;
 -	for (var k in c);
-+	for (var n in --e);
++	for (var k in --a);
  }
 
 ```
@@ -36281,130 +33918,6 @@ function f(x, y) {
 -	moo();
 -	return x + y;
 -}
-
-```
-
-## `uglify/ie/issue_3484_2`
-
-- size: oxc 33 vs reference 77 (-44 bytes)
-
-```js
-(function Infinity() {
-	var Infinity;
-})();
-console.log(typeof (1 / 0), typeof Infinity);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1 @@
--(function Infinity() {
--	var Infinity;
--})();
- console.log('number', 'number');
-
-```
-
-## `uglify/ie/issue_3484_2_toplevel`
-
-- size: oxc 33 vs reference 77 (-44 bytes)
-
-```js
-(function Infinity() {
-	var Infinity;
-})();
-console.log(typeof (1 / 0), typeof Infinity);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1 @@
--(function Infinity() {
--	var Infinity;
--})();
- console.log('number', 'number');
-
-```
-
-## `uglify/ie/issue_5269_3`
-
-- size: oxc 88 vs reference 132 (-44 bytes)
-
-```js
-e = 'foo';
-for (var i = 0; i < 2; i++) (function() {
-	console.log(e);
-	try {
-		console;
-	} catch (e) {
-		e = 'FAIL';
-	}
-	e = 'bar';
-	console;
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,11 +1,5 @@
- e = 'foo';
--for (var i = 0; i < 2; i++) {
-+for (var t = 0; t < 2; t++) (function() {
- 	console.log(e);
--	try {
--		console;
--	} catch (e) {
--		e = 'FAIL';
--	}
- 	e = 'bar';
--	console;
--}
-+})();
-
-```
-
-## `uglify/ie/issue_5269_3_ie`
-
-- size: oxc 88 vs reference 132 (-44 bytes)
-
-```js
-e = 'foo';
-for (var i = 0; i < 2; i++) (function() {
-	console.log(e);
-	try {
-		console;
-	} catch (e) {
-		e = 'FAIL';
-	}
-	e = 'bar';
-	console;
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,11 +1,5 @@
- e = 'foo';
--for (var i = 0; i < 2; i++) {
-+for (var t = 0; t < 2; t++) (function() {
- 	console.log(e);
--	try {
--		console;
--	} catch (e) {
--		e = 'FAIL';
--	}
- 	e = 'bar';
--	console;
--}
-+})();
 
 ```
 
@@ -36795,60 +34308,6 @@ const a = 42;
 
 ```
 
-## `uglify/default-values/issue_5651`
-
-- size: oxc 73 vs reference 121 (-48 bytes)
-
-```js
-console.log(function arguments(a = 'FAIL') {
-	try {} catch (arguments) {
-		var arguments;
-	}
-	return arguments[0];
-}());
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,3 @@
- console.log(function arguments(a = 'FAIL') {
--	try {} catch (arguments) {
--		var arguments;
--	}
- 	return arguments[0];
- }());
-
-```
-
-## `uglify/destructured/issue_5651`
-
-- size: oxc 71 vs reference 119 (-48 bytes)
-
-```js
-console.log(function arguments({}) {
-	try {} catch (arguments) {
-		var arguments;
-	}
-	return arguments[0];
-}('PASS'));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,3 @@
- console.log(function arguments({}) {
--	try {} catch (arguments) {
--		var arguments;
--	}
- 	return arguments[0];
- }('PASS'));
-
-```
-
 ## `uglify/drop-unused/drop_toplevel_funcs`
 
 - size: oxc 16 vs reference 64 (-48 bytes)
@@ -37168,13 +34627,11 @@ f();
 -var a = 'FAIL';
  try {
  	throw 'PASS';
--} catch (a) {
+ } catch (a) {
 -	function f() {
 -		return a;
 -	}
--	console.log(a);
-+} catch (e) {
-+	console.log(e);
+ 	console.log(a);
  }
 -f();
 
@@ -37383,8 +34840,8 @@ try {
 -		case null: var a = 'foo';
 -		default: a.p;
 -	}
-+	e.p;
-+	var e;
++	a.p;
++	var a;
  	console.log('FAIL');
 -} catch (e) {
 +} catch {
@@ -37419,8 +34876,8 @@ try {
 -		case null: var a = 'foo';
 -		default: a.p;
 -	}
-+	e.p;
-+	var e;
++	a.p;
++	var a;
  	console.log('FAIL');
 -} catch (e) {
 +} catch {
@@ -37761,84 +35218,6 @@ console.log(function(f) {
 
 ```
 
-## `uglify/ie/issue_5961`
-
-- size: oxc 93 vs reference 149 (-56 bytes)
-
-```js
-for (var a in [1, 2]) {
-	(function() {
-		try {
-			(function f() {});
-		} finally {
-			var b = f, f = 'FAIL';
-			console.log(b || 'PASS');
-		}
-	})();
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,10 +1,4 @@
--for (var a in [1, 2]) {
--	b = void 0;
--	f = void 0;
--	try {
--		(function f() {});
--	} finally {
--		var b = f, f = 'FAIL';
--		console.log(b || 'PASS');
--	}
--}
-+for (var e in [1, 2]) (function() {
-+	var e = t, t = 'FAIL';
-+	console.log(e || 'PASS');
-+})();
-
-```
-
-## `uglify/ie/issue_5961_ie`
-
-- size: oxc 93 vs reference 149 (-56 bytes)
-
-```js
-for (var a in [1, 2]) {
-	(function() {
-		try {
-			(function f() {});
-		} finally {
-			var b = f, f = 'FAIL';
-			console.log(b || 'PASS');
-		}
-	})();
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,10 +1,4 @@
--for (var a in [1, 2]) {
--	b = void 0;
--	f = void 0;
--	try {
--		(function f() {});
--	} finally {
--		var b = f, f = 'FAIL';
--		console.log(b || 'PASS');
--	}
--}
-+for (var e in [1, 2]) (function() {
-+	var e = t, t = 'FAIL';
-+	console.log(e || 'PASS');
-+})();
-
-```
-
 ## `uglify/pure_getters/collapse_vars_1_true`
 
 - size: oxc 0 vs reference 56 (-56 bytes)
@@ -37961,36 +35340,6 @@ function f2() {
 +	a.size = 9;
 +	a.stuff = 3;
  }
-
-```
-
-## `uglify/classes/issue_4962_2_strict_direct_inline`
-
-- size: oxc 21 vs reference 79 (-58 bytes)
-
-```js
-console.log(function f() {}(function g() {
-	function h() {
-		'use strict';
-		f;
-	}
-	class A {
-		static p = h();
-	}
-}, typeof g));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1 @@
--console.log(function f() {}(function g() {
--	(class {
--		static c = f;
--	});
--}));
-+console.log(void 0);
 
 ```
 
@@ -38910,39 +36259,6 @@ function f() {
 
 ```
 
-## `uglify/ie/reduce_vars`
-
-- size: oxc 0 vs reference 75 (-75 bytes)
-
-```js
-function f() {
-	var a;
-	try {
-		x();
-	} catch (a) {
-		y();
-	}
-	alert(a);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,9 +0,0 @@
--function f() {
--	var t;
--	try {
--		x();
--	} catch (t) {
--		y();
--	}
--	alert(t);
--}
-
-```
-
 ## `uglify/reduce_vars/var_if`
 
 - size: oxc 0 vs reference 75 (-75 bytes)
@@ -39019,13 +36335,11 @@ console.log(b('1'), b(2), b(b(b('ABCDEFGHIJK'))));
 --- reference
 +++ oxc
 @@ -1,4 +1,4 @@
--function b(x) {
--	return x + x + x;
-+function e(e) {
-+	return e + e + e;
+ function b(x) {
+ 	return x + x + x;
  }
 -console.log('111', 6, b('ABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJK'));
-+console.log(e('1'), e(2), e(e(e('ABCDEFGHIJK'))));
++console.log(b('1'), b(2), b(b(b('ABCDEFGHIJK'))));
 
 ```
 
@@ -39421,39 +36735,6 @@ function foo(x) {
 
 ```
 
-## `uglify/let/issue_4229`
-
-- size: oxc 14 vs reference 96 (-82 bytes)
-
-```js
-'use strict';
-try {
-	(function f() {
-		f;
-		let f;
-	})();
-} catch (e) {
-	console.log('PASS');
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,9 +1 @@
- 'use strict';
--try {
--	(function f() {
--		f;
--		let f;
--	})();
--} catch (e) {
--	console.log('PASS');
--}
-
-```
-
 ## `uglify/switches/beautify`
 
 - size: oxc 36 vs reference 118 (-82 bytes)
@@ -39562,38 +36843,6 @@ function g(a, b, c) {
 -function e(a, b) {}
 -function f(a, b, c) {}
 -function g(a, b, c) {}
-
-```
-
-## `uglify/classes/issue_4962_2`
-
-- size: oxc 21 vs reference 105 (-84 bytes)
-
-```js
-console.log(function f() {}(function g() {
-	function h() {
-		f;
-	}
-	class A {
-		static p = h();
-	}
-}, typeof g));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1 @@
--console.log(function f() {}(function g() {
--	function h() {
--		f;
--	}
--	(class {
--		static c = h();
--	});
--}));
-+console.log(void 0);
 
 ```
 
@@ -39765,37 +37014,6 @@ try {
 -} catch (e) {
 -	console.log('PASS');
 -}
-
-```
-
-## `uglify/ie/issue_3918`
-
-- size: oxc 21 vs reference 109 (-88 bytes)
-
-```js
-if (console.log('PASS')) {
-	var a = function f() {
-		f.p;
-		try {
-			console.log('FAIL');
-		} catch (e) {}
-	}, b = a;
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1 @@
--var a;
--console.log('PASS') && (a = function f() {
--	f.p;
--	try {
--		console.log('FAIL');
--	} catch (o) {}
--}, a);
-+console.log('PASS');
 
 ```
 
@@ -40210,39 +37428,6 @@ function f() {
 
 ```
 
-## `uglify/classes/issue_4962_2_strict_direct`
-
-- size: oxc 21 vs reference 119 (-98 bytes)
-
-```js
-console.log(function f() {}(function g() {
-	function h() {
-		'use strict';
-		f;
-	}
-	class A {
-		static p = h();
-	}
-}, typeof g));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1 @@
--console.log(function f() {}(function g() {
--	(class {
--		static c = function() {
--			'use strict';
--			f;
--		}();
--	});
--}));
-+console.log(void 0);
-
-```
-
 ## `uglify/collapse_vars/collapse_vars_properties`
 
 - size: oxc 0 vs reference 100 (-100 bytes)
@@ -40368,92 +37553,6 @@ console.log(b = 3);
 +typeof A > 'u' || typeof B < 'u' || (A, B);
 +typeof A < 'u' || typeof B > 'u' || (A, B);
 +typeof A < 'u' || typeof B < 'u' || (A, B);
-
-```
-
-## `uglify/issue-1446/typeof_eq_undefined_ie8`
-
-- size: oxc 64 vs reference 172 (-108 bytes)
-
-```js
-var a = typeof b != 'undefined';
-b = typeof a != 'undefined';
-var c = typeof d.e !== 'undefined';
-var f = 'undefined' === typeof g;
-g = 'undefined' === typeof f;
-var h = 'undefined' == typeof i.j;
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,4 @@
--var a = 'undefined' != typeof b;
--b = void 0 !== a;
--var c = 'undefined' != typeof d.e;
--var f = 'undefined' == typeof g;
--g = void 0 === f;
--var h = 'undefined' == typeof i.j;
-+b = !0;
-+var c = d.e !== void 0;
-+g = !1;
-+var h = i.j === void 0;
-
-```
-
-## `uglify/reduce_vars/issue_3042_2`
-
-- size: oxc 332 vs reference 442 (-110 bytes)
-
-```js
-function Foo() {
-	this.isFoo = function(o) {
-		return o instanceof Foo;
-	};
-}
-function FooCollection() {
-	this.foos = [1, 1].map(function() {
-		return new Foo();
-	});
-}
-var fooCollection = new FooCollection();
-console.log(fooCollection.foos[0].isFoo(fooCollection.foos[0]));
-console.log(fooCollection.foos[0].isFoo(fooCollection.foos[1]));
-console.log(fooCollection.foos[1].isFoo(fooCollection.foos[0]));
-console.log(fooCollection.foos[1].isFoo(fooCollection.foos[1]));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,14 +1,15 @@
--function Foo() {
--	this.isFoo = function(o) {
--		return o instanceof Foo;
-+function e() {
-+	this.isFoo = function(t) {
-+		return t instanceof e;
- 	};
- }
--var fooCollection = new function() {
-+function t() {
- 	this.foos = [1, 1].map(function() {
--		return new Foo();
-+		return new e();
- 	});
--}();
--console.log(fooCollection.foos[0].isFoo(fooCollection.foos[0]));
--console.log(fooCollection.foos[0].isFoo(fooCollection.foos[1]));
--console.log(fooCollection.foos[1].isFoo(fooCollection.foos[0]));
--console.log(fooCollection.foos[1].isFoo(fooCollection.foos[1]));
-+}
-+var n = new t();
-+console.log(n.foos[0].isFoo(n.foos[0]));
-+console.log(n.foos[0].isFoo(n.foos[1]));
-+console.log(n.foos[1].isFoo(n.foos[0]));
-+console.log(n.foos[1].isFoo(n.foos[1]));
 
 ```
 
@@ -42109,10 +39208,10 @@ console.log(b('1'), b(2), b(b(b('ABCDEFGHIJK'))));
 +++ oxc
 @@ -1 +1,4 @@
 -console.log('111', 6, 'ABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJKABCDEFGHIJK');
-+function e(e) {
-+	return e + e + e;
++function b(x) {
++	return x + x + x;
 +}
-+console.log(e('1'), e(2), e(e(e('ABCDEFGHIJK'))));
++console.log(b('1'), b(2), b(b(b('ABCDEFGHIJK'))));
 
 ```
 

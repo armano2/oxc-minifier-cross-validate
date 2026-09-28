@@ -1,6 +1,6 @@
 # terser / smaller — Output shorter than expected (possible over-optimization / bug)
 
-Fixtures: 627
+Fixtures: 593
 
 [← terser](README.md) · [← all families](../README.md)
 
@@ -872,6 +872,58 @@ console.log((function() {
 
 ```
 
+## `terser/reduce_vars/escape_await`
+
+- size: oxc 236 vs reference 237 (-1 bytes)
+
+```js
+function main() {
+	var thing;
+	baz().then((x) => {
+		thing = x;
+	});
+	baz().then((x) => {
+		if (thing !== (thing = x)) console.log('FAIL');
+		else console.log('PASS');
+	});
+}
+function foo() {}
+async function baz() {
+	return await foo;
+}
+main();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,14 +1,14 @@
+-function foo() {}
+-async function baz() {
+-	return await foo;
+-}
+-(function() {
++function main() {
+ 	var thing;
+ 	baz().then((x) => {
+ 		thing = x;
+ 	});
+ 	baz().then((x) => {
+-		if (thing !== (thing = x)) console.log('FAIL');
+-		else console.log('PASS');
++		thing === (thing = x) ? console.log('PASS') : console.log('FAIL');
+ 	});
+-})();
++}
++function foo() {}
++async function baz() {
++	return await foo;
++}
++main();
+
+```
+
 ## `terser/reduce_vars/issue_2450_5`
 
 - size: oxc 119 vs reference 120 (-1 bytes)
@@ -897,14 +949,12 @@ function g() {}
 --- reference
 +++ oxc
 @@ -1,12 +1,13 @@
--var a;
--function g() {}
-+var e;
-+function t(t) {
-+	console.log(e === t);
-+	e = t;
+ var a;
++function f(b) {
++	console.log(a === b);
++	a = b;
 +}
-+function n() {}
+ function g() {}
  [
  	1,
  	2,
@@ -914,7 +964,7 @@ function g() {}
 -		console.log(a === b);
 -		a = b;
 -	})(g);
-+	t(n);
++	f(g);
  });
 
 ```
@@ -985,9 +1035,8 @@ console.log(a, b);
 @@ -1,3 +1,2 @@
 -var b;
 -var a = b = 2, b = 0 / 0;
--console.log(a, b);
-+var e = 1, t = e += 1, e = NaN;
-+console.log(t, e);
++var b = 1, a = b += 1, b = NaN;
+ console.log(a, b);
 
 ```
 
@@ -1158,36 +1207,6 @@ function x() {
  		class Zee {}
  	}
  }
-
-```
-
-## `terser/classes/class_duplication_2`
-
-- size: oxc 50 vs reference 52 (-2 bytes)
-
-```js
-class Foo {
-	foo() {
-		leak(new Foo());
-	}
-}
-leak(Foo);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,6 @@
--leak(class Foo {
-+class e {
- 	foo() {
--		leak(new Foo());
-+		leak(new e());
- 	}
--});
-+}
-+leak(e);
 
 ```
 
@@ -1508,6 +1527,33 @@ else;
 @@ -1 +1 @@
 -if (x) yes();
 +x && yes();
+
+```
+
+## `terser/keep_names/drop_fnames`
+
+- size: oxc 55 vs reference 57 (-2 bytes)
+
+```js
+function foo() {
+	function bar() {
+		return 'foobar';
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+-function foo() {
+-	function o() {
++function e() {
++	function e() {
+ 		return 'foobar';
+ 	}
+ }
 
 ```
 
@@ -2077,90 +2123,6 @@ console.log(a);
 
 ```
 
-## `terser/collapse_vars/switch_case_2`
-
-- size: oxc 82 vs reference 85 (-3 bytes)
-
-```js
-var a = 1, b = 2;
-switch (b++) {
-	case b:
-		var c = a;
-		var a;
-		break;
-}
-console.log(a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
- var a = 1, b = 2;
- switch (b++) {
- 	case b:
--		var a, c = a;
--		break;
-+		var c = a;
-+		var a;
- }
- console.log(a);
-
-```
-
-## `terser/destructuring/mangle_destructuring_assign_toplevel_true`
-
-- size: oxc 223 vs reference 226 (-3 bytes)
-
-```js
-function test(opts) {
-	let s, o, r;
-	let a = opts.a || {
-		e: 7,
-		n: 8
-	};
-	({t, e, n, s = 5 + 4, o, r} = a);
-	console.log(t, e, n, s, o, r);
-}
-let t, e, n;
-test({ a: {
-	t: 1,
-	e: 2,
-	n: 3,
-	s: 4,
-	o: 5,
-	r: 6
-} });
-test({});
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,13 +1,13 @@
- function e(e) {
--	let l, s, a;
--	let c = e.a || {
-+	let i, a, o;
-+	let s = e.a || {
- 		e: 7,
- 		n: 8
- 	};
--	({t: n, e: o, n: t, s: l = 9, o: s, r: a} = c);
--	console.log(n, o, t, l, s, a);
-+	({t, e: n, n: r, s: i = 9, o: a, r: o} = s);
-+	console.log(t, n, r, i, a, o);
- }
--let n, o, t;
-+let t, n, r;
- e({ a: {
- 	t: 1,
- 	e: 2,
-
-```
-
 ## `terser/evaluate/global_hasOwnProperty`
 
 - size: oxc 85 vs reference 88 (-3 bytes)
@@ -2180,48 +2142,6 @@ hasOwnProperty.call(a['b'], b);
  hasOwnProperty.call(a.b, b);
 -hasOwnProperty.call(a['b'], b);
 +hasOwnProperty.call(a.b, b);
-
-```
-
-## `terser/export/issue_2134_1`
-
-- size: oxc 42 vs reference 45 (-3 bytes)
-
-```js
-export function Foo(x) {}
-Foo.prototype = {};
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,2 @@
--export function Foo() {}
--Foo.prototype = {};
-+export function e(e) {}
-+e.prototype = {};
-
-```
-
-## `terser/export/issue_2134_2`
-
-- size: oxc 48 vs reference 51 (-3 bytes)
-
-```js
-export async function Foo(x) {}
-Foo.prototype = {};
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,2 @@
--export async function Foo() {}
--Foo.prototype = {};
-+export async function e(e) {}
-+e.prototype = {};
 
 ```
 
@@ -2246,7 +2166,7 @@ f(1);
 +++ oxc
 @@ -1,7 +1,8 @@
 -!(function() {
-+function e() {
++function f() {
  	try {
  		throw 0;
 -	} catch (e) {
@@ -2255,44 +2175,7 @@ f(1);
  	}
 -})(1);
 +}
-+e(1);
-
-```
-
-## `terser/harmony/object_spread_of_sequence`
-
-- size: oxc 125 vs reference 128 (-3 bytes)
-
-```js
-var a = { x: 1 };
-console.log({ ...(a, a) });
-console.log({
-	...a,
-	a
-});
-console.log({ ...a || a });
-console.log({ ...a || a });
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,8 @@
--var o = { x: 1 };
--console.log({ ...o });
-+var a = { x: 1 };
-+console.log({ ...a });
- console.log({
--	...o,
--	a: o
-+	...a,
-+	a
- });
--console.log({ ...o || o });
--console.log({ ...o || o });
-+console.log({ ...a || a });
-+console.log({ ...a || a });
++f(1);
 
 ```
 
@@ -2438,6 +2321,30 @@ a['foo'] = 'bar';
 
 ```
 
+## `terser/reduce_vars/conditional_chain_certain_part`
+
+- size: oxc 84 vs reference 87 (-3 bytes)
+
+```js
+global.a = { b: null };
+let foo = 'FAIL';
+a.b.c(foo = 'PASS')?.x;
+console.log(foo);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ global.a = { b: null };
+ let foo = 'FAIL';
+ a.b.c(foo = 'PASS')?.x;
+-console.log('PASS');
++console.log(foo);
+
+```
+
 ## `terser/reduce_vars/escaped_prop_3`
 
 - size: oxc 122 vs reference 125 (-3 bytes)
@@ -2461,26 +2368,21 @@ h();
 --- reference
 +++ oxc
 @@ -1,10 +1,11 @@
--var a;
--function g() {}
--function h() {
+ var a;
++function f(b) {
++	a && console.log(a === b.c);
++	a = b.c;
++}
+ function g() {}
+ function h() {
 -	(function(b) {
 -		if (a) console.log(a === b.c);
 -		a = b.c;
 -	})({ c: g });
-+var e;
-+function t(t) {
-+	e && console.log(e === t.c);
-+	e = t.c;
++	f({ c: g });
  }
--h();
--h();
-+function n() {}
-+function r() {
-+	t({ c: n });
-+}
-+r();
-+r();
+ h();
+ h();
 
 ```
 
@@ -2583,16 +2485,12 @@ console.log(g(false) === g(null));
 ```diff
 --- reference
 +++ oxc
-@@ -1,5 +1,5 @@
--function f() {}
--function g(a) {
--	return a || f;
-+function e() {}
-+function t(t) {
-+	return t || e;
+@@ -2,4 +2,4 @@
+ function g(a) {
+ 	return a || f;
  }
 -console.log(g(false) === g(null));
-+console.log(t(!1) === t(null));
++console.log(g(!1) === g(null));
 
 ```
 
@@ -2842,33 +2740,35 @@ switch (function() {
 
 ```
 
-## `terser/classes/class_duplication`
+## `terser/collapse_vars/issue_2364_4`
 
-- size: oxc 59 vs reference 63 (-4 bytes)
+- size: oxc 218 vs reference 222 (-4 bytes)
 
 ```js
-class Foo {
-	foo() {
-		leak(new Foo());
-	}
+function inc(obj) {
+	return obj.count++;
 }
-export default Foo;
+function foo(bar, baz) {
+	var result = inc(bar);
+	return foo.amount = baz.count, result;
+}
+var data = { count: 0 };
+var answer = foo(data, data);
+console.log(foo.amount, answer);
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,5 +1,6 @@
--export default (class Foo {
-+class e {
- 	foo() {
--		leak(new Foo());
-+		leak(new e());
- 	}
--});
-+}
-+export default e;
+@@ -5,6 +5,5 @@
+ 	var result = inc(bar);
+ 	return foo.amount = baz.count, result;
+ }
+-var data = { count: 0 };
+-var answer = foo(data, data);
++var data = { count: 0 }, answer = foo(data, data);
+ console.log(foo.amount, answer);
 
 ```
 
@@ -2891,14 +2791,11 @@ try {
 +++ oxc
 @@ -1,6 +1,6 @@
  try {
--	var a = A, b = 1;
--	throw a;
+ 	var a = A, b = 1;
+ 	throw a;
 -} catch (e) {
--	console.log(b);
-+	var e = A, t = 1;
-+	throw e;
 +} catch {
-+	console.log(t);
+ 	console.log(b);
  }
 
 ```
@@ -2967,45 +2864,6 @@ console.log(a);
 
 ```
 
-## `terser/collapse_vars/issue_2914_1`
-
-- size: oxc 192 vs reference 196 (-4 bytes)
-
-```js
-function read(input) {
-	var i = 0;
-	var e = 0;
-	var t = 0;
-	while (e < 32) {
-		var n = input[i++];
-		t |= (127 & n) << e;
-		if (0 === (128 & n)) return t;
-		e += 7;
-	}
-}
-console.log(read([129]));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -2,10 +2,10 @@
- 	var i = 0;
- 	var e = 0;
- 	var t = 0;
--	while (e < 32) {
-+	for (; e < 32;) {
- 		var n = input[i++];
- 		t |= (127 & n) << e;
--		if (0 === (128 & n)) return t;
-+		if (!(128 & n)) return t;
- 		e += 7;
- 	}
- }
-
-```
-
 ## `terser/collapse_vars/issue_2954_1`
 
 - size: oxc 138 vs reference 142 (-4 bytes)
@@ -3044,6 +2902,30 @@ console.log(a);
 
 ```
 
+## `terser/collapse_vars/lvalues_def`
+
+- size: oxc 68 vs reference 72 (-4 bytes)
+
+```js
+var a = 0, b = 1;
+var a = b++, b = +(function() {})();
+a && a[a++];
+console.log(a, b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,3 @@
+-var a = 0, b = 1;
+-a = b++, b = +void 0;
++var a = 0, b = 1, a = b++, b = NaN;
+ a && a[a++];
+ console.log(a, b);
+
+```
+
 ## `terser/collapse_vars/may_throw_2`
 
 - size: oxc 97 vs reference 101 (-4 bytes)
@@ -3073,6 +2955,34 @@ f(0);
  	console.log(b);
  }
  f(0);
+
+```
+
+## `terser/collapse_vars/side_effects_property`
+
+- size: oxc 90 vs reference 94 (-4 bytes)
+
+```js
+var a = [];
+var b = 0;
+a[b++] = function() {
+	return 42;
+};
+var c = a[b++]();
+console.log(c);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+-var a = [];
+-var b = 0;
++var a = [], b = 0;
+ a[b++] = function() {
+ 	return 42;
+ };
 
 ```
 
@@ -3237,20 +3147,13 @@ console.log(1 ** NaN);
 
 ```
 
-## `terser/export/issue_2131`
+## `terser/export/export_default_named_async_function`
 
-- size: oxc 66 vs reference 70 (-4 bytes)
+- size: oxc 61 vs reference 65 (-4 bytes)
 
 ```js
-function no() {
-	console.log(42);
-}
-function go() {
-	console.log(42);
-}
-var X = 1, Y = 2;
-export function main() {
-	go(X);
+export default async function bar() {
+	return await foo();
 }
 
 ```
@@ -3258,45 +3161,33 @@ export function main() {
 ```diff
 --- reference
 +++ oxc
-@@ -1,6 +1,6 @@
--function go() {
-+function e() {
- 	console.log(42);
- }
--export function main() {
--	go();
-+export function t() {
-+	e(1);
+@@ -1,3 +1,3 @@
+-export default async function _$BAR$_() {
++export default async function bar() {
+ 	return await foo();
  }
 
 ```
 
-## `terser/functions/issue_2476`
+## `terser/export/export_default_named_generator`
 
-- size: oxc 140 vs reference 144 (-4 bytes)
+- size: oxc 49 vs reference 53 (-4 bytes)
 
 ```js
-function foo(x, y, z) {
-	return x < y ? x * y + z : x * z - y;
+export default function* gen() {
+	yield foo();
 }
-for (var sum = 0, i = 0; i < 10; i++) sum += foo(i, i + 1, 3 * i);
-console.log(sum);
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,5 +1,5 @@
--for (var sum = 0, i = 0; i < 10; i++) {
--	var x, y, z;
--	sum += (x = i, y = i + 1, z = 3 * i, x < y ? x * y + z : x * z - y);
-+function e(e, t, n) {
-+	return e < t ? e * t + n : e * n - t;
+@@ -1,3 +1,3 @@
+-export default function* _$GEN$_() {
++export default function* gen() {
+ 	yield foo();
  }
--console.log(sum);
-+for (var t = 0, n = 0; n < 10; n++) t += e(n, n + 1, 3 * n);
-+console.log(t);
 
 ```
 
@@ -3322,48 +3213,6 @@ class C4 {
 
 ```
 
-## `terser/harmony/export_default_class_decl`
-
-- size: oxc 44 vs reference 48 (-4 bytes)
-
-```js
-export default class Car {}
-export class Cab {}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,2 @@
--export default class Car {}
--export class Cab {}
-+export default class e {}
-+export class t {}
-
-```
-
-## `terser/harmony/export_default_function_decl`
-
-- size: oxc 54 vs reference 58 (-4 bytes)
-
-```js
-export default function Foo() {}
-export function Far() {}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,2 @@
--export default function Foo() {}
--export function Far() {}
-+export default function e() {}
-+export function t() {}
-
-```
-
 ## `terser/harmony/regression_for_of_const`
 
 - size: oxc 36 vs reference 40 (-4 bytes)
@@ -3382,6 +3231,34 @@ for (const x in y) {}
 -for (const x in y);
 +for (let x of y);
 +for (let x in y);
+
+```
+
+## `terser/hoist_props/direct_access_1`
+
+- size: oxc 82 vs reference 86 (-4 bytes)
+
+```js
+var a = 0;
+var obj = {
+	a: 1,
+	b: 2
+};
+for (var k in obj) a++;
+console.log(a, obj.a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+-var a = 0;
+-var obj = {
++var a = 0, obj = {
+ 	a: 1,
+ 	b: 2
+ };
 
 ```
 
@@ -3437,21 +3314,24 @@ console.log(b);
 ```diff
 --- reference
 +++ oxc
-@@ -2,11 +2,11 @@
- var a = 1, b = 'FAIL';
+@@ -1,12 +1,12 @@
+ 'aaaaaaaa';
+-var a = 1, b = 'FAIL';
++var e = 1, t = 'FAIL';
  try {
  	throw 1;
 -} catch (t) {
-+} catch (c) {
++} catch (e) {
  	try {
  		throw 0;
 -	} catch (a) {
 -		if (t) b = 'PASS';
 +	} catch {
-+		c && (b = 'PASS');
++		e && (t = 'PASS');
  	}
  }
- console.log(b);
+-console.log(b);
++console.log(t);
 
 ```
 
@@ -3478,17 +3358,53 @@ console.log(b);
 ```diff
 --- reference
 +++ oxc
-@@ -5,8 +5,8 @@
- } catch (c) {
+@@ -1,12 +1,12 @@
+ 'aaaaaaaa';
+-var a = 1, b = 'FAIL';
++var e = 1, t = 'FAIL';
+ try {
+ 	throw 1;
+-} catch (c) {
++} catch (e) {
  	try {
  		throw 0;
 -	} catch (a) {
 -		if (c) b = 'PASS';
 +	} catch {
-+		c && (b = 'PASS');
++		e && (t = 'PASS');
  	}
  }
- console.log(b);
+-console.log(b);
++console.log(t);
+
+```
+
+## `terser/issue_1202/mangle_keep_fnames_false`
+
+- size: oxc 85 vs reference 89 (-4 bytes)
+
+```js
+'use strict';
+function total() {
+	return function n(a, b, c) {
+		return a + b + c;
+	};
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+ 'use strict';
+-function total() {
+-	return function t(t, n, r) {
++function e() {
++	return function e(t, n, r) {
+ 		return t + n + r;
+ 	};
+ }
 
 ```
 
@@ -3568,7 +3484,9 @@ f();
 ```diff
 --- reference
 +++ oxc
-@@ -2,14 +2,14 @@
+@@ -1,15 +1,15 @@
+-var o = 0;
++var e = 0;
  function f() {
  	try {
  		throw 1;
@@ -3579,13 +3497,13 @@ f();
 -		} catch (c) {
 -			var c = 3;
 -			console.log(c);
-+		} catch (o) {
-+			var o = 3;
-+			console.log(o);
++		} catch (e) {
++			var e = 3;
++			console.log(e);
  		}
  	}
 -	console.log(c);
-+	console.log(o);
++	console.log(e);
  }
  f();
 
@@ -3617,7 +3535,9 @@ f();
 ```diff
 --- reference
 +++ oxc
-@@ -2,7 +2,7 @@
+@@ -1,15 +1,15 @@
+-var o = 0;
++var e = 0;
  function f() {
  	try {
  		throw 1;
@@ -3625,7 +3545,18 @@ f();
 +	} catch {
  		try {
  			throw 2;
- 		} catch (o) {
+-		} catch (o) {
+-			var o = 3;
+-			console.log(o);
++		} catch (e) {
++			var e = 3;
++			console.log(e);
+ 		}
+ 	}
+-	console.log(o);
++	console.log(e);
+ }
+ f();
 
 ```
 
@@ -3649,6 +3580,27 @@ L: do {
  	continue L;
 -} while (0);
 +while (0);
+
+```
+
+## `terser/issue_2001/export_mangle_6`
+
+- size: oxc 36 vs reference 40 (-4 bytes)
+
+```js
+var baz = 2;
+export let foo = 1, bar = baz;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+-var o = 2;
+-export let foo = 1, bar = o;
++var e = 2;
++export let t = 1, n = e;
 
 ```
 
@@ -3861,27 +3813,6 @@ new ((function(a) {
 
 ```
 
-## `terser/nullish/conditional_to_nullish_coalescing`
-
-- size: oxc 43 vs reference 47 (-4 bytes)
-
-```js
-const foo = id('something');
-leak(foo == null ? bar : foo);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,2 @@
--const foo = id('something');
--leak(foo ?? bar);
-+const e = id('something');
-+leak(e ?? bar);
-
-```
-
 ## `terser/numbers/unary_binary_parenthesis`
 
 - size: oxc 217 vs reference 221 (-4 bytes)
@@ -3980,99 +3911,30 @@ function f() {
 
 ```
 
-## `terser/reduce_vars/issue_2416`
+## `terser/reduce_vars/named_function_with_recursive_ref_reuse`
 
-- size: oxc 32 vs reference 36 (-4 bytes)
+- size: oxc 145 vs reference 149 (-4 bytes)
 
 ```js
-class Foo {}
-console.log(Foo.name);
+var result = [];
+var do_not_inline = function foo() {
+	result.push(foo);
+};
+[0, 1].map(() => do_not_inline());
+console.log(result[0] === result[1]);
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,2 +1,2 @@
--class Foo {}
--console.log(Foo.name);
-+class e {}
-+console.log(e.name);
-
-```
-
-## `terser/reduce_vars/issue_2440_with_1`
-
-- size: oxc 71 vs reference 75 (-4 bytes)
-
-```js
-function foo() {
-	return bar();
-}
-baz = { quux: foo };
-with(o) whatever();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,5 @@
--function foo() {
-+function e() {
- 	return bar();
- }
--baz = { quux: foo };
-+baz = { quux: e };
- with(o) whatever();
-
-```
-
-## `terser/reduce_vars/issue_2440_with_2`
-
-- size: oxc 71 vs reference 75 (-4 bytes)
-
-```js
-baz = { quux: foo };
-with(o) whatever();
-function foo() {
-	return bar();
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,5 @@
--baz = { quux: foo };
-+baz = { quux: e };
- with(o) whatever();
--function foo() {
-+function e() {
- 	return bar();
- }
-
-```
-
-## `terser/reduce_vars/issue_2669`
-
-- size: oxc 43 vs reference 47 (-4 bytes)
-
-```js
-let foo;
-console.log(([foo] = ['PASS']) && foo);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,2 @@
--let foo;
--console.log(([foo] = ['PASS'], foo));
-+let e;
-+console.log(([e] = ['PASS']) && e);
+@@ -1,5 +1,4 @@
+-var result = [];
+-var do_not_inline = function foo() {
++var result = [], do_not_inline = function foo() {
+ 	result.push(foo);
+ };
+ [0, 1].map(() => do_not_inline());
 
 ```
 
@@ -4093,12 +3955,10 @@ console.log(a);
 +++ oxc
 @@ -1,4 +1,4 @@
  try {
--	var a = (a.b, 2);
+ 	var a = (a.b, 2);
 -} catch (e) {}
--console.log(a);
-+	var e = (e.b, 2);
 +} catch {}
-+console.log(e);
+ console.log(a);
 
 ```
 
@@ -4128,7 +3988,9 @@ f();
 ```diff
 --- reference
 +++ oxc
-@@ -2,14 +2,14 @@
+@@ -1,15 +1,15 @@
+-var o = 0;
++var e = 0;
  function f() {
  	try {
  		throw 1;
@@ -4139,13 +4001,13 @@ f();
 -		} catch (c) {
 -			var c = 3;
 -			console.log(c);
-+		} catch (o) {
-+			var o = 3;
-+			console.log(o);
++		} catch (e) {
++			var e = 3;
++			console.log(e);
  		}
  	}
 -	console.log(c);
-+	console.log(o);
++	console.log(e);
  }
  f();
 
@@ -4177,7 +4039,9 @@ f();
 ```diff
 --- reference
 +++ oxc
-@@ -2,7 +2,7 @@
+@@ -1,15 +1,15 @@
+-var o = 0;
++var e = 0;
  function f() {
  	try {
  		throw 1;
@@ -4185,7 +4049,18 @@ f();
 +	} catch {
  		try {
  			throw 2;
- 		} catch (o) {
+-		} catch (o) {
+-			var o = 3;
+-			console.log(o);
++		} catch (e) {
++			var e = 3;
++			console.log(e);
+ 		}
+ 	}
+-	console.log(o);
++	console.log(e);
+ }
+ f();
 
 ```
 
@@ -4212,17 +4087,24 @@ console.log(b);
 ```diff
 --- reference
 +++ oxc
-@@ -5,8 +5,8 @@
- } catch (c) {
+@@ -1,12 +1,12 @@
+ 'aaaaaaaa';
+-var a = 1, b = 'FAIL';
++var e = 1, t = 'FAIL';
+ try {
+ 	throw 1;
+-} catch (c) {
++} catch (e) {
  	try {
  		throw 0;
 -	} catch (t) {
 -		if (c) b = 'PASS';
 +	} catch {
-+		c && (b = 'PASS');
++		e && (t = 'PASS');
  	}
  }
- console.log(b);
+-console.log(b);
++console.log(t);
 
 ```
 
@@ -4249,17 +4131,24 @@ console.log(b);
 ```diff
 --- reference
 +++ oxc
-@@ -5,8 +5,8 @@
- } catch (c) {
+@@ -1,12 +1,12 @@
+ 'aaaaaaaa';
+-var a = 1, b = 'FAIL';
++var e = 1, t = 'FAIL';
+ try {
+ 	throw 1;
+-} catch (c) {
++} catch (e) {
  	try {
  		throw 0;
 -	} catch (a) {
 -		if (c) b = 'PASS';
 +	} catch {
-+		c && (b = 'PASS');
++		e && (t = 'PASS');
  	}
  }
- console.log(b);
+-console.log(b);
++console.log(t);
 
 ```
 
@@ -4323,18 +4212,47 @@ console.log(null, a, b);
 
 ```
 
-## `terser/collapse_vars/issue_2571_1`
+## `terser/collapse_vars/issue_2364_2`
 
-- size: oxc 105 vs reference 110 (-5 bytes)
+- size: oxc 163 vs reference 168 (-5 bytes)
 
 ```js
-var b = 1;
-try {
-	var a = (function f0(c) {
-		throw c;
-	})(2);
-	var d = --b + a;
-} catch (e) {}
+function callValidate() {
+	var validate = compilation.validate;
+	var result = validate.apply(null, arguments);
+	return callValidate.errors = validate.errors, result;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+ function callValidate() {
+-	var validate = compilation.validate;
+-	var result = validate.apply(null, arguments);
++	var validate = compilation.validate, result = validate.apply(null, arguments);
+ 	return callValidate.errors = validate.errors, result;
+ }
+
+```
+
+## `terser/collapse_vars/issue_2858`
+
+- size: oxc 116 vs reference 121 (-5 bytes)
+
+```js
+var b;
+(function() {
+	function f() {
+		a++;
+	}
+	f();
+	var c = f();
+	var a = void 0;
+	c || (b = a);
+})();
 console.log(b);
 
 ```
@@ -4342,22 +4260,42 @@ console.log(b);
 ```diff
 --- reference
 +++ oxc
-@@ -1,8 +1,8 @@
--var b = 1;
-+var e = 1;
- try {
--	var a = function f0(c) {
--		throw c;
--	}(2);
--	var d = --b + a;
--} catch (e) {}
--console.log(b);
-+	var t = (function(e) {
-+		throw e;
-+	})(2);
-+	var n = --e + t;
-+} catch {}
-+console.log(e);
+@@ -4,8 +4,7 @@
+ 		a++;
+ 	}
+ 	f();
+-	var c = f();
+-	var a = void 0;
++	var c = f(), a = void 0;
+ 	c || (b = a);
+ })();
+ console.log(b);
+
+```
+
+## `terser/collapse_vars/issue_3096`
+
+- size: oxc 98 vs reference 103 (-5 bytes)
+
+```js
+console.log((function() {
+	var ar = ['a', 'b'];
+	var first = ar.pop();
+	return ar + '' + first;
+})());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+ console.log((function() {
+-	var ar = ['a', 'b'];
+-	var first = ar.pop();
++	var ar = ['a', 'b'], first = ar.pop();
+ 	return ar + '' + first;
+ })());
 
 ```
 
@@ -5007,6 +4945,34 @@ f(NaN, 'foo');
 
 ```
 
+## `terser/dead_code/dead_code_const_annotation`
+
+- size: oxc 48 vs reference 54 (-6 bytes)
+
+```js
+var unused;
+/** @const */ var CONST_FOO_ANN = false;
+if (CONST_FOO_ANN) {
+	console.log('unreachable');
+	var moo;
+	function bar() {}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,2 @@
+-var unused;
+-var CONST_FOO_ANN = !1;
+-var moo;
+-var bar;
++var unused, CONST_FOO_ANN = !1;
++if (0) var moo;
+
+```
+
 ## `terser/dead_code/issue_2597`
 
 - size: oxc 157 vs reference 163 (-6 bytes)
@@ -5209,87 +5175,6 @@ extract({
 
 ```
 
-## `terser/export/export_default_named_async_function`
-
-- size: oxc 59 vs reference 65 (-6 bytes)
-
-```js
-export default async function bar() {
-	return await foo();
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,3 @@
--export default async function _$BAR$_() {
-+export default async function e() {
- 	return await foo();
- }
-
-```
-
-## `terser/export/export_default_named_generator`
-
-- size: oxc 47 vs reference 53 (-6 bytes)
-
-```js
-export default function* gen() {
-	yield foo();
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,3 @@
--export default function* _$GEN$_() {
-+export default function* e() {
- 	yield foo();
- }
-
-```
-
-## `terser/export/name_cache_do_not_mangle_export_destructuring_name`
-
-- size: oxc 115 vs reference 121 (-6 bytes)
-
-```js
-export const [add] = [
-	1,
-	2,
-	3
-];
-const [mul, sub] = [
-	1,
-	2,
-	3
-];
-console.log(add, add, sub, sub, mul, mul);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -3,9 +3,9 @@
- 	2,
- 	3
- ];
--const [d, _$SUB$_] = [
-+const [mul, sub] = [
- 	1,
- 	2,
- 	3
- ];
--console.log(add, add, _$SUB$_, _$SUB$_, d, d);
-+console.log(add, add, sub, sub, mul, mul);
-
-```
-
 ## `terser/global_defs/issue_1986`
 
 - size: oxc 11 vs reference 17 (-6 bytes)
@@ -5412,6 +5297,64 @@ if ((function() {
 +})() ? foo(!0) : bar(!1), (function() {
  	console.log('something');
  })();
+
+```
+
+## `terser/issue_747/dont_reuse_prop`
+
+- size: oxc 73 vs reference 79 (-6 bytes)
+
+```js
+'aaaaaaaaaabbbbb';
+var obj = {};
+obj.a = 123;
+obj.asd = 256;
+console.log(obj.a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ 'aaaaaaaaaabbbbb';
+-var obj = {};
+-obj.a = 123;
+-obj.o = 256;
+-console.log(obj.a);
++var e = {};
++e.a = 123;
++e.asd = 256;
++console.log(e.a);
+
+```
+
+## `terser/issue_747/unmangleable_props_should_always_be_reserved`
+
+- size: oxc 73 vs reference 79 (-6 bytes)
+
+```js
+'aaaaaaaaaabbbbb';
+var obj = {};
+obj.asd = 256;
+obj.a = 123;
+console.log(obj.a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ 'aaaaaaaaaabbbbb';
+-var obj = {};
+-obj.o = 256;
+-obj.a = 123;
+-console.log(obj.a);
++var e = {};
++e.asd = 256;
++e.a = 123;
++console.log(e.a);
 
 ```
 
@@ -5686,110 +5629,6 @@ console.log((function() {
 
 ```
 
-## `terser/reduce_vars/conditional_chain_call`
-
-- size: oxc 76 vs reference 82 (-6 bytes)
-
-```js
-global.a = { b: null };
-let foo = 'PASS';
-a.b?.c(foo = 'FAIL');
-console.log(foo);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
- global.a = { b: null };
--let foo = 'PASS';
--a.b?.c(foo = 'FAIL');
--console.log(foo);
-+let e = 'PASS';
-+a.b?.c(e = 'FAIL');
-+console.log(e);
-
-```
-
-## `terser/reduce_vars/conditional_chain_call_direct`
-
-- size: oxc 75 vs reference 81 (-6 bytes)
-
-```js
-global.a = { b: null };
-let foo = 'PASS';
-a.b?.(foo = 'FAIL');
-console.log(foo);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
- global.a = { b: null };
--let foo = 'PASS';
--a.b?.(foo = 'FAIL');
--console.log(foo);
-+let e = 'PASS';
-+a.b?.(e = 'FAIL');
-+console.log(e);
-
-```
-
-## `terser/reduce_vars/conditional_chain_prop`
-
-- size: oxc 67 vs reference 73 (-6 bytes)
-
-```js
-global.a = null;
-let foo = 'PASS';
-a?.b[foo = 'FAIL'];
-console.log(foo);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
- global.a = null;
--let foo = 'PASS';
--a?.b[foo = 'FAIL'];
--console.log(foo);
-+let e = 'PASS';
-+a?.b[e = 'FAIL'];
-+console.log(e);
-
-```
-
-## `terser/reduce_vars/conditional_chain_prop_direct`
-
-- size: oxc 75 vs reference 81 (-6 bytes)
-
-```js
-global.a = { b: null };
-let foo = 'PASS';
-a.b?.[foo = 'FAIL'];
-console.log(foo);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
- global.a = { b: null };
--let foo = 'PASS';
--a.b?.[foo = 'FAIL'];
--console.log(foo);
-+let e = 'PASS';
-+a.b?.[e = 'FAIL'];
-+console.log(e);
-
-```
-
 ## `terser/reduce_vars/lvalues_def_1`
 
 - size: oxc 48 vs reference 54 (-6 bytes)
@@ -5807,9 +5646,43 @@ console.log(a, b);
 @@ -1,3 +1,2 @@
 -var b = 1;
 -var a = b++, b = 0 / 0;
--console.log(a, b);
-+var e = 1, t = e++, e = NaN;
-+console.log(t, e);
++var b = 1, a = b++, b = NaN;
+ console.log(a, b);
+
+```
+
+## `terser/reduce_vars/perf_7`
+
+- size: oxc 218 vs reference 224 (-6 bytes)
+
+```js
+var indirect_foo = function(x, y, z) {
+	var foo = function(x, y, z) {
+		return x < y ? x * y + z : x * z - y;
+	};
+	return foo(x, y, z);
+};
+var sum = 0;
+for (var i = 0; i < 100; ++i) sum += indirect_foo(i, i + 1, 3 * i);
+console.log(sum);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,7 @@
+ var indirect_foo = function(x, y, z) {
+-	return (function(x, y, z) {
++	return function(x, y, z) {
+ 		return x < y ? x * y + z : x * z - y;
+-	})(x, y, z);
+-};
+-var sum = 0;
++	}(x, y, z);
++}, sum = 0;
+ for (var i = 0; i < 100; ++i) sum += indirect_foo(i, i + 1, 3 * i);
+ console.log(sum);
 
 ```
 
@@ -6258,10 +6131,9 @@ var foo = bar();
 @@ -1,4 +1,3 @@
 -var foo;
 -!function(x) {
--	console.log(x);
++(function(x) {
+ 	console.log(x);
 -}(bar());
-+(function(e) {
-+	console.log(e);
 +})(bar());
 
 ```
@@ -6382,6 +6254,46 @@ console.log(D);
 
 ```
 
+## `terser/identity/inline_identity_lose_this`
+
+- size: oxc 260 vs reference 268 (-8 bytes)
+
+```js
+'use strict';
+const id = (x) => x;
+const func_bag = { func: function() {
+	return this === undefined ? 'PASS' : 'FAIL';
+} };
+func_bag.func2 = function() {
+	return this === undefined ? 'PASS' : 'FAIL';
+};
+console.log(id(func_bag.func)());
+console.log(id(func_bag.func2)());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,9 @@
+ 'use strict';
+-const id = (x) => x;
+-const func_bag = { func: function() {
+-	return void 0 === this ? 'PASS' : 'FAIL';
++const id = (x) => x, func_bag = { func: function() {
++	return this === void 0 ? 'PASS' : 'FAIL';
+ } };
+ func_bag.func2 = function() {
+-	return void 0 === this ? 'PASS' : 'FAIL';
++	return this === void 0 ? 'PASS' : 'FAIL';
+ };
+-console.log((0, func_bag.func)());
+-console.log((0, func_bag.func2)());
++console.log(id(func_bag.func)());
++console.log(id(func_bag.func2)());
+
+```
+
 ## `terser/ie8/issue_2254_1`
 
 - size: oxc 119 vs reference 127 (-8 bytes)
@@ -6409,15 +6321,13 @@ function f(s) {
  try {
  	console.log(f('PASS'));
 -} catch (e) {}
--function f(e) {
 +} catch {}
-+function f(s) {
+ function f(e) {
  	try {
  		throw 'FAIL';
 -	} catch (t) {
--		return e;
 +	} catch {
-+		return s;
+ 		return e;
  	}
  }
 
@@ -6452,43 +6362,15 @@ function f(s) {
 -} catch (e) {}
 -function f(t) {
 +} catch {}
-+function f(s) {
++function f(e) {
  	try {
  		throw 'FAIL';
 -	} catch (e) {
 -		return t;
 +	} catch {
-+		return s;
++		return e;
  	}
  }
-
-```
-
-## `terser/issue_1770/mangle_props`
-
-- size: oxc 271 vs reference 279 (-8 bytes)
-
-```js
-var obj = {
-	undefined: 1,
-	NaN: 2,
-	Infinity: 3,
-	'-Infinity': 4,
-	null: 5
-};
-console.log(obj[void 0], obj[undefined], obj['undefined'], obj[0 / 0], obj[NaN], obj['NaN'], obj[1 / 0], obj[Infinity], obj['Infinity'], obj[-1 / 0], obj[-Infinity], obj['-Infinity'], obj[null], obj['null']);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -5,4 +5,4 @@
- 	'-Infinity': 4,
- 	null: 5
- };
--console.log(obj[void 0], obj[void 0], obj['undefined'], obj[0 / 0], obj[NaN], obj['NaN'], obj[1 / 0], obj[1 / 0], obj['Infinity'], obj[-1 / 0], obj[-1 / 0], obj['-Infinity'], obj[null], obj['null']);
-+console.log(obj[void 0], obj[void 0], obj.undefined, obj[NaN], obj[NaN], obj.NaN, obj[1 / 0], obj[Infinity], obj.Infinity, obj[-1 / 0], obj[-Infinity], obj['-Infinity'], obj[null], obj.null);
 
 ```
 
@@ -6511,6 +6393,92 @@ function f() {
 -	L: 0;
 -}
 +function f() {}
+
+```
+
+## `terser/logical_assignment/assign_in_conditional_part_reused`
+
+- size: oxc 187 vs reference 195 (-8 bytes)
+
+```js
+var status = 'PASS';
+var nil = null;
+var nil_prop = { prop: null };
+nil &&= console.log(status = 'FAIL');
+nil_prop.prop &&= console.log(status = 'FAIL');
+console.log(status, nil, nil_prop.prop);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,4 @@
+-var status = 'PASS';
+-var nil = null;
+-var nil_prop = { prop: null };
++var status = 'PASS', nil = null, nil_prop = { prop: null };
+ nil &&= console.log(status = 'FAIL');
+ nil_prop.prop &&= console.log(status = 'FAIL');
+ console.log(status, nil, nil_prop.prop);
+
+```
+
+## `terser/logical_assignment/prematurely_evaluate_assignment`
+
+- size: oxc 145 vs reference 153 (-8 bytes)
+
+```js
+var or = null;
+var null_coalesce = null;
+var and = 'FAIL';
+or ||= 'PASS';
+null_coalesce ??= 'PASS';
+and &&= 'PASS';
+console.log(or, null_coalesce, and);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,4 @@
+-var or = null;
+-var null_coalesce = null;
+-var and = 'FAIL';
++var or = null, null_coalesce = null, and = 'FAIL';
+ or ||= 'PASS';
+ null_coalesce ??= 'PASS';
+ and &&= 'PASS';
+
+```
+
+## `terser/logical_assignment/prematurely_evaluate_assignment_inv`
+
+- size: oxc 149 vs reference 157 (-8 bytes)
+
+```js
+var or = 'PASS';
+var null_coalesce = 'PASS';
+var and = 'FAIL';
+or ||= 'FAIL';
+null_coalesce ??= 'FAIL';
+and &&= 'PASS';
+console.log(or, null_coalesce, and);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,4 @@
+-var or = 'PASS';
+-var null_coalesce = 'PASS';
+-var and = 'FAIL';
++var or = 'PASS', null_coalesce = 'PASS', and = 'FAIL';
+ or ||= 'FAIL';
+ null_coalesce ??= 'FAIL';
+ and &&= 'PASS';
 
 ```
 
@@ -6605,78 +6573,6 @@ console.log(o[NaN], o[NaN]);
 +o[NaN] = 1;
 +o[NaN] = 2;
 +console.log(o[NaN], o[NaN]);
-
-```
-
-## `terser/properties/mangle_debug`
-
-- size: oxc 47 vs reference 55 (-8 bytes)
-
-```js
-var a = {};
-a.foo = 'bar';
-x = { baz: 'ban' };
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,3 @@
- var a = {};
--a._$foo$_ = 'bar';
--x = { _$baz$_: 'ban' };
-+a.foo = 'bar';
-+x = { baz: 'ban' };
-
-```
-
-## `terser/properties/mangle_debug_true`
-
-- size: oxc 47 vs reference 55 (-8 bytes)
-
-```js
-var a = {};
-a.foo = 'bar';
-x = { baz: 'ban' };
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,3 @@
- var a = {};
--a._$foo$_ = 'bar';
--x = { _$baz$_: 'ban' };
-+a.foo = 'bar';
-+x = { baz: 'ban' };
-
-```
-
-## `terser/reduce_vars/conditional_chain_certain_and_uncertain_part`
-
-- size: oxc 90 vs reference 98 (-8 bytes)
-
-```js
-global.a = { b: null };
-let foo = 'FAIL';
-a.b?.[foo = 'PASS']?.d(foo = 'FAIL');
-console.log(foo);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
- global.a = { b: null };
--let foo = 'FAIL';
--a.b?.[foo = 'PASS']?.d(foo = 'FAIL');
--console.log(foo);
-+let e = 'FAIL';
-+a.b?.[e = 'PASS']?.d(e = 'FAIL');
-+console.log(e);
 
 ```
 
@@ -6826,6 +6722,80 @@ if (a = x(), a) {
 
 ```
 
+## `terser/collapse_vars/issue_2914_2`
+
+- size: oxc 181 vs reference 190 (-9 bytes)
+
+```js
+function read(input) {
+	var i = 0;
+	var e = 0;
+	var t = 0;
+	while (e < 32) {
+		var n = input[i++];
+		t = (127 & n) << e;
+		if (0 === (128 & n)) return t;
+		e += 7;
+	}
+}
+console.log(read([129]));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,9 @@
+ function read(input) {
+-	var i = 0;
+-	var e = 0;
+-	var t = 0;
+-	while (e < 32) {
++	var i = 0, e = 0, t = 0;
++	for (; e < 32;) {
+ 		var n = input[i++];
+-		if (0 === (128 & n)) return t = (127 & n) << e;
++		t = (127 & n) << e;
++		if (!(128 & n)) return t;
+ 		e += 7;
+ 	}
+ }
+
+```
+
+## `terser/export/dynamic_import`
+
+- size: oxc 143 vs reference 152 (-9 bytes)
+
+```js
+import traditional from './traditional.js';
+function imp(x) {
+	return import(x);
+}
+import('module_for_side_effects.js');
+let dynamic = import('some/module.js');
+dynamic.foo();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,6 @@
+-import o from './traditional.js';
+-function t(o) {
+-	return import(o);
++import e from './traditional.js';
++function imp(e) {
++	return import(e);
+ }
+ import('module_for_side_effects.js');
+-let r = import('some/module.js');
+-r.foo();
++import('some/module.js').foo();
+
+```
+
 ## `terser/global_defs/issue_3217`
 
 - size: oxc 8 vs reference 17 (-9 bytes)
@@ -6884,74 +6854,6 @@ x({ x: 3 });
 
 ```
 
-## `terser/hoist_props/hoist_function_with_call`
-
-- size: oxc 123 vs reference 132 (-9 bytes)
-
-```js
-var o = {
-	p: function Foo(value) {
-		return 10 * value;
-	},
-	x: 1,
-	y: 2
-};
-console.log(o.p.name, o.p === o.p, o.p(o.x), o.p(o.y));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,8 @@
--var o = {
--	p: function Foo(value) {
--		return 10 * value;
-+var e = {
-+	p: function e(t) {
-+		return 10 * t;
- 	},
- 	x: 1,
- 	y: 2
- };
--console.log(o.p.name, o.p == o.p, o.p(o.x), o.p(o.y));
-+console.log(e.p.name, e.p === e.p, e.p(e.x), e.p(e.y));
-
-```
-
-## `terser/properties/mangle_properties_which_matches_pattern`
-
-- size: oxc 65 vs reference 74 (-9 bytes)
-
-```js
-var acd = {
-	get asd() {
-		return this._asd;
-	},
-	_asd: true
-};
-console.log(acd);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,6 @@
--var acd = {
-+console.log({
- 	get asd() {
--		return this.a;
-+		return this._asd;
- 	},
--	a: !0
--};
--console.log(acd);
-+	_asd: !0
-+});
-
-```
-
 ## `terser/pure_funcs/boolean_and`
 
 - size: oxc 53 vs reference 62 (-9 bytes)
@@ -6978,32 +6880,6 @@ bar() && 'bar';
  bar();
 -'bar' && bar();
 +bar();
-
-```
-
-## `terser/reduce_vars/conditional_chain_certain_part`
-
-- size: oxc 78 vs reference 87 (-9 bytes)
-
-```js
-global.a = { b: null };
-let foo = 'FAIL';
-a.b.c(foo = 'PASS')?.x;
-console.log(foo);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
- global.a = { b: null };
--let foo = 'FAIL';
--a.b.c(foo = 'PASS')?.x;
--console.log('PASS');
-+let e = 'FAIL';
-+a.b.c(e = 'PASS')?.x;
-+console.log(e);
 
 ```
 
@@ -7133,6 +7009,40 @@ var a = 1;
 +})(function() {
 +	console.log(1);
  });
+
+```
+
+## `terser/collapse_vars/issue_2571_1`
+
+- size: oxc 100 vs reference 110 (-10 bytes)
+
+```js
+var b = 1;
+try {
+	var a = (function f0(c) {
+		throw c;
+	})(2);
+	var d = --b + a;
+} catch (e) {}
+console.log(b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,7 @@
+ var b = 1;
+ try {
+-	var a = function f0(c) {
++	var a = (function(c) {
+ 		throw c;
+-	}(2);
+-	var d = --b + a;
+-} catch (e) {}
++	})(2), d = --b + a;
++} catch {}
+ console.log(b);
 
 ```
 
@@ -7399,38 +7309,6 @@ if (true) {
 
 ```
 
-## `terser/hoist_props/direct_access_1`
-
-- size: oxc 76 vs reference 86 (-10 bytes)
-
-```js
-var a = 0;
-var obj = {
-	a: 1,
-	b: 2
-};
-for (var k in obj) a++;
-console.log(a, obj.a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,6 @@
--var a = 0;
--var obj = {
-+var e = 0, t = {
- 	a: 1,
- 	b: 2
- };
--for (var k in obj) a++;
--console.log(a, obj.a);
-+for (var n in t) e++;
-+console.log(e, t.a);
-
-```
-
 ## `terser/hoist_vars/statements_funs`
 
 - size: oxc 70 vs reference 80 (-10 bytes)
@@ -7617,86 +7495,6 @@ var obj = { foo };
 
 ```
 
-## `terser/reduce_vars/unsafe_evaluate_array_5`
-
-- size: oxc 97 vs reference 107 (-10 bytes)
-
-```js
-var arr = [
-	1,
-	2,
-	function() {
-		return ++this[0];
-	}
-];
-console.log(arr[0], arr[1], arr[2](), arr[0]);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,8 @@
--var arr = [
-+var e = [
- 	1,
- 	2,
- 	function() {
- 		return ++this[0];
- 	}
- ];
--console.log(arr[0], arr[1], arr[2](), arr[0]);
-+console.log(e[0], e[1], e[2](), e[0]);
-
-```
-
-## `terser/reduce_vars/unsafe_evaluate_object_3`
-
-- size: oxc 186 vs reference 196 (-10 bytes)
-
-```js
-var obj = {
-	get foo() {
-		return 1;
-	},
-	bar: 2,
-	square: function(x) {
-		return x * x;
-	},
-	cube: function(x) {
-		return x * x * x;
-	}
-};
-console.log(obj.foo, obj.bar, obj.square(2), obj.cube);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,13 +1,13 @@
--var obj = {
-+var e = {
- 	get foo() {
- 		return 1;
- 	},
- 	bar: 2,
--	square: function(x) {
--		return x * x;
-+	square: function(e) {
-+		return e * e;
- 	},
--	cube: function(x) {
--		return x * x * x;
-+	cube: function(e) {
-+		return e * e * e;
- 	}
- };
--console.log(obj.foo, obj.bar, obj.square(2), obj.cube);
-+console.log(e.foo, e.bar, e.square(2), e.cube);
-
-```
-
 ## `terser/sequences/hoist_decl`
 
 - size: oxc 40 vs reference 50 (-10 bytes)
@@ -7878,6 +7676,37 @@ function f(a) {
 +	}
 +	f();
 +})();
+
+```
+
+## `terser/collapse_vars/switch_case_2`
+
+- size: oxc 74 vs reference 85 (-11 bytes)
+
+```js
+var a = 1, b = 2;
+switch (b++) {
+	case b:
+		var c = a;
+		var a;
+		break;
+}
+console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,5 @@
+ var a = 1, b = 2;
+ switch (b++) {
+-	case b:
+-		var a, c = a;
+-		break;
++	case b: var c = a, a;
+ }
+ console.log(a);
 
 ```
 
@@ -8289,13 +8118,13 @@ console.log(add(1, 2), add(3, 4), sub(5, 6), sub(7, 8));
 @@ -1,7 +1,7 @@
 -export function add(n, d) {
 -	return n + d;
-+export function add(x, y) {
-+	return x + y;
++export function add(e, t) {
++	return e + t;
  }
 -function _$SUB$_(n, d) {
 -	return n - d;
-+function sub(x, y) {
-+	return x - y;
++function sub(e, t) {
++	return e - t;
  }
 -console.log(add(1, 2), add(3, 4), _$SUB$_(5, 6), _$SUB$_(7, 8));
 +console.log(add(1, 2), add(3, 4), sub(5, 6), sub(7, 8));
@@ -8356,20 +8185,13 @@ console.log(foo, bar, baz, qux, qux);
 ```diff
 --- reference
 +++ oxc
-@@ -1,10 +1,9 @@
- (function() {
- 	console.log(1);
- })();
--(function(a) {
--	console.log(a);
-+(function(e) {
-+	console.log(e);
+@@ -5,6 +5,5 @@
+ 	console.log(a);
  })(2);
--(function(b) {
+ (function(b) {
 -	var c = b;
 -	console.log(c);
-+(function(e) {
-+	console.log(e);
++	console.log(b);
  })(3);
 
 ```
@@ -8395,20 +8217,13 @@ console.log(foo, bar, baz, qux, qux);
 ```diff
 --- reference
 +++ oxc
-@@ -1,10 +1,9 @@
- (function() {
- 	console.log(1);
- })();
--(function(a) {
--	console.log(a);
-+(function(e) {
-+	console.log(e);
+@@ -5,6 +5,5 @@
+ 	console.log(a);
  })(2);
--(function(b) {
+ (function(b) {
 -	var c = b;
 -	console.log(c);
-+(function(e) {
-+	console.log(e);
++	console.log(b);
  })(3);
 
 ```
@@ -8457,40 +8272,6 @@ new.target.name;
 +		var b;
  	} while (b && b.c);
  })();
-
-```
-
-## `terser/reduce_vars/unsafe_evaluate_array_3`
-
-- size: oxc 94 vs reference 106 (-12 bytes)
-
-```js
-var arr = [
-	1,
-	2,
-	function() {
-		return ++arr[0];
-	}
-];
-console.log(arr[0], arr[1], arr[2](), arr[0]);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,8 @@
--var arr = [
-+var e = [
- 	1,
- 	2,
- 	function() {
--		return ++arr[0];
-+		return ++e[0];
- 	}
- ];
--console.log(arr[0], arr[1], arr[2](), arr[0]);
-+console.log(e[0], e[1], e[2](), e[0]);
 
 ```
 
@@ -8573,60 +8354,6 @@ foo.d();
 
 ```
 
-## `terser/collapse_vars/issue_2437`
-
-- size: oxc 391 vs reference 404 (-13 bytes)
-
-```js
-function foo() {
-	bar();
-}
-function bar() {
-	if (xhrDesc) {
-		var req = new XMLHttpRequest();
-		var result = !!req.onreadystatechange;
-		Object.defineProperty(XMLHttpRequest.prototype, 'onreadystatechange', xhrDesc || {});
-		return result;
-	} else {
-		var req = new XMLHttpRequest();
-		var detectFunc = function() {};
-		req.onreadystatechange = detectFunc;
-		var result = req[SYMBOL_FAKE_ONREADYSTATECHANGE_1] === detectFunc;
-		req.onreadystatechange = null;
-		return result;
-	}
-}
-foo();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,14 @@
--!(function() {
-+function e() {
-+	t();
-+}
-+function t() {
- 	if (xhrDesc) {
--		var result = !!(req = new XMLHttpRequest()).onreadystatechange;
--		return Object.defineProperty(XMLHttpRequest.prototype, 'onreadystatechange', xhrDesc || {}), result;
-+		var e = new XMLHttpRequest(), t = !!e.onreadystatechange;
-+		return Object.defineProperty(XMLHttpRequest.prototype, 'onreadystatechange', xhrDesc || {}), t;
- 	}
--	var req, detectFunc = function() {};
--	(req = new XMLHttpRequest()).onreadystatechange = detectFunc, result = req[SYMBOL_FAKE_ONREADYSTATECHANGE_1] === detectFunc, req.onreadystatechange = null;
--})();
-+	var e = new XMLHttpRequest(), n = function() {};
-+	e.onreadystatechange = n;
-+	var t = e[SYMBOL_FAKE_ONREADYSTATECHANGE_1] === n;
-+	return e.onreadystatechange = null, t;
-+}
-+e();
-
-```
-
 ## `terser/harmony/import_meta`
 
 - size: oxc 17 vs reference 30 (-13 bytes)
@@ -8669,47 +8396,22 @@ f();
 --- reference
 +++ oxc
 @@ -1,11 +1,10 @@
- function f(n) {
+-function f(n) {
 -	!function() {
++function f(e) {
 +	(function() {
  		try {
  			throw 0;
 -		} catch (o) {
 -			var n = 1;
 -			console.log(o, n);
-+		} catch (n) {
-+			console.log(n, 1);
++		} catch (e) {
++			console.log(e, 1);
  		}
 -	}();
 +	})();
  }
  f();
-
-```
-
-## `terser/logical_assignment/assignment_in_left_part_2`
-
-- size: oxc 88 vs reference 101 (-13 bytes)
-
-```js
-var status = 'FAIL';
-var x = { PASS: false };
-x[status = id('PASS')] ||= 'PASS';
-console.log(status, x.PASS);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,3 @@
--var status;
--var x = { PASS: false };
--x[status = id('PASS')] ||= 'PASS';
--console.log(status, x.PASS);
-+var e = 'FAIL', t = { PASS: !1 };
-+t[e = id('PASS')] ||= 'PASS';
-+console.log(e, t.PASS);
 
 ```
 
@@ -8966,16 +8668,17 @@ f();
 --- reference
 +++ oxc
 @@ -1,11 +1,10 @@
- function f(n) {
+-function f(n) {
 -	!function() {
++function f(e) {
 +	(function() {
  		try {
  			throw 0;
 -		} catch (o) {
 -			var n = 1;
 -			console.log(o, n);
-+		} catch (n) {
-+			console.log(n, 1);
++		} catch (e) {
++			console.log(e, 1);
  		}
 -	}();
 +	})();
@@ -9145,6 +8848,47 @@ switch (function() {
 +	case xxx: if (console.log('FAIL')) {
 +		function xxx() {}
 +	}
+ }
+
+```
+
+## `terser/collapse_vars/issue_2914_1`
+
+- size: oxc 182 vs reference 196 (-14 bytes)
+
+```js
+function read(input) {
+	var i = 0;
+	var e = 0;
+	var t = 0;
+	while (e < 32) {
+		var n = input[i++];
+		t |= (127 & n) << e;
+		if (0 === (128 & n)) return t;
+		e += 7;
+	}
+}
+console.log(read([129]));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,9 @@
+ function read(input) {
+-	var i = 0;
+-	var e = 0;
+-	var t = 0;
+-	while (e < 32) {
++	var i = 0, e = 0, t = 0;
++	for (; e < 32;) {
+ 		var n = input[i++];
+ 		t |= (127 & n) << e;
+-		if (0 === (128 & n)) return t;
++		if (!(128 & n)) return t;
+ 		e += 7;
+ 	}
  }
 
 ```
@@ -9341,29 +9085,6 @@ Number(1234);
 
 ```
 
-## `terser/properties/mangle_debug_suffix`
-
-- size: oxc 47 vs reference 61 (-14 bytes)
-
-```js
-var a = {};
-a.foo = 'bar';
-x = { baz: 'ban' };
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,3 @@
- var a = {};
--a._$foo$XYZ_ = 'bar';
--x = { _$baz$XYZ_: 'ban' };
-+a.foo = 'bar';
-+x = { baz: 'ban' };
-
-```
-
 ## `terser/pure_funcs/issue_2638`
 
 - size: oxc 20 vs reference 34 (-14 bytes)
@@ -9408,76 +9129,6 @@ console.log((function(a) {
  	switch (a) {
  		case 0: return 'FAIL';
  		case !1: return 'PASS';
-
-```
-
-## `terser/reduce_vars/escape_local_conditional`
-
-- size: oxc 169 vs reference 183 (-14 bytes)
-
-```js
-function main() {
-	var thing = baz();
-	if (thing !== (thing = baz())) console.log('PASS');
-	else console.log('FAIL');
-}
-function baz(s) {
-	function foo() {}
-	function bar() {}
-	return s ? foo : bar;
-}
-main();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,10 @@
--function baz(s) {
--	return s ? function() {} : function() {};
-+function e() {
-+	var e = t();
-+	e === (e = t()) ? console.log('FAIL') : console.log('PASS');
-+}
-+function t(e) {
-+	function t() {}
-+	function n() {}
-+	return e ? t : n;
- }
--(function() {
--	var thing = baz();
--	if (thing !== (thing = baz())) console.log('PASS');
--	else console.log('FAIL');
--})();
-+e();
-
-```
-
-## `terser/reduce_vars/issue_2670`
-
-- size: oxc 70 vs reference 84 (-14 bytes)
-
-```js
-const obj = {};
-obj.prop = 'PASS';
-const { prop: value } = obj;
-console.log(value);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
--const obj = {};
--obj.prop = 'PASS';
--const { prop: value } = obj;
--console.log(value);
-+const e = {};
-+e.prop = 'PASS';
-+const { prop: t } = e;
-+console.log(t);
 
 ```
 
@@ -9560,10 +9211,10 @@ export { fs, stuff };
 -import * as e from 'whatever';
 -_$FS$_.resolve(), e.search();
 -export { _$FS$_ as fs, e as stuff };
-+import * as fs from 'filesystem';
-+import * as stuff from 'whatever';
-+fs.resolve(), stuff.search();
-+export { fs, stuff };
++import * as e from 'filesystem';
++import * as t from 'whatever';
++e.resolve(), t.search();
++export { e as fs, t as stuff };
 
 ```
 
@@ -9640,15 +9291,15 @@ f();
 @@ -1,10 +1,9 @@
 -function f(o) {
 -	!(function() {
-+function f(n) {
++function f(e) {
 +	(function() {
  		try {
  			throw 0;
 -		} catch (o) {
 -			var c = 1;
 -			console.log(o, c);
-+		} catch (n) {
-+			console.log(n, 1);
++		} catch (e) {
++			console.log(e, 1);
  		}
  	})();
  }
@@ -9750,73 +9401,36 @@ for (var key in foo) foo[key]();
 
 ```
 
-## `terser/pure_getters/issue_2938_2`
+## `terser/properties/mangle_properties_which_matches_pattern`
 
-- size: oxc 159 vs reference 174 (-15 bytes)
+- size: oxc 59 vs reference 74 (-15 bytes)
 
 ```js
-var Parser = function Parser() {};
-var p = Parser.prototype;
-p.initialContext = function initialContext() {
-	console.log('PASS');
+var acd = {
+	get asd() {
+		return this._asd;
+	},
+	_asd: true
 };
-p.braceIsBlock = function() {};
-new Parser().initialContext();
+console.log(acd);
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,7 +1,7 @@
--var Parser = function() {};
--var p = Parser.prototype;
--p.initialContext = function() {
-+var e = function() {};
-+var t = e.prototype;
-+t.initialContext = function() {
- 	console.log('PASS');
- };
--p.braceIsBlock = function() {};
--new Parser().initialContext();
-+t.braceIsBlock = function() {};
-+new e().initialContext();
-
-```
-
-## `terser/pure_getters/issue_2938_4`
-
-- size: oxc 159 vs reference 174 (-15 bytes)
-
-```js
-var Parser = function Parser() {};
-var p = Parser.prototype;
-var unused = p.x;
-p.initialContext = function initialContext() {
-	p.y;
-	console.log('PASS');
-};
-p.braceIsBlock = function() {};
-new Parser().initialContext();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
--var Parser = function() {};
--var p = Parser.prototype;
--p.initialContext = function() {
-+var e = function() {};
-+var t = e.prototype;
-+t.initialContext = function() {
- 	console.log('PASS');
- };
--p.braceIsBlock = function() {};
--new Parser().initialContext();
-+t.braceIsBlock = function() {};
-+new e().initialContext();
+@@ -1,7 +1,6 @@
+-var acd = {
++console.log({
+ 	get asd() {
+-		return this.a;
++		return this.e;
+ 	},
+-	a: !0
+-};
+-console.log(acd);
++	e: !0
++});
 
 ```
 
@@ -9845,15 +9459,15 @@ f();
 @@ -1,10 +1,9 @@
 -function f(o) {
 -	!(function() {
-+function f(n) {
++function f(e) {
 +	(function() {
  		try {
  			throw 0;
 -		} catch (o) {
 -			var c = 1;
 -			console.log(o, c);
-+		} catch (n) {
-+			console.log(n, 1);
++		} catch (e) {
++			console.log(e, 1);
  		}
  	})();
  }
@@ -10380,39 +9994,6 @@ function f() {
 
 ```
 
-## `terser/collapse_vars/issue_2364_1`
-
-- size: oxc 222 vs reference 239 (-17 bytes)
-
-```js
-function inc(obj) {
-	return obj.count++;
-}
-function foo() {
-	var first = arguments[0];
-	var result = inc(first);
-	return foo.amount = first.count, result;
-}
-var data = { count: 0 };
-var answer = foo(data);
-console.log(foo.amount, answer);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -6,6 +6,5 @@
- 	var result = inc(first);
- 	return foo.amount = first.count, result;
- }
--var data = { count: 0 };
--var answer = foo(data);
-+var answer = foo({ count: 0 });
- console.log(foo.amount, answer);
-
-```
-
 ## `terser/collapse_vars/issue_2364_3`
 
 - size: oxc 194 vs reference 211 (-17 bytes)
@@ -10761,48 +10342,6 @@ var Infinity, NaN;
 
 ```
 
-## `terser/reduce_vars/escape_local_sequence`
-
-- size: oxc 143 vs reference 162 (-19 bytes)
-
-```js
-function main() {
-	var thing = baz();
-	if (thing !== (thing = baz())) console.log('PASS');
-	else console.log('FAIL');
-}
-function baz() {
-	function foo() {}
-	function bar() {}
-	return foo, bar;
-}
-main();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,9 @@
--function baz() {
--	return function() {};
-+function e() {
-+	var e = t();
-+	e === (e = t()) ? console.log('FAIL') : console.log('PASS');
- }
--(function() {
--	var thing = baz();
--	if (thing !== (thing = baz())) console.log('PASS');
--	else console.log('FAIL');
--})();
-+function t() {
-+	function e() {}
-+	return e;
-+}
-+e();
-
-```
-
 ## `terser/template_string/tagged_call_with_invalid_escape`
 
 - size: oxc 36 vs reference 55 (-19 bytes)
@@ -10820,54 +10359,6 @@ console.log(z()`\4321\u\x`);
 -let z = () => String.raw;
 -console.log(z()`\4321\u\x`);
 +console.log(String.raw`\4321\u\x`);
-
-```
-
-## `terser/class_properties/static_means_execution`
-
-- size: oxc 169 vs reference 189 (-20 bytes)
-
-```js
-let x = 0;
-class NoProps {}
-class WithProps {
-	prop = x = x === 1 ? 'PASS' : 'FAIL';
-}
-class WithStaticProps {
-	static prop = x = x === 0 ? 1 : 'FAIL';
-}
-new NoProps();
-new WithProps();
-new WithStaticProps();
-console.log(x);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,10 +1,12 @@
--let x = 0;
--class WithStaticProps {
--	static prop = x = 0 === x ? 1 : 'FAIL';
-+let e = 0;
-+class t {}
-+class n {
-+	prop = e = e === 1 ? 'PASS' : 'FAIL';
-+}
-+class r {
-+	static prop = e = e === 0 ? 1 : 'FAIL';
- }
--new class {}();
--new class {
--	prop = x = 1 === x ? 'PASS' : 'FAIL';
--}();
--new WithStaticProps();
--console.log(x);
-+new t();
-+new n();
-+new r();
-+console.log(e);
 
 ```
 
@@ -11342,6 +10833,150 @@ A.a = 42;
 
 ```
 
+## `terser/harmony/object_rest_spread`
+
+- size: oxc 515 vs reference 536 (-21 bytes)
+
+```js
+var { w: w1, ...V } = {
+	w: 7,
+	x: 1,
+	y: 2
+};
+console.log(w1, V);
+let { w: w2, ...L } = {
+	w: 8,
+	x: 3,
+	y: 4
+};
+console.log(w2, L);
+const { w: w3, ...C } = {
+	w: 9,
+	x: 5,
+	y: 6
+};
+console.log(w3, C);
+let b;
+({b: b, ...V} = {
+	a: 1,
+	b: 2,
+	c: 3
+});
+console.log(V);
+({b: b, ...L} = {
+	a: 4,
+	b: 5,
+	c: 6
+});
+console.log(L);
+(function({ y, ...p }) {
+	console.log(p);
+})({
+	x: 1,
+	y: 2,
+	z: 3
+});
+(({ y, ...p }) => {
+	console.log(p);
+})({
+	x: 4,
+	y: 5,
+	z: 6
+});
+const T = {
+	a: 1,
+	b: 2
+};
+console.log({
+	...T,
+	w: 0,
+	...{},
+	...L,
+	...{ K: 9 }
+});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,55 +1,52 @@
+-var { w: o, ...l } = {
++var { w: e, ...t } = {
+ 	w: 7,
+ 	x: 1,
+ 	y: 2
+ };
+-console.log(o, l);
+-let { w: c, ...n } = {
++console.log(e, t);
++let { w: n, ...r } = {
+ 	w: 8,
+ 	x: 3,
+ 	y: 4
+ };
+-console.log(c, n);
+-const { w: e, ...s } = {
++console.log(n, r);
++const { w: i, ...a } = {
+ 	w: 9,
+ 	x: 5,
+ 	y: 6
+ };
+-console.log(e, s);
+-let g;
+-({b: g, ...l} = {
++console.log(i, a);
++let o;
++({b: o, ...t} = {
+ 	a: 1,
+ 	b: 2,
+ 	c: 3
+ });
+-console.log(l);
+-({b: g, ...n} = {
++console.log(t);
++({b: o, ...r} = {
+ 	a: 4,
+ 	b: 5,
+ 	c: 6
+ });
+-console.log(n);
+-(function({ y: o, ...l }) {
+-	console.log(l);
++console.log(r);
++(function({ y: e, ...t }) {
++	console.log(t);
+ })({
+ 	x: 1,
+ 	y: 2,
+ 	z: 3
+ });
+-(({ y: o, ...l }) => {
+-	console.log(l);
++(({ y: e, ...t }) => {
++	console.log(t);
+ })({
+ 	x: 4,
+ 	y: 5,
+ 	z: 6
+ });
+-const w = {
+-	a: 1,
+-	b: 2
+-};
+ console.log({
+-	...w,
++	a: 1,
++	b: 2,
+ 	w: 0,
+-	...n,
++	...r,
+ 	K: 9
+ });
+
+```
+
 ## `terser/transform/condition_evaluate`
 
 - size: oxc 10 vs reference 31 (-21 bytes)
@@ -11361,6 +10996,44 @@ if (void 0 == null);
 -for (; 1;);
 -if (1);
 +for (;;);
+
+```
+
+## `terser/collapse_vars/issue_2364_1`
+
+- size: oxc 217 vs reference 239 (-22 bytes)
+
+```js
+function inc(obj) {
+	return obj.count++;
+}
+function foo() {
+	var first = arguments[0];
+	var result = inc(first);
+	return foo.amount = first.count, result;
+}
+var data = { count: 0 };
+var answer = foo(data);
+console.log(foo.amount, answer);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,10 +2,8 @@
+ 	return obj.count++;
+ }
+ function foo() {
+-	var first = arguments[0];
+-	var result = inc(first);
++	var first = arguments[0], result = inc(first);
+ 	return foo.amount = first.count, result;
+ }
+-var data = { count: 0 };
+-var answer = foo(data);
++var answer = foo({ count: 0 });
+ console.log(foo.amount, answer);
 
 ```
 
@@ -11632,87 +11305,6 @@ for (let i = 0; i < 3; i++) {
 
 ```
 
-## `terser/logical_assignment/assign_in_conditional_part`
-
-- size: oxc 129 vs reference 152 (-23 bytes)
-
-```js
-var status = 'PASS';
-var nil = null;
-var nil_prop = { prop: null };
-nil &&= console.log(status = 'FAIL');
-nil_prop.prop &&= console.log(status = 'FAIL');
-console.log(status);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,4 @@
--var status = 'PASS';
--var nil = null;
--nil &&= console.log(status = 'FAIL');
--({ prop: null }).prop &&= console.log(status = 'FAIL');
--console.log(status);
-+var e = 'PASS', t = null, n = { prop: null };
-+t &&= console.log(e = 'FAIL');
-+n.prop &&= console.log(e = 'FAIL');
-+console.log(e);
-
-```
-
-## `terser/reduce_vars/escape_local_throw`
-
-- size: oxc 180 vs reference 203 (-23 bytes)
-
-```js
-function main() {
-	var thing = baz();
-	if (thing !== (thing = baz())) console.log('PASS');
-	else console.log('FAIL');
-}
-function baz() {
-	function foo() {}
-	try {
-		throw foo;
-	} catch (bar) {
-		return bar;
-	}
-}
-main();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,12 +1,13 @@
--function baz() {
-+function e() {
-+	var e = t();
-+	e === (e = t()) ? console.log('FAIL') : console.log('PASS');
-+}
-+function t() {
-+	function e() {}
- 	try {
--		throw function() {};
--	} catch (bar) {
--		return bar;
-+		throw e;
-+	} catch (e) {
-+		return e;
- 	}
- }
--(function() {
--	var thing = baz();
--	if (thing !== (thing = baz())) console.log('PASS');
--	else console.log('FAIL');
--})();
-+e();
-
-```
-
 ## `terser/reduce_vars/shorthand_inline_proto`
 
 - size: oxc 30 vs reference 53 (-23 bytes)
@@ -11849,6 +11441,46 @@ test({});
 
 ```
 
+## `terser/export/name_cache_do_not_mangle_export_destructuring_name`
+
+- size: oxc 97 vs reference 121 (-24 bytes)
+
+```js
+export const [add] = [
+	1,
+	2,
+	3
+];
+const [mul, sub] = [
+	1,
+	2,
+	3
+];
+console.log(add, add, sub, sub, mul, mul);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,11 @@
+-export const [add] = [
++export const [e] = [
+ 	1,
+ 	2,
+ 	3
+ ];
+-const [d, _$SUB$_] = [
++const [t, n] = [
+ 	1,
+ 	2,
+ 	3
+ ];
+-console.log(add, add, _$SUB$_, _$SUB$_, d, d);
++console.log(e, e, n, n, t, t);
+
+```
+
 ## `terser/export/name_cache_do_not_mangle_export_var_name`
 
 - size: oxc 67 vs reference 91 (-24 bytes)
@@ -11964,51 +11596,6 @@ for (let tmp of test) {
 
 ```
 
-## `terser/reduce_vars/escape_yield`
-
-- size: oxc 187 vs reference 211 (-24 bytes)
-
-```js
-function main() {
-	var thing = gen.next().value;
-	if (thing !== (thing = gen.next().value)) console.log('FAIL');
-	else console.log('PASS');
-}
-function foo() {}
-function* baz(s) {
-	for (;;) yield foo;
-}
-var gen = baz();
-main();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,9 +1,10 @@
--function foo() {}
--var gen = function* () {
--	for (;;) yield foo;
--}();
--(function() {
--	var thing = gen.next().value;
--	if (thing !== (thing = gen.next().value)) console.log('FAIL');
--	else console.log('PASS');
--})();
-+function e() {
-+	var e = r.next().value;
-+	e === (e = r.next().value) ? console.log('PASS') : console.log('FAIL');
-+}
-+function t() {}
-+function* n(e) {
-+	for (;;) yield t;
-+}
-+var r = n();
-+e();
-
-```
-
 ## `terser/collapse_vars/collapse_vars_regexp`
 
 - size: oxc 316 vs reference 341 (-25 bytes)
@@ -12069,34 +11656,6 @@ function f2() {
 +	var result, s = 'acdabcdeabbb', rx = f2();
 +	for (; result = rx(s);) console.log(result[0]);
  })();
-
-```
-
-## `terser/dead_code/dead_code_const_annotation`
-
-- size: oxc 29 vs reference 54 (-25 bytes)
-
-```js
-var unused;
-/** @const */ var CONST_FOO_ANN = false;
-if (CONST_FOO_ANN) {
-	console.log('unreachable');
-	var moo;
-	function bar() {}
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,2 @@
--var unused;
--var CONST_FOO_ANN = !1;
--var moo;
--var bar;
-+var e, t = !1;
-+if (0) var n;
 
 ```
 
@@ -12306,6 +11865,31 @@ function y() {
 
 ```
 
+## `terser/inline/noinline_annotation`
+
+- size: oxc 38 vs reference 64 (-26 bytes)
+
+```js
+function no_inline() {
+	return 123;
+}
+/*#__NOINLINE__*/ no_inline();
+/*#__NOINLINE__*/ no_inline();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,3 @@
+ function no_inline() {
+ 	return 123;
+ }
+-no_inline();
+-no_inline();
+
+```
+
 ## `terser/collapse_vars/issue_2203_4`
 
 - size: oxc 95 vs reference 122 (-27 bytes)
@@ -12472,150 +12056,6 @@ if (x() && false && y()) z();
 
 ```
 
-## `terser/harmony/object_rest_spread`
-
-- size: oxc 509 vs reference 536 (-27 bytes)
-
-```js
-var { w: w1, ...V } = {
-	w: 7,
-	x: 1,
-	y: 2
-};
-console.log(w1, V);
-let { w: w2, ...L } = {
-	w: 8,
-	x: 3,
-	y: 4
-};
-console.log(w2, L);
-const { w: w3, ...C } = {
-	w: 9,
-	x: 5,
-	y: 6
-};
-console.log(w3, C);
-let b;
-({b: b, ...V} = {
-	a: 1,
-	b: 2,
-	c: 3
-});
-console.log(V);
-({b: b, ...L} = {
-	a: 4,
-	b: 5,
-	c: 6
-});
-console.log(L);
-(function({ y, ...p }) {
-	console.log(p);
-})({
-	x: 1,
-	y: 2,
-	z: 3
-});
-(({ y, ...p }) => {
-	console.log(p);
-})({
-	x: 4,
-	y: 5,
-	z: 6
-});
-const T = {
-	a: 1,
-	b: 2
-};
-console.log({
-	...T,
-	w: 0,
-	...{},
-	...L,
-	...{ K: 9 }
-});
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,55 +1,52 @@
--var { w: o, ...l } = {
-+var { w: w1, ...V } = {
- 	w: 7,
- 	x: 1,
- 	y: 2
- };
--console.log(o, l);
--let { w: c, ...n } = {
-+console.log(w1, V);
-+let { w: w2, ...L } = {
- 	w: 8,
- 	x: 3,
- 	y: 4
- };
--console.log(c, n);
--const { w: e, ...s } = {
-+console.log(w2, L);
-+const { w: w3, ...C } = {
- 	w: 9,
- 	x: 5,
- 	y: 6
- };
--console.log(e, s);
--let g;
--({b: g, ...l} = {
-+console.log(w3, C);
-+let b;
-+({b, ...V} = {
- 	a: 1,
- 	b: 2,
- 	c: 3
- });
--console.log(l);
--({b: g, ...n} = {
-+console.log(V);
-+({b, ...L} = {
- 	a: 4,
- 	b: 5,
- 	c: 6
- });
--console.log(n);
--(function({ y: o, ...l }) {
--	console.log(l);
-+console.log(L);
-+(function({ y, ...p }) {
-+	console.log(p);
- })({
- 	x: 1,
- 	y: 2,
- 	z: 3
- });
--(({ y: o, ...l }) => {
--	console.log(l);
-+(({ y, ...p }) => {
-+	console.log(p);
- })({
- 	x: 4,
- 	y: 5,
- 	z: 6
- });
--const w = {
--	a: 1,
--	b: 2
--};
- console.log({
--	...w,
-+	a: 1,
-+	b: 2,
- 	w: 0,
--	...n,
-+	...L,
- 	K: 9
- });
-
-```
-
 ## `terser/collapse_vars/assignment`
 
 - size: oxc 0 vs reference 28 (-28 bytes)
@@ -12769,56 +12209,6 @@ function f() {
 -function f() {
 -	return 2;
 -}
-
-```
-
-## `terser/reduce_vars/escape_expansion`
-
-- size: oxc 180 vs reference 208 (-28 bytes)
-
-```js
-function main() {
-	var thing = baz();
-	if (thing !== (thing = baz())) console.log('FAIL');
-	else console.log('PASS');
-}
-function foo() {}
-function bar(...x) {
-	return x[0];
-}
-function baz() {
-	return bar(...[foo]);
-}
-main();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,11 +1,12 @@
--function foo() {}
--function baz() {
--	return (function(...x) {
--		return x[0];
--	})(foo);
-+function e() {
-+	var e = r();
-+	e === (e = r()) ? console.log('PASS') : console.log('FAIL');
- }
--(function() {
--	var thing = baz();
--	if (thing !== (thing = baz())) console.log('FAIL');
--	else console.log('PASS');
--})();
-+function t() {}
-+function n(...e) {
-+	return e[0];
-+}
-+function r() {
-+	return n(t);
-+}
-+e();
 
 ```
 
@@ -13182,42 +12572,50 @@ define(function() {
 
 ```
 
-## `terser/reduce_vars/perf_3`
+## `terser/dead_code/dead_code_const_annotation_complex_scope`
 
-- size: oxc 195 vs reference 224 (-29 bytes)
+- size: oxc 121 vs reference 151 (-30 bytes)
 
 ```js
-var foo = function(x, y, z) {
-	return x < y ? x * y + z : x * z - y;
-};
-var indirect_foo = function(x, y, z) {
-	return foo(x, y, z);
-};
-var sum = 0;
-for (var i = 0; i < 100; ++i) sum += indirect_foo(i, i + 1, 3 * i);
-console.log(sum);
+var unused_var;
+/** @const */ var test = 'test';
+// @const
+var CONST_FOO_ANN = false;
+var unused_var_2;
+if (CONST_FOO_ANN) {
+	console.log('unreachable');
+	var moo;
+	function bar() {}
+}
+if (test === 'test') {
+	var beef = 'good';
+	/** @const */ var meat = 'beef';
+	var pork = 'bad';
+	if (meat === 'pork') {
+		console.log('also unreachable');
+	} else if (pork === 'good') {
+		console.log('reached, not const');
+	}
+}
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,8 +1,7 @@
--var indirect_foo = function(x, y, z) {
--	return (function(x, y, z) {
--		return x < y ? x * y + z : x * z - y;
--	})(x, y, z);
--};
--var sum = 0;
--for (var i = 0; i < 100; ++i) sum += indirect_foo(i, i + 1, 3 * i);
--console.log(sum);
-+var e = function(e, t, n) {
-+	return e < t ? e * t + n : e * n - t;
-+}, t = function(t, n, r) {
-+	return e(t, n, r);
-+}, n = 0;
-+for (var r = 0; r < 100; ++r) n += t(r, r + 1, 3 * r);
-+console.log(n);
+@@ -1,9 +1,3 @@
+-var unused_var;
+-var test = 'test';
+-var CONST_FOO_ANN = !1;
+-var unused_var_2;
+-var moo;
+-var bar;
+-var beef = 'good';
+-var meat = 'beef';
+-var pork = 'bad';
++var unused_var, test = 'test', CONST_FOO_ANN = !1, unused_var_2;
++if (0) var moo;
++if (test === 'test') var beef = 'good';
 
 ```
 
@@ -13429,217 +12827,6 @@ new h(1)(2)(3);
 
 ```
 
-## `terser/reduce_vars/escape_conditional`
-
-- size: oxc 167 vs reference 199 (-32 bytes)
-
-```js
-function main() {
-	var thing = baz();
-	if (thing !== (thing = baz())) console.log('FAIL');
-	else console.log('PASS');
-}
-function baz(s) {
-	return s ? foo : bar;
-}
-function foo() {}
-function bar() {}
-main();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,10 +1,10 @@
--function baz(s) {
--	return s ? foo : bar;
-+function e() {
-+	var e = t();
-+	e === (e = t()) ? console.log('PASS') : console.log('FAIL');
- }
--function foo() {}
--function bar() {}
--(function() {
--	var thing = baz();
--	if (thing !== (thing = baz())) console.log('FAIL');
--	else console.log('PASS');
--})();
-+function t(e) {
-+	return e ? n : r;
-+}
-+function n() {}
-+function r() {}
-+e();
-
-```
-
-## `terser/reduce_vars/escape_throw`
-
-- size: oxc 179 vs reference 211 (-32 bytes)
-
-```js
-function main() {
-	var thing = baz();
-	if (thing !== (thing = baz())) console.log('FAIL');
-	else console.log('PASS');
-}
-function baz() {
-	try {
-		throw foo;
-	} catch (bar) {
-		return bar;
-	}
-}
-function foo() {}
-main();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,13 +1,13 @@
--function baz() {
-+function e() {
-+	var e = t();
-+	e === (e = t()) ? console.log('PASS') : console.log('FAIL');
-+}
-+function t() {
- 	try {
--		throw foo;
--	} catch (bar) {
--		return bar;
-+		throw n;
-+	} catch (e) {
-+		return e;
- 	}
- }
--function foo() {}
--(function() {
--	var thing = baz();
--	if (thing !== (thing = baz())) console.log('FAIL');
--	else console.log('PASS');
--})();
-+function n() {}
-+e();
-
-```
-
-## `terser/reduce_vars/issue_2496`
-
-- size: oxc 207 vs reference 239 (-32 bytes)
-
-```js
-function execute(callback) {
-	callback();
-}
-class Foo {
-	constructor(message) {
-		this.message = message;
-	}
-	go() {
-		this.message = 'PASS';
-		console.log(this.message);
-	}
-	run() {
-		execute(() => {
-			this.go();
-		});
-	}
-}
-new Foo('FAIL').run();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,17 +1,18 @@
--class Foo {
--	constructor(message) {
--		this.message = message;
-+function e(e) {
-+	e();
-+}
-+class t {
-+	constructor(e) {
-+		this.message = e;
- 	}
- 	go() {
- 		this.message = 'PASS';
- 		console.log(this.message);
- 	}
- 	run() {
--		(function(callback) {
--			callback();
--		})(() => {
-+		e(() => {
- 			this.go();
- 		});
- 	}
- }
--new Foo('FAIL').run();
-+new t('FAIL').run();
-
-```
-
-## `terser/reduce_vars/escape_await`
-
-- size: oxc 204 vs reference 237 (-33 bytes)
-
-```js
-function main() {
-	var thing;
-	baz().then((x) => {
-		thing = x;
-	});
-	baz().then((x) => {
-		if (thing !== (thing = x)) console.log('FAIL');
-		else console.log('PASS');
-	});
-}
-function foo() {}
-async function baz() {
-	return await foo;
-}
-main();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,14 +1,14 @@
--function foo() {}
--async function baz() {
--	return await foo;
--}
--(function() {
--	var thing;
--	baz().then((x) => {
--		thing = x;
-+function e() {
-+	var e;
-+	n().then((t) => {
-+		e = t;
- 	});
--	baz().then((x) => {
--		if (thing !== (thing = x)) console.log('FAIL');
--		else console.log('PASS');
-+	n().then((t) => {
-+		e === (e = t) ? console.log('PASS') : console.log('FAIL');
- 	});
--})();
-+}
-+function t() {}
-+async function n() {
-+	return await t;
-+}
-+e();
-
-```
-
 ## `terser/dead_code/collapse_vars_assignment`
 
 - size: oxc 0 vs reference 34 (-34 bytes)
@@ -13659,143 +12846,6 @@ function f0(c) {
 -function f0(c) {
 -	return 3 / c;
 -}
-
-```
-
-## `terser/inline/inline_within_extends_2`
-
-- size: oxc 338 vs reference 372 (-34 bytes)
-
-```js
-class Baz extends foo(bar(Array)) {
-	constructor() {
-		super(...arguments);
-	}
-}
-function foo(foo_base) {
-	return class extends foo_base {
-		constructor() {
-			super(...arguments);
-		}
-		second() {
-			return this[1];
-		}
-	};
-}
-function bar(bar_base) {
-	return class extends bar_base {
-		constructor(...args) {
-			super(...args);
-		}
-	};
-}
-console.log(new Baz(1, 'PASS', 3).second());
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,10 @@
--class Baz extends (function(foo_base) {
--	return class extends foo_base {
-+class e extends t(n(Array)) {
-+	constructor() {
-+		super(...arguments);
-+	}
-+}
-+function t(e) {
-+	return class extends e {
- 		constructor() {
- 			super(...arguments);
- 		}
-@@ -7,15 +12,12 @@
- 			return this[1];
- 		}
- 	};
--})((function(bar_base) {
--	return class extends bar_base {
--		constructor(...args) {
--			super(...args);
-+}
-+function n(e) {
-+	return class extends e {
-+		constructor(...e) {
-+			super(...e);
- 		}
- 	};
--})(Array)) {
--	constructor() {
--		super(...arguments);
--	}
- }
--console.log(new Baz(1, 'PASS', 3).second());
-+console.log(new e(1, 'PASS', 3).second());
-
-```
-
-## `terser/inline/noinline_annotation`
-
-- size: oxc 30 vs reference 64 (-34 bytes)
-
-```js
-function no_inline() {
-	return 123;
-}
-/*#__NOINLINE__*/ no_inline();
-/*#__NOINLINE__*/ no_inline();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,3 @@
--function no_inline() {
-+function e() {
- 	return 123;
- }
--no_inline();
--no_inline();
-
-```
-
-## `terser/reduce_vars/perf_7`
-
-- size: oxc 190 vs reference 224 (-34 bytes)
-
-```js
-var indirect_foo = function(x, y, z) {
-	var foo = function(x, y, z) {
-		return x < y ? x * y + z : x * z - y;
-	};
-	return foo(x, y, z);
-};
-var sum = 0;
-for (var i = 0; i < 100; ++i) sum += indirect_foo(i, i + 1, 3 * i);
-console.log(sum);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,7 @@
--var indirect_foo = function(x, y, z) {
--	return (function(x, y, z) {
--		return x < y ? x * y + z : x * z - y;
--	})(x, y, z);
--};
--var sum = 0;
--for (var i = 0; i < 100; ++i) sum += indirect_foo(i, i + 1, 3 * i);
--console.log(sum);
-+var e = function(e, t, n) {
-+	return function(e, t, n) {
-+		return e < t ? e * t + n : e * n - t;
-+	}(e, t, n);
-+}, t = 0;
-+for (var n = 0; n < 100; ++n) t += e(n, n + 1, 3 * n);
-+console.log(t);
 
 ```
 
@@ -14083,12 +13133,11 @@ undefined.prop;
 --- reference
 +++ oxc
 @@ -1,5 +1,2 @@
--var a, b = null, c = {};
+ var a, b = null, c = {};
 -d;
 -null.prop;
 -(void 0).prop;
 -(void 0).prop;
-+var e, t = null, n = {};
 +d.prop;
 
 ```
@@ -14113,12 +13162,11 @@ undefined.prop;
 --- reference
 +++ oxc
 @@ -1,5 +1,2 @@
--var a, b = null, c = {};
+ var a, b = null, c = {};
 -d;
 -null.prop;
 -(void 0).prop;
 -(void 0).prop;
-+var e, t = null, n = {};
 +d.prop;
 
 ```
@@ -14253,47 +13301,6 @@ function f(a, b, c, d, e) {
 -function f(a, b, c) {
 -	return a + c;
 -}
-
-```
-
-## `terser/identity/inline_identity_lose_this`
-
-- size: oxc 229 vs reference 268 (-39 bytes)
-
-```js
-'use strict';
-const id = (x) => x;
-const func_bag = { func: function() {
-	return this === undefined ? 'PASS' : 'FAIL';
-} };
-func_bag.func2 = function() {
-	return this === undefined ? 'PASS' : 'FAIL';
-};
-console.log(id(func_bag.func)());
-console.log(id(func_bag.func2)());
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,10 +1,9 @@
- 'use strict';
--const id = (x) => x;
--const func_bag = { func: function() {
--	return void 0 === this ? 'PASS' : 'FAIL';
-+const e = (e) => e, t = { func: function() {
-+	return this === void 0 ? 'PASS' : 'FAIL';
- } };
--func_bag.func2 = function() {
--	return void 0 === this ? 'PASS' : 'FAIL';
-+t.func2 = function() {
-+	return this === void 0 ? 'PASS' : 'FAIL';
- };
--console.log((0, func_bag.func)());
--console.log((0, func_bag.func2)());
-+console.log(e(t.func)());
-+console.log(e(t.func2)());
 
 ```
 
@@ -14712,7 +13719,7 @@ console.log(f(), g(), h());
 +++ oxc
 @@ -1,10 +1,11 @@
 -console.log(function() {
-+function e() {
++function f() {
  	var arguments;
  	return typeof arguments;
 -}(), function() {
@@ -14723,13 +13730,13 @@ console.log(f(), g(), h());
 -	return typeof arguments;
 -}());
 +}
-+function t() {
++function g() {
 +	return 'number';
 +}
-+function n(e) {
-+	return typeof e;
++function h(x) {
++	return typeof x;
 +}
-+console.log(e(), t(), n());
++console.log(f(), g(), h());
 
 ```
 
@@ -14759,7 +13766,7 @@ console.log(f(), g(), h());
 +++ oxc
 @@ -1,10 +1,11 @@
 -console.log(function() {
-+function e() {
++function f() {
  	var arguments;
  	return typeof arguments;
 -}(), function() {
@@ -14770,13 +13777,13 @@ console.log(f(), g(), h());
 -	return typeof arguments;
 -}());
 +}
-+function t() {
++function g() {
 +	return 'number';
 +}
-+function n(e) {
-+	return typeof e;
++function h(x) {
++	return typeof x;
 +}
-+console.log(e(), t(), n());
++console.log(f(), g(), h());
 
 ```
 
@@ -15049,30 +14056,9 @@ function f() {
 
 ```
 
-## `terser/drop_unused/keep_fnames`
-
-- size: oxc 0 vs reference 49 (-49 bytes)
-
-```js
-function foo() {
-	return function bar(baz) {};
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +0,0 @@
--function foo() {
--	return function bar(baz) {};
--}
-
-```
-
 ## `terser/arrow/arrow_unused_toplevel`
 
-- size: oxc 139 vs reference 190 (-51 bytes)
+- size: oxc 141 vs reference 190 (-49 bytes)
 
 ```js
 (top) => dog;
@@ -15101,10 +14087,8 @@ fn(3);
 --- reference
 +++ oxc
 @@ -1,14 +1,9 @@
--let fn = (a) => {
--	console.log(a * a);
-+let e = (e) => {
-+	console.log(e * e);
+ let fn = (a) => {
+ 	console.log(a * a);
  };
 -(() => {
 -	console.log('0');
@@ -15116,12 +14100,32 @@ fn(3);
 -	let baz = (e) => e + e;
 -	console.log(baz(x));
 +console.log('0');
-+(function(e) {
++(function(x) {
 +	console.log('1');
-+	console.log(((e) => e + e)(e));
++	console.log(((e) => e + e)(x));
  })(1);
--fn(3);
-+e(3);
+ fn(3);
+
+```
+
+## `terser/drop_unused/keep_fnames`
+
+- size: oxc 0 vs reference 49 (-49 bytes)
+
+```js
+function foo() {
+	return function bar(baz) {};
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +0,0 @@
+-function foo() {
+-	return function bar(baz) {};
+-}
 
 ```
 
@@ -15364,105 +14368,6 @@ function a(b) {
 
 ```
 
-## `terser/reduce_vars/named_function_with_recursive_ref_reuse`
-
-- size: oxc 97 vs reference 149 (-52 bytes)
-
-```js
-var result = [];
-var do_not_inline = function foo() {
-	result.push(foo);
-};
-[0, 1].map(() => do_not_inline());
-console.log(result[0] === result[1]);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,5 @@
--var result = [];
--var do_not_inline = function foo() {
--	result.push(foo);
-+var e = [], t = function t() {
-+	e.push(t);
- };
--[0, 1].map(() => do_not_inline());
--console.log(result[0] === result[1]);
-+[0, 1].map(() => t());
-+console.log(e[0] === e[1]);
-
-```
-
-## `terser/logical_assignment/prematurely_evaluate_assignment`
-
-- size: oxc 100 vs reference 153 (-53 bytes)
-
-```js
-var or = null;
-var null_coalesce = null;
-var and = 'FAIL';
-or ||= 'PASS';
-null_coalesce ??= 'PASS';
-and &&= 'PASS';
-console.log(or, null_coalesce, and);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,5 @@
--var or = null;
--var null_coalesce = null;
--var and = 'FAIL';
--or ||= 'PASS';
--null_coalesce ??= 'PASS';
--and &&= 'PASS';
--console.log(or, null_coalesce, and);
-+var e = null, t = null, n = 'FAIL';
-+e ||= 'PASS';
-+t ??= 'PASS';
-+n &&= 'PASS';
-+console.log(e, t, n);
-
-```
-
-## `terser/logical_assignment/prematurely_evaluate_assignment_inv`
-
-- size: oxc 104 vs reference 157 (-53 bytes)
-
-```js
-var or = 'PASS';
-var null_coalesce = 'PASS';
-var and = 'FAIL';
-or ||= 'FAIL';
-null_coalesce ??= 'FAIL';
-and &&= 'PASS';
-console.log(or, null_coalesce, and);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,5 @@
--var or = 'PASS';
--var null_coalesce = 'PASS';
--var and = 'FAIL';
--or ||= 'FAIL';
--null_coalesce ??= 'FAIL';
--and &&= 'PASS';
--console.log(or, null_coalesce, and);
-+var e = 'PASS', t = 'PASS', n = 'FAIL';
-+e ||= 'FAIL';
-+t ??= 'FAIL';
-+n &&= 'PASS';
-+console.log(e, t, n);
-
-```
-
 ## `terser/pure_funcs/unused`
 
 - size: oxc 0 vs reference 53 (-53 bytes)
@@ -15680,105 +14585,6 @@ function f(x, y) {
 
 ```
 
-## `terser/logical_assignment/assign_in_conditional_part_reused`
-
-- size: oxc 140 vs reference 195 (-55 bytes)
-
-```js
-var status = 'PASS';
-var nil = null;
-var nil_prop = { prop: null };
-nil &&= console.log(status = 'FAIL');
-nil_prop.prop &&= console.log(status = 'FAIL');
-console.log(status, nil, nil_prop.prop);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,4 @@
--var status = 'PASS';
--var nil = null;
--var nil_prop = { prop: null };
--nil &&= console.log(status = 'FAIL');
--nil_prop.prop &&= console.log(status = 'FAIL');
--console.log(status, nil, nil_prop.prop);
-+var e = 'PASS', t = null, n = { prop: null };
-+t &&= console.log(e = 'FAIL');
-+n.prop &&= console.log(e = 'FAIL');
-+console.log(e, t, n.prop);
-
-```
-
-## `terser/properties/mangle_debug_suffix_keep_quoted`
-
-- size: oxc 245 vs reference 300 (-55 bytes)
-
-```js
-var a = {};
-a.top = 1;
-function f1() {
-	a['foo'] = 'bar';
-	a.color = 'red';
-	a.stuff = 2;
-	x = {
-		bar: 10,
-		size: 7
-	};
-	a.size = 9;
-}
-function f2() {
-	a.foo = 'bar';
-	a['color'] = 'red';
-	x = {
-		bar: 10,
-		size: 7
-	};
-	a.size = 9;
-	a.stuff = 3;
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,22 +1,22 @@
- var a = {};
--a._$top$XYZ_ = 1;
-+a.top = 1;
- function f1() {
--	a['foo'] = 'bar';
-+	a.foo = 'bar';
- 	a.color = 'red';
--	a._$stuff$XYZ_ = 2;
-+	a.stuff = 2;
- 	x = {
- 		bar: 10,
--		_$size$XYZ_: 7
-+		size: 7
- 	};
--	a._$size$XYZ_ = 9;
-+	a.size = 9;
- }
- function f2() {
- 	a.foo = 'bar';
--	a['color'] = 'red';
-+	a.color = 'red';
- 	x = {
- 		bar: 10,
--		_$size$XYZ_: 7
-+		size: 7
- 	};
--	a._$size$XYZ_ = 9;
--	a._$stuff$XYZ_ = 3;
-+	a.size = 9;
-+	a.stuff = 3;
- }
-
-```
-
 ## `terser/functions/drop_lone_use_strict_arrows_2`
 
 - size: oxc 0 vs reference 56 (-56 bytes)
@@ -15832,6 +14638,68 @@ class C {}
 -let expr = class AnotherClassExpr {};
 +let expr = class {};
  class C {}
+
+```
+
+## `terser/export/name_cache_mangle_local_import_and_export_aliases`
+
+- size: oxc 119 vs reference 176 (-57 bytes)
+
+```js
+import { foo as bar, cat as dog, bird } from 'stuff';
+console.log(bar, dog, bird);
+export { bar as qux, dog, bird };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-import { foo as _$BAR$_, cat as _$DOG$_, bird as _$BIRD$_ } from 'stuff';
+-console.log(_$BAR$_, _$DOG$_, _$BIRD$_);
+-export { _$BAR$_ as qux, _$DOG$_ as dog, _$BIRD$_ as bird };
++import { foo as e, cat as t, bird as n } from 'stuff';
++console.log(e, t, n);
++export { e as qux, t as dog, n as bird };
+
+```
+
+## `terser/nullish/conditional_to_nullish_coalescing_2`
+
+- size: oxc 270 vs reference 327 (-57 bytes)
+
+```js
+const foo = id('something');
+console.log('negative cases');
+foo === null || foo === null ? bar : foo;
+foo === undefined || foo === undefined ? bar : foo;
+foo === null || foo === undefined ? foo : bar;
+some_global === null || some_global === undefined ? bar : some_global;
+console.log('positive cases');
+foo === null || foo === void 0 ? bar : foo;
+foo === null || foo === undefined ? bar : foo;
+foo === undefined || foo === null ? bar : foo;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,9 @@
+ const foo = id('something');
+ console.log('negative cases');
+-null === foo || null === foo ? bar : foo;
+-void 0 === foo || void 0 === foo ? bar : foo;
+-null === foo || void 0 === foo ? foo : bar;
+-null === some_global || void 0 === some_global ? bar : some_global;
++(foo === null || foo === null) && bar;
++(foo === void 0 || foo === void 0) && bar;
++foo == null || bar;
++some_global == null ? bar : some_global;
+ console.log('positive cases');
+ foo ?? bar;
+ foo ?? bar;
 
 ```
 
@@ -15926,30 +14794,6 @@ function foo() {
 -	AnotherUndeclaredGlobal;
 -	(void 0).isNaN;
 -}
-
-```
-
-## `terser/export/name_cache_mangle_local_import_and_export_aliases`
-
-- size: oxc 117 vs reference 176 (-59 bytes)
-
-```js
-import { foo as bar, cat as dog, bird } from 'stuff';
-console.log(bar, dog, bird);
-export { bar as qux, dog, bird };
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,3 @@
--import { foo as _$BAR$_, cat as _$DOG$_, bird as _$BIRD$_ } from 'stuff';
--console.log(_$BAR$_, _$DOG$_, _$BIRD$_);
--export { _$BAR$_ as qux, _$DOG$_ as dog, _$BIRD$_ as bird };
-+import { foo as bar, cat as dog, bird } from 'stuff';
-+console.log(bar, dog, bird);
-+export { bar as qux, dog, bird };
 
 ```
 
@@ -16453,53 +15297,6 @@ function a(b) {
 
 ```
 
-## `terser/dead_code/dead_code_const_annotation_complex_scope`
-
-- size: oxc 78 vs reference 151 (-73 bytes)
-
-```js
-var unused_var;
-/** @const */ var test = 'test';
-// @const
-var CONST_FOO_ANN = false;
-var unused_var_2;
-if (CONST_FOO_ANN) {
-	console.log('unreachable');
-	var moo;
-	function bar() {}
-}
-if (test === 'test') {
-	var beef = 'good';
-	/** @const */ var meat = 'beef';
-	var pork = 'bad';
-	if (meat === 'pork') {
-		console.log('also unreachable');
-	} else if (pork === 'good') {
-		console.log('reached, not const');
-	}
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,9 +1,3 @@
--var unused_var;
--var test = 'test';
--var CONST_FOO_ANN = !1;
--var unused_var_2;
--var moo;
--var bar;
--var beef = 'good';
--var meat = 'beef';
--var pork = 'bad';
-+var e, t = 'test', n = !1, r;
-+if (0) var i;
-+if (t === 'test') var a = 'good';
-
-```
-
 ## `terser/issue_1833/iife_do`
 
 - size: oxc 0 vs reference 73 (-73 bytes)
@@ -16553,49 +15350,6 @@ class Foo {
 -		yield await Promise.resolve(4);
 -	}
 -}
-
-```
-
-## `terser/nullish/conditional_to_nullish_coalescing_2`
-
-- size: oxc 252 vs reference 327 (-75 bytes)
-
-```js
-const foo = id('something');
-console.log('negative cases');
-foo === null || foo === null ? bar : foo;
-foo === undefined || foo === undefined ? bar : foo;
-foo === null || foo === undefined ? foo : bar;
-some_global === null || some_global === undefined ? bar : some_global;
-console.log('positive cases');
-foo === null || foo === void 0 ? bar : foo;
-foo === null || foo === undefined ? bar : foo;
-foo === undefined || foo === null ? bar : foo;
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,10 +1,10 @@
--const foo = id('something');
-+const e = id('something');
- console.log('negative cases');
--null === foo || null === foo ? bar : foo;
--void 0 === foo || void 0 === foo ? bar : foo;
--null === foo || void 0 === foo ? foo : bar;
--null === some_global || void 0 === some_global ? bar : some_global;
-+(e === null || e === null) && bar;
-+(e === void 0 || e === void 0) && bar;
-+e == null || bar;
-+some_global == null ? bar : some_global;
- console.log('positive cases');
--foo ?? bar;
--foo ?? bar;
--foo ?? bar;
-+e ?? bar;
-+e ?? bar;
-+e ?? bar;
 
 ```
 
@@ -16690,10 +15444,8 @@ fn(3);
 --- reference
 +++ oxc
 @@ -1,15 +1,9 @@
--let fn = (a) => {
--	console.log(a * a);
-+let fn = (e) => {
-+	console.log(e * e);
+ let fn = (a) => {
+ 	console.log(a * a);
  };
 -let u = (x, y) => x - y + g;
 -(() => {
@@ -16706,9 +15458,9 @@ fn(3);
 -	let baz = (e) => e + e;
 -	console.log(baz(x));
 +console.log('0');
-+(function(e) {
++(function(x) {
 +	console.log('1');
-+	console.log(((e) => e + e)(e));
++	console.log(((e) => e + e)(x));
  })(1);
  fn(3);
 
@@ -17930,61 +16682,6 @@ n.x(1).y(2).z(3);
 -k.x(1).y(2).z(3);
 -l.x(1).y(2).z(3);
 -m.x(1).y(2).z(3);
-
-```
-
-## `terser/reduce_vars/issue_3042_2`
-
-- size: oxc 332 vs reference 442 (-110 bytes)
-
-```js
-function Foo() {
-	this.isFoo = function(o) {
-		return o instanceof Foo;
-	};
-}
-function FooCollection() {
-	this.foos = [1, 1].map(function() {
-		return new Foo();
-	});
-}
-var fooCollection = new FooCollection();
-console.log(fooCollection.foos[0].isFoo(fooCollection.foos[0]));
-console.log(fooCollection.foos[0].isFoo(fooCollection.foos[1]));
-console.log(fooCollection.foos[1].isFoo(fooCollection.foos[0]));
-console.log(fooCollection.foos[1].isFoo(fooCollection.foos[1]));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,14 +1,15 @@
--function Foo() {
--	this.isFoo = function(o) {
--		return o instanceof Foo;
-+function e() {
-+	this.isFoo = function(t) {
-+		return t instanceof e;
- 	};
- }
--var fooCollection = new function() {
-+function t() {
- 	this.foos = [1, 1].map(function() {
--		return new Foo();
-+		return new e();
- 	});
--}();
--console.log(fooCollection.foos[0].isFoo(fooCollection.foos[0]));
--console.log(fooCollection.foos[0].isFoo(fooCollection.foos[1]));
--console.log(fooCollection.foos[1].isFoo(fooCollection.foos[0]));
--console.log(fooCollection.foos[1].isFoo(fooCollection.foos[1]));
-+}
-+var n = new t();
-+console.log(n.foos[0].isFoo(n.foos[0]));
-+console.log(n.foos[0].isFoo(n.foos[1]));
-+console.log(n.foos[1].isFoo(n.foos[0]));
-+console.log(n.foos[1].isFoo(n.foos[1]));
 
 ```
 

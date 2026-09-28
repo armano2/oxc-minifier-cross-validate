@@ -8,19 +8,19 @@ Fixtures run: 526
 
 | config | smaller | not-idempotent | panic | larger | differs | input-parse-error | expected-parse-error | config-error | no-expected | pass | total |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| clean | 163 | 2 | 1 | 160 | 19 | 1 | 1 | 0 | 1 | 45 | 393 |
-| unsupported keys | 82 | 0 | 0 | 25 | 7 | 0 | 0 | 0 | 0 | 19 | 133 |
-| **all** | 245 | 2 | 1 | 185 | 26 | 1 | 1 | 0 | 1 | 64 | 526 |
+| clean | 81 | 2 | 1 | 220 | 23 | 1 | 1 | 0 | 1 | 82 | 412 |
+| unsupported keys | 31 | 0 | 0 | 53 | 7 | 0 | 0 | 0 | 0 | 23 | 114 |
+| **all** | 112 | 2 | 1 | 273 | 30 | 1 | 1 | 0 | 1 | 105 | 526 |
 
 ## Reports
 
 | kind | fixtures | file |
 |---|---:|---|
-| smaller | 245 | [smaller.md](smaller.md) |
+| smaller | 112 | [smaller.md](smaller.md) |
 | not-idempotent | 2 | [not-idempotent.md](not-idempotent.md) |
 | panic | 1 | [panic.md](panic.md) |
-| larger | 185 | [larger.md](larger.md) |
-| differs | 26 | [differs.md](differs.md) |
+| larger | 273 | [larger.md](larger.md) |
+| differs | 30 | [differs.md](differs.md) |
 | input-parse-error | 1 | [input-parse-error.md](input-parse-error.md) |
 | expected-parse-error | 1 | [expected-parse-error.md](expected-parse-error.md) |
 | no-expected | 1 | [no-expected.md](no-expected.md) |

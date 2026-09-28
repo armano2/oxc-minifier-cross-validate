@@ -78,8 +78,8 @@ pub(crate) fn run_all(root: &Path, fixtures: &[Fixture], options: &Options) -> R
 }
 
 pub(crate) fn run_fixture(root: &Path, fixture: &Fixture) -> Result<Outcome, Skip> {
-    let (mapped, config_errors) = config::load(root, &fixture.dir);
-    if mapped.is_ie8 {
+    let config = config::load(root, &fixture.dir);
+    if config.is_ie8 {
         return Err(Skip::Ie8);
     }
 
@@ -87,7 +87,7 @@ pub(crate) fn run_fixture(root: &Path, fixture: &Fixture) -> Result<Outcome, Ski
         relative: fixture.relative.clone(),
         family: fixture.family.clone(),
         kind: Kind::Pass,
-        unsupported_keys: mapped.unsupported_keys,
+        unsupported_keys: config.unsupported_keys,
         input: String::new(),
         expected: String::new(),
         actual: String::new(),
@@ -95,9 +95,9 @@ pub(crate) fn run_fixture(root: &Path, fixture: &Fixture) -> Result<Outcome, Ski
         note: String::new(),
     };
 
-    if !config_errors.is_empty() {
+    if !config.errors.is_empty() {
         outcome.kind = Kind::ConfigError;
-        outcome.note = config_errors.join("; ");
+        outcome.note = config.errors.join("; ");
         return Ok(outcome);
     }
 
@@ -115,15 +115,15 @@ pub(crate) fn run_fixture(root: &Path, fixture: &Fixture) -> Result<Outcome, Ski
 
     let run_compress = |source: &str, source_type: SourceType| {
         panic::catch_unwind(AssertUnwindSafe(|| {
-            compress(source, source_type, &mapped.options, mapped.top_level)
+            compress(source, source_type, config.options.clone())
         }))
     };
 
     // Prefer script, fall back to module: terser fixtures are mostly scripts but
     // some use import/export.
-    let mut source_type = source_type_for(mapped.is_module);
+    let mut source_type = source_type_for(config.is_module);
     let mut compressed = run_compress(&input, source_type);
-    if !mapped.is_module && !matches!(compressed, Ok(Ok(_))) {
+    if !config.is_module && !matches!(compressed, Ok(Ok(_))) {
         let module = SourceType::mjs();
         let retry = run_compress(&input, module);
         if matches!(retry, Ok(Ok(_))) {

@@ -1,8 +1,7 @@
 use oxc::{
     ast::ast::Program,
     codegen::{Codegen, CodegenOptions, CommentOptions},
-    mangler::MangleOptionsKeepNames,
-    minifier::{CompressOptions, MangleOptions, Minifier, MinifierOptions, MinifierReturn},
+    minifier::{Minifier, MinifierOptions, MinifierReturn},
     parser::{ParseOptions, Parser, ParserReturn},
     span::SourceType,
 };
@@ -28,21 +27,11 @@ pub(crate) fn print_normalized(
 pub(crate) fn compress(
     source_text: &str,
     source_type: SourceType,
-    options: &CompressOptions,
-    top_level: Option<bool>,
+    options: MinifierOptions,
 ) -> Result<String, String> {
     let allocator = Allocator::default();
     let mut program = parse(&allocator, source_text, source_type)?.program;
-    let minified = Minifier::new(MinifierOptions {
-        mangle: top_level.map(|top_level| MangleOptions {
-            top_level: Some(top_level),
-            keep_names: MangleOptionsKeepNames::all_false(),
-            ..MangleOptions::default()
-        }),
-        mangle_properties: None,
-        compress: Some(options.clone()),
-    })
-    .minify(&allocator, &mut program);
+    let minified = Minifier::new(options).minify(&allocator, &mut program);
     Ok(codegen(&program, Some(minified)))
 }
 

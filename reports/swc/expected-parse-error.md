@@ -28,7 +28,7 @@ console.log(k);
 +'use strict';
 +console.log((() => {
 +	switch (1) {
-+		case e: async function e() {}
++		case x: async function x() {}
 +	}
 +	return 1;
 +})());
