@@ -1,6 +1,6 @@
 # uglify / smaller — Output shorter than expected (possible over-optimization / bug)
 
-Fixtures: 1309
+Fixtures: 1308
 
 [← uglify](README.md) · [← all families](../README.md)
 
@@ -33313,36 +33313,6 @@ console.log(a ? 'PASS' : 'FAIL');
 +	if (console.log('PASS')) return;
 +	return null;
  })().next();
-
-```
-
-## `uglify/arrows/issue_5495`
-
-- size: oxc 45 vs reference 85 (-40 bytes)
-
-```js
-console.log((() => {
-	'use strict';
-	return function() {
-		return this;
-	}();
-})());
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,3 @@
--console.log((() => {
--	'use strict';
--	return function() {
--		return this;
--	}();
--})());
-+console.log(function() {
-+	return this;
-+}());
 
 ```
 

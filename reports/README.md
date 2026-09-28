@@ -8,13 +8,13 @@ Fixtures run: 6786
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | pass-1 | clean | 2 | 0 | 0 | 8 | 2 | 0 | 0 | 0 | 0 | 5 | 17 |
 | pass-1 | unsupported keys | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| swc | clean | 81 | 2 | 1 | 220 | 23 | 1 | 1 | 0 | 1 | 82 | 412 |
+| swc | clean | 78 | 2 | 1 | 220 | 23 | 1 | 1 | 0 | 1 | 85 | 412 |
 | swc | unsupported keys | 31 | 0 | 0 | 53 | 7 | 0 | 0 | 0 | 0 | 23 | 114 |
 | terser | clean | 402 | 16 | 1 | 343 | 54 | 6 | 0 | 0 | 0 | 397 | 1219 |
 | terser | unsupported keys | 191 | 12 | 0 | 516 | 19 | 2 | 0 | 0 | 0 | 174 | 914 |
-| uglify | clean | 903 | 3 | 0 | 654 | 116 | 19 | 0 | 0 | 0 | 643 | 2338 |
+| uglify | clean | 902 | 3 | 0 | 654 | 116 | 19 | 0 | 0 | 0 | 644 | 2338 |
 | uglify | unsupported keys | 406 | 3 | 0 | 1002 | 33 | 1 | 3 | 0 | 0 | 323 | 1771 |
-| **all** |  | 2016 | 36 | 2 | 2797 | 254 | 29 | 4 | 0 | 1 | 1647 | 6786 |
+| **all** |  | 2012 | 36 | 2 | 2797 | 254 | 29 | 4 | 0 | 1 | 1651 | 6786 |
 
 ## Families
 
@@ -32,7 +32,7 @@ Fixtures run: 6786
 | pass-1 | smaller | 2 | [pass-1/smaller.md](pass-1/smaller.md) |
 | pass-1 | larger | 9 | [pass-1/larger.md](pass-1/larger.md) |
 | pass-1 | differs | 2 | [pass-1/differs.md](pass-1/differs.md) |
-| swc | smaller | 112 | [swc/smaller.md](swc/smaller.md) |
+| swc | smaller | 109 | [swc/smaller.md](swc/smaller.md) |
 | swc | not-idempotent | 2 | [swc/not-idempotent.md](swc/not-idempotent.md) |
 | swc | panic | 1 | [swc/panic.md](swc/panic.md) |
 | swc | larger | 273 | [swc/larger.md](swc/larger.md) |
@@ -46,7 +46,7 @@ Fixtures run: 6786
 | terser | larger | 859 | [terser/larger.md](terser/larger.md) |
 | terser | differs | 73 | [terser/differs.md](terser/differs.md) |
 | terser | input-parse-error | 8 | [terser/input-parse-error.md](terser/input-parse-error.md) |
-| uglify | smaller | 1309 | [uglify/smaller.md](uglify/smaller.md) |
+| uglify | smaller | 1308 | [uglify/smaller.md](uglify/smaller.md) |
 | uglify | not-idempotent | 6 | [uglify/not-idempotent.md](uglify/not-idempotent.md) |
 | uglify | larger | 1656 | [uglify/larger.md](uglify/larger.md) |
 | uglify | differs | 149 | [uglify/differs.md](uglify/differs.md) |

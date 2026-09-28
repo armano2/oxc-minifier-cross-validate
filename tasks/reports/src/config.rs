@@ -260,10 +260,7 @@ fn map_compress(
                 // enabled by default
             }
             "webkit" | "ie" | "ie8" => {}
-            _ => {
-                println!("unsupported_keys {}", key);
-                unsupported_keys.push(key.clone())
-            }
+            _ => unsupported_keys.push(key.clone()),
         }
     }
 

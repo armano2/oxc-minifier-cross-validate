@@ -1,6 +1,6 @@
 # swc / smaller — Output shorter than expected (possible over-optimization / bug)
 
-Fixtures: 112
+Fixtures: 109
 
 [← swc](README.md) · [← all families](../README.md)
 
@@ -2325,100 +2325,6 @@ console.log(a === b, c === d, e === f, g === h, h === j);
 -const h = false;
 -console.log(false, false, {} == {}, false, false);
 +console.log(!1, !1, {} == {}, !1, !1);
-
-```
-
-## `swc/issues/2262/1`
-
-- size: oxc 19 vs reference 50 (-31 bytes)
-
-```js
-(() => {
-	'use strict';
-	var commonjsGlobal = globalThis;
-	function createEventEmitter(value) {}
-	var index = somethingGlobal;
-	const esm = index;
-	esm();
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1 @@
--(() => {
--	'use strict';
--	somethingGlobal();
--})();
-+somethingGlobal();
-
-```
-
-## `swc/issues/9823/1-class`
-
-- size: oxc 23 vs reference 54 (-31 bytes)
-
-```js
-(() => {
-	'use strict';
-	class Element {}
-	class PointElement extends Element {
-		static id = 'point';
-		constructor(cfg) {
-			super();
-		}
-	}
-	// var chart_elements = /*#__PURE__*/ Object.freeze({
-	// PointElement: PointElement
-	// });
-	var chart_elements = null && Object.freeze({ PointElement });
-	const registerables = null && [chart_elements, chart_plugins];
-	console.log('Done 1');
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1 @@
--(() => {
--	'use strict';
--	console.log('Done 1');
--})();
-+console.log('Done 1');
-
-```
-
-## `swc/issues/9823/2-class-extends`
-
-- size: oxc 23 vs reference 54 (-31 bytes)
-
-```js
-(() => {
-	'use strict';
-	class Element {}
-	// var chart_elements = /*#__PURE__*/ Object.freeze({
-	// PointElement: PointElement
-	// });
-	var chart_elements = null && Object.freeze({ Element });
-	const registerables = null && [chart_elements, chart_plugins];
-	console.log('Done 2');
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1 @@
--(() => {
--	'use strict';
--	console.log('Done 2');
--})();
-+console.log('Done 2');
 
 ```
 
