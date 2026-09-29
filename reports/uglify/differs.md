@@ -4146,7 +4146,7 @@ function f(w, x, y, z) {
  			if (y) return;
  		} else if (z) return;
 -		return x != y && (x && w(), y) && z(), !0;
-+		return x == y || (x && w(), y && z(), !0);
++		return x == y || (x && w(), y && z()), !0;
  	}
  }
 

@@ -1,6 +1,6 @@
 # swc / differs — Output differs at equal length
 
-Fixtures: 30
+Fixtures: 32
 
 [← swc](README.md) · [← all families](../README.md)
 
@@ -830,6 +830,66 @@ if ((name == 'shift' || name == 'splice') && obj.length === 0) delete obj[0];
 @@ -1 +1 @@
 -('shift' == name || 'splice' == name) && 0 === obj.length && delete obj[0];
 +(name == 'shift' || name == 'splice') && obj.length === 0 && delete obj[0];
+
+```
+
+## `swc/projects/underscore/23`
+
+
+```js
+_.once = function(func) {
+	var ran = false, memo;
+	return function() {
+		if (ran) return memo;
+		ran = true;
+		memo = func.apply(this, arguments);
+		func = null;
+		return memo;
+	};
+};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ _.once = function(func) {
+-	var memo, ran = !1;
++	var ran = !1, memo;
+ 	return function() {
+ 		return ran || (ran = !0, memo = func.apply(this, arguments), func = null), memo;
+ 	};
+
+```
+
+## `swc/projects/underscore/9`
+
+
+```js
+_.once = function(func) {
+	var ran = false, memo;
+	return function() {
+		if (ran) return memo;
+		ran = true;
+		memo = func.apply(this, arguments);
+		func = null;
+		return memo;
+	};
+};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ _.once = function(func) {
+-	var memo, ran = !1;
++	var ran = !1, memo;
+ 	return function() {
+ 		return ran || (ran = !0, memo = func.apply(this, arguments), func = null), memo;
+ 	};
 
 ```
 

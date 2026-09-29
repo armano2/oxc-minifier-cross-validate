@@ -1,6 +1,6 @@
 # swc / larger — Output longer than expected (possible missing optimization)
 
-Fixtures: 273
+Fixtures: 269
 
 [← swc](README.md) · [← all families](../README.md)
 
@@ -1808,107 +1808,6 @@ test(globalThis.falseValue);
  		flag ? 1 : -0,
  		flag ? -0 : 1
  	].map(classify).join(','));
-
-```
-
-## `swc/projects/mootools/10`
-
-- size: oxc 287 vs reference 281 (+6 bytes)
-
-```js
-export const exported = { fireEvent: function(type, args, delay) {
-	type = removeOn(type);
-	var events = this.$events[type];
-	if (!events) return this;
-	args = Array.from(args);
-	events.each(function(fn) {
-		if (delay) fn.delay(delay, this, args);
-		else fn.apply(this, args);
-	}, this);
-	return this;
-} };
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
- export const exported = { fireEvent: function(type, args, delay) {
- 	type = removeOn(type);
- 	var events = this.$events[type];
--	return events && (args = Array.from(args), events.each(function(fn) {
-+	return events ? (args = Array.from(args), events.each(function(fn) {
- 		delay ? fn.delay(delay, this, args) : fn.apply(this, args);
--	}, this)), this;
-+	}, this), this) : this;
- } };
-
-```
-
-## `swc/projects/underscore/23`
-
-- size: oxc 164 vs reference 158 (+6 bytes)
-
-```js
-_.once = function(func) {
-	var ran = false, memo;
-	return function() {
-		if (ran) return memo;
-		ran = true;
-		memo = func.apply(this, arguments);
-		func = null;
-		return memo;
-	};
-};
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,6 @@
- _.once = function(func) {
--	var memo, ran = !1;
-+	var ran = !1, memo;
- 	return function() {
--		return ran || (ran = !0, memo = func.apply(this, arguments), func = null), memo;
-+		return ran ? memo : (ran = !0, memo = func.apply(this, arguments), func = null, memo);
- 	};
- };
-
-```
-
-## `swc/projects/underscore/9`
-
-- size: oxc 164 vs reference 158 (+6 bytes)
-
-```js
-_.once = function(func) {
-	var ran = false, memo;
-	return function() {
-		if (ran) return memo;
-		ran = true;
-		memo = func.apply(this, arguments);
-		func = null;
-		return memo;
-	};
-};
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,6 @@
- _.once = function(func) {
--	var memo, ran = !1;
-+	var ran = !1, memo;
- 	return function() {
--		return ran || (ran = !0, memo = func.apply(this, arguments), func = null), memo;
-+		return ran ? memo : (ran = !0, memo = func.apply(this, arguments), func = null, memo);
- 	};
- };
 
 ```
 
@@ -4147,36 +4046,6 @@ export function removeFromMatrix(matrix, id) {
 
 ```
 
-## `swc/issues/10986`
-
-- size: oxc 88 vs reference 68 (+20 bytes)
-
-```js
-test = function test() {
-	if (cond) {
-		console.log('a');
-		return;
-	}
-	console.log('b');
-};
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,7 @@
- test = function() {
--	cond ? console.log('a') : console.log('b');
-+	if (cond) {
-+		console.log('a');
-+		return;
-+	}
-+	console.log('b');
- };
-
-```
-
 ## `swc/issues/11257`
 
 - size: oxc 125 vs reference 105 (+20 bytes)
@@ -6272,6 +6141,83 @@ console.log(typeof class {});
 
 ```
 
+## `swc/issues/9504`
+
+- size: oxc 825 vs reference 793 (+32 bytes)
+
+```js
+export function panUpdate(e) {
+	if (!moveDirectionExpected) {
+		panStart = false;
+		return;
+	}
+	caf(rafIndex);
+	if (panStart) {
+		rafIndex = raf(function() {
+			panUpdate(e);
+		});
+	}
+	if (moveDirectionExpected === '?') {
+		moveDirectionExpected = getMoveDirectionExpected();
+	}
+	if (moveDirectionExpected) {
+		if (!preventScroll && isTouchEvent(e)) {
+			preventScroll = true;
+		}
+		try {
+			if (e.type) {
+				events.emit(isTouchEvent(e) ? 'touchMove' : 'dragMove', info(e));
+			}
+		} catch (err) {}
+		var x = translateInit, dist = getDist(lastPosition, initPosition);
+		if (!horizontal || fixedWidth || autoWidth) {
+			// Relevant lines below
+			x += dist;
+			x += 'px';
+		} else {
+			var percentageX = TRANSFORM ? dist * items * 100 / ((viewport + gutter) * slideCountNew) : dist * 100 / (viewport + gutter);
+			x += percentageX;
+			x += '%';
+		}
+		container.style[transformAttr] = transformPrefix + x + transformPostfix;
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,16 +1,18 @@
+ export function panUpdate(e) {
+-	if (!moveDirectionExpected) {
+-		panStart = !1;
+-		return;
+-	}
+-	if (caf(rafIndex), panStart && (rafIndex = raf(function() {
++	if (!moveDirectionExpected) panStart = !1;
++	else if (caf(rafIndex), panStart && (rafIndex = raf(function() {
+ 		panUpdate(e);
+-	})), '?' === moveDirectionExpected && (moveDirectionExpected = getMoveDirectionExpected()), moveDirectionExpected) {
++	})), moveDirectionExpected === '?' && (moveDirectionExpected = getMoveDirectionExpected()), moveDirectionExpected) {
+ 		!preventScroll && isTouchEvent(e) && (preventScroll = !0);
+ 		try {
+ 			e.type && events.emit(isTouchEvent(e) ? 'touchMove' : 'dragMove', info(e));
+-		} catch (err) {}
++		} catch {}
+ 		var x = translateInit, dist = getDist(lastPosition, initPosition);
+-		!horizontal || fixedWidth || autoWidth ? (x += dist, x += 'px') : (x += TRANSFORM ? dist * items * 100 / ((viewport + gutter) * slideCountNew) : 100 * dist / (viewport + gutter), x += '%'), container.style[transformAttr] = transformPrefix + x + transformPostfix;
++		if (!horizontal || fixedWidth || autoWidth) x += dist, x += 'px';
++		else {
++			var percentageX = TRANSFORM ? dist * items * 100 / ((viewport + gutter) * slideCountNew) : dist * 100 / (viewport + gutter);
++			x += percentageX, x += '%';
++		}
++		container.style[transformAttr] = transformPrefix + x + transformPostfix;
+ 	}
+ }
+
+```
+
 ## `swc/member_expr/string`
 
 - size: oxc 861 vs reference 829 (+32 bytes)
@@ -7010,77 +6956,6 @@ export function foo() {
 -	console.log(!0);
 +	let x = () => null, y = () => x;
 +	console.log(y() === y());
- }
-
-```
-
-## `swc/issues/9504`
-
-- size: oxc 837 vs reference 793 (+44 bytes)
-
-```js
-export function panUpdate(e) {
-	if (!moveDirectionExpected) {
-		panStart = false;
-		return;
-	}
-	caf(rafIndex);
-	if (panStart) {
-		rafIndex = raf(function() {
-			panUpdate(e);
-		});
-	}
-	if (moveDirectionExpected === '?') {
-		moveDirectionExpected = getMoveDirectionExpected();
-	}
-	if (moveDirectionExpected) {
-		if (!preventScroll && isTouchEvent(e)) {
-			preventScroll = true;
-		}
-		try {
-			if (e.type) {
-				events.emit(isTouchEvent(e) ? 'touchMove' : 'dragMove', info(e));
-			}
-		} catch (err) {}
-		var x = translateInit, dist = getDist(lastPosition, initPosition);
-		if (!horizontal || fixedWidth || autoWidth) {
-			// Relevant lines below
-			x += dist;
-			x += 'px';
-		} else {
-			var percentageX = TRANSFORM ? dist * items * 100 / ((viewport + gutter) * slideCountNew) : dist * 100 / (viewport + gutter);
-			x += percentageX;
-			x += '%';
-		}
-		container.style[transformAttr] = transformPrefix + x + transformPostfix;
-	}
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -5,12 +5,17 @@
- 	}
- 	if (caf(rafIndex), panStart && (rafIndex = raf(function() {
- 		panUpdate(e);
--	})), '?' === moveDirectionExpected && (moveDirectionExpected = getMoveDirectionExpected()), moveDirectionExpected) {
-+	})), moveDirectionExpected === '?' && (moveDirectionExpected = getMoveDirectionExpected()), moveDirectionExpected) {
- 		!preventScroll && isTouchEvent(e) && (preventScroll = !0);
- 		try {
- 			e.type && events.emit(isTouchEvent(e) ? 'touchMove' : 'dragMove', info(e));
--		} catch (err) {}
-+		} catch {}
- 		var x = translateInit, dist = getDist(lastPosition, initPosition);
--		!horizontal || fixedWidth || autoWidth ? (x += dist, x += 'px') : (x += TRANSFORM ? dist * items * 100 / ((viewport + gutter) * slideCountNew) : 100 * dist / (viewport + gutter), x += '%'), container.style[transformAttr] = transformPrefix + x + transformPostfix;
-+		if (!horizontal || fixedWidth || autoWidth) x += dist, x += 'px';
-+		else {
-+			var percentageX = TRANSFORM ? dist * items * 100 / ((viewport + gutter) * slideCountNew) : dist * 100 / (viewport + gutter);
-+			x += percentageX, x += '%';
-+		}
-+		container.style[transformAttr] = transformPrefix + x + transformPostfix;
- 	}
  }
 
 ```

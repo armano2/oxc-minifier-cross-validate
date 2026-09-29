@@ -1063,46 +1063,6 @@ for (var key in source) destination[key] = copy(source[key]);
 
 ```
 
-## `swc/projects/backbone/5`
-
-- size: oxc 391 vs reference 399 (-8 bytes)
-
-```js
-export var Events = { 
-// Bind an event to a `callback` function. Passing `"all"` will bind
-// the callback to all events fired.
-on: function(name, callback, context) {
-	if (!eventsApi(this, 'on', name, [callback, context]) || !callback) return this;
-	this._events || (this._events = {});
-	var events = this._events[name] || (this._events[name] = []);
-	events.push({
-		callback,
-		context,
-		ctx: context || this
-	});
-	return this;
-} };
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -2,9 +2,9 @@
- // Bind an event to a `callback` function. Passing `"all"` will bind
- // the callback to all events fired.
- on: function(name, callback, context) {
--	return eventsApi(this, 'on', name, [callback, context]) && callback && (this._events || (this._events = {}), (this._events[name] || (this._events[name] = [])).push({
-+	return !eventsApi(this, 'on', name, [callback, context]) || !callback ? this : (this._events ||= {}, (this._events[name] || (this._events[name] = [])).push({
- 		callback,
- 		context,
- 		ctx: context || this
--	})), this;
-+	}), this);
- } };
-
-```
-
 ## `swc/projects/next/extra/if_return/2`
 
 - size: oxc 849 vs reference 857 (-8 bytes)
@@ -1687,6 +1647,43 @@ export default (function(e) {
 +		return typeof this == 'function' && t(this).source || Pi(this);
 +	}));
 +});
+
+```
+
+## `swc/projects/backbone/5`
+
+- size: oxc 385 vs reference 399 (-14 bytes)
+
+```js
+export var Events = { 
+// Bind an event to a `callback` function. Passing `"all"` will bind
+// the callback to all events fired.
+on: function(name, callback, context) {
+	if (!eventsApi(this, 'on', name, [callback, context]) || !callback) return this;
+	this._events || (this._events = {});
+	var events = this._events[name] || (this._events[name] = []);
+	events.push({
+		callback,
+		context,
+		ctx: context || this
+	});
+	return this;
+} };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,7 +2,7 @@
+ // Bind an event to a `callback` function. Passing `"all"` will bind
+ // the callback to all events fired.
+ on: function(name, callback, context) {
+-	return eventsApi(this, 'on', name, [callback, context]) && callback && (this._events || (this._events = {}), (this._events[name] || (this._events[name] = [])).push({
++	return !eventsApi(this, 'on', name, [callback, context]) || !callback || (this._events ||= {}, (this._events[name] || (this._events[name] = [])).push({
+ 		callback,
+ 		context,
+ 		ctx: context || this
 
 ```
 

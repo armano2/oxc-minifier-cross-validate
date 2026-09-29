@@ -8,9 +8,9 @@ Fixtures run: 526
 
 | config | smaller | not-idempotent | panic | larger | differs | input-parse-error | expected-parse-error | config-error | no-expected | pass | total |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| clean | 78 | 2 | 1 | 220 | 23 | 1 | 1 | 0 | 1 | 85 | 412 |
+| clean | 78 | 2 | 1 | 216 | 25 | 1 | 1 | 0 | 1 | 87 | 412 |
 | unsupported keys | 31 | 0 | 0 | 53 | 7 | 0 | 0 | 0 | 0 | 23 | 114 |
-| **all** | 109 | 2 | 1 | 273 | 30 | 1 | 1 | 0 | 1 | 108 | 526 |
+| **all** | 109 | 2 | 1 | 269 | 32 | 1 | 1 | 0 | 1 | 110 | 526 |
 
 ## Reports
 
@@ -19,8 +19,8 @@ Fixtures run: 526
 | smaller | 109 | [smaller.md](smaller.md) |
 | not-idempotent | 2 | [not-idempotent.md](not-idempotent.md) |
 | panic | 1 | [panic.md](panic.md) |
-| larger | 273 | [larger.md](larger.md) |
-| differs | 30 | [differs.md](differs.md) |
+| larger | 269 | [larger.md](larger.md) |
+| differs | 32 | [differs.md](differs.md) |
 | input-parse-error | 1 | [input-parse-error.md](input-parse-error.md) |
 | expected-parse-error | 1 | [expected-parse-error.md](expected-parse-error.md) |
 | no-expected | 1 | [no-expected.md](no-expected.md) |

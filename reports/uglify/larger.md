@@ -9322,6 +9322,34 @@ console.log(A);
 
 ```
 
+## `uglify/if_return/issue_512`
+
+- size: oxc 47 vs reference 43 (+4 bytes)
+
+```js
+function a() {
+	if (b()) {
+		c();
+		return;
+	}
+	throw e;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ function a() {
+-	if (!b()) throw e;
+-	c();
++	if (b()) c();
++	else throw e;
+ }
+
+```
+
 ## `uglify/if_return/issue_866_2`
 
 - size: oxc 62 vs reference 58 (+4 bytes)
@@ -25509,37 +25537,6 @@ L: for (var a in function() {
  	continue L;
 -} while (console.log('FAIL'));
 +while (console.log('FAIL'));
-
-```
-
-## `uglify/if_return/issue_512`
-
-- size: oxc 59 vs reference 43 (+16 bytes)
-
-```js
-function a() {
-	if (b()) {
-		c();
-		return;
-	}
-	throw e;
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,7 @@
- function a() {
--	if (!b()) throw e;
--	c();
-+	if (b()) {
-+		c();
-+		return;
-+	}
-+	throw e;
- }
 
 ```
 

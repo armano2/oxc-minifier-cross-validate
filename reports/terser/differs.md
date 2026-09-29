@@ -1,6 +1,6 @@
 # terser / differs — Output differs at equal length
 
-Fixtures: 73
+Fixtures: 72
 
 [← terser](README.md) · [← all families](../README.md)
 
@@ -2048,37 +2048,6 @@ function foo(e) {
  function foo(e) {
 -	return `yep,\nthis is a template string!`;
 +	return 'yep,\nthis is a template string!';
- }
-
-```
-
-## `terser/transform/if_return`
-
-
-```js
-function f(w, x, y, z) {
-	if (x) return;
-	if (w) {
-		if (y) return;
-	} else if (z) return;
-	if (x == y) return true;
-	if (x) w();
-	if (y) z();
-	return true;
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -3,6 +3,6 @@
- 		if (w) {
- 			if (y) return;
- 		} else if (z) return;
--		return x == y || (x && w(), y && z()), !0;
-+		return x == y || (x && w(), y && z(), !0);
- 	}
  }
 
 ```
