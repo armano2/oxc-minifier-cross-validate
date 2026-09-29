@@ -1,4 +1,4 @@
-# terser / input-parse-error — `input.js` failed to parse
+# terser / parse-error — failed to parse
 
 Fixtures: 8
 

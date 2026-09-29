@@ -6,11 +6,11 @@ Fixtures run: 4109
 
 ## Summary
 
-| config | smaller | not-idempotent | panic | larger | differs | input-parse-error | expected-parse-error | config-error | no-expected | pass | total |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| clean | 902 | 3 | 0 | 654 | 116 | 19 | 0 | 0 | 0 | 644 | 2338 |
-| unsupported keys | 406 | 3 | 0 | 1002 | 33 | 1 | 3 | 0 | 0 | 323 | 1771 |
-| **all** | 1308 | 6 | 0 | 1656 | 149 | 20 | 3 | 0 | 0 | 967 | 4109 |
+| config | smaller | not-idempotent | panic | larger | differs | parse-error | config-error | no-expected | pass | total |
+|---|---|---|---|---|---|---|---|---|---|---|
+| clean | 902 | 3 | 0 | 654 | 116 | 19 | 0 | 0 | 644 | 2338 |
+| unsupported keys | 406 | 3 | 0 | 1002 | 33 | 4 | 0 | 0 | 323 | 1771 |
+| **all** | 1308 | 6 | 0 | 1656 | 149 | 23 | 0 | 0 | 967 | 4109 |
 
 ## Reports
 
@@ -20,5 +20,4 @@ Fixtures run: 4109
 | not-idempotent | 6 | [not-idempotent.md](not-idempotent.md) |
 | larger | 1656 | [larger.md](larger.md) |
 | differs | 149 | [differs.md](differs.md) |
-| input-parse-error | 20 | [input-parse-error.md](input-parse-error.md) |
-| expected-parse-error | 3 | [expected-parse-error.md](expected-parse-error.md) |
+| parse-error | 23 | [parse-error.md](parse-error.md) |

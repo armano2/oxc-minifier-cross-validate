@@ -7,8 +7,7 @@ pub(crate) enum Kind {
     Panic,
     Larger,
     Differs,
-    InputParseError,
-    ExpectedParseError,
+    ParseError,
     ConfigError,
     NoExpected,
     Pass,
@@ -22,8 +21,7 @@ impl Kind {
             Self::Panic => "panic",
             Self::Larger => "larger",
             Self::Differs => "differs",
-            Self::InputParseError => "input-parse-error",
-            Self::ExpectedParseError => "expected-parse-error",
+            Self::ParseError => "parse-error",
             Self::ConfigError => "config-error",
             Self::NoExpected => "no-expected",
             Self::Pass => "pass",
@@ -37,23 +35,21 @@ impl Kind {
             Self::Panic => "Panicked",
             Self::Larger => "Output longer than expected (possible missing optimization)",
             Self::Differs => "Output differs at equal length",
-            Self::InputParseError => "`input.js` failed to parse",
-            Self::ExpectedParseError => "`output.js` failed to parse",
+            Self::ParseError => "failed to parse",
             Self::ConfigError => "`config.json` failed to parse",
             Self::NoExpected => "No `output.js` to compare against",
             Self::Pass => "Matches the reference output",
         }
     }
 
-    pub(crate) fn all() -> [Self; 10] {
+    pub(crate) fn all() -> [Self; 9] {
         [
             Self::Smaller,
             Self::NotIdempotent,
             Self::Panic,
             Self::Larger,
             Self::Differs,
-            Self::InputParseError,
-            Self::ExpectedParseError,
+            Self::ParseError,
             Self::ConfigError,
             Self::NoExpected,
             Self::Pass,

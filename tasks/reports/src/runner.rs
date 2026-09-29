@@ -102,7 +102,7 @@ pub(crate) fn run_fixture(root: &Path, fixture: &Fixture) -> Result<Outcome, Ski
     }
 
     let Ok(input) = fs::read_to_string(fixture.dir.join("input.js")) else {
-        outcome.kind = Kind::InputParseError;
+        outcome.kind = Kind::ParseError;
         outcome.note = "could not read input.js".to_string();
         return Ok(outcome);
     };
@@ -141,7 +141,7 @@ pub(crate) fn run_fixture(root: &Path, fixture: &Fixture) -> Result<Outcome, Ski
     outcome.actual = match compressed {
         Ok(Ok(actual)) => actual,
         Ok(Err(err)) => {
-            outcome.kind = Kind::InputParseError;
+            outcome.kind = Kind::ParseError;
             outcome.note = err;
             return Ok(outcome);
         }
@@ -157,7 +157,7 @@ pub(crate) fn run_fixture(root: &Path, fixture: &Fixture) -> Result<Outcome, Ski
     })) {
         Ok(Ok(expected)) => expected,
         Ok(Err(err)) => {
-            outcome.kind = Kind::ExpectedParseError;
+            outcome.kind = Kind::ParseError;
             outcome.note = err;
             return Ok(outcome);
         }
