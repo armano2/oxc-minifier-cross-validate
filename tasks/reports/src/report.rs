@@ -102,21 +102,15 @@ fn write_kind_table_row(out: &mut String, leading: &[&str], rows: &[&Outcome]) {
 }
 
 fn write_config_breakdown_rows(out: &mut String, rows: &[&Outcome], prefix: Option<&str>) {
-    for (label, clean) in [("clean", true), ("unsupported keys", false)] {
-        let subset: Vec<&Outcome> = rows
-            .iter()
-            .copied()
-            .filter(|outcome| outcome.unsupported_keys.is_empty() == clean)
-            .collect();
-        if subset.is_empty() {
-            continue;
-        }
-        let leading = match prefix {
-            Some(prefix) => vec![prefix, label],
-            None => vec![label],
-        };
-        write_kind_table_row(out, &leading, &subset);
+    let subset: Vec<&Outcome> = rows.iter().copied().collect();
+    if subset.is_empty() {
+        return;
     }
+    let leading = match prefix {
+        Some(prefix) => vec![prefix],
+        None => vec![""],
+    };
+    write_kind_table_row(out, &leading, &subset);
 }
 
 fn write_summary_markdown(outcomes: &[Outcome], family_reports: &[FamilyReport]) -> String {
@@ -132,7 +126,7 @@ fn write_summary_markdown(outcomes: &[Outcome], family_reports: &[FamilyReport])
             outcomes.iter().filter(|outcome| outcome.family == report.family).collect();
         write_config_breakdown_rows(&mut out, &rows, Some(&report.family));
     }
-    write_kind_table_row(&mut out, &["**all**", ""], &all);
+    write_kind_table_row(&mut out, &["**all**"], &all);
     out.push('\n');
 
     if !family_reports.is_empty() {

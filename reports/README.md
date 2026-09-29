@@ -6,15 +6,11 @@ Fixtures run: 6786
 
 | family | config | smaller | not-idempotent | panic | larger | differs | parse-error | config-error | no-expected | pass | total |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| pass-1 | clean | 2 | 0 | 0 | 8 | 2 | 0 | 0 | 0 | 5 | 17 |
-| pass-1 | unsupported keys | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 1 |
-| swc | clean | 78 | 2 | 1 | 216 | 25 | 2 | 0 | 1 | 87 | 412 |
-| swc | unsupported keys | 31 | 0 | 0 | 53 | 7 | 0 | 0 | 0 | 23 | 114 |
-| terser | clean | 402 | 16 | 1 | 343 | 53 | 6 | 0 | 0 | 398 | 1219 |
-| terser | unsupported keys | 191 | 12 | 0 | 516 | 19 | 2 | 0 | 0 | 174 | 914 |
-| uglify | clean | 902 | 3 | 0 | 654 | 116 | 19 | 0 | 0 | 644 | 2338 |
-| uglify | unsupported keys | 406 | 3 | 0 | 1002 | 33 | 4 | 0 | 0 | 323 | 1771 |
-| **all** |  | 2012 | 36 | 2 | 2793 | 255 | 33 | 0 | 1 | 1654 | 6786 |
+| pass-1 | 2 | 0 | 0 | 9 | 2 | 0 | 0 | 0 | 5 | 18 |
+| swc | 109 | 2 | 1 | 269 | 32 | 2 | 0 | 1 | 110 | 526 |
+| terser | 593 | 28 | 1 | 859 | 72 | 8 | 0 | 0 | 572 | 2133 |
+| uglify | 1308 | 6 | 0 | 1656 | 149 | 23 | 0 | 0 | 967 | 4109 |
+| **all** | 2012 | 36 | 2 | 2793 | 255 | 33 | 0 | 1 | 1654 | 6786 |
 
 ## Families
 

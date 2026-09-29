@@ -8,8 +8,7 @@ Fixtures run: 4109
 
 | config | smaller | not-idempotent | panic | larger | differs | parse-error | config-error | no-expected | pass | total |
 |---|---|---|---|---|---|---|---|---|---|---|
-| clean | 902 | 3 | 0 | 654 | 116 | 19 | 0 | 0 | 644 | 2338 |
-| unsupported keys | 406 | 3 | 0 | 1002 | 33 | 4 | 0 | 0 | 323 | 1771 |
+|  | 1308 | 6 | 0 | 1656 | 149 | 23 | 0 | 0 | 967 | 4109 |
 | **all** | 1308 | 6 | 0 | 1656 | 149 | 23 | 0 | 0 | 967 | 4109 |
 
 ## Reports
