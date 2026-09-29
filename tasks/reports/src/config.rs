@@ -1,10 +1,12 @@
-use oxc::mangler::MangleOptionsKeepNames;
 use serde_json::{Value as Json, Value};
 use std::{collections::BTreeMap, fs, path::Path};
 
-use oxc::minifier::{
-    CompressOptions, CompressOptionsKeepNames, CompressOptionsUnused, MangleOptions,
-    ManglePropertiesOptions, MinifierOptions, PropertyReadSideEffects,
+use oxc::{
+    mangler::MangleOptionsKeepNames,
+    minifier::{
+        CompressOptions, CompressOptionsKeepNames, CompressOptionsUnused, MangleOptions,
+        ManglePropertiesOptions, MinifierOptions, PropertyReadSideEffects,
+    },
 };
 
 pub(crate) struct MappedOptions {

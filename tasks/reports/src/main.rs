@@ -10,7 +10,7 @@ mod runner;
 
 use std::path::Path;
 
-pub(crate) use outcome::{Kind, Outcome};
+use outcome::{Kind, Outcome};
 
 fn main() -> std::io::Result<()> {
     let options = cli::Options::from_env();
