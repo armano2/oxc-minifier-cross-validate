@@ -924,7 +924,6 @@ version = "0.1.0"
 dependencies = [
  "json-strip-comments",
  "oxc",
- "oxc_allocator",
  "pico-args",
  "serde_json",
  "similar",

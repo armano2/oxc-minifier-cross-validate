@@ -4,8 +4,8 @@ use oxc::{
     minifier::{Minifier, MinifierOptions, MinifierReturn},
     parser::{ParseOptions, Parser, ParserReturn},
     span::SourceType,
+    allocator::Allocator
 };
-use oxc_allocator::Allocator;
 
 pub(crate) fn source_type_for(is_module: bool) -> SourceType {
     if is_module { SourceType::mjs() } else { SourceType::cjs() }
