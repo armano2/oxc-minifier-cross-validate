@@ -108,7 +108,7 @@ fn write_config_breakdown_rows(out: &mut String, rows: &[&Outcome], prefix: Opti
     }
     let leading = match prefix {
         Some(prefix) => vec![prefix],
-        None => vec![""],
+        None => vec![],
     };
     write_kind_table_row(out, &leading, &subset);
 }
@@ -120,7 +120,7 @@ fn write_summary_markdown(outcomes: &[Outcome], family_reports: &[FamilyReport])
     let all: Vec<&Outcome> = outcomes.iter().collect();
 
     out.push_str("## Summary\n\n");
-    write_kind_table_header(&mut out, &["family", "config"]);
+    write_kind_table_header(&mut out, &["family"]);
     for report in family_reports {
         let rows: Vec<&Outcome> =
             outcomes.iter().filter(|outcome| outcome.family == report.family).collect();
@@ -170,9 +170,8 @@ fn write_family_markdown(family: &str, rows: &[&Outcome], kind_reports: &[KindRe
     let _ = writeln!(out, "[← all families](../README.md)\n");
 
     out.push_str("## Summary\n\n");
-    write_kind_table_header(&mut out, &["config"]);
+    write_kind_table_header(&mut out, &[]);
     write_config_breakdown_rows(&mut out, rows, None);
-    write_kind_table_row(&mut out, &["**all**"], rows);
     out.push('\n');
 
     if kind_reports.is_empty() {

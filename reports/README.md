@@ -4,8 +4,8 @@ Fixtures run: 6786
 
 ## Summary
 
-| family | config | smaller | not-idempotent | panic | larger | differs | parse-error | config-error | no-expected | pass | total |
-|---|---|---|---|---|---|---|---|---|---|---|---|
+| family | smaller | not-idempotent | panic | larger | differs | parse-error | config-error | no-expected | pass | total |
+|---|---|---|---|---|---|---|---|---|---|---|
 | pass-1 | 2 | 0 | 0 | 9 | 2 | 0 | 0 | 0 | 5 | 18 |
 | swc | 109 | 2 | 1 | 269 | 32 | 2 | 0 | 1 | 110 | 526 |
 | terser | 593 | 28 | 1 | 859 | 72 | 8 | 0 | 0 | 572 | 2133 |
