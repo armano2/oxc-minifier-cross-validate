@@ -1,6 +1,6 @@
 # terser / differs — Output differs at equal length
 
-Fixtures: 72
+Fixtures: 71
 
 [← terser](README.md) · [← all families](../README.md)
 
@@ -644,41 +644,6 @@ console.log([...a || a]);
 +console.log([...e, e]);
 +console.log([...e || e]);
 +console.log([...e || e]);
-
-```
-
-## `terser/harmony/import_statement_mangling`
-
-- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`
-
-```js
-import Foo from 'foo';
-import Bar, { Food } from 'lel';
-import { What as Whatever } from 'lel';
-Foo();
-Bar();
-Food();
-Whatever();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
--import o from 'foo';
--import m, { Food as r } from 'lel';
--import { What as f } from 'lel';
--o();
--m();
-+import e from 'foo';
-+import t, { Food as n } from 'lel';
-+import { What as r } from 'lel';
-+e();
-+t();
-+n();
- r();
--f();
 
 ```
 

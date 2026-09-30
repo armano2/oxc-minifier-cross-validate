@@ -1,6 +1,6 @@
 # terser / smaller — Output shorter than expected (possible over-optimization / bug)
 
-Fixtures: 592
+Fixtures: 594
 
 [← terser](README.md) · [← all families](../README.md)
 
@@ -11373,6 +11373,41 @@ function g6() {
 
 ```
 
+## `terser/harmony/import_statement_mangling`
+
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`
+- size: oxc 88 vs reference 110 (-22 bytes)
+
+```js
+import Foo from 'foo';
+import Bar, { Food } from 'lel';
+import { What as Whatever } from 'lel';
+Foo();
+Bar();
+Food();
+Whatever();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,6 @@
+-import o from 'foo';
+-import m, { Food as r } from 'lel';
+-import { What as f } from 'lel';
+-o();
+-m();
++import e from 'foo';
++import t, { Food as n, What as r } from 'lel';
++e();
++t();
++n();
+ r();
+-f();
+
+```
+
 ## `terser/harmony/issue_1898`
 
 - size: oxc 133 vs reference 155 (-22 bytes)
@@ -13919,6 +13954,32 @@ function f(x, y) {
 -	moo();
 -	return x + y;
 -}
+
+```
+
+## `terser/harmony/import_statement`
+
+- size: oxc 109 vs reference 153 (-44 bytes)
+
+```js
+import 'mod-name';
+import Foo from 'bar';
+import { Bar, Baz } from 'lel';
+import Bar, { Foo } from 'lel';
+import { Bar as kex, Baz as food } from 'lel';
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,3 @@
+ import 'mod-name';
+ import Foo from 'bar';
+-import { Bar, Baz } from 'lel';
+-import Bar, { Foo } from 'lel';
+-import { Bar as kex, Baz as food } from 'lel';
++import Bar, { Bar, Baz, Foo, Bar as kex, Baz as food } from 'lel';
 
 ```
 

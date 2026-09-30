@@ -1,6 +1,6 @@
 # swc / larger — Output longer than expected (possible missing optimization)
 
-Fixtures: 267
+Fixtures: 264
 
 [← swc](README.md) · [← all families](../README.md)
 
@@ -4122,33 +4122,6 @@ export function removeFromMatrix(matrix, id) {
  	].map(String).join(','));
 -}('zero', 'one');
 +})('zero', 'one');
-
-```
-
-## `swc/issues/11257`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 125 vs reference 105 (+20 bytes)
-
-```js
-import { v1 } from 'a';
-import { v2 } from 'b';
-import { v3 } from 'b';
-import { v4 } from 'c';
-console.log(v1, v2, v3, v4);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,5 @@
- import { v1 } from 'a';
--import { v2, v3 } from 'b';
-+import { v2 } from 'b';
-+import { v3 } from 'b';
- import { v4 } from 'c';
- console.log(v1, v2, v3, v4);
 
 ```
 
@@ -8923,71 +8896,6 @@ console.log(new $eb2fd35624c84372$var$A().tagName);
 
 ```
 
-## `swc/issues/11321`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 769 vs reference 693 (+76 bytes)
-
-```js
-// Test case 1: Multiple default imports with different local names (the reported bug)
-import A from 'm.js';
-import B from 'm.js';
-// Test case 2: Multiple namespace imports with different local names
-import * as X from 'p.js';
-import * as Y from 'p.js';
-// Test case 3: Mix of multiple defaults and named imports
-import C from 'r.js';
-import D from 'r.js';
-import { foo } from 'r.js';
-import { bar } from 'r.js';
-// Test case 4: Mix of all kinds of imports
-import * as ns1 from 'q.js';
-import { default as E, 'default' as F } from 'q.js';
-import G from 'q.js';
-import { a, b, c } from 'q.js';
-import * as ns2 from 'q.js';
-import H from 'q.js';
-// Use all imports to prevent dead code elimination
-console.log(A, B, C, D, E, F, G, H);
-console.log(X, Y);
-console.log(foo, bar);
-console.log(ns1, ns2);
-console.log(a, b, c);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,13 +1,19 @@
- // Test case 1: Multiple default imports with different local names (the reported bug)
--import A, { default as B } from 'm.js';
-+import A from 'm.js';
-+import B from 'm.js';
- // Test case 2: Multiple namespace imports with different local names
- import * as X from 'p.js';
- import * as Y from 'p.js';
- // Test case 3: Mix of multiple defaults and named imports
--import C, { default as D, foo, bar } from 'r.js';
-+import C from 'r.js';
-+import D from 'r.js';
-+import { foo } from 'r.js';
-+import { bar } from 'r.js';
- // Test case 4: Mix of all kinds of imports
--import E, * as ns1 from 'q.js';
--import F, { default as G, a, b, c } from 'q.js';
--import H, * as ns2 from 'q.js';
--// Use all imports to prevent dead code elimination
-+import * as ns1 from 'q.js';
-+import { default as E, 'default' as F } from 'q.js';
-+import G from 'q.js';
-+import { a, b, c } from 'q.js';
-+import * as ns2 from 'q.js';
-+import H from 'q.js';
- console.log(A, B, C, D, E, F, G, H), console.log(X, Y), console.log(foo, bar), console.log(ns1, ns2), console.log(a, b, c);
-
-```
-
 ## `swc/issues/2807/1`
 
 - tags: `drop console`, `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -10802,96 +10710,6 @@ export function example() {
 +	return `${x(2)} ${y('2')} ${abc(3)} ${abc2('3')}`;
  }
 
-```
-
-## `swc/issues/11133`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 1499 vs reference 1316 (+183 bytes)
-
-```js
-// Test case 1: Basic duplicate named imports
-import { add } from 'math';
-import { subtract } from 'math';
-import { multiply } from 'math';
-// Test case 2: Same export imported with different local names (should preserve both)
-import { add as a } from 'calculator';
-import { add as b } from 'calculator';
-// Test case 3: Mix of default and named imports
-import defaultExport from 'module1';
-import { namedExport } from 'module1';
-// Test case 4: Namespace import with named imports (CANNOT be merged - incompatible)
-import * as utils from 'utils';
-import { helper } from 'utils';
-// Test case 4b: Default with namespace (CAN be merged)
-import defUtils from 'utils2';
-import * as utils2 from 'utils2';
-// Test case 5: Side-effect import (should not be merged)
-import 'polyfill';
-import 'polyfill';
-// Test case 6: Different sources (should not be merged)
-import { foo } from 'lib1';
-import { foo } from 'lib2';
-// Test case 7: Duplicate named imports (exact same specifier)
-import { duplicate } from 'dups';
-import { duplicate } from 'dups';
-import { duplicate } from 'dups';
-// Test case 8: Mix of named imports with and without aliases
-import { thing } from 'things';
-import { thing as renamedThing } from 'things';
-import { otherThing } from 'things';
-// Use all imports to avoid dead code elimination
-console.log(add, subtract, multiply);
-console.log(a, b);
-console.log(defaultExport, namedExport);
-console.log(utils, helper);
-console.log(defUtils, utils2);
-console.log(foo);
-console.log(duplicate);
-console.log(thing, renamedThing, otherThing);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,22 +1,31 @@
- // Test case 1: Basic duplicate named imports
--import { add, subtract, multiply } from 'math';
-+import { add } from 'math';
-+import { subtract } from 'math';
-+import { multiply } from 'math';
- // Test case 2: Same export imported with different local names (should preserve both)
--import { add as a, add as b } from 'calculator';
-+import { add as a } from 'calculator';
-+import { add as b } from 'calculator';
- // Test case 3: Mix of default and named imports
--import defaultExport, { namedExport } from 'module1';
-+import defaultExport from 'module1';
-+import { namedExport } from 'module1';
- // Test case 4: Namespace import with named imports (CANNOT be merged - incompatible)
- import * as utils from 'utils';
- import { helper } from 'utils';
- // Test case 4b: Default with namespace (CAN be merged)
--import defUtils, * as utils2 from 'utils2';
-+import defUtils from 'utils2';
-+import * as utils2 from 'utils2';
- // Test case 5: Side-effect import (should not be merged)
- import 'polyfill';
-+import 'polyfill';
- // Test case 6: Different sources (should not be merged)
- import { foo } from 'lib1';
- import { foo } from 'lib2';
- // Test case 7: Duplicate named imports (exact same specifier)
--import { duplicate, duplicate, duplicate } from 'dups';
-+import { duplicate } from 'dups';
-+import { duplicate } from 'dups';
-+import { duplicate } from 'dups';
- // Test case 8: Mix of named imports with and without aliases
--import { thing, thing as renamedThing, otherThing } from 'things';
--// Use all imports to avoid dead code elimination
-+import { thing } fro
-... [truncated]
 ```
 
 ## `swc/issues/drop-console-value-refs`

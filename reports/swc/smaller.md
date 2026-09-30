@@ -1,6 +1,6 @@
 # swc / smaller — Output shorter than expected (possible over-optimization / bug)
 
-Fixtures: 110
+Fixtures: 112
 
 [← swc](README.md) · [← all families](../README.md)
 
@@ -2548,6 +2548,57 @@ export function allowInAnd(callback) {
 
 ```
 
+## `swc/issues/11321`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 654 vs reference 693 (-39 bytes)
+
+```js
+// Test case 1: Multiple default imports with different local names (the reported bug)
+import A from 'm.js';
+import B from 'm.js';
+// Test case 2: Multiple namespace imports with different local names
+import * as X from 'p.js';
+import * as Y from 'p.js';
+// Test case 3: Mix of multiple defaults and named imports
+import C from 'r.js';
+import D from 'r.js';
+import { foo } from 'r.js';
+import { bar } from 'r.js';
+// Test case 4: Mix of all kinds of imports
+import * as ns1 from 'q.js';
+import { default as E, 'default' as F } from 'q.js';
+import G from 'q.js';
+import { a, b, c } from 'q.js';
+import * as ns2 from 'q.js';
+import H from 'q.js';
+// Use all imports to prevent dead code elimination
+console.log(A, B, C, D, E, F, G, H);
+console.log(X, Y);
+console.log(foo, bar);
+console.log(ns1, ns2);
+console.log(a, b, c);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -6,8 +6,7 @@
+ // Test case 3: Mix of multiple defaults and named imports
+ import C, { default as D, foo, bar } from 'r.js';
+ // Test case 4: Mix of all kinds of imports
+-import E, * as ns1 from 'q.js';
+-import F, { default as G, a, b, c } from 'q.js';
+-import H, * as ns2 from 'q.js';
+-// Use all imports to prevent dead code elimination
++import G, * as ns1 from 'q.js';
++import H, { default as E, 'default' as F, a, b, c } from 'q.js';
++import * as ns2 from 'q.js';
+ console.log(A, B, C, D, E, F, G, H), console.log(X, Y), console.log(foo, bar), console.log(ns1, ns2), console.log(a, b, c);
+
+```
+
 ## `swc/issues/9741`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -2789,6 +2840,66 @@ console.log([
 +	(2 ** 128).toString(16),
 +	(-(2 ** 128)).toString(16)
  ].join(','));
+
+```
+
+## `swc/issues/11133`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 1266 vs reference 1316 (-50 bytes)
+
+```js
+// Test case 1: Basic duplicate named imports
+import { add } from 'math';
+import { subtract } from 'math';
+import { multiply } from 'math';
+// Test case 2: Same export imported with different local names (should preserve both)
+import { add as a } from 'calculator';
+import { add as b } from 'calculator';
+// Test case 3: Mix of default and named imports
+import defaultExport from 'module1';
+import { namedExport } from 'module1';
+// Test case 4: Namespace import with named imports (CANNOT be merged - incompatible)
+import * as utils from 'utils';
+import { helper } from 'utils';
+// Test case 4b: Default with namespace (CAN be merged)
+import defUtils from 'utils2';
+import * as utils2 from 'utils2';
+// Test case 5: Side-effect import (should not be merged)
+import 'polyfill';
+import 'polyfill';
+// Test case 6: Different sources (should not be merged)
+import { foo } from 'lib1';
+import { foo } from 'lib2';
+// Test case 7: Duplicate named imports (exact same specifier)
+import { duplicate } from 'dups';
+import { duplicate } from 'dups';
+import { duplicate } from 'dups';
+// Test case 8: Mix of named imports with and without aliases
+import { thing } from 'things';
+import { thing as renamedThing } from 'things';
+import { otherThing } from 'things';
+// Use all imports to avoid dead code elimination
+console.log(add, subtract, multiply);
+console.log(a, b);
+console.log(defaultExport, namedExport);
+console.log(utils, helper);
+console.log(defUtils, utils2);
+console.log(foo);
+console.log(duplicate);
+console.log(thing, renamedThing, otherThing);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -18,5 +18,4 @@
+ import { duplicate, duplicate, duplicate } from 'dups';
+ // Test case 8: Mix of named imports with and without aliases
+ import { thing, thing as renamedThing, otherThing } from 'things';
+-// Use all imports to avoid dead code elimination
+ console.log(add, subtract, multiply), console.log(a, b), console.log(defaultExport, namedExport), console.log(utils, helper), console.log(defUtils, utils2), console.log(foo), console.log(duplicate), console.log(thing, renamedThing, otherThing);
 
 ```
 
