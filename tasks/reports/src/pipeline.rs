@@ -1,10 +1,10 @@
 use oxc::{
+    allocator::Allocator,
     ast::ast::Program,
     codegen::{Codegen, CodegenOptions, CommentOptions},
     minifier::{Minifier, MinifierOptions, MinifierReturn},
     parser::{ParseOptions, Parser, ParserReturn},
     span::SourceType,
-    allocator::Allocator
 };
 
 pub(crate) fn source_type_for(is_module: bool) -> SourceType {
@@ -19,7 +19,19 @@ pub(crate) fn print_normalized(
 ) -> Result<String, String> {
     let allocator = Allocator::default();
     let ret = parse(&allocator, source_text, source_type)?;
-    Ok(codegen(&ret.program, None))
+    Ok(codegen(&ret.program, None, false))
+}
+
+/// Re-print already generated code without whitespace.
+///
+/// Sizes must not be measured on the readable form: `while (b++);` and
+/// `for (; b++;);` are equivalent, but formatting alone makes the first look
+/// shorter. Whitespace is stripped for measurement only, so reports can keep
+/// the readable text for diffs.
+pub(crate) fn print_minified(source_text: &str, source_type: SourceType) -> Result<String, String> {
+    let allocator = Allocator::default();
+    let ret = parse(&allocator, source_text, source_type)?;
+    Ok(codegen(&ret.program, None, true))
 }
 
 /// Run the full public `Minifier` pipeline, not just `Compressor`, so the
@@ -32,7 +44,7 @@ pub(crate) fn compress(
     let allocator = Allocator::default();
     let mut program = parse(&allocator, source_text, source_type)?.program;
     let minified = Minifier::new(options).minify(&allocator, &mut program);
-    Ok(codegen(&program, Some(minified)))
+    Ok(codegen(&program, Some(minified), false))
 }
 
 fn parse<'a>(
@@ -57,10 +69,11 @@ fn parse<'a>(
     Ok(ret)
 }
 
-fn codegen(program: &Program<'_>, minified: Option<MinifierReturn>) -> String {
+fn codegen(program: &Program<'_>, minified: Option<MinifierReturn>, minify: bool) -> String {
     let mut codegen = Codegen::new().with_options(CodegenOptions {
         comments: CommentOptions { annotation: false, ..CommentOptions::default() },
         single_quote: true,
+        minify,
         ..CodegenOptions::default()
     });
     if let Some(minified) = minified {

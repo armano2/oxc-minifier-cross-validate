@@ -55,10 +55,9 @@ fn rows_for_kind<'a>(outcomes: &[&'a Outcome], kind: Kind) -> Vec<&'a Outcome> {
         .collect();
     if matches!(kind, Kind::Larger | Kind::Smaller) {
         rows.sort_by(|left, right| {
-            left.actual
-                .len()
-                .abs_diff(left.expected.len())
-                .cmp(&right.actual.len().abs_diff(right.expected.len()))
+            left.actual_size
+                .abs_diff(left.expected_size)
+                .cmp(&right.actual_size.abs_diff(right.expected_size))
                 .then_with(|| left.relative.cmp(&right.relative))
         });
     }
@@ -216,12 +215,11 @@ fn write_outcome_markdown(out: &mut String, outcome: &Outcome, kind: Kind) {
         let _ = writeln!(out, "- note: {}", outcome.note);
     }
     if matches!(kind, Kind::Larger | Kind::Smaller) {
-        let delta = outcome.actual.len().cast_signed() - outcome.expected.len().cast_signed();
+        let delta = outcome.actual_size.cast_signed() - outcome.expected_size.cast_signed();
         let _ = writeln!(
             out,
-            "- size: oxc {} vs reference {} ({delta:+} bytes)",
-            outcome.actual.len(),
-            outcome.expected.len()
+            "- size: oxc {} vs reference {} ({delta:+} bytes, no whitespaces)",
+            outcome.actual_size, outcome.expected_size
         );
     }
     out.push('\n');

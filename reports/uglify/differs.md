@@ -1,8 +1,57 @@
 # uglify / differs — Output differs at equal length
 
-Fixtures: 149
+Fixtures: 211
 
 [← uglify](README.md) · [← all families](../README.md)
+
+## `uglify/arguments/issue_3282_1`
+
+- tags: `join vars`, `remove unused`
+
+```js
+(function(t) {
+	return function() {
+		t();
+	};
+})(function() {
+	'use strict';
+	function e() {
+		return arguments[0];
+	}
+	e();
+	e();
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,12 +1,12 @@
+-(function() {
++(function(t) {
+ 	return function() {
+-		(function() {
+-			'use strict';
+-			function e() {
+-				return arguments[0];
+-			}
+-			e();
+-			e();
+-		})();
++		t();
+ 	};
+-})()();
++})(function() {
++	'use strict';
++	function e() {
++		return arguments[0];
++	}
++	e();
++	e();
++})();
+
+```
 
 ## `uglify/arguments/issue_4291_2`
 
@@ -30,6 +79,66 @@ console.log(a[1], a[0], a.length);
 
 ```
 
+## `uglify/arguments/replace_index_drop_fargs_1`
+
+- tags: `join vars`
+
+```js
+var arguments = [];
+console.log(arguments[0]);
+(function() {
+	console.log(arguments[1], arguments['1'], arguments['foo']);
+})('bar', 42);
+(function(a, b) {
+	console.log(arguments[1], arguments['1'], arguments['foo']);
+})('bar', 42);
+(function(arguments) {
+	console.log(arguments[1], arguments['1'], arguments['foo']);
+})('bar', 42);
+(function() {
+	var arguments;
+	console.log(arguments[1], arguments['1'], arguments['foo']);
+})('bar', 42);
+(function() {
+	var arguments = {
+		1: 'foo',
+		foo: 'bar'
+	};
+	console.log(arguments[1], arguments['1'], arguments['foo']);
+})('bar', 42);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,17 +1,17 @@
+ var arguments = [];
+ console.log(arguments[0]);
+-(function(argument_0, argument_1) {
+-	console.log(argument_1, argument_1, arguments.foo);
++(function() {
++	console.log(arguments[1], arguments[1], arguments.foo);
+ })('bar', 42);
+ (function(a, b) {
+-	console.log(b, b, arguments.foo);
++	console.log(arguments[1], arguments[1], arguments.foo);
+ })('bar', 42);
+ (function(arguments) {
+-	console.log('bar'[1], 'bar'[1], 'bar'.foo);
++	console.log(arguments[1], arguments[1], arguments.foo);
+ })('bar', 42);
+-(function(argument_0, argument_1) {
++(function() {
+ 	var arguments;
+-	console.log(argument_1, argument_1, arguments.foo);
++	console.log(arguments[1], arguments[1], arguments.foo);
+ })('bar', 42);
+ (function() {
+ 	var arguments = {
+
+```
+
 ## `uglify/arrows/for_declaration_parentheses_init`
 
 
@@ -44,6 +153,108 @@ for (var f = (a) => (a in a); console.log(42););
 @@ -1 +1 @@
 -for (var f = ((a) => a in a); console.log(42););
 +for (var f = (a) => (a in a); console.log(42););
+
+```
+
+## `uglify/arrows/issue_5251`
+
+
+```js
+(() => {
+	while (console.log(arguments)) var arguments = 'FAIL';
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ (() => {
+-	while (console.log(arguments)) var arguments = 'FAIL';
++	for (; console.log(arguments);) var arguments = 'FAIL';
+ })();
+
+```
+
+## `uglify/arrows/issue_5414_1`
+
+
+```js
+(() => {
+	(() => {
+		if (!console) var arguments = 42;
+		while (console.log(arguments));
+	})();
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ (() => {
+ 	if (!console) var arguments = 42;
+-	while (console.log(arguments));
++	for (; console.log(arguments););
+ })();
+
+```
+
+## `uglify/arrows/issue_5414_2`
+
+
+```js
+(() => {
+	(() => {
+		if (!console) var arguments = 42;
+		while (console.log(arguments));
+	})();
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ (() => {
+ 	if (!console) var arguments = 42;
+-	while (console.log(arguments));
++	for (; console.log(arguments););
+ })();
+
+```
+
+## `uglify/arrows/reduce_lambda_1`
+
+- tags: `join vars`, `remove unused`
+
+```js
+var f = () => {
+	console.log(a, b);
+};
+var a = 'foo', b = 42;
+f();
+b = 'bar';
+f();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,6 @@
+ var f = () => {
+-	console.log('foo', b);
+-};
+-var b = 42;
++	console.log(a, b);
++}, a = 'foo', b = 42;
+ f();
+ b = 'bar';
+ f();
 
 ```
 
@@ -64,20 +275,94 @@ console.log(void 0 === ([].p &&= 42));
 
 ```
 
-## `uglify/bigint/Number`
+## `uglify/awaits/await_unary_1`
 
 
 ```js
-console.log(Number(-1148098955808013229n));
+var a = 'PASS';
+function f() {
+	return { then: function(r) {
+		a = 'FAIL';
+		r();
+	} };
+}
+(async function() {
+	await !f();
+	while (console.log(a));
+})();
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1 +1 @@
--console.log(+('' + -1148098955808013229n));
-+console.log(Number(-1148098955808013229n));
+@@ -7,5 +7,5 @@
+ }
+ (async function() {
+ 	await !f();
+-	while (console.log(a));
++	for (; console.log(a););
+ })();
+
+```
+
+## `uglify/awaits/await_unary_2`
+
+
+```js
+var a = 'PASS';
+function f() {
+	return { then: function(r) {
+		a = 'FAIL';
+		r();
+	} };
+}
+(async function() {
+	await ~f();
+	while (console.log(a));
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -6,6 +6,6 @@
+ 	} };
+ }
+ (async function() {
+-	await !f();
+-	while (console.log(a));
++	await ~f();
++	for (; console.log(a););
+ })();
+
+```
+
+## `uglify/awaits/issue_4335_1`
+
+
+```js
+var await = 'PASS';
+(async function() {
+	console.log(function() {
+		return await;
+	}());
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+ var await = 'PASS';
+ (async function() {
+ 	console.log(function() {
+-		return await;
++		return 'PASS';
+ 	}());
+ })();
 
 ```
 
@@ -112,6 +397,74 @@ try {
 +} catch {
  	console.log('PASS');
  }
+
+```
+
+## `uglify/classes/issue_5082_1`
+
+- tags: `join vars`, `remove unused`
+
+```js
+(function() {
+	class A {
+		p = console.log('PASS');
+		q() {}
+	}
+	class B {
+		static P = new A();
+	}
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -3,7 +3,7 @@
+ 		p = console.log('PASS');
+ 		q() {}
+ 	}
+-	(class {
+-		static c = new A();
+-	});
++	class B {
++		static P = new A();
++	}
+ })();
+
+```
+
+## `uglify/classes/issue_5082_2`
+
+- tags: `join vars`, `remove unused`, `2 iterations`
+
+```js
+(function() {
+	class A {
+		p = console.log('PASS');
+		q() {}
+	}
+	class B {
+		static P = new A();
+	}
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -3,7 +3,7 @@
+ 		p = console.log('PASS');
+ 		q() {}
+ 	}
+-	(class {
+-		static c = new A();
+-	});
++	class B {
++		static P = new A();
++	}
+ })();
 
 ```
 
@@ -265,6 +618,51 @@ new class A {
 
 ```
 
+## `uglify/collapse_vars/chained_1`
+
+- tags: `join vars`, `remove unused`
+
+```js
+var a = 2;
+var a = 3 / a;
+console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+-var a = 3 / (a = 2);
++var a = 2, a = 3 / a;
+ console.log(a);
+
+```
+
+## `uglify/collapse_vars/chained_2`
+
+- tags: `join vars`, `remove unused`
+
+```js
+var a;
+var a = 2;
+a = 3 / a;
+console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-var a;
+-a = 3 / (a = 2);
++var a, a = 2;
++a = 3 / a;
+ console.log(a);
+
+```
+
 ## `uglify/collapse_vars/chained_3`
 
 - tags: `join vars`, `remove unused`
@@ -371,6 +769,110 @@ console.log(a === b, b === c, c === a);
 
 ```
 
+## `uglify/collapse_vars/compound_assignment_3`
+
+- tags: `join vars`
+
+```js
+var a = 1;
+a += (console.log('PASS'), 2);
+a.p;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,3 @@
+ var a = 1;
+-(a += (console.log('PASS'), 2)).p;
++a += (console.log('PASS'), 2);
++a.p;
+
+```
+
+## `uglify/collapse_vars/double_def_1`
+
+- tags: `join vars`, `remove unused`
+
+```js
+var a = x, a = a && y;
+a();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+-var a = x;
+-(a = a && y)();
++var a = x, a = a && y;
++a();
+
+```
+
+## `uglify/collapse_vars/issue_2425_3`
+
+- tags: `join vars`, `remove unused`
+
+```js
+var a = 8;
+(function(b, b) {
+	b.toString();
+})(--a, a |= 10);
+console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ var a = 8;
+ (function(b, b) {
+-	(a |= 10).toString();
+-})(--a);
++	b.toString();
++})(--a, a |= 10);
+ console.log(a);
+
+```
+
+## `uglify/collapse_vars/issue_2436_14`
+
+- tags: `join vars`, `remove unused`
+
+```js
+var a = 'PASS';
+var b = {};
+(function() {
+	var c = a;
+	c && function(c, d) {
+		console.log(c, d);
+	}(b, c);
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+-var a = 'PASS';
+ var b = {};
+ (function() {
+-	a && function(c, d) {
+-		console.log(b, d);
+-	}(0, a);
++	var c = 'PASS';
++	c && function(c, d) {
++		console.log(c, d);
++	}(b, c);
+ })();
+
+```
+
 ## `uglify/collapse_vars/issue_2908`
 
 - tags: `join vars`
@@ -402,45 +904,6 @@ console.log(b);
  }
  f(0);
  f(2);
-
-```
-
-## `uglify/collapse_vars/issue_3562`
-
-- tags: `join vars`, `sequences`
-
-```js
-function f(a) {
-	console.log('PASS', a);
-}
-function g(b) {
-	console.log('FAIL', b);
-}
-var h;
-var c;
-if (console) {
-	h = f;
-	c = 'PASS';
-} else {
-	h = g;
-	c = 'FAIL';
-}
-h(c);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -4,6 +4,5 @@
- function g(b) {
- 	console.log('FAIL', b);
- }
--var h;
--var c;
--c = console ? (h = f, 'PASS') : (h = g, 'FAIL'), h(c);
-+var h, c;
-+console ? (h = f, c = 'PASS') : (h = g, c = 'FAIL'), h(c);
 
 ```
 
@@ -497,28 +960,6 @@ console.log(d[1]);
 
 ```
 
-## `uglify/collapse_vars/issue_5779`
-
-- tags: `join vars`
-
-```js
-var a = A = 'foo';
-a.p = 42;
-if (a && !a.p) console.log('PASS');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,3 @@
- var a = A = 'foo';
- a.p = 42;
--if (a, !a.p) console.log('PASS');
-+a && !a.p && console.log('PASS');
-
-```
-
 ## `uglify/collapse_vars/replace_all_var_scope`
 
 - tags: `join vars`, `remove unused`
@@ -549,6 +990,44 @@ console.log(a, b);
  	}
  })(--b, a);
  console.log(a, b);
+
+```
+
+## `uglify/collapse_vars/substitution_logical_1`
+
+- tags: `join vars`
+
+```js
+function f1(a, b) {
+	console.log((b = a) && a, b);
+}
+function f2(a, b) {
+	console.log(a && (b = a), b);
+}
+f1(42, 'foo');
+f1(null, true);
+f2(42, 'foo');
+f2(null, true);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,10 @@
+ function f1(a, b) {
+-	console.log(a && a, a);
++	console.log((b = a) && a, b);
+ }
+ function f2(a, b) {
+ 	console.log(a && (b = a), b);
+ }
+ f1(42, 'foo');
+-f1(null, true);
++f1(null, !0);
+ f2(42, 'foo');
+-f2(null, true);
++f2(null, !0);
 
 ```
 
@@ -727,13 +1206,14 @@ A || B || void 0 === a || null === a || C;
 
 ```
 
-## `uglify/comparisons/unsafe_indexOf_assignment`
+## `uglify/comparisons/self_comparison_2`
 
+- tags: `join vars`
 
 ```js
-var a;
-if ((a = Object.keys({ foo: 42 }).indexOf('bar')) < 0) console.log('PASS');
-if (0 > (a = Object.keys({ foo: 42 }).indexOf('bar'))) console.log('PASS');
+function f() {}
+var o = {};
+console.log(f != f, o === o);
 
 ```
 
@@ -741,11 +1221,10 @@ if (0 > (a = Object.keys({ foo: 42 }).indexOf('bar'))) console.log('PASS');
 --- reference
 +++ oxc
 @@ -1,3 +1,3 @@
- var a;
--if (!~(a = Object.keys({ foo: 42 }).indexOf('bar'))) console.log('PASS');
--if (!~(a = Object.keys({ foo: 42 }).indexOf('bar'))) console.log('PASS');
-+(a = Object.keys({ foo: 42 }).indexOf('bar')) < 0 && console.log('PASS');
-+0 > (a = Object.keys({ foo: 42 }).indexOf('bar')) && console.log('PASS');
+ function f() {}
+ var o = {};
+-console.log(false, true);
++console.log(f != f, o === o);
 
 ```
 
@@ -780,37 +1259,85 @@ if (some_condition()) {
 
 ```
 
-## `uglify/conditionals/condition_matches_alternative`
+## `uglify/conditionals/ifs_7`
 
 
 ```js
-function foo(x, y) {
-	return x.p ? y[0] : x.p;
-}
-function bar() {
-	return g ? h : g;
-}
-var g = 4;
-var h = 5;
-console.log(foo({ p: 3 }, [null]), foo({ p: 0 }, [7]), foo({ p: true }, [false]), bar());
+if (A);
+else;
+if (A) while (B);
+else;
+if (A);
+else while (C);
+if (A) while (B);
+else while (C);
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,9 +1,9 @@
- function foo(x, y) {
--	return x.p && y[0];
-+	return x.p ? y[0] : x.p;
- }
- function bar() {
- 	return g && h;
- }
- var g = 4;
- var h = 5;
--console.log(foo({ p: 3 }, [null]), foo({ p: 0 }, [7]), foo({ p: true }, [false]), bar());
-+console.log(foo({ p: 3 }, [null]), foo({ p: 0 }, [7]), foo({ p: !0 }, [!1]), bar());
+@@ -1,5 +1,5 @@
+ A;
+-if (A) while (B);
+-if (!A) while (C);
+-if (A) while (B);
+-else while (C);
++if (A) for (; B;);
++if (!A) for (; C;);
++if (A) for (; B;);
++else for (; C;);
+
+```
+
+## `uglify/const/issue_5656`
+
+- tags: `join vars`
+
+```js
+console.log(function(a) {
+	var b = a;
+	b++;
+	{
+		const a = b;
+	}
+}());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,7 @@
+ console.log(function(a) {
+ 	var b = a;
++	b++;
+ 	{
+-		const a = ++b;
++		let a = b;
+ 	}
+ }());
+
+```
+
+## `uglify/dead-code/issue_3406`
+
+
+```js
+console.log(function f(a) {
+	return delete (f = a);
+}());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ console.log(function f(a) {
+-	return delete (0, a);
++	return delete (f = a);
+ }());
 
 ```
 
@@ -859,6 +1386,30 @@ console.log(function(b, c = 'bar') {
 -}(0, a));
 +	return b + c;
 +}(a, a));
+
+```
+
+## `uglify/default-values/issue_5314_1`
+
+
+```js
+A = this;
+new function() {
+	(function(a = console.log(this === A ? 'PASS' : 'FAIL')) {})();
+}();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ A = this;
+-(function() {
++new function() {
+ 	(function(a = console.log(this === A ? 'PASS' : 'FAIL')) {})();
+-})();
++}();
 
 ```
 
@@ -1142,26 +1693,6 @@ console.log(v);
 
 ```
 
-## `uglify/destructured/drop_hole`
-
-- tags: `remove unused`
-
-```js
-var [a] = [,];
-console.log(a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,2 @@
--var a = [][0];
-+var [a] = [,];
- console.log(a);
-
-```
-
 ## `uglify/destructured/issue_4288`
 
 - tags: `join vars`
@@ -1193,6 +1724,30 @@ f(0);
 
 ```
 
+## `uglify/destructured/issue_5314_1`
+
+
+```js
+A = this;
+new function() {
+	(function({ [console.log(this === A ? 'PASS' : 'FAIL')]: a }) {})(42);
+}();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ A = this;
+-(function() {
++new function() {
+ 	(function({ [console.log(this === A ? 'PASS' : 'FAIL')]: a }) {})(42);
+-})();
++}();
+
+```
+
 ## `uglify/destructured/issue_5866_8`
 
 - tags: `remove unused`
@@ -1215,17 +1770,69 @@ console.log(b === c ? 'PASS' : 'FAIL');
 
 ```
 
-## `uglify/drop-unused/issue_2660_1`
+## `uglify/destructured/maintain_position_var`
+
+- tags: `remove unused`
+
+```js
+A = 'FAIL';
+var [a, b] = [A];
+console.log(b || 'PASS');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ A = 'FAIL';
+-var b = [A][1];
++var [a, b] = [A];
+ console.log(b || 'PASS');
+
+```
+
+## `uglify/drop-unused/cross_scope_assign_chain`
 
 - tags: `join vars`, `remove unused`
 
 ```js
-var a = 2;
-function f(b) {
-	return b && f() || a--;
-}
-f(1);
-console.log(a);
+var a, b = 0;
+(function() {
+	a = b;
+	a++;
+	while (b++);
+})();
+console.log(a ? 'PASS' : 'FAIL');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,6 +2,6 @@
+ (function() {
+ 	a = b;
+ 	a++;
+-	while (b++);
++	for (; b++;);
+ })();
+ console.log(a ? 'PASS' : 'FAIL');
+
+```
+
+## `uglify/drop-unused/issue_3515_1`
+
+- tags: `join vars`, `remove unused`
+
+```js
+var c = 0;
+(function() {
+	this[c++] = 0;
+	var expr20 = !0;
+	for (var key20 in expr20);
+})();
+console.log(c);
 
 ```
 
@@ -1233,38 +1840,44 @@ console.log(a);
 --- reference
 +++ oxc
 @@ -1,5 +1,6 @@
- var a = 2;
--(function f(b) {
-+function f(b) {
- 	return b && f() || a--;
--})(1);
-+}
-+f(1);
- console.log(a);
+ var c = 0;
+ (function() {
+-	for (var key20 in !(this[c++] = 0));
++	this[c++] = 0;
++	for (var key20 in !0);
+ })();
+ console.log(c);
 
 ```
 
-## `uglify/drop-unused/issue_3375`
+## `uglify/drop-unused/issue_5908_1`
 
 - tags: `join vars`, `remove unused`
 
 ```js
-var b = 1;
-var a = c = [], c = --b + ('function' == typeof f && f());
-var a = c && c[a];
-console.log(a, b);
+var a = function(b) {
+	function f() {}
+	b = f.prototype;
+	b.p = 42;
+	b.q = 'PASS';
+	return f;
+}();
+console.log(a.prototype.q);
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,4 +1,2 @@
--var b = 1;
--var a = [], c = --b + ('function' == typeof f && f());
--a = c && c[a];
-+var b = 1, a = c = [], c = --b + (typeof f == 'function' && f()), a = c && c[a];
- console.log(a, b);
+@@ -1,6 +1,7 @@
+ var a = function(b) {
+ 	function f() {}
+-	(b = f.prototype).p = 42;
++	b = f.prototype;
++	b.p = 42;
+ 	b.q = 'PASS';
+ 	return f;
+ }();
 
 ```
 
@@ -1340,6 +1953,27 @@ console.log(a);
 
 ```
 
+## `uglify/exports/defaults_parentheses_6`
+
+
+```js
+export default !function() {
+	while (!console);
+}() ? 'PASS' : 'FAIL';
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ export default (function() {
+-	while (!console);
++	for (; !console;);
+ })() ? 'FAIL' : 'PASS';
+
+```
+
 ## `uglify/functions/catch_defun`
 
 
@@ -1374,15 +2008,50 @@ console.log(f());
 
 ```
 
-## `uglify/functions/duplicate_argnames_4`
+## `uglify/functions/hoist_funs`
 
 
 ```js
-(function() {
-	(function(a, a) {
-		while (console.log(a || 'PASS'));
-	})('FAIL');
-})();
+console.log(1, typeof f, typeof g);
+if (console.log(2, typeof f, typeof g)) console.log(3, typeof f, typeof g);
+else {
+	console.log(4, typeof f, typeof g);
+	function f() {}
+	console.log(5, typeof f, typeof g);
+}
+function g() {}
+console.log(6, typeof f, typeof g);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,9 @@
+-function f() {}
+-function g() {}
+ console.log(1, typeof f, typeof g);
+ if (console.log(2, typeof f, typeof g)) console.log(3, typeof f, typeof g);
+ else {
+ 	console.log(4, typeof f, typeof g);
++	function f() {}
+ 	console.log(5, typeof f, typeof g);
+ }
++function g() {}
+ console.log(6, typeof f, typeof g);
+
+```
+
+## `uglify/functions/issue_2737_1`
+
+- tags: `join vars`, `remove unused`
+
+```js
+(function(a) {
+	while (a());
+})(function f() {
+	console.log(typeof f);
+});
 
 ```
 
@@ -1390,14 +2059,102 @@ console.log(f());
 --- reference
 +++ oxc
 @@ -1,5 +1,5 @@
- (function() {
--	var a = 'FAIL';
--	var a = void 0;
--	while (console.log(a || 'PASS'));
-+	(function(a, a) {
-+		for (; console.log(a || 'PASS'););
-+	})('FAIL');
- })();
+ (function(a) {
+-	while (a());
++	for (; a(););
+ })(function f() {
+ 	console.log(typeof f);
+ });
+
+```
+
+## `uglify/functions/issue_3771`
+
+- tags: `join vars`, `remove unused`
+
+```js
+try {
+	function f(a) {
+		var a = f(1234);
+	}
+	f();
+} catch (e) {
+	console.log('PASS');
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,8 @@
+ try {
+-	(function f(a) {
+-		f();
+-	})();
+-} catch (e) {
++	function f(a) {
++		f(1234);
++	}
++	f();
++} catch {
+ 	console.log('PASS');
+ }
+
+```
+
+## `uglify/functions/issue_4171_1`
+
+- tags: `join vars`, `remove unused`
+
+```js
+console.log(function(a) {
+	try {
+		while (a) var e = function() {};
+	} catch (e) {
+		return function() {
+			return e;
+		};
+	}
+}(!console));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+ console.log(function(a) {
+ 	try {
+-		while (a) var e = function() {};
++		for (; a;) var e = function() {};
+ 	} catch (e) {
+ 		return function() {
+ 			return e;
+
+```
+
+## `uglify/functions/issue_4451`
+
+- tags: `join vars`, `remove unused`
+
+```js
+var a = function f() {
+	for (f in 'foo') return f;
+};
+while (console.log(typeof a()));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ var a = function f() {
+ 	for (f in 'foo') return f;
+ };
+-while (console.log(typeof a()));
++for (; console.log(typeof a()););
 
 ```
 
@@ -1430,16 +2187,57 @@ function g() {
 
 ```
 
-## `uglify/functions/issue_5239`
+## `uglify/functions/issue_4659_3`
 
 - tags: `join vars`, `remove unused`
 
 ```js
+var a = 0;
 (function() {
-	(function(f) {
-		var a = 42, f = function() {};
-		while (console.log(f.p || a++));
+	function f() {
+		return a++;
+	}
+	(function() {
+		function g() {
+			while (!console);
+		}
+		g(f && f());
+		(function() {
+			var a = console && a;
+		})();
 	})();
+})();
+console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -3,10 +3,11 @@
+ 	function f() {
+ 		return a++;
+ 	}
+-	f && a++;
+-	while (!console);
+ 	(function() {
+-		var a = console && a;
++		function g() {
++			for (; !console;);
++		}
++		g(f && f());
+ 	})();
+ })();
+ console.log(a);
+
+```
+
+## `uglify/functions/issue_5692`
+
+
+```js
+(function() {
+	while (console.log('PASS')) if (console) return;
 })();
 
 ```
@@ -1447,33 +2245,183 @@ function g() {
 ```diff
 --- reference
 +++ oxc
-@@ -1,6 +1,6 @@
+@@ -1,3 +1,3 @@
  (function() {
--	var f = void 0;
--	var a = 42, f = function() {};
--	while (console.log(f.p || a++));
--	return;
-+	(function(f) {
-+		var a = 42, f = function() {};
-+		for (; console.log(f.p || a++););
-+	})();
+-	while (console.log('PASS')) if (console) return;
++	for (; console.log('PASS');) if (console) return;
  })();
 
 ```
 
-## `uglify/hoist_props/name_collision_4`
+## `uglify/functions/issue_5925`
+
+- tags: `join vars`
+
+```js
+var a = 42;
+console.log(function() {
+	function f() {
+		return +a - 41;
+	}
+	var b = f(f);
+	a--;
+	return b;
+}() ? 'PASS' : 'FAIL');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+ var a = 42;
+ console.log(function() {
+ 	function f() {
+-		return +a - 41;
++		return a - 41;
+ 	}
+ 	var b = f(f);
+ 	a--;
+
+```
+
+## `uglify/functions/shorter_without_void`
+
+- tags: `join vars`, `2 iterations`
+
+```js
+var a;
+function f(b) {
+	a = b;
+}
+f('foo');
+console.log(a) || f('bar');
+console.log(a, f('baz'));
+console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,7 +2,7 @@
+ function f(b) {
+ 	a = b;
+ }
+-a = 'foo';
+-console.log(a) || (a = 'bar');
++f('foo');
++console.log(a) || f('bar');
+ console.log(a, f('baz'));
+ console.log(a);
+
+```
+
+## `uglify/global_defs/mixed`
+
+
+```js
+var FOO = { BAR: 0 };
+console.log(FOO.BAR);
+console.log(++CONFIG.DEBUG);
+console.log(++CONFIG.VALUE);
+console.log(++CONFIG['VAL' + 'UE']);
+console.log(++DEBUG[CONFIG.VALUE]);
+CONFIG.VALUE.FOO = 'bar';
+console.log(CONFIG);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,7 @@
+-var FOO = { BAR: 0 };
+-console.log('moo');
++console.log({ BAR: 0 }.BAR);
+ console.log(++CONFIG.DEBUG);
+ console.log(++CONFIG.VALUE);
+ console.log(++CONFIG.VALUE);
+-console.log(++DEBUG[42]);
++console.log(++DEBUG[CONFIG.VALUE]);
+ CONFIG.VALUE.FOO = 'bar';
+ console.log(CONFIG);
+
+```
+
+## `uglify/hoist_props/issue_2473_4`
+
+- tags: `join vars`, `remove unused`
+
+```js
+(function() {
+	var o = {
+		a: 1,
+		b: 2
+	};
+	console.log(o.a, o.b);
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,7 @@
+ (function() {
+-	var o_a = 1, o_b = 2;
+-	console.log(o_a, o_b);
++	var o = {
++		a: 1,
++		b: 2
++	};
++	console.log(o.a, o.b);
+ })();
+
+```
+
+## `uglify/hoist_props/issue_3046`
+
+- tags: `join vars`
+
+```js
+console.log(function(a) {
+	do {
+		var b = { c: a++ };
+	} while (b.c && a);
+	return a;
+}(0));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+ console.log(function(a) {
+-	do {
+-		var b, b_c = a++;
+-	} while (b_c && a);
++	do
++		var b = { c: a++ };
++	while (b.c && a);
+ 	return a;
+ }(0));
+
+```
+
+## `uglify/hoist_props/issue_3871`
 
 - tags: `join vars`
 
 ```js
 console.log(function() {
-	var o = {
-		p: 0,
-		q: 'PASS'
-	};
-	return function(o_p) {
-		if (!o.p) return o_p;
-	}(o.q);
+	do {
+		var b = { get null() {
+			c;
+		} };
+	} while (!b);
+	return 'PASS';
 }());
 
 ```
@@ -1481,44 +2429,175 @@ console.log(function() {
 ```diff
 --- reference
 +++ oxc
-@@ -1,6 +1,9 @@
+@@ -1,8 +1,8 @@
  console.log(function() {
--	var o, o_p$0 = 0, o_q = 'PASS';
-+	var o = {
-+		p: 0,
-+		q: 'PASS'
-+	};
- 	return function(o_p) {
--		if (!o_p$0) return o_p;
--	}(o_q);
-+		if (!o.p) return o_p;
-+	}(o.q);
+-	do {
++	do
+ 		var b = { get null() {
+ 			c;
+ 		} };
+-	} while (!b);
++	while (!b);
+ 	return 'PASS';
  }());
 
 ```
 
-## `uglify/hoist_vars/issue_4487_2`
+## `uglify/hoist_props/issue_3945_1`
 
-- tags: `join vars`, `remove unused`, `keep function names`, `2 iterations`
+- tags: `join vars`
 
 ```js
-var a = function f() {
-	var f = console.log(typeof f);
-};
-var b = a();
+function f() {
+	o.p;
+	var o = { q: 0 };
+}
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,4 +1,3 @@
--function a() {
-+(function f() {
- 	var f = console.log(typeof f);
--}
--a();
-+})();
+@@ -1,4 +1,4 @@
+ function f() {
+ 	o.p;
+-	var o, o_q = 0;
++	var o = { q: 0 };
+ }
+
+```
+
+## `uglify/hoist_props/issue_3945_2`
+
+- tags: `join vars`
+
+```js
+console.log(typeof o);
+var o = { p: 0 };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+ console.log(typeof o);
+-var o, o_p = 0;
++var o = { p: 0 };
+
+```
+
+## `uglify/hoist_props/issue_5498`
+
+- tags: `join vars`
+
+```js
+var o = { __proto__: 42 };
+while (console.log(typeof o.__proto__));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+ var o = { __proto__: 42 };
+-while (console.log(typeof o.__proto__));
++for (; console.log(typeof o.__proto__););
+
+```
+
+## `uglify/hoist_vars/issue_4736`
+
+- tags: `join vars`, `remove unused`
+
+```js
+var a;
+function f() {
+	(function g() {
+		var b = (a = 0, 1 << 30);
+		var c = (a = 0, console.log(b));
+		var d = c;
+	})(f);
+}
+f();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+-(function() {
++function f() {
+ 	(function() {
+-		0;
+ 		console.log(1 << 30);
+-	})();
+-})();
++	})(f);
++}
++f();
+
+```
+
+## `uglify/hoist_vars/issue_5638_3`
+
+- tags: `join vars`
+
+```js
+var log = console.log;
+var o = { foo: 42 };
+for (var k in o) {
+	var v = o[k];
+	log(k || v, v++);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,5 @@
+-var log, o, k, v;
+-log = console.log;
+-for (k in o = { foo: 42 }) {
+-	v = o[k];
++var log = console.log, o = { foo: 42 };
++for (var k in o) {
++	var v = o[k];
+ 	log(k || v, v++);
+ }
+
+```
+
+## `uglify/hoist_vars/issue_5638_4`
+
+- tags: `join vars`
+
+```js
+var log = console.log;
+var o = { foo: 6 };
+for (var k in o) {
+	var v = o[k];
+	log(k || v, v *= 7);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,5 @@
+-var log, o, k, v;
+-log = console.log;
+-for (k in o = { foo: 6 }) {
+-	v = o[k];
++var log = console.log, o = { foo: 6 };
++for (var k in o) {
++	var v = o[k];
+ 	log(k || v, v *= 7);
+ }
 
 ```
 
@@ -1596,51 +2675,6 @@ console.log(function f() {
 
 ```
 
-## `uglify/ie/issue_3215_4`
-
-
-```js
-console.log(function foo() {
-	var bar = function bar(name) {
-		return 'FAIL';
-	};
-	try {
-		moo;
-	} catch (e) {
-		bar = function bar(name) {
-			return 'PASS';
-		};
-	}
-	return bar;
-}()());
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,13 +1,13 @@
--console.log(function foo() {
--	var o = function o(n) {
-+console.log(function() {
-+	var bar = function(name) {
- 		return 'FAIL';
- 	};
- 	try {
- 		moo;
--	} catch (n) {
--		o = function o(n) {
-+	} catch {
-+		bar = function(name) {
- 			return 'PASS';
- 		};
- 	}
--	return o;
-+	return bar;
- }()());
-
-```
-
 ## `uglify/ie/issue_3999`
 
 
@@ -1677,32 +2711,108 @@ console.log(function foo() {
 
 ```
 
-## `uglify/if_return/identical_returns_3`
+## `uglify/if_return/if_var_return_4`
 
+- tags: `sequences`
 
 ```js
-function f(a) {
-	if (a) return 42;
-	if (a) return;
-	return 42;
+function f() {
+	if (u()) return v();
+	var a = w();
+	if (x()) return y(a);
+	z();
 }
-if (f(console)) console.log('PASS');
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,6 +1,6 @@
- function f(a) {
- 	if (a) return 42;
--	if (a);
--	else return 42;
-+	if (a) return;
-+	return 42;
+@@ -1,4 +1,6 @@
+ function f() {
+-	var a;
+-	return u() ? v() : (a = w(), x() ? y(a) : (z(), void 0));
++	if (u()) return v();
++	var a = w();
++	if (x()) return y(a);
++	z();
  }
--if (f(console)) console.log('PASS');
-+f(console) && console.log('PASS');
+
+```
+
+## `uglify/if_return/issue_5592_1`
+
+
+```js
+L: {
+	do {
+		switch (console.log('foo')) {
+			case console.log('bar'):
+				if (console) break;
+				break L;
+		}
+	} while (console.log('baz'));
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,9 @@
+-L: do {
+-	switch (console.log('foo')) {
+-		case console.log('bar'):
+-			if (console) break;
+-			break L;
+-	}
+-} while (console.log('baz'));
++L: {
++	do
++		switch (console.log('foo')) {
++			case console.log('bar'):
++				if (console) break;
++				break L;
++		}
++	while (console.log('baz'));
++}
+
+```
+
+## `uglify/if_return/issue_5688`
+
+
+```js
+L: do {
+	switch (console) {
+		default:
+			if (console) break;
+			if (FAIL_1);
+			else break L;
+			break;
+		case 42: FAIL_2;
+	}
+} while (console.log('PASS'));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,9 @@
+-L: do {
++L: do
+ 	switch (console) {
+ 		default:
+ 			if (console) break;
+-			if (FAIL_1) break;
+-			break L;
++			if (!FAIL_1) break L;
++			break;
+ 		case 42: FAIL_2;
+ 	}
+-} while (console.log('PASS'));
++while (console.log('PASS'));
 
 ```
 
@@ -2015,12 +3125,34 @@ function f(x) {
 
 ```
 
-## `uglify/issue-269/issue_269_1`
+## `uglify/issue-1833/label_do`
 
 
 ```js
-var x = {};
-console.log(String(x), Number(x), Boolean(x), String(), Number(), Boolean());
+L: do {
+	continue L;
+} while (0);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-L: do {
++L: do
+ 	continue L;
+-} while (0);
++while (0);
+
+```
+
+## `uglify/issue-597/beautify_off_1`
+
+
+```js
+var NaN;
+console.log(null, undefined, Infinity, NaN, Infinity * undefined, Infinity.toString(), NaN.toString(), (Infinity * undefined).toString());
 
 ```
 
@@ -2028,9 +3160,28 @@ console.log(String(x), Number(x), Boolean(x), String(), Number(), Boolean());
 --- reference
 +++ oxc
 @@ -1,2 +1,2 @@
- var x = {};
--console.log('' + x, +('' + x), !!x, '', 0, false);
-+console.log(String(x), Number(x), !!x, '', 0, !1);
+ var NaN;
+-console.log(null, void 0, 1 / 0, NaN, 0 / 0, (1 / 0).toString(), NaN.toString(), (0 / 0).toString());
++console.log(null, void 0, Infinity, NaN, Infinity * void 0, 'Infinity', NaN.toString(), 'NaN');
+
+```
+
+## `uglify/issue-597/beautify_on_1`
+
+
+```js
+var NaN;
+console.log(null, undefined, Infinity, NaN, Infinity * undefined, Infinity.toString(), NaN.toString(), (Infinity * undefined).toString());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+ var NaN;
+-console.log(null, void 0, 1 / 0, NaN, 0 / 0, (1 / 0).toString(), NaN.toString(), (0 / 0).toString());
++console.log(null, void 0, Infinity, NaN, Infinity * void 0, 'Infinity', NaN.toString(), 'NaN');
 
 ```
 
@@ -2062,6 +3213,59 @@ console.log(a);
 
 ```
 
+## `uglify/join_vars/join_object_assignments_NaN_1`
+
+- tags: `join vars`
+
+```js
+var o = {};
+o[NaN] = 1;
+o[0 / 0] = 2;
+console.log(o[NaN], o[NaN]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ var o = {};
+ o[NaN] = 1;
+-o[0 / 0] = 2;
++o[NaN] = 2;
+ console.log(o[NaN], o[NaN]);
+
+```
+
+## `uglify/join_vars/join_object_assignments_return_2`
+
+- tags: `join vars`
+
+```js
+console.log(function() {
+	var o = { p: 3 };
+	return o.q = /foo/, o.r = 'bar';
+}());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,4 @@
+ console.log(function() {
+-	var o = {
+-		p: 3,
+-		q: /foo/,
+-		r: 'bar'
+-	};
+-	return o.r;
++	var o = { p: 3 };
++	return o.q = /foo/, o.r = 'bar';
+ }());
+
+```
+
 ## `uglify/keep_fargs/function_argument_mangle`
 
 
@@ -2088,65 +3292,37 @@ var a = A;
 
 ```
 
-## `uglify/keep_fargs/issue_2319_1`
+## `uglify/keep_fargs/replace_all_var_scope`
 
 - tags: `join vars`, `remove unused`
 
 ```js
-console.log(function(a) {
-	return a;
-}(!function() {
-	return this;
-}()));
+var a = 100, b = 10;
+(function(r, a) {
+	switch (~a) {
+		case b += a:
+		case a++:
+	}
+})(--b, a);
+console.log(a, b);
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,5 +1,5 @@
--console.log(function() {
--	return !function() {
--		return this;
--	}();
--}());
-+console.log(function(a) {
-+	return a;
-+}(!function() {
-+	return this;
-+}()));
-
-```
-
-## `uglify/keep_fargs/issue_2319_3`
-
-- tags: `join vars`, `remove unused`
-
-```js
-'use strict';
-console.log(function(a) {
-	return a;
-}(!function() {
-	return this;
-}()));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,6 @@
- 'use strict';
--console.log(function() {
--	return !function() {
--		return this;
--	}();
--}());
-+console.log(function(a) {
-+	return a;
-+}(!function() {
-+	return this;
-+}()));
+@@ -1,8 +1,8 @@
+ var a = 100, b = 10;
+-(function(c) {
++(function(r, a) {
+ 	switch (~a) {
+ 		case b += a:
+-		case c++:
++		case a++:
+ 	}
+-})((--b, a));
++})(--b, a);
+ console.log(a, b);
 
 ```
 
@@ -2179,55 +3355,106 @@ console.log(function(a) {
 
 ```
 
-## `uglify/let/issue_4691`
+## `uglify/labels/labels_5`
 
+- tags: `remove unused`
 
 ```js
-'use strict';
-function A() {}
-A.prototype.f = function() {
-	if (!this) return;
-	let a = 'PA';
-	function g(b) {
-		h(a + b);
-	}
-	['SS'].forEach(function(c) {
-		g(c);
-	});
-};
-function h(d) {
-	console.log(d);
+while (foo) {
+	if (bar) break;
+	console.log('foo');
 }
-new A().f();
+out: while (foo) {
+	if (bar) break out;
+	console.log('foo');
+}
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,15 +1,14 @@
+@@ -1,8 +1,5 @@
+-while (foo) {
+-	if (bar) break;
+-	console.log('foo');
+-}
+-while (foo) {
+-	if (bar) break;
++for (; foo && !bar;) console.log('foo');
++out: for (; foo;) {
++	if (bar) break out;
+ 	console.log('foo');
+ }
+
+```
+
+## `uglify/labels/labels_7`
+
+
+```js
+while (foo) {
+	x();
+	y();
+	continue;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+-while (foo) {
++for (; foo;) {
+ 	x();
+ 	y();
+ }
+
+```
+
+## `uglify/labels/labels_8`
+
+
+```js
+while (foo) {
+	x();
+	y();
+	break;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+-while (foo) {
++for (; foo;) {
+ 	x();
+ 	y();
+ 	break;
+
+```
+
+## `uglify/let/issue_5338`
+
+- tags: `remove unused`
+
+```js
+'use strict';
+let a = a;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,2 @@
  'use strict';
- function A() {}
- A.prototype.f = function() {
--	if (this) {
--		let a = 'PA';
--		['SS'].forEach(function(c) {
--			g(c);
--		});
--		function g(b) {
--			h(a + b);
--		}
-+	if (!this) return;
-+	let a = 'PA';
-+	function g(b) {
-+		h('PA' + b);
- 	}
-+	['SS'].forEach(function(c) {
-+		g(c);
-+	});
- };
- function h(d) {
- 	console.log(d);
+-a;
+-let a;
++let a = a;
 
 ```
 
@@ -2251,6 +3478,30 @@ console.log(function(n) {
 -	let o;
 +	let a;
  }());
+
+```
+
+## `uglify/let/join_let_var_2`
+
+- tags: `join vars`
+
+```js
+'use strict';
+let a = 'foo';
+var b = 'bar';
+for (let c of [a, b]) console.log(c);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ 'use strict';
+-let a = 'foo', b = 'bar';
+-for (let c of [a, b]) console.log(c);
++let a = 'foo';
++for (let c of ['foo', 'bar']) console.log(c);
 
 ```
 
@@ -2303,6 +3554,89 @@ console.log(function(n) {
 +	let a;
 +	var a;
  }
+
+```
+
+## `uglify/loops/issue_186`
+
+
+```js
+var x = 3;
+if (foo()) do
+	do
+		alert(x);
+	while (--x);
+while (x);
+else bar();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+ var x = 3;
+-if (foo()) do {
+-	do {
++if (foo()) do
++	do
+ 		alert(x);
+-	} while (--x);
+-} while (x);
++	while (--x);
++while (x);
+ else bar();
+
+```
+
+## `uglify/loops/issue_186_beautify`
+
+
+```js
+var x = 3;
+if (foo()) do
+	do
+		alert(x);
+	while (--x);
+while (x);
+else bar();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+ var x = 3;
+-if (foo()) do {
+-	do {
++if (foo()) do
++	do
+ 		alert(x);
+-	} while (--x);
+-} while (x);
++	while (--x);
++while (x);
+ else bar();
+
+```
+
+## `uglify/max_line_len/template_newline`
+
+
+```js
+console.log(`foo
+bar`);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-console.log(`foo
+-bar`);
++console.log('foo\nbar');
 
 ```
 
@@ -2950,58 +4284,25 @@ console.log(function(a) {
 
 ```
 
-## `uglify/merge_vars/issue_4255`
+## `uglify/merge_vars/issue_4110`
 
 - tags: `join vars`
 
 ```js
-L: for (var a = 2; --a;) for (var b = 0; console.log(b); --b) break L;
+while (a) var c;
+var b, a = c += b = a;
+console.log(b);
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,4 +1 @@
--L: for (var a = 2; --a;) {
--	var b = 0;
--	if (console.log(b)) break L;
--}
-+L: for (var a = 2; --a;) for (var b = 0; console.log(b); --b) break L;
-
-```
-
-## `uglify/new/new_statements_2`
-
-
-```js
-new x();
-new new x()();
-new new new x()()();
-new true();
-new 0();
-new (!0)();
-new (bar = function(foo) {
-	this.foo = foo;
-})(123);
-new (bar = function(foo) {
-	this.foo = foo;
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
- new x();
- new new x()();
- new new new x()()();
--new true();
-+new (!0)();
- new 0();
- new (!0)();
- new (bar = function(foo) {
+@@ -1,3 +1,3 @@
+-while (a) var c;
++for (; a;) var c;
+ var b, a = c += b = a;
+ console.log(b);
 
 ```
 
@@ -3090,16 +4391,15 @@ for (var k in o) console.log(k, o[k]);
 
 ```
 
-## `uglify/objects/issue_4380`
+## `uglify/objects/issue_5213`
 
 
 ```js
+var a = 'FAIL';
 console.log({
-	get 0() {
-		return 'FAIL 1';
-	},
-	0: 'FAIL 2',
-	[0]: 'PASS'
+	p: a = 'PASS',
+	0: a,
+	p: null
 }[0]);
 
 ```
@@ -3107,14 +4407,38 @@ console.log({
 ```diff
 --- reference
 +++ oxc
-@@ -2,5 +2,6 @@
- 	get 0() {
- 		return 'FAIL 1';
- 	},
--	[0]: ('FAIL 2', 'PASS')
-+	0: 'FAIL 2',
-+	0: 'PASS'
+@@ -1,5 +1,6 @@
+ var a = 'FAIL';
+ console.log({
+-	p: (a = 'PASS', null),
+-	0: a
++	p: a = 'PASS',
++	0: a,
++	p: null
  }[0]);
+
+```
+
+## `uglify/optional-chains/issue_4906`
+
+- tags: `remove unused`
+
+```js
+do {
+	var a = a?.[42];
+} while (console.log('PASS'));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-do {
++do
+ 	var a = a?.[42];
+-} while (console.log('PASS'));
++while (console.log('PASS'));
 
 ```
 
@@ -3258,6 +4582,32 @@ console.log(f(o) ? 'PASS' : 'FAIL');
 
 ```
 
+## `uglify/properties/issue_5927`
+
+- tags: `join vars`
+
+```js
+A = {};
+while (console.log('PASS'));
+A.p;
+A.q = 42;
+A.q.r = 42;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ A = {};
+-while (console.log('PASS'));
++for (; console.log('PASS'););
+ A.p;
+ A.q = 42;
+ A.q.r = 42;
+
+```
+
 ## `uglify/properties/issue_869_1`
 
 
@@ -3390,146 +4740,6 @@ console.log(a.p, A);
 
 ```
 
-## `uglify/properties/prop_side_effects_1`
-
-- tags: `join vars`, `remove unused`
-
-```js
-var C = 1;
-console.log(C);
-var obj = { bar: function() {
-	return C + C;
-} };
-console.log(obj.bar());
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,5 @@
--console.log(1);
--var obj = { bar: function() {
--	return 2;
--} };
--console.log(obj.bar());
-+var C = 1;
-+console.log(C);
-+console.log({ bar: function() {
-+	return C + C;
-+} }.bar());
-
-```
-
-## `uglify/pure_funcs/unary`
-
-- tags: `pure functions`
-
-```js
-typeof foo();
-typeof bar();
-typeof 'bar';
-void foo();
-void bar();
-void 'bar';
-delete a[foo()];
-delete a[bar()];
-delete a['bar'];
-a[foo()]++;
-a[bar()]++;
-a['bar']++;
---a[foo()];
---a[bar()];
---a['bar'];
-~foo();
-~bar();
-~'bar';
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -2,11 +2,12 @@
- bar();
- delete a[foo()];
- delete a[bar()];
--delete a['bar'];
-+delete a.bar;
- a[foo()]++;
- a[bar()]++;
--a['bar']++;
-+a.bar++;
- --a[foo()];
- --a[bar()];
----a['bar'];
--bar();
-+--a.bar;
-+~foo();
-+~bar();
-
-```
-
-## `uglify/pure_getters/issue_2062`
-
-- tags: `join vars`, `pure getters`
-
-```js
-var a = 1;
-if ([
-	a || a++ + a--,
-	a++ + a--,
-	a && a.var
-]);
-console.log(a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,3 @@
- var a = 1;
--a || (a++, a--), a++, a--;
-+a || a++ + a--, a++ + a--;
- console.log(a);
-
-```
-
-## `uglify/pure_getters/nested_property_assignments_3`
-
-- tags: `join vars`, `remove unused`, `pure getters`
-
-```js
-var o = { p: {} };
-(function(a) {
-	console && a;
-	if (console) {
-		a = a.p;
-		a.q = a;
-	}
-})(o);
-console.log(o.p.q === o.p ? 'PASS' : 'FAIL');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,8 @@
- var o = { p: {} };
- (function(a) {
--	console;
--	if (console) (a = a.p).q = a;
-+	if (console) {
-+		a = a.p;
-+		a.q = a;
-+	}
- })(o);
- console.log(o.p.q === o.p ? 'PASS' : 'FAIL');
-
-```
-
 ## `uglify/reduce_vars/iife_arguments_3`
 
 - tags: `join vars`, `remove unused`, `2 iterations`
@@ -3633,6 +4843,299 @@ function f() {
 
 ```
 
+## `uglify/reduce_vars/issue_2774`
+
+- tags: `join vars`, `remove unused`
+
+```js
+console.log({ get a() {
+	var b;
+	(b = true) && b.c;
+	b = void 0;
+} }.a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ console.log({ get a() {
+ 	var b;
+-	(b = true) && b.c;
+-	void 0;
++	(b = !0) && b.c;
++	b = void 0;
+ } }.a);
+
+```
+
+## `uglify/reduce_vars/issue_3113_1`
+
+- tags: `join vars`
+
+```js
+var c = 0;
+(function() {
+	function f() {
+		while (g());
+	}
+	var a = f();
+	function g() {
+		a && a[c++];
+	}
+	g(a = 1);
+})();
+console.log(c);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+ var c = 0;
+ (function() {
+ 	function f() {
+-		while (g());
++		for (; g(););
+ 	}
+ 	var a = f();
+ 	function g() {
+
+```
+
+## `uglify/reduce_vars/issue_3113_2`
+
+- tags: `join vars`
+
+```js
+var c = 0;
+(function() {
+	function f() {
+		while (g());
+	}
+	var a = f();
+	function g() {
+		a && a[c++];
+	}
+	a = 1;
+	g();
+})();
+console.log(c);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+ var c = 0;
+ (function() {
+ 	function f() {
+-		while (g());
++		for (; g(););
+ 	}
+ 	var a = f();
+ 	function g() {
+
+```
+
+## `uglify/reduce_vars/issue_3113_5`
+
+- tags: `join vars`
+
+```js
+function f() {
+	console.log(a);
+}
+function g() {
+	f();
+}
+while (g());
+var a = 1;
+f();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -4,6 +4,6 @@
+ function g() {
+ 	f();
+ }
+-while (g());
++for (; g(););
+ var a = 1;
+ f();
+
+```
+
+## `uglify/reduce_vars/issue_3880`
+
+- tags: `join vars`, `remove unused`
+
+```js
+(function(a) {
+	while (a.var ^= 1);
+	console.log('PASS');
+})(function() {});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ (function(a) {
+-	while (a.var ^= 1);
++	for (; a.var ^= 1;);
+ 	console.log('PASS');
+ })(function() {});
+
+```
+
+## `uglify/reduce_vars/issue_3957_1`
+
+- tags: `join vars`
+
+```js
+function f(a) {
+	while (a += console.log(a = 0)) a = 0;
+}
+f('FAIL');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ function f(a) {
+-	while (a += console.log(a = 0)) a = 0;
++	for (; a += console.log(a = 0);) a = 0;
+ }
+ f('FAIL');
+
+```
+
+## `uglify/reduce_vars/issue_3957_2`
+
+- tags: `join vars`, `remove unused`
+
+```js
+function f(a) {
+	while (a += console.log(a = 0)) a = 0;
+}
+f('FAIL');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ function f(a) {
+-	while (a += console.log(a = 0)) a = 0;
++	for (; a += console.log(a = 0);) a = 0;
+ }
+ f('FAIL');
+
+```
+
+## `uglify/reduce_vars/issue_4188_1`
+
+- tags: `join vars`, `remove unused`
+
+```js
+(function() {
+	try {
+		while (A) var a = function() {}, b = a;
+	} catch (a) {
+		console.log(function() {
+			return typeof a;
+		}(), typeof b);
+	}
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+ (function() {
+ 	try {
+-		while (A) var a = function() {}, b = a;
++		for (; A;) var a = function() {}, b = a;
+ 	} catch (a) {
+ 		console.log(function() {
+ 			return typeof a;
+
+```
+
+## `uglify/reduce_vars/issue_4188_2`
+
+- tags: `join vars`, `remove unused`
+
+```js
+(function() {
+	try {
+		throw 42;
+	} catch (a) {
+		console.log(function() {
+			return typeof a;
+		}(), typeof b);
+	}
+	while (!console) var a = function() {}, b = a;
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -6,5 +6,5 @@
+ 			return typeof a;
+ 		}(), typeof b);
+ 	}
+-	while (!console) var a = function() {}, b = a;
++	for (; !console;) var a = function() {}, b = a;
+ })();
+
+```
+
+## `uglify/reduce_vars/issue_4937`
+
+- tags: `join vars`, `remove unused`
+
+```js
+function f() {
+	while (console.log('PASS'));
+}
+do {
+	function g() {
+		f();
+	}
+} while (!g);
+f();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ function f() {
+-	while (console.log('PASS'));
++	for (; console.log('PASS'););
+ }
+ do {
+ 	function g() {
+
+```
+
 ## `uglify/reduce_vars/multi_def_2`
 
 - tags: `join vars`
@@ -3663,9 +5166,9 @@ function f() {
 
 ```
 
-## `uglify/reduce_vars/recursive_inlining_3`
+## `uglify/reduce_vars/recursive_inlining_4`
 
-- tags: `join vars`, `remove unused`, `2 iterations`
+- tags: `join vars`, `remove unused`
 
 ```js
 !function() {
@@ -3682,6 +5185,7 @@ function f() {
 		if (x) foo(x - 1);
 	}
 	qux(4);
+	bar(5);
 }();
 
 ```
@@ -3689,72 +5193,78 @@ function f() {
 ```diff
 --- reference
 +++ oxc
-@@ -1,13 +1,15 @@
+@@ -1,15 +1,16 @@
 -!function() {
 +(function() {
 +	function foo(x) {
 +		console.log('foo', x);
 +		x && bar(x - 1);
 +	}
-+	function bar(x) {
-+		console.log('bar', x);
+ 	function bar(x) {
+ 		console.log('bar', x);
+-		if (x) qux(x - 1);
 +		x && qux(x - 1);
-+	}
+ 	}
  	function qux(x) {
  		console.log('qux', x);
 -		if (x) (function(x) {
 -			console.log('foo', x);
--			if (x) (function(x) {
--				console.log('bar', x);
--				if (x) qux(x - 1);
--			})(x - 1);
+-			if (x) bar(x - 1);
 -		})(x - 1);
 +		x && foo(x - 1);
  	}
  	qux(4);
+ 	bar(5);
 -}();
 +})();
 
 ```
 
-## `uglify/reduce_vars/redefine_farg_1`
+## `uglify/reduce_vars/var_assign_3`
 
-- tags: `join vars`, `remove unused`
+- tags: `join vars`, `sequences`, `remove unused`
 
 ```js
-function f(a) {
+!function() {
 	var a;
-	return typeof a;
-}
-function g(a) {
-	var a = 42;
-	return typeof a;
-}
-function h(a, b) {
-	var a = b;
-	return typeof a;
-}
-console.log(f([]), g([]), h([]));
+	while (a = 2);
+	console.log(a);
+}();
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,11 +1,11 @@
- function f(a) {
-+	var a;
- 	return typeof a;
- }
- function g(a) {
- 	return 'number';
- }
- function h(a, b) {
--	a = b;
--	return typeof a;
-+	return typeof b;
- }
- console.log(f([]), g([]), h([]));
+@@ -1,5 +1,4 @@
+-!function() {
+-	var a;
+-	while (a = 2);
++(function() {
++	for (var a; a = 2;);
+ 	console.log(a);
+-}();
++})();
+
+```
+
+## `uglify/regexp/var_test_global`
+
+- tags: `join vars`
+
+```js
+var r = /a/g;
+while (r.test('aaa')) console.log('PASS');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+ var r = /a/g;
+-while (r.test('aaa')) console.log('PASS');
++for (; r.test('aaa');) console.log('PASS');
 
 ```
 
@@ -3878,6 +5388,32 @@ y();
 
 ```
 
+## `uglify/sequences/issue_2062`
+
+- tags: `join vars`
+
+```js
+var a = 1;
+if ([
+	a || a++ + a--,
+	a++ + a--,
+	a && a.var
+]);
+console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ var a = 1;
+-a || (a++, a--), a++, --a && a.var;
++a || a++ + a--, a++ + a--, a && a.var;
+ console.log(a);
+
+```
+
 ## `uglify/sequences/issue_3703`
 
 - tags: `sequences`
@@ -3897,6 +5433,26 @@ console.log(a);
 -while (a = 'PASS', 0 .foo = 0);
 +for (var a = 'FAIL'; (a = 'PASS', 0).foo = 0;);
  console.log(a);
+
+```
+
+## `uglify/sequences/lift_sequences_3`
+
+- tags: `sequences`
+
+```js
+var x, foo, bar, baz;
+x = (foo(), bar(), baz()) ? 10 : 20;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-var x, foo, bar, baz;
+-foo(), bar(), x = baz() ? 10 : 20;
++var x = (foo(), bar(), baz() ? 10 : 20), foo, bar, baz;
 
 ```
 
@@ -3953,6 +5509,28 @@ k;
 -e, f, g, h;
 -i, j, k;
 +a, b, c, d, e, f, g, h, i, j, k;
+
+```
+
+## `uglify/sequences/side_effects_cascade_2`
+
+- tags: `join vars`
+
+```js
+function f(a, b) {
+	b = a, !a + (b += a) || (b += a), b = a, b;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ function f(a, b) {
+-	!(b = a) + (b += a) || (b += a), b = a;
++	b = a, !a + (b += a) || (b += a), b = a;
+ }
 
 ```
 
@@ -4014,6 +5592,122 @@ console.log(null == Object.getPrototypeOf({ ...{ __proto__: (console.log(42), nu
 
 ```
 
+## `uglify/spreads/object_key_order_1`
+
+
+```js
+var o = {
+	...{},
+	a: 1,
+	b: 2,
+	a: 3
+};
+for (var k in o) console.log(k, o[k]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,6 @@
+ var o = {
+-	a: (1, 3),
+-	b: 2
++	a: 1,
++	b: 2,
++	a: 3
+ };
+ for (var k in o) console.log(k, o[k]);
+
+```
+
+## `uglify/spreads/object_key_order_2`
+
+
+```js
+var o = {
+	a: 1,
+	...{},
+	b: 2,
+	a: 3
+};
+for (var k in o) console.log(k, o[k]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,6 @@
+ var o = {
+-	a: (1, 3),
+-	b: 2
++	a: 1,
++	b: 2,
++	a: 3
+ };
+ for (var k in o) console.log(k, o[k]);
+
+```
+
+## `uglify/spreads/object_key_order_3`
+
+
+```js
+var o = {
+	a: 1,
+	b: 2,
+	...{},
+	a: 3
+};
+for (var k in o) console.log(k, o[k]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,6 @@
+ var o = {
+-	a: (1, 3),
+-	b: 2
++	a: 1,
++	b: 2,
++	a: 3
+ };
+ for (var k in o) console.log(k, o[k]);
+
+```
+
+## `uglify/spreads/object_key_order_4`
+
+
+```js
+var o = {
+	a: 1,
+	b: 2,
+	a: 3,
+	...{}
+};
+for (var k in o) console.log(k, o[k]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,6 @@
+ var o = {
+-	a: (1, 3),
+-	b: 2
++	a: 1,
++	b: 2,
++	a: 3
+ };
+ for (var k in o) console.log(k, o[k]);
+
+```
+
 ## `uglify/switches/issue_1663`
 
 
@@ -4048,25 +5742,6 @@ console.log(a, b);
 
 ```
 
-## `uglify/templates/booleans`
-
-
-```js
-var a;
-console.log(`$${a}${a}` ? 'PASS' : 'FAIL');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,2 @@
- var a;
--console.log('$' + a + a ? 'PASS' : 'FAIL');
-+console.log(`$${a}${a}` ? 'PASS' : 'FAIL');
-
-```
-
 ## `uglify/templates/escape_placeholder_1`
 
 
@@ -4085,11 +5760,68 @@ console.log(`\${\n`);
 
 ```
 
-## `uglify/templates/issue_5125_1`
+## `uglify/templates/escape_placeholder_2`
 
 
 ```js
-console.log(`PASS ${typeof A}`);
+console.log(`\n${'${'}\n`);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1 @@
+-console.log(`
+-\${
+-`);
++console.log('\n${\n');
+
+```
+
+## `uglify/templates/escape_placeholder_3`
+
+
+```js
+console.log(`\n$${'{'}\n`);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1 @@
+-console.log(`
+-\${
+-`);
++console.log('\n${\n');
+
+```
+
+## `uglify/templates/escape_placeholder_4`
+
+
+```js
+console.log(`\n${'$'}${'{'}\n`);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1 @@
+-console.log(`
+-\${
+-`);
++console.log('\n${\n');
+
+```
+
+## `uglify/templates/issue_5136`
+
+
+```js
+console.log(`${A = []}${A[0] = 42}`);
 
 ```
 
@@ -4097,56 +5829,16 @@ console.log(`PASS ${typeof A}`);
 --- reference
 +++ oxc
 @@ -1 +1 @@
--console.log('PASS ' + typeof A);
-+console.log(`PASS ${typeof A}`);
+-console.log(`` + (A = []) + (A[0] = 42));
++console.log(`${A = []}${A[0] = 42}`);
 
 ```
 
-## `uglify/templates/issue_5125_2`
+## `uglify/templates/partial_evaluate`
 
 
 ```js
-console.log(`PASS
-${typeof A}`);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,2 @@
- console.log(`PASS
--` + typeof A);
-+${typeof A}`);
-
-```
-
-## `uglify/templates/issue_5125_4`
-
-
-```js
-console.log(`PASS
-
-${typeof A}`);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,3 @@
- console.log(`PASS
- 
--` + typeof A);
-+${typeof A}`);
-
-```
-
-## `uglify/templates/issue_5125_6`
-
-
-```js
-console.log(`${typeof A} ${typeof B} PASS`);
+console.log(`${6 * 7} foo ${console ? `PA` + 'SS' : `FA` + `IL`}`);
 
 ```
 
@@ -4154,42 +5846,8 @@ console.log(`${typeof A} ${typeof B} PASS`);
 --- reference
 +++ oxc
 @@ -1 +1 @@
--console.log(typeof A + ` ${typeof B} PASS`);
-+console.log(`${typeof A} ${typeof B} PASS`);
-
-```
-
-## `uglify/templates/issue_5125_7`
-
-
-```js
-console.log(`${typeof A} ${typeof B} ${typeof C} PASS`);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--console.log(typeof A + ` ${typeof B} ${typeof C} PASS`);
-+console.log(`${typeof A} ${typeof B} ${typeof C} PASS`);
-
-```
-
-## `uglify/templates/issue_5125_8`
-
-
-```js
-console.log(`${typeof A}${typeof B}${typeof C} PASS`);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--console.log(typeof A + typeof B + typeof C + ' PASS');
-+console.log(`${typeof A}${typeof B}${typeof C} PASS`);
+-console.log('42 foo ' + (console ? 'PASS' : 'FAIL'));
++console.log(`42 foo ${console ? 'PASS' : 'FAIL'}`);
 
 ```
 
@@ -4244,6 +5902,37 @@ function f(w, x, y, z) {
 -'function' != typeof A && A;
 +typeof A != 'function' && A;
 +typeof A == 'function' || A;
+
+```
+
+## `uglify/typeof/typeof_evaluation`
+
+
+```js
+a = typeof 1;
+b = typeof 'test';
+c = typeof [];
+d = typeof {};
+e = typeof /./;
+f = typeof false;
+g = typeof function() {};
+h = typeof undefined;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+ a = 'number';
+ b = 'string';
+-c = typeof [];
+-d = typeof {};
++c = 'object';
++d = 'object';
+ e = typeof /./;
+ f = 'boolean';
+ g = 'function';
 
 ```
 
@@ -4394,6 +6083,31 @@ var [, a] = function* () {
  	console.log('foo');
  	yield console.log('bar');
  	console.log('baz');
+
+```
+
+## `uglify/yields/reduce_single_use_defun`
+
+- tags: `join vars`, `remove unused`
+
+```js
+function* f(a) {
+	console.log(a);
+}
+f('PASS').next();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,4 @@
+-(function* (a) {
++function* f(a) {
+ 	console.log(a);
+-})('PASS').next();
++}
++f('PASS').next();
 
 ```
 

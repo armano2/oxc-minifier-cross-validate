@@ -7,10 +7,10 @@ Fixtures run: 6786
 | family | smaller | not-idempotent | panic | larger | differs | parse-error | config-error | no-expected | pass | total |
 |---|---|---|---|---|---|---|---|---|---|---|
 | pass-1 | 2 | 0 | 0 | 9 | 2 | 0 | 0 | 0 | 5 | 18 |
-| swc | 112 | 2 | 1 | 264 | 33 | 2 | 0 | 1 | 111 | 526 |
-| terser | 594 | 28 | 1 | 858 | 71 | 8 | 0 | 0 | 573 | 2133 |
-| uglify | 1308 | 6 | 0 | 1656 | 149 | 23 | 0 | 0 | 967 | 4109 |
-| **all** | 2016 | 36 | 2 | 2787 | 255 | 33 | 0 | 1 | 1656 | 6786 |
+| swc | 109 | 2 | 1 | 267 | 33 | 2 | 0 | 1 | 111 | 526 |
+| terser | 593 | 28 | 1 | 852 | 78 | 8 | 0 | 0 | 573 | 2133 |
+| uglify | 1291 | 6 | 0 | 1611 | 211 | 23 | 0 | 0 | 967 | 4109 |
+| **all** | 1995 | 36 | 2 | 2739 | 324 | 33 | 0 | 1 | 1656 | 6786 |
 
 ## Families
 
@@ -28,21 +28,21 @@ Fixtures run: 6786
 | pass-1 | smaller | 2 | [pass-1/smaller.md](pass-1/smaller.md) |
 | pass-1 | larger | 9 | [pass-1/larger.md](pass-1/larger.md) |
 | pass-1 | differs | 2 | [pass-1/differs.md](pass-1/differs.md) |
-| swc | smaller | 112 | [swc/smaller.md](swc/smaller.md) |
+| swc | smaller | 109 | [swc/smaller.md](swc/smaller.md) |
 | swc | not-idempotent | 2 | [swc/not-idempotent.md](swc/not-idempotent.md) |
 | swc | panic | 1 | [swc/panic.md](swc/panic.md) |
-| swc | larger | 264 | [swc/larger.md](swc/larger.md) |
+| swc | larger | 267 | [swc/larger.md](swc/larger.md) |
 | swc | differs | 33 | [swc/differs.md](swc/differs.md) |
 | swc | parse-error | 2 | [swc/parse-error.md](swc/parse-error.md) |
 | swc | no-expected | 1 | [swc/no-expected.md](swc/no-expected.md) |
-| terser | smaller | 594 | [terser/smaller.md](terser/smaller.md) |
+| terser | smaller | 593 | [terser/smaller.md](terser/smaller.md) |
 | terser | not-idempotent | 28 | [terser/not-idempotent.md](terser/not-idempotent.md) |
 | terser | panic | 1 | [terser/panic.md](terser/panic.md) |
-| terser | larger | 858 | [terser/larger.md](terser/larger.md) |
-| terser | differs | 71 | [terser/differs.md](terser/differs.md) |
+| terser | larger | 852 | [terser/larger.md](terser/larger.md) |
+| terser | differs | 78 | [terser/differs.md](terser/differs.md) |
 | terser | parse-error | 8 | [terser/parse-error.md](terser/parse-error.md) |
-| uglify | smaller | 1308 | [uglify/smaller.md](uglify/smaller.md) |
+| uglify | smaller | 1291 | [uglify/smaller.md](uglify/smaller.md) |
 | uglify | not-idempotent | 6 | [uglify/not-idempotent.md](uglify/not-idempotent.md) |
-| uglify | larger | 1656 | [uglify/larger.md](uglify/larger.md) |
-| uglify | differs | 149 | [uglify/differs.md](uglify/differs.md) |
+| uglify | larger | 1611 | [uglify/larger.md](uglify/larger.md) |
+| uglify | differs | 211 | [uglify/differs.md](uglify/differs.md) |
 | uglify | parse-error | 23 | [uglify/parse-error.md](uglify/parse-error.md) |

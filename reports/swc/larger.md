@@ -1,13 +1,13 @@
 # swc / larger — Output longer than expected (possible missing optimization)
 
-Fixtures: 264
+Fixtures: 267
 
 [← swc](README.md) · [← all families](../README.md)
 
 ## `swc/issues/10412`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 222 vs reference 221 (+1 bytes)
+- size: oxc 193 vs reference 192 (+1 bytes, no whitespaces)
 
 ```js
 (function(e, i) {
@@ -38,10 +38,241 @@ Fixtures: 264
 
 ```
 
+## `swc/issues/10466`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 194 vs reference 193 (+1 bytes, no whitespaces)
+
+```js
+const G = { setPackageName({ packageName }) {
+	if ('string' == typeof packageName) this.packageName = packageName;
+	return this;
+} };
+var packageName;
+packageName = '@clerk/clerk-react', G.setPackageName({ packageName }), console.log(G.packageName);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ const G = { setPackageName({ packageName }) {
+-	return 'string' == typeof packageName && (this.packageName = packageName), this;
++	return typeof packageName == 'string' && (this.packageName = packageName), this;
+ } };
+ G.setPackageName({ packageName: '@clerk/clerk-react' }), console.log(G.packageName);
+
+```
+
+## `swc/issues/11512-exhaustive/iife-anon-first-default-unused`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
+- size: oxc 98 vs reference 97 (+1 bytes, no whitespaces)
+
+```js
+export function iifeAnonFirstDefaultUnused(value) {
+	return (function(a = 1, b) {
+		return b;
+	})(undefined, value);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ export function iifeAnonFirstDefaultUnused(value) {
+-	return function(a = 1, b) {
++	return (function(a = 1, b) {
+ 		return b;
+-	}(void 0, value);
++	})(void 0, value);
+ }
+
+```
+
+## `swc/issues/11512-exhaustive/iife-default-reassigned`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
+- size: oxc 90 vs reference 89 (+1 bytes, no whitespaces)
+
+```js
+export function iifeDefaultReassigned(value) {
+	return (function(a, b = 1) {
+		b = 2;
+		return a;
+	})(value);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,5 @@
+ export function iifeDefaultReassigned(value) {
+-	return function(a, b = 1) {
+-		b = 2;
+-		return a;
+-	}(value);
++	return (function(a, b = 1) {
++		return b = 2, a;
++	})(value);
+ }
+
+```
+
+## `swc/issues/11512-exhaustive/iife-default-ref-prev`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
+- size: oxc 83 vs reference 82 (+1 bytes, no whitespaces)
+
+```js
+export function iifeDefaultRefPrev(value) {
+	return (function(a, b = a) {
+		return a;
+	})(value);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ export function iifeDefaultRefPrev(value) {
+-	return function(a, b = a) {
++	return (function(a, b = a) {
+ 		return a;
+-	}(value);
++	})(value);
+ }
+
+```
+
+## `swc/issues/11512-exhaustive/iife-default-used`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
+- size: oxc 80 vs reference 79 (+1 bytes, no whitespaces)
+
+```js
+export function iifeDefaultUsed(value) {
+	return (function(a, b = 1) {
+		return b;
+	})(value);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ export function iifeDefaultUsed(value) {
+-	return function(a, b = 1) {
++	return (function(a, b = 1) {
+ 		return b;
+-	}(value);
++	})(value);
+ }
+
+```
+
+## `swc/issues/11512-exhaustive/iife-named-default-length`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
+- size: oxc 113 vs reference 112 (+1 bytes, no whitespaces)
+
+```js
+export function iifeNamedDefaultLength(value) {
+	return (function named(a = 1, b) {
+		return named.length + b;
+	})(undefined, value);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ export function iifeNamedDefaultLength(value) {
+-	return function named(a = 1, b) {
++	return (function named(a = 1, b) {
+ 		return named.length + b;
+-	}(void 0, value);
++	})(void 0, value);
+ }
+
+```
+
+## `swc/issues/11684/disabled`
+
+- tags: `drop debugger`, `join vars`, `sequences`
+- size: oxc 113 vs reference 112 (+1 bytes, no whitespaces)
+
+```js
+out.fn = new (function() {
+	this.kind = 'function';
+})(1, 2, 3);
+out.class = new class {
+	constructor() {
+		this.kind = 'class';
+	}
+}(1, 2, 3);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+-out.fn = new function() {
++out.fn = new (function() {
+ 	this.kind = 'function';
+-}(1, 2, 3), out.class = new class {
++})(1, 2, 3), out.class = new class {
+ 	constructor() {
+ 		this.kind = 'class';
+ 	}
+
+```
+
+## `swc/issues/2679`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 38 vs reference 37 (+1 bytes, no whitespaces)
+
+```js
+(function() {
+	var a = {};
+	a.b = 1;
+	a = null;
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+-!function() {
++(function() {
+ 	var a = {};
+-	a.b = 1;
+-	a = null;
+-}();
++	a.b = 1, a = null;
++})();
+
+```
+
 ## `swc/issues/6141`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 160 vs reference 159 (+1 bytes)
+- size: oxc 121 vs reference 120 (+1 bytes, no whitespaces)
 
 ```js
 (function foo(obj) {
@@ -78,7 +309,7 @@ Fixtures: 264
 ## `swc/issues/7412`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 212 vs reference 211 (+1 bytes)
+- size: oxc 171 vs reference 170 (+1 bytes, no whitespaces)
 
 ```js
 export function throttleTime(interval) {
@@ -115,7 +346,7 @@ export function throttleTime(interval) {
 ## `swc/issues/7784/3`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 124 vs reference 123 (+1 bytes)
+- size: oxc 97 vs reference 96 (+1 bytes, no whitespaces)
 
 ```js
 export function f(i, e, cmp) {
@@ -144,153 +375,10 @@ export function f(i, e, cmp) {
 
 ```
 
-## `swc/issues/8826`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 263 vs reference 262 (+1 bytes)
-
-```js
-export function createTypeChecker(host) {
-	return { getFlowTypeOfReference };
-	function getFlowTypeOfReference(reference, declaredType, initialType = declaredType, flowContainer, flowNode = ((_a2) => (_a2 = tryCast(reference, canHaveFlowNode)) == null ? void 0 : _a2.flowNode)()) {}
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,4 @@
- export function createTypeChecker(host) {
--	return { getFlowTypeOfReference: function(reference, declaredType, initialType = declaredType, flowContainer, flowNode = ((_a2) => null == (_a2 = tryCast(reference, canHaveFlowNode)) ? void 0 : _a2.flowNode)()) {} };
-+	return { getFlowTypeOfReference };
-+	function getFlowTypeOfReference(reference, declaredType, initialType = declaredType, flowContainer, flowNode = ((_a2) => (_a2 = tryCast(reference, canHaveFlowNode))?.flowNode)()) {}
- }
-
-```
-
-## `swc/issues/vercel/003`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 748 vs reference 747 (+1 bytes)
-
-```js
-import { a, b } from './utils';
-if (typeof window !== 'undefined') {
-	require('intersection-observer');
-}
-const manager = (function makeManager() {
-	const c = new Map();
-	function d(e) {
-		return f(e) || new IntersectionObserver(g, e);
-	}
-	function f(g = {}) {
-		const h = b(g);
-		for (const i of c.keys()) {
-			if (a(i, h)) {
-				return i;
-			}
-		}
-		return null;
-	}
-	function j(k) {
-		return !c.has(k) ? c.set(k, new Map()).get(k) : c.get(k);
-	}
-	function l(m, n, o) {
-		const p = j(m);
-		p.set(n, o);
-		m.observe(n);
-	}
-	function q(r, s) {
-		const t = j(r);
-		t.delete(s);
-		r.unobserve(s);
-	}
-	function g(u, v) {
-		for (let w of u) {
-			const x = j(v);
-			const y = x.get(w.target);
-			if (y) {
-				y(w);
-			}
-		}
-	}
-	return {
-		d,
-		l,
-		q
-	};
-})();
-export default manager;
-export const { d } = manager;
-export const { l } = manager;
-export const { q } = manager;
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,10 +1,24 @@
- import { a, b } from './utils';
--'u' > typeof window && require('intersection-observer');
--let manager = function() {
-+typeof window < 'u' && require('intersection-observer');
-+const manager = (function() {
- 	let c = new Map();
-+	function d(e) {
-+		return f(e) || new IntersectionObserver(g, e);
-+	}
-+	function f(g = {}) {
-+		let h = b(g);
-+		for (let i of c.keys()) if (a(i, h)) return i;
-+		return null;
-+	}
- 	function j(k) {
- 		return c.has(k) ? c.get(k) : c.set(k, new Map()).get(k);
- 	}
-+	function l(m, n, o) {
-+		j(m).set(n, o), m.observe(n);
-+	}
-+	function q(r, s) {
-+		j(r).delete(s), r.unobserve(s);
-+	}
- 	function g(u, v) {
- 		for (let w of u) {
- 			let y = j(v).get(w.target);
-@@ -12,21 +26,11 @@
- 		}
- 	}
- 	return {
--		d: function(e) {
--			return function(g = {}) {
--				let h = b(g);
--				for (let i of c.keys()) if (a(i, h)) return i;
--				return null;
--			}(e) || new IntersectionObserver(g, e);
--		},
--		l: function(m, n, o) {
--			j(m).set(n, o), m.observe(n);
--		},
--		q: function(r, s) {
--			j(r).delete(s), r.unobserve(s);
--		}
-+		d,
-+		l,
-+		q
- 	};
--}();
-+})();
- export default manager;
- export const { d } = manager;
- export const { l } = manager;
-
-```
-
 ## `swc/projects/jquery/27`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 185 vs reference 184 (+1 bytes)
+- size: oxc 177 vs reference 176 (+1 bytes, no whitespaces)
 
 ```js
 if (!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.push(context.createTextNode(rleadingWhitespace.exec(elem)[0])), !jQuery.support.tbody) {
@@ -311,7 +399,7 @@ if (!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.
 ## `swc/projects/next/archive-1/916.2317bfea2c41354132bd`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 525 vs reference 524 (+1 bytes)
+- size: oxc 484 vs reference 483 (+1 bytes, no whitespaces)
 
 ```js
 'use strict';
@@ -343,7 +431,7 @@ if (!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.
 ## `swc/projects/next/archive-1/974.b9fed4786fc6d4a5745d`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 525 vs reference 524 (+1 bytes)
+- size: oxc 484 vs reference 483 (+1 bytes, no whitespaces)
 
 ```js
 'use strict';
@@ -375,7 +463,7 @@ if (!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.
 ## `swc/projects/next/archive-1/hello-world.1af1130392dd1b8d7964`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 527 vs reference 526 (+1 bytes)
+- size: oxc 487 vs reference 486 (+1 bytes, no whitespaces)
 
 ```js
 'use strict';
@@ -407,7 +495,7 @@ if (!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.
 ## `swc/projects/next/archive-1/hello1.4066327636ea41cc1002`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 520 vs reference 519 (+1 bytes)
+- size: oxc 480 vs reference 479 (+1 bytes, no whitespaces)
 
 ```js
 'use strict';
@@ -439,7 +527,7 @@ if (!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.
 ## `swc/projects/next/archive-1/hello2.339fbf9b6616133531f3`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 520 vs reference 519 (+1 bytes)
+- size: oxc 480 vs reference 479 (+1 bytes, no whitespaces)
 
 ```js
 'use strict';
@@ -471,7 +559,7 @@ if (!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.
 ## `swc/projects/react/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 1144 vs reference 1143 (+1 bytes)
+- size: oxc 1063 vs reference 1062 (+1 bytes, no whitespaces)
 
 ```js
 (function() {
@@ -518,10 +606,80 @@ if (!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.
 
 ```
 
+## `swc/projects/underscore/11`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 83 vs reference 82 (+1 bytes, no whitespaces)
+
+```js
+if (typeof /./ !== 'function') {
+	_.isFunction = function(obj) {
+		return typeof obj === 'function';
+	};
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-'function' != typeof /./ && (_.isFunction = function(obj) {
+-	return 'function' == typeof obj;
++typeof /./ != 'function' && (_.isFunction = function(obj) {
++	return typeof obj == 'function';
+ });
+
+```
+
+## `swc/projects/underscore/22`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 385 vs reference 384 (+1 bytes, no whitespaces)
+
+```js
+_.indexOf = function(array, item, isSorted) {
+	if (array == null) return -1;
+	var i = 0, length = array.length;
+	if (isSorted) {
+		if (typeof isSorted == 'number') {
+			i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
+		} else {
+			i = _.sortedIndex(array, item);
+			return array[i] === item ? i : -1;
+		}
+	}
+	if (nativeIndexOf && array.indexOf === nativeIndexOf) return array.indexOf(item, isSorted);
+	for (; i < length; i++) if (array[i] === item) return i;
+	return -1;
+};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,10 @@
+ _.indexOf = function(array, item, isSorted) {
+-	if (null == array) return -1;
++	if (array == null) return -1;
+ 	var i = 0, length = array.length;
+-	if (isSorted) if ('number' != typeof isSorted) return i = _.sortedIndex(array, item), array[i] === item ? i : -1;
+-	else i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
++	if (isSorted) {
++		if (typeof isSorted == 'number') i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
++		else return i = _.sortedIndex(array, item), array[i] === item ? i : -1;
++	}
+ 	if (nativeIndexOf && array.indexOf === nativeIndexOf) return array.indexOf(item, isSorted);
+ 	for (; i < length; i++) if (array[i] === item) return i;
+ 	return -1;
+
+```
+
 ## `swc/projects/underscore/24`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 142 vs reference 141 (+1 bytes)
+- size: oxc 110 vs reference 109 (+1 bytes, no whitespaces)
 
 ```js
 (function() {
@@ -550,10 +708,54 @@ if (!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.
 
 ```
 
+## `swc/projects/underscore/6`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 385 vs reference 384 (+1 bytes, no whitespaces)
+
+```js
+_.indexOf = function(array, item, isSorted) {
+	if (array == null) return -1;
+	var i = 0, length = array.length;
+	if (isSorted) {
+		if (typeof isSorted == 'number') {
+			i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
+		} else {
+			i = _.sortedIndex(array, item);
+			return array[i] === item ? i : -1;
+		}
+	}
+	if (nativeIndexOf && array.indexOf === nativeIndexOf) return array.indexOf(item, isSorted);
+	for (; i < length; i++) if (array[i] === item) return i;
+	return -1;
+};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,10 @@
+ _.indexOf = function(array, item, isSorted) {
+-	if (null == array) return -1;
++	if (array == null) return -1;
+ 	var i = 0, length = array.length;
+-	if (isSorted) if ('number' != typeof isSorted) return i = _.sortedIndex(array, item), array[i] === item ? i : -1;
+-	else i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
++	if (isSorted) {
++		if (typeof isSorted == 'number') i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
++		else return i = _.sortedIndex(array, item), array[i] === item ? i : -1;
++	}
+ 	if (nativeIndexOf && array.indexOf === nativeIndexOf) return array.indexOf(item, isSorted);
+ 	for (; i < length; i++) if (array[i] === item) return i;
+ 	return -1;
+
+```
+
 ## `swc/issues/10824`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
-- size: oxc 199 vs reference 197 (+2 bytes)
+- size: oxc 151 vs reference 149 (+2 bytes, no whitespaces)
 
 ```js
 class A {
@@ -589,122 +791,35 @@ export {};
 
 ```
 
-## `swc/issues/11512-exhaustive/iife-anon-first-default-unused`
+## `swc/issues/11645/control-known-arity-drop`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
-- size: oxc 116 vs reference 114 (+2 bytes)
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
+- size: oxc 43 vs reference 41 (+2 bytes, no whitespaces)
 
 ```js
-export function iifeAnonFirstDefaultUnused(value) {
-	return (function(a = 1, b) {
-		return b;
-	})(undefined, value);
+function f(a) {
+	return a;
 }
+console.log(f(1, 2));
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,5 +1,5 @@
- export function iifeAnonFirstDefaultUnused(value) {
--	return function(a = 1, b) {
-+	return (function(a = 1, b) {
- 		return b;
--	}(void 0, value);
-+	})(void 0, value);
+@@ -1,4 +1,4 @@
+ function f(a) {
+ 	return a;
  }
-
-```
-
-## `swc/issues/11512-exhaustive/iife-default-ref-prev`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
-- size: oxc 100 vs reference 98 (+2 bytes)
-
-```js
-export function iifeDefaultRefPrev(value) {
-	return (function(a, b = a) {
-		return a;
-	})(value);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,5 @@
- export function iifeDefaultRefPrev(value) {
--	return function(a, b = a) {
-+	return (function(a, b = a) {
- 		return a;
--	}(value);
-+	})(value);
- }
-
-```
-
-## `swc/issues/11512-exhaustive/iife-default-used`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
-- size: oxc 97 vs reference 95 (+2 bytes)
-
-```js
-export function iifeDefaultUsed(value) {
-	return (function(a, b = 1) {
-		return b;
-	})(value);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,5 @@
- export function iifeDefaultUsed(value) {
--	return function(a, b = 1) {
-+	return (function(a, b = 1) {
- 		return b;
--	}(value);
-+	})(value);
- }
-
-```
-
-## `swc/issues/11512-exhaustive/iife-named-default-length`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
-- size: oxc 133 vs reference 131 (+2 bytes)
-
-```js
-export function iifeNamedDefaultLength(value) {
-	return (function named(a = 1, b) {
-		return named.length + b;
-	})(undefined, value);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,5 @@
- export function iifeNamedDefaultLength(value) {
--	return function named(a = 1, b) {
-+	return (function named(a = 1, b) {
- 		return named.length + b;
--	}(void 0, value);
-+	})(void 0, value);
- }
+-console.log(f(1));
++console.log(f(1, 2));
 
 ```
 
 ## `swc/issues/11645/logical-and-assign-stale-arity`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 61 vs reference 59 (+2 bytes)
+- size: oxc 46 vs reference 44 (+2 bytes, no whitespaces)
 
 ```js
 let f = (a) => a;
@@ -724,42 +839,133 @@ console.log(f(1, 2));
 
 ```
 
-## `swc/issues/11684/disabled`
+## `swc/issues/11684/preserved`
 
-- tags: `drop debugger`, `join vars`, `sequences`
-- size: oxc 144 vs reference 142 (+2 bytes)
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 1097 vs reference 1095 (+2 bytes, no whitespaces)
 
 ```js
-out.fn = new (function() {
-	this.kind = 'function';
+out.fnArguments = new (function() {
+	this.count = arguments.length;
 })(1, 2, 3);
-out.class = new class {
+out.fnLexicalArguments = new (function() {
+	this.count = (() => arguments.length)();
+})(1, 2, 3);
+out.fnDefaultArguments = new (function(value = arguments[1]) {
+	this.value = value;
+})(undefined, 'fallback', 'extra');
+out.fnEval = new (function() {
+	eval('this.count = arguments.length');
+})(1, 2, 3);
+out.fnRest = new (function(...values) {
+	this.count = values.length;
+})(1, 2, 3);
+out.fnSpread = new (function() {
+	this.kind = 'spread';
+})(...values, 1);
+out.classArguments = new class {
 	constructor() {
-		this.kind = 'class';
+		this.count = arguments.length;
 	}
 }(1, 2, 3);
+out.classLexicalArguments = new class {
+	constructor() {
+		this.count = (() => arguments.length)();
+	}
+}(1, 2, 3);
+out.classDefaultArguments = new class {
+	constructor(value = arguments[1]) {
+		this.value = value;
+	}
+}(undefined, 'fallback', 'extra');
+out.classEval = new class {
+	constructor() {
+		eval('this.count = arguments.length');
+	}
+}(1, 2, 3);
+out.classRest = new class {
+	constructor(...values) {
+		this.count = values.length;
+	}
+}(1, 2, 3);
+out.classSpread = new class {
+	constructor() {
+		this.kind = 'spread';
+	}
+}(...values, 1);
+out.defaultClass = new class {}(1, 2, 3);
+out.defaultDerivedClass = new class extends Base {}(1, 2, 3);
+out.unknown = new Constructor(1, 2, 3);
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,6 +1,6 @@
--out.fn = new function() {
-+out.fn = new (function() {
- 	this.kind = 'function';
--}(1, 2, 3), out.class = new class {
-+})(1, 2, 3), out.class = new class {
+@@ -1,16 +1,16 @@
+-out.fnArguments = new function() {
++out.fnArguments = new (function() {
+ 	this.count = arguments.length;
+-}(1, 2, 3), out.fnLexicalArguments = new function() {
++})(1, 2, 3), out.fnLexicalArguments = new (function() {
+ 	this.count = arguments.length;
+-}(1, 2, 3), out.fnDefaultArguments = new function(value = arguments[1]) {
++})(1, 2, 3), out.fnDefaultArguments = new (function(value = arguments[1]) {
+ 	this.value = value;
+-}(void 0, 'fallback', 'extra'), out.fnEval = new function() {
++})(void 0, 'fallback', 'extra'), out.fnEval = new (function() {
+ 	eval('this.count = arguments.length');
+-}(1, 2, 3), out.fnRest = new function(...values1) {
+-	this.count = values1.length;
+-}(1, 2, 3), out.fnSpread = new function() {
++})(1, 2, 3), out.fnRest = new (function(...values) {
++	this.count = values.length;
++})(1, 2, 3), out.fnSpread = new (function() {
+ 	this.kind = 'spread';
+-}(...values, 1), out.classArguments = new class {
++})(...values, 1), out.classArguments = new class {
  	constructor() {
- 		this.kind = 'class';
+ 		this.count = arguments.length;
  	}
+@@ -27,8 +27,8 @@
+ 		eval('this.count = arguments.length');
+ 	}
+ }(1, 2, 3), out.classRest = new class {
+-	constructor(...values1) {
+-		this.count = values1.length;
++	constructor(...values) {
++		this.count = values.length;
+ 	}
+ }(1, 2, 3), out.classSpread = new class {
+ 	constructor() {
+
+```
+
+## `swc/issues/12118/export`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 48 vs reference 46 (+2 bytes, no whitespaces)
+
+```js
+export var a;
+for (var a of [0]) a = 1, console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+ export var a;
+-for (var a of [0]) console.log(a = 1);
++for (var a of [0]) a = 1, console.log(a);
 
 ```
 
 ## `swc/issues/12126`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 73 vs reference 71 (+2 bytes)
+- size: oxc 62 vs reference 60 (+2 bytes, no whitespaces)
 
 ```js
 console.log((function(a) {
@@ -785,7 +991,7 @@ console.log((function(a) {
 ## `swc/issues/7783/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 168 vs reference 166 (+2 bytes)
+- size: oxc 136 vs reference 134 (+2 bytes, no whitespaces)
 
 ```js
 export default function Home() {
@@ -817,10 +1023,35 @@ const foo = {
 
 ```
 
+## `swc/issues/8718/7`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 42 vs reference 40 (+2 bytes, no whitespaces)
+
+```js
+export function foo(a) {
+	a += 1;
+	a += 2;
+	return a;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ export function foo(a) {
+-	return a += 1, a += 2;
++	return a += 1, a += 2, a;
+ }
+
+```
+
 ## `swc/issues/8907`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 68 vs reference 66 (+2 bytes)
+- size: oxc 61 vs reference 59 (+2 bytes, no whitespaces)
 
 ```js
 const used = (0, forwardRef)(
@@ -846,7 +1077,7 @@ export default used;
 ## `swc/issues/8974`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 102 vs reference 100 (+2 bytes)
+- size: oxc 85 vs reference 83 (+2 bytes, no whitespaces)
 
 ```js
 const one = {
@@ -878,7 +1109,7 @@ export {};
 ## `swc/issues/vercel/002`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 125 vs reference 123 (+2 bytes)
+- size: oxc 118 vs reference 116 (+2 bytes, no whitespaces)
 
 ```js
 const globalStyles = new String(':root {--a-b:4px}');
@@ -898,40 +1129,10 @@ export default globalStyles;
 
 ```
 
-## `swc/projects/underscore/1`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 215 vs reference 213 (+2 bytes)
-
-```js
-_.contains = _.include = function(obj, target) {
-	if (obj == null) return false;
-	if (nativeIndexOf && obj.indexOf === nativeIndexOf) return obj.indexOf(target) != -1;
-	return any(obj, function(value) {
-		return value === target;
-	});
-};
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,5 @@
- _.contains = _.include = function(obj, target) {
--	return null != obj && (nativeIndexOf && obj.indexOf === nativeIndexOf ? -1 != obj.indexOf(target) : any(obj, function(value) {
-+	return obj == null ? !1 : nativeIndexOf && obj.indexOf === nativeIndexOf ? obj.indexOf(target) != -1 : any(obj, function(value) {
- 		return value === target;
--	}));
-+	});
- };
-
-```
-
 ## `swc/projects/underscore/5`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 443 vs reference 441 (+2 bytes)
+- size: oxc 378 vs reference 376 (+2 bytes, no whitespaces)
 
 ```js
 _.uniq = _.unique = function(array, isSorted, iterator, context) {
@@ -971,7 +1172,7 @@ _.uniq = _.unique = function(array, isSorted, iterator, context) {
 ## `swc/projects/wmr/archive-1/chunks/json.5609c5fa`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 375 vs reference 373 (+2 bytes)
+- size: oxc 323 vs reference 321 (+2 bytes, no whitespaces)
 
 ```js
 import { a as l, y, m } from '../index.f66dda46.js';
@@ -1003,181 +1204,10 @@ export { JSONView };
 
 ```
 
-## `swc/issues/11645/control-known-arity-drop`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 51 vs reference 48 (+3 bytes)
-
-```js
-function f(a) {
-	return a;
-}
-console.log(f(1, 2));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
- function f(a) {
- 	return a;
- }
--console.log(f(1));
-+console.log(f(1, 2));
-
-```
-
-## `swc/issues/12118/export`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 56 vs reference 53 (+3 bytes)
-
-```js
-export var a;
-for (var a of [0]) a = 1, console.log(a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,2 @@
- export var a;
--for (var a of [0]) console.log(a = 1);
-+for (var a of [0]) a = 1, console.log(a);
-
-```
-
-## `swc/issues/8670`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `pure getters`
-- size: oxc 64 vs reference 61 (+3 bytes)
-
-```js
-const [a, b, c, d, e] = [
-	1,
-	2,
-	3,
-	4,
-	5
-];
-console.log(c);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
--const [, , c, , ,] = [
-+const [a, b, c, d, e] = [
- 	1,
- 	2,
- 	3,
-
-```
-
-## `swc/issues/8718/7`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 54 vs reference 51 (+3 bytes)
-
-```js
-export function foo(a) {
-	a += 1;
-	a += 2;
-	return a;
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,3 @@
- export function foo(a) {
--	return a += 1, a += 2;
-+	return a += 1, a += 2, a;
- }
-
-```
-
-## `swc/issues/arguments-parameter-injection-size`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
-- size: oxc 134 vs reference 131 (+3 bytes)
-
-```js
-(function(zero, one) {
-	console.log(arguments[20], arguments['20'], arguments[4294967295], arguments['4294967295']);
-})('zero', 'one');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,3 @@
--!function(zero, one) {
--	console.log(arguments[20], arguments[20], arguments[4294967295], arguments[4294967295]);
--}('zero', 'one');
-+(function(zero, one) {
-+	console.log(arguments[20], arguments[20], arguments[4294967295], arguments['4294967295']);
-+})('zero', 'one');
-
-```
-
-## `swc/projects/backbone/11`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 169 vs reference 166 (+3 bytes)
-
-```js
-export const obj = { navigate: function(fragment, options) {
-	if (!History.started) return false;
-	if (!options || options === true) options = { trigger: !!options };
-} };
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
- export const obj = { navigate: function(fragment, options) {
- 	if (!History.started) return !1;
--	options && !0 !== options || (options = { trigger: !!options });
-+	(!options || options === !0) && (options = { trigger: !!options });
- } };
-
-```
-
-## `swc/projects/backbone/3`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 54 vs reference 51 (+3 bytes)
-
-```js
-if (!name && !callback && !context) {
-	console.log('foo');
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--name || callback || context || console.log('foo');
-+!name && !callback && !context && console.log('foo');
-
-```
-
 ## `swc/projects/yui/11`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 67 vs reference 64 (+3 bytes)
+- size: oxc 54 vs reference 52 (+2 bytes, no whitespaces)
 
 ```js
 export function foo() {
@@ -1200,7 +1230,7 @@ export function foo() {
 ## `swc/simple/block/.0001`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 116 vs reference 113 (+3 bytes)
+- size: oxc 91 vs reference 89 (+2 bytes, no whitespaces)
 
 ```js
 do {
@@ -1223,7 +1253,7 @@ do {
 ## `swc/simple/sequences/.0001`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 8 vs reference 5 (+3 bytes)
+- size: oxc 6 vs reference 4 (+2 bytes, no whitespaces)
 
 ```js
 h--, 0 > h;
@@ -1239,58 +1269,79 @@ h--, 0 > h;
 
 ```
 
-## `swc/issues/7754/1`
-
-- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 59 vs reference 55 (+4 bytes)
-
-```js
-const foo = 1;
-console.log(foo);
-eval(`console.log(foo)`);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,2 @@
--const o = 1;
--console.log(o), eval('console.log(foo)');
-+const foo = 1;
-+console.log(foo), eval('console.log(foo)');
-
-```
-
-## `swc/issues/8626`
+## `swc/issues/11684/bindings`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 54 vs reference 50 (+4 bytes)
+- size: oxc 620 vs reference 617 (+3 bytes, no whitespaces)
 
 ```js
-export function foo(cb) {
-	cb();
-}
-foo((a, b) => true);
+const FunctionBinding = function(value) {
+	this.value = value;
+};
+out.FunctionBinding = FunctionBinding;
+out.functionBinding = new FunctionBinding(1, 2, 3);
+let ClassBinding = class {
+	constructor(value) {
+		this.value = value;
+	}
+};
+out.ClassBinding = ClassBinding;
+out.classBinding = new ClassBinding(1, 2, 3);
+let AssignedFunction;
+AssignedFunction = function(first, second) {
+	this.first = first;
+	this.second = second;
+};
+out.AssignedFunction = AssignedFunction;
+out.assignedFunction = new AssignedFunction(1, 2, 3, 4);
+let AssignedClass;
+AssignedClass = class {
+	constructor(first, second) {
+		this.first = first;
+		this.second = second;
+	}
+};
+out.AssignedClass = AssignedClass;
+out.assignedClass = new AssignedClass(1, 2, 3, 4);
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,4 +1,4 @@
- export function foo(cb) {
- 	cb();
- }
--foo(() => !0);
-+foo((a, b) => !0);
+@@ -1,17 +1,20 @@
+-let AssignedFunction, AssignedClass;
+ const FunctionBinding = function(value) {
+ 	this.value = value;
+ };
+-out.FunctionBinding = FunctionBinding, out.functionBinding = new FunctionBinding(1);
++out.FunctionBinding = FunctionBinding, out.functionBinding = new FunctionBinding(1, 2, 3);
+ let ClassBinding = class {
+ 	constructor(value) {
+ 		this.value = value;
+ 	}
+ };
+-out.ClassBinding = ClassBinding, out.classBinding = new ClassBinding(1), AssignedFunction = function(first, second) {
++out.ClassBinding = ClassBinding, out.classBinding = new ClassBinding(1, 2, 3);
++let AssignedFunction = function(first, second) {
+ 	this.first = first, this.second = second;
+-}, out.AssignedFunction = AssignedFunction, out.assignedFunction = new AssignedFunction(1, 2), AssignedClass = class {
++};
++out.AssignedFunction = AssignedFunction, out.assignedFunction = new AssignedFunction(1, 2, 3, 4);
++let AssignedClass;
++AssignedClass = class {
+ 	constructor(first, second) {
+ 		this.first = first, this.second = second;
+ 	}
+-}, out.AssignedClass = AssignedClass, out.assignedClass = new AssignedClass(1, 2);
++}, out.AssignedClass = AssignedClass, out.assignedClass = new AssignedClass(1, 2, 3, 4);
 
 ```
 
 ## `swc/issues/5955`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 198 vs reference 193 (+5 bytes)
+- size: oxc 164 vs reference 161 (+3 bytes, no whitespaces)
 
 ```js
 export var foo;
@@ -1329,93 +1380,94 @@ export function init1() {
 
 ```
 
-## `swc/issues/7749`
+## `swc/issues/8626`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 102 vs reference 97 (+5 bytes)
+- size: oxc 44 vs reference 41 (+3 bytes, no whitespaces)
 
 ```js
-let depth = 0;
-function foo(n) {
-	depth += 1;
-	let k = visit(n);
-	depth -= 1;
-	return k;
+export function foo(cb) {
+	cb();
 }
-blackbox(foo);
+foo((a, b) => true);
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,6 +1,7 @@
- let depth = 0;
--blackbox(function(n) {
-+function foo(n) {
- 	depth += 1;
- 	let k = visit(n);
--	return depth -= 1, k;
--});
-+	return --depth, k;
-+}
-+blackbox(foo);
-
-```
-
-## `swc/issues/8622`
-
-- tags: `mangle`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 173 vs reference 168 (+5 bytes)
-
-```js
-export function foo(cond) {
-	let reserved = 1;
-	if (cond) {
-		reserved = 2;
-	}
-	return [reserved, bar(cond)];
-}
-function bar(cond) {
-	let reserved = 1;
-	if (cond) {
-		reserved = 2;
-	}
-	return reserved;
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,8 @@
- export function foo(e) {
- 	let reserved = 1;
--	return e && (reserved = 2), [reserved, function(e) {
--		let reserved = 1;
--		return e && (reserved = 2), reserved;
--	}(e)];
-+	return e && (reserved = 2), [reserved, bar(e)];
-+}
-+function bar(e) {
-+	let reserved = 1;
-+	return e && (reserved = 2), reserved;
+@@ -1,4 +1,4 @@
+ export function foo(cb) {
+ 	cb();
  }
+-foo(() => !0);
++foo((a, b) => !0);
 
 ```
 
-## `swc/projects/backbone/18`
+## `swc/issues/8670`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 294 vs reference 289 (+5 bytes)
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `pure getters`
+- size: oxc 44 vs reference 41 (+3 bytes, no whitespaces)
 
 ```js
-export const obj = { _routeToRegExp: function(route) {
-	route = route.replace(escapeRegExp, '\\$&').replace(optionalParam, '(?:$1)?').replace(namedParam, function(match, optional) {
-		return optional ? match : '([^/]+)';
-	}).replace(splatParam, '(.*?)');
-	return new RegExp('^' + route + '$');
+const [a, b, c, d, e] = [
+	1,
+	2,
+	3,
+	4,
+	5
+];
+console.log(c);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+-const [, , c, , ,] = [
++const [a, b, c, d, e] = [
+ 	1,
+ 	2,
+ 	3,
+
+```
+
+## `swc/issues/arguments-parameter-injection-size`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
+- size: oxc 123 vs reference 120 (+3 bytes, no whitespaces)
+
+```js
+(function(zero, one) {
+	console.log(arguments[20], arguments['20'], arguments[4294967295], arguments['4294967295']);
+})('zero', 'one');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-!function(zero, one) {
+-	console.log(arguments[20], arguments[20], arguments[4294967295], arguments[4294967295]);
+-}('zero', 'one');
++(function(zero, one) {
++	console.log(arguments[20], arguments[20], arguments[4294967295], arguments['4294967295']);
++})('zero', 'one');
+
+```
+
+## `swc/projects/backbone/11`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 141 vs reference 138 (+3 bytes, no whitespaces)
+
+```js
+export const obj = { navigate: function(fragment, options) {
+	if (!History.started) return false;
+	if (!options || options === true) options = { trigger: !!options };
 } };
 
 ```
@@ -1423,114 +1475,40 @@ export const obj = { _routeToRegExp: function(route) {
 ```diff
 --- reference
 +++ oxc
-@@ -1,5 +1,5 @@
- export const obj = { _routeToRegExp: function(route) {
--	return RegExp('^' + (route = route.replace(escapeRegExp, '\\$&').replace(optionalParam, '(?:$1)?').replace(namedParam, function(match, optional) {
-+	return route = route.replace(escapeRegExp, '\\$&').replace(optionalParam, '(?:$1)?').replace(namedParam, function(match, optional) {
- 		return optional ? match : '([^/]+)';
--	}).replace(splatParam, '(.*?)')) + '$');
-+	}).replace(splatParam, '(.*?)'), RegExp('^' + route + '$');
+@@ -1,4 +1,4 @@
+ export const obj = { navigate: function(fragment, options) {
+ 	if (!History.started) return !1;
+-	options && !0 !== options || (options = { trigger: !!options });
++	(!options || options === !0) && (options = { trigger: !!options });
  } };
 
 ```
 
-## `swc/projects/jquery/7`
+## `swc/projects/backbone/3`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 514 vs reference 509 (+5 bytes)
+- size: oxc 47 vs reference 44 (+3 bytes, no whitespaces)
 
 ```js
-export const obj = { proxy: function(fn, context) {
-	var args, proxy, tmp;
-	if (typeof context === 'string') {
-		tmp = fn[context];
-		context = fn;
-		fn = tmp;
-	}
-	// Quick check to determine if target is callable, in the spec
-	// this throws a TypeError, but we will just return undefined.
-	if (!jQuery.isFunction(fn)) {
-		return undefined;
-	}
-	// Simulated bind
-	args = core_slice.call(arguments, 2);
-	proxy = function() {
-		return fn.apply(context || this, args.concat(core_slice.call(arguments)));
-	};
-	// Set the guid of unique handler to the same of original handler, so it can be removed
-	proxy.guid = fn.guid = fn.guid || jQuery.guid++;
-	return proxy;
-} };
+if (!name && !callback && !context) {
+	console.log('foo');
+}
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -2,7 +2,7 @@
- 	var args, proxy, tmp;
- 	// Quick check to determine if target is callable, in the spec
- 	// this throws a TypeError, but we will just return undefined.
--	if ('string' == typeof context && (tmp = fn[context], context = fn, fn = tmp), jQuery.isFunction(fn)) return args = core_slice.call(arguments, 2), (proxy = function() {
-+	if (typeof context == 'string' && (tmp = fn[context], context = fn, fn = tmp), jQuery.isFunction(fn)) return args = core_slice.call(arguments, 2), proxy = function() {
- 		return fn.apply(context || this, args.concat(core_slice.call(arguments)));
--	}).guid = fn.guid = fn.guid || jQuery.guid++, proxy;
-+	}, proxy.guid = fn.guid = fn.guid || jQuery.guid++, proxy;
- } };
-
-```
-
-## `swc/projects/mootools/6`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 502 vs reference 497 (+5 bytes)
-
-```js
-export const obj = { removeEvents: function(events) {
-	var type;
-	if (typeOf(events) == 'object') {
-		for (type in events) this.removeEvent(type, events[type]);
-		return this;
-	}
-	var attached = this.retrieve('events');
-	if (!attached) return this;
-	if (!events) {
-		for (type in attached) this.removeEvents(type);
-		this.eliminate('events');
-	} else if (attached[events]) {
-		attached[events].keys.each(function(fn) {
-			this.removeEvent(events, fn);
-		}, this);
-		delete attached[events];
-	}
-	return this;
-} };
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,9 +1,10 @@
- export const obj = { removeEvents: function(events) {
--	if ('object' == typeOf(events)) {
-+	var type;
-+	if (typeOf(events) == 'object') {
- 		for (type in events) this.removeEvent(type, events[type]);
- 		return this;
- 	}
--	var type, attached = this.retrieve('events');
-+	var attached = this.retrieve('events');
- 	if (!attached) return this;
- 	if (events) attached[events] && (attached[events].keys.each(function(fn) {
- 		this.removeEvent(events, fn);
+@@ -1 +1 @@
+-name || callback || context || console.log('foo');
++!name && !callback && !context && console.log('foo');
 
 ```
 
 ## `swc/issues/11108`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 68 vs reference 62 (+6 bytes)
+- size: oxc 49 vs reference 45 (+4 bytes, no whitespaces)
 
 ```js
 this.test = function(a) {
@@ -1550,38 +1528,10 @@ this.test = function(a) {
 
 ```
 
-## `swc/issues/11512-exhaustive/fn-multi-use-default-unused`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
-- size: oxc 123 vs reference 117 (+6 bytes)
-
-```js
-function id(a, b = 1) {
-	return a;
-}
-export function fnMultiUseDefaultUnused(value) {
-	return id(value) + id(value + 1);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -2,5 +2,5 @@
- 	return a;
- }
- export function fnMultiUseDefaultUnused(value) {
--	return value + (value + 1);
-+	return id(value) + id(value + 1);
- }
-
-```
-
 ## `swc/issues/11684/scopes-and-mutations`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 1399 vs reference 1393 (+6 bytes)
+- size: oxc 1213 vs reference 1209 (+4 bytes, no whitespaces)
 
 ```js
 class Global {
@@ -1696,176 +1646,10 @@ out.constructAfterEval = constructAfterEval;
 ... [truncated]
 ```
 
-## `swc/issues/6407/1`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 342 vs reference 336 (+6 bytes)
-
-```js
-export default class Demo {
-	static encode(value) {
-		const ranges = [];
-		let range = [];
-		let retrString = A.encode(value);
-		let bitField = '';
-		value.forEach((curValue, i) => {
-			bitField += B.encode(curValue);
-			range.push(i);
-			ranges.push(range);
-		});
-		retrString += '.';
-		retrString += C.encode(ranges);
-		return retrString;
-	}
-}
-console.log(Deno.encode());
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -2,10 +2,8 @@
- 	static encode(value) {
- 		let ranges = [], range = [], retrString = A.encode(value), bitField = '';
- 		return value.forEach((curValue, i) => {
--			bitField += B.encode(curValue);
--			range.push(i);
--			ranges.push(range);
--		}), retrString += '.', retrString += C.encode(ranges);
-+			bitField += B.encode(curValue), range.push(i), ranges.push(range);
-+		}), retrString += '.', retrString += C.encode(ranges), retrString;
- 	}
- }
- console.log(Deno.encode());
-
-```
-
-## `swc/issues/firebase/2`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 432 vs reference 426 (+6 bytes)
-
-```js
-export function treeSubTree(tree, pathObj) {
-	// TODO: Require pathObj to be Path?
-	let path = pathObj instanceof Path ? pathObj : new Path(pathObj);
-	let child = tree, next = pathGetFront(path);
-	while (next !== null) {
-		const childNode = safeGet(child.node.children, next) || {
-			children: {},
-			childCount: 0
-		};
-		child = new Tree(next, child, childNode);
-		path = pathPopFront(path);
-		next = pathGetFront(path);
-	}
-	return child;
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,12 +1,12 @@
- export function treeSubTree(tree, pathObj) {
- 	// TODO: Require pathObj to be Path?
- 	let path = pathObj instanceof Path ? pathObj : new Path(pathObj), child = tree, next = pathGetFront(path);
--	for (; null !== next;) {
-+	for (; next !== null;) {
- 		let childNode = safeGet(child.node.children, next) || {
- 			children: {},
- 			childCount: 0
- 		};
--		child = new Tree(next, child, childNode), next = pathGetFront(path = pathPopFront(path));
-+		child = new Tree(next, child, childNode), path = pathPopFront(path), next = pathGetFront(path);
- 	}
- 	return child;
- }
-
-```
-
-## `swc/issues/non-finite-conditional-arithmetic`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
-- size: oxc 371 vs reference 365 (+6 bytes)
-
-```js
-function classify(value) {
-	if (Number.isNaN(value)) {
-		return 'NaN';
-	}
-	if (Object.is(value, -0)) {
-		return '-0';
-	}
-	return String(value);
-}
-function test(flag) {
-	console.log([
-		flag ? Infinity : 0,
-		flag ? 0 : Infinity,
-		flag ? 1 : -0,
-		flag ? -0 : 1
-	].map(classify).join(','));
-}
-globalThis.trueValue = true;
-globalThis.falseValue = false;
-test(globalThis.trueValue);
-test(globalThis.falseValue);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -3,8 +3,8 @@
- }
- function test(flag) {
- 	console.log([
--		flag ? 1 / 0 : 0,
--		flag ? 0 : 1 / 0,
-+		flag ? Infinity : 0,
-+		flag ? 0 : Infinity,
- 		flag ? 1 : -0,
- 		flag ? -0 : 1
- 	].map(classify).join(','));
-
-```
-
-## `swc/projects/yui/10`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 157 vs reference 151 (+6 bytes)
-
-```js
-export var _path = function(dir, file, type, nomin) {
-	var path = dir + '/' + file;
-	if (!nomin) {
-		path += '-min';
-	}
-	path += '.' + (type || CSS);
-	return path;
-};
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
- export var _path = function(dir, file, type, nomin) {
- 	var path = dir + '/' + file;
--	return nomin || (path += '-min'), path += '.' + (type || CSS);
-+	return nomin || (path += '-min'), path += '.' + (type || CSS), path;
- };
-
-```
-
 ## `swc/issues/12118`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 42 vs reference 35 (+7 bytes)
+- size: oxc 35 vs reference 31 (+4 bytes, no whitespaces)
 
 ```js
 for (let a of [0]) a = 1, console.log(a);
@@ -1881,319 +1665,202 @@ for (let a of [0]) a = 1, console.log(a);
 
 ```
 
-## `swc/issues/11089`
+## `swc/issues/7754/1`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 66 vs reference 58 (+8 bytes)
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 54 vs reference 50 (+4 bytes, no whitespaces)
 
 ```js
-let k = 0;
-const fn = () => console.log(k++);
-fn('Hi');
-fn('Hi');
+const foo = 1;
+console.log(foo);
+eval(`console.log(foo)`);
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,3 +1,3 @@
- let k = 0;
- const fn = () => console.log(k++);
--fn(), fn();
-+fn('Hi'), fn('Hi');
+@@ -1,2 +1,2 @@
+-const o = 1;
+-console.log(o), eval('console.log(foo)');
++const foo = 1;
++console.log(foo), eval('console.log(foo)');
 
 ```
 
-## `swc/issues/11684/preserved`
+## `swc/issues/9186/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 1298 vs reference 1290 (+8 bytes)
+- size: oxc 128 vs reference 124 (+4 bytes, no whitespaces)
 
 ```js
-out.fnArguments = new (function() {
-	this.count = arguments.length;
-})(1, 2, 3);
-out.fnLexicalArguments = new (function() {
-	this.count = (() => arguments.length)();
-})(1, 2, 3);
-out.fnDefaultArguments = new (function(value = arguments[1]) {
-	this.value = value;
-})(undefined, 'fallback', 'extra');
-out.fnEval = new (function() {
-	eval('this.count = arguments.length');
-})(1, 2, 3);
-out.fnRest = new (function(...values) {
-	this.count = values.length;
-})(1, 2, 3);
-out.fnSpread = new (function() {
-	this.kind = 'spread';
-})(...values, 1);
-out.classArguments = new class {
-	constructor() {
-		this.count = arguments.length;
-	}
-}(1, 2, 3);
-out.classLexicalArguments = new class {
-	constructor() {
-		this.count = (() => arguments.length)();
-	}
-}(1, 2, 3);
-out.classDefaultArguments = new class {
-	constructor(value = arguments[1]) {
-		this.value = value;
-	}
-}(undefined, 'fallback', 'extra');
-out.classEval = new class {
-	constructor() {
-		eval('this.count = arguments.length');
-	}
-}(1, 2, 3);
-out.classRest = new class {
-	constructor(...values) {
-		this.count = values.length;
-	}
-}(1, 2, 3);
-out.classSpread = new class {
-	constructor() {
-		this.kind = 'spread';
-	}
-}(...values, 1);
-out.defaultClass = new class {}(1, 2, 3);
-out.defaultDerivedClass = new class extends Base {}(1, 2, 3);
-out.unknown = new Constructor(1, 2, 3);
+o = {
+	foo() {
+		return val;
+	},
+	s: 'test'
+};
+console.log(o.foo().length);
+o = {
+	foo(val = this.s) {
+		return val;
+	},
+	s: 'test'
+};
+console.log(o.foo().length);
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,16 +1,16 @@
--out.fnArguments = new function() {
-+out.fnArguments = new (function() {
- 	this.count = arguments.length;
--}(1, 2, 3), out.fnLexicalArguments = new function() {
-+})(1, 2, 3), out.fnLexicalArguments = new (function() {
- 	this.count = arguments.length;
--}(1, 2, 3), out.fnDefaultArguments = new function(value = arguments[1]) {
-+})(1, 2, 3), out.fnDefaultArguments = new (function(value = arguments[1]) {
- 	this.value = value;
--}(void 0, 'fallback', 'extra'), out.fnEval = new function() {
-+})(void 0, 'fallback', 'extra'), out.fnEval = new (function() {
- 	eval('this.count = arguments.length');
--}(1, 2, 3), out.fnRest = new function(...values1) {
--	this.count = values1.length;
--}(1, 2, 3), out.fnSpread = new function() {
-+})(1, 2, 3), out.fnRest = new (function(...values) {
-+	this.count = values.length;
-+})(1, 2, 3), out.fnSpread = new (function() {
- 	this.kind = 'spread';
--}(...values, 1), out.classArguments = new class {
-+})(...values, 1), out.classArguments = new class {
- 	constructor() {
- 		this.count = arguments.length;
+@@ -1,9 +1,11 @@
+-console.log((o = {
+-	foo: () => val,
++o = {
++	foo() {
++		return val;
++	},
+ 	s: 'test'
+-}).foo().length), console.log((o = {
+-	foo(val1 = this.s) {
+-		return val1;
++}, console.log(o.foo().length), o = {
++	foo(val = this.s) {
++		return val;
+ 	},
+ 	s: 'test'
+-}).foo().length);
++}, console.log(o.foo().length);
+
+```
+
+## `swc/projects/backbone/18`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 260 vs reference 256 (+4 bytes, no whitespaces)
+
+```js
+export const obj = { _routeToRegExp: function(route) {
+	route = route.replace(escapeRegExp, '\\$&').replace(optionalParam, '(?:$1)?').replace(namedParam, function(match, optional) {
+		return optional ? match : '([^/]+)';
+	}).replace(splatParam, '(.*?)');
+	return new RegExp('^' + route + '$');
+} };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ export const obj = { _routeToRegExp: function(route) {
+-	return RegExp('^' + (route = route.replace(escapeRegExp, '\\$&').replace(optionalParam, '(?:$1)?').replace(namedParam, function(match, optional) {
++	return route = route.replace(escapeRegExp, '\\$&').replace(optionalParam, '(?:$1)?').replace(namedParam, function(match, optional) {
+ 		return optional ? match : '([^/]+)';
+-	}).replace(splatParam, '(.*?)')) + '$');
++	}).replace(splatParam, '(.*?)'), RegExp('^' + route + '$');
+ } };
+
+```
+
+## `swc/projects/jquery/7`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 458 vs reference 454 (+4 bytes, no whitespaces)
+
+```js
+export const obj = { proxy: function(fn, context) {
+	var args, proxy, tmp;
+	if (typeof context === 'string') {
+		tmp = fn[context];
+		context = fn;
+		fn = tmp;
+	}
+	// Quick check to determine if target is callable, in the spec
+	// this throws a TypeError, but we will just return undefined.
+	if (!jQuery.isFunction(fn)) {
+		return undefined;
+	}
+	// Simulated bind
+	args = core_slice.call(arguments, 2);
+	proxy = function() {
+		return fn.apply(context || this, args.concat(core_slice.call(arguments)));
+	};
+	// Set the guid of unique handler to the same of original handler, so it can be removed
+	proxy.guid = fn.guid = fn.guid || jQuery.guid++;
+	return proxy;
+} };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,7 +2,7 @@
+ 	var args, proxy, tmp;
+ 	// Quick check to determine if target is callable, in the spec
+ 	// this throws a TypeError, but we will just return undefined.
+-	if ('string' == typeof context && (tmp = fn[context], context = fn, fn = tmp), jQuery.isFunction(fn)) return args = core_slice.call(arguments, 2), (proxy = function() {
++	if (typeof context == 'string' && (tmp = fn[context], context = fn, fn = tmp), jQuery.isFunction(fn)) return args = core_slice.call(arguments, 2), proxy = function() {
+ 		return fn.apply(context || this, args.concat(core_slice.call(arguments)));
+-	}).guid = fn.guid = fn.guid || jQuery.guid++, proxy;
++	}, proxy.guid = fn.guid = fn.guid || jQuery.guid++, proxy;
+ } };
+
+```
+
+## `swc/projects/mootools/6`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 433 vs reference 429 (+4 bytes, no whitespaces)
+
+```js
+export const obj = { removeEvents: function(events) {
+	var type;
+	if (typeOf(events) == 'object') {
+		for (type in events) this.removeEvent(type, events[type]);
+		return this;
+	}
+	var attached = this.retrieve('events');
+	if (!attached) return this;
+	if (!events) {
+		for (type in attached) this.removeEvents(type);
+		this.eliminate('events');
+	} else if (attached[events]) {
+		attached[events].keys.each(function(fn) {
+			this.removeEvent(events, fn);
+		}, this);
+		delete attached[events];
+	}
+	return this;
+} };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,10 @@
+ export const obj = { removeEvents: function(events) {
+-	if ('object' == typeOf(events)) {
++	var type;
++	if (typeOf(events) == 'object') {
+ 		for (type in events) this.removeEvent(type, events[type]);
+ 		return this;
  	}
-@@ -27,8 +27,8 @@
- 		eval('this.count = arguments.length');
- 	}
- }(1, 2, 3), out.classRest = new class {
--	constructor(...values1) {
--		this.count = values1.length;
-+	constructor(...values) {
-+		this.count = values.length;
- 	}
- }(1, 2, 3), out.classSpread = new class {
- 	constructor() {
-
-```
-
-## `swc/issues/11829`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 200 vs reference 192 (+8 bytes)
-
-```js
-function run(options) {
-	let { cb } = options;
-	if (!cb) {
-		cb = () => true;
-	}
-	return cb('value');
-}
-run({ cb(value) {
-	if (value === undefined) {
-		throw new Error('missing argument');
-	}
-	console.log('PASS');
-	return true;
-} });
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,8 @@
--!function(options) {
-+function run(options) {
- 	let { cb } = options;
--	cb || (cb = () => !0), cb('value');
--}({ cb(value) {
--	if (void 0 === value) throw Error('missing argument');
-+	return cb ||= () => !0, cb('value');
-+}
-+run({ cb(value) {
-+	if (value === void 0) throw Error('missing argument');
- 	return console.log('PASS'), !0;
- } });
-
-```
-
-## `swc/issues/2319/1`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 204 vs reference 196 (+8 bytes)
-
-```js
-function foo(l, r) {
-	var lightGreeting;
-	if (l > 0) {
-		var greeting = 'hello';
-	} else {
-		var greeting = 'howdy';
-	}
-	if (r > 0) {
-		lightGreeting = greeting.substr(0, 2);
-	}
-	return lightGreeting;
-}
-module.exports = foo;
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,7 @@
--module.exports = function(l, r) {
-+function foo(l, r) {
- 	var lightGreeting;
- 	if (l > 0) var greeting = 'hello';
- 	else var greeting = 'howdy';
- 	return r > 0 && (lightGreeting = greeting.substr(0, 2)), lightGreeting;
--};
-+}
-+module.exports = foo;
-
-```
-
-## `swc/issues/4234`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 80 vs reference 72 (+8 bytes)
-
-```js
-bar(new RegExp(''));
-bar(new RegExp('', 'u'));
-bar(new RegExp('a'));
-bar(new RegExp('a', 'u'));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1 @@
--bar(RegExp(''));
--bar(RegExp('', 'u'));
--bar(/a/);
--bar(RegExp('a', 'u'));
-+bar(RegExp('')), bar(RegExp('', 'u')), bar(RegExp('a')), bar(RegExp('a', 'u'));
-
-```
-
-## `swc/issues/6463`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 75 vs reference 67 (+8 bytes)
-
-```js
-var foo_1 = foo;
-function foo() {
-	console.log('foo');
-}
-foo_1();
-foo_1();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,5 @@
--var foo_1 = function() {
-+var foo_1 = foo;
-+function foo() {
- 	console.log('foo');
--};
-+}
- foo_1(), foo_1();
-
-```
-
-## `swc/issues/8704`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 53 vs reference 45 (+8 bytes)
-
-```js
-console.log({ toString() {
-	return 'swc';
-} } + '');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,3 @@
--console.log({ toString: () => 'swc' } + '');
-+console.log({ toString() {
-+	return 'swc';
-+} } + '');
-
-```
-
-## `swc/pr/11446`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 65 vs reference 57 (+8 bytes)
-
-```js
-function f(a, b = a, c = b) {
-	return c;
-}
-expect(f(3)).toBe(3);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,4 @@
--expect(function(b = 3, c = b) {
-+function f(a, b = a, c = b) {
- 	return c;
--}()).toBe(3);
-+}
-+expect(f(3)).toBe(3);
+-	var type, attached = this.retrieve('events');
++	var attached = this.retrieve('events');
+ 	if (!attached) return this;
+ 	if (events) attached[events] && (attached[events].keys.each(function(fn) {
+ 		this.removeEvent(events, fn);
 
 ```
 
 ## `swc/projects/mootools/7`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 586 vs reference 578 (+8 bytes)
+- size: oxc 460 vs reference 456 (+4 bytes, no whitespaces)
 
 ```js
 export const exported = { toQueryString: function(object, base) {
@@ -2251,26 +1918,121 @@ export const exported = { toQueryString: function(object, base) {
 
 ```
 
-## `swc/projects/underscore/22`
+## `swc/issues/7749`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 469 vs reference 461 (+8 bytes)
+- size: oxc 82 vs reference 77 (+5 bytes, no whitespaces)
 
 ```js
-_.indexOf = function(array, item, isSorted) {
-	if (array == null) return -1;
-	var i = 0, length = array.length;
-	if (isSorted) {
-		if (typeof isSorted == 'number') {
-			i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
-		} else {
-			i = _.sortedIndex(array, item);
-			return array[i] === item ? i : -1;
-		}
+let depth = 0;
+function foo(n) {
+	depth += 1;
+	let k = visit(n);
+	depth -= 1;
+	return k;
+}
+blackbox(foo);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,7 @@
+ let depth = 0;
+-blackbox(function(n) {
++function foo(n) {
+ 	depth += 1;
+ 	let k = visit(n);
+-	return depth -= 1, k;
+-});
++	return --depth, k;
++}
++blackbox(foo);
+
+```
+
+## `swc/issues/8704`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 42 vs reference 37 (+5 bytes, no whitespaces)
+
+```js
+console.log({ toString() {
+	return 'swc';
+} } + '');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,3 @@
+-console.log({ toString: () => 'swc' } + '');
++console.log({ toString() {
++	return 'swc';
++} } + '');
+
+```
+
+## `swc/issues/firebase/2`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 367 vs reference 362 (+5 bytes, no whitespaces)
+
+```js
+export function treeSubTree(tree, pathObj) {
+	// TODO: Require pathObj to be Path?
+	let path = pathObj instanceof Path ? pathObj : new Path(pathObj);
+	let child = tree, next = pathGetFront(path);
+	while (next !== null) {
+		const childNode = safeGet(child.node.children, next) || {
+			children: {},
+			childCount: 0
+		};
+		child = new Tree(next, child, childNode);
+		path = pathPopFront(path);
+		next = pathGetFront(path);
 	}
-	if (nativeIndexOf && array.indexOf === nativeIndexOf) return array.indexOf(item, isSorted);
-	for (; i < length; i++) if (array[i] === item) return i;
-	return -1;
+	return child;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,12 +1,12 @@
+ export function treeSubTree(tree, pathObj) {
+ 	// TODO: Require pathObj to be Path?
+ 	let path = pathObj instanceof Path ? pathObj : new Path(pathObj), child = tree, next = pathGetFront(path);
+-	for (; null !== next;) {
++	for (; next !== null;) {
+ 		let childNode = safeGet(child.node.children, next) || {
+ 			children: {},
+ 			childCount: 0
+ 		};
+-		child = new Tree(next, child, childNode), next = pathGetFront(path = pathPopFront(path));
++		child = new Tree(next, child, childNode), path = pathPopFront(path), next = pathGetFront(path);
+ 	}
+ 	return child;
+ }
+
+```
+
+## `swc/projects/yui/10`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 126 vs reference 121 (+5 bytes, no whitespaces)
+
+```js
+export var _path = function(dir, file, type, nomin) {
+	var path = dir + '/' + file;
+	if (!nomin) {
+		path += '-min';
+	}
+	path += '.' + (type || CSS);
+	return path;
 };
 
 ```
@@ -2278,43 +2040,356 @@ _.indexOf = function(array, item, isSorted) {
 ```diff
 --- reference
 +++ oxc
-@@ -1,8 +1,10 @@
- _.indexOf = function(array, item, isSorted) {
--	if (null == array) return -1;
-+	if (array == null) return -1;
- 	var i = 0, length = array.length;
--	if (isSorted) if ('number' != typeof isSorted) return i = _.sortedIndex(array, item), array[i] === item ? i : -1;
--	else i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
-+	if (isSorted) {
-+		if (typeof isSorted == 'number') i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
-+		else return i = _.sortedIndex(array, item), array[i] === item ? i : -1;
-+	}
- 	if (nativeIndexOf && array.indexOf === nativeIndexOf) return array.indexOf(item, isSorted);
- 	for (; i < length; i++) if (array[i] === item) return i;
- 	return -1;
+@@ -1,4 +1,4 @@
+ export var _path = function(dir, file, type, nomin) {
+ 	var path = dir + '/' + file;
+-	return nomin || (path += '-min'), path += '.' + (type || CSS);
++	return nomin || (path += '-min'), path += '.' + (type || CSS), path;
+ };
 
 ```
 
-## `swc/projects/underscore/6`
+## `swc/issues/10281`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 469 vs reference 461 (+8 bytes)
+- size: oxc 140 vs reference 134 (+6 bytes, no whitespaces)
 
 ```js
-_.indexOf = function(array, item, isSorted) {
-	if (array == null) return -1;
-	var i = 0, length = array.length;
-	if (isSorted) {
-		if (typeof isSorted == 'number') {
-			i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
-		} else {
-			i = _.sortedIndex(array, item);
-			return array[i] === item ? i : -1;
-		}
+export function bitwise1(a, b) {
+	return a & b | 0;
+}
+export function bitwise2(a) {
+	return ~a | 0;
+}
+export function bitwise3(a, b) {
+	a ^= b | 0;
+	console.log(a | b, a & b);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,9 @@
+ export function bitwise1(a, b) {
+-	return a & b;
++	return a & b | 0;
+ }
+ export function bitwise2(a) {
+-	return ~a;
++	return ~a | 0;
+ }
+ export function bitwise3(a, b) {
+-	console.log((a ^= b) | b, a & b);
++	a ^= b | 0, console.log(a | b, a & b);
+ }
+
+```
+
+## `swc/issues/10816`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 133 vs reference 127 (+6 bytes, no whitespaces)
+
+```js
+class A {
+	fromArrow() {
+		console.log('hello');
 	}
-	if (nativeIndexOf && array.indexOf === nativeIndexOf) return array.indexOf(item, isSorted);
-	for (; i < length; i++) if (array[i] === item) return i;
-	return -1;
+	foobar() {
+		const callMe = () => this.fromArrow();
+		function B() {
+			callMe();
+		}
+		return B;
+	}
+}
+const instance = new A();
+const fn = instance.foobar();
+fn();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,13 @@
+-new class {
++class A {
+ 	fromArrow() {
+ 		console.log('hello');
+ 	}
+ 	foobar() {
+ 		let callMe = () => this.fromArrow();
+-		return function() {
++		function B() {
+ 			callMe();
+-		};
++		}
++		return B;
+ 	}
+-}().foobar()();
++}
++new A().foobar()();
+
+```
+
+## `swc/issues/11512-exhaustive/fn-multi-use-default-unused`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
+- size: oxc 104 vs reference 98 (+6 bytes, no whitespaces)
+
+```js
+function id(a, b = 1) {
+	return a;
+}
+export function fnMultiUseDefaultUnused(value) {
+	return id(value) + id(value + 1);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,5 +2,5 @@
+ 	return a;
+ }
+ export function fnMultiUseDefaultUnused(value) {
+-	return value + (value + 1);
++	return id(value) + id(value + 1);
+ }
+
+```
+
+## `swc/issues/5680`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
+- size: oxc 30 vs reference 24 (+6 bytes, no whitespaces)
+
+```js
+const totalCount = (a ? a.length : 0) + (b ? b.length : 0);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-a && a.length, b && b.length;
++(a ? a.length : 0) + (b ? b.length : 0);
+
+```
+
+## `swc/pr/11446`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 52 vs reference 46 (+6 bytes, no whitespaces)
+
+```js
+function f(a, b = a, c = b) {
+	return c;
+}
+expect(f(3)).toBe(3);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,4 @@
+-expect(function(b = 3, c = b) {
++function f(a, b = a, c = b) {
+ 	return c;
+-}()).toBe(3);
++}
++expect(f(3)).toBe(3);
+
+```
+
+## `swc/issues/2319/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 172 vs reference 165 (+7 bytes, no whitespaces)
+
+```js
+function foo(l, r) {
+	var lightGreeting;
+	if (l > 0) {
+		var greeting = 'hello';
+	} else {
+		var greeting = 'howdy';
+	}
+	if (r > 0) {
+		lightGreeting = greeting.substr(0, 2);
+	}
+	return lightGreeting;
+}
+module.exports = foo;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,7 @@
+-module.exports = function(l, r) {
++function foo(l, r) {
+ 	var lightGreeting;
+ 	if (l > 0) var greeting = 'hello';
+ 	else var greeting = 'howdy';
+ 	return r > 0 && (lightGreeting = greeting.substr(0, 2)), lightGreeting;
+-};
++}
++module.exports = foo;
+
+```
+
+## `swc/issues/6463`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 64 vs reference 57 (+7 bytes, no whitespaces)
+
+```js
+var foo_1 = foo;
+function foo() {
+	console.log('foo');
+}
+foo_1();
+foo_1();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,5 @@
+-var foo_1 = function() {
++var foo_1 = foo;
++function foo() {
+ 	console.log('foo');
+-};
++}
+ foo_1(), foo_1();
+
+```
+
+## `swc/issues/8622`
+
+- tags: `mangle`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 142 vs reference 135 (+7 bytes, no whitespaces)
+
+```js
+export function foo(cond) {
+	let reserved = 1;
+	if (cond) {
+		reserved = 2;
+	}
+	return [reserved, bar(cond)];
+}
+function bar(cond) {
+	let reserved = 1;
+	if (cond) {
+		reserved = 2;
+	}
+	return reserved;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,8 @@
+ export function foo(e) {
+ 	let reserved = 1;
+-	return e && (reserved = 2), [reserved, function(e) {
+-		let reserved = 1;
+-		return e && (reserved = 2), reserved;
+-	}(e)];
++	return e && (reserved = 2), [reserved, bar(e)];
++}
++function bar(e) {
++	let reserved = 1;
++	return e && (reserved = 2), reserved;
+ }
+
+```
+
+## `swc/issues/8826`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 237 vs reference 230 (+7 bytes, no whitespaces)
+
+```js
+export function createTypeChecker(host) {
+	return { getFlowTypeOfReference };
+	function getFlowTypeOfReference(reference, declaredType, initialType = declaredType, flowContainer, flowNode = ((_a2) => (_a2 = tryCast(reference, canHaveFlowNode)) == null ? void 0 : _a2.flowNode)()) {}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,4 @@
+ export function createTypeChecker(host) {
+-	return { getFlowTypeOfReference: function(reference, declaredType, initialType = declaredType, flowContainer, flowNode = ((_a2) => null == (_a2 = tryCast(reference, canHaveFlowNode)) ? void 0 : _a2.flowNode)()) {} };
++	return { getFlowTypeOfReference };
++	function getFlowTypeOfReference(reference, declaredType, initialType = declaredType, flowContainer, flowNode = ((_a2) => (_a2 = tryCast(reference, canHaveFlowNode))?.flowNode)()) {}
+ }
+
+```
+
+## `swc/next/feedback-1/reduced/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 263 vs reference 256 (+7 bytes, no whitespaces)
+
+```js
+export function getInsertStringLength(a, e, t, i) {
+	var r = a.mask, o = a.maskChar, n = t.split(''), s = i;
+	return n.every(function(e) {
+		for (; n = e, isPermanentCharacter(a, t = i) && n !== r[t];) if (++i >= r.length) return !1;
+		var t, n;
+		return (isAllowedCharacter(a, i, e) || e === o) && i++, i < r.length;
+	}), i - s;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,8 @@
+ export function getInsertStringLength(a, e, t, i) {
+ 	var r = a.mask, o = a.maskChar, n = t.split(''), s = i;
+ 	return n.every(function(e) {
+-		for (var t; isPermanentCharacter(a, t = i) && e !== r[t];) if (++i >= r.length) return !1;
++		for (; n = e, isPermanentCharacter(a, t = i) && n !== r[t];) if (++i >= r.length) return !1;
++		var t, n;
+ 		return (isAllowedCharacter(a, i, e) || e === o) && i++, i < r.length;
+ 	}), i - s;
+ }
+
+```
+
+## `swc/projects/underscore/18`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 279 vs reference 272 (+7 bytes, no whitespaces)
+
+```js
+_.sortedIndex = function(array, obj, iterator, context) {
+	iterator = iterator == null ? _.identity : lookupIterator(iterator);
+	var value = iterator.call(context, obj);
+	var low = 0, high = array.length;
+	while (low < high) {
+		var mid = low + high >>> 1;
+		iterator.call(context, array[mid]) < value ? low = mid + 1 : high = mid;
+	}
+	return low;
 };
 
 ```
@@ -2322,27 +2397,436 @@ _.indexOf = function(array, item, isSorted) {
 ```diff
 --- reference
 +++ oxc
-@@ -1,8 +1,10 @@
- _.indexOf = function(array, item, isSorted) {
--	if (null == array) return -1;
-+	if (array == null) return -1;
- 	var i = 0, length = array.length;
--	if (isSorted) if ('number' != typeof isSorted) return i = _.sortedIndex(array, item), array[i] === item ? i : -1;
--	else i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
-+	if (isSorted) {
-+		if (typeof isSorted == 'number') i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
-+		else return i = _.sortedIndex(array, item), array[i] === item ? i : -1;
-+	}
- 	if (nativeIndexOf && array.indexOf === nativeIndexOf) return array.indexOf(item, isSorted);
- 	for (; i < length; i++) if (array[i] === item) return i;
- 	return -1;
+@@ -1,5 +1,6 @@
+ _.sortedIndex = function(array, obj, iterator, context) {
+-	for (var value = (iterator = null == iterator ? _.identity : lookupIterator(iterator)).call(context, obj), low = 0, high = array.length; low < high;) {
++	iterator = iterator == null ? _.identity : lookupIterator(iterator);
++	for (var value = iterator.call(context, obj), low = 0, high = array.length; low < high;) {
+ 		var mid = low + high >>> 1;
+ 		iterator.call(context, array[mid]) < value ? low = mid + 1 : high = mid;
+ 	}
+
+```
+
+## `swc/issues/10721`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 84 vs reference 76 (+8 bytes, no whitespaces)
+
+```js
+var _ref1 = { b1: { b11: 'world' } }, tmp = _ref1.b1, b11 = (tmp === void 0 ? { b11: 'string' } : tmp).b11;
+var temp = {
+	t1: true,
+	t2: 'false'
+};
+export { b11 };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+-var tmp = { b11: 'world' }, b11 = (void 0 === tmp ? { b11: 'string' } : tmp).b11;
++var tmp = { b1: { b11: 'world' } }.b1, b11 = (tmp === void 0 ? { b11: 'string' } : tmp).b11;
+ export { b11 };
+
+```
+
+## `swc/issues/11089`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 56 vs reference 48 (+8 bytes, no whitespaces)
+
+```js
+let k = 0;
+const fn = () => console.log(k++);
+fn('Hi');
+fn('Hi');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ let k = 0;
+ const fn = () => console.log(k++);
+-fn(), fn();
++fn('Hi'), fn('Hi');
+
+```
+
+## `swc/issues/11684/identifier-reduce-vars-only`
+
+- tags: `drop debugger`, `join vars`, `sequences`
+- size: oxc 229 vs reference 221 (+8 bytes, no whitespaces)
+
+```js
+function FunctionCtor(value) {
+	this.value = value;
+}
+out.FunctionCtor = FunctionCtor;
+out.functionCtor = new FunctionCtor(1, 2, 3);
+class ClassCtor {
+	constructor(value) {
+		this.value = value;
+	}
+}
+out.ClassCtor = ClassCtor;
+out.classCtor = new ClassCtor(1, 2, 3);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,12 +1,10 @@
+ function FunctionCtor(value) {
+ 	this.value = value;
+ }
+-out.FunctionCtor = FunctionCtor;
+-out.functionCtor = new FunctionCtor(1);
++out.FunctionCtor = FunctionCtor, out.functionCtor = new FunctionCtor(1, 2, 3);
+ class ClassCtor {
+ 	constructor(value) {
+ 		this.value = value;
+ 	}
+ }
+-out.ClassCtor = ClassCtor;
+-out.classCtor = new ClassCtor(1);
++out.ClassCtor = ClassCtor, out.classCtor = new ClassCtor(1, 2, 3);
+
+```
+
+## `swc/issues/11684/identifier-unused-only`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 229 vs reference 221 (+8 bytes, no whitespaces)
+
+```js
+function FunctionCtor(value) {
+	this.value = value;
+}
+out.FunctionCtor = FunctionCtor;
+out.functionCtor = new FunctionCtor(1, 2, 3);
+class ClassCtor {
+	constructor(value) {
+		this.value = value;
+	}
+}
+out.ClassCtor = ClassCtor;
+out.classCtor = new ClassCtor(1, 2, 3);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,12 +1,10 @@
+ function FunctionCtor(value) {
+ 	this.value = value;
+ }
+-out.FunctionCtor = FunctionCtor;
+-out.functionCtor = new FunctionCtor(1);
++out.FunctionCtor = FunctionCtor, out.functionCtor = new FunctionCtor(1, 2, 3);
+ class ClassCtor {
+ 	constructor(value) {
+ 		this.value = value;
+ 	}
+ }
+-out.ClassCtor = ClassCtor;
+-out.classCtor = new ClassCtor(1);
++out.ClassCtor = ClassCtor, out.classCtor = new ClassCtor(1, 2, 3);
+
+```
+
+## `swc/issues/4234`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 74 vs reference 66 (+8 bytes, no whitespaces)
+
+```js
+bar(new RegExp(''));
+bar(new RegExp('', 'u'));
+bar(new RegExp('a'));
+bar(new RegExp('a', 'u'));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1 @@
+-bar(RegExp(''));
+-bar(RegExp('', 'u'));
+-bar(/a/);
+-bar(RegExp('a', 'u'));
++bar(RegExp('')), bar(RegExp('', 'u')), bar(RegExp('a')), bar(RegExp('a', 'u'));
+
+```
+
+## `swc/issues/6049/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 15 vs reference 7 (+8 bytes, no whitespaces)
+
+```js
+var a = z();
+g(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,2 @@
+-g(z());
++var a = z();
++g(a);
+
+```
+
+## `swc/issues/6422/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 271 vs reference 263 (+8 bytes, no whitespaces)
+
+```js
+let getter_effect = 'FAIL';
+let setter_effect = 'FAIL';
+let proto = {
+	get foo() {
+		getter_effect = 'PASS';
+	},
+	set bar(value) {
+		setter_effect = 'PASS';
+	}
+};
+let obj1 = { __proto__: proto };
+let obj2 = { __proto__: proto };
+let unused = obj1.foo;
+obj2.bar = 0;
+assert.strictEqual(getter_effect, 'PASS');
+assert.strictEqual(setter_effect, 'PASS');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,14 +1,9 @@
+-let getter_effect = 'FAIL';
+-let setter_effect = 'FAIL';
+-let proto = {
++let getter_effect = 'FAIL', setter_effect = 'FAIL', proto = {
+ 	get foo() {
+ 		getter_effect = 'PASS';
+ 	},
+ 	set bar(value) {
+ 		setter_effect = 'PASS';
+ 	}
+-};
+-({ __proto__: proto }).foo;
+-({ __proto__: proto }).bar = 0;
+-assert.strictEqual(getter_effect, 'PASS');
+-assert.strictEqual(setter_effect, 'PASS');
++}, obj1 = { __proto__: proto }, obj2 = { __proto__: proto };
++obj1.foo, obj2.bar = 0, assert.strictEqual(getter_effect, 'PASS'), assert.strictEqual(setter_effect, 'PASS');
+
+```
+
+## `swc/issues/9610-destructuring`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `pure getters`, `3 iterations`
+- size: oxc 562 vs reference 554 (+8 bytes, no whitespaces)
+
+```js
+// Test: Destructuring patterns with default values
+// Object destructuring with default - unused
+function foo({ a, b = 10 }) {
+	return a;
+}
+// Object destructuring with default - used
+function bar({ a, b = 20 }) {
+	return a + b;
+}
+// Array destructuring with default - unused
+function baz([a, b = 30]) {
+	return a;
+}
+// Array destructuring with default - used
+function qux([a, b = 40]) {
+	return a + b;
+}
+// Combined: regular param and destructuring with defaults
+function combined(x, { a, b = 50 }, c = 60) {
+	return x + a;
+}
+export function example() {
+	return foo({ a: 1 }) + bar({ a: 2 }) + baz([3]) + qux([4]) + combined(5, { a: 6 });
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -8,7 +8,7 @@
+ 	return a + b;
+ }
+ // Array destructuring with default - unused
+-function baz([a, ,]) {
++function baz([a, b = 30]) {
+ 	return a;
+ }
+ // Array destructuring with default - used
+@@ -16,7 +16,7 @@
+ 	return a + b;
+ }
+ // Combined: regular param and destructuring with defaults
+-function combined(x, { a, b = 50 }) {
++function combined(x, { a, b = 50 }, c = 60) {
+ 	return x + a;
+ }
+ export function example() {
+
+```
+
+## `swc/issues/9610-nested-defaults`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `pure getters`, `3 iterations`
+- size: oxc 487 vs reference 479 (+8 bytes, no whitespaces)
+
+```js
+// Test: Nested default patterns
+// Nested object destructuring with default
+function foo({ outer: { inner = 10 } }) {
+	return inner;
+}
+// Nested object with default for entire nested part
+function bar({ outer = { inner: 20 } }) {
+	return outer.inner;
+}
+// Default with another default inside object
+function baz({ a = { b: 30 } }) {
+	return a.b;
+}
+// Array inside object with default
+function qux({ arr: [first, second = 40] }) {
+	return first;
+}
+export function example() {
+	return foo({ outer: { inner: 1 } }) + bar({}) + baz({}) + qux({ arr: [5] });
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -12,7 +12,7 @@
+ 	return a.b;
+ }
+ // Array inside object with default
+-function qux({ arr: [first, ,] }) {
++function qux({ arr: [first, second = 40] }) {
+ 	return first;
+ }
+ export function example() {
+
+```
+
+## `swc/issues/10938`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 35 vs reference 26 (+9 bytes, no whitespaces)
+
+```js
+let Number;
+console.log(Number.NaN);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,2 @@
+-console.log((void 0).NaN);
++let Number;
++console.log(Number.NaN);
+
+```
+
+## `swc/issues/11829`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 167 vs reference 158 (+9 bytes, no whitespaces)
+
+```js
+function run(options) {
+	let { cb } = options;
+	if (!cb) {
+		cb = () => true;
+	}
+	return cb('value');
+}
+run({ cb(value) {
+	if (value === undefined) {
+		throw new Error('missing argument');
+	}
+	console.log('PASS');
+	return true;
+} });
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,8 @@
+-!function(options) {
++function run(options) {
+ 	let { cb } = options;
+-	cb || (cb = () => !0), cb('value');
+-}({ cb(value) {
+-	if (void 0 === value) throw Error('missing argument');
++	return cb ||= () => !0, cb('value');
++}
++run({ cb(value) {
++	if (value === void 0) throw Error('missing argument');
+ 	return console.log('PASS'), !0;
+ } });
+
+```
+
+## `swc/issues/5343`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 59 vs reference 50 (+9 bytes, no whitespaces)
+
+```js
+({ x: 0 }).x = _iter[_i];
+for ({ x: 0 }.x of iter()) {
+	console.log(123);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,2 @@
+-for ({ x: 0 }.x of (_iter[_i], iter())) console.log(123);
++({ x: 0 }).x = _iter[_i];
++for ({ x: 0 }.x of iter()) console.log(123);
 
 ```
 
 ## `swc/issues/5864`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 27 vs reference 18 (+9 bytes)
+- size: oxc 21 vs reference 12 (+9 bytes, no whitespaces)
 
 ```js
 foo = { v: 0 .toFixed() };
@@ -2361,7 +2845,7 @@ foo = { v: 0 .toFixed() };
 ## `swc/issues/spread-primitives`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 462 vs reference 453 (+9 bytes)
+- size: oxc 395 vs reference 386 (+9 bytes, no whitespaces)
 
 ```js
 // Object spread of a primitive with no own enumerable properties contributes
@@ -2437,509 +2921,10 @@ console.log([1, ...[2, 3]]);
 
 ```
 
-## `swc/projects/underscore/18`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 344 vs reference 335 (+9 bytes)
-
-```js
-_.sortedIndex = function(array, obj, iterator, context) {
-	iterator = iterator == null ? _.identity : lookupIterator(iterator);
-	var value = iterator.call(context, obj);
-	var low = 0, high = array.length;
-	while (low < high) {
-		var mid = low + high >>> 1;
-		iterator.call(context, array[mid]) < value ? low = mid + 1 : high = mid;
-	}
-	return low;
-};
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,6 @@
- _.sortedIndex = function(array, obj, iterator, context) {
--	for (var value = (iterator = null == iterator ? _.identity : lookupIterator(iterator)).call(context, obj), low = 0, high = array.length; low < high;) {
-+	iterator = iterator == null ? _.identity : lookupIterator(iterator);
-+	for (var value = iterator.call(context, obj), low = 0, high = array.length; low < high;) {
- 		var mid = low + high >>> 1;
- 		iterator.call(context, array[mid]) < value ? low = mid + 1 : high = mid;
- 	}
-
-```
-
-## `swc/projects/underscore/3`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 492 vs reference 483 (+9 bytes)
-
-```js
-_.max = function(obj, iterator, context) {
-	if (!iterator && _.isArray(obj) && obj[0] === +obj[0] && obj.length < 65535) {
-		return Math.max.apply(Math, obj);
-	}
-	if (!iterator && _.isEmpty(obj)) return -Infinity;
-	var result = {
-		computed: -Infinity,
-		value: -Infinity
-	};
-	each(obj, function(value, index, list) {
-		var computed = iterator ? iterator.call(context, value, index, list) : value;
-		computed > result.computed && (result = {
-			value,
-			computed
-		});
-	});
-	return result.value;
-};
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,9 +1,9 @@
- _.max = function(obj, iterator, context) {
- 	if (!iterator && _.isArray(obj) && obj[0] === +obj[0] && obj.length < 65535) return Math.max.apply(Math, obj);
--	if (!iterator && _.isEmpty(obj)) return -1 / 0;
-+	if (!iterator && _.isEmpty(obj)) return -Infinity;
- 	var result = {
--		computed: -1 / 0,
--		value: -1 / 0
-+		computed: -Infinity,
-+		value: -Infinity
- 	};
- 	return each(obj, function(value, index, list) {
- 		var computed = iterator ? iterator.call(context, value, index, list) : value;
-
-```
-
-## `swc/issues/10816`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 174 vs reference 164 (+10 bytes)
-
-```js
-class A {
-	fromArrow() {
-		console.log('hello');
-	}
-	foobar() {
-		const callMe = () => this.fromArrow();
-		function B() {
-			callMe();
-		}
-		return B;
-	}
-}
-const instance = new A();
-const fn = instance.foobar();
-fn();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,11 +1,13 @@
--new class {
-+class A {
- 	fromArrow() {
- 		console.log('hello');
- 	}
- 	foobar() {
- 		let callMe = () => this.fromArrow();
--		return function() {
-+		function B() {
- 			callMe();
--		};
-+		}
-+		return B;
- 	}
--}().foobar()();
-+}
-+new A().foobar()();
-
-```
-
-## `swc/issues/10938`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 37 vs reference 27 (+10 bytes)
-
-```js
-let Number;
-console.log(Number.NaN);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,2 @@
--console.log((void 0).NaN);
-+let Number;
-+console.log(Number.NaN);
-
-```
-
-## `swc/issues/11684/bindings`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 715 vs reference 705 (+10 bytes)
-
-```js
-const FunctionBinding = function(value) {
-	this.value = value;
-};
-out.FunctionBinding = FunctionBinding;
-out.functionBinding = new FunctionBinding(1, 2, 3);
-let ClassBinding = class {
-	constructor(value) {
-		this.value = value;
-	}
-};
-out.ClassBinding = ClassBinding;
-out.classBinding = new ClassBinding(1, 2, 3);
-let AssignedFunction;
-AssignedFunction = function(first, second) {
-	this.first = first;
-	this.second = second;
-};
-out.AssignedFunction = AssignedFunction;
-out.assignedFunction = new AssignedFunction(1, 2, 3, 4);
-let AssignedClass;
-AssignedClass = class {
-	constructor(first, second) {
-		this.first = first;
-		this.second = second;
-	}
-};
-out.AssignedClass = AssignedClass;
-out.assignedClass = new AssignedClass(1, 2, 3, 4);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,17 +1,20 @@
--let AssignedFunction, AssignedClass;
- const FunctionBinding = function(value) {
- 	this.value = value;
- };
--out.FunctionBinding = FunctionBinding, out.functionBinding = new FunctionBinding(1);
-+out.FunctionBinding = FunctionBinding, out.functionBinding = new FunctionBinding(1, 2, 3);
- let ClassBinding = class {
- 	constructor(value) {
- 		this.value = value;
- 	}
- };
--out.ClassBinding = ClassBinding, out.classBinding = new ClassBinding(1), AssignedFunction = function(first, second) {
-+out.ClassBinding = ClassBinding, out.classBinding = new ClassBinding(1, 2, 3);
-+let AssignedFunction = function(first, second) {
- 	this.first = first, this.second = second;
--}, out.AssignedFunction = AssignedFunction, out.assignedFunction = new AssignedFunction(1, 2), AssignedClass = class {
-+};
-+out.AssignedFunction = AssignedFunction, out.assignedFunction = new AssignedFunction(1, 2, 3, 4);
-+let AssignedClass;
-+AssignedClass = class {
- 	constructor(first, second) {
- 		this.first = first, this.second = second;
- 	}
--}, out.AssignedClass = AssignedClass, out.assignedClass = new AssignedClass(1, 2);
-+}, out.AssignedClass = AssignedClass, out.assignedClass = new AssignedClass(1, 2, 3, 4);
-
-```
-
-## `swc/issues/9186/1`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 164 vs reference 154 (+10 bytes)
-
-```js
-o = {
-	foo() {
-		return val;
-	},
-	s: 'test'
-};
-console.log(o.foo().length);
-o = {
-	foo(val = this.s) {
-		return val;
-	},
-	s: 'test'
-};
-console.log(o.foo().length);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,9 +1,11 @@
--console.log((o = {
--	foo: () => val,
-+o = {
-+	foo() {
-+		return val;
-+	},
- 	s: 'test'
--}).foo().length), console.log((o = {
--	foo(val1 = this.s) {
--		return val1;
-+}, console.log(o.foo().length), o = {
-+	foo(val = this.s) {
-+		return val;
- 	},
- 	s: 'test'
--}).foo().length);
-+}, console.log(o.foo().length);
-
-```
-
-## `swc/issues/9610-nested-defaults`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `pure getters`, `3 iterations`
-- size: oxc 556 vs reference 546 (+10 bytes)
-
-```js
-// Test: Nested default patterns
-// Nested object destructuring with default
-function foo({ outer: { inner = 10 } }) {
-	return inner;
-}
-// Nested object with default for entire nested part
-function bar({ outer = { inner: 20 } }) {
-	return outer.inner;
-}
-// Default with another default inside object
-function baz({ a = { b: 30 } }) {
-	return a.b;
-}
-// Array inside object with default
-function qux({ arr: [first, second = 40] }) {
-	return first;
-}
-export function example() {
-	return foo({ outer: { inner: 1 } }) + bar({}) + baz({}) + qux({ arr: [5] });
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -12,7 +12,7 @@
- 	return a.b;
- }
- // Array inside object with default
--function qux({ arr: [first, ,] }) {
-+function qux({ arr: [first, second = 40] }) {
- 	return first;
- }
- export function example() {
-
-```
-
-## `swc/issues/10721`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 109 vs reference 98 (+11 bytes)
-
-```js
-var _ref1 = { b1: { b11: 'world' } }, tmp = _ref1.b1, b11 = (tmp === void 0 ? { b11: 'string' } : tmp).b11;
-var temp = {
-	t1: true,
-	t2: 'false'
-};
-export { b11 };
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,2 @@
--var tmp = { b11: 'world' }, b11 = (void 0 === tmp ? { b11: 'string' } : tmp).b11;
-+var tmp = { b1: { b11: 'world' } }.b1, b11 = (tmp === void 0 ? { b11: 'string' } : tmp).b11;
- export { b11 };
-
-```
-
-## `swc/issues/5680`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 41 vs reference 30 (+11 bytes)
-
-```js
-const totalCount = (a ? a.length : 0) + (b ? b.length : 0);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--a && a.length, b && b.length;
-+(a ? a.length : 0) + (b ? b.length : 0);
-
-```
-
-## `swc/issues/6049/1`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 19 vs reference 8 (+11 bytes)
-
-```js
-var a = z();
-g(a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,2 @@
--g(z());
-+var a = z();
-+g(a);
-
-```
-
-## `swc/issues/drop-console-es2015`
-
-- tags: `drop console`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 216 vs reference 205 (+11 bytes)
-
-```js
-const err = console.error.bind(console);
-err('boom');
-process.stdout.write(typeof err + '\n');
-let threw = false;
-try {
-	new (console.error.bind(console))();
-} catch (e) {
-	threw = true;
-}
-process.stdout.write(threw + '\n');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,10 +1,9 @@
--const err = (() => {}).bind();
--err('boom');
--process.stdout.write(typeof err + '\n');
--let threw = false;
-+const err = console.error.bind(console);
-+err('boom'), process.stdout.write(typeof err + '\n');
-+let threw = !1;
- try {
--	new ((() => {}).bind())();
--} catch (e) {
--	threw = true;
-+	new (console.error.bind(console))();
-+} catch {
-+	threw = !0;
- }
- process.stdout.write(threw + '\n');
-
-```
-
-## `swc/issues/11684/identifier-reduce-vars-only`
-
-- tags: `drop debugger`, `join vars`, `sequences`
-- size: oxc 267 vs reference 255 (+12 bytes)
-
-```js
-function FunctionCtor(value) {
-	this.value = value;
-}
-out.FunctionCtor = FunctionCtor;
-out.functionCtor = new FunctionCtor(1, 2, 3);
-class ClassCtor {
-	constructor(value) {
-		this.value = value;
-	}
-}
-out.ClassCtor = ClassCtor;
-out.classCtor = new ClassCtor(1, 2, 3);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,12 +1,10 @@
- function FunctionCtor(value) {
- 	this.value = value;
- }
--out.FunctionCtor = FunctionCtor;
--out.functionCtor = new FunctionCtor(1);
-+out.FunctionCtor = FunctionCtor, out.functionCtor = new FunctionCtor(1, 2, 3);
- class ClassCtor {
- 	constructor(value) {
- 		this.value = value;
- 	}
- }
--out.ClassCtor = ClassCtor;
--out.classCtor = new ClassCtor(1);
-+out.ClassCtor = ClassCtor, out.classCtor = new ClassCtor(1, 2, 3);
-
-```
-
-## `swc/issues/11684/identifier-unused-only`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 267 vs reference 255 (+12 bytes)
-
-```js
-function FunctionCtor(value) {
-	this.value = value;
-}
-out.FunctionCtor = FunctionCtor;
-out.functionCtor = new FunctionCtor(1, 2, 3);
-class ClassCtor {
-	constructor(value) {
-		this.value = value;
-	}
-}
-out.ClassCtor = ClassCtor;
-out.classCtor = new ClassCtor(1, 2, 3);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,12 +1,10 @@
- function FunctionCtor(value) {
- 	this.value = value;
- }
--out.FunctionCtor = FunctionCtor;
--out.functionCtor = new FunctionCtor(1);
-+out.FunctionCtor = FunctionCtor, out.functionCtor = new FunctionCtor(1, 2, 3);
- class ClassCtor {
- 	constructor(value) {
- 		this.value = value;
- 	}
- }
--out.ClassCtor = ClassCtor;
--out.classCtor = new ClassCtor(1);
-+out.ClassCtor = ClassCtor, out.classCtor = new ClassCtor(1, 2, 3);
-
-```
-
 ## `swc/member_expr/undetermined_prop`
 
 - tags: `drop debugger`, `join vars`, `sequences`
-- size: oxc 28 vs reference 16 (+12 bytes)
+- size: oxc 24 vs reference 15 (+9 bytes, no whitespaces)
 
 ```js
 ({ a: 1 })[undetermined()];
@@ -2955,10 +2940,937 @@ out.classCtor = new ClassCtor(1, 2, 3);
 
 ```
 
+## `swc/issues/9030`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 261 vs reference 251 (+10 bytes, no whitespaces)
+
+```js
+var FRUITS = { MANGO: 'mango' };
+var getMangoLabel = (label) => label[FRUITS.MANGO];
+export default (name) => {
+	// Breaks with switch case
+	switch (name) {
+		case FRUITS.MANGO: {
+			return getMangoLabel;
+		}
+	}
+	// Works with if else
+	// if (name === FRUITS.MANGO) {
+	//     return getMangoLabel;
+	// }
+};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,11 @@
+-var FRUITS_MANGO = 'mango', getMangoLabel = (label) => label[FRUITS_MANGO];
+-export default ((name) => {
++var FRUITS = { MANGO: 'mango' }, getMangoLabel = (label) => label[FRUITS.MANGO];
++export default (name) => {
+ 	// Breaks with switch case
+-	if (name === FRUITS_MANGO) return getMangoLabel;
++	switch (name) {
++		case FRUITS.MANGO: return getMangoLabel;
++	}
+ 	// Works with if else
+ 	// if (name === FRUITS.MANGO) {
+ 	//     return getMangoLabel;
+ 	// }
+-});
++};
+
+```
+
+## `swc/issues/cycle-1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 98 vs reference 88 (+10 bytes, no whitespaces)
+
+```js
+(() => {
+	class A {
+		cycle() {
+			return B;
+		}
+	}
+	class B {
+		cycle() {
+			return A;
+		}
+	}
+	class ExtendsA1 extends sideEffectWith(A) {}
+	class Unused1 {
+		constructor() {
+			ExtendsA1;
+		}
+	}
+	class ExtendsA2 extends sideEffectWith(A) {}
+	class Unused2 {
+		async put() {
+			ExtendsA2;
+		}
+	}
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,13 @@
+-class A {
+-	cycle() {
+-		return B;
++(() => {
++	class A {
++		cycle() {
++			return B;
++		}
+ 	}
+-}
+-class B {
+-	cycle() {
+-		return A;
++	class B {
++		cycle() {
++			return A;
++		}
+ 	}
+-}
+-sideEffectWith(A), sideEffectWith(A);
++	sideEffectWith(A), sideEffectWith(A);
++})();
+
+```
+
+## `swc/issues/cycle-2`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 80 vs reference 70 (+10 bytes, no whitespaces)
+
+```js
+(() => {
+	class C {
+		cycle() {
+			return D;
+		}
+	}
+	class D {
+		cycle() {
+			return C;
+		}
+	}
+	class ExtendsC extends sideEffectWith(C) {}
+	class Unused {
+		constructor() {
+			ExtendsC;
+		}
+	}
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,13 @@
+-class C {
+-	cycle() {
+-		return D;
++(() => {
++	class C {
++		cycle() {
++			return D;
++		}
+ 	}
+-}
+-class D {
+-	cycle() {
+-		return C;
++	class D {
++		cycle() {
++			return C;
++		}
+ 	}
+-}
+-sideEffectWith(C);
++	sideEffectWith(C);
++})();
+
+```
+
+## `swc/issues/non-finite-conditional-arithmetic`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
+- size: oxc 312 vs reference 302 (+10 bytes, no whitespaces)
+
+```js
+function classify(value) {
+	if (Number.isNaN(value)) {
+		return 'NaN';
+	}
+	if (Object.is(value, -0)) {
+		return '-0';
+	}
+	return String(value);
+}
+function test(flag) {
+	console.log([
+		flag ? Infinity : 0,
+		flag ? 0 : Infinity,
+		flag ? 1 : -0,
+		flag ? -0 : 1
+	].map(classify).join(','));
+}
+globalThis.trueValue = true;
+globalThis.falseValue = false;
+test(globalThis.trueValue);
+test(globalThis.falseValue);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -3,8 +3,8 @@
+ }
+ function test(flag) {
+ 	console.log([
+-		flag ? 1 / 0 : 0,
+-		flag ? 0 : 1 / 0,
++		flag ? Infinity : 0,
++		flag ? 0 : Infinity,
+ 		flag ? 1 : -0,
+ 		flag ? -0 : 1
+ 	].map(classify).join(','));
+
+```
+
+## `swc/issues/vercel/003`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 588 vs reference 578 (+10 bytes, no whitespaces)
+
+```js
+import { a, b } from './utils';
+if (typeof window !== 'undefined') {
+	require('intersection-observer');
+}
+const manager = (function makeManager() {
+	const c = new Map();
+	function d(e) {
+		return f(e) || new IntersectionObserver(g, e);
+	}
+	function f(g = {}) {
+		const h = b(g);
+		for (const i of c.keys()) {
+			if (a(i, h)) {
+				return i;
+			}
+		}
+		return null;
+	}
+	function j(k) {
+		return !c.has(k) ? c.set(k, new Map()).get(k) : c.get(k);
+	}
+	function l(m, n, o) {
+		const p = j(m);
+		p.set(n, o);
+		m.observe(n);
+	}
+	function q(r, s) {
+		const t = j(r);
+		t.delete(s);
+		r.unobserve(s);
+	}
+	function g(u, v) {
+		for (let w of u) {
+			const x = j(v);
+			const y = x.get(w.target);
+			if (y) {
+				y(w);
+			}
+		}
+	}
+	return {
+		d,
+		l,
+		q
+	};
+})();
+export default manager;
+export const { d } = manager;
+export const { l } = manager;
+export const { q } = manager;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,24 @@
+ import { a, b } from './utils';
+-'u' > typeof window && require('intersection-observer');
+-let manager = function() {
++typeof window < 'u' && require('intersection-observer');
++const manager = (function() {
+ 	let c = new Map();
++	function d(e) {
++		return f(e) || new IntersectionObserver(g, e);
++	}
++	function f(g = {}) {
++		let h = b(g);
++		for (let i of c.keys()) if (a(i, h)) return i;
++		return null;
++	}
+ 	function j(k) {
+ 		return c.has(k) ? c.get(k) : c.set(k, new Map()).get(k);
+ 	}
++	function l(m, n, o) {
++		j(m).set(n, o), m.observe(n);
++	}
++	function q(r, s) {
++		j(r).delete(s), r.unobserve(s);
++	}
+ 	function g(u, v) {
+ 		for (let w of u) {
+ 			let y = j(v).get(w.target);
+@@ -12,21 +26,11 @@
+ 		}
+ 	}
+ 	return {
+-		d: function(e) {
+-			return function(g = {}) {
+-				let h = b(g);
+-				for (let i of c.keys()) if (a(i, h)) return i;
+-				return null;
+-			}(e) || new IntersectionObserver(g, e);
+-		},
+-		l: function(m, n, o) {
+-			j(m).set(n, o), m.observe(n);
+-		},
+-		q: function(r, s) {
+-			j(r).delete(s), r.unobserve(s);
+-		}
++		d,
++		l,
++		q
+ 	};
+-}();
++})();
+ export default manager;
+ export const { d } = manager;
+ export const { l } = manager;
+
+```
+
+## `swc/pr/7856/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 32 vs reference 22 (+10 bytes, no whitespaces)
+
+```js
+const a = () => '';
+const b = {};
+export const c = a;
+b.c = c;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,2 @@
+-export const c = () => '';
++const a = () => '';
++export const c = a;
+
+```
+
+## `swc/projects/yui/8`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 277 vs reference 267 (+10 bytes, no whitespaces)
+
+```js
+export const E = { _onProgress: function(e) {
+	var self = this, i;
+	//set the internal cache to what just came in.
+	if (e.data && e.data.length) {
+		for (i = 0; i < e.data.length; i++) {
+			e.data[i] = self.getModule(e.data[i].name);
+		}
+	}
+	if (self.onProgress) {
+		self.onProgress.call(self.context, {
+			name: e.url,
+			data: e.data
+		});
+	}
+} };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,8 @@
+ export const E = { _onProgress: function(e) {
+-	var i;
++	var self = this, i;
+ 	//set the internal cache to what just came in.
+-	if (e.data && e.data.length) for (i = 0; i < e.data.length; i++) e.data[i] = this.getModule(e.data[i].name);
+-	this.onProgress && this.onProgress.call(this.context, {
++	if (e.data && e.data.length) for (i = 0; i < e.data.length; i++) e.data[i] = self.getModule(e.data[i].name);
++	self.onProgress && self.onProgress.call(self.context, {
+ 		name: e.url,
+ 		data: e.data
+ 	});
+
+```
+
+## `swc/simple/switch/const/call`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 38 vs reference 28 (+10 bytes, no whitespaces)
+
+```js
+switch (a()) {
+	case a(): console.log(123);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,3 @@
+-a() === a() && console.log(123);
++switch (a()) {
++	case a(): console.log(123);
++}
+
+```
+
+## `swc/issues/4386/2`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 324 vs reference 313 (+11 bytes, no whitespaces)
+
+```js
+var application;
+(() => {
+	var __webpack_require__ = {};
+	(() => {
+		__webpack_require__.d = (exports, definition) => {};
+	})();
+	(() => {
+		__webpack_require__.o = (obj, prop) => {};
+	})();
+	(() => {
+		__webpack_require__.r = (exports) => {};
+	})();
+	var __webpack_exports__ = {};
+	__webpack_require__.r(__webpack_exports__);
+	__webpack_require__.d(__webpack_exports__, { 'bootstrap': () => bootstrap });
+	function bootstrap() {
+		alert();
+	}
+	application = __webpack_exports__;
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,9 @@
+-var __webpack_require__ = {};
+-__webpack_require__.d = (exports, definition) => {}, __webpack_require__.o = (obj, prop) => {}, __webpack_require__.r = (exports) => {};
+-var __webpack_exports__ = {};
+-function bootstrap() {
+-	alert();
+-}
+-__webpack_require__.r(__webpack_exports__), __webpack_require__.d(__webpack_exports__, { bootstrap: () => bootstrap });
++(() => {
++	var __webpack_require__ = {};
++	__webpack_require__.d = (exports, definition) => {}, __webpack_require__.o = (obj, prop) => {}, __webpack_require__.r = (exports) => {};
++	var __webpack_exports__ = {};
++	__webpack_require__.r(__webpack_exports__), __webpack_require__.d(__webpack_exports__, { bootstrap: () => bootstrap });
++	function bootstrap() {
++		alert();
++	}
++})();
+
+```
+
+## `swc/issues/6407/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 293 vs reference 282 (+11 bytes, no whitespaces)
+
+```js
+export default class Demo {
+	static encode(value) {
+		const ranges = [];
+		let range = [];
+		let retrString = A.encode(value);
+		let bitField = '';
+		value.forEach((curValue, i) => {
+			bitField += B.encode(curValue);
+			range.push(i);
+			ranges.push(range);
+		});
+		retrString += '.';
+		retrString += C.encode(ranges);
+		return retrString;
+	}
+}
+console.log(Deno.encode());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,10 +2,8 @@
+ 	static encode(value) {
+ 		let ranges = [], range = [], retrString = A.encode(value), bitField = '';
+ 		return value.forEach((curValue, i) => {
+-			bitField += B.encode(curValue);
+-			range.push(i);
+-			ranges.push(range);
+-		}), retrString += '.', retrString += C.encode(ranges);
++			bitField += B.encode(curValue), range.push(i), ranges.push(range);
++		}), retrString += '.', retrString += C.encode(ranges), retrString;
+ 	}
+ }
+ console.log(Deno.encode());
+
+```
+
+## `swc/member_expr/seq`
+
+- tags: `drop debugger`, `join vars`, `sequences`
+- size: oxc 55 vs reference 44 (+11 bytes, no whitespaces)
+
+```js
+console.log((f(), [2, 4])[5]);
+console.log((f(), { b: 2 }).a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-console.log(void f()), console.log(void f());
++console.log((f(), [2, 4])[5]), console.log((f(), { b: 2 }).a);
+
+```
+
+## `swc/projects/yui/14`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 381 vs reference 370 (+11 bytes, no whitespaces)
+
+```js
+YArray.indexOf = Lang._isNative(Native.indexOf) ? function(array, value, from) {
+	return Native.indexOf.call(array, value, from);
+} : function(array, value, from) {
+	// http://es5.github.com/#x15.4.4.14
+	var len = array.length;
+	from = +from || 0;
+	from = (from > 0 || -1) * Math.floor(Math.abs(from));
+	if (from < 0) {
+		from += len;
+		if (from < 0) {
+			from = 0;
+		}
+	}
+	for (; from < len; ++from) {
+		if (from in array && array[from] === value) {
+			return from;
+		}
+	}
+	return -1;
+};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -3,6 +3,6 @@
+ } : function(array, value, from) {
+ 	// http://es5.github.com/#x15.4.4.14
+ 	var len = array.length;
+-	for ((from = ((from = +from || 0) > 0 || -1) * Math.floor(Math.abs(from))) < 0 && (from += len) < 0 && (from = 0); from < len; ++from) if (from in array && array[from] === value) return from;
++	for (from = +from || 0, from = (from > 0 || -1) * Math.floor(Math.abs(from)), from < 0 && (from += len, from < 0 && (from = 0)); from < len; ++from) if (from in array && array[from] === value) return from;
+ 	return -1;
+ };
+
+```
+
+## `swc/issues/12128`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 153 vs reference 141 (+12 bytes, no whitespaces)
+
+```js
+var callback;
+var _loop = function() {
+	var value = callback;
+	return value ? 'break' : callback = function() {
+		return value;
+	};
+};
+for (; _loop() !== 'break';);
+console.log(callback());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+-for (var callback; 'break' !== function() {
++for (var callback, _loop = function() {
+ 	var value = callback;
+ 	return value ? 'break' : callback = function() {
+ 		return value;
+ 	};
+-}(););
++}; _loop() !== 'break';);
+ console.log(callback());
+
+```
+
+## `swc/issues/9610-side-effects`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
+- size: oxc 635 vs reference 623 (+12 bytes, no whitespaces)
+
+```js
+// Test: Default values with side effects should NOT be removed
+// The function call in default value has side effects
+let sideEffectCounter = 0;
+function getSideEffect() {
+	sideEffectCounter++;
+	return 'value';
+}
+// This should NOT have the default param removed because getSideEffect() has side effects
+function foo(a, b = getSideEffect()) {
+	return a;
+}
+// This SHOULD have the default param removed because literal has no side effects
+function bar(a, b = 'literal') {
+	return a;
+}
+// This should NOT have the default param removed because new Date() has side effects
+function baz(a, b = new Date()) {
+	return a;
+}
+export function example() {
+	return foo(1) + bar(2) + baz(3);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -9,7 +9,7 @@
+ 	return a;
+ }
+ // This SHOULD have the default param removed because literal has no side effects
+-function bar(a) {
++function bar(a, b = 'literal') {
+ 	return a;
+ }
+ // This should NOT have the default param removed because new Date() has side effects
+
+```
+
+## `swc/issues/react-instancesearch/001`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 553 vs reference 541 (+12 bytes, no whitespaces)
+
+```js
+import { defer } from './utils';
+export default function createWidgetsManager(onWidgetsUpdate) {
+	const widgets = [];
+	// Is an update scheduled?
+	let scheduled = false;
+	// The state manager's updates need to be batched since more than one
+	// component can register or unregister widgets during the same tick.
+	function scheduleUpdate() {
+		if (scheduled) {
+			return;
+		}
+		scheduled = true;
+		defer(() => {
+			scheduled = false;
+			onWidgetsUpdate();
+		});
+	}
+	return {
+		registerWidget(widget) {
+			widgets.push(widget);
+			scheduleUpdate();
+			return function unregisterWidget() {
+				widgets.splice(widgets.indexOf(widget), 1);
+				scheduleUpdate();
+			};
+		},
+		update: scheduleUpdate,
+		getWidgets() {
+			return widgets;
+		}
+	};
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -9,10 +9,14 @@
+ 		}));
+ 	}
+ 	return {
+-		registerWidget: (widget) => (widgets.push(widget), scheduleUpdate(), function() {
+-			widgets.splice(widgets.indexOf(widget), 1), scheduleUpdate();
+-		}),
++		registerWidget(widget) {
++			return widgets.push(widget), scheduleUpdate(), function() {
++				widgets.splice(widgets.indexOf(widget), 1), scheduleUpdate();
++			};
++		},
+ 		update: scheduleUpdate,
+-		getWidgets: () => widgets
++		getWidgets() {
++			return widgets;
++		}
+ 	};
+ }
+
+```
+
+## `swc/issues/11545`
+
+- size: oxc 206 vs reference 193 (+13 bytes, no whitespaces)
+
+```js
+function joinArrayWithUndefined(bool) {
+	return ['abc', bool ? undefined : 'def'].join('');
+}
+console.log(joinArrayWithUndefined(true));
+console.log(joinArrayWithUndefined(false));
+const x = ['abc', undefined].join('');
+console.log(x);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+ function joinArrayWithUndefined(bool) {
+ 	return ['abc', bool ? void 0 : 'def'].join('');
+ }
+-console.log(joinArrayWithUndefined(true));
+-console.log(joinArrayWithUndefined(false));
+-const x = 'abc';
++console.log(joinArrayWithUndefined(!0));
++console.log(joinArrayWithUndefined(!1));
++const x = ['abc', void 0].join('');
+ console.log(x);
+
+```
+
+## `swc/issues/react-countup/2`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 521 vs reference 508 (+13 bytes, no whitespaces)
+
+```js
+export function formatNumber(t) {
+	var i, a, n, e, r = t < 0 ? '-' : '';
+	i = Math.abs(t).toFixed(s.options.decimalPlaces);
+	var o = (i += '').split('.');
+	if (a = o[0], n = o.length > 1 ? s.options.decimal + o[1] : '', s.options.useGrouping) {
+		e = '';
+		for (var l = 0, h = a.length; l < h; ++l) 0 !== l && l % 3 == 0 && (e = s.options.separator + e), e = a[h - l - 1] + e;
+		a = e;
+	}
+	return s.options.numerals && s.options.numerals.length && (a = a.replace(/[0-9]/g, function(t) {
+		return s.options.numerals[+t];
+	}), n = n.replace(/[0-9]/g, function(t) {
+		return s.options.numerals[+t];
+	})), r + s.options.prefix + a + n + s.options.suffix;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,13 +1,15 @@
+ export function formatNumber(t) {
+-	var a, n, e, o = (Math.abs(t).toFixed(s.options.decimalPlaces) + '').split('.');
++	var i, a, n, e, r = t < 0 ? '-' : '';
++	i = Math.abs(t).toFixed(s.options.decimalPlaces);
++	var o = (i += '').split('.');
+ 	if (a = o[0], n = o.length > 1 ? s.options.decimal + o[1] : '', s.options.useGrouping) {
+ 		e = '';
+-		for (var l = 0, h = a.length; l < h; ++l) 0 !== l && l % 3 == 0 && (e = s.options.separator + e), e = a[h - l - 1] + e;
++		for (var l = 0, h = a.length; l < h; ++l) l !== 0 && l % 3 == 0 && (e = s.options.separator + e), e = a[h - l - 1] + e;
+ 		a = e;
+ 	}
+ 	return s.options.numerals && s.options.numerals.length && (a = a.replace(/[0-9]/g, function(t) {
+ 		return s.options.numerals[+t];
+ 	}), n = n.replace(/[0-9]/g, function(t) {
+ 		return s.options.numerals[+t];
+-	})), (t < 0 ? '-' : '') + s.options.prefix + a + n + s.options.suffix;
++	})), r + s.options.prefix + a + n + s.options.suffix;
+ }
+
+```
+
+## `swc/projects/wmr/archive-1/chunks/index.5a544c41`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 231 vs reference 218 (+13 bytes, no whitespaces)
+
+```js
+import { m } from '../index.f66dda46.js';
+const jpg = '/assets/img.2dae108d.jpg';
+function Files() {
+	return m`<div style="padding: 2rem;"><h1>Files</h1><p> jpg: ${jpg}<br/><img src=${jpg} alt="" height="320"/></p></div>`;
+}
+export default Files;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+ import { m } from '../index.f66dda46.js';
+-let jpg = '/assets/img.2dae108d.jpg';
+-export default function() {
++const jpg = '/assets/img.2dae108d.jpg';
++function Files() {
+ 	return m`<div style="padding: 2rem;"><h1>Files</h1><p> jpg: ${jpg}<br/><img src=${jpg} alt="" height="320"/></p></div>`;
+ }
+-;
++export default Files;
+
+```
+
+## `swc/reduced/3`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 194 vs reference 181 (+13 bytes, no whitespaces)
+
+```js
+var element = jqLite(element);
+if (element.injector()) {
+	var tag = element[0] === document ? 'document' : startingTag(element);
+	throw ngMinErr('btstrpd', 'App Already Bootstrapped with this Element \'{0}\'', tag);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,5 @@
+ var element = jqLite(element);
+-if (element.injector()) throw ngMinErr('btstrpd', 'App Already Bootstrapped with this Element \'{0}\'', element[0] === document ? 'document' : startingTag(element));
++if (element.injector()) {
++	var tag = element[0] === document ? 'document' : startingTag(element);
++	throw ngMinErr('btstrpd', 'App Already Bootstrapped with this Element \'{0}\'', tag);
++}
+
+```
+
+## `swc/issues/11970`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 108 vs reference 94 (+14 bytes, no whitespaces)
+
+```js
+export async function classify(code) {
+	switch (code) {
+		case '66': return 1;
+		case '0': break;
+		default: return 1;
+	}
+	return 2;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,8 @@
+ export async function classify(code) {
+ 	switch (code) {
+-		case '66':
++		case '66': return 1;
++		case '0': break;
+ 		default: return 1;
+-		case '0':
+ 	}
+ 	return 2;
+ }
+
+```
+
+## `swc/issues/2926/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 184 vs reference 170 (+14 bytes, no whitespaces)
+
+```js
+export var webpackJsonpCallback = function(parentChunkLoadingFunction, data) {
+	/******/
+	var runtime = data[2];
+	//......
+	if (runtime) var result = runtime(__webpack_require__);
+	// return result
+};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,7 @@
+ export var webpackJsonpCallback = function(parentChunkLoadingFunction, data) {
+-	/******/ var runtime = data[2];
++	/******/
++	var runtime = data[2];
+ 	//......
+-	runtime && runtime(__webpack_require__);
++	if (runtime) var result = runtime(__webpack_require__);
+ 	// return result
+ };
+
+```
+
 ## `swc/next/36127/2/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 436 vs reference 424 (+12 bytes)
+- size: oxc 413 vs reference 399 (+14 bytes, no whitespaces)
 
 ```js
 /**
@@ -3013,7 +3925,7 @@ export function regexCheck(regex) {
 ## `swc/next/36127/2/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 749 vs reference 737 (+12 bytes)
+- size: oxc 716 vs reference 702 (+14 bytes, no whitespaces)
 
 ```js
 /**
@@ -3076,48 +3988,10 @@ console.log(regexCheck('Foo'));
 
 ```
 
-## `swc/issues/10281`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 177 vs reference 164 (+13 bytes)
-
-```js
-export function bitwise1(a, b) {
-	return a & b | 0;
-}
-export function bitwise2(a) {
-	return ~a | 0;
-}
-export function bitwise3(a, b) {
-	a ^= b | 0;
-	console.log(a | b, a & b);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,9 +1,9 @@
- export function bitwise1(a, b) {
--	return a & b;
-+	return a & b | 0;
- }
- export function bitwise2(a) {
--	return ~a;
-+	return ~a | 0;
- }
- export function bitwise3(a, b) {
--	console.log((a ^= b) | b, a & b);
-+	a ^= b | 0, console.log(a | b, a & b);
- }
-
-```
-
 ## `swc/issues/10328`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 158 vs reference 145 (+13 bytes)
+- size: oxc 119 vs reference 104 (+15 bytes, no whitespaces)
 
 ```js
 function f() {
@@ -3156,666 +4030,10 @@ g('b');
 
 ```
 
-## `swc/issues/5343`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 71 vs reference 58 (+13 bytes)
-
-```js
-({ x: 0 }).x = _iter[_i];
-for ({ x: 0 }.x of iter()) {
-	console.log(123);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,2 @@
--for ({ x: 0 }.x of (_iter[_i], iter())) console.log(123);
-+({ x: 0 }).x = _iter[_i];
-+for ({ x: 0 }.x of iter()) console.log(123);
-
-```
-
-## `swc/issues/9610-destructuring`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `pure getters`, `3 iterations`
-- size: oxc 643 vs reference 630 (+13 bytes)
-
-```js
-// Test: Destructuring patterns with default values
-// Object destructuring with default - unused
-function foo({ a, b = 10 }) {
-	return a;
-}
-// Object destructuring with default - used
-function bar({ a, b = 20 }) {
-	return a + b;
-}
-// Array destructuring with default - unused
-function baz([a, b = 30]) {
-	return a;
-}
-// Array destructuring with default - used
-function qux([a, b = 40]) {
-	return a + b;
-}
-// Combined: regular param and destructuring with defaults
-function combined(x, { a, b = 50 }, c = 60) {
-	return x + a;
-}
-export function example() {
-	return foo({ a: 1 }) + bar({ a: 2 }) + baz([3]) + qux([4]) + combined(5, { a: 6 });
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -8,7 +8,7 @@
- 	return a + b;
- }
- // Array destructuring with default - unused
--function baz([a, ,]) {
-+function baz([a, b = 30]) {
- 	return a;
- }
- // Array destructuring with default - used
-@@ -16,7 +16,7 @@
- 	return a + b;
- }
- // Combined: regular param and destructuring with defaults
--function combined(x, { a, b = 50 }) {
-+function combined(x, { a, b = 50 }, c = 60) {
- 	return x + a;
- }
- export function example() {
-
-```
-
-## `swc/pr/7856/1`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 40 vs reference 27 (+13 bytes)
-
-```js
-const a = () => '';
-const b = {};
-export const c = a;
-b.c = c;
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,2 @@
--export const c = () => '';
-+const a = () => '';
-+export const c = a;
-
-```
-
-## `swc/projects/wmr/archive-1/chunks/index.5a544c41`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 247 vs reference 234 (+13 bytes)
-
-```js
-import { m } from '../index.f66dda46.js';
-const jpg = '/assets/img.2dae108d.jpg';
-function Files() {
-	return m`<div style="padding: 2rem;"><h1>Files</h1><p> jpg: ${jpg}<br/><img src=${jpg} alt="" height="320"/></p></div>`;
-}
-export default Files;
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,6 @@
- import { m } from '../index.f66dda46.js';
--let jpg = '/assets/img.2dae108d.jpg';
--export default function() {
-+const jpg = '/assets/img.2dae108d.jpg';
-+function Files() {
- 	return m`<div style="padding: 2rem;"><h1>Files</h1><p> jpg: ${jpg}<br/><img src=${jpg} alt="" height="320"/></p></div>`;
- }
--;
-+export default Files;
-
-```
-
-## `swc/projects/yui/8`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 322 vs reference 309 (+13 bytes)
-
-```js
-export const E = { _onProgress: function(e) {
-	var self = this, i;
-	//set the internal cache to what just came in.
-	if (e.data && e.data.length) {
-		for (i = 0; i < e.data.length; i++) {
-			e.data[i] = self.getModule(e.data[i].name);
-		}
-	}
-	if (self.onProgress) {
-		self.onProgress.call(self.context, {
-			name: e.url,
-			data: e.data
-		});
-	}
-} };
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,8 @@
- export const E = { _onProgress: function(e) {
--	var i;
-+	var self = this, i;
- 	//set the internal cache to what just came in.
--	if (e.data && e.data.length) for (i = 0; i < e.data.length; i++) e.data[i] = this.getModule(e.data[i].name);
--	this.onProgress && this.onProgress.call(this.context, {
-+	if (e.data && e.data.length) for (i = 0; i < e.data.length; i++) e.data[i] = self.getModule(e.data[i].name);
-+	self.onProgress && self.onProgress.call(self.context, {
- 		name: e.url,
- 		data: e.data
- 	});
-
-```
-
-## `swc/simple/switch/const/call`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 46 vs reference 33 (+13 bytes)
-
-```js
-switch (a()) {
-	case a(): console.log(123);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,3 @@
--a() === a() && console.log(123);
-+switch (a()) {
-+	case a(): console.log(123);
-+}
-
-```
-
-## `swc/issues/11545`
-
-- size: oxc 225 vs reference 211 (+14 bytes)
-
-```js
-function joinArrayWithUndefined(bool) {
-	return ['abc', bool ? undefined : 'def'].join('');
-}
-console.log(joinArrayWithUndefined(true));
-console.log(joinArrayWithUndefined(false));
-const x = ['abc', undefined].join('');
-console.log(x);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
- function joinArrayWithUndefined(bool) {
- 	return ['abc', bool ? void 0 : 'def'].join('');
- }
--console.log(joinArrayWithUndefined(true));
--console.log(joinArrayWithUndefined(false));
--const x = 'abc';
-+console.log(joinArrayWithUndefined(!0));
-+console.log(joinArrayWithUndefined(!1));
-+const x = ['abc', void 0].join('');
- console.log(x);
-
-```
-
-## `swc/issues/6422/1`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 323 vs reference 309 (+14 bytes)
-
-```js
-let getter_effect = 'FAIL';
-let setter_effect = 'FAIL';
-let proto = {
-	get foo() {
-		getter_effect = 'PASS';
-	},
-	set bar(value) {
-		setter_effect = 'PASS';
-	}
-};
-let obj1 = { __proto__: proto };
-let obj2 = { __proto__: proto };
-let unused = obj1.foo;
-obj2.bar = 0;
-assert.strictEqual(getter_effect, 'PASS');
-assert.strictEqual(setter_effect, 'PASS');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,14 +1,9 @@
--let getter_effect = 'FAIL';
--let setter_effect = 'FAIL';
--let proto = {
-+let getter_effect = 'FAIL', setter_effect = 'FAIL', proto = {
- 	get foo() {
- 		getter_effect = 'PASS';
- 	},
- 	set bar(value) {
- 		setter_effect = 'PASS';
- 	}
--};
--({ __proto__: proto }).foo;
--({ __proto__: proto }).bar = 0;
--assert.strictEqual(getter_effect, 'PASS');
--assert.strictEqual(setter_effect, 'PASS');
-+}, obj1 = { __proto__: proto }, obj2 = { __proto__: proto };
-+obj1.foo, obj2.bar = 0, assert.strictEqual(getter_effect, 'PASS'), assert.strictEqual(setter_effect, 'PASS');
-
-```
-
-## `swc/next/feedback-1/reduced/1`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 332 vs reference 318 (+14 bytes)
-
-```js
-export function getInsertStringLength(a, e, t, i) {
-	var r = a.mask, o = a.maskChar, n = t.split(''), s = i;
-	return n.every(function(e) {
-		for (; n = e, isPermanentCharacter(a, t = i) && n !== r[t];) if (++i >= r.length) return !1;
-		var t, n;
-		return (isAllowedCharacter(a, i, e) || e === o) && i++, i < r.length;
-	}), i - s;
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,8 @@
- export function getInsertStringLength(a, e, t, i) {
- 	var r = a.mask, o = a.maskChar, n = t.split(''), s = i;
- 	return n.every(function(e) {
--		for (var t; isPermanentCharacter(a, t = i) && e !== r[t];) if (++i >= r.length) return !1;
-+		for (; n = e, isPermanentCharacter(a, t = i) && n !== r[t];) if (++i >= r.length) return !1;
-+		var t, n;
- 		return (isAllowedCharacter(a, i, e) || e === o) && i++, i < r.length;
- 	}), i - s;
- }
-
-```
-
-## `swc/projects/react/5`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 340 vs reference 326 (+14 bytes)
-
-```js
-var emptyObject = {};
-{
-	Object.freeze(emptyObject);
-}
-/**
-* Base class helpers for the updating state of a component.
-*/
-function Component(props, context, updater) {
-	this.props = props;
-	this.context = context;
-	this.refs = emptyObject;
-	// renderer.
-	this.updater = updater || ReactNoopUpdateQueue;
-}
-Component.prototype.isReactComponent = {};
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,10 @@
- var emptyObject = {};
-+Object.freeze(emptyObject);
- /**
- * Base class helpers for the updating state of a component.
--*/ function Component(props, context, updater) {
-+*/
-+function Component(props, context, updater) {
-+	// renderer.
- 	this.props = props, this.context = context, this.refs = emptyObject, this.updater = updater || ReactNoopUpdateQueue;
- }
--Object.freeze(emptyObject), Component.prototype.isReactComponent = {};
-+Component.prototype.isReactComponent = {};
-
-```
-
-## `swc/projects/yui/14`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 450 vs reference 436 (+14 bytes)
-
-```js
-YArray.indexOf = Lang._isNative(Native.indexOf) ? function(array, value, from) {
-	return Native.indexOf.call(array, value, from);
-} : function(array, value, from) {
-	// http://es5.github.com/#x15.4.4.14
-	var len = array.length;
-	from = +from || 0;
-	from = (from > 0 || -1) * Math.floor(Math.abs(from));
-	if (from < 0) {
-		from += len;
-		if (from < 0) {
-			from = 0;
-		}
-	}
-	for (; from < len; ++from) {
-		if (from in array && array[from] === value) {
-			return from;
-		}
-	}
-	return -1;
-};
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -3,6 +3,6 @@
- } : function(array, value, from) {
- 	// http://es5.github.com/#x15.4.4.14
- 	var len = array.length;
--	for ((from = ((from = +from || 0) > 0 || -1) * Math.floor(Math.abs(from))) < 0 && (from += len) < 0 && (from = 0); from < len; ++from) if (from in array && array[from] === value) return from;
-+	for (from = +from || 0, from = (from > 0 || -1) * Math.floor(Math.abs(from)), from < 0 && (from += len, from < 0 && (from = 0)); from < len; ++from) if (from in array && array[from] === value) return from;
- 	return -1;
- };
-
-```
-
-## `swc/issues/11684`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 86 vs reference 71 (+15 bytes)
-
-```js
-n = new (function() {
-	throw 1;
-})('test');
-class A {}
-g.foo = A;
-n = new A(1, 2, 3);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,5 @@
--n = new function() {
-+n = new (function() {
- 	throw 1;
--}();
-+})('test');
- class A {}
--g.foo = A, n = new A();
-+g.foo = A, n = new A(1, 2, 3);
-
-```
-
-## `swc/issues/12128`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 184 vs reference 169 (+15 bytes)
-
-```js
-var callback;
-var _loop = function() {
-	var value = callback;
-	return value ? 'break' : callback = function() {
-		return value;
-	};
-};
-for (; _loop() !== 'break';);
-console.log(callback());
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
--for (var callback; 'break' !== function() {
-+for (var callback, _loop = function() {
- 	var value = callback;
- 	return value ? 'break' : callback = function() {
- 		return value;
- 	};
--}(););
-+}; _loop() !== 'break';);
- console.log(callback());
-
-```
-
-## `swc/issues/9610-side-effects`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
-- size: oxc 681 vs reference 666 (+15 bytes)
-
-```js
-// Test: Default values with side effects should NOT be removed
-// The function call in default value has side effects
-let sideEffectCounter = 0;
-function getSideEffect() {
-	sideEffectCounter++;
-	return 'value';
-}
-// This should NOT have the default param removed because getSideEffect() has side effects
-function foo(a, b = getSideEffect()) {
-	return a;
-}
-// This SHOULD have the default param removed because literal has no side effects
-function bar(a, b = 'literal') {
-	return a;
-}
-// This should NOT have the default param removed because new Date() has side effects
-function baz(a, b = new Date()) {
-	return a;
-}
-export function example() {
-	return foo(1) + bar(2) + baz(3);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -9,7 +9,7 @@
- 	return a;
- }
- // This SHOULD have the default param removed because literal has no side effects
--function bar(a) {
-+function bar(a, b = 'literal') {
- 	return a;
- }
- // This should NOT have the default param removed because new Date() has side effects
-
-```
-
-## `swc/issues/11684/reduce-vars-only`
-
-- tags: `drop debugger`, `join vars`, `sequences`
-- size: oxc 144 vs reference 128 (+16 bytes)
-
-```js
-out.fn = new (function() {
-	this.kind = 'function';
-})(1, 2, 3);
-out.class = new class {
-	constructor() {
-		this.kind = 'class';
-	}
-}(1, 2, 3);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,7 @@
--out.fn = new function() {
-+out.fn = new (function() {
- 	this.kind = 'function';
--}();
--out.class = new class {
-+})(1, 2, 3), out.class = new class {
- 	constructor() {
- 		this.kind = 'class';
- 	}
--}();
-+}(1, 2, 3);
-
-```
-
-## `swc/issues/11684/unused-only`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 144 vs reference 128 (+16 bytes)
-
-```js
-out.fn = new (function() {
-	this.kind = 'function';
-})(1, 2, 3);
-out.class = new class {
-	constructor() {
-		this.kind = 'class';
-	}
-}(1, 2, 3);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,7 @@
--out.fn = new function() {
-+out.fn = new (function() {
- 	this.kind = 'function';
--}();
--out.class = new class {
-+})(1, 2, 3), out.class = new class {
- 	constructor() {
- 		this.kind = 'class';
- 	}
--}();
-+}(1, 2, 3);
-
-```
-
-## `swc/issues/2926/1`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 201 vs reference 185 (+16 bytes)
-
-```js
-export var webpackJsonpCallback = function(parentChunkLoadingFunction, data) {
-	/******/
-	var runtime = data[2];
-	//......
-	if (runtime) var result = runtime(__webpack_require__);
-	// return result
-};
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,7 @@
- export var webpackJsonpCallback = function(parentChunkLoadingFunction, data) {
--	/******/ var runtime = data[2];
-+	/******/
-+	var runtime = data[2];
- 	//......
--	runtime && runtime(__webpack_require__);
-+	if (runtime) var result = runtime(__webpack_require__);
- 	// return result
- };
-
-```
-
-## `swc/issues/9030`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 294 vs reference 278 (+16 bytes)
-
-```js
-var FRUITS = { MANGO: 'mango' };
-var getMangoLabel = (label) => label[FRUITS.MANGO];
-export default (name) => {
-	// Breaks with switch case
-	switch (name) {
-		case FRUITS.MANGO: {
-			return getMangoLabel;
-		}
-	}
-	// Works with if else
-	// if (name === FRUITS.MANGO) {
-	//     return getMangoLabel;
-	// }
-};
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,9 +1,11 @@
--var FRUITS_MANGO = 'mango', getMangoLabel = (label) => label[FRUITS_MANGO];
--export default ((name) => {
-+var FRUITS = { MANGO: 'mango' }, getMangoLabel = (label) => label[FRUITS.MANGO];
-+export default (name) => {
- 	// Breaks with switch case
--	if (name === FRUITS_MANGO) return getMangoLabel;
-+	switch (name) {
-+		case FRUITS.MANGO: return getMangoLabel;
-+	}
- 	// Works with if else
- 	// if (name === FRUITS.MANGO) {
- 	//     return getMangoLabel;
- 	// }
--});
-+};
-
-```
-
 ## `swc/issues/11368`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 728 vs reference 711 (+17 bytes)
+- size: oxc 672 vs reference 657 (+15 bytes, no whitespaces)
 
 ```js
 /**
@@ -3876,90 +4094,378 @@ console.log(result === 'A' ? 'OK: got A' : 'BUG: expected A, got ' + result);
 
 ```
 
-## `swc/issues/11970`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 135 vs reference 118 (+17 bytes)
-
-```js
-export async function classify(code) {
-	switch (code) {
-		case '66': return 1;
-		case '0': break;
-		default: return 1;
-	}
-	return 2;
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,8 @@
- export async function classify(code) {
- 	switch (code) {
--		case '66':
-+		case '66': return 1;
-+		case '0': break;
- 		default: return 1;
--		case '0':
- 	}
- 	return 2;
- }
-
-```
-
-## `swc/issues/8465`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 70 vs reference 53 (+17 bytes)
-
-```js
-function Infinity() {
-	console.log('xxx');
-}
-export default Infinity;
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
--export default function() {
-+function Infinity() {
- 	console.log('xxx');
- }
--;
-+export default Infinity;
-
-```
-
-## `swc/member_expr/seq`
+## `swc/issues/11684/reduce-vars-only`
 
 - tags: `drop debugger`, `join vars`, `sequences`
-- size: oxc 63 vs reference 46 (+17 bytes)
+- size: oxc 113 vs reference 98 (+15 bytes, no whitespaces)
 
 ```js
-console.log((f(), [2, 4])[5]);
-console.log((f(), { b: 2 }).a);
+out.fn = new (function() {
+	this.kind = 'function';
+})(1, 2, 3);
+out.class = new class {
+	constructor() {
+		this.kind = 'class';
+	}
+}(1, 2, 3);
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1 +1 @@
--console.log(void f()), console.log(void f());
-+console.log((f(), [2, 4])[5]), console.log((f(), { b: 2 }).a);
+@@ -1,8 +1,7 @@
+-out.fn = new function() {
++out.fn = new (function() {
+ 	this.kind = 'function';
+-}();
+-out.class = new class {
++})(1, 2, 3), out.class = new class {
+ 	constructor() {
+ 		this.kind = 'class';
+ 	}
+-}();
++}(1, 2, 3);
+
+```
+
+## `swc/issues/11684/unused-only`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 113 vs reference 98 (+15 bytes, no whitespaces)
+
+```js
+out.fn = new (function() {
+	this.kind = 'function';
+})(1, 2, 3);
+out.class = new class {
+	constructor() {
+		this.kind = 'class';
+	}
+}(1, 2, 3);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,7 @@
+-out.fn = new function() {
++out.fn = new (function() {
+ 	this.kind = 'function';
+-}();
+-out.class = new class {
++})(1, 2, 3), out.class = new class {
+ 	constructor() {
+ 		this.kind = 'class';
+ 	}
+-}();
++}(1, 2, 3);
+
+```
+
+## `swc/issues/4412`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 87 vs reference 72 (+15 bytes, no whitespaces)
+
+```js
+export function foo(arg) {
+	switch (arg) {
+		case ENUM_VALUE: {
+			const { data } = arg;
+			call(data);
+			break;
+		}
+		default: break;
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,9 @@
+ export function foo(arg) {
+-	if (arg === ENUM_VALUE) {
+-		let { data } = arg;
+-		call(data);
++	switch (arg) {
++		case ENUM_VALUE: {
++			let { data } = arg;
++			call(data);
++			break;
++		}
+ 	}
+ }
+
+```
+
+## `swc/projects/react/5`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 313 vs reference 298 (+15 bytes, no whitespaces)
+
+```js
+var emptyObject = {};
+{
+	Object.freeze(emptyObject);
+}
+/**
+* Base class helpers for the updating state of a component.
+*/
+function Component(props, context, updater) {
+	this.props = props;
+	this.context = context;
+	this.refs = emptyObject;
+	// renderer.
+	this.updater = updater || ReactNoopUpdateQueue;
+}
+Component.prototype.isReactComponent = {};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,10 @@
+ var emptyObject = {};
++Object.freeze(emptyObject);
+ /**
+ * Base class helpers for the updating state of a component.
+-*/ function Component(props, context, updater) {
++*/
++function Component(props, context, updater) {
++	// renderer.
+ 	this.props = props, this.context = context, this.refs = emptyObject, this.updater = updater || ReactNoopUpdateQueue;
+ }
+-Object.freeze(emptyObject), Component.prototype.isReactComponent = {};
++Component.prototype.isReactComponent = {};
+
+```
+
+## `swc/projects/underscore/3`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 406 vs reference 391 (+15 bytes, no whitespaces)
+
+```js
+_.max = function(obj, iterator, context) {
+	if (!iterator && _.isArray(obj) && obj[0] === +obj[0] && obj.length < 65535) {
+		return Math.max.apply(Math, obj);
+	}
+	if (!iterator && _.isEmpty(obj)) return -Infinity;
+	var result = {
+		computed: -Infinity,
+		value: -Infinity
+	};
+	each(obj, function(value, index, list) {
+		var computed = iterator ? iterator.call(context, value, index, list) : value;
+		computed > result.computed && (result = {
+			value,
+			computed
+		});
+	});
+	return result.value;
+};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,9 @@
+ _.max = function(obj, iterator, context) {
+ 	if (!iterator && _.isArray(obj) && obj[0] === +obj[0] && obj.length < 65535) return Math.max.apply(Math, obj);
+-	if (!iterator && _.isEmpty(obj)) return -1 / 0;
++	if (!iterator && _.isEmpty(obj)) return -Infinity;
+ 	var result = {
+-		computed: -1 / 0,
+-		value: -1 / 0
++		computed: -Infinity,
++		value: -Infinity
+ 	};
+ 	return each(obj, function(value, index, list) {
+ 		var computed = iterator ? iterator.call(context, value, index, list) : value;
+
+```
+
+## `swc/projects/wmr/archive-1/chunks/index.bf24abaa`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 400 vs reference 385 (+15 bytes, no whitespaces)
+
+```js
+import { s as style, m } from '../index.f66dda46.js';
+const process = {
+	browser: true,
+	env: {
+		FOO: 'bar',
+		OVERRIDE: '11',
+		EMPTY: '',
+		FOO_LOCAL: 'bar',
+		NODE_ENV: 'production'
+	}
+};
+null;
+const foo = 42;
+function Environment() {
+	return m`<table><thead><tr><th>Name ${foo}</th><th>Value</th></tr></thead><tbody>${Object.keys(process.env).sort().map((key) => {
+		return m`<tr key=${key}><td>${key}</td><td>${String(process.env[key])}</td></tr>`;
+	})}</tbody></table>`;
+}
+export { Environment };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,12 +1,15 @@
+ import { m } from '../index.f66dda46.js';
+-let process_env = {
+-	FOO: 'bar',
+-	OVERRIDE: '11',
+-	EMPTY: '',
+-	FOO_LOCAL: 'bar',
+-	NODE_ENV: 'production'
++const process = {
++	browser: !0,
++	env: {
++		FOO: 'bar',
++		OVERRIDE: '11',
++		EMPTY: '',
++		FOO_LOCAL: 'bar',
++		NODE_ENV: 'production'
++	}
+ };
+ function Environment() {
+-	return m`<table><thead><tr><th>Name ${42}</th><th>Value</th></tr></thead><tbody>${Object.keys(process_env).sort().map((key) => m`<tr key=${key}><td>${key}</td><td>${String(process_env[key])}</td></tr>`)}</tbody></table>`;
++	return m`<table><thead><tr><th>Name ${42}</th><th>Value</th></tr></thead><tbody>${Object.keys(process.env).sort().map((key) => m`<tr key=${key}><td>${key}</td><td>${String(process.env[key])}</td></tr>`)}</tbody></table>`;
+ }
+ export { Environment };
+
+```
+
+## `swc/issues/11320`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 258 vs reference 242 (+16 bytes, no whitespaces)
+
+```js
+// Empty class expression should be removed
+new class {}();
+// Class with only a method should also be removed (no side effects)
+new class {
+	foo() {}
+}();
+// Stored result should be removed if unused
+let x = new class {}();
+// Class with side effects in computed key should NOT be removed
+new class {
+	[console.log('side effect')]() {}
+}();
+// Class with property initializer with side effects should NOT be removed
+new class {
+	prop = console.log('side effect');
+}();
+// Class with static block should NOT be removed if static block has side effects
+new class {
+	static {
+		console.log('side effect');
+	}
+}();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,7 @@
+-// Empty class expression should be removed
+-// Class with side effects in computed key should NOT be removed
+-new class {
++// Class with static block should NOT be removed if static block has side effects
++new class {}(), new class {
++	foo() {}
++}(), new class {}(), new class {
+ 	[console.log('side effect')]() {}
+ }(), new class {
+ 	prop = console.log('side effect');
+
+```
+
+## `swc/issues/11684`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 67 vs reference 51 (+16 bytes, no whitespaces)
+
+```js
+n = new (function() {
+	throw 1;
+})('test');
+class A {}
+g.foo = A;
+n = new A(1, 2, 3);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+-n = new function() {
++n = new (function() {
+ 	throw 1;
+-}();
++})('test');
+ class A {}
+-g.foo = A, n = new A();
++g.foo = A, n = new A(1, 2, 3);
+
+```
+
+## `swc/issues/11684/function-expression`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 175 vs reference 159 (+16 bytes, no whitespaces)
+
+```js
+out.zero = new (function() {
+	this.kind = 'zero';
+})(1, 2);
+out.one = new (function(value) {
+	this.value = value;
+})(1, 2, 3);
+out.destructured = new (function({ value }) {
+	this.value = value;
+})({ value: 1 }, 2, 3);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+-out.zero = new function() {
++out.zero = new (function() {
+ 	this.kind = 'zero';
+-}(), out.one = new function(value) {
++})(1, 2), out.one = new (function(value) {
+ 	this.value = value;
+-}(1), out.destructured = new function({ value }) {
++})(1, 2, 3), out.destructured = new (function({ value }) {
+ 	this.value = value;
+-}({ value: 1 });
++})({ value: 1 }, 2, 3);
 
 ```
 
 ## `swc/issues/5846`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 686 vs reference 668 (+18 bytes)
+- size: oxc 559 vs reference 543 (+16 bytes, no whitespaces)
 
 ```js
 function processNode(node, index, parent, pathNodes) {
@@ -4031,35 +4537,25 @@ processNode(null);
 
 ```
 
-## `swc/issues/6864`
+## `swc/issues/7847`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 536 vs reference 518 (+18 bytes)
+- size: oxc 287 vs reference 271 (+16 bytes, no whitespaces)
 
 ```js
-export function removeFromMatrix(matrix, id) {
-	var newMatrix;
-	var indexOfIdToRemove;
-	var row = _.find(matrix, (entry, index) => {
-		if (_.includes(entry, id)) {
-			indexOfIdToRemove = index;
-			return entry;
-		}
-	});
-	if (!row) {
-		return matrix;
-	}
-	if (row.length === 1) {
-		newMatrix = _.without(matrix, row);
-		if (newMatrix[0].length === 2) {
-			const remainingEntry = newMatrix[0];
-			newMatrix = [[remainingEntry[0]], [remainingEntry[1]]];
-		}
-	} else {
-		newMatrix = [...matrix];
-		newMatrix[indexOfIdToRemove] = _.without(row, id);
-	}
-	return newMatrix || matrix;
+function requireState() {
+	if (hasRequiredState) return state;
+	hasRequiredState = 1;
+	return state = { getHighWaterMark: function(o) {
+		return o.objectMode ? 16 : 16384;
+	} };
+}
+if (g()) {
+	var state, hasRequiredState;
+	const a = requireState();
+	console.log(a.getHighWaterMark());
+	const b = requireState();
+	console.log(b.getHighWaterMark());
 }
 
 ```
@@ -4067,68 +4563,46 @@ export function removeFromMatrix(matrix, id) {
 ```diff
 --- reference
 +++ oxc
-@@ -3,11 +3,11 @@
- 		if (_.includes(entry, id)) return indexOfIdToRemove = index, entry;
- 	});
- 	if (!row) return matrix;
--	if (1 === row.length) {
--		if (2 === (newMatrix = _.without(matrix, row))[0].length) {
-+	if (row.length === 1) {
-+		if (newMatrix = _.without(matrix, row), newMatrix[0].length === 2) {
- 			let remainingEntry = newMatrix[0];
- 			newMatrix = [[remainingEntry[0]], [remainingEntry[1]]];
- 		}
--	} else (newMatrix = [...matrix])[indexOfIdToRemove] = _.without(row, id);
-+	} else newMatrix = [...matrix], newMatrix[indexOfIdToRemove] = _.without(row, id);
- 	return newMatrix || matrix;
+@@ -5,5 +5,8 @@
+ }
+ if (g()) {
+ 	var state, hasRequiredState;
+-	console.log(requireState().getHighWaterMark()), console.log(requireState().getHighWaterMark());
++	let a = requireState();
++	console.log(a.getHighWaterMark());
++	let b = requireState();
++	console.log(b.getHighWaterMark());
  }
 
 ```
 
-## `swc/issues/arguments-canonical-index`
+## `swc/issues/8886`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
-- size: oxc 189 vs reference 170 (+19 bytes)
+- tags: `mangle`, `drop debugger`, `join vars`, `sequences`, `remove unused`, `99 iterations`
+- size: oxc 54 vs reference 38 (+16 bytes, no whitespaces)
 
 ```js
-(function(zero, one) {
-	console.log([
-		arguments['01'],
-		arguments[-1],
-		arguments[1.5],
-		arguments[1e21],
-		arguments[-0],
-		arguments[1]
-	].map(String).join(','));
-})('zero', 'one');
+const bar = ((v) => v)(1);
+const foo = ((v) => v)(2);
+eval(bar);
+eval(foo);
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,10 +1,10 @@
--!function(zero, one) {
-+(function(zero, one) {
- 	console.log([
- 		arguments['01'],
- 		arguments[-1],
- 		arguments[1.5],
- 		arguments[1e21],
--		zero,
--		one
-+		arguments[-0],
-+		arguments[1]
- 	].map(String).join(','));
--}('zero', 'one');
-+})('zero', 'one');
+@@ -1,2 +1,2 @@
+-const bar = 1, foo = 2;
++const bar = ((e) => e)(1), foo = ((e) => e)(2);
+ eval(bar), eval(foo);
 
 ```
 
 ## `swc/issues/9176`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 54 vs reference 33 (+21 bytes)
+- size: oxc 47 vs reference 31 (+16 bytes, no whitespaces)
 
 ```js
 'use strict';
@@ -4155,10 +4629,58 @@ const k = (function() {
 
 ```
 
+## `swc/issues/9610`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
+- size: oxc 194 vs reference 178 (+16 bytes, no whitespaces)
+
+```js
+const defaultMessage = 'hello';
+function x(x) {
+	return x;
+}
+function y(x, y, z) {
+	return x;
+}
+;
+function abc(a) {
+	return x(a);
+}
+function abc2(a, x, z = defaultMessage) {
+	return y(a);
+}
+export function example() {
+	return `${x(2)} ${y('2')} ${abc(3)} ${abc2('3')}`;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,13 +1,13 @@
+ function x(x) {
+ 	return x;
+ }
+-function y(x) {
++function y(x, y, z) {
+ 	return x;
+ }
+ function abc(a) {
+ 	return x(a);
+ }
+-function abc2(a) {
++function abc2(a, x, z = 'hello') {
+ 	return y(a);
+ }
+ export function example() {
+
+```
+
 ## `swc/issues/9823/3`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 42 vs reference 21 (+21 bytes)
+- size: oxc 36 vs reference 20 (+16 bytes, no whitespaces)
 
 ```js
 (function() {
@@ -4179,80 +4701,107 @@ const k = (function() {
 
 ```
 
-## `swc/projects/next/extra/if_return/1`
+## `swc/issues/drop-console-es2015`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 402 vs reference 381 (+21 bytes)
+- tags: `drop console`, `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 184 vs reference 168 (+16 bytes, no whitespaces)
 
 ```js
-export function foo() {
-	if (state.loading || state.error) return _react.default.createElement(opts.loading, {
-		isLoading: state.loading,
-		pastDelay: state.pastDelay,
-		timedOut: state.timedOut,
-		error: state.error,
-		retry: subscription.retry
-	});
-	if (!state.loaded) return null;
-	var obj;
-	return _react.default.createElement((obj = state.loaded) && obj.__esModule ? obj.default : obj, props);
+const err = console.error.bind(console);
+err('boom');
+process.stdout.write(typeof err + '\n');
+let threw = false;
+try {
+	new (console.error.bind(console))();
+} catch (e) {
+	threw = true;
 }
+process.stdout.write(threw + '\n');
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,10 +1,12 @@
- export function foo() {
--	var obj;
--	return state.loading || state.error ? _react.default.createElement(opts.loading, {
-+	if (state.loading || state.error) return _react.default.createElement(opts.loading, {
- 		isLoading: state.loading,
- 		pastDelay: state.pastDelay,
- 		timedOut: state.timedOut,
- 		error: state.error,
- 		retry: subscription.retry
--	}) : state.loaded ? _react.default.createElement((obj = state.loaded) && obj.__esModule ? obj.default : obj, props) : null;
-+	});
-+	if (!state.loaded) return null;
-+	var obj;
-+	return _react.default.createElement((obj = state.loaded) && obj.__esModule ? obj.default : obj, props);
+@@ -1,10 +1,9 @@
+-const err = (() => {}).bind();
+-err('boom');
+-process.stdout.write(typeof err + '\n');
+-let threw = false;
++const err = console.error.bind(console);
++err('boom'), process.stdout.write(typeof err + '\n');
++let threw = !1;
+ try {
+-	new ((() => {}).bind())();
+-} catch (e) {
+-	threw = true;
++	new (console.error.bind(console))();
++} catch {
++	threw = !0;
  }
+ process.stdout.write(threw + '\n');
 
 ```
 
-## `swc/reduced/3`
+## `swc/projects/react/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 218 vs reference 197 (+21 bytes)
+- size: oxc 356 vs reference 340 (+16 bytes, no whitespaces)
 
 ```js
-var element = jqLite(element);
-if (element.injector()) {
-	var tag = element[0] === document ? 'document' : startingTag(element);
-	throw ngMinErr('btstrpd', 'App Already Bootstrapped with this Element \'{0}\'', tag);
-}
+(function() {
+	{
+		ReactDebugCurrentFrame.setExtraStackFrame = function(stack) {
+			{
+				currentExtraStackFrame = stack;
+			}
+		};
+		ReactDebugCurrentFrame.getCurrentStack = null;
+		ReactDebugCurrentFrame.getStackAddendum = function() {
+			var stack = '';
+			if (currentExtraStackFrame) {
+				stack += currentExtraStackFrame;
+			}
+			var impl = ReactDebugCurrentFrame.getCurrentStack;
+			if (impl) {
+				stack += impl() || '';
+			}
+			return stack;
+		};
+	}
+})();
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,2 +1,5 @@
- var element = jqLite(element);
--if (element.injector()) throw ngMinErr('btstrpd', 'App Already Bootstrapped with this Element \'{0}\'', element[0] === document ? 'document' : startingTag(element));
-+if (element.injector()) {
-+	var tag = element[0] === document ? 'document' : startingTag(element);
-+	throw ngMinErr('btstrpd', 'App Already Bootstrapped with this Element \'{0}\'', tag);
-+}
+@@ -1,8 +1,10 @@
+-ReactDebugCurrentFrame.setExtraStackFrame = function(stack) {
+-	currentExtraStackFrame = stack;
+-}, ReactDebugCurrentFrame.getCurrentStack = null, ReactDebugCurrentFrame.getStackAddendum = function() {
+-	var stack = '';
+-	currentExtraStackFrame && (stack += currentExtraStackFrame);
+-	var impl = ReactDebugCurrentFrame.getCurrentStack;
+-	return impl && (stack += impl() || ''), stack;
+-};
++(function() {
++	ReactDebugCurrentFrame.setExtraStackFrame = function(stack) {
++		currentExtraStackFrame = stack;
++	}, ReactDebugCurrentFrame.getCurrentStack = null, ReactDebugCurrentFrame.getStackAddendum = function() {
++		var stack = '';
++		currentExtraStackFrame && (stack += currentExtraStackFrame);
++		var impl = ReactDebugCurrentFrame.getCurrentStack;
++		return impl && (stack += impl() || ''), stack;
++	};
++})();
 
 ```
 
 ## `swc/issues/11684/class-expression`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 352 vs reference 330 (+22 bytes)
+- size: oxc 278 vs reference 261 (+17 bytes, no whitespaces)
 
 ```js
 out.zero = new class {
@@ -4305,230 +4854,85 @@ out.derived = new class extends Base {
 
 ```
 
-## `swc/issues/11684/function-expression`
+## `swc/issues/11684/identifier-side-effects`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 218 vs reference 196 (+22 bytes)
+- size: oxc 521 vs reference 504 (+17 bytes, no whitespaces)
 
 ```js
-out.zero = new (function() {
+function FunctionCtor(value) {
+	this.value = value;
+}
+out.FunctionCtor = FunctionCtor;
+out.functionCtor = new FunctionCtor(effect('function-used'), 1, effect('function-extra-a'), 2, effect('function-extra-b'));
+class ClassCtor {
+	constructor(value) {
+		this.value = value;
+	}
+}
+out.ClassCtor = ClassCtor;
+out.classCtor = new ClassCtor(effect('class-used'), 1, effect('class-extra-a'), 2, effect('class-extra-b'));
+function Zero() {
 	this.kind = 'zero';
-})(1, 2);
-out.one = new (function(value) {
-	this.value = value;
-})(1, 2, 3);
-out.destructured = new (function({ value }) {
-	this.value = value;
-})({ value: 1 }, 2, 3);
+}
+out.Zero = Zero;
+out.sequence = new Zero(1, (2, effect('sequence')), 3);
+out.conditional = new Zero(1, condition ? effect('yes') : 2, 3);
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,7 +1,7 @@
--out.zero = new function() {
-+out.zero = new (function() {
+@@ -1,13 +1,14 @@
+ function FunctionCtor(value) {
+ 	this.value = value;
+ }
+-out.FunctionCtor = FunctionCtor, out.functionCtor = new FunctionCtor(effect('function-used'), effect('function-extra-a'), effect('function-extra-b'));
++out.FunctionCtor = FunctionCtor, out.functionCtor = new FunctionCtor(effect('function-used'), 1, effect('function-extra-a'), 2, effect('function-extra-b'));
+ class ClassCtor {
+ 	constructor(value) {
+ 		this.value = value;
+ 	}
+ }
++out.ClassCtor = ClassCtor, out.classCtor = new ClassCtor(effect('class-used'), 1, effect('class-extra-a'), 2, effect('class-extra-b'));
+ function Zero() {
  	this.kind = 'zero';
--}(), out.one = new function(value) {
-+})(1, 2), out.one = new (function(value) {
- 	this.value = value;
--}(1), out.destructured = new function({ value }) {
-+})(1, 2, 3), out.destructured = new (function({ value }) {
- 	this.value = value;
--}({ value: 1 });
-+})({ value: 1 }, 2, 3);
+ }
+-out.ClassCtor = ClassCtor, out.classCtor = new ClassCtor(effect('class-used'), effect('class-extra-a'), effect('class-extra-b')), out.Zero = Zero, out.sequence = new Zero(effect('sequence')), out.conditional = new Zero(condition && effect('yes'));
++out.Zero = Zero, out.sequence = new Zero(1, effect('sequence'), 3), out.conditional = new Zero(1, condition ? effect('yes') : 2, 3);
 
 ```
 
-## `swc/issues/4386/2`
+## `swc/issues/6864`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 374 vs reference 352 (+22 bytes)
+- size: oxc 458 vs reference 441 (+17 bytes, no whitespaces)
 
 ```js
-var application;
-(() => {
-	var __webpack_require__ = {};
-	(() => {
-		__webpack_require__.d = (exports, definition) => {};
-	})();
-	(() => {
-		__webpack_require__.o = (obj, prop) => {};
-	})();
-	(() => {
-		__webpack_require__.r = (exports) => {};
-	})();
-	var __webpack_exports__ = {};
-	__webpack_require__.r(__webpack_exports__);
-	__webpack_require__.d(__webpack_exports__, { 'bootstrap': () => bootstrap });
-	function bootstrap() {
-		alert();
+export function removeFromMatrix(matrix, id) {
+	var newMatrix;
+	var indexOfIdToRemove;
+	var row = _.find(matrix, (entry, index) => {
+		if (_.includes(entry, id)) {
+			indexOfIdToRemove = index;
+			return entry;
+		}
+	});
+	if (!row) {
+		return matrix;
 	}
-	application = __webpack_exports__;
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,9 @@
--var __webpack_require__ = {};
--__webpack_require__.d = (exports, definition) => {}, __webpack_require__.o = (obj, prop) => {}, __webpack_require__.r = (exports) => {};
--var __webpack_exports__ = {};
--function bootstrap() {
--	alert();
--}
--__webpack_require__.r(__webpack_exports__), __webpack_require__.d(__webpack_exports__, { bootstrap: () => bootstrap });
-+(() => {
-+	var __webpack_require__ = {};
-+	__webpack_require__.d = (exports, definition) => {}, __webpack_require__.o = (obj, prop) => {}, __webpack_require__.r = (exports) => {};
-+	var __webpack_exports__ = {};
-+	__webpack_require__.r(__webpack_exports__), __webpack_require__.d(__webpack_exports__, { bootstrap: () => bootstrap });
-+	function bootstrap() {
-+		alert();
-+	}
-+})();
-
-```
-
-## `swc/issues/6957/2`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 111 vs reference 89 (+22 bytes)
-
-```js
-assertEquals('1', .5.toFixed(0), '0.5.toFixed(0)');
-assertEquals('-1', (-.5).toFixed(0), '(-0.5).toFixed(0)');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1 @@
--assertEquals('1', '1', '0.5.toFixed(0)');
--assertEquals('-1', '-1', '(-0.5).toFixed(0)');
-+assertEquals('1', .5.toFixed(0), '0.5.toFixed(0)'), assertEquals('-1', (-.5).toFixed(0), '(-0.5).toFixed(0)');
-
-```
-
-## `swc/issues/9610`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
-- size: oxc 231 vs reference 209 (+22 bytes)
-
-```js
-const defaultMessage = 'hello';
-function x(x) {
-	return x;
-}
-function y(x, y, z) {
-	return x;
-}
-;
-function abc(a) {
-	return x(a);
-}
-function abc2(a, x, z = defaultMessage) {
-	return y(a);
-}
-export function example() {
-	return `${x(2)} ${y('2')} ${abc(3)} ${abc2('3')}`;
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,13 +1,13 @@
- function x(x) {
- 	return x;
- }
--function y(x) {
-+function y(x, y, z) {
- 	return x;
- }
- function abc(a) {
- 	return x(a);
- }
--function abc2(a) {
-+function abc2(a, x, z = 'hello') {
- 	return y(a);
- }
- export function example() {
-
-```
-
-## `swc/issues/next-97517`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
-- size: oxc 243 vs reference 221 (+22 bytes)
-
-```js
-module.exports = [50708, (context) => {
-	'use strict';
-	var join, run;
-	join = (left, right) => left + right, run = (rows) => {
-		rows.map((row) => join(row.g, row.r));
-		return rows.map((row) => (item) => join(row.g, item.l));
-	};
-	context.s([
-		'run',
-		0,
-		run
-	], 42519);
-}];
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,14 +1,9 @@
--module.exports = [50708, (r) => {
-+module.exports = [50708, (context) => {
- 	'use strict';
--	r.s([
-+	var join = (left, right) => left + right;
-+	context.s([
- 		'run',
- 		0,
--		(r) => (r.map((r) => {
--			let e;
--			return e = r.g, e + r.r;
--		}), r.map((r) => (e) => {
--			let t;
--			return t = r.g, t + e.l;
--		}))
-+		(rows) => (rows.map((row) => join(row.g, row.r)), rows.map((row) => (item) => join(row.g, item.l)))
- 	], 42519);
- }];
-
-```
-
-## `swc/issues/react-countup/2`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 653 vs reference 631 (+22 bytes)
-
-```js
-export function formatNumber(t) {
-	var i, a, n, e, r = t < 0 ? '-' : '';
-	i = Math.abs(t).toFixed(s.options.decimalPlaces);
-	var o = (i += '').split('.');
-	if (a = o[0], n = o.length > 1 ? s.options.decimal + o[1] : '', s.options.useGrouping) {
-		e = '';
-		for (var l = 0, h = a.length; l < h; ++l) 0 !== l && l % 3 == 0 && (e = s.options.separator + e), e = a[h - l - 1] + e;
-		a = e;
+	if (row.length === 1) {
+		newMatrix = _.without(matrix, row);
+		if (newMatrix[0].length === 2) {
+			const remainingEntry = newMatrix[0];
+			newMatrix = [[remainingEntry[0]], [remainingEntry[1]]];
+		}
+	} else {
+		newMatrix = [...matrix];
+		newMatrix[indexOfIdToRemove] = _.without(row, id);
 	}
-	return s.options.numerals && s.options.numerals.length && (a = a.replace(/[0-9]/g, function(t) {
-		return s.options.numerals[+t];
-	}), n = n.replace(/[0-9]/g, function(t) {
-		return s.options.numerals[+t];
-	})), r + s.options.prefix + a + n + s.options.suffix;
+	return newMatrix || matrix;
 }
 
 ```
@@ -4536,71 +4940,108 @@ export function formatNumber(t) {
 ```diff
 --- reference
 +++ oxc
-@@ -1,13 +1,15 @@
- export function formatNumber(t) {
--	var a, n, e, o = (Math.abs(t).toFixed(s.options.decimalPlaces) + '').split('.');
-+	var i, a, n, e, r = t < 0 ? '-' : '';
-+	i = Math.abs(t).toFixed(s.options.decimalPlaces);
-+	var o = (i += '').split('.');
- 	if (a = o[0], n = o.length > 1 ? s.options.decimal + o[1] : '', s.options.useGrouping) {
- 		e = '';
--		for (var l = 0, h = a.length; l < h; ++l) 0 !== l && l % 3 == 0 && (e = s.options.separator + e), e = a[h - l - 1] + e;
-+		for (var l = 0, h = a.length; l < h; ++l) l !== 0 && l % 3 == 0 && (e = s.options.separator + e), e = a[h - l - 1] + e;
- 		a = e;
- 	}
- 	return s.options.numerals && s.options.numerals.length && (a = a.replace(/[0-9]/g, function(t) {
- 		return s.options.numerals[+t];
- 	}), n = n.replace(/[0-9]/g, function(t) {
- 		return s.options.numerals[+t];
--	})), (t < 0 ? '-' : '') + s.options.prefix + a + n + s.options.suffix;
-+	})), r + s.options.prefix + a + n + s.options.suffix;
+@@ -3,11 +3,11 @@
+ 		if (_.includes(entry, id)) return indexOfIdToRemove = index, entry;
+ 	});
+ 	if (!row) return matrix;
+-	if (1 === row.length) {
+-		if (2 === (newMatrix = _.without(matrix, row))[0].length) {
++	if (row.length === 1) {
++		if (newMatrix = _.without(matrix, row), newMatrix[0].length === 2) {
+ 			let remainingEntry = newMatrix[0];
+ 			newMatrix = [[remainingEntry[0]], [remainingEntry[1]]];
+ 		}
+-	} else (newMatrix = [...matrix])[indexOfIdToRemove] = _.without(row, id);
++	} else newMatrix = [...matrix], newMatrix[indexOfIdToRemove] = _.without(row, id);
+ 	return newMatrix || matrix;
  }
 
 ```
 
-## `swc/projects/wmr/archive-1/chunks/class-fields.43d5f69c`
+## `swc/issues/8465`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 343 vs reference 320 (+23 bytes)
+- size: oxc 63 vs reference 46 (+17 bytes, no whitespaces)
 
 ```js
-import { _, m } from '../index.f66dda46.js';
-class ClassFields extends _ {
-	state = { value: 1 };
-	onClick = () => {
-		this.setState((prev) => ({ value: prev.value + 1 }));
-	};
-	render() {
-		return m`<div><p> State: <span>${this.state.value}</span></p><button onClick=${this.onClick}>click me</button></div>`;
-	}
+function Infinity() {
+	console.log('xxx');
 }
-export default ClassFields;
+export default Infinity;
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,5 +1,5 @@
- import { _, m } from '../index.f66dda46.js';
--export default class extends _ {
-+class ClassFields extends _ {
- 	state = { value: 1 };
- 	onClick = () => {
- 		this.setState((prev) => ({ value: prev.value + 1 }));
-@@ -8,4 +8,4 @@
- 		return m`<div><p> State: <span>${this.state.value}</span></p><button onClick=${this.onClick}>click me</button></div>`;
- 	}
+@@ -1,4 +1,4 @@
+-export default function() {
++function Infinity() {
+ 	console.log('xxx');
  }
 -;
-+export default ClassFields;
++export default Infinity;
+
+```
+
+## `swc/issues/8718/5`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 33 vs reference 15 (+18 bytes, no whitespaces)
+
+```js
+let a = 0;
+function f() {
+	a = '123';
+	console.log(a);
+}
+console.log((a += 1, a += 2));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,2 @@
+-console.log(3);
++let a = 0;
++console.log((a += 1, a += 2));
+
+```
+
+## `swc/issues/8718/6`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 33 vs reference 15 (+18 bytes, no whitespaces)
+
+```js
+let a = 0;
+function g() {
+	a = '123';
+	console.log(a);
+}
+function f() {
+	// a = "123";
+	console.log(a);
+}
+console.log((a += 1, a += 2));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,2 @@
+-console.log(3);
++let a = 0;
++console.log((a += 1, a += 2));
 
 ```
 
 ## `swc/issues/8737`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 90 vs reference 66 (+24 bytes)
+- size: oxc 67 vs reference 49 (+18 bytes, no whitespaces)
 
 ```js
 d(() => {
@@ -4631,7 +5072,7 @@ d(() => {
 ## `swc/issues/8737/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 133 vs reference 109 (+24 bytes)
+- size: oxc 102 vs reference 84 (+18 bytes, no whitespaces)
 
 ```js
 d(function() {
@@ -4660,66 +5101,49 @@ d(function() {
 
 ```
 
-## `swc/issues/8886`
+## `swc/issues/8919`
 
-- tags: `mangle`, `drop debugger`, `join vars`, `sequences`, `remove unused`, `99 iterations`
-- size: oxc 70 vs reference 46 (+24 bytes)
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 51 vs reference 33 (+18 bytes, no whitespaces)
 
 ```js
-const bar = ((v) => v)(1);
-const foo = ((v) => v)(2);
-eval(bar);
-eval(foo);
+'use strict';
+const k = (() => {
+	switch ('') {
+		default: var x;
+		case '': x;
+	}
+	return x;
+})();
+console.log(k);
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,2 +1,2 @@
--const bar = 1, foo = 2;
-+const bar = ((e) => e)(1), foo = ((e) => e)(2);
- eval(bar), eval(foo);
+@@ -1,2 +1,5 @@
+ 'use strict';
+-console.log(void 0);
++console.log((() => {
++	var x;
++	return x;
++})());
 
 ```
 
-## `swc/issues/react-instancesearch/001`
+## `swc/simple/inline/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 646 vs reference 622 (+24 bytes)
+- size: oxc 52 vs reference 34 (+18 bytes, no whitespaces)
 
 ```js
-import { defer } from './utils';
-export default function createWidgetsManager(onWidgetsUpdate) {
-	const widgets = [];
-	// Is an update scheduled?
-	let scheduled = false;
-	// The state manager's updates need to be batched since more than one
-	// component can register or unregister widgets during the same tick.
-	function scheduleUpdate() {
-		if (scheduled) {
-			return;
-		}
-		scheduled = true;
-		defer(() => {
-			scheduled = false;
-			onWidgetsUpdate();
-		});
-	}
-	return {
-		registerWidget(widget) {
-			widgets.push(widget);
-			scheduleUpdate();
-			return function unregisterWidget() {
-				widgets.splice(widgets.indexOf(widget), 1);
-				scheduleUpdate();
-			};
-		},
-		update: scheduleUpdate,
-		getWidgets() {
-			return widgets;
-		}
-	};
+var a = 1;
+h();
+function h() {
+	(function g() {
+		a-- && g();
+	})();
 }
 
 ```
@@ -4727,32 +5151,24 @@ export default function createWidgetsManager(onWidgetsUpdate) {
 ```diff
 --- reference
 +++ oxc
-@@ -9,10 +9,14 @@
- 		}));
- 	}
- 	return {
--		registerWidget: (widget) => (widgets.push(widget), scheduleUpdate(), function() {
--			widgets.splice(widgets.indexOf(widget), 1), scheduleUpdate();
--		}),
-+		registerWidget(widget) {
-+			return widgets.push(widget), scheduleUpdate(), function() {
-+				widgets.splice(widgets.indexOf(widget), 1), scheduleUpdate();
-+			};
-+		},
- 		update: scheduleUpdate,
--		getWidgets: () => widgets
-+		getWidgets() {
-+			return widgets;
-+		}
- 	};
- }
+@@ -1,4 +1,7 @@
+ var a = 1;
+-!function g() {
+-	a-- && g();
+-}();
++h();
++function h() {
++	(function g() {
++		a-- && g();
++	})();
++}
 
 ```
 
 ## `swc/issues/11684/function-decl`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 501 vs reference 476 (+25 bytes)
+- size: oxc 420 vs reference 401 (+19 bytes, no whitespaces)
 
 ```js
 function Zero() {
@@ -4804,1198 +5220,10 @@ out.default = new Default(undefined, 2, 3, 4);
 
 ```
 
-## `swc/issues/7847`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 336 vs reference 311 (+25 bytes)
-
-```js
-function requireState() {
-	if (hasRequiredState) return state;
-	hasRequiredState = 1;
-	return state = { getHighWaterMark: function(o) {
-		return o.objectMode ? 16 : 16384;
-	} };
-}
-if (g()) {
-	var state, hasRequiredState;
-	const a = requireState();
-	console.log(a.getHighWaterMark());
-	const b = requireState();
-	console.log(b.getHighWaterMark());
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -5,5 +5,8 @@
- }
- if (g()) {
- 	var state, hasRequiredState;
--	console.log(requireState().getHighWaterMark()), console.log(requireState().getHighWaterMark());
-+	let a = requireState();
-+	console.log(a.getHighWaterMark());
-+	let b = requireState();
-+	console.log(b.getHighWaterMark());
- }
-
-```
-
-## `swc/pr/6169/1`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 49 vs reference 24 (+25 bytes)
-
-```js
-var ref = ['foo'], key = ref[0], value = ref[1];
-value.toUpperCase();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,2 @@
--(void 0).toUpperCase();
-+var ref = ['foo'];
-+ref[0], ref[1].toUpperCase();
-
-```
-
-## `swc/projects/wmr/archive-1/chunks/alias-outside.6e8773c7`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 180 vs reference 155 (+25 bytes)
-
-```js
-import { m } from '../index.f66dda46.js';
-const value$1 = 'it works';
-const value = 'it works';
-function AliasOutside() {
-	return m`<div><p>Inside: ${value}</p><p>Outside: ${value$1}</p></div>`;
-}
-export default AliasOutside;
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,5 @@
- import { m } from '../index.f66dda46.js';
--export default function() {
-+function AliasOutside() {
- 	return m`<div><p>Inside: ${'it works'}</p><p>Outside: ${'it works'}</p></div>`;
- }
--;
-+export default AliasOutside;
-
-```
-
-## `swc/issues/4412`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 121 vs reference 95 (+26 bytes)
-
-```js
-export function foo(arg) {
-	switch (arg) {
-		case ENUM_VALUE: {
-			const { data } = arg;
-			call(data);
-			break;
-		}
-		default: break;
-	}
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,9 @@
- export function foo(arg) {
--	if (arg === ENUM_VALUE) {
--		let { data } = arg;
--		call(data);
-+	switch (arg) {
-+		case ENUM_VALUE: {
-+			let { data } = arg;
-+			call(data);
-+			break;
-+		}
- 	}
- }
-
-```
-
-## `swc/issues/7331/1`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 103 vs reference 77 (+26 bytes)
-
-```js
-export default function() {
-	function foo(arg) {
-		var arg = arg.slice();
-		return arg;
-	}
-	foo([]);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,7 @@
- export default function() {
--	var arg;
--	var arg;
--	arg = (arg = []).slice();
-+	function foo(arg) {
-+		var arg = arg.slice();
-+		return arg;
-+	}
-+	foo([]);
- }
-
-```
-
-## `swc/issues/8718/3`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 88 vs reference 62 (+26 bytes)
-
-```js
-let a;
-function f() {
-	a = '123';
-	console.log(a);
-}
-f();
-console.log((a += 1, a += 2));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,5 @@
- let a;
--console.log(a = '123'), console.log((a += 1, a += 2));
-+function f() {
-+	a = '123', console.log(a);
-+}
-+f(), console.log((a += 1, a += 2));
-
-```
-
-## `swc/issues/8718/5`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 42 vs reference 16 (+26 bytes)
-
-```js
-let a = 0;
-function f() {
-	a = '123';
-	console.log(a);
-}
-console.log((a += 1, a += 2));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,2 @@
--console.log(3);
-+let a = 0;
-+console.log((a += 1, a += 2));
-
-```
-
-## `swc/issues/8718/6`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 42 vs reference 16 (+26 bytes)
-
-```js
-let a = 0;
-function g() {
-	a = '123';
-	console.log(a);
-}
-function f() {
-	// a = "123";
-	console.log(a);
-}
-console.log((a += 1, a += 2));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,2 @@
--console.log(3);
-+let a = 0;
-+console.log((a += 1, a += 2));
-
-```
-
-## `swc/issues/8919`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 61 vs reference 35 (+26 bytes)
-
-```js
-'use strict';
-const k = (() => {
-	switch ('') {
-		default: var x;
-		case '': x;
-	}
-	return x;
-})();
-console.log(k);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,5 @@
- 'use strict';
--console.log(void 0);
-+console.log((() => {
-+	var x;
-+	return x;
-+})());
-
-```
-
-## `swc/issues/cycle-1`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 140 vs reference 114 (+26 bytes)
-
-```js
-(() => {
-	class A {
-		cycle() {
-			return B;
-		}
-	}
-	class B {
-		cycle() {
-			return A;
-		}
-	}
-	class ExtendsA1 extends sideEffectWith(A) {}
-	class Unused1 {
-		constructor() {
-			ExtendsA1;
-		}
-	}
-	class ExtendsA2 extends sideEffectWith(A) {}
-	class Unused2 {
-		async put() {
-			ExtendsA2;
-		}
-	}
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,11 +1,13 @@
--class A {
--	cycle() {
--		return B;
-+(() => {
-+	class A {
-+		cycle() {
-+			return B;
-+		}
- 	}
--}
--class B {
--	cycle() {
--		return A;
-+	class B {
-+		cycle() {
-+			return A;
-+		}
- 	}
--}
--sideEffectWith(A), sideEffectWith(A);
-+	sideEffectWith(A), sideEffectWith(A);
-+})();
-
-```
-
-## `swc/issues/cycle-2`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 121 vs reference 95 (+26 bytes)
-
-```js
-(() => {
-	class C {
-		cycle() {
-			return D;
-		}
-	}
-	class D {
-		cycle() {
-			return C;
-		}
-	}
-	class ExtendsC extends sideEffectWith(C) {}
-	class Unused {
-		constructor() {
-			ExtendsC;
-		}
-	}
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,11 +1,13 @@
--class C {
--	cycle() {
--		return D;
-+(() => {
-+	class C {
-+		cycle() {
-+			return D;
-+		}
- 	}
--}
--class D {
--	cycle() {
--		return C;
-+	class D {
-+		cycle() {
-+			return C;
-+		}
- 	}
--}
--sideEffectWith(C);
-+	sideEffectWith(C);
-+})();
-
-```
-
-## `swc/issues/react/hooks/1`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 444 vs reference 418 (+26 bytes)
-
-```js
-import { jsx as _jsx, Fragment as _Fragment } from 'react/jsx-runtime';
-import { useRouter } from 'next/router';
-import { useProject } from '@swr/use-project';
-import useTeam from '@swr/use-team';
-export default function MyComp() {
-	var _query = useRouter().query, projectName = _query.project;
-	var ref = useProject(projectName), projectInfo = ref.data;
-	var ref1 = useTeam(), teamSlug = ref1.teamSlug;
-	var projectId = projectInfo === null || projectInfo === void 0 ? void 0 : projectInfo.id;
-	var ref2 = useProjectBranches(projectId), branches = ref2.data;
-	return _jsx(_Fragment, {});
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -3,6 +3,8 @@
- import { useProject } from '@swr/use-project';
- import useTeam from '@swr/use-team';
- export default function MyComp() {
--	var projectInfo = useProject(useRouter().query.project).data;
--	return useTeam().teamSlug, useProjectBranches(null == projectInfo ? void 0 : projectInfo.id).data, _jsx(_Fragment, {});
-+	var projectName = useRouter().query.project, projectInfo = useProject(projectName).data;
-+	useTeam().teamSlug;
-+	var projectId = projectInfo?.id;
-+	return useProjectBranches(projectId).data, _jsx(_Fragment, {});
- }
-
-```
-
-## `swc/issues/react/hooks/5`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 466 vs reference 440 (+26 bytes)
-
-```js
-const CONST_1 = 'const1';
-const CONST_2 = 'const2';
-function useHook1() {
-	const [v1, v1_set] = useState(undefined);
-	useEffect(() => {
-		if (GLOBALS.get(CONST_1) && GLOBALS.get(CONST_2)) {
-			v1_set(true);
-		} else {
-			v1_set(false);
-		}
-	}, []);
-	return v1;
-}
-function useHook2() {
-	const [a1, a1_set] = useState({});
-	useEffect(() => {
-		a1_set(JSON.parse(GLOBALS.get(CONST1) || '{}'));
-	}, []);
-	return a1;
-}
-export function HeaderCTA() {
-	const varB = useHook2();
-	const varA = useHook1();
-	// Loading...
-	if (varA === undefined) {
-		return null;
-	}
-	if (varA) {
-		return use(varB.field);
-	}
-	return pure();
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,14 +1,16 @@
-+function useHook1() {
-+	let [v1, v1_set] = useState(void 0);
-+	return useEffect(() => {
-+		GLOBALS.get('const1') && GLOBALS.get('const2') ? v1_set(!0) : v1_set(!1);
-+	}, []), v1;
-+}
-+function useHook2() {
-+	let [a1, a1_set] = useState({});
-+	return useEffect(() => {
-+		a1_set(JSON.parse(GLOBALS.get(CONST1) || '{}'));
-+	}, []), a1;
-+}
- export function HeaderCTA() {
--	let varB = function() {
--		let [a1, a1_set] = useState({});
--		return useEffect(() => {
--			a1_set(JSON.parse(GLOBALS.get(CONST1) || '{}'));
--		}, []), a1;
--	}(), varA = function() {
--		let [v1, v1_set] = useState(void 0);
--		return useEffect(() => {
--			GLOBALS.get('const1') && GLOBALS.get('const2') ? v1_set(!0) : v1_set(!1);
--		}, []), v1;
--	}();
--	return void 0 === varA ? null : varA ? use(varB.field) : pure();
-+	let varB = useHook2(), varA = useHook1();
-+	return varA === void 0 ? null : varA ? use(varB.field) : pure();
- }
-
-```
-
-## `swc/simple/inline/2`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 71 vs reference 45 (+26 bytes)
-
-```js
-var a = 1;
-h();
-function h() {
-	(function g() {
-		a-- && g();
-	})();
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,7 @@
- var a = 1;
--!function g() {
--	a-- && g();
--}();
-+h();
-+function h() {
-+	(function g() {
-+		a-- && g();
-+	})();
-+}
-
-```
-
-## `swc/issues/11684/identifier-side-effects`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 588 vs reference 561 (+27 bytes)
-
-```js
-function FunctionCtor(value) {
-	this.value = value;
-}
-out.FunctionCtor = FunctionCtor;
-out.functionCtor = new FunctionCtor(effect('function-used'), 1, effect('function-extra-a'), 2, effect('function-extra-b'));
-class ClassCtor {
-	constructor(value) {
-		this.value = value;
-	}
-}
-out.ClassCtor = ClassCtor;
-out.classCtor = new ClassCtor(effect('class-used'), 1, effect('class-extra-a'), 2, effect('class-extra-b'));
-function Zero() {
-	this.kind = 'zero';
-}
-out.Zero = Zero;
-out.sequence = new Zero(1, (2, effect('sequence')), 3);
-out.conditional = new Zero(1, condition ? effect('yes') : 2, 3);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,13 +1,14 @@
- function FunctionCtor(value) {
- 	this.value = value;
- }
--out.FunctionCtor = FunctionCtor, out.functionCtor = new FunctionCtor(effect('function-used'), effect('function-extra-a'), effect('function-extra-b'));
-+out.FunctionCtor = FunctionCtor, out.functionCtor = new FunctionCtor(effect('function-used'), 1, effect('function-extra-a'), 2, effect('function-extra-b'));
- class ClassCtor {
- 	constructor(value) {
- 		this.value = value;
- 	}
- }
-+out.ClassCtor = ClassCtor, out.classCtor = new ClassCtor(effect('class-used'), 1, effect('class-extra-a'), 2, effect('class-extra-b'));
- function Zero() {
- 	this.kind = 'zero';
- }
--out.ClassCtor = ClassCtor, out.classCtor = new ClassCtor(effect('class-used'), effect('class-extra-a'), effect('class-extra-b')), out.Zero = Zero, out.sequence = new Zero(effect('sequence')), out.conditional = new Zero(condition && effect('yes'));
-+out.Zero = Zero, out.sequence = new Zero(1, effect('sequence'), 3), out.conditional = new Zero(1, condition ? effect('yes') : 2, 3);
-
-```
-
-## `swc/issues/7500`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 169 vs reference 142 (+27 bytes)
-
-```js
-var globalArray = [
-	1,
-	1,
-	1
-];
-module.exports = function() {
-	var localArray = globalArray;
-	localArray[0] = localArray[1] = localArray[2] = 0;
-	return localArray;
-};
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -4,5 +4,6 @@
- 	1
- ];
- module.exports = function() {
--	return globalArray[0] = globalArray[1] = globalArray[2] = 0, globalArray;
-+	var localArray = globalArray;
-+	return localArray[0] = localArray[1] = localArray[2] = 0, localArray;
- };
-
-```
-
-## `swc/simple/switch/merge/simple`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 113 vs reference 86 (+27 bytes)
-
-```js
-switch (a) {
-	case 1:
-		console.log(1);
-		break;
-	case 2:
-		console.log(2);
-		break;
-	default: console.log(1);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,9 @@
- switch (a) {
- 	case 1:
--	default:
- 		console.log(1);
- 		break;
--	case 2: console.log(2);
-+	case 2:
-+		console.log(2);
-+		break;
-+	default: console.log(1);
- }
-
-```
-
-## `swc/issues/8841`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 55 vs reference 27 (+28 bytes)
-
-```js
-export const k = (() => {
-	var x = x;
-	return x;
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,4 @@
--var x;
--export const k = x;
-+export const k = (() => {
-+	var x = x;
-+	return x;
-+})();
-
-```
-
-## `swc/member_expr/object`
-
-- tags: `drop debugger`, `join vars`, `sequences`
-- size: oxc 268 vs reference 240 (+28 bytes)
-
-```js
-// Invalid
-({})[0];
-({}).invalid;
-({})['invalid'];
-({})[[]];
-({})[0 + []];
-// Object symbols
-({}).constructor;
-({}).__proto__;
-({}).__defineGetter__;
-({}).__defineSetter__;
-({}).__lookupGetter__;
-({}).__lookupSetter__;
-({}).hasOwnProperty;
-({}).isPrototypeOf;
-({}).propertyIsEnumerable;
-({}).toLocaleString;
-({}).toString;
-({}).valueOf;
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1 @@
--// Object symbols
--({}).constructor, {}.__proto__, {}.__defineGetter__, {}.__defineSetter__, {}.__lookupGetter__, {}.__lookupSetter__, {}.hasOwnProperty, {}.isPrototypeOf, {}.propertyIsEnumerable, {}.toLocaleString, {}.toString, {}.valueOf;
-+({})[0], {}.invalid, {}.invalid, {}[[]], {}[0], {}.constructor, {}.__proto__, {}.__defineGetter__, {}.__defineSetter__, {}.__lookupGetter__, {}.__lookupSetter__, {}.hasOwnProperty, {}.isPrototypeOf, {}.propertyIsEnumerable, {}.toLocaleString, {}.toString, {}.valueOf;
-
-```
-
-## `swc/projects/react/2`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 410 vs reference 382 (+28 bytes)
-
-```js
-(function() {
-	{
-		ReactDebugCurrentFrame.setExtraStackFrame = function(stack) {
-			{
-				currentExtraStackFrame = stack;
-			}
-		};
-		ReactDebugCurrentFrame.getCurrentStack = null;
-		ReactDebugCurrentFrame.getStackAddendum = function() {
-			var stack = '';
-			if (currentExtraStackFrame) {
-				stack += currentExtraStackFrame;
-			}
-			var impl = ReactDebugCurrentFrame.getCurrentStack;
-			if (impl) {
-				stack += impl() || '';
-			}
-			return stack;
-		};
-	}
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,10 @@
--ReactDebugCurrentFrame.setExtraStackFrame = function(stack) {
--	currentExtraStackFrame = stack;
--}, ReactDebugCurrentFrame.getCurrentStack = null, ReactDebugCurrentFrame.getStackAddendum = function() {
--	var stack = '';
--	currentExtraStackFrame && (stack += currentExtraStackFrame);
--	var impl = ReactDebugCurrentFrame.getCurrentStack;
--	return impl && (stack += impl() || ''), stack;
--};
-+(function() {
-+	ReactDebugCurrentFrame.setExtraStackFrame = function(stack) {
-+		currentExtraStackFrame = stack;
-+	}, ReactDebugCurrentFrame.getCurrentStack = null, ReactDebugCurrentFrame.getStackAddendum = function() {
-+		var stack = '';
-+		currentExtraStackFrame && (stack += currentExtraStackFrame);
-+		var impl = ReactDebugCurrentFrame.getCurrentStack;
-+		return impl && (stack += impl() || ''), stack;
-+	};
-+})();
-
-```
-
-## `swc/projects/wmr/archive-1/chunks/index.bf24abaa`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 452 vs reference 424 (+28 bytes)
-
-```js
-import { s as style, m } from '../index.f66dda46.js';
-const process = {
-	browser: true,
-	env: {
-		FOO: 'bar',
-		OVERRIDE: '11',
-		EMPTY: '',
-		FOO_LOCAL: 'bar',
-		NODE_ENV: 'production'
-	}
-};
-null;
-const foo = 42;
-function Environment() {
-	return m`<table><thead><tr><th>Name ${foo}</th><th>Value</th></tr></thead><tbody>${Object.keys(process.env).sort().map((key) => {
-		return m`<tr key=${key}><td>${key}</td><td>${String(process.env[key])}</td></tr>`;
-	})}</tbody></table>`;
-}
-export { Environment };
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,12 +1,15 @@
- import { m } from '../index.f66dda46.js';
--let process_env = {
--	FOO: 'bar',
--	OVERRIDE: '11',
--	EMPTY: '',
--	FOO_LOCAL: 'bar',
--	NODE_ENV: 'production'
-+const process = {
-+	browser: !0,
-+	env: {
-+		FOO: 'bar',
-+		OVERRIDE: '11',
-+		EMPTY: '',
-+		FOO_LOCAL: 'bar',
-+		NODE_ENV: 'production'
-+	}
- };
- function Environment() {
--	return m`<table><thead><tr><th>Name ${42}</th><th>Value</th></tr></thead><tbody>${Object.keys(process_env).sort().map((key) => m`<tr key=${key}><td>${key}</td><td>${String(process_env[key])}</td></tr>`)}</tbody></table>`;
-+	return m`<table><thead><tr><th>Name ${42}</th><th>Value</th></tr></thead><tbody>${Object.keys(process.env).sort().map((key) => m`<tr key=${key}><td>${key}</td><td>${String(process.env[key])}</td></tr>`)}</tbody></table>`;
- }
- export { Environment };
-
-```
-
-## `swc/simple/if/var`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 70 vs reference 42 (+28 bytes)
-
-```js
-if (false) {
-	var a = 123;
-} else {
-	console.log(a);
-}
-if (true) {
-	console.log(b);
-} else {
-	var b = 123;
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,4 @@
--var a, b;
--console.log(a), console.log(b);
-+if (0) var a;
-+else console.log(a);
-+if (1) console.log(b);
-+else var b;
-
-```
-
-## `swc/issues/5693`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
-- size: oxc 175 vs reference 146 (+29 bytes)
-
-```js
-API.prototype._getIngestEndpoint = function(target) {
-	var base = this.getBaseApiEndpoint();
-	var dsn = this._dsnObject;
-	return '' + base + dsn.projectId + '/' + target + '/';
-};
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,4 @@
- API.prototype._getIngestEndpoint = function(target) {
--	return '' + this.getBaseApiEndpoint() + this._dsnObject.projectId + '/' + target + '/';
-+	var base = this.getBaseApiEndpoint(), dsn = this._dsnObject;
-+	return '' + base + dsn.projectId + '/' + target + '/';
- };
-
-```
-
-## `swc/issues/6492/2`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 65 vs reference 36 (+29 bytes)
-
-```js
-const obj = { key: 42 };
-const val = obj?.key.toString();
-console.log('val', val);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,2 @@
--console.log('val', 42 .toString());
-+const val = { key: 42 }.key.toString();
-+console.log('val', val);
-
-```
-
-## `swc/issues/7739/1`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 230 vs reference 201 (+29 bytes)
-
-```js
-const formatterOpt = {
-	minimumFractionDigits: 0,
-	maximumFractionDigits: 0
-};
-if (withCurrency) {
-	formatterOpt.style = 'currency';
-}
-const formatter = new Intl.NumberFormat('en', formatterOpt);
-console.log(formatter.format(amount));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -2,4 +2,6 @@
- 	minimumFractionDigits: 0,
- 	maximumFractionDigits: 0
- };
--withCurrency && (formatterOpt.style = 'currency'), console.log(new Intl.NumberFormat('en', formatterOpt).format(amount));
-+withCurrency && (formatterOpt.style = 'currency');
-+const formatter = new Intl.NumberFormat('en', formatterOpt);
-+console.log(formatter.format(amount));
-
-```
-
-## `swc/simple/inline/3`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 102 vs reference 73 (+29 bytes)
-
-```js
-function foo(x) {
-	bar(x);
-}
-function bar(x) {
-	if (x === 1) {
-		throw new Error();
-	}
-}
-foo(3);
-foo(2);
-foo(1);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,7 @@
-+function foo(x) {
-+	bar(x);
-+}
- function bar(x) {
--	if (1 === x) throw Error();
-+	if (x === 1) throw Error();
- }
--bar(3), bar(2), bar(1);
-+foo(3), foo(2), foo(1);
-
-```
-
-## `swc/issues/10876/3`
-
-- tags: `join vars`, `sequences`, `2 iterations`
-- size: oxc 211 vs reference 181 (+30 bytes)
-
-```js
-const createCounter = () => {
-	let count = 0;
-	return (numToAdd) => {
-		count += numToAdd;
-		return count;
-	};
-};
-new class Bar {
-	x = new class Foo {
-		[createCounter()]() {
-			console.log('Hello, world!');
-		}
-	}();
-}();
-export {};
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,9 +1,10 @@
--new class Bar {
--	x = new class Foo {
--		[(() => {
--			let count = 0;
--			return (numToAdd) => count += numToAdd;
--		})()]() {
-+const createCounter = () => {
-+	let count = 0;
-+	return (numToAdd) => (count += numToAdd, count);
-+};
-+new class {
-+	x = new class {
-+		[createCounter()]() {
- 			console.log('Hello, world!');
- 		}
- 	}();
-
-```
-
-## `swc/issues/6492/1`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 54 vs reference 24 (+30 bytes)
-
-```js
-const obj = { key: 42 };
-const val = obj?.[null || 'key'];
-console.log('val', val);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,2 @@
--console.log('val', 42);
-+const val = { key: 42 }.key;
-+console.log('val', val);
-
-```
-
-## `swc/issues/6492/3`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 66 vs reference 36 (+30 bytes)
-
-```js
-const obj = { key: 42 };
-const val = obj?.key?.toString();
-console.log('val', val);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,2 @@
--console.log('val', 42 .toString());
-+const val = { key: 42 }.key?.toString();
-+console.log('val', val);
-
-```
-
-## `swc/issues/6492/4`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 66 vs reference 36 (+30 bytes)
-
-```js
-const obj = { key: 42 };
-const val = obj.key?.toString();
-console.log('val', val);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,2 @@
--console.log('val', 42 .toString());
-+const val = { key: 42 }.key?.toString();
-+console.log('val', val);
-
-```
-
-## `swc/issues/9468`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 213 vs reference 183 (+30 bytes)
-
-```js
-function func1(arg1, arg2) {
-	return getX(arg1) + arg2;
-}
-function getX(x) {
-	const v = document.getElementById('eid').getAttribute(x);
-	return v;
-}
-console.log(func1(7, getX('data-x')));
-console.log(func1(7, getX('data-y')));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,7 @@
--var t, e;
--function getX(t) {
--	return document.getElementById('eid').getAttribute(t);
-+function func1(arg1, arg2) {
-+	return getX(arg1) + arg2;
-+}
-+function getX(x) {
-+	return document.getElementById('eid').getAttribute(x);
- }
--console.log((t = getX('data-x'), getX(7) + t)), console.log((e = getX('data-y'), getX(7) + e));
-+console.log(func1(7, getX('data-x'))), console.log(func1(7, getX('data-y')));
-
-```
-
-## `swc/projects/yui/9`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 582 vs reference 552 (+30 bytes)
-
-```js
-export const E = { _addLangPack: function(lang, m, packName) {
-	var name = m.name, packPath, conf, existing = this.moduleInfo[packName];
-	if (!existing) {
-		packPath = _path(m.pkg || name, packName, JS, true);
-		conf = {
-			path: packPath,
-			intl: true,
-			langPack: true,
-			ext: m.ext,
-			group: m.group,
-			supersedes: []
-		};
-		if (m.root) {
-			conf.root = m.root;
-		}
-		if (m.base) {
-			conf.base = m.base;
-		}
-		if (m.configFn) {
-			conf.configFn = m.configFn;
-		}
-		this.addModule(conf, packName);
-		if (lang) {
-			Y.Env.lang = Y.Env.lang || {};
-			Y.Env.lang[lang] = Y.Env.lang[lang] || {};
-			Y.Env.lang[lang][name] = true;
-		}
-	}
-	return this.moduleInfo[packName];
-} };
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
- export const E = { _addLangPack: function(lang, m, packName) {
--	var conf, name = m.name;
--	return !this.moduleInfo[packName] && (conf = {
--		path: _path(m.pkg || name, packName, JS, !0),
-+	var name = m.name, packPath, conf;
-+	return this.moduleInfo[packName] || (packPath = _path(m.pkg || name, packName, JS, !0), conf = {
-+		path: packPath,
- 		intl: !0,
- 		langPack: !0,
- 		ext: m.ext,
-
-```
-
 ## `swc/issues/11684/side-effects`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 452 vs reference 421 (+31 bytes)
+- size: oxc 382 vs reference 363 (+19 bytes, no whitespaces)
 
 ```js
 out.fn = new (function(value) {
@@ -6042,20 +5270,113 @@ out.conditional = new class {
 
 ```
 
-## `swc/issues/11983`
+## `swc/issues/8718/3`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 98 vs reference 67 (+31 bytes)
+- size: oxc 71 vs reference 52 (+19 bytes, no whitespaces)
 
 ```js
-const N = 260;
-const A = 40 + N;
-function f(w) {
-	return A / w;
+let a;
+function f() {
+	a = '123';
+	console.log(a);
 }
-const S = f(621);
-export function dyn(w) {
-	return f(w) + S;
+f();
+console.log((a += 1, a += 2));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,5 @@
+ let a;
+-console.log(a = '123'), console.log((a += 1, a += 2));
++function f() {
++	a = '123', console.log(a);
++}
++f(), console.log((a += 1, a += 2));
+
+```
+
+## `swc/issues/8841`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 42 vs reference 23 (+19 bytes, no whitespaces)
+
+```js
+export const k = (() => {
+	var x = x;
+	return x;
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,4 @@
+-var x;
+-export const k = x;
++export const k = (() => {
++	var x = x;
++	return x;
++})();
+
+```
+
+## `swc/issues/arguments-canonical-index`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
+- size: oxc 161 vs reference 142 (+19 bytes, no whitespaces)
+
+```js
+(function(zero, one) {
+	console.log([
+		arguments['01'],
+		arguments[-1],
+		arguments[1.5],
+		arguments[1e21],
+		arguments[-0],
+		arguments[1]
+	].map(String).join(','));
+})('zero', 'one');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,10 @@
+-!function(zero, one) {
++(function(zero, one) {
+ 	console.log([
+ 		arguments['01'],
+ 		arguments[-1],
+ 		arguments[1.5],
+ 		arguments[1e21],
+-		zero,
+-		one
++		arguments[-0],
++		arguments[1]
+ 	].map(String).join(','));
+-}('zero', 'one');
++})('zero', 'one');
+
+```
+
+## `swc/issues/7331/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
+- size: oxc 83 vs reference 63 (+20 bytes, no whitespaces)
+
+```js
+export default function() {
+	function foo(arg) {
+		var arg = arg.slice();
+		return arg;
+	}
+	foo([]);
 }
 
 ```
@@ -6063,23 +5384,586 @@ export function dyn(w) {
 ```diff
 --- reference
 +++ oxc
-@@ -1,4 +1,7 @@
--let S = 300 / 621;
-+function f(w) {
-+	return 300 / w;
-+}
-+const S = f(621);
- export function dyn(w) {
--	return 300 / w + S;
-+	return f(w) + S;
+@@ -1,5 +1,7 @@
+ export default function() {
+-	var arg;
+-	var arg;
+-	arg = (arg = []).slice();
++	function foo(arg) {
++		var arg = arg.slice();
++		return arg;
++	}
++	foo([]);
  }
+
+```
+
+## `swc/issues/8718/2`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 38 vs reference 18 (+20 bytes, no whitespaces)
+
+```js
+let a = 0;
+a = '';
+console.log((a += 1, a += 2));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,2 @@
+-console.log('12');
++let a = 0;
++a = '', console.log((a += 1, a += 2));
+
+```
+
+## `swc/pr/6169/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 44 vs reference 23 (+21 bytes, no whitespaces)
+
+```js
+var ref = ['foo'], key = ref[0], value = ref[1];
+value.toUpperCase();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,2 @@
+-(void 0).toUpperCase();
++var ref = ['foo'];
++ref[0], ref[1].toUpperCase();
+
+```
+
+## `swc/projects/next/extra/if_return/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 352 vs reference 331 (+21 bytes, no whitespaces)
+
+```js
+export function foo() {
+	if (state.loading || state.error) return _react.default.createElement(opts.loading, {
+		isLoading: state.loading,
+		pastDelay: state.pastDelay,
+		timedOut: state.timedOut,
+		error: state.error,
+		retry: subscription.retry
+	});
+	if (!state.loaded) return null;
+	var obj;
+	return _react.default.createElement((obj = state.loaded) && obj.__esModule ? obj.default : obj, props);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,12 @@
+ export function foo() {
+-	var obj;
+-	return state.loading || state.error ? _react.default.createElement(opts.loading, {
++	if (state.loading || state.error) return _react.default.createElement(opts.loading, {
+ 		isLoading: state.loading,
+ 		pastDelay: state.pastDelay,
+ 		timedOut: state.timedOut,
+ 		error: state.error,
+ 		retry: subscription.retry
+-	}) : state.loaded ? _react.default.createElement((obj = state.loaded) && obj.__esModule ? obj.default : obj, props) : null;
++	});
++	if (!state.loaded) return null;
++	var obj;
++	return _react.default.createElement((obj = state.loaded) && obj.__esModule ? obj.default : obj, props);
+ }
+
+```
+
+## `swc/simple/switch/merge/simple`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 89 vs reference 68 (+21 bytes, no whitespaces)
+
+```js
+switch (a) {
+	case 1:
+		console.log(1);
+		break;
+	case 2:
+		console.log(2);
+		break;
+	default: console.log(1);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,9 @@
+ switch (a) {
+ 	case 1:
+-	default:
+ 		console.log(1);
+ 		break;
+-	case 2: console.log(2);
++	case 2:
++		console.log(2);
++		break;
++	default: console.log(1);
+ }
+
+```
+
+## `swc/issues/5280`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 66 vs reference 44 (+22 bytes, no whitespaces)
+
+```js
+export function source() {
+	let c = 0;
+	let a = 1;
+	c += a;
+	a += 5;
+	let b = c;
+	console.log(a, b, c);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,4 @@
+ export function source() {
+-	console.log(6, 1, 1);
++	let c = 0, a = 1;
++	c += a, a += 5, console.log(a, c, c);
+ }
+
+```
+
+## `swc/issues/5693`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
+- size: oxc 149 vs reference 127 (+22 bytes, no whitespaces)
+
+```js
+API.prototype._getIngestEndpoint = function(target) {
+	var base = this.getBaseApiEndpoint();
+	var dsn = this._dsnObject;
+	return '' + base + dsn.projectId + '/' + target + '/';
+};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,4 @@
+ API.prototype._getIngestEndpoint = function(target) {
+-	return '' + this.getBaseApiEndpoint() + this._dsnObject.projectId + '/' + target + '/';
++	var base = this.getBaseApiEndpoint(), dsn = this._dsnObject;
++	return '' + base + dsn.projectId + '/' + target + '/';
+ };
+
+```
+
+## `swc/issues/6957/2`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 105 vs reference 83 (+22 bytes, no whitespaces)
+
+```js
+assertEquals('1', .5.toFixed(0), '0.5.toFixed(0)');
+assertEquals('-1', (-.5).toFixed(0), '(-0.5).toFixed(0)');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-assertEquals('1', '1', '0.5.toFixed(0)');
+-assertEquals('-1', '-1', '(-0.5).toFixed(0)');
++assertEquals('1', .5.toFixed(0), '0.5.toFixed(0)'), assertEquals('-1', (-.5).toFixed(0), '(-0.5).toFixed(0)');
+
+```
+
+## `swc/issues/9148`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 178 vs reference 156 (+22 bytes, no whitespaces)
+
+```js
+function foo() {
+	const obj = {
+		clear: function() {
+			console.log('clear');
+		},
+		start: function() {
+			const _this = this;
+			setTimeout(function() {
+				_this.clear();
+			});
+		}
+	};
+	return () => obj.start();
+}
+;
+export default foo();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,12 +1,15 @@
+-let obj;
+-export default (obj = {
+-	clear: function() {
+-		console.log('clear');
+-	},
+-	start: function() {
+-		let _this = this;
+-		setTimeout(function() {
+-			_this.clear();
+-		});
+-	}
+-}, () => obj.start());
++function foo() {
++	let obj = {
++		clear: function() {
++			console.log('clear');
++		},
++		start: function() {
++			let _this = this;
++			setTimeout(function() {
++				_this.clear();
++			});
++		}
++	};
++	return () => obj.start();
++}
++export default foo();
+
+```
+
+## `swc/issues/10885`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 310 vs reference 287 (+23 bytes, no whitespaces)
+
+```js
+import { useState } from 'react';
+import { getCondition, doSomething } from './utils';
+export default function useMeow() {
+	const [state, setState] = useState('init');
+	const onMeow = async () => {
+		switch (state) {
+			case 'init': {
+				const innerCondition = getCondition();
+				switch (innerCondition) {
+					case 'a': break;
+					case 'b': break;
+					default: await doSomething();
+				}
+				break;
+			}
+			default: {
+				await doSomething();
+				break;
+			}
+		}
+	};
+	return { onMeow };
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -3,11 +3,15 @@
+ export default function useMeow() {
+ 	let [state, setState] = useState('init');
+ 	return { onMeow: async () => {
+-		if ('init' === state) switch (getCondition()) {
+-			case 'a':
+-			case 'b': break;
++		switch (state) {
++			case 'init':
++				switch (getCondition()) {
++					case 'a': break;
++					case 'b': break;
++					default: await doSomething();
++				}
++				break;
+ 			default: await doSomething();
+ 		}
+-		else await doSomething();
+ 	} };
+ }
+
+```
+
+## `swc/issues/6492/2`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 57 vs reference 34 (+23 bytes, no whitespaces)
+
+```js
+const obj = { key: 42 };
+const val = obj?.key.toString();
+console.log('val', val);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,2 @@
+-console.log('val', 42 .toString());
++const val = { key: 42 }.key.toString();
++console.log('val', val);
+
+```
+
+## `swc/issues/7500`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 140 vs reference 117 (+23 bytes, no whitespaces)
+
+```js
+var globalArray = [
+	1,
+	1,
+	1
+];
+module.exports = function() {
+	var localArray = globalArray;
+	localArray[0] = localArray[1] = localArray[2] = 0;
+	return localArray;
+};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -4,5 +4,6 @@
+ 	1
+ ];
+ module.exports = function() {
+-	return globalArray[0] = globalArray[1] = globalArray[2] = 0, globalArray;
++	var localArray = globalArray;
++	return localArray[0] = localArray[1] = localArray[2] = 0, localArray;
+ };
+
+```
+
+## `swc/issues/9453`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 132 vs reference 109 (+23 bytes, no whitespaces)
+
+```js
+'use strict';
+class x {}
+const y = x;
+const z = class {};
+console.log(typeof x);
+console.log(typeof y);
+console.log(typeof z);
+console.log(typeof class {});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,4 @@
+ 'use strict';
+-console.log('function'), console.log('function'), console.log('function'), console.log('function');
++class x {}
++const y = x, z = class {};
++console.log(typeof x), console.log(typeof y), console.log(typeof z), console.log('function');
+
+```
+
+## `swc/issues/object-accessor-function-boundary`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 163 vs reference 140 (+23 bytes, no whitespaces)
+
+```js
+function make(key) {
+	return {
+		get [key]() {
+			return key;
+		},
+		set [key](value = key) {
+			console.log(value);
+		}
+	};
+}
+const object = make('value');
+console.log(object.value);
+object.value = undefined;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,12 @@
+-var key;
+-const object = {
+-	get [key = 'value']() {
+-		return key;
+-	},
+-	set [key](value = key) {
+-		console.log(value);
+-	}
+-};
++function make(key) {
++	return {
++		get [key]() {
++			return key;
++		},
++		set [key](value = key) {
++			console.log(value);
++		}
++	};
++}
++const object = make('value');
+ console.log(object.value), object.value = void 0;
+
+```
+
+## `swc/member_expr/object`
+
+- tags: `drop debugger`, `join vars`, `sequences`
+- size: oxc 251 vs reference 228 (+23 bytes, no whitespaces)
+
+```js
+// Invalid
+({})[0];
+({}).invalid;
+({})['invalid'];
+({})[[]];
+({})[0 + []];
+// Object symbols
+({}).constructor;
+({}).__proto__;
+({}).__defineGetter__;
+({}).__defineSetter__;
+({}).__lookupGetter__;
+({}).__lookupSetter__;
+({}).hasOwnProperty;
+({}).isPrototypeOf;
+({}).propertyIsEnumerable;
+({}).toLocaleString;
+({}).toString;
+({}).valueOf;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-// Object symbols
+-({}).constructor, {}.__proto__, {}.__defineGetter__, {}.__defineSetter__, {}.__lookupGetter__, {}.__lookupSetter__, {}.hasOwnProperty, {}.isPrototypeOf, {}.propertyIsEnumerable, {}.toLocaleString, {}.toString, {}.valueOf;
++({})[0], {}.invalid, {}.invalid, {}[[]], {}[0], {}.constructor, {}.__proto__, {}.__defineGetter__, {}.__defineSetter__, {}.__lookupGetter__, {}.__lookupSetter__, {}.hasOwnProperty, {}.isPrototypeOf, {}.propertyIsEnumerable, {}.toLocaleString, {}.toString, {}.valueOf;
+
+```
+
+## `swc/projects/wmr/archive-1/chunks/class-fields.43d5f69c`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 295 vs reference 272 (+23 bytes, no whitespaces)
+
+```js
+import { _, m } from '../index.f66dda46.js';
+class ClassFields extends _ {
+	state = { value: 1 };
+	onClick = () => {
+		this.setState((prev) => ({ value: prev.value + 1 }));
+	};
+	render() {
+		return m`<div><p> State: <span>${this.state.value}</span></p><button onClick=${this.onClick}>click me</button></div>`;
+	}
+}
+export default ClassFields;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ import { _, m } from '../index.f66dda46.js';
+-export default class extends _ {
++class ClassFields extends _ {
+ 	state = { value: 1 };
+ 	onClick = () => {
+ 		this.setState((prev) => ({ value: prev.value + 1 }));
+@@ -8,4 +8,4 @@
+ 		return m`<div><p> State: <span>${this.state.value}</span></p><button onClick=${this.onClick}>click me</button></div>`;
+ 	}
+ }
+-;
++export default ClassFields;
+
+```
+
+## `swc/simple/inline/3`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 83 vs reference 60 (+23 bytes, no whitespaces)
+
+```js
+function foo(x) {
+	bar(x);
+}
+function bar(x) {
+	if (x === 1) {
+		throw new Error();
+	}
+}
+foo(3);
+foo(2);
+foo(1);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,7 @@
++function foo(x) {
++	bar(x);
++}
+ function bar(x) {
+-	if (1 === x) throw Error();
++	if (x === 1) throw Error();
+ }
+-bar(3), bar(2), bar(1);
++foo(3), foo(2), foo(1);
 
 ```
 
 ## `swc/issues/6279/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 95 vs reference 64 (+31 bytes)
+- size: oxc 79 vs reference 55 (+24 bytes, no whitespaces)
 
 ```js
 function run(str, r) {
@@ -6106,15 +5990,15 @@ run('abcda', /a/g);
 
 ```
 
-## `swc/issues/8718/2`
+## `swc/issues/6492/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 50 vs reference 19 (+31 bytes)
+- size: oxc 46 vs reference 22 (+24 bytes, no whitespaces)
 
 ```js
-let a = 0;
-a = '';
-console.log((a += 1, a += 2));
+const obj = { key: 42 };
+const val = obj?.[null || 'key'];
+console.log('val', val);
 
 ```
 
@@ -6122,138 +6006,60 @@ console.log((a += 1, a += 2));
 --- reference
 +++ oxc
 @@ -1 +1,2 @@
--console.log('12');
-+let a = 0;
-+a = '', console.log((a += 1, a += 2));
+-console.log('val', 42);
++const val = { key: 42 }.key;
++console.log('val', val);
 
 ```
 
-## `swc/check/1`
+## `swc/issues/6492/3`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 305 vs reference 273 (+32 bytes)
+- size: oxc 58 vs reference 34 (+24 bytes, no whitespaces)
 
 ```js
-import { upper } from 'module';
-let foobar = 'foo';
-export const foo = foobar;
-const bar = 'bar';
-foobar += bar;
-let foobarCopy = foobar;
-foobar += 'foo';
-console.log(foobarCopy);
-foobarCopy += 'Unused';
-function internal() {
-	return upper(foobar);
-}
-// export function external1() {
-//     return internal() + foobar;
-// }
-// export function external2() {
-//     foobar += ".";
-// }
+const obj = { key: 42 };
+const val = obj?.key?.toString();
+console.log('val', val);
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,8 +1,9 @@
- import 'module';
- let foobar = 'foo';
- export const foo = foobar;
--let foobarCopy = foobar += 'bar';
--foobar += 'foo', console.log(foobarCopy);
-+foobar += 'bar';
-+let foobarCopy = foobar;
-+foobar += 'foo', console.log(foobarCopy), foobarCopy += 'Unused';
- // export function external1() {
- //     return internal() + foobar;
- // }
+@@ -1 +1,2 @@
+-console.log('val', 42 .toString());
++const val = { key: 42 }.key?.toString();
++console.log('val', val);
 
 ```
 
-## `swc/issues/11320`
+## `swc/issues/6492/4`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 306 vs reference 274 (+32 bytes)
+- size: oxc 58 vs reference 34 (+24 bytes, no whitespaces)
 
 ```js
-// Empty class expression should be removed
-new class {}();
-// Class with only a method should also be removed (no side effects)
-new class {
-	foo() {}
-}();
-// Stored result should be removed if unused
-let x = new class {}();
-// Class with side effects in computed key should NOT be removed
-new class {
-	[console.log('side effect')]() {}
-}();
-// Class with property initializer with side effects should NOT be removed
-new class {
-	prop = console.log('side effect');
-}();
-// Class with static block should NOT be removed if static block has side effects
-new class {
-	static {
-		console.log('side effect');
-	}
-}();
+const obj = { key: 42 };
+const val = obj.key?.toString();
+console.log('val', val);
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,6 +1,7 @@
--// Empty class expression should be removed
--// Class with side effects in computed key should NOT be removed
--new class {
-+// Class with static block should NOT be removed if static block has side effects
-+new class {}(), new class {
-+	foo() {}
-+}(), new class {}(), new class {
- 	[console.log('side effect')]() {}
- }(), new class {
- 	prop = console.log('side effect');
-
-```
-
-## `swc/issues/9453`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 146 vs reference 114 (+32 bytes)
-
-```js
-'use strict';
-class x {}
-const y = x;
-const z = class {};
-console.log(typeof x);
-console.log(typeof y);
-console.log(typeof z);
-console.log(typeof class {});
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,4 @@
- 'use strict';
--console.log('function'), console.log('function'), console.log('function'), console.log('function');
-+class x {}
-+const y = x, z = class {};
-+console.log(typeof x), console.log(typeof y), console.log(typeof z), console.log('function');
+@@ -1 +1,2 @@
+-console.log('val', 42 .toString());
++const val = { key: 42 }.key?.toString();
++console.log('val', val);
 
 ```
 
 ## `swc/issues/9504`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 825 vs reference 793 (+32 bytes)
+- size: oxc 684 vs reference 660 (+24 bytes, no whitespaces)
 
 ```js
 export function panUpdate(e) {
@@ -6328,10 +6134,80 @@ export function panUpdate(e) {
 
 ```
 
+## `swc/issues/react/hooks/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 402 vs reference 378 (+24 bytes, no whitespaces)
+
+```js
+import { jsx as _jsx, Fragment as _Fragment } from 'react/jsx-runtime';
+import { useRouter } from 'next/router';
+import { useProject } from '@swr/use-project';
+import useTeam from '@swr/use-team';
+export default function MyComp() {
+	var _query = useRouter().query, projectName = _query.project;
+	var ref = useProject(projectName), projectInfo = ref.data;
+	var ref1 = useTeam(), teamSlug = ref1.teamSlug;
+	var projectId = projectInfo === null || projectInfo === void 0 ? void 0 : projectInfo.id;
+	var ref2 = useProjectBranches(projectId), branches = ref2.data;
+	return _jsx(_Fragment, {});
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -3,6 +3,8 @@
+ import { useProject } from '@swr/use-project';
+ import useTeam from '@swr/use-team';
+ export default function MyComp() {
+-	var projectInfo = useProject(useRouter().query.project).data;
+-	return useTeam().teamSlug, useProjectBranches(null == projectInfo ? void 0 : projectInfo.id).data, _jsx(_Fragment, {});
++	var projectName = useRouter().query.project, projectInfo = useProject(projectName).data;
++	useTeam().teamSlug;
++	var projectId = projectInfo?.id;
++	return useProjectBranches(projectId).data, _jsx(_Fragment, {});
+ }
+
+```
+
+## `swc/simple/if/var`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 62 vs reference 38 (+24 bytes, no whitespaces)
+
+```js
+if (false) {
+	var a = 123;
+} else {
+	console.log(a);
+}
+if (true) {
+	console.log(b);
+} else {
+	var b = 123;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,4 @@
+-var a, b;
+-console.log(a), console.log(b);
++if (0) var a;
++else console.log(a);
++if (1) console.log(b);
++else var b;
+
+```
+
 ## `swc/member_expr/string`
 
 - tags: `drop debugger`, `join vars`, `sequences`
-- size: oxc 861 vs reference 829 (+32 bytes)
+- size: oxc 796 vs reference 771 (+25 bytes, no whitespaces)
 
 ```js
 // Invalid
@@ -6417,302 +6293,72 @@ export function panUpdate(e) {
 ... [truncated]
 ```
 
-## `swc/issues/11512-exhaustive/fn-multi-use-default-side-effect`
+## `swc/projects/wmr/archive-1/chunks/alias-outside.6e8773c7`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
-- size: oxc 201 vs reference 167 (+34 bytes)
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 167 vs reference 142 (+25 bytes, no whitespaces)
 
 ```js
-let sideCalls = 0;
-function side() {
-	sideCalls++;
-	return 1;
+import { m } from '../index.f66dda46.js';
+const value$1 = 'it works';
+const value = 'it works';
+function AliasOutside() {
+	return m`<div><p>Inside: ${value}</p><p>Outside: ${value$1}</p></div>`;
 }
-function keep(a, b = side()) {
-	return a;
-}
-export function fnMultiUseDefaultSideEffect(value) {
-	return keep(value) + keep(value + 1);
-}
+export default AliasOutside;
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,5 +1,8 @@
- let sideCalls = 0;
--function keep(a, b = (sideCalls++, 1)) {
-+function side() {
-+	return sideCalls++, 1;
-+}
-+function keep(a, b = side()) {
- 	return a;
+@@ -1,5 +1,5 @@
+ import { m } from '../index.f66dda46.js';
+-export default function() {
++function AliasOutside() {
+ 	return m`<div><p>Inside: ${'it works'}</p><p>Outside: ${'it works'}</p></div>`;
  }
- export function fnMultiUseDefaultSideEffect(value) {
+-;
++export default AliasOutside;
 
 ```
 
-## `swc/issues/object-accessor-function-boundary`
+## `swc/issues/7739/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 207 vs reference 173 (+34 bytes)
+- size: oxc 210 vs reference 184 (+26 bytes, no whitespaces)
 
 ```js
-function make(key) {
-	return {
-		get [key]() {
-			return key;
-		},
-		set [key](value = key) {
-			console.log(value);
-		}
-	};
+const formatterOpt = {
+	minimumFractionDigits: 0,
+	maximumFractionDigits: 0
+};
+if (withCurrency) {
+	formatterOpt.style = 'currency';
 }
-const object = make('value');
-console.log(object.value);
-object.value = undefined;
+const formatter = new Intl.NumberFormat('en', formatterOpt);
+console.log(formatter.format(amount));
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,10 +1,12 @@
--var key;
--const object = {
--	get [key = 'value']() {
--		return key;
--	},
--	set [key](value = key) {
--		console.log(value);
--	}
--};
-+function make(key) {
-+	return {
-+		get [key]() {
-+			return key;
-+		},
-+		set [key](value = key) {
-+			console.log(value);
-+		}
-+	};
-+}
-+const object = make('value');
- console.log(object.value), object.value = void 0;
-
-```
-
-## `swc/issues/5280`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 87 vs reference 52 (+35 bytes)
-
-```js
-export function source() {
-	let c = 0;
-	let a = 1;
-	c += a;
-	a += 5;
-	let b = c;
-	console.log(a, b, c);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,4 @@
- export function source() {
--	console.log(6, 1, 1);
-+	let c = 0, a = 1;
-+	c += a, a += 5, console.log(a, c, c);
- }
-
-```
-
-## `swc/projects/jquery/3`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 572 vs reference 537 (+35 bytes)
-
-```js
-export const obj = { ready: function(wait) {
-	// Abort if there are pending holds or we're already ready
-	if (wait === true ? --jQuery.readyWait : jQuery.isReady) {
-		return;
-	}
-	// Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).
-	if (!document.body) {
-		return setTimeout(jQuery.ready);
-	}
-	// Remember that the DOM is ready
-	jQuery.isReady = true;
-	// If a normal DOM Ready event fired, decrement, and wait if need be
-	if (wait !== true && --jQuery.readyWait > 0) {
-		return;
-	}
-	// If there are functions bound, to execute
-	readyList.resolveWith(document, [jQuery]);
-	// Trigger any bound ready events
-	if (jQuery.fn.trigger) {
-		jQuery(document).trigger('ready').off('ready');
-	}
-} };
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,9 +1,9 @@
- export const obj = { ready: function(wait) {
- 	// Abort if there are pending holds or we're already ready
--	if (!(!0 === wait ? --jQuery.readyWait : jQuery.isReady)) {
-+	if (!(wait === !0 ? --jQuery.readyWait : jQuery.isReady)) {
- 		// Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).
- 		if (!document.body) return setTimeout(jQuery.ready);
--		// Remember that the DOM is ready
--		jQuery.isReady = !0, !(!0 !== wait && --jQuery.readyWait > 0) && (readyList.resolveWith(document, [jQuery]), jQuery.fn.trigger && jQuery(document).trigger('ready').off('ready'));
-+		// If a normal DOM Ready event fired, decrement, and wait if need be
-+		jQuery.isReady = !0, !(wait !== !0 && --jQuery.readyWait > 0) && (readyList.resolveWith(document, [jQuery]), jQuery.fn.trigger && jQuery(document).trigger('ready').off('ready'));
- 	}
- } };
-
-```
-
-## `swc/issues/10054/for`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 128 vs reference 92 (+36 bytes)
-
-```js
-// Input:
-function test() {
-	for (var l = 0; i < 10; l++) {}
-	console.log('test');
-}
-window.a = [function() {
-	return test();
-}];
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,8 @@
- // Input:
--window.a = [function() {
-+function test() {
- 	for (var l = 0; i < 10; l++);
- 	console.log('test');
-+}
-+window.a = [function() {
-+	return test();
- }];
-
-```
-
-## `swc/issues/10054/if`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 131 vs reference 95 (+36 bytes)
-
-```js
-// Input:
-function test() {
-	if (navigator.userAgentData !== undefined) {
-		throw new Error();
-	}
-}
-window.a = [function() {
-	return test();
-}];
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,7 @@
- // Input:
-+function test() {
-+	if (navigator.userAgentData !== void 0) throw Error();
-+}
- window.a = [function() {
--	if (void 0 !== navigator.userAgentData) throw Error();
-+	return test();
- }];
-
-```
-
-## `swc/issues/11512-exhaustive/iife-default-side-effect`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
-- size: oxc 163 vs reference 127 (+36 bytes)
-
-```js
-let calls = 0;
-function side() {
-	calls++;
-	return 1;
-}
-export function iifeDefaultSideEffect(value) {
-	return (function(a, b = side()) {
-		return a;
-	})(value);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,9 @@
- let calls = 0;
-+function side() {
-+	return calls++, 1;
-+}
- export function iifeDefaultSideEffect(value) {
--	return function(a, b = (calls++, 1)) {
-+	return (function(a, b = side()) {
- 		return a;
--	}(value);
-+	})(value);
- }
-
-```
-
-## `swc/issues/10849`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 55 vs reference 17 (+38 bytes)
-
-```js
-(function() {
-	const obj = { value: 42 };
-	console.log(obj === null || obj === void 0 ? void 0 : obj.value);
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,3 @@
--console.log(42);
-+(function() {
-+	console.log({ value: 42 }.value);
-+})();
+@@ -2,4 +2,6 @@
+ 	minimumFractionDigits: 0,
+ 	maximumFractionDigits: 0
+ };
+-withCurrency && (formatterOpt.style = 'currency'), console.log(new Intl.NumberFormat('en', formatterOpt).format(amount));
++withCurrency && (formatterOpt.style = 'currency');
++const formatter = new Intl.NumberFormat('en', formatterOpt);
++console.log(formatter.format(amount));
 
 ```
 
 ## `swc/issues/11684/constructor-scopes`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 905 vs reference 867 (+38 bytes)
+- size: oxc 781 vs reference 754 (+27 bytes, no whitespaces)
 
 ```js
 class ExplicitDerived extends Base {
@@ -6794,158 +6440,36 @@ out.structuredParameters = new StructuredParameters({ value: 1 }, undefined, 3, 
 
 ```
 
-## `swc/issues/9148`
+## `swc/issues/11983`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 237 vs reference 199 (+38 bytes)
+- size: oxc 79 vs reference 52 (+27 bytes, no whitespaces)
 
 ```js
-function foo() {
-	const obj = {
-		clear: function() {
-			console.log('clear');
-		},
-		start: function() {
-			const _this = this;
-			setTimeout(function() {
-				_this.clear();
-			});
-		}
-	};
-	return () => obj.start();
+const N = 260;
+const A = 40 + N;
+function f(w) {
+	return A / w;
 }
-;
-export default foo();
+const S = f(621);
+export function dyn(w) {
+	return f(w) + S;
+}
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,12 +1,15 @@
--let obj;
--export default (obj = {
--	clear: function() {
--		console.log('clear');
--	},
--	start: function() {
--		let _this = this;
--		setTimeout(function() {
--			_this.clear();
--		});
--	}
--}, () => obj.start());
-+function foo() {
-+	let obj = {
-+		clear: function() {
-+			console.log('clear');
-+		},
-+		start: function() {
-+			let _this = this;
-+			setTimeout(function() {
-+				_this.clear();
-+			});
-+		}
-+	};
-+	return () => obj.start();
+@@ -1,4 +1,7 @@
+-let S = 300 / 621;
++function f(w) {
++	return 300 / w;
 +}
-+export default foo();
-
-```
-
-## `swc/projects/jquery/6`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 323 vs reference 285 (+38 bytes)
-
-```js
-export const obj = { inArray: function(elem, arr, i) {
-	var len;
-	if (arr) {
-		if (core_indexOf) {
-			return core_indexOf.call(arr, elem, i);
-		}
-		len = arr.length;
-		i = i ? i < 0 ? Math.max(0, len + i) : i : 0;
-		for (; i < len; i++) {
-			// Skip accessing in sparse arrays
-			if (i in arr && arr[i] === elem) {
-				return i;
-			}
-		}
-	}
-	return -1;
-} };
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -2,7 +2,9 @@
- 	var len;
- 	if (arr) {
- 		if (core_indexOf) return core_indexOf.call(arr, elem, i);
--		for (len = arr.length, i = i ? i < 0 ? Math.max(0, len + i) : i : 0; i < len; i++) if (i in arr && arr[i] === elem) return i;
-+		for (len = arr.length, i = i ? i < 0 ? Math.max(0, len + i) : i : 0; i < len; i++)
-+ // Skip accessing in sparse arrays
-+		if (i in arr && arr[i] === elem) return i;
- 	}
- 	return -1;
- } };
-
-```
-
-## `swc/issues/11512-exhaustive/iife-anon-default-unused`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
-- size: oxc 103 vs reference 64 (+39 bytes)
-
-```js
-export function iifeAnonDefaultUnused(value) {
-	return (function(a, b = 1) {
-		return a;
-	})(value);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,5 @@
- export function iifeAnonDefaultUnused(value) {
--	return value;
-+	return (function(a, b = 1) {
-+		return a;
-+	})(value);
- }
-
-```
-
-## `swc/issues/11512-exhaustive/iife-anon-arg-unused`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
-- size: oxc 102 vs reference 60 (+42 bytes)
-
-```js
-export function iifeAnonArgUnused(value) {
-	return (function(a, b = 1) {
-		return a;
-	})(value, 7);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,5 @@
- export function iifeAnonArgUnused(value) {
--	return value;
-+	return (function(a, b = 1) {
-+		return a;
-+	})(value, 7);
++const S = f(621);
+ export function dyn(w) {
+-	return 300 / w + S;
++	return f(w) + S;
  }
 
 ```
@@ -6953,7 +6477,7 @@ export function iifeAnonArgUnused(value) {
 ## `swc/issues/9610-mixed-params`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
-- size: oxc 878 vs reference 835 (+43 bytes)
+- size: oxc 784 vs reference 757 (+27 bytes, no whitespaces)
 
 ```js
 // Test: Mixed used and unused parameters with defaults
@@ -7022,16 +6546,123 @@ export function example() {
 
 ```
 
-## `swc/pr/7690`
+## `swc/projects/yui/9`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 87 vs reference 44 (+43 bytes)
+- size: oxc 492 vs reference 465 (+27 bytes, no whitespaces)
 
 ```js
-export function foo() {
-	const x = () => null;
-	const y = () => x;
-	console.log(y() === y());
+export const E = { _addLangPack: function(lang, m, packName) {
+	var name = m.name, packPath, conf, existing = this.moduleInfo[packName];
+	if (!existing) {
+		packPath = _path(m.pkg || name, packName, JS, true);
+		conf = {
+			path: packPath,
+			intl: true,
+			langPack: true,
+			ext: m.ext,
+			group: m.group,
+			supersedes: []
+		};
+		if (m.root) {
+			conf.root = m.root;
+		}
+		if (m.base) {
+			conf.base = m.base;
+		}
+		if (m.configFn) {
+			conf.configFn = m.configFn;
+		}
+		this.addModule(conf, packName);
+		if (lang) {
+			Y.Env.lang = Y.Env.lang || {};
+			Y.Env.lang[lang] = Y.Env.lang[lang] || {};
+			Y.Env.lang[lang][name] = true;
+		}
+	}
+	return this.moduleInfo[packName];
+} };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+ export const E = { _addLangPack: function(lang, m, packName) {
+-	var conf, name = m.name;
+-	return !this.moduleInfo[packName] && (conf = {
+-		path: _path(m.pkg || name, packName, JS, !0),
++	var name = m.name, packPath, conf;
++	return this.moduleInfo[packName] || (packPath = _path(m.pkg || name, packName, JS, !0), conf = {
++		path: packPath,
+ 		intl: !0,
+ 		langPack: !0,
+ 		ext: m.ext,
+
+```
+
+## `swc/check/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 285 vs reference 257 (+28 bytes, no whitespaces)
+
+```js
+import { upper } from 'module';
+let foobar = 'foo';
+export const foo = foobar;
+const bar = 'bar';
+foobar += bar;
+let foobarCopy = foobar;
+foobar += 'foo';
+console.log(foobarCopy);
+foobarCopy += 'Unused';
+function internal() {
+	return upper(foobar);
+}
+// export function external1() {
+//     return internal() + foobar;
+// }
+// export function external2() {
+//     foobar += ".";
+// }
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,9 @@
+ import 'module';
+ let foobar = 'foo';
+ export const foo = foobar;
+-let foobarCopy = foobar += 'bar';
+-foobar += 'foo', console.log(foobarCopy);
++foobar += 'bar';
++let foobarCopy = foobar;
++foobar += 'foo', console.log(foobarCopy), foobarCopy += 'Unused';
+ // export function external1() {
+ //     return internal() + foobar;
+ // }
+
+```
+
+## `swc/issues/11512-exhaustive/fn-multi-use-default-side-effect`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
+- size: oxc 172 vs reference 144 (+28 bytes, no whitespaces)
+
+```js
+let sideCalls = 0;
+function side() {
+	sideCalls++;
+	return 1;
+}
+function keep(a, b = side()) {
+	return a;
+}
+export function fnMultiUseDefaultSideEffect(value) {
+	return keep(value) + keep(value + 1);
 }
 
 ```
@@ -7039,48 +6670,50 @@ export function foo() {
 ```diff
 --- reference
 +++ oxc
-@@ -1,3 +1,4 @@
- export function foo() {
--	console.log(!0);
-+	let x = () => null, y = () => x;
-+	console.log(y() === y());
+@@ -1,5 +1,8 @@
+ let sideCalls = 0;
+-function keep(a, b = (sideCalls++, 1)) {
++function side() {
++	return sideCalls++, 1;
++}
++function keep(a, b = side()) {
+ 	return a;
  }
+ export function fnMultiUseDefaultSideEffect(value) {
 
 ```
 
-## `swc/issues/8806`
+## `swc/issues/11512-exhaustive/iife-anon-default-unused`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
-- size: oxc 102 vs reference 57 (+45 bytes)
+- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
+- size: oxc 86 vs reference 58 (+28 bytes, no whitespaces)
 
 ```js
-function logTheNine() {
-	((theThree, theNine) => {
-		console.log(theNine);
-	})(...[3, 9]);
+export function iifeAnonDefaultUnused(value) {
+	return (function(a, b = 1) {
+		return a;
+	})(value);
 }
-logTheNine();
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,4 +1,6 @@
- function logTheNine() {
--	console.log(9);
-+	((theThree, theNine) => {
-+		console.log(theNine);
-+	})(3, 9);
+@@ -1,3 +1,5 @@
+ export function iifeAnonDefaultUnused(value) {
+-	return value;
++	return (function(a, b = 1) {
++		return a;
++	})(value);
  }
- logTheNine();
 
 ```
 
 ## `swc/next/swc-4559`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 456 vs reference 411 (+45 bytes)
+- size: oxc 421 vs reference 393 (+28 bytes, no whitespaces)
 
 ```js
 (self['webpackChunk_N_E'] = self['webpackChunk_N_E'] || []).push([[657], { 
@@ -7114,45 +6747,190 @@ logTheNine();
 
 ```
 
-## `swc/issues/11684/class-decl`
+## `swc/issues/11512-exhaustive/iife-default-side-effect`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 197 vs reference 150 (+47 bytes)
+- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
+- size: oxc 136 vs reference 107 (+29 bytes, no whitespaces)
 
 ```js
-class A {
-	constructor() {}
+let calls = 0;
+function side() {
+	calls++;
+	return 1;
 }
-console.log(new A(1, 2, 3), new A(4, 5, 6));
-class B {}
-console.log(new B(1, 2, 3), new B(4, 5, 6));
-class C extends G {}
-console.log(new C(1, 2, 3), new C(4, 5, 6));
+export function iifeDefaultSideEffect(value) {
+	return (function(a, b = side()) {
+		return a;
+	})(value);
+}
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,6 +1,8 @@
--class A {}
--console.log(new A(), new A());
-+class A {
-+	constructor() {}
+@@ -1,6 +1,9 @@
+ let calls = 0;
++function side() {
++	return calls++, 1;
 +}
-+console.log(new A(1, 2, 3), new A(4, 5, 6));
- class B {}
--console.log(new B(), new B());
-+console.log(new B(1, 2, 3), new B(4, 5, 6));
- class C extends G {}
- console.log(new C(1, 2, 3), new C(4, 5, 6));
+ export function iifeDefaultSideEffect(value) {
+-	return function(a, b = (calls++, 1)) {
++	return (function(a, b = side()) {
+ 		return a;
+-	}(value);
++	})(value);
+ }
+
+```
+
+## `swc/issues/10054/for`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 105 vs reference 75 (+30 bytes, no whitespaces)
+
+```js
+// Input:
+function test() {
+	for (var l = 0; i < 10; l++) {}
+	console.log('test');
+}
+window.a = [function() {
+	return test();
+}];
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,8 @@
+ // Input:
+-window.a = [function() {
++function test() {
+ 	for (var l = 0; i < 10; l++);
+ 	console.log('test');
++}
++window.a = [function() {
++	return test();
+ }];
+
+```
+
+## `swc/issues/10054/if`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 113 vs reference 83 (+30 bytes, no whitespaces)
+
+```js
+// Input:
+function test() {
+	if (navigator.userAgentData !== undefined) {
+		throw new Error();
+	}
+}
+window.a = [function() {
+	return test();
+}];
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,7 @@
+ // Input:
++function test() {
++	if (navigator.userAgentData !== void 0) throw Error();
++}
+ window.a = [function() {
+-	if (void 0 !== navigator.userAgentData) throw Error();
++	return test();
+ }];
+
+```
+
+## `swc/issues/10849`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 46 vs reference 16 (+30 bytes, no whitespaces)
+
+```js
+(function() {
+	const obj = { value: 42 };
+	console.log(obj === null || obj === void 0 ? void 0 : obj.value);
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,3 @@
+-console.log(42);
++(function() {
++	console.log({ value: 42 }.value);
++})();
+
+```
+
+## `swc/issues/11512-exhaustive/iife-anon-arg-unused`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
+- size: oxc 84 vs reference 54 (+30 bytes, no whitespaces)
+
+```js
+export function iifeAnonArgUnused(value) {
+	return (function(a, b = 1) {
+		return a;
+	})(value, 7);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,5 @@
+ export function iifeAnonArgUnused(value) {
+-	return value;
++	return (function(a, b = 1) {
++		return a;
++	})(value, 7);
+ }
+
+```
+
+## `swc/pr/7690`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 68 vs reference 38 (+30 bytes, no whitespaces)
+
+```js
+export function foo() {
+	const x = () => null;
+	const y = () => x;
+	console.log(y() === y());
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,4 @@
+ export function foo() {
+-	console.log(!0);
++	let x = () => null, y = () => x;
++	console.log(y() === y());
+ }
 
 ```
 
 ## `swc/issues/11730`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 97 vs reference 50 (+47 bytes)
+- size: oxc 74 vs reference 43 (+31 bytes, no whitespaces)
 
 ```js
 someFunction(function f() {
@@ -7182,206 +6960,46 @@ someFunction(function f() {
 
 ```
 
-## `swc/issues/spread-primitives-void-call`
+## `swc/issues/9468`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 215 vs reference 168 (+47 bytes)
+- size: oxc 194 vs reference 163 (+31 bytes, no whitespaces)
 
 ```js
-// The motivating case: a pure call inside `void` is reduced to `void 0` by
-// earlier passes, and the resulting trivial spread is then dropped.
-function foo() {
-	return 1 + 1;
+function func1(arg1, arg2) {
+	return getX(arg1) + arg2;
 }
-console.log({
-	a: 1,
-	...void foo()
-});
+function getX(x) {
+	const v = document.getElementById('eid').getAttribute(x);
+	return v;
+}
+console.log(func1(7, getX('data-x')));
+console.log(func1(7, getX('data-y')));
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,3 +1,9 @@
- // The motivating case: a pure call inside `void` is reduced to `void 0` by
- // earlier passes, and the resulting trivial spread is then dropped.
--console.log({ a: 1 });
-+function foo() {
-+	return 2;
+@@ -1,5 +1,7 @@
+-var t, e;
+-function getX(t) {
+-	return document.getElementById('eid').getAttribute(t);
++function func1(arg1, arg2) {
++	return getX(arg1) + arg2;
 +}
-+console.log({
-+	a: 1,
-+	...void foo()
-+});
-
-```
-
-## `swc/non-finite-number-literals`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
-- size: oxc 365 vs reference 318 (+47 bytes)
-
-```js
-globalThis.values = [
-	NaN,
-	Infinity,
-	Number.NaN,
-	Number.POSITIVE_INFINITY,
-	Number.NEGATIVE_INFINITY,
-	0 / 0,
-	1 / 0,
-	-1 / 0,
-	1 / -0,
-	Infinity / Infinity,
-	1 % 0
-];
-globalThis.notNaN = !NaN;
-if (NaN) {
-	globalThis.directNaN = 'truthy';
-} else {
-	globalThis.directNaN = 'falsy';
-}
-globalThis.nanSubtraction = NaN - 1 ? 'truthy' : 'falsy';
-globalThis.nanDivision = Infinity / Infinity ? 'truthy' : 'falsy';
-globalThis.joined = [Infinity, '' + globalThis.value].join('');
-switch (1 / 0) {
-	case 1 / 0:
-		globalThis.matched = true;
-		break;
-	default: globalThis.matched = false;
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,13 +1,15 @@
--globalThis.values = [
--	0 / 0,
--	1 / 0,
--	0 / 0,
-+switch (globalThis.values = [
-+	NaN,
-+	Infinity,
-+	NaN,
-+	Infinity,
-+	-Infinity,
-+	NaN,
- 	1 / 0,
- 	-1 / 0,
--	0 / 0,
--	1 / 0,
--	-1 / 0,
--	-1 / 0,
--	0 / 0,
--	0 / 0
--], globalThis.notNaN = !0, globalThis.directNaN = 'falsy', globalThis.nanSubtraction = 'falsy', globalThis.nanDivision = 'falsy', globalThis.joined = 'Infinity' + globalThis.value, globalThis.matched = !0;
-+	-Infinity,
-+	NaN,
-+	NaN
-+], globalThis.notNaN = !0, globalThis.directNaN = 'falsy', globalThis.nanSubtraction = 'falsy', globalThis.nanDivision = 'falsy', globalThis.joined = [Infinity, '' + globalThis.value].join(''), 1 / 0) {
-+	case 1 / 0: globalThis.matched = !0;
-+}
-
-```
-
-## `swc/issues/5910/1`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 170 vs reference 122 (+48 bytes)
-
-```js
-export function fn1() {
-	let walkingIndex = 0;
-	function fn2() {
-		const myIndex = walkingIndex;
-		walkingIndex += 1;
-		console.log(myIndex, walkingIndex);
-	}
-	return fn2;
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,8 @@
- export function fn1() {
- 	let walkingIndex = 0;
--	return function() {
--		console.log(walkingIndex, walkingIndex += 1);
--	};
-+	function fn2() {
-+		let myIndex = walkingIndex;
-+		walkingIndex += 1, console.log(myIndex, walkingIndex);
-+	}
-+	return fn2;
++function getX(x) {
++	return document.getElementById('eid').getAttribute(x);
  }
-
-```
-
-## `swc/issues/pure-callee-call`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 258 vs reference 210 (+48 bytes)
-
-```js
-function identity(value) {
-	return value;
-}
-let count = 0;
-function invoke() {
-	count += 1;
-}
-identity(invoke)();
-(identity?.(invoke))();
-function Factory() {
-	return invoke;
-}
-new Factory()();
-function tag() {
-	return invoke;
-}
-tag``();
-console.log(count);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,11 +1,16 @@
-+function identity(value) {
-+	return value;
-+}
- let count = 0;
- function invoke() {
- 	count += 1;
- }
--invoke(), ((function(value) {
--	return value;
--})?.(invoke))(), new function() {
-+identity(invoke)(), (identity?.(invoke))();
-+function Factory() {
- 	return invoke;
--}()(), (function() {
-+}
-+new Factory()();
-+function tag() {
- 	return invoke;
--})``(), console.log(count);
-+}
-+tag``(), console.log(count);
+-console.log((t = getX('data-x'), getX(7) + t)), console.log((e = getX('data-y'), getX(7) + e));
++console.log(func1(7, getX('data-x'))), console.log(func1(7, getX('data-y')));
 
 ```
 
 ## `swc/issues/10532`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 212 vs reference 162 (+50 bytes)
+- size: oxc 166 vs reference 134 (+32 bytes, no whitespaces)
 
 ```js
 (function() {
@@ -7425,68 +7043,57 @@ console.log(count);
 
 ```
 
-## `swc/issues/10885`
+## `swc/issues/10876/3`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 404 vs reference 354 (+50 bytes)
+- tags: `join vars`, `sequences`, `2 iterations`
+- size: oxc 162 vs reference 130 (+32 bytes, no whitespaces)
 
 ```js
-import { useState } from 'react';
-import { getCondition, doSomething } from './utils';
-export default function useMeow() {
-	const [state, setState] = useState('init');
-	const onMeow = async () => {
-		switch (state) {
-			case 'init': {
-				const innerCondition = getCondition();
-				switch (innerCondition) {
-					case 'a': break;
-					case 'b': break;
-					default: await doSomething();
-				}
-				break;
-			}
-			default: {
-				await doSomething();
-				break;
-			}
-		}
+const createCounter = () => {
+	let count = 0;
+	return (numToAdd) => {
+		count += numToAdd;
+		return count;
 	};
-	return { onMeow };
-}
+};
+new class Bar {
+	x = new class Foo {
+		[createCounter()]() {
+			console.log('Hello, world!');
+		}
+	}();
+}();
+export {};
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -3,11 +3,15 @@
- export default function useMeow() {
- 	let [state, setState] = useState('init');
- 	return { onMeow: async () => {
--		if ('init' === state) switch (getCondition()) {
--			case 'a':
--			case 'b': break;
-+		switch (state) {
-+			case 'init':
-+				switch (getCondition()) {
-+					case 'a': break;
-+					case 'b': break;
-+					default: await doSomething();
-+				}
-+				break;
- 			default: await doSomething();
+@@ -1,9 +1,10 @@
+-new class Bar {
+-	x = new class Foo {
+-		[(() => {
+-			let count = 0;
+-			return (numToAdd) => count += numToAdd;
+-		})()]() {
++const createCounter = () => {
++	let count = 0;
++	return (numToAdd) => (count += numToAdd, count);
++};
++new class {
++	x = new class {
++		[createCounter()]() {
+ 			console.log('Hello, world!');
  		}
--		else await doSomething();
- 	} };
- }
+ 	}();
 
 ```
 
 ## `swc/issues/7984`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 222 vs reference 172 (+50 bytes)
+- size: oxc 168 vs reference 136 (+32 bytes, no whitespaces)
 
 ```js
 getInitialProps = (code) => {
@@ -7528,10 +7135,165 @@ getInitialProps = (code) => {
 
 ```
 
+## `swc/issues/react/hooks/5`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 391 vs reference 357 (+34 bytes, no whitespaces)
+
+```js
+const CONST_1 = 'const1';
+const CONST_2 = 'const2';
+function useHook1() {
+	const [v1, v1_set] = useState(undefined);
+	useEffect(() => {
+		if (GLOBALS.get(CONST_1) && GLOBALS.get(CONST_2)) {
+			v1_set(true);
+		} else {
+			v1_set(false);
+		}
+	}, []);
+	return v1;
+}
+function useHook2() {
+	const [a1, a1_set] = useState({});
+	useEffect(() => {
+		a1_set(JSON.parse(GLOBALS.get(CONST1) || '{}'));
+	}, []);
+	return a1;
+}
+export function HeaderCTA() {
+	const varB = useHook2();
+	const varA = useHook1();
+	// Loading...
+	if (varA === undefined) {
+		return null;
+	}
+	if (varA) {
+		return use(varB.field);
+	}
+	return pure();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,14 +1,16 @@
++function useHook1() {
++	let [v1, v1_set] = useState(void 0);
++	return useEffect(() => {
++		GLOBALS.get('const1') && GLOBALS.get('const2') ? v1_set(!0) : v1_set(!1);
++	}, []), v1;
++}
++function useHook2() {
++	let [a1, a1_set] = useState({});
++	return useEffect(() => {
++		a1_set(JSON.parse(GLOBALS.get(CONST1) || '{}'));
++	}, []), a1;
++}
+ export function HeaderCTA() {
+-	let varB = function() {
+-		let [a1, a1_set] = useState({});
+-		return useEffect(() => {
+-			a1_set(JSON.parse(GLOBALS.get(CONST1) || '{}'));
+-		}, []), a1;
+-	}(), varA = function() {
+-		let [v1, v1_set] = useState(void 0);
+-		return useEffect(() => {
+-			GLOBALS.get('const1') && GLOBALS.get('const2') ? v1_set(!0) : v1_set(!1);
+-		}, []), v1;
+-	}();
+-	return void 0 === varA ? null : varA ? use(varB.field) : pure();
++	let varB = useHook2(), varA = useHook1();
++	return varA === void 0 ? null : varA ? use(varB.field) : pure();
+ }
+
+```
+
+## `swc/issues/8806`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
+- size: oxc 85 vs reference 50 (+35 bytes, no whitespaces)
+
+```js
+function logTheNine() {
+	((theThree, theNine) => {
+		console.log(theNine);
+	})(...[3, 9]);
+}
+logTheNine();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,6 @@
+ function logTheNine() {
+-	console.log(9);
++	((theThree, theNine) => {
++		console.log(theNine);
++	})(3, 9);
+ }
+ logTheNine();
+
+```
+
+## `swc/projects/jquery/3`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 526 vs reference 491 (+35 bytes, no whitespaces)
+
+```js
+export const obj = { ready: function(wait) {
+	// Abort if there are pending holds or we're already ready
+	if (wait === true ? --jQuery.readyWait : jQuery.isReady) {
+		return;
+	}
+	// Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).
+	if (!document.body) {
+		return setTimeout(jQuery.ready);
+	}
+	// Remember that the DOM is ready
+	jQuery.isReady = true;
+	// If a normal DOM Ready event fired, decrement, and wait if need be
+	if (wait !== true && --jQuery.readyWait > 0) {
+		return;
+	}
+	// If there are functions bound, to execute
+	readyList.resolveWith(document, [jQuery]);
+	// Trigger any bound ready events
+	if (jQuery.fn.trigger) {
+		jQuery(document).trigger('ready').off('ready');
+	}
+} };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,9 @@
+ export const obj = { ready: function(wait) {
+ 	// Abort if there are pending holds or we're already ready
+-	if (!(!0 === wait ? --jQuery.readyWait : jQuery.isReady)) {
++	if (!(wait === !0 ? --jQuery.readyWait : jQuery.isReady)) {
+ 		// Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).
+ 		if (!document.body) return setTimeout(jQuery.ready);
+-		// Remember that the DOM is ready
+-		jQuery.isReady = !0, !(!0 !== wait && --jQuery.readyWait > 0) && (readyList.resolveWith(document, [jQuery]), jQuery.fn.trigger && jQuery(document).trigger('ready').off('ready'));
++		// If a normal DOM Ready event fired, decrement, and wait if need be
++		jQuery.isReady = !0, !(wait !== !0 && --jQuery.readyWait > 0) && (readyList.resolveWith(document, [jQuery]), jQuery.fn.trigger && jQuery(document).trigger('ready').off('ready'));
+ 	}
+ } };
+
+```
+
 ## `swc/issues/8718/4`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 142 vs reference 92 (+50 bytes)
+- size: oxc 118 vs reference 82 (+36 bytes, no whitespaces)
 
 ```js
 let a;
@@ -7566,50 +7328,88 @@ console.log((a += 1, a += 2));
 
 ```
 
-## `swc/projects/wmr/archive-1/chunks/index.ddc4110d`
+## `swc/projects/jquery/6`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 397 vs reference 346 (+51 bytes)
+- size: oxc 258 vs reference 222 (+36 bytes, no whitespaces)
 
 ```js
-import { s as style, y, m } from '../index.f66dda46.js';
-null;
-const styles = { about: 'about_migxty' };
-function About({ query, title }) {
-	y(() => {
-		console.log('Mounted About: ', title);
-		return () => {
-			console.log('Unmounting About: ', title);
-		};
-	}, []);
-	return m`<section class=${styles.about}><h1>${title || 'About'}</h1><p>My name is Jason.</p><pre>${JSON.stringify(query)}</pre></section>`;
-}
-export default About;
+export const obj = { inArray: function(elem, arr, i) {
+	var len;
+	if (arr) {
+		if (core_indexOf) {
+			return core_indexOf.call(arr, elem, i);
+		}
+		len = arr.length;
+		i = i ? i < 0 ? Math.max(0, len + i) : i : 0;
+		for (; i < len; i++) {
+			// Skip accessing in sparse arrays
+			if (i in arr && arr[i] === elem) {
+				return i;
+			}
+		}
+	}
+	return -1;
+} };
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,7 +1,8 @@
- import { y, m } from '../index.f66dda46.js';
--export default function({ query, title }) {
-+const styles = { about: 'about_migxty' };
-+function About({ query, title }) {
- 	return y(() => (console.log('Mounted About: ', title), () => {
- 		console.log('Unmounting About: ', title);
--	}), []), m`<section class=${'about_migxty'}><h1>${title || 'About'}</h1><p>My name is Jason.</p><pre>${JSON.stringify(query)}</pre></section>`;
-+	}), []), m`<section class=${styles.about}><h1>${title || 'About'}</h1><p>My name is Jason.</p><pre>${JSON.stringify(query)}</pre></section>`;
- }
--;
-+export default About;
+@@ -2,7 +2,9 @@
+ 	var len;
+ 	if (arr) {
+ 		if (core_indexOf) return core_indexOf.call(arr, elem, i);
+-		for (len = arr.length, i = i ? i < 0 ? Math.max(0, len + i) : i : 0; i < len; i++) if (i in arr && arr[i] === elem) return i;
++		for (len = arr.length, i = i ? i < 0 ? Math.max(0, len + i) : i : 0; i < len; i++)
++ // Skip accessing in sparse arrays
++		if (i in arr && arr[i] === elem) return i;
+ 	}
+ 	return -1;
+ } };
+
+```
+
+## `swc/issues/spread-primitives-void-call`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 202 vs reference 164 (+38 bytes, no whitespaces)
+
+```js
+// The motivating case: a pure call inside `void` is reduced to `void 0` by
+// earlier passes, and the resulting trivial spread is then dropped.
+function foo() {
+	return 1 + 1;
+}
+console.log({
+	a: 1,
+	...void foo()
+});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,9 @@
+ // The motivating case: a pure call inside `void` is reduced to `void 0` by
+ // earlier passes, and the resulting trivial spread is then dropped.
+-console.log({ a: 1 });
++function foo() {
++	return 2;
++}
++console.log({
++	a: 1,
++	...void foo()
++});
 
 ```
 
 ## `swc/issues/10981`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 144 vs reference 91 (+53 bytes)
+- size: oxc 106 vs reference 67 (+39 bytes, no whitespaces)
 
 ```js
 class C {
@@ -7644,146 +7444,10 @@ class D {
 
 ```
 
-## `swc/issues/9922/1`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 55 vs reference 0 (+55 bytes)
-
-```js
-switch (0) {
-	default:
-		x: break;
-		console.log(1);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -0,0 +1,5 @@
-+switch (0) {
-+	default:
-+		x: break;
-+		console.log(1);
-+}
-
-```
-
-## `swc/issues/6279/2`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 120 vs reference 64 (+56 bytes)
-
-```js
-const r = new RegExp('a', 'g');
-function run(str, r) {
-	let m;
-	while (m = r.exec(str)) {
-		console.log(m);
-	}
-}
-run('abcda', r);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,6 @@
--let m;
--for (var r = /a/g; m = r.exec('abcda');) console.log(m);
-+const r = RegExp('a', 'g');
-+function run(str, r) {
-+	let m;
-+	for (; m = r.exec(str);) console.log(m);
-+}
-+run('abcda', r);
-
-```
-
-## `swc/issues/10876/2`
-
-- tags: `join vars`, `sequences`, `2 iterations`
-- size: oxc 187 vs reference 130 (+57 bytes)
-
-```js
-const createCounter1 = () => {
-	let count = 0;
-	return (numToAdd) => {
-		count += numToAdd;
-		return count;
-	};
-};
-new class Foo {
-	[createCounter1()]() {
-		console.log('Hello, world!');
-	}
-}();
-export {};
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,9 @@
--let count;
--new class Foo {
--	[(count = 0, (numToAdd) => count += numToAdd)]() {
-+const createCounter1 = () => {
-+	let count = 0;
-+	return (numToAdd) => (count += numToAdd, count);
-+};
-+new class {
-+	[createCounter1()]() {
- 		console.log('Hello, world!');
- 	}
- }();
-
-```
-
-## `swc/issues/7575/1`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 128 vs reference 71 (+57 bytes)
-
-```js
-export const envKey = 'staging' || 'production';
-const environmentResolver = () => {
-	if (envKey === 'production') {
-		return 'production';
-	}
-	if (envKey === 'staging') {
-		return 'staging';
-	}
-	if (envKey === 'test') {
-		return 'test';
-	}
-	if (envKey === 'development') {
-		return 'development';
-	}
-	throw new Error(`Unknown environment: ${envKey}`);
-};
-export const environment = environmentResolver();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,3 @@
- export const envKey = 'staging';
--export const environment = 'staging';
-+const environmentResolver = () => 'staging';
-+export const environment = environmentResolver();
-
-```
-
 ## `swc/issues/11103`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 277 vs reference 219 (+58 bytes)
+- size: oxc 241 vs reference 202 (+39 bytes, no whitespaces)
 
 ```js
 import assert from 'node:assert';
@@ -7822,62 +7486,247 @@ export default function Home() {
 
 ```
 
-## `swc/projects/jquery/.19`
+## `swc/issues/5910/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 542 vs reference 484 (+58 bytes)
+- size: oxc 142 vs reference 102 (+40 bytes, no whitespaces)
 
 ```js
-// Functions to create xhrs
-function createStandardXHR() {
-	try {
-		return new window.XMLHttpRequest();
-	} catch (e) {}
+export function fn1() {
+	let walkingIndex = 0;
+	function fn2() {
+		const myIndex = walkingIndex;
+		walkingIndex += 1;
+		console.log(myIndex, walkingIndex);
+	}
+	return fn2;
 }
-function createActiveXHR() {
-	try {
-		return new window.ActiveXObject('Microsoft.XMLHTTP');
-	} catch (e) {}
-}
-// Create the request object
-// (This is still attached to ajaxSettings for backward compatibility)
-jQuery.ajaxSettings.xhr = window.ActiveXObject ? function() {
-	return !this.isLocal && createStandardXHR() || createActiveXHR();
-} : // For all other browsers, use the standard XMLHttpRequest object
-createStandardXHR;
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -2,15 +2,16 @@
- function createStandardXHR() {
- 	try {
- 		return new window.XMLHttpRequest();
--	} catch (e) {}
-+	} catch {}
+@@ -1,6 +1,8 @@
+ export function fn1() {
+ 	let walkingIndex = 0;
+-	return function() {
+-		console.log(walkingIndex, walkingIndex += 1);
+-	};
++	function fn2() {
++		let myIndex = walkingIndex;
++		walkingIndex += 1, console.log(myIndex, walkingIndex);
++	}
++	return fn2;
  }
- function createActiveXHR() {
- 	try {
- 		return new window.ActiveXObject('Microsoft.XMLHTTP');
--	} catch (e) {}
-+	} catch {}
- }
- // Create the request object
- // (This is still attached to ajaxSettings for backward compatibility)
- jQuery.ajaxSettings.xhr = window.ActiveXObject ? function() {
- 	return !this.isLocal && createStandardXHR() || createActiveXHR();
--} : createStandardXHR;
-+} : // For all other browsers, use the standard XMLHttpRequest object
-+createStandardXHR;
+
+```
+
+## `swc/issues/9922/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 41 vs reference 0 (+41 bytes, no whitespaces)
+
+```js
+switch (0) {
+	default:
+		x: break;
+		console.log(1);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -0,0 +1,5 @@
++switch (0) {
++	default:
++		x: break;
++		console.log(1);
++}
+
+```
+
+## `swc/member_expr/array_side_effects`
+
+- tags: `drop debugger`, `join vars`, `sequences`
+- size: oxc 248 vs reference 207 (+41 bytes, no whitespaces)
+
+```js
+// Out of bounds
+f([][-1]);
+f([][1]);
+f([][[]]);
+f([][0 + []]);
+f([
+	x(),
+	2,
+	'a',
+	1 + 1,
+	y()
+][-1]);
+f([
+	x(),
+	2,
+	'a',
+	1 + 1,
+	y()
+][10]);
+// Invalid property
+f([].invalid);
+f([]['invalid']);
+f([
+	x(),
+	2,
+	'a',
+	1 + 1,
+	y()
+].invalid);
+f([
+	x(),
+	2,
+	'a',
+	1 + 1,
+	y()
+]['invalid']);
+// Valid property
+f([].push);
+f([]['push']);
+f([
+	x(),
+	2,
+	'a',
+	1 + 1,
+	y()
+].push);
+f([
+	x(),
+	2,
+	'a',
+	1 + 1,
+	y()
+]['push']);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,37 @@
+-// Out of bounds
+-f(void 0), f(void 0), f(void 0), f(void 0), f((x(), void y())), f((x(), void y())), f(void 0), f(void 0), f((x(), void y())), f((x(), void y())), f([].push), f([].push), f([x(), y()].push), f([x(), y()].push);
++f([][-1]), f([][1]), f([][[]]), f([][0]), f([
++	x(),
++	2,
++	'a',
++	2,
++	y()
++][-1]), f([
++	x(),
++	2,
++	'a',
++	2,
++	y()
++][10]), f([].invalid), f([].invalid), f([
++	x(),
++	2,
++	'a',
++	2,
++	y()
++].invalid), f([
++	x(),
++	2,
++	'a',
++	2,
++	y()
++].invalid), f([].push), f([].push), f([
++	x(),
++	2,
++	'a',
++	2,
++	y()
++].push), f([
++	x(),
++	2,
++	'a',
++	2,
++	y()
++].push);
+
+```
+
+## `swc/issues/11684/class-decl`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 169 vs reference 126 (+43 bytes, no whitespaces)
+
+```js
+class A {
+	constructor() {}
+}
+console.log(new A(1, 2, 3), new A(4, 5, 6));
+class B {}
+console.log(new B(1, 2, 3), new B(4, 5, 6));
+class C extends G {}
+console.log(new C(1, 2, 3), new C(4, 5, 6));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,8 @@
+-class A {}
+-console.log(new A(), new A());
++class A {
++	constructor() {}
++}
++console.log(new A(1, 2, 3), new A(4, 5, 6));
+ class B {}
+-console.log(new B(), new B());
++console.log(new B(1, 2, 3), new B(4, 5, 6));
+ class C extends G {}
+ console.log(new C(1, 2, 3), new C(4, 5, 6));
+
+```
+
+## `swc/issues/6279/2`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 100 vs reference 55 (+45 bytes, no whitespaces)
+
+```js
+const r = new RegExp('a', 'g');
+function run(str, r) {
+	let m;
+	while (m = r.exec(str)) {
+		console.log(m);
+	}
+}
+run('abcda', r);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,6 @@
+-let m;
+-for (var r = /a/g; m = r.exec('abcda');) console.log(m);
++const r = RegExp('a', 'g');
++function run(str, r) {
++	let m;
++	for (; m = r.exec(str);) console.log(m);
++}
++run('abcda', r);
 
 ```
 
 ## `swc/issues/7402`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
-- size: oxc 335 vs reference 274 (+61 bytes)
+- size: oxc 261 vs reference 216 (+45 bytes, no whitespaces)
 
 ```js
 export function mutate(out) {
@@ -7942,436 +7791,10 @@ myFunc(out);
 
 ```
 
-## `swc/issues/2028`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 148 vs reference 86 (+62 bytes)
-
-```js
-function isSymbol(s) {
-	return s != null;
-}
-function isKey(value, object) {
-	if (value == null || isSymbol(value)) {
-		return true;
-	}
-	return false;
-}
-module.exports = isKey;
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,7 @@
--module.exports = function(value, object) {
--	return null == value || null != value;
--};
-+function isSymbol(s) {
-+	return s != null;
-+}
-+function isKey(value, object) {
-+	return !!(value == null || isSymbol(value));
-+}
-+module.exports = isKey;
-
-```
-
-## `swc/issues/9785`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 196 vs reference 134 (+62 bytes)
-
-```js
-function dist_index_es_P(e) {
-	try {
-		t = JSON.stringify(e);
-	} catch (r) {
-		t = String(e);
-	}
-	for (var r = 0, o = 0; o < t.length; o++) {
-		r += 1;
-	}
-	console.log(r);
-	return r;
-}
-dist_index_es_P('aa');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,10 @@
--try {
--	t = JSON.stringify('aa');
--} catch (r) {
--	t = String('aa');
-+function dist_index_es_P(e) {
-+	try {
-+		t = JSON.stringify(e);
-+	} catch {
-+		t = String(e);
-+	}
-+	for (var r = 0, o = 0; o < t.length; o++) r += 1;
-+	return console.log(r), r;
- }
--for (var r = 0, o = 0; o < t.length; o++) r += 1;
--console.log(r);
-+dist_index_es_P('aa');
-
-```
-
-## `swc/next/joda`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 382 vs reference 320 (+62 bytes)
-
-```js
-'use strict';
-(self['webpackChunk_N_E'] = self['webpackChunk_N_E'] || []).push([[715], { 
-/***/ 3266: 
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-	/* harmony export */ __webpack_require__.d(__webpack_exports__, { 
-	/* harmony export */ 'h': function() {
-		return LocalDate;
-	} });
-	var isInit = false;
-	function init() {
-		if (isInit) {
-			return;
-		}
-		isInit = true;
-	}
-	init();
-}) }]);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,13 @@
- 'use strict';
- (self.webpackChunk_N_E = self.webpackChunk_N_E || []).push([[715], { 
--/***/ 3266: /***/ function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-+/***/ 3266: (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
- 	/* harmony export */ __webpack_require__.d(__webpack_exports__, { 
- 	/* harmony export */ h: function() {
- 		return LocalDate;
- 	} });
--} }]);
-+	var isInit = !1;
-+	function init() {
-+		isInit ||= !0;
-+	}
-+	init();
-+}) }]);
-
-```
-
-## `swc/projects/mootools/8`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 1096 vs reference 1034 (+62 bytes)
-
-```js
-var Browser = window.Browser || {};
-var setEngine = function(name, version) {
-	Browser.Engine.name = name;
-	Browser.Engine[name + version] = true;
-	Browser.Engine.version = version;
-};
-if (Browser.ie) {
-	Browser.Engine.trident = true;
-	switch (Browser.version) {
-		case 6:
-			setEngine('trident', 4);
-			break;
-		case 7:
-			setEngine('trident', 5);
-			break;
-		case 8: setEngine('trident', 6);
-	}
-}
-if (Browser.firefox) {
-	Browser.Engine.gecko = true;
-	if (Browser.version >= 3) setEngine('gecko', 19);
-	else setEngine('gecko', 18);
-}
-if (Browser.safari || Browser.chrome) {
-	Browser.Engine.webkit = true;
-	switch (Browser.version) {
-		case 2:
-			setEngine('webkit', 419);
-			break;
-		case 3:
-			setEngine('webkit', 420);
-			break;
-		case 4: setEngine('webkit', 525);
-	}
-}
-if (Browser.opera) {
-	Browser.Engine.presto = true;
-	if (Browser.version >= 9.6) setEngine('presto', 960);
-	else if (Browser.version >= 9.5) setEngine('presto', 950);
-	else setEngine('presto', 925);
-}
-if (Browser.name == 'unknown') {
-	switch ((ua.match(/(?:webkit|khtml|gecko)/) || [])[0]) {
-		case 'webkit':
-		case 'khtml':
-			Browser.Engine.webkit = true;
-			break;
-		case 'gecko': Browser.Engine.gecko = true;
-	}
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -10,7 +10,7 @@
- 		break;
- 	case 8: setEngine('trident', 6);
- }
--if (Browser.firefox && (Browser.Engine.gecko = !0, setEngine('gecko', Browser.version >= 3 ? 19 : 18)), Browser.safari || Browser.chrome) switch (Browser.Engine.webkit = !0, Browser.version) {
-+if (Browser.firefox && (Browser.Engine.gecko = !0, Browser.version >= 3 ? setEngine('gecko', 19) : setEngine('gecko', 18)), Browser.safari || Browser.chrome) switch (Browser.Engine.webkit = !0, Browser.version) {
- 	case 2:
- 		setEngine('webkit', 419);
- 		break;
-@@ -19,7 +19,7 @@
- 		break;
- 	case 4: setEngine('webkit', 525);
- }
--if (Browser.opera && (Browser.Engine.presto = !0, setEngine('presto', Browser.version >= 9.6 ? 960 : Browser.version >= 9.5 ? 950 : 925)), 'unknown' == Browser.name) switch ((ua.match(/(?:webkit|khtml|gecko)/) || [])[0]) {
-+if (Browser.opera && (Browser.Engine.presto = !0, Browser.version >= 9.6 ? setEngine('presto', 960) : Browser.version >= 9.5 ? setEngine('presto', 950) : setEngine('presto', 925)), Browser.name == 'unknown') switch ((ua.match(/(?:webkit|khtml|gecko)/) || [])[0]) {
- 	case 'webkit':
- 	case 'khtml':
- 		Browser.Engine.webkit = !0;
-
-```
-
-## `swc/issues/10178`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 90 vs reference 27 (+63 bytes)
-
-```js
-//// [indexerWithTuple.ts]
-var strNumTuple = ['foo', 10], numTupleTuple = [10, ['bar', 20]], unionTuple1 = [10, 'foo'], unionTuple2 = [!0, 'foo'];
-strNumTuple[0], strNumTuple['0'];
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,3 @@
- //// [indexerWithTuple.ts]
-+var strNumTuple = ['foo', 10];
-+strNumTuple[0], strNumTuple[0];
-
-```
-
-## `swc/issues/10425`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
-- size: oxc 85 vs reference 22 (+63 bytes)
-
-```js
-export const foo = 6;
-function baz() {
-	return 5;
-}
-class Bar {
-	static x = baz();
-}
-class Ban {
-	static x = 5;
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,7 @@
- export const foo = 6;
-+function baz() {
-+	return 5;
-+}
-+class Bar {
-+	static x = baz();
-+}
-
-```
-
-## `swc/issues/9459`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 102 vs reference 39 (+63 bytes)
-
-```js
-export default function Component() {
-	const [state, setState] = useState();
-	const { a, b = 'b' } = call();
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,3 @@
--export default function Component() {}
-+export default function Component() {
-+	let [state, setState] = useState(), { a, b = 'b' } = call();
-+}
-
-```
-
-## `swc/issues/7287/1`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 106 vs reference 42 (+64 bytes)
-
-```js
-(function() {
-	const r = f();
-	console.log(r);
-	function f() {
-		console.log('REQUIRE');
-		return 1;
-	}
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,7 @@
--console.log((console.log('REQUIRE'), 1));
-+(function() {
-+	let r = f();
-+	console.log(r);
-+	function f() {
-+		return console.log('REQUIRE'), 1;
-+	}
-+})();
-
-```
-
-## `swc/simple/inline/6`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 415 vs reference 348 (+67 bytes)
-
-```js
-export function endOf(units) {
-	var time, dividend, dividend1;
-	switch (this._isUTC, units) {
-		case 'hour':
-			time = v(), time += 36e5 - (dividend = time + 36e5, (dividend % 36e5 + 36e5) % 36e5) - 1;
-			break;
-		case 'minute':
-			time = v(), time += 6e4 - (dividend1 = time, (dividend1 % 6e4 + 6e4) % 6e4) - 1;
-			break;
-		case 'second': time = v(), time += 1e3 - (time % 1e3 + 1e3) % 1e3 - 1;
-	}
-	return time;
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,11 +1,11 @@
- export function endOf(units) {
--	var time;
-+	var time, dividend, dividend1;
- 	switch (this._isUTC, units) {
- 		case 'hour':
--			time = v(), time += 36e5 - ((time + 36e5) % 36e5 + 36e5) % 36e5 - 1;
-+			time = v(), time += 36e5 - (dividend = time + 36e5, (dividend % 36e5 + 36e5) % 36e5) - 1;
- 			break;
- 		case 'minute':
--			time = v(), time += 6e4 - (time % 6e4 + 6e4) % 6e4 - 1;
-+			time = v(), time += 6e4 - (dividend1 = time, (dividend1 % 6e4 + 6e4) % 6e4) - 1;
- 			break;
- 		case 'second': time = v(), time += 1e3 - (time % 1e3 + 1e3) % 1e3 - 1;
- 	}
-
-```
-
-## `swc/projects/wmr/archive-1/chunks/prerender.93c6f601`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 685 vs reference 615 (+70 bytes)
-
-```js
-import '../index.f66dda46.js';
-import { t as toStatic } from './hoofd.module.6c5395cb.js';
-function prerender$1(vnode, options) {
-	return import('../prerender.daa73035/input.js').then((m) => m.default(vnode, options));
-}
-async function prerender(vnode) {
-	const res = await prerender$1(vnode);
-	const head = toStatic();
-	const elements = new Set([
-		...head.links.map((props) => ({
-			type: 'link',
-			props
-		})),
-		...head.metas.map((props) => ({
-			type: 'meta',
-			props
-		})),
-		...head.scripts.map((props) => ({
-			type: 'script',
-			props
-		}))
-	]);
-	return {
-		...res,
-		data: { hello: 'world' },
-		head: {
-			title: head.title,
-			lang: head.lang,
-			elements
-		}
-	};
-}
-export { prerender };
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,10 @@
- import '../index.f66dda46.js';
- import { t as toStatic } from './hoofd.module.6c5395cb.js';
-+function prerender$1(vnode, options) {
-+	return import('../prerender.daa73035/input.js').then((m) => m.default(vnode, options));
-+}
- async function prerender(vnode) {
--	let res = await import('../prerender.daa73035/input.js').then((m) => m.default(vnode, void 0)), head = toStatic(), elements = new Set([
-+	let res = await prerender$1(vnode), head = toStatic(), elements = new Set([
- 		...head.links.map((props) => ({
- 			type: 'link',
- 			props
-
-```
-
 ## `swc/issues/8173`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 1236 vs reference 1165 (+71 bytes)
+- size: oxc 1022 vs reference 977 (+45 bytes, no whitespaces)
 
 ```js
 'use strict';
@@ -8475,77 +7898,601 @@ badFunction();
 
 ```
 
-## `swc/projects/jquery/5`
+## `swc/issues/next-97517`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 533 vs reference 462 (+71 bytes)
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
+- size: oxc 189 vs reference 144 (+45 bytes, no whitespaces)
 
 ```js
-export const obj = { each: function(obj, callback, args) {
-	var value, i = 0, length = obj.length, isArray = isArraylike(obj);
-	if (args) {
-		if (isArray) {
-			for (; i < length; i++) {
-				value = callback.apply(obj[i], args);
-				if (value === false) {
-					break;
-				}
-			}
-		} else {
-			for (i in obj) {
-				value = callback.apply(obj[i], args);
-				if (value === false) {
-					break;
-				}
-			}
-		}
-	} else {
-		if (isArray) {
-			for (; i < length; i++) {
-				value = callback.call(obj[i], i, obj[i]);
-				if (value === false) {
-					break;
-				}
-			}
-		} else {
-			for (i in obj) {
-				value = callback.call(obj[i], i, obj[i]);
-				if (value === false) {
-					break;
-				}
-			}
-		}
-	}
-	return obj;
-} };
+module.exports = [50708, (context) => {
+	'use strict';
+	var join, run;
+	join = (left, right) => left + right, run = (rows) => {
+		rows.map((row) => join(row.g, row.r));
+		return rows.map((row) => (item) => join(row.g, item.l));
+	};
+	context.s([
+		'run',
+		0,
+		run
+	], 42519);
+}];
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,9 +1,9 @@
- export const obj = { each: function(obj, callback, args) {
--	var i = 0, length = obj.length, isArray = isArraylike(obj);
-+	var value, i = 0, length = obj.length, isArray = isArraylike(obj);
- 	if (args) {
--		if (isArray) for (; i < length && !1 !== callback.apply(obj[i], args); i++);
--		else for (i in obj) if (!1 === callback.apply(obj[i], args)) break;
--	} else if (isArray) for (; i < length && !1 !== callback.call(obj[i], i, obj[i]); i++);
--	else for (i in obj) if (!1 === callback.call(obj[i], i, obj[i])) break;
-+		if (isArray) for (; i < length && (value = callback.apply(obj[i], args), value !== !1); i++);
-+		else for (i in obj) if (value = callback.apply(obj[i], args), value === !1) break;
-+	} else if (isArray) for (; i < length && (value = callback.call(obj[i], i, obj[i]), value !== !1); i++);
-+	else for (i in obj) if (value = callback.call(obj[i], i, obj[i]), value === !1) break;
- 	return obj;
- } };
+@@ -1,14 +1,9 @@
+-module.exports = [50708, (r) => {
++module.exports = [50708, (context) => {
+ 	'use strict';
+-	r.s([
++	var join = (left, right) => left + right;
++	context.s([
+ 		'run',
+ 		0,
+-		(r) => (r.map((r) => {
+-			let e;
+-			return e = r.g, e + r.r;
+-		}), r.map((r) => (e) => {
+-			let t;
+-			return t = r.g, t + e.l;
+-		}))
++		(rows) => (rows.map((row) => join(row.g, row.r)), rows.map((row) => (item) => join(row.g, item.l)))
+ 	], 42519);
+ }];
+
+```
+
+## `swc/issues/pure-callee-call`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 224 vs reference 179 (+45 bytes, no whitespaces)
+
+```js
+function identity(value) {
+	return value;
+}
+let count = 0;
+function invoke() {
+	count += 1;
+}
+identity(invoke)();
+(identity?.(invoke))();
+function Factory() {
+	return invoke;
+}
+new Factory()();
+function tag() {
+	return invoke;
+}
+tag``();
+console.log(count);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,16 @@
++function identity(value) {
++	return value;
++}
+ let count = 0;
+ function invoke() {
+ 	count += 1;
+ }
+-invoke(), ((function(value) {
+-	return value;
+-})?.(invoke))(), new function() {
++identity(invoke)(), (identity?.(invoke))();
++function Factory() {
+ 	return invoke;
+-}()(), (function() {
++}
++new Factory()();
++function tag() {
+ 	return invoke;
+-})``(), console.log(count);
++}
++tag``(), console.log(count);
+
+```
+
+## `swc/projects/wmr/archive-1/chunks/index.ddc4110d`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 357 vs reference 312 (+45 bytes, no whitespaces)
+
+```js
+import { s as style, y, m } from '../index.f66dda46.js';
+null;
+const styles = { about: 'about_migxty' };
+function About({ query, title }) {
+	y(() => {
+		console.log('Mounted About: ', title);
+		return () => {
+			console.log('Unmounting About: ', title);
+		};
+	}, []);
+	return m`<section class=${styles.about}><h1>${title || 'About'}</h1><p>My name is Jason.</p><pre>${JSON.stringify(query)}</pre></section>`;
+}
+export default About;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,8 @@
+ import { y, m } from '../index.f66dda46.js';
+-export default function({ query, title }) {
++const styles = { about: 'about_migxty' };
++function About({ query, title }) {
+ 	return y(() => (console.log('Mounted About: ', title), () => {
+ 		console.log('Unmounting About: ', title);
+-	}), []), m`<section class=${'about_migxty'}><h1>${title || 'About'}</h1><p>My name is Jason.</p><pre>${JSON.stringify(query)}</pre></section>`;
++	}), []), m`<section class=${styles.about}><h1>${title || 'About'}</h1><p>My name is Jason.</p><pre>${JSON.stringify(query)}</pre></section>`;
+ }
+-;
++export default About;
+
+```
+
+## `swc/next/joda`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 334 vs reference 288 (+46 bytes, no whitespaces)
+
+```js
+'use strict';
+(self['webpackChunk_N_E'] = self['webpackChunk_N_E'] || []).push([[715], { 
+/***/ 3266: 
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+	/* harmony export */ __webpack_require__.d(__webpack_exports__, { 
+	/* harmony export */ 'h': function() {
+		return LocalDate;
+	} });
+	var isInit = false;
+	function init() {
+		if (isInit) {
+			return;
+		}
+		isInit = true;
+	}
+	init();
+}) }]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,13 @@
+ 'use strict';
+ (self.webpackChunk_N_E = self.webpackChunk_N_E || []).push([[715], { 
+-/***/ 3266: /***/ function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
++/***/ 3266: (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+ 	/* harmony export */ __webpack_require__.d(__webpack_exports__, { 
+ 	/* harmony export */ h: function() {
+ 		return LocalDate;
+ 	} });
+-} }]);
++	var isInit = !1;
++	function init() {
++		isInit ||= !0;
++	}
++	init();
++}) }]);
+
+```
+
+## `swc/issues/10876/2`
+
+- tags: `join vars`, `sequences`, `2 iterations`
+- size: oxc 151 vs reference 104 (+47 bytes, no whitespaces)
+
+```js
+const createCounter1 = () => {
+	let count = 0;
+	return (numToAdd) => {
+		count += numToAdd;
+		return count;
+	};
+};
+new class Foo {
+	[createCounter1()]() {
+		console.log('Hello, world!');
+	}
+}();
+export {};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,9 @@
+-let count;
+-new class Foo {
+-	[(count = 0, (numToAdd) => count += numToAdd)]() {
++const createCounter1 = () => {
++	let count = 0;
++	return (numToAdd) => (count += numToAdd, count);
++};
++new class {
++	[createCounter1()]() {
+ 		console.log('Hello, world!');
+ 	}
+ }();
+
+```
+
+## `swc/issues/7287/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 87 vs reference 40 (+47 bytes, no whitespaces)
+
+```js
+(function() {
+	const r = f();
+	console.log(r);
+	function f() {
+		console.log('REQUIRE');
+		return 1;
+	}
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,7 @@
+-console.log((console.log('REQUIRE'), 1));
++(function() {
++	let r = f();
++	console.log(r);
++	function f() {
++		return console.log('REQUIRE'), 1;
++	}
++})();
+
+```
+
+## `swc/issues/9459`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 84 vs reference 37 (+47 bytes, no whitespaces)
+
+```js
+export default function Component() {
+	const [state, setState] = useState();
+	const { a, b = 'b' } = call();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,3 @@
+-export default function Component() {}
++export default function Component() {
++	let [state, setState] = useState(), { a, b = 'b' } = call();
++}
+
+```
+
+## `swc/issues/10425`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
+- size: oxc 68 vs reference 19 (+49 bytes, no whitespaces)
+
+```js
+export const foo = 6;
+function baz() {
+	return 5;
+}
+class Bar {
+	static x = baz();
+}
+class Ban {
+	static x = 5;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,7 @@
+ export const foo = 6;
++function baz() {
++	return 5;
++}
++class Bar {
++	static x = baz();
++}
+
+```
+
+## `swc/member_expr/object_side_effects`
+
+- tags: `drop debugger`, `join vars`, `sequences`
+- size: oxc 154 vs reference 105 (+49 bytes, no whitespaces)
+
+```js
+// foo(), {}.__proto__
+f({
+	a: foo(),
+	b: 5
+}.__proto__);
+// foo(), bar(), undefined
+f({
+	a: foo(),
+	b: bar()
+}.invalid);
+// foo1(), bar(), baz(), foo2(), undefined
+f({
+	a: foo1(),
+	b: {
+		a: bar(),
+		b: { a: baz() },
+		c: foo2()
+	}
+}.invalid);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,15 @@
+-// foo(), {}.__proto__
+-f((foo(), {}.__proto__)), f((foo(), void bar())), f((foo1(), bar(), baz(), void foo2()));
++// foo1(), bar(), baz(), foo2(), undefined
++f({
++	a: foo(),
++	b: 5
++}.__proto__), f({
++	a: foo(),
++	b: bar()
++}.invalid), f({
++	a: foo1(),
++	b: {
++		a: bar(),
++		b: { a: baz() },
++		c: foo2()
++	}
++}.invalid);
+
+```
+
+## `swc/issues/9785`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 152 vs reference 102 (+50 bytes, no whitespaces)
+
+```js
+function dist_index_es_P(e) {
+	try {
+		t = JSON.stringify(e);
+	} catch (r) {
+		t = String(e);
+	}
+	for (var r = 0, o = 0; o < t.length; o++) {
+		r += 1;
+	}
+	console.log(r);
+	return r;
+}
+dist_index_es_P('aa');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,10 @@
+-try {
+-	t = JSON.stringify('aa');
+-} catch (r) {
+-	t = String('aa');
++function dist_index_es_P(e) {
++	try {
++		t = JSON.stringify(e);
++	} catch {
++		t = String(e);
++	}
++	for (var r = 0, o = 0; o < t.length; o++) r += 1;
++	return console.log(r), r;
+ }
+-for (var r = 0, o = 0; o < t.length; o++) r += 1;
+-console.log(r);
++dist_index_es_P('aa');
+
+```
+
+## `swc/issues/7575/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 117 vs reference 65 (+52 bytes, no whitespaces)
+
+```js
+export const envKey = 'staging' || 'production';
+const environmentResolver = () => {
+	if (envKey === 'production') {
+		return 'production';
+	}
+	if (envKey === 'staging') {
+		return 'staging';
+	}
+	if (envKey === 'test') {
+		return 'test';
+	}
+	if (envKey === 'development') {
+		return 'development';
+	}
+	throw new Error(`Unknown environment: ${envKey}`);
+};
+export const environment = environmentResolver();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,3 @@
+ export const envKey = 'staging';
+-export const environment = 'staging';
++const environmentResolver = () => 'staging';
++export const environment = environmentResolver();
+
+```
+
+## `swc/non-finite-number-literals`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
+- size: oxc 303 vs reference 250 (+53 bytes, no whitespaces)
+
+```js
+globalThis.values = [
+	NaN,
+	Infinity,
+	Number.NaN,
+	Number.POSITIVE_INFINITY,
+	Number.NEGATIVE_INFINITY,
+	0 / 0,
+	1 / 0,
+	-1 / 0,
+	1 / -0,
+	Infinity / Infinity,
+	1 % 0
+];
+globalThis.notNaN = !NaN;
+if (NaN) {
+	globalThis.directNaN = 'truthy';
+} else {
+	globalThis.directNaN = 'falsy';
+}
+globalThis.nanSubtraction = NaN - 1 ? 'truthy' : 'falsy';
+globalThis.nanDivision = Infinity / Infinity ? 'truthy' : 'falsy';
+globalThis.joined = [Infinity, '' + globalThis.value].join('');
+switch (1 / 0) {
+	case 1 / 0:
+		globalThis.matched = true;
+		break;
+	default: globalThis.matched = false;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,13 +1,15 @@
+-globalThis.values = [
+-	0 / 0,
+-	1 / 0,
+-	0 / 0,
++switch (globalThis.values = [
++	NaN,
++	Infinity,
++	NaN,
++	Infinity,
++	-Infinity,
++	NaN,
+ 	1 / 0,
+ 	-1 / 0,
+-	0 / 0,
+-	1 / 0,
+-	-1 / 0,
+-	-1 / 0,
+-	0 / 0,
+-	0 / 0
+-], globalThis.notNaN = !0, globalThis.directNaN = 'falsy', globalThis.nanSubtraction = 'falsy', globalThis.nanDivision = 'falsy', globalThis.joined = 'Infinity' + globalThis.value, globalThis.matched = !0;
++	-Infinity,
++	NaN,
++	NaN
++], globalThis.notNaN = !0, globalThis.directNaN = 'falsy', globalThis.nanSubtraction = 'falsy', globalThis.nanDivision = 'falsy', globalThis.joined = [Infinity, '' + globalThis.value].join(''), 1 / 0) {
++	case 1 / 0: globalThis.matched = !0;
++}
+
+```
+
+## `swc/issues/2028`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 125 vs reference 71 (+54 bytes, no whitespaces)
+
+```js
+function isSymbol(s) {
+	return s != null;
+}
+function isKey(value, object) {
+	if (value == null || isSymbol(value)) {
+		return true;
+	}
+	return false;
+}
+module.exports = isKey;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,7 @@
+-module.exports = function(value, object) {
+-	return null == value || null != value;
+-};
++function isSymbol(s) {
++	return s != null;
++}
++function isKey(value, object) {
++	return !!(value == null || isSymbol(value));
++}
++module.exports = isKey;
+
+```
+
+## `swc/issues/9610-arrow-functions`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
+- size: oxc 191 vs reference 137 (+54 bytes, no whitespaces)
+
+```js
+// Test: Arrow functions with unused default parameters
+const defaultValue = 100;
+// Unused default param at end should be removed
+const foo = (a, b = defaultValue) => a;
+// Unused default param in middle - params after should also be removed
+const bar = (a, b = 10, c = 20) => a;
+// Used default param should be kept
+const baz = (a, b = 5) => a + b;
+// Multiple default params, only last unused
+const qux = (a, b = 1, c = 2) => a + b;
+export const example = () => foo(1) + bar(2) + baz(3) + qux(4);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,3 @@
+ // Test: Arrow functions with unused default parameters
+-export const example = () => ((a) => a)(1) + ((a) => a)(2) + ((a, b = 5) => a + b)(3) + ((a, b = 1) => a + b)(4);
++const foo = (a, b = 100) => a, bar = (a, b = 10, c = 20) => a, baz = (a, b = 5) => a + b, qux = (a, b = 1, c = 2) => a + b;
++export const example = () => foo(1) + bar(2) + baz(3) + qux(4);
 
 ```
 
 ## `swc/simple/switch/const/order`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 120 vs reference 49 (+71 bytes)
+- size: oxc 96 vs reference 42 (+54 bytes, no whitespaces)
 
 ```js
 switch (1) {
@@ -8577,139 +8524,10 @@ switch (1) {
 
 ```
 
-## `swc/issues/11755`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 280 vs reference 207 (+73 bytes)
-
-```js
-function f() {
-	const getConfigId = ({ id, configIndex }) => `${id}-${configIndex}`;
-	const createSelector = (id, configIndex) => (data) => data[getConfigId({
-		id,
-		configIndex
-	})];
-	const selector = createSelector('item-1', 0);
-	const result = selector({ 'item-1-0': 100 });
-	if (result === 100) {
-		console.log('Test PASSED!');
-	} else {
-		console.log('Test FAILED!');
-	}
-}
-f();
-f();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,8 @@
- function f() {
--	100 === { 'item-1-0': 100 }[(({ id, configIndex }) => `${id}-${configIndex}`)({
--		id: 'item-1',
--		configIndex: 0
--	})] ? console.log('Test PASSED!') : console.log('Test FAILED!');
-+	let getConfigId = ({ id, configIndex }) => `${id}-${configIndex}`, result = ((id, configIndex) => (data) => data[getConfigId({
-+		id,
-+		configIndex
-+	})])('item-1', 0)({ 'item-1-0': 100 });
-+	console.log(result === 100 ? 'Test PASSED!' : 'Test FAILED!');
- }
- f(), f();
-
-```
-
-## `swc/issues/10746`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 165 vs reference 91 (+74 bytes)
-
-```js
-const ErrorResponse = (statusCode, message) => {
-	return Response.json({ message }, { status: statusCode });
-};
-export const unknownError = ErrorResponse(520, 'Unknown error.');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,2 @@
--export const unknownError = Response.json({ message: 'Unknown error.' }, { status: 520 });
-+const ErrorResponse = (statusCode, message) => Response.json({ message }, { status: statusCode });
-+export const unknownError = ErrorResponse(520, 'Unknown error.');
-
-```
-
-## `swc/issues/7331/2`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 103 vs reference 29 (+74 bytes)
-
-```js
-export default function() {
-	function foo(arg) {
-		var arg = arg.slice();
-		return arg;
-	}
-	foo([]);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,7 @@
--export default function() {}
-+export default function() {
-+	function foo(arg) {
-+		var arg = arg.slice();
-+		return arg;
-+	}
-+	foo([]);
-+}
-
-```
-
-## `swc/issues/9610-arrow-functions`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
-- size: oxc 244 vs reference 170 (+74 bytes)
-
-```js
-// Test: Arrow functions with unused default parameters
-const defaultValue = 100;
-// Unused default param at end should be removed
-const foo = (a, b = defaultValue) => a;
-// Unused default param in middle - params after should also be removed
-const bar = (a, b = 10, c = 20) => a;
-// Used default param should be kept
-const baz = (a, b = 5) => a + b;
-// Multiple default params, only last unused
-const qux = (a, b = 1, c = 2) => a + b;
-export const example = () => foo(1) + bar(2) + baz(3) + qux(4);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,3 @@
- // Test: Arrow functions with unused default parameters
--export const example = () => ((a) => a)(1) + ((a) => a)(2) + ((a, b = 5) => a + b)(3) + ((a, b = 1) => a + b)(4);
-+const foo = (a, b = 100) => a, bar = (a, b = 10, c = 20) => a, baz = (a, b = 5) => a + b, qux = (a, b = 1, c = 2) => a + b;
-+export const example = () => foo(1) + bar(2) + baz(3) + qux(4);
-
-```
-
 ## `swc/issues/10936`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 1038 vs reference 963 (+75 bytes)
+- size: oxc 904 vs reference 849 (+55 bytes, no whitespaces)
 
 ```js
 const variable = {};
@@ -8831,10 +8649,41 @@ export const test11 = [
 
 ```
 
+## `swc/issues/7331/2`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 83 vs reference 27 (+56 bytes, no whitespaces)
+
+```js
+export default function() {
+	function foo(arg) {
+		var arg = arg.slice();
+		return arg;
+	}
+	foo([]);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,7 @@
+-export default function() {}
++export default function() {
++	function foo(arg) {
++		var arg = arg.slice();
++		return arg;
++	}
++	foo([]);
++}
+
+```
+
 ## `swc/issues/8271`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 396 vs reference 321 (+75 bytes)
+- size: oxc 334 vs reference 278 (+56 bytes, no whitespaces)
 
 ```js
 let $eb2fd35624c84372$var$A = (() => {
@@ -8896,10 +8745,438 @@ console.log(new $eb2fd35624c84372$var$A().tagName);
 
 ```
 
+## `swc/issues/10178`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 84 vs reference 27 (+57 bytes, no whitespaces)
+
+```js
+//// [indexerWithTuple.ts]
+var strNumTuple = ['foo', 10], numTupleTuple = [10, ['bar', 20]], unionTuple1 = [10, 'foo'], unionTuple2 = [!0, 'foo'];
+strNumTuple[0], strNumTuple['0'];
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,3 @@
+ //// [indexerWithTuple.ts]
++var strNumTuple = ['foo', 10];
++strNumTuple[0], strNumTuple[0];
+
+```
+
+## `swc/projects/jquery/5`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 441 vs reference 383 (+58 bytes, no whitespaces)
+
+```js
+export const obj = { each: function(obj, callback, args) {
+	var value, i = 0, length = obj.length, isArray = isArraylike(obj);
+	if (args) {
+		if (isArray) {
+			for (; i < length; i++) {
+				value = callback.apply(obj[i], args);
+				if (value === false) {
+					break;
+				}
+			}
+		} else {
+			for (i in obj) {
+				value = callback.apply(obj[i], args);
+				if (value === false) {
+					break;
+				}
+			}
+		}
+	} else {
+		if (isArray) {
+			for (; i < length; i++) {
+				value = callback.call(obj[i], i, obj[i]);
+				if (value === false) {
+					break;
+				}
+			}
+		} else {
+			for (i in obj) {
+				value = callback.call(obj[i], i, obj[i]);
+				if (value === false) {
+					break;
+				}
+			}
+		}
+	}
+	return obj;
+} };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,9 @@
+ export const obj = { each: function(obj, callback, args) {
+-	var i = 0, length = obj.length, isArray = isArraylike(obj);
++	var value, i = 0, length = obj.length, isArray = isArraylike(obj);
+ 	if (args) {
+-		if (isArray) for (; i < length && !1 !== callback.apply(obj[i], args); i++);
+-		else for (i in obj) if (!1 === callback.apply(obj[i], args)) break;
+-	} else if (isArray) for (; i < length && !1 !== callback.call(obj[i], i, obj[i]); i++);
+-	else for (i in obj) if (!1 === callback.call(obj[i], i, obj[i])) break;
++		if (isArray) for (; i < length && (value = callback.apply(obj[i], args), value !== !1); i++);
++		else for (i in obj) if (value = callback.apply(obj[i], args), value === !1) break;
++	} else if (isArray) for (; i < length && (value = callback.call(obj[i], i, obj[i]), value !== !1); i++);
++	else for (i in obj) if (value = callback.call(obj[i], i, obj[i]), value === !1) break;
+ 	return obj;
+ } };
+
+```
+
+## `swc/projects/mootools/8`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 940 vs reference 881 (+59 bytes, no whitespaces)
+
+```js
+var Browser = window.Browser || {};
+var setEngine = function(name, version) {
+	Browser.Engine.name = name;
+	Browser.Engine[name + version] = true;
+	Browser.Engine.version = version;
+};
+if (Browser.ie) {
+	Browser.Engine.trident = true;
+	switch (Browser.version) {
+		case 6:
+			setEngine('trident', 4);
+			break;
+		case 7:
+			setEngine('trident', 5);
+			break;
+		case 8: setEngine('trident', 6);
+	}
+}
+if (Browser.firefox) {
+	Browser.Engine.gecko = true;
+	if (Browser.version >= 3) setEngine('gecko', 19);
+	else setEngine('gecko', 18);
+}
+if (Browser.safari || Browser.chrome) {
+	Browser.Engine.webkit = true;
+	switch (Browser.version) {
+		case 2:
+			setEngine('webkit', 419);
+			break;
+		case 3:
+			setEngine('webkit', 420);
+			break;
+		case 4: setEngine('webkit', 525);
+	}
+}
+if (Browser.opera) {
+	Browser.Engine.presto = true;
+	if (Browser.version >= 9.6) setEngine('presto', 960);
+	else if (Browser.version >= 9.5) setEngine('presto', 950);
+	else setEngine('presto', 925);
+}
+if (Browser.name == 'unknown') {
+	switch ((ua.match(/(?:webkit|khtml|gecko)/) || [])[0]) {
+		case 'webkit':
+		case 'khtml':
+			Browser.Engine.webkit = true;
+			break;
+		case 'gecko': Browser.Engine.gecko = true;
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -10,7 +10,7 @@
+ 		break;
+ 	case 8: setEngine('trident', 6);
+ }
+-if (Browser.firefox && (Browser.Engine.gecko = !0, setEngine('gecko', Browser.version >= 3 ? 19 : 18)), Browser.safari || Browser.chrome) switch (Browser.Engine.webkit = !0, Browser.version) {
++if (Browser.firefox && (Browser.Engine.gecko = !0, Browser.version >= 3 ? setEngine('gecko', 19) : setEngine('gecko', 18)), Browser.safari || Browser.chrome) switch (Browser.Engine.webkit = !0, Browser.version) {
+ 	case 2:
+ 		setEngine('webkit', 419);
+ 		break;
+@@ -19,7 +19,7 @@
+ 		break;
+ 	case 4: setEngine('webkit', 525);
+ }
+-if (Browser.opera && (Browser.Engine.presto = !0, setEngine('presto', Browser.version >= 9.6 ? 960 : Browser.version >= 9.5 ? 950 : 925)), 'unknown' == Browser.name) switch ((ua.match(/(?:webkit|khtml|gecko)/) || [])[0]) {
++if (Browser.opera && (Browser.Engine.presto = !0, Browser.version >= 9.6 ? setEngine('presto', 960) : Browser.version >= 9.5 ? setEngine('presto', 950) : setEngine('presto', 925)), Browser.name == 'unknown') switch ((ua.match(/(?:webkit|khtml|gecko)/) || [])[0]) {
+ 	case 'webkit':
+ 	case 'khtml':
+ 		Browser.Engine.webkit = !0;
+
+```
+
+## `swc/simple/inline/6`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 315 vs reference 256 (+59 bytes, no whitespaces)
+
+```js
+export function endOf(units) {
+	var time, dividend, dividend1;
+	switch (this._isUTC, units) {
+		case 'hour':
+			time = v(), time += 36e5 - (dividend = time + 36e5, (dividend % 36e5 + 36e5) % 36e5) - 1;
+			break;
+		case 'minute':
+			time = v(), time += 6e4 - (dividend1 = time, (dividend1 % 6e4 + 6e4) % 6e4) - 1;
+			break;
+		case 'second': time = v(), time += 1e3 - (time % 1e3 + 1e3) % 1e3 - 1;
+	}
+	return time;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,11 @@
+ export function endOf(units) {
+-	var time;
++	var time, dividend, dividend1;
+ 	switch (this._isUTC, units) {
+ 		case 'hour':
+-			time = v(), time += 36e5 - ((time + 36e5) % 36e5 + 36e5) % 36e5 - 1;
++			time = v(), time += 36e5 - (dividend = time + 36e5, (dividend % 36e5 + 36e5) % 36e5) - 1;
+ 			break;
+ 		case 'minute':
+-			time = v(), time += 6e4 - (time % 6e4 + 6e4) % 6e4 - 1;
++			time = v(), time += 6e4 - (dividend1 = time, (dividend1 % 6e4 + 6e4) % 6e4) - 1;
+ 			break;
+ 		case 'second': time = v(), time += 1e3 - (time % 1e3 + 1e3) % 1e3 - 1;
+ 	}
+
+```
+
+## `swc/issues/11755`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 235 vs reference 175 (+60 bytes, no whitespaces)
+
+```js
+function f() {
+	const getConfigId = ({ id, configIndex }) => `${id}-${configIndex}`;
+	const createSelector = (id, configIndex) => (data) => data[getConfigId({
+		id,
+		configIndex
+	})];
+	const selector = createSelector('item-1', 0);
+	const result = selector({ 'item-1-0': 100 });
+	if (result === 100) {
+		console.log('Test PASSED!');
+	} else {
+		console.log('Test FAILED!');
+	}
+}
+f();
+f();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,8 @@
+ function f() {
+-	100 === { 'item-1-0': 100 }[(({ id, configIndex }) => `${id}-${configIndex}`)({
+-		id: 'item-1',
+-		configIndex: 0
+-	})] ? console.log('Test PASSED!') : console.log('Test FAILED!');
++	let getConfigId = ({ id, configIndex }) => `${id}-${configIndex}`, result = ((id, configIndex) => (data) => data[getConfigId({
++		id,
++		configIndex
++	})])('item-1', 0)({ 'item-1-0': 100 });
++	console.log(result === 100 ? 'Test PASSED!' : 'Test FAILED!');
+ }
+ f(), f();
+
+```
+
+## `swc/projects/jquery/.19`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 496 vs reference 436 (+60 bytes, no whitespaces)
+
+```js
+// Functions to create xhrs
+function createStandardXHR() {
+	try {
+		return new window.XMLHttpRequest();
+	} catch (e) {}
+}
+function createActiveXHR() {
+	try {
+		return new window.ActiveXObject('Microsoft.XMLHTTP');
+	} catch (e) {}
+}
+// Create the request object
+// (This is still attached to ajaxSettings for backward compatibility)
+jQuery.ajaxSettings.xhr = window.ActiveXObject ? function() {
+	return !this.isLocal && createStandardXHR() || createActiveXHR();
+} : // For all other browsers, use the standard XMLHttpRequest object
+createStandardXHR;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,15 +2,16 @@
+ function createStandardXHR() {
+ 	try {
+ 		return new window.XMLHttpRequest();
+-	} catch (e) {}
++	} catch {}
+ }
+ function createActiveXHR() {
+ 	try {
+ 		return new window.ActiveXObject('Microsoft.XMLHTTP');
+-	} catch (e) {}
++	} catch {}
+ }
+ // Create the request object
+ // (This is still attached to ajaxSettings for backward compatibility)
+ jQuery.ajaxSettings.xhr = window.ActiveXObject ? function() {
+ 	return !this.isLocal && createStandardXHR() || createActiveXHR();
+-} : createStandardXHR;
++} : // For all other browsers, use the standard XMLHttpRequest object
++createStandardXHR;
+
+```
+
+## `swc/projects/wmr/archive-1/chunks/prerender.93c6f601`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 552 vs reference 489 (+63 bytes, no whitespaces)
+
+```js
+import '../index.f66dda46.js';
+import { t as toStatic } from './hoofd.module.6c5395cb.js';
+function prerender$1(vnode, options) {
+	return import('../prerender.daa73035/input.js').then((m) => m.default(vnode, options));
+}
+async function prerender(vnode) {
+	const res = await prerender$1(vnode);
+	const head = toStatic();
+	const elements = new Set([
+		...head.links.map((props) => ({
+			type: 'link',
+			props
+		})),
+		...head.metas.map((props) => ({
+			type: 'meta',
+			props
+		})),
+		...head.scripts.map((props) => ({
+			type: 'script',
+			props
+		}))
+	]);
+	return {
+		...res,
+		data: { hello: 'world' },
+		head: {
+			title: head.title,
+			lang: head.lang,
+			elements
+		}
+	};
+}
+export { prerender };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,10 @@
+ import '../index.f66dda46.js';
+ import { t as toStatic } from './hoofd.module.6c5395cb.js';
++function prerender$1(vnode, options) {
++	return import('../prerender.daa73035/input.js').then((m) => m.default(vnode, options));
++}
+ async function prerender(vnode) {
+-	let res = await import('../prerender.daa73035/input.js').then((m) => m.default(vnode, void 0)), head = toStatic(), elements = new Set([
++	let res = await prerender$1(vnode), head = toStatic(), elements = new Set([
+ 		...head.links.map((props) => ({
+ 			type: 'link',
+ 			props
+
+```
+
+## `swc/issues/11303`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 96 vs reference 31 (+65 bytes, no whitespaces)
+
+```js
+class X {
+	constructor() {}
+}
+class Y extends X {}
+const t = (a) => ((b) => {
+	if (a.foo()) throw Error();
+	return a;
+}), y = t(new Y());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,8 @@
+-class X {}
+-new class extends X {}();
++class X {
++	constructor() {}
++}
++class Y extends X {}
++((a) => ((b) => {
++	if (a.foo()) throw Error();
++	return a;
++}))(new Y());
+
+```
+
+## `swc/issues/10746`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 149 vs reference 81 (+68 bytes, no whitespaces)
+
+```js
+const ErrorResponse = (statusCode, message) => {
+	return Response.json({ message }, { status: statusCode });
+};
+export const unknownError = ErrorResponse(520, 'Unknown error.');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,2 @@
+-export const unknownError = Response.json({ message: 'Unknown error.' }, { status: 520 });
++const ErrorResponse = (statusCode, message) => Response.json({ message }, { status: statusCode });
++export const unknownError = ErrorResponse(520, 'Unknown error.');
+
+```
+
 ## `swc/issues/2807/1`
 
 - tags: `drop console`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 107 vs reference 31 (+76 bytes)
+- size: oxc 98 vs reference 29 (+69 bytes, no whitespaces)
 
 ```js
 export default function A() {
@@ -8923,32 +9200,19 @@ export default function A() {
 
 ```
 
-## `swc/issues/6957/1`
+## `swc/issues/9922/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 444 vs reference 368 (+76 bytes)
+- size: oxc 73 vs reference 4 (+69 bytes, no whitespaces)
 
 ```js
-// prettier-ignore
-export function foo() {
-	//    actual | expected
-	alert(1 .toFixed(1));
-	alert(0 .toFixed(0));
-	alert(0 .toFixed(1));
-	alert(0 .toFixed(2));
-	alert(0 .toFixed(3));
-	alert(10 .toFixed(1));
-	alert(20 .toFixed(2));
-	alert(30 .toFixed(3));
-	alert(100 .toFixed(1));
-	alert(100 .toFixed(2));
-	alert(100 .toFixed(3));
-	alert(110 .toFixed(1));
-	alert(110 .toFixed(2));
-	alert(110 .toFixed(3));
-	alert(110 .toFixed(4));
-	alert(1110 .toFixed(4));
-	alert(11110 .toFixed(4));
+switch (g()) {
+	case 1:
+		y: break;
+		console.log(2);
+	default:
+		x: break;
+		console.log(1);
 }
 
 ```
@@ -8956,66 +9220,165 @@ export function foo() {
 ```diff
 --- reference
 +++ oxc
-@@ -1,21 +1,4 @@
- // prettier-ignore
- export function foo() {
--	//    actual | expected
--	alert('1.0');
--	alert('0');
--	alert('0.0');
--	alert('0.00');
--	alert('0.000');
--	alert('10.0');
--	alert('20.00');
--	alert('30.000');
--	alert('100.0');
--	alert('100.00');
--	alert('100.000');
--	alert('110.0');
--	alert('110.00');
--	alert('110.000');
--	alert('110.0000');
--	alert('1110.0000');
--	alert('11110.0000');
-+	alert(1 .toFixed(1)), alert(0 .toFixed(0)), alert(0 .toFixed(1)), alert(0 .toFixed(2)), alert(0 .toFixed(3)), alert(10 .toFixed(1)), alert(20 .toFixed(2)), alert(30 .toFixed(3)), alert(100 .toFixed(1)), alert(100 .toFixed(2)), alert(100 .toFixed(3)), alert(110 .toFixed(1)), alert(110 .toFixed(2)), alert(110 .toFixed(3)), alert(110 .toFixed(4)), alert(1110 .toFixed(4)), alert(11110 .toFixed(4));
- }
+@@ -1 +1,8 @@
+-g();
++switch (g()) {
++	case 1:
++		y: break;
++		console.log(2);
++	default:
++		x: break;
++		console.log(1);
++}
 
 ```
 
-## `swc/issues/drop-console-computed`
+## `swc/issues/11512-simple`
 
-- tags: `drop console`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 224 vs reference 147 (+77 bytes)
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `7 iterations`
+- size: oxc 259 vs reference 189 (+70 bytes, no whitespaces)
 
 ```js
-const cb = console.error['bind'](console);
-cb('boom');
-process.stdout.write(typeof cb + '\n');
-console.error['call'](console, 'via call');
-const r = console.error['capture']('custom property');
-process.stdout.write(typeof r + '\n');
+// Test that functions with side-effect-free default parameters can be inlined.
+function identity(x, y = 42) {
+	return x;
+}
+// Use the function multiple times so it goes through simple_functions path.
+export function test() {
+	return identity(1) + identity(2) + identity(3);
+}
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,5 +1,4 @@
--const cb = (function() {})['bind']();
--cb('boom');
--process.stdout.write(typeof cb + '\n');
--const r = void 0;
-+const cb = console.error.bind(console);
-+cb('boom'), process.stdout.write(typeof cb + '\n'), console.error.call(console, 'via call');
-+const r = console.error.capture('custom property');
- process.stdout.write(typeof r + '\n');
+@@ -1,5 +1,8 @@
+ // Test that functions with side-effect-free default parameters can be inlined.
++function identity(x, y = 42) {
++	return x;
++}
+ // Use the function multiple times so it goes through simple_functions path.
+ export function test() {
+-	return 6;
++	return identity(1) + identity(2) + identity(3);
+ }
+
+```
+
+## `swc/issues/7784/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 87 vs reference 15 (+72 bytes, no whitespaces)
+
+```js
+let a = 1;
+function foo(g) {
+	var t = g();
+	a += t;
+}
+function g() {
+	a = 2;
+	return 1;
+}
+foo(g);
+console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,9 @@
+-console.log(3);
++let a = 1;
++function foo(g) {
++	var t = g();
++	a += t;
++}
++function g() {
++	return a = 2, 1;
++}
++foo(g), console.log(a);
+
+```
+
+## `swc/issues/7784/2`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 87 vs reference 15 (+72 bytes, no whitespaces)
+
+```js
+let a = 1;
+function foo(g) {
+	var t = g();
+	a = a + t;
+}
+function g() {
+	a = 2;
+	return 1;
+}
+foo(g);
+console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,9 @@
+-console.log(3);
++let a = 1;
++function foo(g) {
++	var t = g();
++	a += t;
++}
++function g() {
++	return a = 2, 1;
++}
++foo(g), console.log(a);
+
+```
+
+## `swc/issues/11007`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 150 vs reference 76 (+74 bytes, no whitespaces)
+
+```js
+const profile = (_s, fn) => {
+	return fn();
+};
+profile('trace1', () => {
+	someFunction({
+		args1: profile('trace2', () => JSON.stringify(someObj)),
+		args2: JSON.stringify(someObj)
+	});
+});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,7 @@
+-someFunction({
+-	args1: JSON.stringify(someObj),
+-	args2: JSON.stringify(someObj)
++const profile = (_s, fn) => fn();
++profile('trace1', () => {
++	someFunction({
++		args1: profile('trace2', () => JSON.stringify(someObj)),
++		args2: JSON.stringify(someObj)
++	});
+ });
 
 ```
 
 ## `swc/projects/underscore/17`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 655 vs reference 577 (+78 bytes)
+- size: oxc 562 vs reference 488 (+74 bytes, no whitespaces)
 
 ```js
 export function foo() {
@@ -9072,195 +9435,10 @@ export function foo() {
 
 ```
 
-## `swc/issues/11512-simple`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `7 iterations`
-- size: oxc 277 vs reference 195 (+82 bytes)
-
-```js
-// Test that functions with side-effect-free default parameters can be inlined.
-function identity(x, y = 42) {
-	return x;
-}
-// Use the function multiple times so it goes through simple_functions path.
-export function test() {
-	return identity(1) + identity(2) + identity(3);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,8 @@
- // Test that functions with side-effect-free default parameters can be inlined.
-+function identity(x, y = 42) {
-+	return x;
-+}
- // Use the function multiple times so it goes through simple_functions path.
- export function test() {
--	return 6;
-+	return identity(1) + identity(2) + identity(3);
- }
-
-```
-
-## `swc/member_expr/object_side_effects`
-
-- tags: `drop debugger`, `join vars`, `sequences`
-- size: oxc 195 vs reference 113 (+82 bytes)
-
-```js
-// foo(), {}.__proto__
-f({
-	a: foo(),
-	b: 5
-}.__proto__);
-// foo(), bar(), undefined
-f({
-	a: foo(),
-	b: bar()
-}.invalid);
-// foo1(), bar(), baz(), foo2(), undefined
-f({
-	a: foo1(),
-	b: {
-		a: bar(),
-		b: { a: baz() },
-		c: foo2()
-	}
-}.invalid);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,15 @@
--// foo(), {}.__proto__
--f((foo(), {}.__proto__)), f((foo(), void bar())), f((foo1(), bar(), baz(), void foo2()));
-+// foo1(), bar(), baz(), foo2(), undefined
-+f({
-+	a: foo(),
-+	b: 5
-+}.__proto__), f({
-+	a: foo(),
-+	b: bar()
-+}.invalid), f({
-+	a: foo1(),
-+	b: {
-+		a: bar(),
-+		b: { a: baz() },
-+		c: foo2()
-+	}
-+}.invalid);
-
-```
-
-## `swc/issues/11303`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 123 vs reference 37 (+86 bytes)
-
-```js
-class X {
-	constructor() {}
-}
-class Y extends X {}
-const t = (a) => ((b) => {
-	if (a.foo()) throw Error();
-	return a;
-}), y = t(new Y());
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,8 @@
--class X {}
--new class extends X {}();
-+class X {
-+	constructor() {}
-+}
-+class Y extends X {}
-+((a) => ((b) => {
-+	if (a.foo()) throw Error();
-+	return a;
-+}))(new Y());
-
-```
-
-## `swc/issues/10630`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 152 vs reference 62 (+90 bytes)
-
-```js
-var constants = {
-	first: 1,
-	second: 2
-};
-export function isConstant(x) {
-	return x === constants.first || x === constants.second;
-}
-var y = constants.second;
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,8 @@
-+var constants = {
-+	first: 1,
-+	second: 2
-+};
- export function isConstant(x) {
--	return 1 === x || 2 === x;
-+	return x === constants.first || x === constants.second;
- }
-+constants.second;
-
-```
-
-## `swc/issues/9922/2`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 96 vs reference 5 (+91 bytes)
-
-```js
-switch (g()) {
-	case 1:
-		y: break;
-		console.log(2);
-	default:
-		x: break;
-		console.log(1);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,8 @@
--g();
-+switch (g()) {
-+	case 1:
-+		y: break;
-+		console.log(2);
-+	default:
-+		x: break;
-+		console.log(1);
-+}
-
-```
-
 ## `swc/issues/7770/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 240 vs reference 148 (+92 bytes)
+- size: oxc 221 vs reference 145 (+76 bytes, no whitespaces)
 
 ```js
 const sWidth = 'asdasd';
@@ -9312,45 +9490,149 @@ exports.MainCSS = `
 
 ```
 
-## `swc/issues/11007`
+## `swc/issues/drop-console-computed`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 177 vs reference 84 (+93 bytes)
+- tags: `drop console`, `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 207 vs reference 131 (+76 bytes, no whitespaces)
 
 ```js
-const profile = (_s, fn) => {
-	return fn();
-};
-profile('trace1', () => {
-	someFunction({
-		args1: profile('trace2', () => JSON.stringify(someObj)),
-		args2: JSON.stringify(someObj)
-	});
-});
+const cb = console.error['bind'](console);
+cb('boom');
+process.stdout.write(typeof cb + '\n');
+console.error['call'](console, 'via call');
+const r = console.error['capture']('custom property');
+process.stdout.write(typeof r + '\n');
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,4 +1,7 @@
--someFunction({
--	args1: JSON.stringify(someObj),
--	args2: JSON.stringify(someObj)
-+const profile = (_s, fn) => fn();
-+profile('trace1', () => {
-+	someFunction({
-+		args1: profile('trace2', () => JSON.stringify(someObj)),
-+		args2: JSON.stringify(someObj)
-+	});
- });
+@@ -1,5 +1,4 @@
+-const cb = (function() {})['bind']();
+-cb('boom');
+-process.stdout.write(typeof cb + '\n');
+-const r = void 0;
++const cb = console.error.bind(console);
++cb('boom'), process.stdout.write(typeof cb + '\n'), console.error.call(console, 'via call');
++const r = console.error.capture('custom property');
+ process.stdout.write(typeof r + '\n');
+
+```
+
+## `swc/issues/10630`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 129 vs reference 50 (+79 bytes, no whitespaces)
+
+```js
+var constants = {
+	first: 1,
+	second: 2
+};
+export function isConstant(x) {
+	return x === constants.first || x === constants.second;
+}
+var y = constants.second;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,8 @@
++var constants = {
++	first: 1,
++	second: 2
++};
+ export function isConstant(x) {
+-	return 1 === x || 2 === x;
++	return x === constants.first || x === constants.second;
+ }
++constants.second;
+
+```
+
+## `swc/issues/11977`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 352 vs reference 272 (+80 bytes, no whitespaces)
+
+```js
+var Subscription = (function() {
+	function Subscription1(listeners, listener) {}
+	Subscription1.prototype.add = function(subscription) {
+		if (this.unsubscribed) {}
+	};
+})();
+try {
+	serverOnlyRequire = eval('require');
+} catch (err) {}
+var __require = ((x) => ('TURBOPACK compile-time truthy', 1) ? __turbopack_context__.z : 'TURBOPACK unreachable')(function(x) {})(ErrorType || {});
+var isRequestError = (error) => {
+	let u = i.getKey ?? ((p, s) => `x`), f = async () => {
+		try {} catch (s) {}
+	};
+};
+var x = class extends d {};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,12 @@
+-var Subscription = void ((function(listeners, listener) {}).prototype.add = function(subscription) {
+-	this.unsubscribed;
+-});
++var Subscription = (function() {
++	function Subscription1(listeners, listener) {}
++	Subscription1.prototype.add = function(subscription) {
++		this.unsubscribed;
++	};
++})();
+ try {
+ 	serverOnlyRequire = eval('require');
+-} catch (err) {}
+-var __require = (0, __turbopack_context__.z)(ErrorType || {}), isRequestError = (error) => {
+-	i.getKey;
++} catch {}
++var __require = ((x) => __turbopack_context__.z)(function(x) {})(ErrorType || {}), isRequestError = (error) => {
++	let u = i.getKey ?? ((p, s) => 'x'), f = async () => {};
+ }, x = class extends d {};
+
+```
+
+## `swc/simple/inline/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 96 vs reference 16 (+80 bytes, no whitespaces)
+
+```js
+const A = 10, B = 5;
+function mod(dividend, divisor) {
+	return (dividend % divisor + divisor) % divisor;
+}
+console.log(mod(A, A + B));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,4 @@
+-console.log(10);
++function mod(dividend, divisor) {
++	return (dividend % divisor + divisor) % divisor;
++}
++console.log(mod(10, 15));
 
 ```
 
 ## `swc/issues/11083`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 297 vs reference 202 (+95 bytes)
+- size: oxc 237 vs reference 153 (+84 bytes, no whitespaces)
 
 ```js
 (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
@@ -9404,49 +9686,26 @@ profile('trace1', () => {
 
 ```
 
-## `swc/simple/inline/1`
+## `swc/issues/7241`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 112 vs reference 17 (+95 bytes)
+- size: oxc 116 vs reference 25 (+91 bytes, no whitespaces)
 
 ```js
-const A = 10, B = 5;
-function mod(dividend, divisor) {
-	return (dividend % divisor + divisor) % divisor;
-}
-console.log(mod(A, A + B));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,4 @@
--console.log(10);
-+function mod(dividend, divisor) {
-+	return (dividend % divisor + divisor) % divisor;
-+}
-+console.log(mod(10, 15));
-
-```
-
-## `swc/issues/7784/1`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 113 vs reference 16 (+97 bytes)
-
-```js
-let a = 1;
-function foo(g) {
-	var t = g();
-	a += t;
-}
-function g() {
-	a = 2;
-	return 1;
-}
-foo(g);
-console.log(a);
+(function() {
+	function forwardRef() {
+		return something();
+	}
+	function Test() {
+		return 'Test';
+	}
+	const _Test = (0, forwardRef)(Test);
+	function Other() {
+		return 'Other';
+	}
+	const _Other = (0, forwardRef)(Other);
+	console.log((0, _Test));
+})();
 
 ```
 
@@ -9454,168 +9713,138 @@ console.log(a);
 --- reference
 +++ oxc
 @@ -1 +1,9 @@
--console.log(3);
-+let a = 1;
-+function foo(g) {
-+	var t = g();
-+	a += t;
-+}
-+function g() {
-+	return a = 2, 1;
-+}
-+foo(g), console.log(a);
+-console.log(something());
++(function() {
++	function forwardRef() {
++		return something();
++	}
++	function Test() {
++		return 'Test';
++	}
++	console.log(forwardRef(Test));
++})();
 
 ```
 
-## `swc/issues/7784/2`
+## `swc/issues/10041`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 113 vs reference 16 (+97 bytes)
+- size: oxc 241 vs reference 149 (+92 bytes, no whitespaces)
 
 ```js
-let a = 1;
-function foo(g) {
-	var t = g();
-	a = a + t;
-}
-function g() {
-	a = 2;
-	return 1;
-}
-foo(g);
-console.log(a);
+(function() {
+	function entry() {
+		var struct = {
+			a: [],
+			b: 0
+		};
+		setName(struct, 'Alice');
+	}
+	function setName(struct, str) {
+		writeString(struct.a, struct.b, str);
+	}
+	function writeString(buffer, offset, c) {
+		for (var i = 0, v = c.length; i < v; i = i + 1 | 0) {
+			buffer[offset + i | 0] = c.charCodeAt(i);
+		}
+	}
+	entry();
+})();
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1 +1,9 @@
--console.log(3);
-+let a = 1;
-+function foo(g) {
-+	var t = g();
-+	a += t;
-+}
-+function g() {
-+	return a = 2, 1;
-+}
-+foo(g), console.log(a);
+@@ -1,7 +1,15 @@
+-var struct;
+-!function(buffer, offset, c) {
+-	for (var i = 0, v = c.length; i < v; i = i + 1 | 0) buffer[offset + i | 0] = c.charCodeAt(i);
+-}((struct = {
+-	a: [],
+-	b: 0
+-}).a, struct.b, 'Alice');
++(function() {
++	function entry() {
++		setName({
++			a: [],
++			b: 0
++		}, 'Alice');
++	}
++	function setName(struct, str) {
++		writeString(struct.a, struct.b, str);
++	}
++	function writeString(buffer, offset, c) {
++		for (var i = 0, v = c.length; i < v; i = i + 1 | 0) buffer[offset + i | 0] = c.charCodeAt(i);
++	}
++	entry();
++})();
 
 ```
 
-## `swc/member_expr/array_side_effects`
+## `swc/issues/6957/1`
 
-- tags: `drop debugger`, `join vars`, `sequences`
-- size: oxc 328 vs reference 227 (+101 bytes)
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 422 vs reference 330 (+92 bytes, no whitespaces)
 
 ```js
-// Out of bounds
-f([][-1]);
-f([][1]);
-f([][[]]);
-f([][0 + []]);
-f([
-	x(),
-	2,
-	'a',
-	1 + 1,
-	y()
-][-1]);
-f([
-	x(),
-	2,
-	'a',
-	1 + 1,
-	y()
-][10]);
-// Invalid property
-f([].invalid);
-f([]['invalid']);
-f([
-	x(),
-	2,
-	'a',
-	1 + 1,
-	y()
-].invalid);
-f([
-	x(),
-	2,
-	'a',
-	1 + 1,
-	y()
-]['invalid']);
-// Valid property
-f([].push);
-f([]['push']);
-f([
-	x(),
-	2,
-	'a',
-	1 + 1,
-	y()
-].push);
-f([
-	x(),
-	2,
-	'a',
-	1 + 1,
-	y()
-]['push']);
+// prettier-ignore
+export function foo() {
+	//    actual | expected
+	alert(1 .toFixed(1));
+	alert(0 .toFixed(0));
+	alert(0 .toFixed(1));
+	alert(0 .toFixed(2));
+	alert(0 .toFixed(3));
+	alert(10 .toFixed(1));
+	alert(20 .toFixed(2));
+	alert(30 .toFixed(3));
+	alert(100 .toFixed(1));
+	alert(100 .toFixed(2));
+	alert(100 .toFixed(3));
+	alert(110 .toFixed(1));
+	alert(110 .toFixed(2));
+	alert(110 .toFixed(3));
+	alert(110 .toFixed(4));
+	alert(1110 .toFixed(4));
+	alert(11110 .toFixed(4));
+}
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,2 +1,37 @@
--// Out of bounds
--f(void 0), f(void 0), f(void 0), f(void 0), f((x(), void y())), f((x(), void y())), f(void 0), f(void 0), f((x(), void y())), f((x(), void y())), f([].push), f([].push), f([x(), y()].push), f([x(), y()].push);
-+f([][-1]), f([][1]), f([][[]]), f([][0]), f([
-+	x(),
-+	2,
-+	'a',
-+	2,
-+	y()
-+][-1]), f([
-+	x(),
-+	2,
-+	'a',
-+	2,
-+	y()
-+][10]), f([].invalid), f([].invalid), f([
-+	x(),
-+	2,
-+	'a',
-+	2,
-+	y()
-+].invalid), f([
-+	x(),
-+	2,
-+	'a',
-+	2,
-+	y()
-+].invalid), f([].push), f([].push), f([
-+	x(),
-+	2,
-+	'a',
-+	2,
-+	y()
-+].push), f([
-+	x(),
-+	2,
-+	'a',
-+	2,
-+	y()
-+].push);
+@@ -1,21 +1,4 @@
+ // prettier-ignore
+ export function foo() {
+-	//    actual | expected
+-	alert('1.0');
+-	alert('0');
+-	alert('0.0');
+-	alert('0.00');
+-	alert('0.000');
+-	alert('10.0');
+-	alert('20.00');
+-	alert('30.000');
+-	alert('100.0');
+-	alert('100.00');
+-	alert('100.000');
+-	alert('110.0');
+-	alert('110.00');
+-	alert('110.000');
+-	alert('110.0000');
+-	alert('1110.0000');
+-	alert('11110.0000');
++	alert(1 .toFixed(1)), alert(0 .toFixed(0)), alert(0 .toFixed(1)), alert(0 .toFixed(2)), alert(0 .toFixed(3)), alert(10 .toFixed(1)), alert(20 .toFixed(2)), alert(30 .toFixed(3)), alert(100 .toFixed(1)), alert(100 .toFixed(2)), alert(100 .toFixed(3)), alert(110 .toFixed(1)), alert(110 .toFixed(2)), alert(110 .toFixed(3)), alert(110 .toFixed(4)), alert(1110 .toFixed(4)), alert(11110 .toFixed(4));
+ }
 
 ```
 
 ## `swc/simple/inline/4`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 273 vs reference 171 (+102 bytes)
+- size: oxc 230 vs reference 138 (+92 bytes, no whitespaces)
 
 ```js
 function $parcel$export(a, b, c) {
@@ -9656,60 +9885,61 @@ const A = 'A', B = 'B', C = 'C';
 
 ```
 
-## `swc/issues/11977`
+## `swc/issues/11871`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 421 vs reference 317 (+104 bytes)
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
+- size: oxc 626 vs reference 531 (+95 bytes, no whitespaces)
 
 ```js
-var Subscription = (function() {
-	function Subscription1(listeners, listener) {}
-	Subscription1.prototype.add = function(subscription) {
-		if (this.unsubscribed) {}
-	};
-})();
-try {
-	serverOnlyRequire = eval('require');
-} catch (err) {}
-var __require = ((x) => ('TURBOPACK compile-time truthy', 1) ? __turbopack_context__.z : 'TURBOPACK unreachable')(function(x) {})(ErrorType || {});
-var isRequestError = (error) => {
-	let u = i.getKey ?? ((p, s) => `x`), f = async () => {
-		try {} catch (s) {}
-	};
+var window = {};
+var foo = { min: (items) => items[0] };
+var bar = {};
+var bucketFactory = () => ({ utc: (input) => ({ diff: () => 0 }) });
+var min = foo;
+var moment = bucketFactory(bar);
+const defaultSpec = {
+	granularities: [{
+		maxDays: 1,
+		displayFormatString: '[Q]Q'
+	}],
+	other: 1
 };
-var x = class extends d {};
+window.x = { f: (start, end) => ((inputStartDate, inputEndDate, spec = defaultSpec) => {
+	let startDate = moment.utc(inputStartDate);
+	let dayCount = moment.utc(inputEndDate).diff(startDate, 'days') + 1;
+	let granularity = spec.granularities.sort((left, right) => left.maxDays - right.maxDays).find((item) => dayCount <= item.maxDays);
+	return granularity == null ? '' : granularity.displayFormatString;
+})(start, end) + String(min.min([1, 2])) };
+console.log(window.x.f(0, 0));
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,9 +1,12 @@
--var Subscription = void ((function(listeners, listener) {}).prototype.add = function(subscription) {
--	this.unsubscribed;
--});
-+var Subscription = (function() {
-+	function Subscription1(listeners, listener) {}
-+	Subscription1.prototype.add = function(subscription) {
-+		this.unsubscribed;
-+	};
-+})();
- try {
- 	serverOnlyRequire = eval('require');
--} catch (err) {}
--var __require = (0, __turbopack_context__.z)(ErrorType || {}), isRequestError = (error) => {
--	i.getKey;
-+} catch {}
-+var __require = ((x) => __turbopack_context__.z)(function(x) {})(ErrorType || {}), isRequestError = (error) => {
-+	let u = i.getKey ?? ((p, s) => 'x'), f = async () => {};
- }, x = class extends d {};
+@@ -1,4 +1,4 @@
+-var window = {}, moment_utc = (input) => ({ diff: () => 0 });
++var window = {}, foo = { min: (items) => items[0] }, bar = {}, bucketFactory = () => ({ utc: (input) => ({ diff: () => 0 }) }), min = foo, moment = bucketFactory(bar);
+ const defaultSpec = {
+ 	granularities: [{
+ 		maxDays: 1,
+@@ -7,6 +7,6 @@
+ 	other: 1
+ };
+ window.x = { f: (start, end) => ((inputStartDate, inputEndDate, spec = defaultSpec) => {
+-	let startDate = moment_utc(inputStartDate), dayCount = moment_utc(inputEndDate).diff(startDate, 'days') + 1, granularity = spec.granularities.sort((left, right) => left.maxDays - right.maxDays).find((item) => dayCount <= item.maxDays);
+-	return null == granularity ? '' : granularity.displayFormatString;
+-})(start, end) + String(1) }, console.log(window.x.f(0, 0));
++	let startDate = moment.utc(inputStartDate), dayCount = moment.utc(inputEndDate).diff(startDate, 'days') + 1, granularity = spec.granularities.sort((left, right) => left.maxDays - right.maxDays).find((item) => dayCount <= item.maxDays);
++	return granularity == null ? '' : granularity.displayFormatString;
++})(start, end) + String(min.min([1, 2])) }, console.log(window.x.f(0, 0));
 
 ```
 
 ## `swc/issues/6730`
 
 - tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`
-- size: oxc 806 vs reference 700 (+106 bytes)
+- size: oxc 620 vs reference 514 (+106 bytes, no whitespaces)
 
 ```js
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
@@ -9826,202 +10056,10 @@ export const styleLoader = () => {
 
 ```
 
-## `swc/issues/7241`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 141 vs reference 26 (+115 bytes)
-
-```js
-(function() {
-	function forwardRef() {
-		return something();
-	}
-	function Test() {
-		return 'Test';
-	}
-	const _Test = (0, forwardRef)(Test);
-	function Other() {
-		return 'Other';
-	}
-	const _Other = (0, forwardRef)(Other);
-	console.log((0, _Test));
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,9 @@
--console.log(something());
-+(function() {
-+	function forwardRef() {
-+		return something();
-+	}
-+	function Test() {
-+		return 'Test';
-+	}
-+	console.log(forwardRef(Test));
-+})();
-
-```
-
-## `swc/issues/11871`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
-- size: oxc 740 vs reference 620 (+120 bytes)
-
-```js
-var window = {};
-var foo = { min: (items) => items[0] };
-var bar = {};
-var bucketFactory = () => ({ utc: (input) => ({ diff: () => 0 }) });
-var min = foo;
-var moment = bucketFactory(bar);
-const defaultSpec = {
-	granularities: [{
-		maxDays: 1,
-		displayFormatString: '[Q]Q'
-	}],
-	other: 1
-};
-window.x = { f: (start, end) => ((inputStartDate, inputEndDate, spec = defaultSpec) => {
-	let startDate = moment.utc(inputStartDate);
-	let dayCount = moment.utc(inputEndDate).diff(startDate, 'days') + 1;
-	let granularity = spec.granularities.sort((left, right) => left.maxDays - right.maxDays).find((item) => dayCount <= item.maxDays);
-	return granularity == null ? '' : granularity.displayFormatString;
-})(start, end) + String(min.min([1, 2])) };
-console.log(window.x.f(0, 0));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
--var window = {}, moment_utc = (input) => ({ diff: () => 0 });
-+var window = {}, foo = { min: (items) => items[0] }, bar = {}, bucketFactory = () => ({ utc: (input) => ({ diff: () => 0 }) }), min = foo, moment = bucketFactory(bar);
- const defaultSpec = {
- 	granularities: [{
- 		maxDays: 1,
-@@ -7,6 +7,6 @@
- 	other: 1
- };
- window.x = { f: (start, end) => ((inputStartDate, inputEndDate, spec = defaultSpec) => {
--	let startDate = moment_utc(inputStartDate), dayCount = moment_utc(inputEndDate).diff(startDate, 'days') + 1, granularity = spec.granularities.sort((left, right) => left.maxDays - right.maxDays).find((item) => dayCount <= item.maxDays);
--	return null == granularity ? '' : granularity.displayFormatString;
--})(start, end) + String(1) }, console.log(window.x.f(0, 0));
-+	let startDate = moment.utc(inputStartDate), dayCount = moment.utc(inputEndDate).diff(startDate, 'days') + 1, granularity = spec.granularities.sort((left, right) => left.maxDays - right.maxDays).find((item) => dayCount <= item.maxDays);
-+	return granularity == null ? '' : granularity.displayFormatString;
-+})(start, end) + String(min.min([1, 2])) }, console.log(window.x.f(0, 0));
-
-```
-
-## `swc/issues/non-finite-number-method-call`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 496 vs reference 375 (+121 bytes)
-
-```js
-console.log(1.23.toFixed(-1));
-console.log(1.23.toFixed(-Infinity));
-console.log(Infinity.toFixed(-1));
-console.log(NaN.toFixed(-1));
-console.log(1.23.toFixed(-.9));
-console.log(1.23.toFixed(NaN));
-console.log(1.23.toExponential(-1));
-console.log(Infinity.toExponential(-1));
-console.log(NaN.toExponential(-1));
-console.log(1.23.toExponential(-.9));
-console.log(1.23.toExponential(NaN));
-console.log(1.23.toPrecision(-1));
-console.log(Infinity.toPrecision(-1));
-console.log(NaN.toPrecision(-1));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,14 +1 @@
--console.log(1.23.toFixed(-1));
--console.log(1.23.toFixed(-1 / 0));
--console.log(Infinity.toFixed(-1));
--console.log((0 / 0).toFixed(-1));
--console.log('1');
--console.log('1');
--console.log(1.23.toExponential(-1));
--console.log('Infinity');
--console.log('NaN');
--console.log('1e+0');
--console.log('1e+0');
--console.log(1.23.toPrecision(-1));
--console.log('Infinity');
--console.log('NaN');
-+console.log(1.23.toFixed(-1)), console.log(1.23.toFixed(-Infinity)), console.log(Infinity.toFixed(-1)), console.log(NaN.toFixed(-1)), console.log(1.23.toFixed(-.9)), console.log(1.23.toFixed(NaN)), console.log(1.23.toExponential(-1)), console.log(Infinity.toExponential(-1)), console.log(NaN.toExponential(-1)), console.log(1.23.toExponential(-.9)), console.log(1.23.toExponential(NaN)), console.log(1.23.toPrecision(-1)), console.log(Infinity.toPrecision(-1)), console.log(NaN.toPrecision(-1));
-
-```
-
-## `swc/issues/10041`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 316 vs reference 192 (+124 bytes)
-
-```js
-(function() {
-	function entry() {
-		var struct = {
-			a: [],
-			b: 0
-		};
-		setName(struct, 'Alice');
-	}
-	function setName(struct, str) {
-		writeString(struct.a, struct.b, str);
-	}
-	function writeString(buffer, offset, c) {
-		for (var i = 0, v = c.length; i < v; i = i + 1 | 0) {
-			buffer[offset + i | 0] = c.charCodeAt(i);
-		}
-	}
-	entry();
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,15 @@
--var struct;
--!function(buffer, offset, c) {
--	for (var i = 0, v = c.length; i < v; i = i + 1 | 0) buffer[offset + i | 0] = c.charCodeAt(i);
--}((struct = {
--	a: [],
--	b: 0
--}).a, struct.b, 'Alice');
-+(function() {
-+	function entry() {
-+		setName({
-+			a: [],
-+			b: 0
-+		}, 'Alice');
-+	}
-+	function setName(struct, str) {
-+		writeString(struct.a, struct.b, str);
-+	}
-+	function writeString(buffer, offset, c) {
-+		for (var i = 0, v = c.length; i < v; i = i + 1 | 0) buffer[offset + i | 0] = c.charCodeAt(i);
-+	}
-+	entry();
-+})();
-
-```
-
 ## `swc/issues/12177`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 584 vs reference 458 (+126 bytes)
+- size: oxc 526 vs reference 413 (+113 bytes, no whitespaces)
 
 ```js
 const effects = [];
@@ -10106,7 +10144,7 @@ console.log(effects.join(','));
 ## `swc/issues/6751/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 307 vs reference 174 (+133 bytes)
+- size: oxc 265 vs reference 144 (+121 bytes, no whitespaces)
 
 ```js
 let current_component;
@@ -10160,7 +10198,7 @@ try {
 ## `swc/issues/9757`
 
 - tags: `drop console`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 165 vs reference 31 (+134 bytes)
+- size: oxc 153 vs reference 29 (+124 bytes, no whitespaces)
 
 ```js
 export default function A() {
@@ -10184,96 +10222,55 @@ export default function A() {
 
 ```
 
-## `swc/issues/10876/1`
+## `swc/issues/non-finite-number-method-call`
 
-- tags: `join vars`, `sequences`, `2 iterations`
-- size: oxc 624 vs reference 477 (+147 bytes)
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 482 vs reference 357 (+125 bytes, no whitespaces)
 
 ```js
-const createCounter1 = () => {
-	let count = 0;
-	return (numToAdd) => {
-		count += numToAdd;
-		return count;
-	};
-};
-const createCounter2 = () => {
-	let count = 0;
-	return (numToAdd) => {
-		count += numToAdd;
-		return count;
-	};
-};
-function createCounter3() {
-	let count = 0;
-	return (numToAdd) => {
-		count += numToAdd;
-		return count;
-	};
-}
-class Counter {
-	add = createCounter1();
-	static {
-		this.helper = createCounter2();
-	}
-	static method() {
-		return createCounter3();
-	}
-}
-const counter1 = new Counter();
-const counter2 = new Counter();
-console.log(counter1.add(1));
-console.log(counter2.add(1));
-console.log(Counter.helper(1));
-console.log(Counter.method()(1));
-export {};
+console.log(1.23.toFixed(-1));
+console.log(1.23.toFixed(-Infinity));
+console.log(Infinity.toFixed(-1));
+console.log(NaN.toFixed(-1));
+console.log(1.23.toFixed(-.9));
+console.log(1.23.toFixed(NaN));
+console.log(1.23.toExponential(-1));
+console.log(Infinity.toExponential(-1));
+console.log(NaN.toExponential(-1));
+console.log(1.23.toExponential(-.9));
+console.log(1.23.toExponential(NaN));
+console.log(1.23.toPrecision(-1));
+console.log(Infinity.toPrecision(-1));
+console.log(NaN.toPrecision(-1));
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,18 +1,23 @@
-+const createCounter1 = () => {
-+	let count = 0;
-+	return (numToAdd) => (count += numToAdd, count);
-+}, createCounter2 = () => {
-+	let count = 0;
-+	return (numToAdd) => (count += numToAdd, count);
-+};
-+function createCounter3() {
-+	let count = 0;
-+	return (numToAdd) => (count += numToAdd, count);
-+}
- class Counter {
--	add = (() => {
--		let count = 0;
--		return (numToAdd) => count += numToAdd;
--	})();
-+	add = createCounter1();
- 	static {
--		let count;
--		this.helper = (count = 0, (numToAdd) => count += numToAdd);
-+		this.helper = createCounter2();
- 	}
- 	static method() {
--		let count;
--		return count = 0, (numToAdd) => count += numToAdd;
-+		return createCounter3();
- 	}
- }
--const counter1 = new Counter();
--const counter2 = new Counter();
-+const counter1 = new Counter(), counter2 = new Counter();
- console.log(counter1.add(1)), console.log(counter2.add(1)), console.log(Counter.helper(1)), console.log(Counter.method()(1));
- export {};
+@@ -1,14 +1 @@
+-console.log(1.23.toFixed(-1));
+-console.log(1.23.toFixed(-1 / 0));
+-console.log(Infinity.toFixed(-1));
+-console.log((0 / 0).toFixed(-1));
+-console.log('1');
+-console.log('1');
+-console.log(1.23.toExponential(-1));
+-console.log('Infinity');
+-console.log('NaN');
+-console.log('1e+0');
+-console.log('1e+0');
+-console.log(1.23.toPrecision(-1));
+-console.log('Infinity');
+-console.log('NaN');
++console.log(1.23.toFixed(-1)), console.log(1.23.toFixed(-Infinity)), console.log(Infinity.toFixed(-1)), console.log(NaN.toFixed(-1)), console.log(1.23.toFixed(-.9)), console.log(1.23.toFixed(NaN)), console.log(1.23.toExponential(-1)), console.log(Infinity.toExponential(-1)), console.log(NaN.toExponential(-1)), console.log(1.23.toExponential(-.9)), console.log(1.23.toExponential(NaN)), console.log(1.23.toPrecision(-1)), console.log(Infinity.toPrecision(-1)), console.log(NaN.toPrecision(-1));
 
 ```
 
 ## `swc/no-side-effect`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 151 vs reference 0 (+151 bytes)
+- size: oxc 126 vs reference 0 (+126 bytes, no whitespaces)
 
 ```js
 function fnA(args) {
@@ -10357,55 +10354,10 @@ fnD();
 
 ```
 
-## `swc/issues/7004`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 283 vs reference 117 (+166 bytes)
-
-```js
-function getDescription(option, parentGroup) {
-	return [parentGroup && parentGroup.label, option.__labelPrefix].concat(option.tags);
-}
-function printDescription() {
-	const option = {
-		__labelPrefix: 'test',
-		tags: []
-	};
-	const parent = null;
-	const desc = getDescription(option, parent);
-	console.log(desc);
-}
-printDescription();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,11 @@
--var option;
--console.log([null, (option = {
--	__labelPrefix: 'test',
--	tags: []
--}).__labelPrefix].concat(option.tags));
-+function getDescription(option, parentGroup) {
-+	return [parentGroup && parentGroup.label, option.__labelPrefix].concat(option.tags);
-+}
-+function printDescription() {
-+	let desc = getDescription({
-+		__labelPrefix: 'test',
-+		tags: []
-+	}, null);
-+	console.log(desc);
-+}
-+printDescription();
-
-```
-
 ## `swc/pr/11814_class_effect_guards`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 537 vs reference 370 (+167 bytes)
+- size: oxc 444 vs reference 313 (+131 bytes, no whitespaces)
 
 ```js
 class KeepThis {
@@ -10482,10 +10434,141 @@ class KeepNonExpressionBlock {
 
 ```
 
+## `swc/issues/10876/1`
+
+- tags: `join vars`, `sequences`, `2 iterations`
+- size: oxc 524 vs reference 391 (+133 bytes, no whitespaces)
+
+```js
+const createCounter1 = () => {
+	let count = 0;
+	return (numToAdd) => {
+		count += numToAdd;
+		return count;
+	};
+};
+const createCounter2 = () => {
+	let count = 0;
+	return (numToAdd) => {
+		count += numToAdd;
+		return count;
+	};
+};
+function createCounter3() {
+	let count = 0;
+	return (numToAdd) => {
+		count += numToAdd;
+		return count;
+	};
+}
+class Counter {
+	add = createCounter1();
+	static {
+		this.helper = createCounter2();
+	}
+	static method() {
+		return createCounter3();
+	}
+}
+const counter1 = new Counter();
+const counter2 = new Counter();
+console.log(counter1.add(1));
+console.log(counter2.add(1));
+console.log(Counter.helper(1));
+console.log(Counter.method()(1));
+export {};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,18 +1,23 @@
++const createCounter1 = () => {
++	let count = 0;
++	return (numToAdd) => (count += numToAdd, count);
++}, createCounter2 = () => {
++	let count = 0;
++	return (numToAdd) => (count += numToAdd, count);
++};
++function createCounter3() {
++	let count = 0;
++	return (numToAdd) => (count += numToAdd, count);
++}
+ class Counter {
+-	add = (() => {
+-		let count = 0;
+-		return (numToAdd) => count += numToAdd;
+-	})();
++	add = createCounter1();
+ 	static {
+-		let count;
+-		this.helper = (count = 0, (numToAdd) => count += numToAdd);
++		this.helper = createCounter2();
+ 	}
+ 	static method() {
+-		let count;
+-		return count = 0, (numToAdd) => count += numToAdd;
++		return createCounter3();
+ 	}
+ }
+-const counter1 = new Counter();
+-const counter2 = new Counter();
++const counter1 = new Counter(), counter2 = new Counter();
+ console.log(counter1.add(1)), console.log(counter2.add(1)), console.log(Counter.helper(1)), console.log(Counter.method()(1));
+ export {};
+
+```
+
+## `swc/issues/7004`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 250 vs reference 105 (+145 bytes, no whitespaces)
+
+```js
+function getDescription(option, parentGroup) {
+	return [parentGroup && parentGroup.label, option.__labelPrefix].concat(option.tags);
+}
+function printDescription() {
+	const option = {
+		__labelPrefix: 'test',
+		tags: []
+	};
+	const parent = null;
+	const desc = getDescription(option, parent);
+	console.log(desc);
+}
+printDescription();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,11 @@
+-var option;
+-console.log([null, (option = {
+-	__labelPrefix: 'test',
+-	tags: []
+-}).__labelPrefix].concat(option.tags));
++function getDescription(option, parentGroup) {
++	return [parentGroup && parentGroup.label, option.__labelPrefix].concat(option.tags);
++}
++function printDescription() {
++	let desc = getDescription({
++		__labelPrefix: 'test',
++		tags: []
++	}, null);
++	console.log(desc);
++}
++printDescription();
+
+```
+
 ## `swc/issues/8284`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 828 vs reference 657 (+171 bytes)
+- size: oxc 707 vs reference 562 (+145 bytes, no whitespaces)
 
 ```js
 (function(global, factory) {
@@ -10545,10 +10628,48 @@ class KeepNonExpressionBlock {
 
 ```
 
+## `swc/issues/11102`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 168 vs reference 21 (+147 bytes, no whitespaces)
+
+```js
+const decideZoomByAccuracy = (range) => {
+	const isUnder = (accuracy) => {
+		return range <= accuracy;
+	};
+	if (isUnder(0)) {
+		return 15;
+	}
+	if (isUnder(50)) {
+		return 15;
+	}
+	if (isUnder(100)) {
+		return 15;
+	}
+	return 11;
+};
+export const zoom = decideZoomByAccuracy(75);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,5 @@
+-export const zoom = 15;
++const decideZoomByAccuracy = (range) => {
++	let isUnder = (accuracy) => range <= accuracy;
++	return isUnder(0) || isUnder(50) || isUnder(100) ? 15 : 11;
++};
++export const zoom = decideZoomByAccuracy(75);
+
+```
+
 ## `swc/issues/9610-methods`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
-- size: oxc 666 vs reference 492 (+174 bytes)
+- size: oxc 575 vs reference 425 (+150 bytes, no whitespaces)
 
 ```js
 // Test: Object and class methods with unused default parameters
@@ -10622,48 +10743,10 @@ export function example() {
 
 ```
 
-## `swc/issues/11102`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 200 vs reference 24 (+176 bytes)
-
-```js
-const decideZoomByAccuracy = (range) => {
-	const isUnder = (accuracy) => {
-		return range <= accuracy;
-	};
-	if (isUnder(0)) {
-		return 15;
-	}
-	if (isUnder(50)) {
-		return 15;
-	}
-	if (isUnder(100)) {
-		return 15;
-	}
-	return 11;
-};
-export const zoom = decideZoomByAccuracy(75);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,5 @@
--export const zoom = 15;
-+const decideZoomByAccuracy = (range) => {
-+	let isUnder = (accuracy) => range <= accuracy;
-+	return isUnder(0) || isUnder(50) || isUnder(100) ? 15 : 11;
-+};
-+export const zoom = decideZoomByAccuracy(75);
-
-```
-
 ## `swc/issues/11512`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `7 iterations`
-- size: oxc 274 vs reference 92 (+182 bytes)
+- size: oxc 236 vs reference 84 (+152 bytes, no whitespaces)
 
 ```js
 const defaultMessage = 'hello';
@@ -10712,10 +10795,111 @@ export function example() {
 
 ```
 
+## `swc/issues/11158`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 251 vs reference 82 (+169 bytes, no whitespaces)
+
+```js
+(() => {
+	const gen = () => foo(12);
+	function foo(length) {
+		return length;
+	}
+	const a = `tmp-${gen()}-a`, b = `tmp-${gen()}-b`;
+	console.log(a, b);
+})();
+(() => {
+	const gen = () => g(foo(12));
+	function foo(length) {
+		return length;
+	}
+	const a = `tmp-${gen()}-a`, b = `tmp-${gen()}-b`;
+	console.log(a, b);
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,15 @@
+-console.log('tmp-12-a', 'tmp-12-b'), console.log(`tmp-${g(12)}-a`, `tmp-${g(12)}-b`);
++(() => {
++	let gen = () => foo(12);
++	function foo(length) {
++		return length;
++	}
++	let a = `tmp-${gen()}-a`, b = `tmp-${gen()}-b`;
++	console.log(a, b);
++})(), (() => {
++	let gen = () => g(foo(12));
++	function foo(length) {
++		return length;
++	}
++	let a = `tmp-${gen()}-a`, b = `tmp-${gen()}-b`;
++	console.log(a, b);
++})();
+
+```
+
+## `swc/pr/11814_class_effect_order`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 548 vs reference 354 (+194 bytes, no whitespaces)
+
+```js
+class DeclarationOrder extends effect('decl:extends') {
+	[effect('decl:method')]() {}
+	static [effect('decl:static-key')] = effect('decl:static-value');
+	[effect('decl:instance-key')] = effect('decl:instance-value');
+	static #privateField = effect('decl:private-value');
+	static {
+		effect('decl:block');
+	}
+}
+(class ExpressionOrder extends effect('expr:extends') {
+	[effect('expr:method')]() {}
+	static [effect('expr:static-key')] = effect('expr:static-value');
+	[effect('expr:instance-key')] = effect('expr:instance-value');
+	static #privateField = effect('expr:private-value');
+	static {
+		effect('expr:block');
+	}
+});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,18 @@
+-effect('decl:extends'), effect('decl:method'), effect('decl:static-key'), effect('decl:instance-key'), effect('decl:static-value'), effect('decl:private-value'), effect('decl:block'), effect('expr:extends'), effect('expr:method'), effect('expr:static-key'), effect('expr:instance-key'), effect('expr:static-value'), effect('expr:private-value'), effect('expr:block');
++class DeclarationOrder extends effect('decl:extends') {
++	[effect('decl:method')]() {}
++	static [effect('decl:static-key')] = effect('decl:static-value');
++	[effect('decl:instance-key')] = effect('decl:instance-value');
++	static #privateField = effect('decl:private-value');
++	static {
++		effect('decl:block');
++	}
++}
++(class extends effect('expr:extends') {
++	[effect('expr:method')]() {}
++	static [effect('expr:static-key')] = effect('expr:static-value');
++	[effect('expr:instance-key')] = effect('expr:instance-value');
++	static #privateField = effect('expr:private-value');
++	static {
++		effect('expr:block');
++	}
++});
+
+```
+
 ## `swc/issues/drop-console-value-refs`
 
 - tags: `drop console`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 986 vs reference 794 (+192 bytes)
+- size: oxc 915 vs reference 705 (+210 bytes, no whitespaces)
 
 ```js
 const err = console.error.bind(console);
@@ -10786,111 +10970,10 @@ process.stdout.write(typeof st + '\n');
 ... [truncated]
 ```
 
-## `swc/issues/11158`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 311 vs reference 86 (+225 bytes)
-
-```js
-(() => {
-	const gen = () => foo(12);
-	function foo(length) {
-		return length;
-	}
-	const a = `tmp-${gen()}-a`, b = `tmp-${gen()}-b`;
-	console.log(a, b);
-})();
-(() => {
-	const gen = () => g(foo(12));
-	function foo(length) {
-		return length;
-	}
-	const a = `tmp-${gen()}-a`, b = `tmp-${gen()}-b`;
-	console.log(a, b);
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,15 @@
--console.log('tmp-12-a', 'tmp-12-b'), console.log(`tmp-${g(12)}-a`, `tmp-${g(12)}-b`);
-+(() => {
-+	let gen = () => foo(12);
-+	function foo(length) {
-+		return length;
-+	}
-+	let a = `tmp-${gen()}-a`, b = `tmp-${gen()}-b`;
-+	console.log(a, b);
-+})(), (() => {
-+	let gen = () => g(foo(12));
-+	function foo(length) {
-+		return length;
-+	}
-+	let a = `tmp-${gen()}-a`, b = `tmp-${gen()}-b`;
-+	console.log(a, b);
-+})();
-
-```
-
-## `swc/pr/11814_class_effect_order`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 606 vs reference 368 (+238 bytes)
-
-```js
-class DeclarationOrder extends effect('decl:extends') {
-	[effect('decl:method')]() {}
-	static [effect('decl:static-key')] = effect('decl:static-value');
-	[effect('decl:instance-key')] = effect('decl:instance-value');
-	static #privateField = effect('decl:private-value');
-	static {
-		effect('decl:block');
-	}
-}
-(class ExpressionOrder extends effect('expr:extends') {
-	[effect('expr:method')]() {}
-	static [effect('expr:static-key')] = effect('expr:static-value');
-	[effect('expr:instance-key')] = effect('expr:instance-value');
-	static #privateField = effect('expr:private-value');
-	static {
-		effect('expr:block');
-	}
-});
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,18 @@
--effect('decl:extends'), effect('decl:method'), effect('decl:static-key'), effect('decl:instance-key'), effect('decl:static-value'), effect('decl:private-value'), effect('decl:block'), effect('expr:extends'), effect('expr:method'), effect('expr:static-key'), effect('expr:instance-key'), effect('expr:static-value'), effect('expr:private-value'), effect('expr:block');
-+class DeclarationOrder extends effect('decl:extends') {
-+	[effect('decl:method')]() {}
-+	static [effect('decl:static-key')] = effect('decl:static-value');
-+	[effect('decl:instance-key')] = effect('decl:instance-value');
-+	static #privateField = effect('decl:private-value');
-+	static {
-+		effect('decl:block');
-+	}
-+}
-+(class extends effect('expr:extends') {
-+	[effect('expr:method')]() {}
-+	static [effect('expr:static-key')] = effect('expr:static-value');
-+	[effect('expr:instance-key')] = effect('expr:instance-value');
-+	static #privateField = effect('expr:private-value');
-+	static {
-+		effect('expr:block');
-+	}
-+});
-
-```
-
 ## `swc/issues/8813`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 714 vs reference 369 (+345 bytes)
+- size: oxc 528 vs reference 310 (+218 bytes, no whitespaces)
 
 ```js
 const k1 = (() => {
@@ -11039,7 +11122,7 @@ console.log(c);
 ## `swc/projects/backbone/9`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 589 vs reference 235 (+354 bytes)
+- size: oxc 549 vs reference 212 (+337 bytes, no whitespaces)
 
 ```js
 (function() {
@@ -11102,7 +11185,7 @@ console.log(c);
 ## `swc/issues/numeric-property-key`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
-- size: oxc 668 vs reference 207 (+461 bytes)
+- size: oxc 532 vs reference 175 (+357 bytes, no whitespaces)
 
 ```js
 console.log([

@@ -4,10 +4,32 @@ Fixtures: 9
 
 [← pass-1](README.md) · [← all families](../README.md)
 
+## `pass-1/3`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
+- size: oxc 45 vs reference 40 (+5 bytes, no whitespaces)
+
+```js
+(() => {
+	let x;
+	console.log('undefined' + ('?ts=' + Date.now()));
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-console.log('undefined?ts=' + Date.now());
++console.log('undefined' + ('?ts=' + Date.now()));
+
+```
+
 ## `pass-1/issues/6407/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 342 vs reference 336 (+6 bytes)
+- size: oxc 293 vs reference 282 (+11 bytes, no whitespaces)
 
 ```js
 export default class Demo {
@@ -49,32 +71,10 @@ console.log(Deno.encode());
 
 ```
 
-## `pass-1/3`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 50 vs reference 43 (+7 bytes)
-
-```js
-(() => {
-	let x;
-	console.log('undefined' + ('?ts=' + Date.now()));
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--console.log('undefined?ts=' + Date.now());
-+console.log('undefined' + ('?ts=' + Date.now()));
-
-```
-
 ## `pass-1/joda/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 382 vs reference 364 (+18 bytes)
+- size: oxc 334 vs reference 322 (+12 bytes, no whitespaces)
 
 ```js
 'use strict';
@@ -123,7 +123,7 @@ console.log(Deno.encode());
 ## `pass-1/8`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 123 vs reference 98 (+25 bytes)
+- size: oxc 103 vs reference 82 (+21 bytes, no whitespaces)
 
 ```js
 export function MultiPoint(point) {
@@ -148,7 +148,7 @@ export function MultiPoint(point) {
 ## `pass-1/joda/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 320 vs reference 263 (+57 bytes)
+- size: oxc 277 vs reference 235 (+42 bytes, no whitespaces)
 
 ```js
 'use strict';
@@ -182,7 +182,7 @@ export function MultiPoint(point) {
 ## `pass-1/9/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 101 vs reference 35 (+66 bytes)
+- size: oxc 87 vs reference 33 (+54 bytes, no whitespaces)
 
 ```js
 console.log('Greeting:', (function(value) {
@@ -209,7 +209,7 @@ console.log('Greeting:', (function(value) {
 ## `pass-1/compute/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 178 vs reference 51 (+127 bytes)
+- size: oxc 129 vs reference 47 (+82 bytes, no whitespaces)
 
 ```js
 function f() {
@@ -255,7 +255,7 @@ console.log(f().toString(16));
 ## `pass-1/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 189 vs reference 33 (+156 bytes)
+- size: oxc 157 vs reference 32 (+125 bytes, no whitespaces)
 
 ```js
 (function() {
@@ -279,7 +279,7 @@ console.log(f().toString(16));
 ## `pass-1/9/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 202 vs reference 35 (+167 bytes)
+- size: oxc 164 vs reference 33 (+131 bytes, no whitespaces)
 
 ```js
 function outer() {

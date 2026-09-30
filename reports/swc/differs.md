@@ -32,32 +32,6 @@ export function example(value) {
 
 ```
 
-## `swc/issues/10466`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-
-```js
-const G = { setPackageName({ packageName }) {
-	if ('string' == typeof packageName) this.packageName = packageName;
-	return this;
-} };
-var packageName;
-packageName = '@clerk/clerk-react', G.setPackageName({ packageName }), console.log(G.packageName);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
- const G = { setPackageName({ packageName }) {
--	return 'string' == typeof packageName && (this.packageName = packageName), this;
-+	return typeof packageName == 'string' && (this.packageName = packageName), this;
- } };
- G.setPackageName({ packageName: '@clerk/clerk-react' }), console.log(G.packageName);
-
-```
-
 ## `swc/issues/10720`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -91,6 +65,32 @@ export function someFn({ someVal, shouldBreak }) {
  			return 1;
  		default: return 0;
  	}
+
+```
+
+## `swc/issues/11034`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+
+```js
+export function f() {
+	const foo = window.e ? 'bar' : 'baz';
+	foo = `it's not allowed`;
+	console.log(`foo=${foo}`);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+ export function f() {
+ 	const foo = window.e ? 'bar' : 'baz';
+-	foo = 'it\'s not allowed';
+-	console.log(`foo=${foo}`);
++	foo = 'it\'s not allowed', console.log(`foo=${foo}`);
+ }
 
 ```
 
@@ -155,17 +155,19 @@ console.log(state.flag);
 
 ```
 
-## `swc/issues/11512-exhaustive/iife-default-reassigned`
+## `swc/issues/11645/eval-parent-scope-nested-block`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
 
 ```js
-export function iifeDefaultReassigned(value) {
-	return (function(a, b = 1) {
-		b = 2;
-		return a;
-	})(value);
+function outer() {
+	let f = (a) => a;
+	eval('f = (_, b) => b');
+	{
+		return f(1, 2);
+	}
 }
+console.log(outer());
 
 ```
 
@@ -173,15 +175,41 @@ export function iifeDefaultReassigned(value) {
 --- reference
 +++ oxc
 @@ -1,6 +1,5 @@
- export function iifeDefaultReassigned(value) {
--	return function(a, b = 1) {
--		b = 2;
--		return a;
--	}(value);
-+	return (function(a, b = 1) {
-+		return b = 2, a;
-+	})(value);
+ function outer() {
+ 	let f = (a) => a;
+-	eval('f = (_, b) => b');
+-	return f(1, 2);
++	return eval('f = (_, b) => b'), f(1, 2);
  }
+ console.log(outer());
+
+```
+
+## `swc/issues/11645/eval-rebind-scope`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
+
+```js
+function outer() {
+	let f = (a) => a;
+	eval('f = (_, b) => b');
+	return f(1, 2);
+}
+console.log(outer());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,5 @@
+ function outer() {
+ 	let f = (a) => a;
+-	eval('f = (_, b) => b');
+-	return f(1, 2);
++	return eval('f = (_, b) => b'), f(1, 2);
+ }
+ console.log(outer());
 
 ```
 
@@ -325,34 +353,6 @@ while (rerenderQueue.length > 0) {
 
 ```
 
-## `swc/issues/2679`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-
-```js
-(function() {
-	var a = {};
-	a.b = 1;
-	a = null;
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,4 @@
--!function() {
-+(function() {
- 	var a = {};
--	a.b = 1;
--	a = null;
--}();
-+	a.b = 1, a = null;
-+})();
-
-```
-
 ## `swc/issues/2779/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -417,6 +417,67 @@ console.log(a + ((b ? 'c' : 'd') + 1));
 
 ```
 
+## `swc/issues/6344/1`
+
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`
+
+```js
+function a() {}
+var te = function() {
+	function n(e) {}
+	var t = null;
+	return { init: function(e) {
+		return t = new n(e);
+	} };
+}();
+var he = function() {
+	function n() {
+		a();
+	}
+	;
+	var t = null;
+	return { init: function(e) {
+		return t;
+	} };
+}();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,17 +1,15 @@
+-function n() {}
+-var t = function() {
+-	function n(n) {}
+-	var t = null;
+-	return { init: function(u) {
+-		return t = new n(u);
++function a() {}
++var e = function() {
++	function n(e) {}
++	var e = null;
++	return { init: function(t) {
++		return e = new n(t);
+ 	} };
+ }();
+-var u = function() {
+-	function t() {
+-		n();
+-	}
+-	var u = null;
+-	return { init: function(n) {
+-		return u;
++var t = function() {
++	function n() {}
++	var e = null;
++	return { init: function(e) {
++		return null;
+ 	} };
+ }();
+
+```
+
 ## `swc/issues/6422/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -441,33 +502,6 @@ assert.strictEqual(result, 'PASS');
 -} } });
 -assert.strictEqual(result, 'PASS');
 +} } }), assert.strictEqual(result, 'PASS');
-
-```
-
-## `swc/issues/7591`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-
-```js
-var x = someFunction;
-function someFunction() {
-	return 2;
-}
-console.log(x);
-console.log(x);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,5 @@
-+var x = someFunction;
- function someFunction() {
- 	return 2;
- }
--console.log(someFunction), console.log(someFunction);
-+console.log(x), console.log(x);
 
 ```
 
@@ -575,25 +609,38 @@ run('b');
 
 ```
 
-## `swc/issues/8705`
+## `swc/issues/9186/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
-console.log(Math.pow({ valueOf() {
-	return 42;
-} }, 1));
+console.log((function() {
+	while (true) {
+		console.log(123);
+	}
+})());
+console.log((function(a = this.a) {
+	while (true) {
+		console.log(123);
+	}
+})());
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1 +1,3 @@
--console.log(Math.pow({ valueOf: () => 42 }, 1));
-+console.log({ valueOf() {
-+	return 42;
-+} } ** 1);
+@@ -1,6 +1,5 @@
+-console.log((() => {
+-	while (true) console.log(123);
++console.log((function() {
++	for (;;) console.log(123);
++})()), console.log((function(a = this.a) {
++	for (;;) console.log(123);
+ })());
+-console.log(function(a = this.a) {
+-	while (true) console.log(123);
+-}());
 
 ```
 
@@ -824,28 +871,32 @@ export const obj = { flatten: function() {
 
 ```
 
-## `swc/projects/underscore/11`
+## `swc/projects/underscore/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
-if (typeof /./ !== 'function') {
-	_.isFunction = function(obj) {
-		return typeof obj === 'function';
-	};
-}
+_.contains = _.include = function(obj, target) {
+	if (obj == null) return false;
+	if (nativeIndexOf && obj.indexOf === nativeIndexOf) return obj.indexOf(target) != -1;
+	return any(obj, function(value) {
+		return value === target;
+	});
+};
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,3 +1,3 @@
--'function' != typeof /./ && (_.isFunction = function(obj) {
--	return 'function' == typeof obj;
-+typeof /./ != 'function' && (_.isFunction = function(obj) {
-+	return typeof obj == 'function';
- });
+@@ -1,5 +1,5 @@
+ _.contains = _.include = function(obj, target) {
+-	return null != obj && (nativeIndexOf && obj.indexOf === nativeIndexOf ? -1 != obj.indexOf(target) : any(obj, function(value) {
++	return obj == null ? !1 : nativeIndexOf && obj.indexOf === nativeIndexOf ? obj.indexOf(target) != -1 : any(obj, function(value) {
+ 		return value === target;
+-	}));
++	});
+ };
 
 ```
 

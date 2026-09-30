@@ -58,14 +58,23 @@ impl Kind {
 
     /// Classify a fixture that produced output on both sides. Non-idempotency
     /// takes precedence over any comparison result.
-    pub(crate) fn classify(actual: &str, expected: &str, idempotent: bool) -> Self {
+    ///
+    /// Sizes are measured on whitespace-free output so formatting differences
+    /// alone never decide between [`Self::Smaller`] and [`Self::Larger`].
+    pub(crate) fn classify(
+        actual: &str,
+        expected: &str,
+        actual_size: usize,
+        expected_size: usize,
+        idempotent: bool,
+    ) -> Self {
         if !idempotent {
             return Self::NotIdempotent;
         }
         if actual == expected {
             return Self::Pass;
         }
-        match actual.len().cmp(&expected.len()) {
+        match actual_size.cmp(&expected_size) {
             Ordering::Less => Self::Smaller,
             Ordering::Greater => Self::Larger,
             Ordering::Equal => Self::Differs,
@@ -82,6 +91,10 @@ pub(crate) struct Outcome {
     pub(crate) input: String,
     pub(crate) expected: String,
     pub(crate) actual: String,
+    /// Byte length of [`Outcome::expected`] without whitespace.
+    pub(crate) expected_size: usize,
+    /// Byte length of [`Outcome::actual`] without whitespace.
+    pub(crate) actual_size: usize,
     /// Output of a second compression pass, set only when it differs from `actual`.
     pub(crate) idempotency: Option<String>,
     pub(crate) note: String,

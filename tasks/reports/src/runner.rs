@@ -13,7 +13,7 @@ use crate::{
     config,
     fixture::Fixture,
     outcome::{Kind, Outcome},
-    pipeline::{compress, print_normalized, source_type_for},
+    pipeline::{compress, print_minified, print_normalized, source_type_for},
     tags,
 };
 
@@ -94,6 +94,8 @@ pub(crate) fn run_fixture(root: &Path, fixture: &Fixture) -> Result<Outcome, Ski
         input: String::new(),
         expected: String::new(),
         actual: String::new(),
+        expected_size: 0,
+        actual_size: 0,
         idempotency: None,
         note: String::new(),
     };
@@ -179,9 +181,27 @@ pub(crate) fn run_fixture(root: &Path, fixture: &Fixture) -> Result<Outcome, Ski
         Err(payload) => Some(format!("<panicked: {}>", panic_message(&payload))),
     };
 
-    outcome.kind =
-        Kind::classify(&outcome.actual, &outcome.expected, outcome.idempotency.is_none());
+    outcome.actual_size = minified_size(&outcome.actual, source_type);
+    outcome.expected_size = minified_size(&outcome.expected, source_type);
+
+    outcome.kind = Kind::classify(
+        &outcome.actual,
+        &outcome.expected,
+        outcome.actual_size,
+        outcome.expected_size,
+        outcome.idempotency.is_none(),
+    );
     Ok(outcome)
+}
+
+/// Byte length of `source` once whitespace is removed, so size comparisons do
+/// not depend on formatting. Falls back to the printed length if the code
+/// cannot be re-printed.
+fn minified_size(source: &str, source_type: SourceType) -> usize {
+    panic::catch_unwind(AssertUnwindSafe(|| print_minified(source, source_type)))
+        .ok()
+        .and_then(Result::ok)
+        .map_or_else(|| source.len(), |minified| minified.len())
 }
 
 fn panic_message(payload: &Box<dyn Any + Send>) -> String {
