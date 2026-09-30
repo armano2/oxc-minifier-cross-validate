@@ -6,6 +6,7 @@ Fixtures: 267
 
 ## `swc/issues/10412`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 222 vs reference 221 (+1 bytes)
 
 ```js
@@ -39,6 +40,7 @@ Fixtures: 267
 
 ## `swc/issues/6141`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 160 vs reference 159 (+1 bytes)
 
 ```js
@@ -75,6 +77,7 @@ Fixtures: 267
 
 ## `swc/issues/7412`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 212 vs reference 211 (+1 bytes)
 
 ```js
@@ -111,6 +114,7 @@ export function throttleTime(interval) {
 
 ## `swc/issues/7784/3`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 124 vs reference 123 (+1 bytes)
 
 ```js
@@ -142,6 +146,7 @@ export function f(i, e, cmp) {
 
 ## `swc/issues/8826`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 263 vs reference 262 (+1 bytes)
 
 ```js
@@ -166,6 +171,7 @@ export function createTypeChecker(host) {
 
 ## `swc/issues/vercel/003`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 748 vs reference 747 (+1 bytes)
 
 ```js
@@ -283,6 +289,7 @@ export const { q } = manager;
 
 ## `swc/projects/jquery/27`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 185 vs reference 184 (+1 bytes)
 
 ```js
@@ -303,6 +310,7 @@ if (!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.
 
 ## `swc/projects/next/archive-1/916.2317bfea2c41354132bd`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 525 vs reference 524 (+1 bytes)
 
 ```js
@@ -334,6 +342,7 @@ if (!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.
 
 ## `swc/projects/next/archive-1/974.b9fed4786fc6d4a5745d`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 525 vs reference 524 (+1 bytes)
 
 ```js
@@ -365,6 +374,7 @@ if (!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.
 
 ## `swc/projects/next/archive-1/hello-world.1af1130392dd1b8d7964`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 527 vs reference 526 (+1 bytes)
 
 ```js
@@ -396,6 +406,7 @@ if (!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.
 
 ## `swc/projects/next/archive-1/hello1.4066327636ea41cc1002`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 520 vs reference 519 (+1 bytes)
 
 ```js
@@ -427,6 +438,7 @@ if (!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.
 
 ## `swc/projects/next/archive-1/hello2.339fbf9b6616133531f3`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 520 vs reference 519 (+1 bytes)
 
 ```js
@@ -458,6 +470,7 @@ if (!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.
 
 ## `swc/projects/react/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 1144 vs reference 1143 (+1 bytes)
 
 ```js
@@ -507,6 +520,7 @@ if (!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.
 
 ## `swc/projects/underscore/24`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 142 vs reference 141 (+1 bytes)
 
 ```js
@@ -538,6 +552,7 @@ if (!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.
 
 ## `swc/issues/10824`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 199 vs reference 197 (+2 bytes)
 
 ```js
@@ -576,6 +591,7 @@ export {};
 
 ## `swc/issues/11512-exhaustive/iife-anon-first-default-unused`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
 - size: oxc 116 vs reference 114 (+2 bytes)
 
 ```js
@@ -603,6 +619,7 @@ export function iifeAnonFirstDefaultUnused(value) {
 
 ## `swc/issues/11512-exhaustive/iife-default-ref-prev`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
 - size: oxc 100 vs reference 98 (+2 bytes)
 
 ```js
@@ -630,6 +647,7 @@ export function iifeDefaultRefPrev(value) {
 
 ## `swc/issues/11512-exhaustive/iife-default-used`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
 - size: oxc 97 vs reference 95 (+2 bytes)
 
 ```js
@@ -657,6 +675,7 @@ export function iifeDefaultUsed(value) {
 
 ## `swc/issues/11512-exhaustive/iife-named-default-length`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
 - size: oxc 133 vs reference 131 (+2 bytes)
 
 ```js
@@ -684,6 +703,7 @@ export function iifeNamedDefaultLength(value) {
 
 ## `swc/issues/11645/logical-and-assign-stale-arity`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
 - size: oxc 61 vs reference 59 (+2 bytes)
 
 ```js
@@ -706,6 +726,7 @@ console.log(f(1, 2));
 
 ## `swc/issues/11684/disabled`
 
+- tags: `drop debugger`, `join vars`, `sequences`
 - size: oxc 144 vs reference 142 (+2 bytes)
 
 ```js
@@ -737,6 +758,7 @@ out.class = new class {
 
 ## `swc/issues/12126`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 73 vs reference 71 (+2 bytes)
 
 ```js
@@ -762,6 +784,7 @@ console.log((function(a) {
 
 ## `swc/issues/7783/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 168 vs reference 166 (+2 bytes)
 
 ```js
@@ -796,6 +819,7 @@ const foo = {
 
 ## `swc/issues/8907`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 68 vs reference 66 (+2 bytes)
 
 ```js
@@ -821,6 +845,7 @@ export default used;
 
 ## `swc/issues/8974`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 102 vs reference 100 (+2 bytes)
 
 ```js
@@ -852,6 +877,7 @@ export {};
 
 ## `swc/issues/vercel/002`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 125 vs reference 123 (+2 bytes)
 
 ```js
@@ -874,6 +900,7 @@ export default globalStyles;
 
 ## `swc/projects/underscore/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 215 vs reference 213 (+2 bytes)
 
 ```js
@@ -903,6 +930,7 @@ _.contains = _.include = function(obj, target) {
 
 ## `swc/projects/underscore/5`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 443 vs reference 441 (+2 bytes)
 
 ```js
@@ -942,6 +970,7 @@ _.uniq = _.unique = function(array, isSorted, iterator, context) {
 
 ## `swc/projects/wmr/archive-1/chunks/json.5609c5fa`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 375 vs reference 373 (+2 bytes)
 
 ```js
@@ -976,6 +1005,7 @@ export { JSONView };
 
 ## `swc/issues/11645/control-known-arity-drop`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
 - size: oxc 51 vs reference 48 (+3 bytes)
 
 ```js
@@ -1000,6 +1030,7 @@ console.log(f(1, 2));
 
 ## `swc/issues/12118/export`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 56 vs reference 53 (+3 bytes)
 
 ```js
@@ -1020,6 +1051,7 @@ for (var a of [0]) a = 1, console.log(a);
 
 ## `swc/issues/8670`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `pure getters`
 - size: oxc 64 vs reference 61 (+3 bytes)
 
 ```js
@@ -1048,6 +1080,7 @@ console.log(c);
 
 ## `swc/issues/8718/7`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 54 vs reference 51 (+3 bytes)
 
 ```js
@@ -1072,6 +1105,7 @@ export function foo(a) {
 
 ## `swc/issues/arguments-parameter-injection-size`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 134 vs reference 131 (+3 bytes)
 
 ```js
@@ -1096,6 +1130,7 @@ export function foo(a) {
 
 ## `swc/projects/backbone/11`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 169 vs reference 166 (+3 bytes)
 
 ```js
@@ -1120,6 +1155,7 @@ export const obj = { navigate: function(fragment, options) {
 
 ## `swc/projects/backbone/3`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 54 vs reference 51 (+3 bytes)
 
 ```js
@@ -1140,6 +1176,7 @@ if (!name && !callback && !context) {
 
 ## `swc/projects/yui/11`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 67 vs reference 64 (+3 bytes)
 
 ```js
@@ -1162,6 +1199,7 @@ export function foo() {
 
 ## `swc/simple/block/.0001`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 116 vs reference 113 (+3 bytes)
 
 ```js
@@ -1184,6 +1222,7 @@ do {
 
 ## `swc/simple/sequences/.0001`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 8 vs reference 5 (+3 bytes)
 
 ```js
@@ -1202,6 +1241,7 @@ h--, 0 > h;
 
 ## `swc/issues/7754/1`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 59 vs reference 55 (+4 bytes)
 
 ```js
@@ -1224,6 +1264,7 @@ eval(`console.log(foo)`);
 
 ## `swc/issues/8626`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 54 vs reference 50 (+4 bytes)
 
 ```js
@@ -1248,6 +1289,7 @@ foo((a, b) => true);
 
 ## `swc/issues/5955`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 198 vs reference 193 (+5 bytes)
 
 ```js
@@ -1289,6 +1331,7 @@ export function init1() {
 
 ## `swc/issues/7749`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 102 vs reference 97 (+5 bytes)
 
 ```js
@@ -1322,6 +1365,7 @@ blackbox(foo);
 
 ## `swc/issues/8622`
 
+- tags: `mangle`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 173 vs reference 168 (+5 bytes)
 
 ```js
@@ -1363,6 +1407,7 @@ function bar(cond) {
 
 ## `swc/projects/backbone/18`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 294 vs reference 289 (+5 bytes)
 
 ```js
@@ -1391,6 +1436,7 @@ export const obj = { _routeToRegExp: function(route) {
 
 ## `swc/projects/jquery/7`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 514 vs reference 509 (+5 bytes)
 
 ```js
@@ -1436,6 +1482,7 @@ export const obj = { proxy: function(fn, context) {
 
 ## `swc/projects/mootools/6`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 502 vs reference 497 (+5 bytes)
 
 ```js
@@ -1482,6 +1529,7 @@ export const obj = { removeEvents: function(events) {
 
 ## `swc/issues/11108`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 68 vs reference 62 (+6 bytes)
 
 ```js
@@ -1504,6 +1552,7 @@ this.test = function(a) {
 
 ## `swc/issues/11512-exhaustive/fn-multi-use-default-unused`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
 - size: oxc 123 vs reference 117 (+6 bytes)
 
 ```js
@@ -1531,6 +1580,7 @@ export function fnMultiUseDefaultUnused(value) {
 
 ## `swc/issues/11684/scopes-and-mutations`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 1399 vs reference 1393 (+6 bytes)
 
 ```js
@@ -1648,6 +1698,7 @@ out.constructAfterEval = constructAfterEval;
 
 ## `swc/issues/6407/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 342 vs reference 336 (+6 bytes)
 
 ```js
@@ -1692,6 +1743,7 @@ console.log(Deno.encode());
 
 ## `swc/issues/firebase/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 432 vs reference 426 (+6 bytes)
 
 ```js
@@ -1736,6 +1788,7 @@ export function treeSubTree(tree, pathObj) {
 
 ## `swc/issues/non-finite-conditional-arithmetic`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 371 vs reference 365 (+6 bytes)
 
 ```js
@@ -1782,6 +1835,7 @@ test(globalThis.falseValue);
 
 ## `swc/projects/yui/10`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 157 vs reference 151 (+6 bytes)
 
 ```js
@@ -1810,6 +1864,7 @@ export var _path = function(dir, file, type, nomin) {
 
 ## `swc/issues/12118`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 42 vs reference 35 (+7 bytes)
 
 ```js
@@ -1828,6 +1883,7 @@ for (let a of [0]) a = 1, console.log(a);
 
 ## `swc/issues/11089`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 66 vs reference 58 (+8 bytes)
 
 ```js
@@ -1851,6 +1907,7 @@ fn('Hi');
 
 ## `swc/issues/11684/preserved`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 1298 vs reference 1290 (+8 bytes)
 
 ```js
@@ -1952,6 +2009,7 @@ out.unknown = new Constructor(1, 2, 3);
 
 ## `swc/issues/11829`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 200 vs reference 192 (+8 bytes)
 
 ```js
@@ -1993,6 +2051,7 @@ run({ cb(value) {
 
 ## `swc/issues/2319/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 204 vs reference 196 (+8 bytes)
 
 ```js
@@ -2030,6 +2089,7 @@ module.exports = foo;
 
 ## `swc/issues/4234`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 80 vs reference 72 (+8 bytes)
 
 ```js
@@ -2054,6 +2114,7 @@ bar(new RegExp('a', 'u'));
 
 ## `swc/issues/6463`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 75 vs reference 67 (+8 bytes)
 
 ```js
@@ -2082,6 +2143,7 @@ foo_1();
 
 ## `swc/issues/8704`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 53 vs reference 45 (+8 bytes)
 
 ```js
@@ -2104,6 +2166,7 @@ console.log({ toString() {
 
 ## `swc/pr/11446`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 65 vs reference 57 (+8 bytes)
 
 ```js
@@ -2129,6 +2192,7 @@ expect(f(3)).toBe(3);
 
 ## `swc/projects/mootools/7`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 586 vs reference 578 (+8 bytes)
 
 ```js
@@ -2189,6 +2253,7 @@ export const exported = { toQueryString: function(object, base) {
 
 ## `swc/projects/underscore/22`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 469 vs reference 461 (+8 bytes)
 
 ```js
@@ -2232,6 +2297,7 @@ _.indexOf = function(array, item, isSorted) {
 
 ## `swc/projects/underscore/6`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 469 vs reference 461 (+8 bytes)
 
 ```js
@@ -2275,6 +2341,7 @@ _.indexOf = function(array, item, isSorted) {
 
 ## `swc/issues/5864`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 27 vs reference 18 (+9 bytes)
 
 ```js
@@ -2293,6 +2360,7 @@ foo = { v: 0 .toFixed() };
 
 ## `swc/issues/spread-primitives`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 462 vs reference 453 (+9 bytes)
 
 ```js
@@ -2371,6 +2439,7 @@ console.log([1, ...[2, 3]]);
 
 ## `swc/projects/underscore/18`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 344 vs reference 335 (+9 bytes)
 
 ```js
@@ -2403,6 +2472,7 @@ _.sortedIndex = function(array, obj, iterator, context) {
 
 ## `swc/projects/underscore/3`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 492 vs reference 483 (+9 bytes)
 
 ```js
@@ -2448,6 +2518,7 @@ _.max = function(obj, iterator, context) {
 
 ## `swc/issues/10816`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 174 vs reference 164 (+10 bytes)
 
 ```js
@@ -2495,6 +2566,7 @@ fn();
 
 ## `swc/issues/10938`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 37 vs reference 27 (+10 bytes)
 
 ```js
@@ -2515,6 +2587,7 @@ console.log(Number.NaN);
 
 ## `swc/issues/11684/bindings`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 715 vs reference 705 (+10 bytes)
 
 ```js
@@ -2583,6 +2656,7 @@ out.assignedClass = new AssignedClass(1, 2, 3, 4);
 
 ## `swc/issues/9186/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 164 vs reference 154 (+10 bytes)
 
 ```js
@@ -2629,6 +2703,7 @@ console.log(o.foo().length);
 
 ## `swc/issues/9610-nested-defaults`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `pure getters`, `3 iterations`
 - size: oxc 556 vs reference 546 (+10 bytes)
 
 ```js
@@ -2672,6 +2747,7 @@ export function example() {
 
 ## `swc/issues/10721`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 109 vs reference 98 (+11 bytes)
 
 ```js
@@ -2696,6 +2772,7 @@ export { b11 };
 
 ## `swc/issues/5680`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
 - size: oxc 41 vs reference 30 (+11 bytes)
 
 ```js
@@ -2714,6 +2791,7 @@ const totalCount = (a ? a.length : 0) + (b ? b.length : 0);
 
 ## `swc/issues/6049/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 19 vs reference 8 (+11 bytes)
 
 ```js
@@ -2734,6 +2812,7 @@ g(a);
 
 ## `swc/issues/drop-console-es2015`
 
+- tags: `drop console`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 216 vs reference 205 (+11 bytes)
 
 ```js
@@ -2775,6 +2854,7 @@ process.stdout.write(threw + '\n');
 
 ## `swc/issues/11684/identifier-reduce-vars-only`
 
+- tags: `drop debugger`, `join vars`, `sequences`
 - size: oxc 267 vs reference 255 (+12 bytes)
 
 ```js
@@ -2816,6 +2896,7 @@ out.classCtor = new ClassCtor(1, 2, 3);
 
 ## `swc/issues/11684/identifier-unused-only`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 267 vs reference 255 (+12 bytes)
 
 ```js
@@ -2857,6 +2938,7 @@ out.classCtor = new ClassCtor(1, 2, 3);
 
 ## `swc/member_expr/undetermined_prop`
 
+- tags: `drop debugger`, `join vars`, `sequences`
 - size: oxc 28 vs reference 16 (+12 bytes)
 
 ```js
@@ -2875,6 +2957,7 @@ out.classCtor = new ClassCtor(1, 2, 3);
 
 ## `swc/next/36127/2/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 436 vs reference 424 (+12 bytes)
 
 ```js
@@ -2929,6 +3012,7 @@ export function regexCheck(regex) {
 
 ## `swc/next/36127/2/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 749 vs reference 737 (+12 bytes)
 
 ```js
@@ -2994,6 +3078,7 @@ console.log(regexCheck('Foo'));
 
 ## `swc/issues/10281`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 177 vs reference 164 (+13 bytes)
 
 ```js
@@ -3031,6 +3116,7 @@ export function bitwise3(a, b) {
 
 ## `swc/issues/10328`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 158 vs reference 145 (+13 bytes)
 
 ```js
@@ -3072,6 +3158,7 @@ g('b');
 
 ## `swc/issues/5343`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 71 vs reference 58 (+13 bytes)
 
 ```js
@@ -3094,6 +3181,7 @@ for ({ x: 0 }.x of iter()) {
 
 ## `swc/issues/9610-destructuring`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `pure getters`, `3 iterations`
 - size: oxc 643 vs reference 630 (+13 bytes)
 
 ```js
@@ -3150,6 +3238,7 @@ export function example() {
 
 ## `swc/pr/7856/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 40 vs reference 27 (+13 bytes)
 
 ```js
@@ -3172,6 +3261,7 @@ b.c = c;
 
 ## `swc/projects/wmr/archive-1/chunks/index.5a544c41`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 247 vs reference 234 (+13 bytes)
 
 ```js
@@ -3202,6 +3292,7 @@ export default Files;
 
 ## `swc/projects/yui/8`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 322 vs reference 309 (+13 bytes)
 
 ```js
@@ -3243,6 +3334,7 @@ export const E = { _onProgress: function(e) {
 
 ## `swc/simple/switch/const/call`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 46 vs reference 33 (+13 bytes)
 
 ```js
@@ -3297,6 +3389,7 @@ console.log(x);
 
 ## `swc/issues/6422/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 323 vs reference 309 (+14 bytes)
 
 ```js
@@ -3345,6 +3438,7 @@ assert.strictEqual(setter_effect, 'PASS');
 
 ## `swc/next/feedback-1/reduced/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 332 vs reference 318 (+14 bytes)
 
 ```js
@@ -3377,6 +3471,7 @@ export function getInsertStringLength(a, e, t, i) {
 
 ## `swc/projects/react/5`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 340 vs reference 326 (+14 bytes)
 
 ```js
@@ -3419,6 +3514,7 @@ Component.prototype.isReactComponent = {};
 
 ## `swc/projects/yui/14`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 450 vs reference 436 (+14 bytes)
 
 ```js
@@ -3461,6 +3557,7 @@ YArray.indexOf = Lang._isNative(Native.indexOf) ? function(array, value, from) {
 
 ## `swc/issues/11684`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 86 vs reference 71 (+15 bytes)
 
 ```js
@@ -3490,6 +3587,7 @@ n = new A(1, 2, 3);
 
 ## `swc/issues/12128`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 184 vs reference 169 (+15 bytes)
 
 ```js
@@ -3523,6 +3621,7 @@ console.log(callback());
 
 ## `swc/issues/9610-side-effects`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 681 vs reference 666 (+15 bytes)
 
 ```js
@@ -3568,6 +3667,7 @@ export function example() {
 
 ## `swc/issues/11684/reduce-vars-only`
 
+- tags: `drop debugger`, `join vars`, `sequences`
 - size: oxc 144 vs reference 128 (+16 bytes)
 
 ```js
@@ -3602,6 +3702,7 @@ out.class = new class {
 
 ## `swc/issues/11684/unused-only`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 144 vs reference 128 (+16 bytes)
 
 ```js
@@ -3636,6 +3737,7 @@ out.class = new class {
 
 ## `swc/issues/2926/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 201 vs reference 185 (+16 bytes)
 
 ```js
@@ -3667,6 +3769,7 @@ export var webpackJsonpCallback = function(parentChunkLoadingFunction, data) {
 
 ## `swc/issues/9030`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 294 vs reference 278 (+16 bytes)
 
 ```js
@@ -3711,6 +3814,7 @@ export default (name) => {
 
 ## `swc/issues/11368`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 728 vs reference 711 (+17 bytes)
 
 ```js
@@ -3774,6 +3878,7 @@ console.log(result === 'A' ? 'OK: got A' : 'BUG: expected A, got ' + result);
 
 ## `swc/issues/11970`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 135 vs reference 118 (+17 bytes)
 
 ```js
@@ -3807,6 +3912,7 @@ export async function classify(code) {
 
 ## `swc/issues/8465`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 70 vs reference 53 (+17 bytes)
 
 ```js
@@ -3832,6 +3938,7 @@ export default Infinity;
 
 ## `swc/member_expr/seq`
 
+- tags: `drop debugger`, `join vars`, `sequences`
 - size: oxc 63 vs reference 46 (+17 bytes)
 
 ```js
@@ -3851,6 +3958,7 @@ console.log((f(), { b: 2 }).a);
 
 ## `swc/issues/5846`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 686 vs reference 668 (+18 bytes)
 
 ```js
@@ -3925,6 +4033,7 @@ processNode(null);
 
 ## `swc/issues/6864`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 536 vs reference 518 (+18 bytes)
 
 ```js
@@ -3978,6 +4087,7 @@ export function removeFromMatrix(matrix, id) {
 
 ## `swc/issues/arguments-canonical-index`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 189 vs reference 170 (+19 bytes)
 
 ```js
@@ -4017,6 +4127,7 @@ export function removeFromMatrix(matrix, id) {
 
 ## `swc/issues/11257`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 125 vs reference 105 (+20 bytes)
 
 ```js
@@ -4043,6 +4154,7 @@ console.log(v1, v2, v3, v4);
 
 ## `swc/issues/9176`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 54 vs reference 33 (+21 bytes)
 
 ```js
@@ -4072,6 +4184,7 @@ const k = (function() {
 
 ## `swc/issues/9823/3`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 42 vs reference 21 (+21 bytes)
 
 ```js
@@ -4095,6 +4208,7 @@ const k = (function() {
 
 ## `swc/projects/next/extra/if_return/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 402 vs reference 381 (+21 bytes)
 
 ```js
@@ -4137,6 +4251,7 @@ export function foo() {
 
 ## `swc/reduced/3`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 218 vs reference 197 (+21 bytes)
 
 ```js
@@ -4163,6 +4278,7 @@ if (element.injector()) {
 
 ## `swc/issues/11684/class-expression`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 352 vs reference 330 (+22 bytes)
 
 ```js
@@ -4218,6 +4334,7 @@ out.derived = new class extends Base {
 
 ## `swc/issues/11684/function-expression`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 218 vs reference 196 (+22 bytes)
 
 ```js
@@ -4253,6 +4370,7 @@ out.destructured = new (function({ value }) {
 
 ## `swc/issues/4386/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 374 vs reference 352 (+22 bytes)
 
 ```js
@@ -4304,6 +4422,7 @@ var application;
 
 ## `swc/issues/6957/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 111 vs reference 89 (+22 bytes)
 
 ```js
@@ -4324,6 +4443,7 @@ assertEquals('-1', (-.5).toFixed(0), '(-0.5).toFixed(0)');
 
 ## `swc/issues/9610`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 231 vs reference 209 (+22 bytes)
 
 ```js
@@ -4371,6 +4491,7 @@ export function example() {
 
 ## `swc/issues/next-97517`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 243 vs reference 221 (+22 bytes)
 
 ```js
@@ -4417,6 +4538,7 @@ module.exports = [50708, (context) => {
 
 ## `swc/issues/react-countup/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 653 vs reference 631 (+22 bytes)
 
 ```js
@@ -4465,6 +4587,7 @@ export function formatNumber(t) {
 
 ## `swc/projects/wmr/archive-1/chunks/class-fields.43d5f69c`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 343 vs reference 320 (+23 bytes)
 
 ```js
@@ -4503,6 +4626,7 @@ export default ClassFields;
 
 ## `swc/issues/8737`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 90 vs reference 66 (+24 bytes)
 
 ```js
@@ -4533,6 +4657,7 @@ d(() => {
 
 ## `swc/issues/8737/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 133 vs reference 109 (+24 bytes)
 
 ```js
@@ -4564,6 +4689,7 @@ d(function() {
 
 ## `swc/issues/8886`
 
+- tags: `mangle`, `drop debugger`, `join vars`, `sequences`, `remove unused`, `99 iterations`
 - size: oxc 70 vs reference 46 (+24 bytes)
 
 ```js
@@ -4586,6 +4712,7 @@ eval(foo);
 
 ## `swc/issues/react-instancesearch/001`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 646 vs reference 622 (+24 bytes)
 
 ```js
@@ -4651,6 +4778,7 @@ export default function createWidgetsManager(onWidgetsUpdate) {
 
 ## `swc/issues/11684/function-decl`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 501 vs reference 476 (+25 bytes)
 
 ```js
@@ -4705,6 +4833,7 @@ out.default = new Default(undefined, 2, 3, 4);
 
 ## `swc/issues/7847`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 336 vs reference 311 (+25 bytes)
 
 ```js
@@ -4743,6 +4872,7 @@ if (g()) {
 
 ## `swc/pr/6169/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 49 vs reference 24 (+25 bytes)
 
 ```js
@@ -4763,6 +4893,7 @@ value.toUpperCase();
 
 ## `swc/projects/wmr/archive-1/chunks/alias-outside.6e8773c7`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 180 vs reference 155 (+25 bytes)
 
 ```js
@@ -4792,6 +4923,7 @@ export default AliasOutside;
 
 ## `swc/issues/4412`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 121 vs reference 95 (+26 bytes)
 
 ```js
@@ -4829,6 +4961,7 @@ export function foo(arg) {
 
 ## `swc/issues/7331/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
 - size: oxc 103 vs reference 77 (+26 bytes)
 
 ```js
@@ -4861,6 +4994,7 @@ export default function() {
 
 ## `swc/issues/8718/3`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 88 vs reference 62 (+26 bytes)
 
 ```js
@@ -4889,6 +5023,7 @@ console.log((a += 1, a += 2));
 
 ## `swc/issues/8718/5`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 42 vs reference 16 (+26 bytes)
 
 ```js
@@ -4913,6 +5048,7 @@ console.log((a += 1, a += 2));
 
 ## `swc/issues/8718/6`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 42 vs reference 16 (+26 bytes)
 
 ```js
@@ -4941,6 +5077,7 @@ console.log((a += 1, a += 2));
 
 ## `swc/issues/8919`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 61 vs reference 35 (+26 bytes)
 
 ```js
@@ -4971,6 +5108,7 @@ console.log(k);
 
 ## `swc/issues/cycle-1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 140 vs reference 114 (+26 bytes)
 
 ```js
@@ -5032,6 +5170,7 @@ console.log(k);
 
 ## `swc/issues/cycle-2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 121 vs reference 95 (+26 bytes)
 
 ```js
@@ -5087,6 +5226,7 @@ console.log(k);
 
 ## `swc/issues/react/hooks/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 444 vs reference 418 (+26 bytes)
 
 ```js
@@ -5124,6 +5264,7 @@ export default function MyComp() {
 
 ## `swc/issues/react/hooks/5`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 466 vs reference 440 (+26 bytes)
 
 ```js
@@ -5199,6 +5340,7 @@ export function HeaderCTA() {
 
 ## `swc/simple/inline/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 71 vs reference 45 (+26 bytes)
 
 ```js
@@ -5231,6 +5373,7 @@ function h() {
 
 ## `swc/issues/11684/identifier-side-effects`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 588 vs reference 561 (+27 bytes)
 
 ```js
@@ -5280,6 +5423,7 @@ out.conditional = new Zero(1, condition ? effect('yes') : 2, 3);
 
 ## `swc/issues/7500`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 169 vs reference 142 (+27 bytes)
 
 ```js
@@ -5312,6 +5456,7 @@ module.exports = function() {
 
 ## `swc/simple/switch/merge/simple`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 113 vs reference 86 (+27 bytes)
 
 ```js
@@ -5347,6 +5492,7 @@ switch (a) {
 
 ## `swc/issues/8841`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 55 vs reference 27 (+28 bytes)
 
 ```js
@@ -5372,6 +5518,7 @@ export const k = (() => {
 
 ## `swc/member_expr/object`
 
+- tags: `drop debugger`, `join vars`, `sequences`
 - size: oxc 268 vs reference 240 (+28 bytes)
 
 ```js
@@ -5409,6 +5556,7 @@ export const k = (() => {
 
 ## `swc/projects/react/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 410 vs reference 382 (+28 bytes)
 
 ```js
@@ -5463,6 +5611,7 @@ export const k = (() => {
 
 ## `swc/projects/wmr/archive-1/chunks/index.bf24abaa`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 452 vs reference 424 (+28 bytes)
 
 ```js
@@ -5519,6 +5668,7 @@ export { Environment };
 
 ## `swc/simple/if/var`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 70 vs reference 42 (+28 bytes)
 
 ```js
@@ -5550,6 +5700,7 @@ if (true) {
 
 ## `swc/issues/5693`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 175 vs reference 146 (+29 bytes)
 
 ```js
@@ -5575,6 +5726,7 @@ API.prototype._getIngestEndpoint = function(target) {
 
 ## `swc/issues/6492/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 65 vs reference 36 (+29 bytes)
 
 ```js
@@ -5596,6 +5748,7 @@ console.log('val', val);
 
 ## `swc/issues/7739/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 230 vs reference 201 (+29 bytes)
 
 ```js
@@ -5627,6 +5780,7 @@ console.log(formatter.format(amount));
 
 ## `swc/simple/inline/3`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 102 vs reference 73 (+29 bytes)
 
 ```js
@@ -5662,6 +5816,7 @@ foo(1);
 
 ## `swc/issues/10876/3`
 
+- tags: `join vars`, `sequences`, `2 iterations`
 - size: oxc 211 vs reference 181 (+30 bytes)
 
 ```js
@@ -5708,6 +5863,7 @@ export {};
 
 ## `swc/issues/6492/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 54 vs reference 24 (+30 bytes)
 
 ```js
@@ -5729,6 +5885,7 @@ console.log('val', val);
 
 ## `swc/issues/6492/3`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 66 vs reference 36 (+30 bytes)
 
 ```js
@@ -5750,6 +5907,7 @@ console.log('val', val);
 
 ## `swc/issues/6492/4`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 66 vs reference 36 (+30 bytes)
 
 ```js
@@ -5771,6 +5929,7 @@ console.log('val', val);
 
 ## `swc/issues/9468`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 213 vs reference 183 (+30 bytes)
 
 ```js
@@ -5806,6 +5965,7 @@ console.log(func1(7, getX('data-y')));
 
 ## `swc/projects/yui/9`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 582 vs reference 552 (+30 bytes)
 
 ```js
@@ -5861,6 +6021,7 @@ export const E = { _addLangPack: function(lang, m, packName) {
 
 ## `swc/issues/11684/side-effects`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 452 vs reference 421 (+31 bytes)
 
 ```js
@@ -5910,6 +6071,7 @@ out.conditional = new class {
 
 ## `swc/issues/11983`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 98 vs reference 67 (+31 bytes)
 
 ```js
@@ -5943,6 +6105,7 @@ export function dyn(w) {
 
 ## `swc/issues/6279/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 95 vs reference 64 (+31 bytes)
 
 ```js
@@ -5972,6 +6135,7 @@ run('abcda', /a/g);
 
 ## `swc/issues/8718/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 50 vs reference 19 (+31 bytes)
 
 ```js
@@ -5993,6 +6157,7 @@ console.log((a += 1, a += 2));
 
 ## `swc/check/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 305 vs reference 273 (+32 bytes)
 
 ```js
@@ -6037,6 +6202,7 @@ function internal() {
 
 ## `swc/issues/11320`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 306 vs reference 274 (+32 bytes)
 
 ```js
@@ -6084,6 +6250,7 @@ new class {
 
 ## `swc/issues/9453`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 146 vs reference 114 (+32 bytes)
 
 ```js
@@ -6112,6 +6279,7 @@ console.log(typeof class {});
 
 ## `swc/issues/9504`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 825 vs reference 793 (+32 bytes)
 
 ```js
@@ -6189,6 +6357,7 @@ export function panUpdate(e) {
 
 ## `swc/member_expr/string`
 
+- tags: `drop debugger`, `join vars`, `sequences`
 - size: oxc 861 vs reference 829 (+32 bytes)
 
 ```js
@@ -6277,6 +6446,7 @@ export function panUpdate(e) {
 
 ## `swc/issues/11512-exhaustive/fn-multi-use-default-side-effect`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
 - size: oxc 201 vs reference 167 (+34 bytes)
 
 ```js
@@ -6312,6 +6482,7 @@ export function fnMultiUseDefaultSideEffect(value) {
 
 ## `swc/issues/object-accessor-function-boundary`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 207 vs reference 173 (+34 bytes)
 
 ```js
@@ -6361,6 +6532,7 @@ object.value = undefined;
 
 ## `swc/issues/5280`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 87 vs reference 52 (+35 bytes)
 
 ```js
@@ -6389,6 +6561,7 @@ export function source() {
 
 ## `swc/projects/jquery/3`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 572 vs reference 537 (+35 bytes)
 
 ```js
@@ -6438,6 +6611,7 @@ export const obj = { ready: function(wait) {
 
 ## `swc/issues/10054/for`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 128 vs reference 92 (+36 bytes)
 
 ```js
@@ -6470,6 +6644,7 @@ window.a = [function() {
 
 ## `swc/issues/10054/if`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 131 vs reference 95 (+36 bytes)
 
 ```js
@@ -6502,6 +6677,7 @@ window.a = [function() {
 
 ## `swc/issues/11512-exhaustive/iife-default-side-effect`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
 - size: oxc 163 vs reference 127 (+36 bytes)
 
 ```js
@@ -6538,6 +6714,7 @@ export function iifeDefaultSideEffect(value) {
 
 ## `swc/issues/10849`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 55 vs reference 17 (+38 bytes)
 
 ```js
@@ -6561,6 +6738,7 @@ export function iifeDefaultSideEffect(value) {
 
 ## `swc/issues/11684/constructor-scopes`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 905 vs reference 867 (+38 bytes)
 
 ```js
@@ -6645,6 +6823,7 @@ out.structuredParameters = new StructuredParameters({ value: 1 }, undefined, 3, 
 
 ## `swc/issues/9148`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 237 vs reference 199 (+38 bytes)
 
 ```js
@@ -6703,6 +6882,7 @@ export default foo();
 
 ## `swc/projects/jquery/6`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 323 vs reference 285 (+38 bytes)
 
 ```js
@@ -6745,6 +6925,7 @@ export const obj = { inArray: function(elem, arr, i) {
 
 ## `swc/issues/11512-exhaustive/iife-anon-default-unused`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
 - size: oxc 103 vs reference 64 (+39 bytes)
 
 ```js
@@ -6771,6 +6952,7 @@ export function iifeAnonDefaultUnused(value) {
 
 ## `swc/issues/11512-exhaustive/iife-anon-arg-unused`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
 - size: oxc 102 vs reference 60 (+42 bytes)
 
 ```js
@@ -6797,6 +6979,7 @@ export function iifeAnonArgUnused(value) {
 
 ## `swc/issues/9610-mixed-params`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 878 vs reference 835 (+43 bytes)
 
 ```js
@@ -6868,6 +7051,7 @@ export function example() {
 
 ## `swc/pr/7690`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 87 vs reference 44 (+43 bytes)
 
 ```js
@@ -6893,6 +7077,7 @@ export function foo() {
 
 ## `swc/issues/8806`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 102 vs reference 57 (+45 bytes)
 
 ```js
@@ -6921,6 +7106,7 @@ logTheNine();
 
 ## `swc/next/swc-4559`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 456 vs reference 411 (+45 bytes)
 
 ```js
@@ -6957,6 +7143,7 @@ logTheNine();
 
 ## `swc/issues/11684/class-decl`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 197 vs reference 150 (+47 bytes)
 
 ```js
@@ -6991,6 +7178,7 @@ console.log(new C(1, 2, 3), new C(4, 5, 6));
 
 ## `swc/issues/11730`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 97 vs reference 50 (+47 bytes)
 
 ```js
@@ -7023,6 +7211,7 @@ someFunction(function f() {
 
 ## `swc/issues/spread-primitives-void-call`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 215 vs reference 168 (+47 bytes)
 
 ```js
@@ -7057,6 +7246,7 @@ console.log({
 
 ## `swc/non-finite-number-literals`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 365 vs reference 318 (+47 bytes)
 
 ```js
@@ -7126,6 +7316,7 @@ switch (1 / 0) {
 
 ## `swc/issues/5910/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 170 vs reference 122 (+48 bytes)
 
 ```js
@@ -7161,6 +7352,7 @@ export function fn1() {
 
 ## `swc/issues/pure-callee-call`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 258 vs reference 210 (+48 bytes)
 
 ```js
@@ -7215,6 +7407,7 @@ console.log(count);
 
 ## `swc/issues/10532`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 212 vs reference 162 (+50 bytes)
 
 ```js
@@ -7261,6 +7454,7 @@ console.log(count);
 
 ## `swc/issues/10885`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 404 vs reference 354 (+50 bytes)
 
 ```js
@@ -7318,6 +7512,7 @@ export default function useMeow() {
 
 ## `swc/issues/7984`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 222 vs reference 172 (+50 bytes)
 
 ```js
@@ -7362,6 +7557,7 @@ getInitialProps = (code) => {
 
 ## `swc/issues/8718/4`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 142 vs reference 92 (+50 bytes)
 
 ```js
@@ -7399,6 +7595,7 @@ console.log((a += 1, a += 2));
 
 ## `swc/projects/wmr/archive-1/chunks/index.ddc4110d`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 397 vs reference 346 (+51 bytes)
 
 ```js
@@ -7438,6 +7635,7 @@ export default About;
 
 ## `swc/issues/10981`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 144 vs reference 91 (+53 bytes)
 
 ```js
@@ -7475,6 +7673,7 @@ class D {
 
 ## `swc/issues/9922/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 55 vs reference 0 (+55 bytes)
 
 ```js
@@ -7500,6 +7699,7 @@ switch (0) {
 
 ## `swc/issues/6279/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 120 vs reference 64 (+56 bytes)
 
 ```js
@@ -7531,6 +7731,7 @@ run('abcda', r);
 
 ## `swc/issues/10876/2`
 
+- tags: `join vars`, `sequences`, `2 iterations`
 - size: oxc 187 vs reference 130 (+57 bytes)
 
 ```js
@@ -7571,6 +7772,7 @@ export {};
 
 ## `swc/issues/7575/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 128 vs reference 71 (+57 bytes)
 
 ```js
@@ -7607,6 +7809,7 @@ export const environment = environmentResolver();
 
 ## `swc/issues/11103`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 277 vs reference 219 (+58 bytes)
 
 ```js
@@ -7648,6 +7851,7 @@ export default function Home() {
 
 ## `swc/projects/jquery/.19`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 542 vs reference 484 (+58 bytes)
 
 ```js
@@ -7699,6 +7903,7 @@ createStandardXHR;
 
 ## `swc/issues/7402`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 335 vs reference 274 (+61 bytes)
 
 ```js
@@ -7766,6 +7971,7 @@ myFunc(out);
 
 ## `swc/issues/2028`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 148 vs reference 86 (+62 bytes)
 
 ```js
@@ -7801,6 +8007,7 @@ module.exports = isKey;
 
 ## `swc/issues/9785`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 196 vs reference 134 (+62 bytes)
 
 ```js
@@ -7845,6 +8052,7 @@ dist_index_es_P('aa');
 
 ## `swc/next/joda`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 382 vs reference 320 (+62 bytes)
 
 ```js
@@ -7892,6 +8100,7 @@ dist_index_es_P('aa');
 
 ## `swc/projects/mootools/8`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 1096 vs reference 1034 (+62 bytes)
 
 ```js
@@ -7974,6 +8183,7 @@ if (Browser.name == 'unknown') {
 
 ## `swc/issues/10178`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 90 vs reference 27 (+63 bytes)
 
 ```js
@@ -7995,6 +8205,7 @@ strNumTuple[0], strNumTuple['0'];
 
 ## `swc/issues/10425`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 85 vs reference 22 (+63 bytes)
 
 ```js
@@ -8027,6 +8238,7 @@ class Ban {
 
 ## `swc/issues/9459`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 102 vs reference 39 (+63 bytes)
 
 ```js
@@ -8050,6 +8262,7 @@ export default function Component() {
 
 ## `swc/issues/7287/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 106 vs reference 42 (+64 bytes)
 
 ```js
@@ -8081,6 +8294,7 @@ export default function Component() {
 
 ## `swc/simple/inline/6`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 415 vs reference 348 (+67 bytes)
 
 ```js
@@ -8123,6 +8337,7 @@ export function endOf(units) {
 
 ## `swc/projects/wmr/archive-1/chunks/prerender.93c6f601`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 685 vs reference 615 (+70 bytes)
 
 ```js
@@ -8182,6 +8397,7 @@ export { prerender };
 
 ## `swc/issues/8173`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 1236 vs reference 1165 (+71 bytes)
 
 ```js
@@ -8288,6 +8504,7 @@ badFunction();
 
 ## `swc/projects/jquery/5`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 533 vs reference 462 (+71 bytes)
 
 ```js
@@ -8354,6 +8571,7 @@ export const obj = { each: function(obj, callback, args) {
 
 ## `swc/simple/switch/const/order`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 120 vs reference 49 (+71 bytes)
 
 ```js
@@ -8388,6 +8606,7 @@ switch (1) {
 
 ## `swc/issues/11755`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 280 vs reference 207 (+73 bytes)
 
 ```js
@@ -8431,6 +8650,7 @@ f();
 
 ## `swc/issues/10746`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 165 vs reference 91 (+74 bytes)
 
 ```js
@@ -8453,6 +8673,7 @@ export const unknownError = ErrorResponse(520, 'Unknown error.');
 
 ## `swc/issues/7331/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 103 vs reference 29 (+74 bytes)
 
 ```js
@@ -8483,6 +8704,7 @@ export default function() {
 
 ## `swc/issues/9610-arrow-functions`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 244 vs reference 170 (+74 bytes)
 
 ```js
@@ -8513,6 +8735,7 @@ export const example = () => foo(1) + bar(2) + baz(3) + qux(4);
 
 ## `swc/issues/10936`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 1038 vs reference 963 (+75 bytes)
 
 ```js
@@ -8637,6 +8860,7 @@ export const test11 = [
 
 ## `swc/issues/8271`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 396 vs reference 321 (+75 bytes)
 
 ```js
@@ -8701,6 +8925,7 @@ console.log(new $eb2fd35624c84372$var$A().tagName);
 
 ## `swc/issues/11321`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 769 vs reference 693 (+76 bytes)
 
 ```js
@@ -8765,6 +8990,7 @@ console.log(a, b, c);
 
 ## `swc/issues/2807/1`
 
+- tags: `drop console`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 107 vs reference 31 (+76 bytes)
 
 ```js
@@ -8791,6 +9017,7 @@ export default function A() {
 
 ## `swc/issues/6957/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 444 vs reference 368 (+76 bytes)
 
 ```js
@@ -8849,6 +9076,7 @@ export function foo() {
 
 ## `swc/issues/drop-console-computed`
 
+- tags: `drop console`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 224 vs reference 147 (+77 bytes)
 
 ```js
@@ -8878,6 +9106,7 @@ process.stdout.write(typeof r + '\n');
 
 ## `swc/projects/underscore/17`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 655 vs reference 577 (+78 bytes)
 
 ```js
@@ -8937,6 +9166,7 @@ export function foo() {
 
 ## `swc/issues/11512-simple`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `7 iterations`
 - size: oxc 277 vs reference 195 (+82 bytes)
 
 ```js
@@ -8969,6 +9199,7 @@ export function test() {
 
 ## `swc/member_expr/object_side_effects`
 
+- tags: `drop debugger`, `join vars`, `sequences`
 - size: oxc 195 vs reference 113 (+82 bytes)
 
 ```js
@@ -9020,6 +9251,7 @@ f({
 
 ## `swc/issues/11303`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 123 vs reference 37 (+86 bytes)
 
 ```js
@@ -9053,6 +9285,7 @@ const t = (a) => ((b) => {
 
 ## `swc/issues/10630`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 152 vs reference 62 (+90 bytes)
 
 ```js
@@ -9085,6 +9318,7 @@ var y = constants.second;
 
 ## `swc/issues/9922/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 96 vs reference 5 (+91 bytes)
 
 ```js
@@ -9117,6 +9351,7 @@ switch (g()) {
 
 ## `swc/issues/7770/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 240 vs reference 148 (+92 bytes)
 
 ```js
@@ -9171,6 +9406,7 @@ exports.MainCSS = `
 
 ## `swc/issues/11007`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 177 vs reference 84 (+93 bytes)
 
 ```js
@@ -9205,6 +9441,7 @@ profile('trace1', () => {
 
 ## `swc/issues/11083`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 297 vs reference 202 (+95 bytes)
 
 ```js
@@ -9261,6 +9498,7 @@ profile('trace1', () => {
 
 ## `swc/simple/inline/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 112 vs reference 17 (+95 bytes)
 
 ```js
@@ -9286,6 +9524,7 @@ console.log(mod(A, A + B));
 
 ## `swc/issues/7784/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 113 vs reference 16 (+97 bytes)
 
 ```js
@@ -9322,6 +9561,7 @@ console.log(a);
 
 ## `swc/issues/7784/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 113 vs reference 16 (+97 bytes)
 
 ```js
@@ -9358,6 +9598,7 @@ console.log(a);
 
 ## `swc/member_expr/array_side_effects`
 
+- tags: `drop debugger`, `join vars`, `sequences`
 - size: oxc 328 vs reference 227 (+101 bytes)
 
 ```js
@@ -9465,6 +9706,7 @@ f([
 
 ## `swc/simple/inline/4`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 273 vs reference 171 (+102 bytes)
 
 ```js
@@ -9508,6 +9750,7 @@ const A = 'A', B = 'B', C = 'C';
 
 ## `swc/issues/11977`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 421 vs reference 317 (+104 bytes)
 
 ```js
@@ -9557,6 +9800,7 @@ var x = class extends d {};
 
 ## `swc/issues/6730`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`
 - size: oxc 806 vs reference 700 (+106 bytes)
 
 ```js
@@ -9676,6 +9920,7 @@ export const styleLoader = () => {
 
 ## `swc/issues/7241`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 141 vs reference 26 (+115 bytes)
 
 ```js
@@ -9715,6 +9960,7 @@ export const styleLoader = () => {
 
 ## `swc/issues/11871`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 740 vs reference 620 (+120 bytes)
 
 ```js
@@ -9765,6 +10011,7 @@ console.log(window.x.f(0, 0));
 
 ## `swc/issues/non-finite-number-method-call`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 496 vs reference 375 (+121 bytes)
 
 ```js
@@ -9809,6 +10056,7 @@ console.log(NaN.toPrecision(-1));
 
 ## `swc/issues/10041`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 316 vs reference 192 (+124 bytes)
 
 ```js
@@ -9864,6 +10112,7 @@ console.log(NaN.toPrecision(-1));
 
 ## `swc/issues/12177`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 584 vs reference 458 (+126 bytes)
 
 ```js
@@ -9948,6 +10197,7 @@ console.log(effects.join(','));
 
 ## `swc/issues/6751/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 307 vs reference 174 (+133 bytes)
 
 ```js
@@ -10001,6 +10251,7 @@ try {
 
 ## `swc/issues/9757`
 
+- tags: `drop console`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 165 vs reference 31 (+134 bytes)
 
 ```js
@@ -10027,6 +10278,7 @@ export default function A() {
 
 ## `swc/issues/10876/1`
 
+- tags: `join vars`, `sequences`, `2 iterations`
 - size: oxc 624 vs reference 477 (+147 bytes)
 
 ```js
@@ -10112,6 +10364,7 @@ export {};
 
 ## `swc/no-side-effect`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 151 vs reference 0 (+151 bytes)
 
 ```js
@@ -10198,6 +10451,7 @@ fnD();
 
 ## `swc/issues/7004`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 283 vs reference 117 (+166 bytes)
 
 ```js
@@ -10242,6 +10496,7 @@ printDescription();
 
 ## `swc/pr/11814_class_effect_guards`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 537 vs reference 370 (+167 bytes)
 
 ```js
@@ -10321,6 +10576,7 @@ class KeepNonExpressionBlock {
 
 ## `swc/issues/8284`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 828 vs reference 657 (+171 bytes)
 
 ```js
@@ -10383,6 +10639,7 @@ class KeepNonExpressionBlock {
 
 ## `swc/issues/9610-methods`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 666 vs reference 492 (+174 bytes)
 
 ```js
@@ -10459,6 +10716,7 @@ export function example() {
 
 ## `swc/issues/11102`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 200 vs reference 24 (+176 bytes)
 
 ```js
@@ -10496,6 +10754,7 @@ export const zoom = decideZoomByAccuracy(75);
 
 ## `swc/issues/11512`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `7 iterations`
 - size: oxc 274 vs reference 92 (+182 bytes)
 
 ```js
@@ -10547,6 +10806,7 @@ export function example() {
 
 ## `swc/issues/11133`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 1499 vs reference 1316 (+183 bytes)
 
 ```js
@@ -10636,6 +10896,7 @@ console.log(thing, renamedThing, otherThing);
 
 ## `swc/issues/drop-console-value-refs`
 
+- tags: `drop console`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 986 vs reference 794 (+192 bytes)
 
 ```js
@@ -10709,6 +10970,7 @@ process.stdout.write(typeof st + '\n');
 
 ## `swc/issues/11158`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 311 vs reference 86 (+225 bytes)
 
 ```js
@@ -10756,6 +11018,7 @@ process.stdout.write(typeof st + '\n');
 
 ## `swc/pr/11814_class_effect_order`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 606 vs reference 368 (+238 bytes)
 
 ```js
@@ -10808,6 +11071,7 @@ class DeclarationOrder extends effect('decl:extends') {
 
 ## `swc/issues/8813`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 714 vs reference 369 (+345 bytes)
 
 ```js
@@ -10956,6 +11220,7 @@ console.log(c);
 
 ## `swc/projects/backbone/9`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 589 vs reference 235 (+354 bytes)
 
 ```js
@@ -11018,6 +11283,7 @@ console.log(c);
 
 ## `swc/issues/numeric-property-key`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 668 vs reference 207 (+461 bytes)
 
 ```js

@@ -6,6 +6,7 @@ Fixtures: 110
 
 ## `swc/issues/11034`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 118 vs reference 119 (-1 bytes)
 
 ```js
@@ -32,6 +33,7 @@ export function f() {
 
 ## `swc/issues/11645/eval-parent-scope-nested-block`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
 - size: oxc 104 vs reference 105 (-1 bytes)
 
 ```js
@@ -62,6 +64,7 @@ console.log(outer());
 
 ## `swc/issues/11645/eval-rebind-scope`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
 - size: oxc 104 vs reference 105 (-1 bytes)
 
 ```js
@@ -90,6 +93,7 @@ console.log(outer());
 
 ## `swc/issues/9186/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 132 vs reference 133 (-1 bytes)
 
 ```js
@@ -125,6 +129,7 @@ console.log((function(a = this.a) {
 
 ## `swc/issues/9741_collision_function`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 138 vs reference 139 (-1 bytes)
 
 ```js
@@ -157,6 +162,7 @@ Object.assign(b, {});
 
 ## `swc/issues/11684/with-scope`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 332 vs reference 334 (-2 bytes)
 
 ```js
@@ -203,6 +209,7 @@ out.constructLocal = constructLocal;
 
 ## `swc/issues/5684`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
 - size: oxc 44 vs reference 46 (-2 bytes)
 
 ```js
@@ -224,6 +231,7 @@ obj = unknown(), obj && obj.__esModule;
 
 ## `swc/issues/9500`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 74 vs reference 76 (-2 bytes)
 
 ```js
@@ -252,6 +260,7 @@ console.log(foo);
 
 ## `swc/next/feeback-plotly/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 239 vs reference 241 (-2 bytes)
 
 ```js
@@ -288,6 +297,7 @@ export function log2(v) {
 
 ## `swc/pr/6169/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 87 vs reference 89 (-2 bytes)
 
 ```js
@@ -312,6 +322,7 @@ value.toUpperCase();
 
 ## `swc/projects/jquery/.17`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 642 vs reference 644 (-2 bytes)
 
 ```js
@@ -371,6 +382,7 @@ jQuery.fn.offset = function(options) {
 
 ## `swc/projects/jquery/9`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 212 vs reference 214 (-2 bytes)
 
 ```js
@@ -402,6 +414,7 @@ export const obj = { fireWith: function(context, args) {
 
 ## `swc/projects/mootools/9`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 266 vs reference 268 (-2 bytes)
 
 ```js
@@ -433,6 +446,7 @@ var newClass = function() {
 
 ## `swc/projects/yui/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 241 vs reference 243 (-2 bytes)
 
 ```js
@@ -460,6 +474,7 @@ export const E = { test: function(Y) {
 
 ## `swc/issues/5588`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 198 vs reference 202 (-4 bytes)
 
 ```js
@@ -501,6 +516,7 @@ expect(getFoo2()).toBe(42);
 
 ## `swc/issues/6791/1`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 103 vs reference 107 (-4 bytes)
 
 ```js
@@ -533,6 +549,7 @@ test(Test['Hello']);
 
 ## `swc/member_expr/callee`
 
+- tags: `drop debugger`, `join vars`, `sequences`
 - size: oxc 59 vs reference 63 (-4 bytes)
 
 ```js
@@ -560,6 +577,7 @@ try {
 
 ## `swc/pr/11381`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 199 vs reference 203 (-4 bytes)
 
 ```js
@@ -605,6 +623,7 @@ new B({});
 
 ## `swc/issues/6175/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 88 vs reference 93 (-5 bytes)
 
 ```js
@@ -633,6 +652,7 @@ let a;
 
 ## `swc/pr/6272`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 9 vs reference 14 (-5 bytes)
 
 ```js
@@ -651,6 +671,7 @@ a ?? (a = b);
 
 ## `swc/issues/11645/child-scope-reassign-merge`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
 - size: oxc 117 vs reference 123 (-6 bytes)
 
 ```js
@@ -682,6 +703,7 @@ console.log(run(true), run(false));
 
 ## `swc/issues/6344/1`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`
 - size: oxc 243 vs reference 249 (-6 bytes)
 
 ```js
@@ -743,6 +765,7 @@ var he = function() {
 
 ## `swc/issues/9466`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 99 vs reference 105 (-6 bytes)
 
 ```js
@@ -774,6 +797,7 @@ let k = function() {
 
 ## `swc/member_expr/array`
 
+- tags: `drop debugger`, `join vars`, `sequences`
 - size: oxc 710 vs reference 716 (-6 bytes)
 
 ```js
@@ -851,6 +875,7 @@ f([][0 + []]);
 
 ## `swc/issues/6837/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 227 vs reference 234 (-7 bytes)
 
 ```js
@@ -888,6 +913,7 @@ export class Class2 extends Class1 {
 
 ## `swc/issues/8924`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 66 vs reference 73 (-7 bytes)
 
 ```js
@@ -916,6 +942,7 @@ const k = (() => {
 
 ## `swc/projects/backbone/16`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 569 vs reference 576 (-7 bytes)
 
 ```js
@@ -960,6 +987,7 @@ export const obj = { remove: function(models, options) {
 
 ## `swc/issues/8923`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 67 vs reference 75 (-8 bytes)
 
 ```js
@@ -988,6 +1016,7 @@ const k = (() => {
 
 ## `swc/issues/9739`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 61 vs reference 69 (-8 bytes)
 
 ```js
@@ -1008,6 +1037,7 @@ const arr = ['a', 'b'];
 
 ## `swc/projects/angular/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 159 vs reference 167 (-8 bytes)
 
 ```js
@@ -1033,6 +1063,7 @@ for (var key in source) destination[key] = copy(source[key]);
 
 ## `swc/projects/next/extra/if_return/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 849 vs reference 857 (-8 bytes)
 
 ```js
@@ -1092,6 +1123,7 @@ export function insertRule(rule, index) {
 
 ## `swc/projects/underscore/12`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 123 vs reference 131 (-8 bytes)
 
 ```js
@@ -1118,6 +1150,7 @@ _.random = function(min, max) {
 
 ## `swc/simple/inline/5`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 231 vs reference 239 (-8 bytes)
 
 ```js
@@ -1163,6 +1196,7 @@ export function bar() {
 
 ## `swc/issues/4249`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 278 vs reference 287 (-9 bytes)
 
 ```js
@@ -1189,6 +1223,7 @@ foo({ bar: function bar(data, baz) {
 
 ## `swc/issues/6837/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 348 vs reference 357 (-9 bytes)
 
 ```js
@@ -1236,6 +1271,7 @@ export class Class2 extends Class1 {
 
 ## `swc/projects/backbone/15`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 335 vs reference 344 (-9 bytes)
 
 ```js
@@ -1269,6 +1305,7 @@ export const obj = { changedAttributes: function(diff) {
 
 ## `swc/projects/underscore/8`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 653 vs reference 662 (-9 bytes)
 
 ```js
@@ -1328,6 +1365,7 @@ _.throttle = function(func, wait, options) {
 
 ## `swc/issues/3709`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 28 vs reference 38 (-10 bytes)
 
 ```js
@@ -1350,6 +1388,7 @@ var d;
 
 ## `swc/issues/9263`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 98 vs reference 108 (-10 bytes)
 
 ```js
@@ -1408,6 +1447,7 @@ export const N = (0, p.default)(e = (0, ft.default)((0, p.default)(r).call(r, ((
 
 ## `swc/pr/11987`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 27 vs reference 37 (-10 bytes)
 
 ```js
@@ -1426,6 +1466,7 @@ export const a = (() => eval(''))();
 
 ## `swc/projects/mootools/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 188 vs reference 199 (-11 bytes)
 
 ```js
@@ -1452,6 +1493,7 @@ var Hash = this.Hash = new Type('Hash', function(object) {
 
 ## `swc/projects/angular/3`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 38 vs reference 50 (-12 bytes)
 
 ```js
@@ -1474,6 +1516,7 @@ if (foo) {
 
 ## `swc/projects/yui/6`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 76 vs reference 88 (-12 bytes)
 
 ```js
@@ -1496,6 +1539,7 @@ export function foo() {
 
 ## `swc/projects/backbone/12`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 109 vs reference 122 (-13 bytes)
 
 ```js
@@ -1519,6 +1563,7 @@ for (i = 0, l = names.length; i < l; i++) {
 
 ## `swc/issues/6628`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 361 vs reference 375 (-14 bytes)
 
 ```js
@@ -1571,6 +1616,7 @@ for (i = 0, l = names.length; i < l; i++) {
 
 ## `swc/next/46887-2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 1081 vs reference 1095 (-14 bytes)
 
 ```js
@@ -1651,6 +1697,7 @@ export default (function(e) {
 
 ## `swc/projects/backbone/5`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 385 vs reference 399 (-14 bytes)
 
 ```js
@@ -1688,6 +1735,7 @@ on: function(name, callback, context) {
 
 ## `swc/simple/issues/2007/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 92 vs reference 107 (-15 bytes)
 
 ```js
@@ -1714,6 +1762,7 @@ arr.forEach(() => {});
 
 ## `swc/issues/6344/2`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`
 - size: oxc 268 vs reference 285 (-17 bytes)
 
 ```js
@@ -1776,6 +1825,7 @@ var he = function() {
 
 ## `swc/issues/8844`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 17 (-17 bytes)
 
 ```js
@@ -1800,6 +1850,7 @@ const k = (() => {
 
 ## `swc/simple/disable-char-freq/1`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 17 (-17 bytes)
 
 ```js
@@ -1819,6 +1870,7 @@ var baz;
 
 ## `swc/issues/7228/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 58 vs reference 76 (-18 bytes)
 
 ```js
@@ -1843,6 +1895,7 @@ export function f() {
 
 ## `swc/issues/string-from-char-code-uint16`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 129 vs reference 147 (-18 bytes)
 
 ```js
@@ -1877,6 +1930,7 @@ console.log([
 
 ## `swc/issues/8324`
 
+- tags: `3 iterations`
 - size: oxc 481 vs reference 500 (-19 bytes)
 
 ```js
@@ -1944,6 +1998,7 @@ export async function bug() {
 
 ## `swc/issues/9741_multiple_methods`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 212 vs reference 232 (-20 bytes)
 
 ```js
@@ -1972,6 +2027,7 @@ console.log(a, b, c, d, e, f);
 
 ## `swc/reduced/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 317 vs reference 337 (-20 bytes)
 
 ```js
@@ -2043,6 +2099,7 @@ var A, B, A1;
 
 ## `swc/issues/9619`
 
+- tags: `join vars`, `sequences`, `remove unused`, `1 iteration`
 - size: oxc 25 vs reference 46 (-21 bytes)
 
 ```js
@@ -2072,6 +2129,7 @@ console.log(a);
 
 ## `swc/projects/mootools/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 8 vs reference 31 (-23 bytes)
 
 ```js
@@ -2090,6 +2148,7 @@ var isType = object != Object;
 
 ## `swc/issues/7568/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 422 vs reference 447 (-25 bytes)
 
 ```js
@@ -2140,6 +2199,7 @@ var specific_microfront;
 
 ## `swc/simple/if/block/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 52 vs reference 77 (-25 bytes)
 
 ```js
@@ -2166,6 +2226,7 @@ if (a) {
 
 ## `swc/issues/vercel/001`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 26 (-26 bytes)
 
 ```js
@@ -2183,6 +2244,7 @@ const re = new RegExp('^/(?!_next).*$');
 
 ## `swc/issues/10918`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 404 vs reference 432 (-28 bytes)
 
 ```js
@@ -2250,6 +2312,7 @@ export default function useMeow() {
 
 ## `swc/issues/6422/3`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 232 vs reference 261 (-29 bytes)
 
 ```js
@@ -2298,6 +2361,7 @@ assert.strictEqual(result, 3);
 
 ## `swc/issues/lit_comparisons`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 39 vs reference 68 (-29 bytes)
 
 ```js
@@ -2326,6 +2390,7 @@ console.log(a === b, c === d, e === f, g === h, h === j);
 
 ## `swc/next/43052`
 
+- tags: `2 iterations`
 - size: oxc 930 vs reference 961 (-31 bytes)
 
 ```js
@@ -2401,6 +2466,7 @@ use((function(__unused_webpack_module, exports, __webpack_require__) {
 
 ## `swc/issues/11645/spread-argument-preserved`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
 - size: oxc 8 vs reference 41 (-33 bytes)
 
 ```js
@@ -2425,6 +2491,7 @@ f(1, ...0);
 
 ## `swc/simple/order/fn/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 20 vs reference 56 (-36 bytes)
 
 ```js
@@ -2446,6 +2513,7 @@ function bar() {}
 
 ## `swc/issues/8337`
 
+- tags: `3 iterations`
 - size: oxc 270 vs reference 308 (-38 bytes)
 
 ```js
@@ -2482,6 +2550,7 @@ export function allowInAnd(callback) {
 
 ## `swc/issues/9741`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 93 vs reference 132 (-39 bytes)
 
 ```js
@@ -2509,6 +2578,7 @@ Object.assign(b, a);
 
 ## `swc/issues/9741_collision`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 93 vs reference 132 (-39 bytes)
 
 ```js
@@ -2537,6 +2607,7 @@ Object.assign(b, a);
 
 ## `swc/issues/do-while-false-control-flow`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 1119 vs reference 1164 (-45 bytes)
 
 ```js
@@ -2680,6 +2751,7 @@ console.log('hoist after break', hoistAfterBreak());
 
 ## `swc/issues/number-radix-conversion`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 308 vs reference 353 (-45 bytes)
 
 ```js
@@ -2722,6 +2794,7 @@ console.log([
 
 ## `swc/issues/drop-console-nullish-console`
 
+- tags: `drop console`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 190 vs reference 240 (-50 bytes)
 
 ```js
@@ -2749,6 +2822,7 @@ process.stdout.write(typeof ob + '\n');
 
 ## `swc/issues/9741_global_objects`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 51 (-51 bytes)
 
 ```js
@@ -2777,6 +2851,7 @@ const j = new Set();
 
 ## `swc/issues/4386/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 374 vs reference 426 (-52 bytes)
 
 ```js
@@ -2823,6 +2898,7 @@ var application;
 
 ## `swc/issues/vercel/004`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 519 vs reference 572 (-53 bytes)
 
 ```js
@@ -2861,6 +2937,7 @@ export function ItemsList() {
 
 ## `swc/simple/super/computed`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 3 vs reference 62 (-59 bytes)
 
 ```js
@@ -2887,6 +2964,7 @@ class A extends B {
 
 ## `swc/issues/react/hooks/4`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 621 vs reference 687 (-66 bytes)
 
 ```js
@@ -2936,6 +3014,7 @@ export function useProjectBranches(projectId, opts) {
 
 ## `swc/projects/jquery/26`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 235 vs reference 315 (-80 bytes)
 
 ```js
@@ -2964,6 +3043,7 @@ export const obj = { clone: function(dataAndEvents, deepDataAndEvents) {
 
 ## `swc/projects/mootools/3`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 83 (-83 bytes)
 
 ```js
@@ -2989,6 +3069,7 @@ function foo() {
 
 ## `swc/issues/11082`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 225 vs reference 324 (-99 bytes)
 
 ```js
@@ -3031,6 +3112,7 @@ export default A;
 
 ## `swc/issues/9741_threshold`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 59 vs reference 159 (-100 bytes)
 
 ```js
@@ -3056,6 +3138,7 @@ const y = JSON.parse('{}');
 
 ## `swc/issues/3256/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 411 vs reference 516 (-105 bytes)
 
 ```js
@@ -3111,6 +3194,7 @@ export default adler32;
 
 ## `swc/issues/10539`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 135 vs reference 242 (-107 bytes)
 
 ```js
@@ -3142,6 +3226,7 @@ class WorksClass {
 
 ## `swc/projects/angular/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 114 (-114 bytes)
 
 ```js
@@ -3169,6 +3254,7 @@ function isDefined(value) {
 
 ## `swc/issues/drop-console-shadowed`
 
+- tags: `drop console`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 121 (-121 bytes)
 
 ```js
@@ -3194,6 +3280,7 @@ local();
 
 ## `swc/issues/8119`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 294 vs reference 420 (-126 bytes)
 
 ```js
@@ -3246,6 +3333,7 @@ console.log(myArr);
 
 ## `swc/projects/backbone/6`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 128 (-128 bytes)
 
 ```js
@@ -3267,6 +3355,7 @@ function foo() {
 
 ## `swc/projects/backbone/8`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 128 (-128 bytes)
 
 ```js
@@ -3288,6 +3377,7 @@ function foo() {
 
 ## `swc/issues/9610-keep-fargs`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 148 vs reference 279 (-131 bytes)
 
 ```js
@@ -3320,6 +3410,7 @@ export function example() {
 
 ## `swc/issues/arguments-parameter-injection-limit`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 0 vs reference 155 (-155 bytes)
 
 ```js
@@ -3347,6 +3438,7 @@ function exceedsLimit() {
 
 ## `swc/issues/10859`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 333 vs reference 511 (-178 bytes)
 
 ```js
@@ -3393,6 +3485,7 @@ var c = (0, ((x) => x * 2)(10), 1);
 
 ## `swc/issues/7683/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 136 vs reference 328 (-192 bytes)
 
 ```js
@@ -3449,6 +3542,7 @@ var c = (0, ((x) => x * 2)(10), 1);
 
 ## `swc/issues/7194/1`
 
+- tags: `join vars`, `sequences`, `remove unused`, `1 iteration`
 - size: oxc 0 vs reference 198 (-198 bytes)
 
 ```js
@@ -3482,6 +3576,7 @@ example();
 
 ## `swc/projects/react/3`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 202 (-202 bytes)
 
 ```js
@@ -3509,6 +3604,7 @@ function warn(format) {
 
 ## `swc/projects/underscore/15`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 208 (-208 bytes)
 
 ```js
@@ -3534,6 +3630,7 @@ function foo(a, b) {
 
 ## `swc/projects/backbone/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 244 (-244 bytes)
 
 ```js
@@ -3564,6 +3661,7 @@ function foo() {
 
 ## `swc/next/feedback-regex`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 154 vs reference 406 (-252 bytes)
 
 ```js
@@ -3590,6 +3688,7 @@ export const rtlRegEx = new RegExp(
 
 ## `swc/projects/react/11`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 252 (-252 bytes)
 
 ```js
@@ -3622,6 +3721,7 @@ function setCurrentlyValidatingElement$1(element) {
 
 ## `swc/projects/backbone/7`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 266 (-266 bytes)
 
 ```js
@@ -3649,6 +3749,7 @@ function foo() {
 
 ## `swc/projects/react/12`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 282 (-282 bytes)
 
 ```js
@@ -3685,6 +3786,7 @@ function getSourceInfoErrorAddendumForProps(elementProps) {
 
 ## `swc/projects/backbone/4`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 317 (-317 bytes)
 
 ```js
@@ -3713,6 +3815,7 @@ function foo(attrs, options) {
 
 ## `swc/projects/react/16`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 368 (-368 bytes)
 
 ```js
@@ -3758,6 +3861,7 @@ function advanceTimers(currentTime) {
 
 ## `swc/projects/react/4`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 380 (-380 bytes)
 
 ```js
@@ -3800,6 +3904,7 @@ function printWarning(level, format, args) {
 
 ## `swc/projects/react/7`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 470 (-470 bytes)
 
 ```js
@@ -3849,6 +3954,7 @@ function getElementKey(element, index) {
 
 ## `swc/projects/angular/5`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 517 (-517 bytes)
 
 ```js
@@ -3895,6 +4001,7 @@ function forEach(obj, iterator, context) {
 
 ## `swc/projects/react/15`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 584 (-584 bytes)
 
 ```js
@@ -3939,6 +4046,7 @@ function validateFragmentProps(fragment) {
 
 ## `swc/projects/react/13`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 617 (-617 bytes)
 
 ```js
@@ -4000,6 +4108,7 @@ function validateChildKeys(node, parentType) {
 
 ## `swc/projects/underscore/16`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 663 (-663 bytes)
 
 ```js

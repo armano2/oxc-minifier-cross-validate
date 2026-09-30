@@ -53,6 +53,7 @@ try {
 
 ## `uglify/drop-unused/issue_1715_4`
 
+- tags: `remove unused`
 
 ```js
 var a = 1;
@@ -103,6 +104,7 @@ console.log(a);
 
 ## `uglify/drop-unused/issue_3746`
 
+- tags: `remove unused`
 
 ```js
 try {
@@ -238,6 +240,7 @@ console.log('PASS');
 
 ## `uglify/side_effects/issue_3983_2`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 
 ```js
 var a = 'PASS';

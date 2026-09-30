@@ -6,6 +6,7 @@ Fixtures: 72
 
 ## `terser/collapse_vars/collapse_rhs_conditional_1`
 
+- tags: `join vars`
 
 ```js
 var a = 'PASS', b = 'FAIL';
@@ -29,6 +30,7 @@ console.log(a, b);
 
 ## `terser/collapse_vars/collapse_rhs_lhs_2`
 
+- tags: `join vars`
 
 ```js
 var b = 1;
@@ -57,6 +59,7 @@ console.log('PASS');
 
 ## `terser/collapse_vars/issue_2908`
 
+- tags: `join vars`
 
 ```js
 var a = 0, b = 0;
@@ -90,6 +93,7 @@ console.log(b);
 
 ## `terser/collapse_vars/replace_all_var_scope`
 
+- tags: `join vars`, `remove unused`
 
 ```js
 var a = 100, b = 10;
@@ -122,6 +126,7 @@ console.log(a, b);
 
 ## `terser/collapse_vars/var_side_effects_1`
 
+- tags: `join vars`, `remove unused`
 
 ```js
 var print = console.log.bind(console);
@@ -148,6 +153,7 @@ foo(10);
 
 ## `terser/collapse_vars/var_side_effects_2`
 
+- tags: `join vars`, `remove unused`
 
 ```js
 var print = console.log.bind(console);
@@ -174,6 +180,7 @@ foo({ y: 10 });
 
 ## `terser/collapse_vars/var_side_effects_3`
 
+- tags: `join vars`, `remove unused`, `pure getters`
 
 ```js
 var print = console.log.bind(console);
@@ -254,6 +261,7 @@ export { y };
 
 ## `terser/destructuring/anon_func_with_destructuring_args`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `remove unused`
 
 ```js
 (function({ foo = 1 + 0, bar = 2 }, [car = 3, far = 4]) {
@@ -276,6 +284,7 @@ export { y };
 
 ## `terser/destructuring/arrow_func_with_destructuring_args`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `remove unused`
 
 ```js
 (({ foo = 1 + 0, bar = 2 }, [car = 3, far = 4]) => {
@@ -298,6 +307,7 @@ export { y };
 
 ## `terser/destructuring/mangle_destructuring_decl_array`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `remove unused`
 
 ```js
 var [, t, e, n, s, o = 2, r = [1 + 2]] = [
@@ -328,6 +338,7 @@ console.log(t, e, n, s, o, r);
 
 ## `terser/drop_unused/issue_2660_1`
 
+- tags: `join vars`, `remove unused`
 
 ```js
 var a = 2;
@@ -385,6 +396,7 @@ console.log(2 == Object(1) || 0 || void 0 || 'ok' || null || Object(2));
 
 ## `terser/export/issue_2038_2`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `remove unused`
 
 ```js
 let LET = 1;
@@ -506,6 +518,7 @@ console.log(a);
 
 ## `terser/functions/recursive_inline_2`
 
+- tags: `join vars`, `remove unused`
 
 ```js
 function f(n) {
@@ -606,6 +619,7 @@ if (CONFIG.DEBUG[0]) console.debug('foo');
 
 ## `terser/harmony/array_spread_of_sequence`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`
 
 ```js
 var a = [1];
@@ -635,6 +649,7 @@ console.log([...a || a]);
 
 ## `terser/harmony/import_statement_mangling`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`
 
 ```js
 import Foo from 'foo';
@@ -669,6 +684,7 @@ Whatever();
 
 ## `terser/harmony/issue_1613`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`
 
 ```js
 const name = 1;
@@ -689,6 +705,7 @@ const foo = { name };
 
 ## `terser/harmony/issue_1753`
 
+- tags: `mangle`, `keep function names`, `keep class names`
 
 ```js
 class SomeClass {
@@ -724,6 +741,7 @@ class SomeClass {
 
 ## `terser/harmony/issue_1753_disable`
 
+- tags: `mangle`, `keep function names`, `keep class names`
 
 ```js
 class SomeClass {
@@ -759,6 +777,7 @@ class SomeClass {
 
 ## `terser/harmony/issue_t80`
 
+- tags: `remove unused`
 
 ```js
 function foo(data = []) {
@@ -791,6 +810,7 @@ console.log(JSON.stringify([
 
 ## `terser/harmony/module_enabled`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `join vars`, `remove unused`
 
 ```js
 let apple = 10, b = 20;
@@ -814,6 +834,7 @@ export { apple };
 
 ## `terser/harmony/object_spread_of_sequence`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`
 
 ```js
 var a = { x: 1 };
@@ -873,6 +894,7 @@ function a() {
 
 ## `terser/if_return/issue_2747`
 
+- tags: `sequences`, `remove unused`
 
 ```js
 'use strict';
@@ -908,6 +930,7 @@ console.log(f(0), f(1), f(3));
 
 ## `terser/inline/do_not_repeat_when_variable_larger_than_inlined_node`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `join vars`
 
 ```js
 const _string_ = 'string';
@@ -969,6 +992,7 @@ function* range(start = 0, end = null, step = 1) {
 
 ## `terser/issue_1202/mangle_keep_fnames_true`
 
+- tags: `mangle`, `keep function names`, `keep class names`
 
 ```js
 'use strict';
@@ -997,6 +1021,7 @@ function total() {
 
 ## `terser/issue_1431/level_one`
 
+- tags: `mangle`, `keep function names`, `keep class names`
 
 ```js
 function f(x) {
@@ -1031,6 +1056,7 @@ function f(x) {
 
 ## `terser/issue_1431/level_three`
 
+- tags: `mangle`, `keep function names`, `keep class names`
 
 ```js
 function f(x) {
@@ -1089,6 +1115,7 @@ function f(x) {
 
 ## `terser/issue_1431/level_two`
 
+- tags: `mangle`, `keep function names`, `keep class names`
 
 ```js
 function f(x) {
@@ -1135,6 +1162,7 @@ function f(x) {
 
 ## `terser/issue_1431/level_zero`
 
+- tags: `mangle`, `keep function names`, `keep class names`
 
 ```js
 function f(x) {
@@ -1169,6 +1197,7 @@ function f(x) {
 
 ## `terser/issue_1466/more_variable_in_multiple_for`
 
+- tags: `join vars`
 
 ```js
 for (let a = 9, i = 0; i < 20; i += a) {
@@ -1199,6 +1228,7 @@ for (let a = 9, i = 0; i < 20; i += a) {
 
 ## `terser/issue_1704/mangle_catch_redef_3`
 
+- tags: `mangle`, `keep function names`, `keep class names`
 
 ```js
 var o = 'PASS';
@@ -1241,6 +1271,7 @@ console.log(o);
 
 ## `terser/issue_1704/mangle_catch_redef_ie8_3`
 
+- tags: `mangle`, `keep function names`, `keep class names`
 
 ```js
 var o = 'PASS';
@@ -1283,6 +1314,7 @@ console.log(o);
 
 ## `terser/issue_2001/export_mangle_1`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`
 
 ```js
 export function foo(one, two) {
@@ -1305,6 +1337,7 @@ export function foo(one, two) {
 
 ## `terser/issue_2001/export_mangle_2`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`
 
 ```js
 export default function foo(one, two) {
@@ -1328,6 +1361,7 @@ export default function foo(one, two) {
 
 ## `terser/issue_2001/export_mangle_5`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`
 
 ```js
 export default { prop: function(one, two) {
@@ -1350,6 +1384,7 @@ export default { prop: function(one, two) {
 
 ## `terser/issue_2001/export_mangle_6`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`
 
 ```js
 var baz = 2;
@@ -1391,6 +1426,7 @@ console.log(a);
 
 ## `terser/keep_names/drop_classnames`
 
+- tags: `mangle`, `keep function names`
 
 ```js
 function foo() {
@@ -1412,6 +1448,7 @@ function foo() {
 
 ## `terser/loops/keep_collapse_const_in_own_block_scope`
 
+- tags: `join vars`
 
 ```js
 var i = 2;
@@ -1525,6 +1562,7 @@ new (bar = function(foo) {
 
 ## `terser/properties/prop_side_effects_1`
 
+- tags: `join vars`, `remove unused`
 
 ```js
 var C = 1;
@@ -1555,6 +1593,7 @@ console.log(obj.bar());
 
 ## `terser/pure_funcs/unary`
 
+- tags: `pure functions`
 
 ```js
 typeof foo();
@@ -1603,6 +1642,7 @@ a['bar']++;
 
 ## `terser/reduce_vars/escape_conditional`
 
+- tags: `join vars`, `remove unused`
 
 ```js
 function main() {
@@ -1643,6 +1683,7 @@ main();
 
 ## `terser/reduce_vars/escape_throw`
 
+- tags: `join vars`, `remove unused`
 
 ```js
 function main() {
@@ -1688,6 +1729,7 @@ main();
 
 ## `terser/reduce_vars/inner_var_for_1`
 
+- tags: `join vars`
 
 ```js
 function f() {
@@ -1724,6 +1766,7 @@ function f() {
 
 ## `terser/reduce_vars/issue_2423_1`
 
+- tags: `join vars`, `remove unused`
 
 ```js
 function c() {
@@ -1757,6 +1800,7 @@ p();
 
 ## `terser/reduce_vars/issue_2449`
 
+- tags: `join vars`, `remove unused`, `10 iterations`
 
 ```js
 var a = 'PASS';
@@ -1797,6 +1841,7 @@ function g() {
 
 ## `terser/reduce_vars/multi_def_2`
 
+- tags: `join vars`
 
 ```js
 function f() {
@@ -1826,6 +1871,7 @@ function f() {
 
 ## `terser/sequences/hoist_defun`
 
+- tags: `join vars`, `sequences`
 
 ```js
 x();
@@ -2051,6 +2097,7 @@ function foo(e) {
 
 ## `terser/try_catch/broken_safari_catch_scope`
 
+- tags: `mangle`, `keep function names`, `keep class names`
 
 ```js
 'AAAAAAAA';
@@ -2090,6 +2137,7 @@ new class {
 
 ## `terser/try_catch/broken_safari_catch_scope_caveat`
 
+- tags: `mangle`, `keep function names`, `keep class names`
 
 ```js
 'AAAAAAAA';

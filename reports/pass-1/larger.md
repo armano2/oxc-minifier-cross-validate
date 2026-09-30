@@ -6,6 +6,7 @@ Fixtures: 9
 
 ## `pass-1/issues/6407/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
 - size: oxc 342 vs reference 336 (+6 bytes)
 
 ```js
@@ -50,6 +51,7 @@ console.log(Deno.encode());
 
 ## `pass-1/3`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
 - size: oxc 50 vs reference 43 (+7 bytes)
 
 ```js
@@ -71,6 +73,7 @@ console.log(Deno.encode());
 
 ## `pass-1/joda/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
 - size: oxc 382 vs reference 364 (+18 bytes)
 
 ```js
@@ -119,6 +122,7 @@ console.log(Deno.encode());
 
 ## `pass-1/8`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
 - size: oxc 123 vs reference 98 (+25 bytes)
 
 ```js
@@ -143,6 +147,7 @@ export function MultiPoint(point) {
 
 ## `pass-1/joda/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
 - size: oxc 320 vs reference 263 (+57 bytes)
 
 ```js
@@ -176,6 +181,7 @@ export function MultiPoint(point) {
 
 ## `pass-1/9/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
 - size: oxc 101 vs reference 35 (+66 bytes)
 
 ```js
@@ -202,6 +208,7 @@ console.log('Greeting:', (function(value) {
 
 ## `pass-1/compute/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
 - size: oxc 178 vs reference 51 (+127 bytes)
 
 ```js
@@ -247,6 +254,7 @@ console.log(f().toString(16));
 
 ## `pass-1/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
 - size: oxc 189 vs reference 33 (+156 bytes)
 
 ```js
@@ -270,6 +278,7 @@ console.log(f().toString(16));
 
 ## `pass-1/9/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
 - size: oxc 202 vs reference 35 (+167 bytes)
 
 ```js

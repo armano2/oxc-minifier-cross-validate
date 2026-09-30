@@ -208,6 +208,10 @@ fn write_kind_markdown(family: &str, kind: Kind, rows: &[&Outcome]) -> String {
 
 fn write_outcome_markdown(out: &mut String, outcome: &Outcome, kind: Kind) {
     let _ = writeln!(out, "## `{}`\n", outcome.relative);
+    if !outcome.tags.is_empty() {
+        let tags = outcome.tags.iter().map(|tag| format!("`{tag}`")).collect::<Vec<_>>().join(", ");
+        let _ = writeln!(out, "- tags: {tags}");
+    }
     if !outcome.note.is_empty() {
         let _ = writeln!(out, "- note: {}", outcome.note);
     }

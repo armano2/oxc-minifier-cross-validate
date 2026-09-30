@@ -6,6 +6,7 @@ Fixtures: 1
 
 ## `swc/issues/react/hooks/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 function useProjectBranches(projectId, opts) {

@@ -6,6 +6,7 @@ Fixtures: 2
 
 ## `swc/projects/jquery/4`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 export const obj = { parseXML: function(data) {
@@ -77,6 +78,7 @@ export const obj = { parseXML: function(data) {
 
 ## `swc/projects/next/extra/if_return/.3`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 __webpack_require__.O = function(result, chunkIds, fn, priority) {

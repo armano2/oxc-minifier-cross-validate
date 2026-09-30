@@ -40,6 +40,7 @@ function f() {
 
 ## `uglify/classes/issue_4681`
 
+- tags: `remove unused`
 - size: oxc 87 vs reference 88 (-1 bytes)
 
 ```js
@@ -69,6 +70,7 @@ console.log(function(a) {
 
 ## `uglify/classes/issue_4821_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 71 vs reference 72 (-1 bytes)
 
 ```js
@@ -96,6 +98,7 @@ console.log(typeof a);
 
 ## `uglify/classes/issue_4821_2`
 
+- tags: `remove unused`
 - size: oxc 71 vs reference 72 (-1 bytes)
 
 ```js
@@ -123,6 +126,7 @@ console.log(typeof a);
 
 ## `uglify/classes/issue_5082_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 106 vs reference 107 (-1 bytes)
 
 ```js
@@ -157,6 +161,7 @@ console.log(typeof a);
 
 ## `uglify/classes/issue_5082_2`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 106 vs reference 107 (-1 bytes)
 
 ```js
@@ -191,6 +196,7 @@ console.log(typeof a);
 
 ## `uglify/classes/issue_5322`
 
+- tags: `remove unused`
 - size: oxc 83 vs reference 84 (-1 bytes)
 
 ```js
@@ -222,6 +228,7 @@ class A {
 
 ## `uglify/collapse_vars/cascade_switch`
 
+- tags: `join vars`
 - size: oxc 69 vs reference 70 (-1 bytes)
 
 ```js
@@ -249,6 +256,7 @@ function f(a, b) {
 
 ## `uglify/collapse_vars/collapse_rhs_conditional_2`
 
+- tags: `join vars`
 - size: oxc 79 vs reference 80 (-1 bytes)
 
 ```js
@@ -271,6 +279,7 @@ console.log(a, b);
 
 ## `uglify/collapse_vars/issue_2319_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 74 vs reference 75 (-1 bytes)
 
 ```js
@@ -300,6 +309,7 @@ console.log(function(a) {
 
 ## `uglify/collapse_vars/issue_2319_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 88 vs reference 89 (-1 bytes)
 
 ```js
@@ -331,6 +341,7 @@ console.log(function(a) {
 
 ## `uglify/collapse_vars/issue_4586_2`
 
+- tags: `join vars`
 - size: oxc 93 vs reference 94 (-1 bytes)
 
 ```js
@@ -358,6 +369,7 @@ var a = 42;
 
 ## `uglify/collapse_vars/may_throw_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 97 vs reference 98 (-1 bytes)
 
 ```js
@@ -393,6 +405,7 @@ f(0);
 
 ## `uglify/collapse_vars/substitution_conditional`
 
+- tags: `join vars`
 - size: oxc 268 vs reference 269 (-1 bytes)
 
 ```js
@@ -443,6 +456,7 @@ f3(null, true);
 
 ## `uglify/collapse_vars/var_defs`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 85 vs reference 86 (-1 bytes)
 
 ```js
@@ -521,6 +535,7 @@ console.log(a);
 
 ## `uglify/default-values/issue_5340_1`
 
+- tags: `remove unused`
 - size: oxc 63 vs reference 64 (-1 bytes)
 
 ```js
@@ -543,6 +558,7 @@ console.log(a);
 
 ## `uglify/destructured/drop_unused_1`
 
+- tags: `remove unused`
 - size: oxc 92 vs reference 93 (-1 bytes)
 
 ```js
@@ -572,6 +588,7 @@ switch (0) {
 
 ## `uglify/destructured/hoist_vars`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 47 vs reference 48 (-1 bytes)
 
 ```js
@@ -593,6 +610,7 @@ console.log(a, b);
 
 ## `uglify/destructured/issue_5866_3`
 
+- tags: `remove unused`
 - size: oxc 64 vs reference 65 (-1 bytes)
 
 ```js
@@ -615,6 +633,7 @@ console.log(b);
 
 ## `uglify/destructured/issue_5866_5`
 
+- tags: `remove unused`
 - size: oxc 60 vs reference 61 (-1 bytes)
 
 ```js
@@ -637,6 +656,7 @@ console.log(b);
 
 ## `uglify/destructured/issue_5866_6`
 
+- tags: `remove unused`
 - size: oxc 59 vs reference 60 (-1 bytes)
 
 ```js
@@ -660,6 +680,7 @@ console.log(b);
 
 ## `uglify/evaluate/issue_3887`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 71 vs reference 72 (-1 bytes)
 
 ```js
@@ -688,6 +709,7 @@ console.log(b);
 
 ## `uglify/evaluate/issue_5362_1`
 
+- tags: `join vars`
 - size: oxc 42 vs reference 43 (-1 bytes)
 
 ```js
@@ -708,6 +730,7 @@ console.log(delete +a);
 
 ## `uglify/evaluate/try_increment`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 66 vs reference 67 (-1 bytes)
 
 ```js
@@ -736,6 +759,7 @@ console.log(function(a) {
 
 ## `uglify/functions/issue_2097`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 84 vs reference 85 (-1 bytes)
 
 ```js
@@ -770,6 +794,7 @@ f(1);
 
 ## `uglify/functions/issue_5925`
 
+- tags: `join vars`
 - size: oxc 129 vs reference 130 (-1 bytes)
 
 ```js
@@ -802,6 +827,7 @@ console.log(function() {
 
 ## `uglify/hoist_props/issue_3071_3`
 
+- tags: `join vars`
 - size: oxc 133 vs reference 134 (-1 bytes)
 
 ```js
@@ -835,6 +861,7 @@ console.log(c);
 
 ## `uglify/hoist_vars/issue_5187_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 94 vs reference 95 (-1 bytes)
 
 ```js
@@ -870,6 +897,7 @@ f();
 
 ## `uglify/hoist_vars/issue_5195`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 85 vs reference 86 (-1 bytes)
 
 ```js
@@ -1071,6 +1099,7 @@ try {
 
 ## `uglify/issue-1609/chained_evaluation_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 99 vs reference 100 (-1 bytes)
 
 ```js
@@ -1101,6 +1130,7 @@ try {
 
 ## `uglify/issue-1673/side_effects_catch`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 107 vs reference 108 (-1 bytes)
 
 ```js
@@ -1141,6 +1171,7 @@ f();
 
 ## `uglify/issue-1673/side_effects_finally`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 114 vs reference 115 (-1 bytes)
 
 ```js
@@ -1238,6 +1269,7 @@ if (CONST_FOO_ANN) {
 
 ## `uglify/join_vars/join_object_assignments_for`
 
+- tags: `join vars`
 - size: oxc 102 vs reference 103 (-1 bytes)
 
 ```js
@@ -1267,6 +1299,7 @@ console.log(function() {
 
 ## `uglify/merge_vars/issue_5772_2`
 
+- tags: `join vars`
 - size: oxc 114 vs reference 115 (-1 bytes)
 
 ```js
@@ -1355,6 +1388,7 @@ new (-1)(-2);
 
 ## `uglify/pure_getters/lvalues_def`
 
+- tags: `join vars`, `remove unused`, `pure getters`
 - size: oxc 68 vs reference 69 (-1 bytes)
 
 ```js
@@ -1380,6 +1414,7 @@ console.log(a, b);
 
 ## `uglify/reduce_vars/issue_2450_5`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 119 vs reference 120 (-1 bytes)
 
 ```js
@@ -1425,6 +1460,7 @@ function g() {}
 
 ## `uglify/reduce_vars/issue_2869`
 
+- tags: `join vars`
 - size: oxc 99 vs reference 100 (-1 bytes)
 
 ```js
@@ -1456,6 +1492,7 @@ console.log(c);
 
 ## `uglify/reduce_vars/recursive_inlining_4`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 236 vs reference 237 (-1 bytes)
 
 ```js
@@ -1510,6 +1547,7 @@ console.log(c);
 
 ## `uglify/reduce_vars/unsafe_evaluate_array_1`
 
+- tags: `join vars`
 - size: oxc 205 vs reference 206 (-1 bytes)
 
 ```js
@@ -1552,6 +1590,7 @@ function f2() {
 
 ## `uglify/reduce_vars/unsafe_evaluate_object_1`
 
+- tags: `join vars`
 - size: oxc 140 vs reference 141 (-1 bytes)
 
 ```js
@@ -1589,6 +1628,7 @@ function f1() {
 
 ## `uglify/reduce_vars/var_assign_3`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 59 vs reference 60 (-1 bytes)
 
 ```js
@@ -1617,6 +1657,7 @@ function f1() {
 
 ## `uglify/rests/issue_5246_3`
 
+- tags: `remove unused`
 - size: oxc 53 vs reference 54 (-1 bytes)
 
 ```js
@@ -1640,6 +1681,7 @@ function f1() {
 
 ## `uglify/sequences/lift_sequences_3`
 
+- tags: `sequences`
 - size: oxc 56 vs reference 57 (-1 bytes)
 
 ```js
@@ -1684,6 +1726,7 @@ var o = { f() {
 
 ## `uglify/yields/collapse_vars_5`
 
+- tags: `join vars`
 - size: oxc 99 vs reference 100 (-1 bytes)
 
 ```js
@@ -1710,6 +1753,7 @@ a.next('FAIL');
 
 ## `uglify/arguments/issue_4410_2`
 
+- tags: `join vars`
 - size: oxc 80 vs reference 82 (-2 bytes)
 
 ```js
@@ -1732,6 +1776,7 @@ a.next('FAIL');
 
 ## `uglify/arguments/replace_index_drop_fargs_1`
 
+- tags: `join vars`
 - size: oxc 554 vs reference 556 (-2 bytes)
 
 ```js
@@ -1792,6 +1837,7 @@ console.log(arguments[0]);
 
 ## `uglify/arrays/unsafe_evaluate_modified_binary`
 
+- tags: `join vars`
 - size: oxc 82 vs reference 84 (-2 bytes)
 
 ```js
@@ -1816,6 +1862,7 @@ console.log(arguments[0]);
 
 ## `uglify/arrays/unsafe_evaluate_modified_conditional`
 
+- tags: `join vars`
 - size: oxc 86 vs reference 88 (-2 bytes)
 
 ```js
@@ -1840,6 +1887,7 @@ console.log(arguments[0]);
 
 ## `uglify/arrows/issue_4685_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 71 vs reference 73 (-2 bytes)
 
 ```js
@@ -1862,6 +1910,7 @@ new function(f) {
 
 ## `uglify/arrows/issue_4685_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 97 vs reference 99 (-2 bytes)
 
 ```js
@@ -1930,6 +1979,7 @@ console.log(new n().add('foo', 42));
 
 ## `uglify/awaits/collapse_vars_3`
 
+- tags: `join vars`
 - size: oxc 97 vs reference 99 (-2 bytes)
 
 ```js
@@ -1958,6 +2008,7 @@ console.log(a);
 
 ## `uglify/awaits/issue_4340`
 
+- tags: `join vars`
 - size: oxc 54 vs reference 56 (-2 bytes)
 
 ```js
@@ -1980,6 +2031,7 @@ console.log(a);
 
 ## `uglify/classes/issue_4685_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 120 vs reference 122 (-2 bytes)
 
 ```js
@@ -2011,6 +2063,7 @@ new class {
 
 ## `uglify/classes/issue_4685_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 150 vs reference 152 (-2 bytes)
 
 ```js
@@ -2044,6 +2097,7 @@ new class {
 
 ## `uglify/classes/issue_5142`
 
+- tags: `join vars`
 - size: oxc 114 vs reference 116 (-2 bytes)
 
 ```js
@@ -2075,6 +2129,7 @@ if (++a) new class {
 
 ## `uglify/classes/issue_5876_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 66 vs reference 68 (-2 bytes)
 
 ```js
@@ -2100,6 +2155,7 @@ if (A) console.log('PASS');
 
 ## `uglify/classes/issue_5876_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 69 vs reference 71 (-2 bytes)
 
 ```js
@@ -2124,6 +2180,7 @@ if (A) console.log('bar');
 
 ## `uglify/collapse_vars/collapse_and_assign`
 
+- tags: `join vars`
 - size: oxc 72 vs reference 74 (-2 bytes)
 
 ```js
@@ -2149,6 +2206,7 @@ log(a);
 
 ## `uglify/collapse_vars/collapse_or_assign`
 
+- tags: `join vars`
 - size: oxc 68 vs reference 70 (-2 bytes)
 
 ```js
@@ -2174,6 +2232,7 @@ log(a);
 
 ## `uglify/collapse_vars/issue_2878`
 
+- tags: `join vars`, `sequences`
 - size: oxc 117 vs reference 119 (-2 bytes)
 
 ```js
@@ -2208,6 +2267,7 @@ console.log(c);
 
 ## `uglify/collapse_vars/issue_3573`
 
+- tags: `join vars`
 - size: oxc 144 vs reference 146 (-2 bytes)
 
 ```js
@@ -2245,6 +2305,7 @@ console.log(c);
 
 ## `uglify/collapse_vars/issue_4895`
 
+- tags: `join vars`
 - size: oxc 74 vs reference 76 (-2 bytes)
 
 ```js
@@ -2271,6 +2332,7 @@ console.log((b = a) || b, b += 0);
 
 ## `uglify/collapse_vars/issue_4920_2`
 
+- tags: `join vars`
 - size: oxc 82 vs reference 84 (-2 bytes)
 
 ```js
@@ -2359,6 +2421,7 @@ alert(f([], {}));
 
 ## `uglify/const/issue_4198`
 
+- tags: `join vars`
 - size: oxc 141 vs reference 143 (-2 bytes)
 
 ```js
@@ -2394,6 +2457,7 @@ console.log(function() {
 
 ## `uglify/const/issue_4205`
 
+- tags: `join vars`
 - size: oxc 154 vs reference 156 (-2 bytes)
 
 ```js
@@ -2573,6 +2637,7 @@ f();
 
 ## `uglify/const/issue_5930_1`
 
+- tags: `join vars`
 - size: oxc 85 vs reference 87 (-2 bytes)
 
 ```js
@@ -2683,6 +2748,7 @@ console.log(o);
 
 ## `uglify/default-values/issue_4483`
 
+- tags: `join vars`
 - size: oxc 68 vs reference 70 (-2 bytes)
 
 ```js
@@ -2740,6 +2806,7 @@ console.log(b);
 
 ## `uglify/destructured/issue_5899_1`
 
+- tags: `join vars`
 - size: oxc 74 vs reference 76 (-2 bytes)
 
 ```js
@@ -2766,6 +2833,7 @@ log(a);
 
 ## `uglify/destructured/issue_5899_2`
 
+- tags: `join vars`
 - size: oxc 71 vs reference 73 (-2 bytes)
 
 ```js
@@ -2792,6 +2860,7 @@ log(a);
 
 ## `uglify/destructured/keep_reference`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 73 vs reference 75 (-2 bytes)
 
 ```js
@@ -2814,6 +2883,7 @@ console.log(a[0] === b ? 'PASS' : 'FAIL');
 
 ## `uglify/evaluate/issue_3997`
 
+- tags: `join vars`
 - size: oxc 77 vs reference 79 (-2 bytes)
 
 ```js
@@ -2838,6 +2908,7 @@ console.log(typeof a);
 
 ## `uglify/evaluate/issue_4393`
 
+- tags: `join vars`
 - size: oxc 68 vs reference 70 (-2 bytes)
 
 ```js
@@ -2908,6 +2979,7 @@ console.log(s.charAt(0), 'string'.charAt(x), (typeof x).charAt());
 
 ## `uglify/evaluate/void_returns`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 196 vs reference 198 (-2 bytes)
 
 ```js
@@ -2974,6 +3046,7 @@ export default (function f() {});
 
 ## `uglify/functions/issue_5332_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 74 vs reference 76 (-2 bytes)
 
 ```js
@@ -3006,6 +3079,7 @@ do {
 
 ## `uglify/functions/issue_5332_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 82 vs reference 84 (-2 bytes)
 
 ```js
@@ -3038,6 +3112,7 @@ do {
 
 ## `uglify/hoist_props/issue_3046`
 
+- tags: `join vars`
 - size: oxc 89 vs reference 91 (-2 bytes)
 
 ```js
@@ -3068,6 +3143,7 @@ console.log(function(a) {
 
 ## `uglify/hoist_vars/issue_4736`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 69 vs reference 71 (-2 bytes)
 
 ```js
@@ -3228,6 +3304,7 @@ f();
 
 ## `uglify/if_return/if_var_return_4`
 
+- tags: `sequences`
 - size: oxc 82 vs reference 84 (-2 bytes)
 
 ```js
@@ -3355,6 +3432,7 @@ if (some_condition()) {
 
 ## `uglify/issue-640/negate_iife_4`
 
+- tags: `sequences`
 - size: oxc 114 vs reference 116 (-2 bytes)
 
 ```js
@@ -3384,6 +3462,7 @@ if (some_condition()) {
 
 ## `uglify/issue-640/negate_iife_5`
 
+- tags: `sequences`
 - size: oxc 98 vs reference 100 (-2 bytes)
 
 ```js
@@ -3417,6 +3496,7 @@ if ((function() {
 
 ## `uglify/issue-640/negate_iife_5_off`
 
+- tags: `sequences`
 - size: oxc 98 vs reference 100 (-2 bytes)
 
 ```js
@@ -3496,6 +3576,7 @@ console.log(function f3(a, eval, c, d, e) {
 
 ## `uglify/join_vars/join_object_assignments_NaN_1`
 
+- tags: `join vars`
 - size: oxc 65 vs reference 67 (-2 bytes)
 
 ```js
@@ -3520,6 +3601,7 @@ console.log(o[NaN], o[NaN]);
 
 ## `uglify/join_vars/join_object_assignments_if`
 
+- tags: `join vars`
 - size: oxc 75 vs reference 77 (-2 bytes)
 
 ```js
@@ -3545,6 +3627,7 @@ console.log(function() {
 
 ## `uglify/join_vars/join_object_assignments_return_3`
 
+- tags: `join vars`
 - size: oxc 105 vs reference 107 (-2 bytes)
 
 ```js
@@ -3573,6 +3656,7 @@ console.log(function() {
 
 ## `uglify/keep_fargs/duplicate_lambda_defun_name_1`
 
+- tags: `join vars`
 - size: oxc 67 vs reference 69 (-2 bytes)
 
 ```js
@@ -3597,6 +3681,7 @@ console.log(function f(a) {
 
 ## `uglify/keep_fargs/issue_1595_4`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 87 vs reference 89 (-2 bytes)
 
 ```js
@@ -3621,6 +3706,7 @@ console.log(function f(a) {
 
 ## `uglify/keep_fargs/trailing_argument_side_effects`
 
+- tags: `remove unused`
 - size: oxc 92 vs reference 94 (-2 bytes)
 
 ```js
@@ -3769,6 +3855,7 @@ console.log(b);
 
 ## `uglify/loops/issue_4240`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 113 vs reference 115 (-2 bytes)
 
 ```js
@@ -3806,6 +3893,7 @@ console.log(b);
 
 ## `uglify/merge_vars/cross_branch_2a_2`
 
+- tags: `join vars`
 - size: oxc 192 vs reference 194 (-2 bytes)
 
 ```js
@@ -3855,6 +3943,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2a_5`
 
+- tags: `join vars`
 - size: oxc 193 vs reference 195 (-2 bytes)
 
 ```js
@@ -3904,6 +3993,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2b_1`
 
+- tags: `join vars`
 - size: oxc 184 vs reference 186 (-2 bytes)
 
 ```js
@@ -3950,6 +4040,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2b_10`
 
+- tags: `join vars`
 - size: oxc 193 vs reference 195 (-2 bytes)
 
 ```js
@@ -3998,6 +4089,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2b_8`
 
+- tags: `join vars`
 - size: oxc 184 vs reference 186 (-2 bytes)
 
 ```js
@@ -4043,6 +4135,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2b_9`
 
+- tags: `join vars`
 - size: oxc 192 vs reference 194 (-2 bytes)
 
 ```js
@@ -4091,6 +4184,7 @@ f();
 
 ## `uglify/merge_vars/lambda_reuse`
 
+- tags: `join vars`
 - size: oxc 122 vs reference 124 (-2 bytes)
 
 ```js
@@ -4119,6 +4213,7 @@ if (console.log(typeof b)) console.log(b);
 
 ## `uglify/negate-iife/negate_iife_4_drop_side_effect_free`
 
+- tags: `sequences`
 - size: oxc 114 vs reference 116 (-2 bytes)
 
 ```js
@@ -4148,6 +4243,7 @@ if (console.log(typeof b)) console.log(b);
 
 ## `uglify/negate-iife/negate_iife_5_drop_side_effect_free`
 
+- tags: `sequences`
 - size: oxc 98 vs reference 100 (-2 bytes)
 
 ```js
@@ -4181,6 +4277,7 @@ if (function() {
 
 ## `uglify/negate-iife/negate_iife_5_off`
 
+- tags: `sequences`
 - size: oxc 98 vs reference 100 (-2 bytes)
 
 ```js
@@ -4261,6 +4358,7 @@ new (function test(foo) {
 
 ## `uglify/nullish/issue_5829_2`
 
+- tags: `join vars`
 - size: oxc 80 vs reference 82 (-2 bytes)
 
 ```js
@@ -4422,6 +4520,7 @@ console.log(o.p);
 
 ## `uglify/pure_getters/issue_2878`
 
+- tags: `join vars`, `sequences`, `pure getters`
 - size: oxc 107 vs reference 109 (-2 bytes)
 
 ```js
@@ -4456,6 +4555,7 @@ console.log(c);
 
 ## `uglify/reduce_vars/defun_single_use_loop`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 93 vs reference 95 (-2 bytes)
 
 ```js
@@ -4482,6 +4582,7 @@ function f() {}
 
 ## `uglify/reduce_vars/duplicate_lambda_defun_name_1`
 
+- tags: `join vars`
 - size: oxc 67 vs reference 69 (-2 bytes)
 
 ```js
@@ -4506,6 +4607,7 @@ console.log(function f(a) {
 
 ## `uglify/reduce_vars/issue_1595_4`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 87 vs reference 89 (-2 bytes)
 
 ```js
@@ -4530,6 +4632,7 @@ console.log(function f(a) {
 
 ## `uglify/reduce_vars/issue_3949_1`
 
+- tags: `join vars`
 - size: oxc 97 vs reference 99 (-2 bytes)
 
 ```js
@@ -4557,6 +4660,7 @@ console.log(function f(a) {
 
 ## `uglify/reduce_vars/unary_delete`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 76 vs reference 78 (-2 bytes)
 
 ```js
@@ -4802,6 +4906,7 @@ for (let k in o) setTimeout(function() {
 
 ## `uglify/varify/loop_scope_2`
 
+- tags: `join vars`
 - size: oxc 228 vs reference 230 (-2 bytes)
 
 ```js
@@ -4842,6 +4947,7 @@ for (var i = 0; i < a.length; i++) {
 
 ## `uglify/yields/collapse_vars_3`
 
+- tags: `join vars`
 - size: oxc 100 vs reference 102 (-2 bytes)
 
 ```js
@@ -4870,6 +4976,7 @@ console.log(a);
 
 ## `uglify/assignments/logical_collapse_vars_1`
 
+- tags: `join vars`
 - size: oxc 61 vs reference 64 (-3 bytes)
 
 ```js
@@ -4894,6 +5001,7 @@ console.log(a);
 
 ## `uglify/awaits/issue_4337`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 69 vs reference 72 (-3 bytes)
 
 ```js
@@ -4999,6 +5107,7 @@ console.log(A.Q, new A().r);
 
 ## `uglify/classes/unused_await_strict`
 
+- tags: `remove unused`
 - size: oxc 88 vs reference 91 (-3 bytes)
 
 ```js
@@ -5029,6 +5138,7 @@ var await = 'PASS';
 
 ## `uglify/collapse_vars/collapse_rhs_loop`
 
+- tags: `join vars`
 - size: oxc 123 vs reference 126 (-3 bytes)
 
 ```js
@@ -5053,6 +5163,7 @@ console.log(s);
 
 ## `uglify/collapse_vars/compound_assignment_1`
 
+- tags: `join vars`
 - size: oxc 39 vs reference 42 (-3 bytes)
 
 ```js
@@ -5077,6 +5188,7 @@ console.log(a);
 
 ## `uglify/collapse_vars/compound_assignment_2`
 
+- tags: `join vars`
 - size: oxc 46 vs reference 49 (-3 bytes)
 
 ```js
@@ -5099,6 +5211,7 @@ for (a += a + 2; console.log(a););
 
 ## `uglify/collapse_vars/issue_3314`
 
+- tags: `join vars`
 - size: oxc 88 vs reference 91 (-3 bytes)
 
 ```js
@@ -5184,6 +5297,7 @@ else switch (false) {
 
 ## `uglify/const/issue_4216`
 
+- tags: `join vars`
 - size: oxc 50 vs reference 53 (-3 bytes)
 
 ```js
@@ -5210,6 +5324,7 @@ console.log(typeof a);
 
 ## `uglify/const/issue_4261_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 131 vs reference 134 (-3 bytes)
 
 ```js
@@ -5285,6 +5400,7 @@ if (console.log('PASS')) {
 
 ## `uglify/default-values/issue_4523`
 
+- tags: `join vars`
 - size: oxc 89 vs reference 92 (-3 bytes)
 
 ```js
@@ -5311,6 +5427,7 @@ console.log(function() {
 
 ## `uglify/destructured/issue_5866_4`
 
+- tags: `remove unused`
 - size: oxc 61 vs reference 64 (-3 bytes)
 
 ```js
@@ -5334,6 +5451,7 @@ console.log(b);
 
 ## `uglify/destructured/join_vars`
 
+- tags: `join vars`
 - size: oxc 38 vs reference 41 (-3 bytes)
 
 ```js
@@ -5354,6 +5472,7 @@ a, console.log(a);
 
 ## `uglify/drop-unused/drop_toplevel_all`
 
+- tags: `remove unused`
 - size: oxc 16 vs reference 19 (-3 bytes)
 
 ```js
@@ -5381,6 +5500,7 @@ console.log(b = 3);
 
 ## `uglify/drop-unused/issue_3427_2`
 
+- tags: `remove unused`
 - size: oxc 65 vs reference 68 (-3 bytes)
 
 ```js
@@ -5405,6 +5525,7 @@ console.log(b = 3);
 
 ## `uglify/drop-unused/issue_4912_2`
 
+- tags: `remove unused`
 - size: oxc 120 vs reference 123 (-3 bytes)
 
 ```js
@@ -5432,6 +5553,7 @@ console.log(function() {
 
 ## `uglify/evaluate/issue_3878_2`
 
+- tags: `join vars`
 - size: oxc 40 vs reference 43 (-3 bytes)
 
 ```js
@@ -5455,6 +5577,7 @@ console.log(a);
 
 ## `uglify/evaluate/issue_3937`
 
+- tags: `join vars`
 - size: oxc 55 vs reference 58 (-3 bytes)
 
 ```js
@@ -5477,6 +5600,7 @@ console.log(a, b);
 
 ## `uglify/evaluate/issue_4119_1`
 
+- tags: `join vars`
 - size: oxc 82 vs reference 85 (-3 bytes)
 
 ```js
@@ -5505,6 +5629,7 @@ if (+b + 1) {
 
 ## `uglify/evaluate/issue_4119_3`
 
+- tags: `join vars`
 - size: oxc 74 vs reference 77 (-3 bytes)
 
 ```js
@@ -5568,6 +5693,7 @@ console.log([
 
 ## `uglify/exports/issue_4742_join_vars_2`
 
+- tags: `join vars`
 - size: oxc 37 vs reference 40 (-3 bytes)
 
 ```js
@@ -5685,6 +5811,7 @@ console.log(function() {
 
 ## `uglify/functions/issue_5851_1`
 
+- tags: `join vars`
 - size: oxc 58 vs reference 61 (-3 bytes)
 
 ```js
@@ -5742,6 +5869,7 @@ console.log(CONFIG);
 
 ## `uglify/hoist_vars/issue_5638_1`
 
+- tags: `join vars`
 - size: oxc 64 vs reference 67 (-3 bytes)
 
 ```js
@@ -5767,6 +5895,7 @@ console.log(a++);
 
 ## `uglify/hoist_vars/issue_5638_2`
 
+- tags: `join vars`
 - size: oxc 66 vs reference 69 (-3 bytes)
 
 ```js
@@ -5792,6 +5921,7 @@ console.log(a *= 7);
 
 ## `uglify/hoist_vars/issue_5638_3`
 
+- tags: `join vars`
 - size: oxc 95 vs reference 98 (-3 bytes)
 
 ```js
@@ -5822,6 +5952,7 @@ for (var k in o) {
 
 ## `uglify/hoist_vars/issue_5638_4`
 
+- tags: `join vars`
 - size: oxc 97 vs reference 100 (-3 bytes)
 
 ```js
@@ -5918,6 +6049,7 @@ L: do {
 
 ## `uglify/issue-1639/issue_1639_2`
 
+- tags: `join vars`, `sequences`
 - size: oxc 72 vs reference 75 (-3 bytes)
 
 ```js
@@ -5984,6 +6116,7 @@ var z = 'foo';
 
 ## `uglify/issue-5614/reassign_3`
 
+- tags: `join vars`
 - size: oxc 54 vs reference 57 (-3 bytes)
 
 ```js
@@ -6059,6 +6192,7 @@ if (func() || true) {
 
 ## `uglify/labels/labels_5`
 
+- tags: `remove unused`
 - size: oxc 105 vs reference 108 (-3 bytes)
 
 ```js
@@ -6118,6 +6252,7 @@ console.log(a, b);
 
 ## `uglify/let/issue_5745_1`
 
+- tags: `join vars`
 - size: oxc 96 vs reference 99 (-3 bytes)
 
 ```js
@@ -6147,6 +6282,7 @@ console.log(a);
 
 ## `uglify/let/join_let_var_2`
 
+- tags: `join vars`
 - size: oxc 75 vs reference 78 (-3 bytes)
 
 ```js
@@ -6196,6 +6332,7 @@ console.log(b);
 
 ## `uglify/merge_vars/issue_4759`
 
+- tags: `join vars`
 - size: oxc 170 vs reference 173 (-3 bytes)
 
 ```js
@@ -6244,6 +6381,7 @@ console.log(a);
 
 ## `uglify/merge_vars/issue_5770_1`
 
+- tags: `join vars`
 - size: oxc 120 vs reference 123 (-3 bytes)
 
 ```js
@@ -6271,6 +6409,7 @@ L: do {
 
 ## `uglify/negate-iife/negate_iife_4`
 
+- tags: `sequences`
 - size: oxc 114 vs reference 117 (-3 bytes)
 
 ```js
@@ -6300,6 +6439,7 @@ L: do {
 
 ## `uglify/negate-iife/negate_iife_5`
 
+- tags: `sequences`
 - size: oxc 98 vs reference 101 (-3 bytes)
 
 ```js
@@ -6495,6 +6635,7 @@ a['foo'] = 'bar';
 
 ## `uglify/reduce_vars/escaped_prop_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 122 vs reference 125 (-3 bytes)
 
 ```js
@@ -6536,6 +6677,7 @@ h();
 
 ## `uglify/reduce_vars/inner_var_if`
 
+- tags: `join vars`
 - size: oxc 59 vs reference 62 (-3 bytes)
 
 ```js
@@ -6560,6 +6702,7 @@ function f(a) {
 
 ## `uglify/reduce_vars/issue_2598`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 82 vs reference 85 (-3 bytes)
 
 ```js
@@ -6585,6 +6728,7 @@ console.log(g(false) === g(null));
 
 ## `uglify/reduce_vars/issue_3240_2`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 105 vs reference 108 (-3 bytes)
 
 ```js
@@ -6623,6 +6767,7 @@ console.log(g(false) === g(null));
 
 ## `uglify/reduce_vars/issue_5623`
 
+- tags: `join vars`, `2 iterations`
 - size: oxc 83 vs reference 86 (-3 bytes)
 
 ```js
@@ -6653,6 +6798,7 @@ console.log(a);
 
 ## `uglify/reduce_vars/issue_5872_2`
 
+- tags: `join vars`
 - size: oxc 139 vs reference 142 (-3 bytes)
 
 ```js
@@ -6693,6 +6839,7 @@ try {
 
 ## `uglify/reduce_vars/issue_5872_3`
 
+- tags: `join vars`
 - size: oxc 141 vs reference 144 (-3 bytes)
 
 ```js
@@ -6735,6 +6882,7 @@ try {
 
 ## `uglify/reduce_vars/lvalues_def_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 48 vs reference 51 (-3 bytes)
 
 ```js
@@ -6784,6 +6932,7 @@ console.log(function(a, ...[b, c]) {
 
 ## `uglify/rests/issue_5100_1`
 
+- tags: `remove unused`, `2 iterations`
 - size: oxc 78 vs reference 81 (-3 bytes)
 
 ```js
@@ -6813,6 +6962,7 @@ console.log(a.r);
 
 ## `uglify/rests/issue_5100_2`
 
+- tags: `remove unused`, `2 iterations`
 - size: oxc 70 vs reference 73 (-3 bytes)
 
 ```js
@@ -6833,6 +6983,7 @@ var a;
 
 ## `uglify/sequences/lift_sequences_1`
 
+- tags: `sequences`
 - size: oxc 41 vs reference 44 (-3 bytes)
 
 ```js
@@ -6873,6 +7024,7 @@ x = (foo, bar, baz);
 
 ## `uglify/sequences/lift_sequences_5`
 
+- tags: `sequences`
 - size: oxc 47 vs reference 50 (-3 bytes)
 
 ```js
@@ -6894,6 +7046,7 @@ console.log(a);
 
 ## `uglify/sequences/make_sequences_2`
 
+- tags: `sequences`
 - size: oxc 47 vs reference 50 (-3 bytes)
 
 ```js
@@ -7070,6 +7223,7 @@ var f = (a) => a;
 
 ## `uglify/awaits/issue_4359`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 82 vs reference 86 (-4 bytes)
 
 ```js
@@ -7099,6 +7253,7 @@ try {
 
 ## `uglify/awaits/issue_4406`
 
+- tags: `join vars`
 - size: oxc 136 vs reference 140 (-4 bytes)
 
 ```js
@@ -7387,6 +7542,7 @@ console.log(function() {
 
 ## `uglify/classes/drop_name`
 
+- tags: `remove unused`
 - size: oxc 89 vs reference 93 (-4 bytes)
 
 ```js
@@ -7445,6 +7601,7 @@ try {
 
 ## `uglify/classes/issue_5053_1`
 
+- tags: `join vars`
 - size: oxc 121 vs reference 125 (-4 bytes)
 
 ```js
@@ -7477,6 +7634,7 @@ try {
 
 ## `uglify/classes/issue_5053_2`
 
+- tags: `join vars`
 - size: oxc 115 vs reference 119 (-4 bytes)
 
 ```js
@@ -7509,6 +7667,7 @@ try {
 
 ## `uglify/classes/issue_5053_3`
 
+- tags: `join vars`
 - size: oxc 90 vs reference 94 (-4 bytes)
 
 ```js
@@ -7538,6 +7697,7 @@ try {
 
 ## `uglify/classes/issue_5053_4`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 119 vs reference 123 (-4 bytes)
 
 ```js
@@ -7604,6 +7764,7 @@ try {
 
 ## `uglify/classes/keep_field_reference_4`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 111 vs reference 115 (-4 bytes)
 
 ```js
@@ -7632,6 +7793,7 @@ console.log(new B().p === new B().p ? 'PASS' : 'FAIL');
 
 ## `uglify/classes/keep_fnames`
 
+- tags: `keep function names`
 - size: oxc 65 vs reference 69 (-4 bytes)
 
 ```js
@@ -7654,6 +7816,7 @@ console.log(Foo.name, class Bar {}.name);
 
 ## `uglify/collapse_vars/call_1_symbol`
 
+- tags: `join vars`
 - size: oxc 70 vs reference 74 (-4 bytes)
 
 ```js
@@ -7682,6 +7845,7 @@ console.log(Foo.name, class Bar {}.name);
 
 ## `uglify/collapse_vars/chained_4`
 
+- tags: `join vars`
 - size: oxc 60 vs reference 64 (-4 bytes)
 
 ```js
@@ -7704,6 +7868,7 @@ console.log(a, b);
 
 ## `uglify/collapse_vars/compound_assignment_6`
 
+- tags: `join vars`
 - size: oxc 43 vs reference 47 (-4 bytes)
 
 ```js
@@ -7728,6 +7893,7 @@ console.log(a);
 
 ## `uglify/collapse_vars/dot_in_try`
 
+- tags: `join vars`
 - size: oxc 80 vs reference 84 (-4 bytes)
 
 ```js
@@ -7757,6 +7923,7 @@ try {
 
 ## `uglify/collapse_vars/dot_throw_assign_sequence`
 
+- tags: `join vars`
 - size: oxc 94 vs reference 98 (-4 bytes)
 
 ```js
@@ -7785,6 +7952,7 @@ console.log(a);
 
 ## `uglify/collapse_vars/issue_2364_4`
 
+- tags: `join vars`, `pure getters`
 - size: oxc 218 vs reference 222 (-4 bytes)
 
 ```js
@@ -7817,6 +7985,7 @@ console.log(foo.amount, answer);
 
 ## `uglify/collapse_vars/issue_2571_2`
 
+- tags: `join vars`
 - size: oxc 64 vs reference 68 (-4 bytes)
 
 ```js
@@ -7845,6 +8014,7 @@ try {
 
 ## `uglify/collapse_vars/issue_2891_1`
 
+- tags: `join vars`
 - size: oxc 85 vs reference 89 (-4 bytes)
 
 ```js
@@ -7873,6 +8043,7 @@ console.log(a);
 
 ## `uglify/collapse_vars/issue_2891_2`
 
+- tags: `join vars`
 - size: oxc 97 vs reference 101 (-4 bytes)
 
 ```js
@@ -7902,6 +8073,7 @@ console.log(a);
 
 ## `uglify/collapse_vars/issue_2954_1`
 
+- tags: `join vars`
 - size: oxc 136 vs reference 140 (-4 bytes)
 
 ```js
@@ -7934,6 +8106,7 @@ console.log(a);
 
 ## `uglify/collapse_vars/issue_3520`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 171 vs reference 175 (-4 bytes)
 
 ```js
@@ -7968,6 +8141,7 @@ console.log(a);
 
 ## `uglify/collapse_vars/issue_3581_1`
 
+- tags: `join vars`
 - size: oxc 119 vs reference 123 (-4 bytes)
 
 ```js
@@ -7997,6 +8171,7 @@ console.log(a, b);
 
 ## `uglify/collapse_vars/issue_3641`
 
+- tags: `join vars`
 - size: oxc 92 vs reference 96 (-4 bytes)
 
 ```js
@@ -8024,6 +8199,7 @@ console.log(a, b);
 
 ## `uglify/collapse_vars/issue_3671`
 
+- tags: `join vars`
 - size: oxc 73 vs reference 77 (-4 bytes)
 
 ```js
@@ -8054,6 +8230,7 @@ try {
 
 ## `uglify/collapse_vars/issue_3698_1`
 
+- tags: `join vars`
 - size: oxc 97 vs reference 101 (-4 bytes)
 
 ```js
@@ -8081,6 +8258,7 @@ log(a, b, c);
 
 ## `uglify/collapse_vars/issue_3698_2`
 
+- tags: `join vars`
 - size: oxc 122 vs reference 126 (-4 bytes)
 
 ```js
@@ -8109,6 +8287,7 @@ log(a, b, c, d);
 
 ## `uglify/collapse_vars/issue_3700`
 
+- tags: `join vars`
 - size: oxc 107 vs reference 111 (-4 bytes)
 
 ```js
@@ -8139,6 +8318,7 @@ console.log(a);
 
 ## `uglify/collapse_vars/issue_4051`
 
+- tags: `join vars`
 - size: oxc 68 vs reference 72 (-4 bytes)
 
 ```js
@@ -8163,6 +8343,7 @@ console.log(a);
 
 ## `uglify/collapse_vars/issue_4248`
 
+- tags: `join vars`
 - size: oxc 61 vs reference 65 (-4 bytes)
 
 ```js
@@ -8192,6 +8373,7 @@ try {
 
 ## `uglify/collapse_vars/issue_4865`
 
+- tags: `join vars`
 - size: oxc 48 vs reference 52 (-4 bytes)
 
 ```js
@@ -8214,6 +8396,7 @@ console.log(a, NaN);
 
 ## `uglify/collapse_vars/issue_4977_1`
 
+- tags: `join vars`
 - size: oxc 81 vs reference 85 (-4 bytes)
 
 ```js
@@ -8241,6 +8424,7 @@ console.log(o.p, a);
 
 ## `uglify/collapse_vars/issue_5112_1`
 
+- tags: `join vars`
 - size: oxc 156 vs reference 160 (-4 bytes)
 
 ```js
@@ -8274,6 +8458,7 @@ console.log(function(a) {
 
 ## `uglify/collapse_vars/issue_5112_2`
 
+- tags: `join vars`
 - size: oxc 189 vs reference 193 (-4 bytes)
 
 ```js
@@ -8309,6 +8494,7 @@ console.log(function(a) {
 
 ## `uglify/collapse_vars/issue_5638_3`
 
+- tags: `join vars`
 - size: oxc 94 vs reference 98 (-4 bytes)
 
 ```js
@@ -8336,6 +8522,7 @@ for (var k in a) {
 
 ## `uglify/collapse_vars/issue_5638_4`
 
+- tags: `join vars`
 - size: oxc 96 vs reference 100 (-4 bytes)
 
 ```js
@@ -8363,6 +8550,7 @@ for (var k in a) {
 
 ## `uglify/collapse_vars/lvalues_def`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 68 vs reference 72 (-4 bytes)
 
 ```js
@@ -8387,6 +8575,7 @@ console.log(a, b);
 
 ## `uglify/collapse_vars/operator_in`
 
+- tags: `join vars`
 - size: oxc 124 vs reference 128 (-4 bytes)
 
 ```js
@@ -8418,6 +8607,7 @@ log(a);
 
 ## `uglify/collapse_vars/side_effects_property`
 
+- tags: `join vars`
 - size: oxc 90 vs reference 94 (-4 bytes)
 
 ```js
@@ -8446,6 +8636,7 @@ console.log(c);
 
 ## `uglify/collapse_vars/unused_orig`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 123 vs reference 127 (-4 bytes)
 
 ```js
@@ -8487,6 +8678,7 @@ console.log(function(b) {
 
 ## `uglify/comparisons/is_boolean_var`
 
+- tags: `join vars`
 - size: oxc 118 vs reference 122 (-4 bytes)
 
 ```js
@@ -8510,6 +8702,7 @@ console.log(function(a, b) {
 
 ## `uglify/conditionals/issue_5334_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 97 vs reference 101 (-4 bytes)
 
 ```js
@@ -8620,6 +8813,7 @@ console.log(function(a, b, c) {
 
 ## `uglify/const/use_before_init_2`
 
+- tags: `remove unused`
 - size: oxc 69 vs reference 73 (-4 bytes)
 
 ```js
@@ -8648,6 +8842,7 @@ const a = 'bar';
 
 ## `uglify/const/use_before_init_4`
 
+- tags: `join vars`
 - size: oxc 75 vs reference 79 (-4 bytes)
 
 ```js
@@ -8789,6 +8984,7 @@ try {
 
 ## `uglify/default-values/issue_4460`
 
+- tags: `join vars`
 - size: oxc 74 vs reference 78 (-4 bytes)
 
 ```js
@@ -8873,6 +9069,7 @@ log(a, b);
 
 ## `uglify/default-values/issue_4485_3`
 
+- tags: `remove unused`
 - size: oxc 108 vs reference 112 (-4 bytes)
 
 ```js
@@ -8904,6 +9101,7 @@ log(a, b);
 
 ## `uglify/default-values/issue_4548_2`
 
+- tags: `join vars`
 - size: oxc 90 vs reference 94 (-4 bytes)
 
 ```js
@@ -8930,6 +9128,7 @@ var c;
 
 ## `uglify/default-values/issue_4916`
 
+- tags: `join vars`
 - size: oxc 86 vs reference 90 (-4 bytes)
 
 ```js
@@ -8957,6 +9156,7 @@ var log = console.log;
 
 ## `uglify/default-values/issue_5336`
 
+- tags: `remove unused`
 - size: oxc 81 vs reference 85 (-4 bytes)
 
 ```js
@@ -8986,6 +9186,7 @@ do {
 
 ## `uglify/default-values/issue_5444_1`
 
+- tags: `join vars`
 - size: oxc 123 vs reference 127 (-4 bytes)
 
 ```js
@@ -9014,6 +9215,7 @@ console.log(typeof b);
 
 ## `uglify/default-values/issue_5536`
 
+- tags: `remove unused`
 - size: oxc 80 vs reference 84 (-4 bytes)
 
 ```js
@@ -9066,6 +9268,7 @@ try {
 
 ## `uglify/destructured/collapse_vars_1`
 
+- tags: `join vars`
 - size: oxc 48 vs reference 52 (-4 bytes)
 
 ```js
@@ -9086,6 +9289,7 @@ var { [a.p]: a } = !console.log(a);
 
 ## `uglify/destructured/collapse_vars_4`
 
+- tags: `join vars`
 - size: oxc 68 vs reference 72 (-4 bytes)
 
 ```js
@@ -9115,6 +9319,7 @@ try {
 
 ## `uglify/destructured/collapse_vars_5`
 
+- tags: `join vars`
 - size: oxc 73 vs reference 77 (-4 bytes)
 
 ```js
@@ -9144,6 +9349,7 @@ try {
 
 ## `uglify/destructured/collapse_vars_6`
 
+- tags: `join vars`
 - size: oxc 77 vs reference 81 (-4 bytes)
 
 ```js
@@ -9173,6 +9379,7 @@ try {
 
 ## `uglify/destructured/collapse_vars_7`
 
+- tags: `join vars`
 - size: oxc 117 vs reference 121 (-4 bytes)
 
 ```js
@@ -9204,6 +9411,7 @@ try {
 
 ## `uglify/destructured/collapse_vars_8`
 
+- tags: `join vars`
 - size: oxc 121 vs reference 125 (-4 bytes)
 
 ```js
@@ -9235,6 +9443,7 @@ try {
 
 ## `uglify/destructured/collapse_vars_9`
 
+- tags: `join vars`
 - size: oxc 159 vs reference 163 (-4 bytes)
 
 ```js
@@ -9269,6 +9478,7 @@ console.log(function(a) {
 
 ## `uglify/destructured/funarg_collapse_vars_3`
 
+- tags: `join vars`
 - size: oxc 101 vs reference 105 (-4 bytes)
 
 ```js
@@ -9299,6 +9509,7 @@ try {
 
 ## `uglify/destructured/funarg_collapse_vars_5`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 118 vs reference 122 (-4 bytes)
 
 ```js
@@ -9328,6 +9539,7 @@ console.log(A);
 
 ## `uglify/destructured/funarg_collapse_vars_6`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 143 vs reference 147 (-4 bytes)
 
 ```js
@@ -9362,6 +9574,7 @@ try {
 
 ## `uglify/destructured/funarg_reduce_vars_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 100 vs reference 104 (-4 bytes)
 
 ```js
@@ -9391,6 +9604,7 @@ try {
 
 ## `uglify/destructured/funarg_unused_5`
 
+- tags: `remove unused`
 - size: oxc 75 vs reference 79 (-4 bytes)
 
 ```js
@@ -9417,6 +9631,7 @@ try {
 
 ## `uglify/destructured/issue_4284_2`
 
+- tags: `join vars`
 - size: oxc 57 vs reference 61 (-4 bytes)
 
 ```js
@@ -9437,6 +9652,7 @@ var c = a;
 
 ## `uglify/destructured/issue_4301`
 
+- tags: `join vars`
 - size: oxc 127 vs reference 131 (-4 bytes)
 
 ```js
@@ -9566,6 +9782,7 @@ console.log(function() {
 
 ## `uglify/destructured/issue_4485_3`
 
+- tags: `remove unused`
 - size: oxc 104 vs reference 108 (-4 bytes)
 
 ```js
@@ -9657,6 +9874,7 @@ try {
 
 ## `uglify/destructured/issue_4554`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 115 vs reference 119 (-4 bytes)
 
 ```js
@@ -9688,6 +9906,7 @@ try {
 
 ## `uglify/destructured/issue_5573`
 
+- tags: `join vars`
 - size: oxc 110 vs reference 114 (-4 bytes)
 
 ```js
@@ -9740,6 +9959,7 @@ try {
 
 ## `uglify/destructured/side_effects_array`
 
+- tags: `remove unused`
 - size: oxc 55 vs reference 59 (-4 bytes)
 
 ```js
@@ -9766,6 +9986,7 @@ try {
 
 ## `uglify/drop-unused/issue_4806_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 83 vs reference 87 (-4 bytes)
 
 ```js
@@ -9791,6 +10012,7 @@ a;
 
 ## `uglify/evaluate/issue_4552`
 
+- tags: `join vars`, `remove unused`, `keep function names`
 - size: oxc 113 vs reference 117 (-4 bytes)
 
 ```js
@@ -9823,6 +10045,7 @@ console.log(a);
 
 ## `uglify/exports/instanceof_default_function`
 
+- tags: `remove unused`
 - size: oxc 92 vs reference 96 (-4 bytes)
 
 ```js
@@ -9953,6 +10176,7 @@ console.log(function() {
 
 ## `uglify/functions/issue_5290`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 117 vs reference 121 (-4 bytes)
 
 ```js
@@ -9986,6 +10210,7 @@ while (a--) new function(b) {
 
 ## `uglify/functions/shorter_without_void`
 
+- tags: `join vars`, `2 iterations`
 - size: oxc 113 vs reference 117 (-4 bytes)
 
 ```js
@@ -10018,6 +10243,7 @@ console.log(a);
 
 ## `uglify/hoist_props/direct_access_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 82 vs reference 86 (-4 bytes)
 
 ```js
@@ -10046,6 +10272,7 @@ console.log(a, obj.a);
 
 ## `uglify/hoist_props/issue_3871`
 
+- tags: `join vars`
 - size: oxc 102 vs reference 106 (-4 bytes)
 
 ```js
@@ -10400,6 +10627,7 @@ console.log(c);
 
 ## `uglify/ie/issue_4028`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 80 vs reference 84 (-4 bytes)
 
 ```js
@@ -10610,6 +10838,7 @@ L: do {
 
 ## `uglify/join_vars/issue_3786`
 
+- tags: `join vars`
 - size: oxc 82 vs reference 86 (-4 bytes)
 
 ```js
@@ -10639,6 +10868,7 @@ try {
 
 ## `uglify/keep_fargs/collapse_vars_repeated`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 144 vs reference 148 (-4 bytes)
 
 ```js
@@ -10687,6 +10917,7 @@ function f2(x) {
 
 ## `uglify/keep_fargs/issue_3364`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 370 vs reference 374 (-4 bytes)
 
 ```js
@@ -10829,6 +11060,7 @@ try {
 
 ## `uglify/let/issue_4197`
 
+- tags: `join vars`
 - size: oxc 105 vs reference 109 (-4 bytes)
 
 ```js
@@ -10861,6 +11093,7 @@ try {
 
 ## `uglify/let/issue_4248`
 
+- tags: `join vars`
 - size: oxc 120 vs reference 124 (-4 bytes)
 
 ```js
@@ -10894,6 +11127,7 @@ try {
 
 ## `uglify/let/issue_4290_2`
 
+- tags: `join vars`
 - size: oxc 118 vs reference 122 (-4 bytes)
 
 ```js
@@ -10926,6 +11160,7 @@ try {
 
 ## `uglify/let/issue_5759`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 132 vs reference 136 (-4 bytes)
 
 ```js
@@ -10969,6 +11204,7 @@ f();
 
 ## `uglify/let/use_before_init_2`
 
+- tags: `remove unused`
 - size: oxc 81 vs reference 85 (-4 bytes)
 
 ```js
@@ -10999,6 +11235,7 @@ let a = 'bar';
 
 ## `uglify/let/use_before_init_4`
 
+- tags: `join vars`
 - size: oxc 87 vs reference 91 (-4 bytes)
 
 ```js
@@ -11077,6 +11314,7 @@ y();
 
 ## `uglify/merge_vars/cross_branch_1_5`
 
+- tags: `join vars`
 - size: oxc 128 vs reference 132 (-4 bytes)
 
 ```js
@@ -11114,6 +11352,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_1_6`
 
+- tags: `join vars`
 - size: oxc 129 vs reference 133 (-4 bytes)
 
 ```js
@@ -11157,6 +11396,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_1_7`
 
+- tags: `join vars`
 - size: oxc 120 vs reference 124 (-4 bytes)
 
 ```js
@@ -11195,6 +11435,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_1_8`
 
+- tags: `join vars`
 - size: oxc 128 vs reference 132 (-4 bytes)
 
 ```js
@@ -11238,6 +11479,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2a_11`
 
+- tags: `join vars`
 - size: oxc 201 vs reference 205 (-4 bytes)
 
 ```js
@@ -11281,6 +11523,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2a_12`
 
+- tags: `join vars`
 - size: oxc 191 vs reference 195 (-4 bytes)
 
 ```js
@@ -11326,6 +11569,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2a_13`
 
+- tags: `join vars`
 - size: oxc 201 vs reference 205 (-4 bytes)
 
 ```js
@@ -11376,6 +11620,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2a_15`
 
+- tags: `join vars`
 - size: oxc 190 vs reference 194 (-4 bytes)
 
 ```js
@@ -11421,6 +11666,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2a_9`
 
+- tags: `join vars`
 - size: oxc 190 vs reference 194 (-4 bytes)
 
 ```js
@@ -11466,6 +11712,7 @@ f();
 
 ## `uglify/merge_vars/issue_4103`
 
+- tags: `join vars`
 - size: oxc 91 vs reference 95 (-4 bytes)
 
 ```js
@@ -11493,6 +11740,7 @@ b;
 
 ## `uglify/merge_vars/issue_4126_1`
 
+- tags: `join vars`
 - size: oxc 129 vs reference 133 (-4 bytes)
 
 ```js
@@ -11533,6 +11781,7 @@ f('FAIL');
 
 ## `uglify/merge_vars/issue_4761`
 
+- tags: `join vars`
 - size: oxc 86 vs reference 90 (-4 bytes)
 
 ```js
@@ -11557,6 +11806,7 @@ try {
 
 ## `uglify/merge_vars/issue_5420`
 
+- tags: `join vars`
 - size: oxc 136 vs reference 140 (-4 bytes)
 
 ```js
@@ -11588,6 +11838,7 @@ do {
 
 ## `uglify/merge_vars/try_branch`
 
+- tags: `join vars`
 - size: oxc 115 vs reference 119 (-4 bytes)
 
 ```js
@@ -11689,6 +11940,7 @@ console.log(function(a) {
 
 ## `uglify/negate-iife/negate_iife_issue_1073`
 
+- tags: `sequences`
 - size: oxc 86 vs reference 90 (-4 bytes)
 
 ```js
@@ -11716,6 +11968,7 @@ new (function(a) {
 
 ## `uglify/optional-chains/issue_4906`
 
+- tags: `remove unused`
 - size: oxc 50 vs reference 54 (-4 bytes)
 
 ```js
@@ -11739,6 +11992,7 @@ do {
 
 ## `uglify/optional-chains/issue_5856`
 
+- tags: `join vars`
 - size: oxc 83 vs reference 87 (-4 bytes)
 
 ```js
@@ -11769,6 +12023,7 @@ try {
 
 ## `uglify/optional-chains/issue_5912`
 
+- tags: `join vars`
 - size: oxc 102 vs reference 106 (-4 bytes)
 
 ```js
@@ -11826,6 +12081,7 @@ try {
 
 ## `uglify/properties/issue_5949_1`
 
+- tags: `join vars`
 - size: oxc 93 vs reference 97 (-4 bytes)
 
 ```js
@@ -11856,6 +12112,7 @@ try {
 
 ## `uglify/properties/issue_5949_2`
 
+- tags: `join vars`
 - size: oxc 70 vs reference 74 (-4 bytes)
 
 ```js
@@ -11884,6 +12141,7 @@ try {
 
 ## `uglify/properties/issue_5963_dot`
 
+- tags: `join vars`
 - size: oxc 117 vs reference 121 (-4 bytes)
 
 ```js
@@ -11913,6 +12171,7 @@ try {
 
 ## `uglify/properties/issue_5963_sub`
 
+- tags: `join vars`
 - size: oxc 119 vs reference 123 (-4 bytes)
 
 ```js
@@ -11942,6 +12201,7 @@ try {
 
 ## `uglify/pure_getters/issue_4440`
 
+- tags: `remove unused`
 - size: oxc 119 vs reference 123 (-4 bytes)
 
 ```js
@@ -11972,6 +12232,7 @@ try {
 
 ## `uglify/pure_getters/issue_5917_1`
 
+- tags: `join vars`
 - size: oxc 133 vs reference 137 (-4 bytes)
 
 ```js
@@ -12005,6 +12266,7 @@ try {
 
 ## `uglify/pure_getters/issue_5917_2`
 
+- tags: `join vars`, `2 iterations`
 - size: oxc 146 vs reference 150 (-4 bytes)
 
 ```js
@@ -12041,6 +12303,7 @@ try {
 
 ## `uglify/reduce_vars/do_while`
 
+- tags: `join vars`
 - size: oxc 122 vs reference 126 (-4 bytes)
 
 ```js
@@ -12077,6 +12340,7 @@ console.log(c);
 
 ## `uglify/reduce_vars/inner_var_catch`
 
+- tags: `join vars`
 - size: oxc 75 vs reference 79 (-4 bytes)
 
 ```js
@@ -12108,6 +12372,7 @@ function f() {
 
 ## `uglify/reduce_vars/issue_5892`
 
+- tags: `join vars`
 - size: oxc 111 vs reference 115 (-4 bytes)
 
 ```js
@@ -12143,6 +12408,7 @@ try {
 
 ## `uglify/reduce_vars/lvalues_def_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 51 vs reference 55 (-4 bytes)
 
 ```js
@@ -12165,6 +12431,7 @@ console.log(a, b);
 
 ## `uglify/reduce_vars/perf_8`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 218 vs reference 222 (-4 bytes)
 
 ```js
@@ -12197,6 +12464,7 @@ console.log(sum);
 
 ## `uglify/reduce_vars/pure_getters_1`
 
+- tags: `join vars`
 - size: oxc 52 vs reference 56 (-4 bytes)
 
 ```js
@@ -12386,6 +12654,7 @@ console.log(b);
 
 ## `uglify/sequences/issue_4079`
 
+- tags: `sequences`
 - size: oxc 44 vs reference 48 (-4 bytes)
 
 ```js
@@ -12412,6 +12681,7 @@ try {
 
 ## `uglify/sequences/make_sequences_3`
 
+- tags: `sequences`
 - size: oxc 93 vs reference 97 (-4 bytes)
 
 ```js
@@ -12443,6 +12713,7 @@ function g() {
 
 ## `uglify/side_effects/issue_5912_1`
 
+- tags: `join vars`
 - size: oxc 105 vs reference 109 (-4 bytes)
 
 ```js
@@ -12474,6 +12745,7 @@ try {
 
 ## `uglify/side_effects/keep_access`
 
+- tags: `join vars`
 - size: oxc 118 vs reference 122 (-4 bytes)
 
 ```js
@@ -12507,6 +12779,7 @@ try {
 
 ## `uglify/spreads/collapse_vars_2`
 
+- tags: `join vars`
 - size: oxc 90 vs reference 94 (-4 bytes)
 
 ```js
@@ -12536,6 +12809,7 @@ try {
 
 ## `uglify/spreads/collapse_vars_3`
 
+- tags: `join vars`
 - size: oxc 91 vs reference 95 (-4 bytes)
 
 ```js
@@ -12646,6 +12920,7 @@ try {
 
 ## `uglify/switches/issue_5912_2`
 
+- tags: `join vars`
 - size: oxc 132 vs reference 136 (-4 bytes)
 
 ```js
@@ -12745,6 +13020,7 @@ new RegExp('[\udc42-\udcaa\udd74-\udd96\ude45-\ude4f\udea3-\udecc]');
 
 ## `uglify/yields/collapse_vars_4`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 93 vs reference 97 (-4 bytes)
 
 ```js
@@ -12841,6 +13117,7 @@ console.log(a);
 
 ## `uglify/arrows/issue_4401`
 
+- tags: `join vars`
 - size: oxc 98 vs reference 103 (-5 bytes)
 
 ```js
@@ -12867,6 +13144,7 @@ console.log(a);
 
 ## `uglify/assignments/issue_3429_1`
 
+- tags: `remove unused`
 - size: oxc 72 vs reference 77 (-5 bytes)
 
 ```js
@@ -12893,6 +13171,7 @@ console.log(a);
 
 ## `uglify/assignments/issue_3429_2`
 
+- tags: `remove unused`
 - size: oxc 65 vs reference 70 (-5 bytes)
 
 ```js
@@ -12919,6 +13198,7 @@ console.log(a);
 
 ## `uglify/awaits/issue_5493`
 
+- tags: `join vars`
 - size: oxc 72 vs reference 77 (-5 bytes)
 
 ```js
@@ -12995,6 +13275,7 @@ console.log(o.q);
 
 ## `uglify/classes/issue_4756`
 
+- tags: `remove unused`
 - size: oxc 116 vs reference 121 (-5 bytes)
 
 ```js
@@ -13027,6 +13308,7 @@ try {
 
 ## `uglify/classes/issue_4756_strict`
 
+- tags: `remove unused`
 - size: oxc 130 vs reference 135 (-5 bytes)
 
 ```js
@@ -13124,6 +13406,7 @@ new A();
 
 ## `uglify/collapse_vars/boolean_binary_2`
 
+- tags: `join vars`
 - size: oxc 76 vs reference 81 (-5 bytes)
 
 ```js
@@ -13151,6 +13434,7 @@ console.log(c);
 
 ## `uglify/collapse_vars/inner_lvalues`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 82 vs reference 87 (-5 bytes)
 
 ```js
@@ -13174,6 +13458,7 @@ console.log(null, a, b);
 
 ## `uglify/collapse_vars/issue_2364_2`
 
+- tags: `join vars`, `pure getters`
 - size: oxc 163 vs reference 168 (-5 bytes)
 
 ```js
@@ -13200,6 +13485,7 @@ function callValidate() {
 
 ## `uglify/collapse_vars/issue_2858`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 116 vs reference 121 (-5 bytes)
 
 ```js
@@ -13235,6 +13521,7 @@ console.log(b);
 
 ## `uglify/collapse_vars/issue_2954_2`
 
+- tags: `join vars`
 - size: oxc 163 vs reference 168 (-5 bytes)
 
 ```js
@@ -13280,6 +13567,7 @@ console.log(a);
 
 ## `uglify/collapse_vars/issue_3096`
 
+- tags: `join vars`
 - size: oxc 96 vs reference 101 (-5 bytes)
 
 ```js
@@ -13306,6 +13594,7 @@ console.log(function() {
 
 ## `uglify/collapse_vars/issue_3626_1`
 
+- tags: `join vars`
 - size: oxc 58 vs reference 63 (-5 bytes)
 
 ```js
@@ -13328,6 +13617,7 @@ console.log(a, b);
 
 ## `uglify/collapse_vars/return_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 153 vs reference 158 (-5 bytes)
 
 ```js
@@ -13366,6 +13656,7 @@ f(true, function() {
 
 ## `uglify/collapse_vars/return_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 109 vs reference 114 (-5 bytes)
 
 ```js
@@ -13425,6 +13716,7 @@ console.log(foo(3, null), foo(0, 7), foo(true, false), bar());
 
 ## `uglify/conditionals/issue_5666_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 73 vs reference 78 (-5 bytes)
 
 ```js
@@ -13453,6 +13745,7 @@ console.log(a);
 
 ## `uglify/conditionals/issue_5666_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 81 vs reference 86 (-5 bytes)
 
 ```js
@@ -13546,6 +13839,7 @@ console.log(a);
 
 ## `uglify/destructured/funarg_collapse_vars_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 65 vs reference 70 (-5 bytes)
 
 ```js
@@ -13570,6 +13864,7 @@ console.log(function(a, {}) {
 
 ## `uglify/destructured/issue_4294`
 
+- tags: `join vars`
 - size: oxc 103 vs reference 108 (-5 bytes)
 
 ```js
@@ -13598,6 +13893,7 @@ A = 'PASS';
 
 ## `uglify/destructured/issue_4504`
 
+- tags: `join vars`
 - size: oxc 94 vs reference 99 (-5 bytes)
 
 ```js
@@ -13624,6 +13920,7 @@ A = 'FAIL';
 
 ## `uglify/functions/issue_4659_2`
 
+- tags: `join vars`
 - size: oxc 139 vs reference 144 (-5 bytes)
 
 ```js
@@ -13666,6 +13963,7 @@ console.log(a);
 
 ## `uglify/functions/issue_5173_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 58 vs reference 63 (-5 bytes)
 
 ```js
@@ -13690,6 +13988,7 @@ f([A = 42, [] + '' || (A = f)]);
 
 ## `uglify/hoist_props/issue_3021`
 
+- tags: `join vars`
 - size: oxc 108 vs reference 113 (-5 bytes)
 
 ```js
@@ -13720,6 +14019,7 @@ console.log(a, b);
 
 ## `uglify/hoist_vars/issue_5187_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 94 vs reference 99 (-5 bytes)
 
 ```js
@@ -13795,6 +14095,7 @@ console.log(f());
 
 ## `uglify/issue-5614/retain_instance_write`
 
+- tags: `join vars`, `remove unused`, `pure getters`
 - size: oxc 132 vs reference 137 (-5 bytes)
 
 ```js
@@ -13875,6 +14176,7 @@ console.log(g().p);
 
 ## `uglify/negate-iife/sequence_off`
 
+- tags: `sequences`, `2 iterations`
 - size: oxc 272 vs reference 277 (-5 bytes)
 
 ```js
@@ -13943,6 +14245,7 @@ console?.log((void 0)?.p);
 
 ## `uglify/optional-chains/issue_5091`
 
+- tags: `join vars`
 - size: oxc 107 vs reference 112 (-5 bytes)
 
 ```js
@@ -13975,6 +14278,7 @@ console.log(f('FAIL 1') || 'PASS');
 
 ## `uglify/pure_getters/collapse_rhs_call`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 44 vs reference 49 (-5 bytes)
 
 ```js
@@ -14002,6 +14306,7 @@ f();
 
 ## `uglify/pure_getters/issue_4803`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 70 vs reference 75 (-5 bytes)
 
 ```js
@@ -14028,6 +14333,7 @@ for (var k in o) o[k];
 
 ## `uglify/reduce_vars/defun_reference`
 
+- tags: `join vars`
 - size: oxc 129 vs reference 134 (-5 bytes)
 
 ```js
@@ -14065,6 +14371,7 @@ function f() {
 
 ## `uglify/reduce_vars/escape_sequence`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 170 vs reference 175 (-5 bytes)
 
 ```js
@@ -14106,6 +14413,7 @@ main();
 
 ## `uglify/reduce_vars/issue_1865`
 
+- tags: `join vars`
 - size: oxc 127 vs reference 132 (-5 bytes)
 
 ```js
@@ -14139,6 +14447,7 @@ console.log(function() {
 
 ## `uglify/reduce_vars/issue_2485_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 320 vs reference 325 (-5 bytes)
 
 ```js
@@ -14201,6 +14510,7 @@ console.log(bar.baz([
 
 ## `uglify/reduce_vars/issue_3140_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 201 vs reference 206 (-5 bytes)
 
 ```js
@@ -14242,6 +14552,7 @@ console.log(bar.baz([
 
 ## `uglify/reduce_vars/issue_3140_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 252 vs reference 257 (-5 bytes)
 
 ```js
@@ -14288,6 +14599,7 @@ console.log(bar.baz([
 
 ## `uglify/reduce_vars/issue_3140_4`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 223 vs reference 228 (-5 bytes)
 
 ```js
@@ -14330,6 +14642,7 @@ console.log(bar.baz([
 
 ## `uglify/reduce_vars/issue_5055_1`
 
+- tags: `join vars`
 - size: oxc 61 vs reference 66 (-5 bytes)
 
 ```js
@@ -14356,6 +14669,7 @@ f(0 && (a = 0)(f(this)));
 
 ## `uglify/reduce_vars/issue_5872_1`
 
+- tags: `join vars`
 - size: oxc 138 vs reference 143 (-5 bytes)
 
 ```js
@@ -14398,6 +14712,7 @@ try {
 
 ## `uglify/reduce_vars/recursive_inlining_5`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 245 vs reference 250 (-5 bytes)
 
 ```js
@@ -14452,6 +14767,7 @@ try {
 
 ## `uglify/reduce_vars/unused_modified`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 96 vs reference 101 (-5 bytes)
 
 ```js
@@ -14525,6 +14841,7 @@ for (var k in o) console.log(k, o[k]);
 
 ## `uglify/spreads/collapse_vars_4`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 57 vs reference 62 (-5 bytes)
 
 ```js
@@ -14569,6 +14886,7 @@ console.log(function(a) {
 
 ## `uglify/spreads/reduce_vars_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 100 vs reference 105 (-5 bytes)
 
 ```js
@@ -14613,6 +14931,7 @@ console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
 
 ## `uglify/typeof/reassign_iife`
 
+- tags: `2 iterations`
 - size: oxc 132 vs reference 137 (-5 bytes)
 
 ```js
@@ -14731,6 +15050,7 @@ console.log(typeof 丽, 丽.丸, 丽['乁']);
 
 ## `uglify/varify/reduce_merge_const`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 65 vs reference 70 (-5 bytes)
 
 ```js
@@ -14811,6 +15131,7 @@ console.log(typeof async function* () {
 
 ## `uglify/arguments/issue_3273_drop_fargs_1`
 
+- tags: `join vars`
 - size: oxc 81 vs reference 87 (-6 bytes)
 
 ```js
@@ -14839,6 +15160,7 @@ console.log(typeof async function* () {
 
 ## `uglify/arguments/issue_3273_drop_fargs_2`
 
+- tags: `join vars`
 - size: oxc 81 vs reference 87 (-6 bytes)
 
 ```js
@@ -14867,6 +15189,7 @@ console.log(typeof async function* () {
 
 ## `uglify/arrows/issue_5416_2`
 
+- tags: `remove unused`
 - size: oxc 96 vs reference 102 (-6 bytes)
 
 ```js
@@ -14930,6 +15253,7 @@ f();
 
 ## `uglify/bigint/issue_4590`
 
+- tags: `join vars`
 - size: oxc 28 vs reference 34 (-6 bytes)
 
 ```js
@@ -15005,6 +15329,7 @@ console.log('PASS');
 
 ## `uglify/collapse_vars/collapse_vars_repeated`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 144 vs reference 150 (-6 bytes)
 
 ```js
@@ -15052,6 +15377,7 @@ function f2(x) {
 
 ## `uglify/collapse_vars/issue_3247`
 
+- tags: `join vars`
 - size: oxc 88 vs reference 94 (-6 bytes)
 
 ```js
@@ -15083,6 +15409,7 @@ f(a, true);
 
 ## `uglify/collapse_vars/issue_3927`
 
+- tags: `join vars`
 - size: oxc 146 vs reference 152 (-6 bytes)
 
 ```js
@@ -15121,6 +15448,7 @@ console.log(function(b) {
 
 ## `uglify/collapse_vars/issue_4920_3`
 
+- tags: `join vars`
 - size: oxc 93 vs reference 99 (-6 bytes)
 
 ```js
@@ -15153,6 +15481,7 @@ log(b);
 
 ## `uglify/collapse_vars/issue_5396`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 103 vs reference 109 (-6 bytes)
 
 ```js
@@ -15186,6 +15515,7 @@ new function g(c) {
 
 ## `uglify/conditionals/angularjs_chain`
 
+- tags: `2 iterations`
 - size: oxc 268 vs reference 274 (-6 bytes)
 
 ```js
@@ -15363,6 +15693,7 @@ console.log(f());
 
 ## `uglify/const/issue_4197`
 
+- tags: `join vars`
 - size: oxc 91 vs reference 97 (-6 bytes)
 
 ```js
@@ -15398,6 +15729,7 @@ try {
 
 ## `uglify/const/issue_4248`
 
+- tags: `join vars`
 - size: oxc 108 vs reference 114 (-6 bytes)
 
 ```js
@@ -15476,6 +15808,7 @@ try {
 
 ## `uglify/const/issue_5660`
 
+- tags: `join vars`
 - size: oxc 123 vs reference 129 (-6 bytes)
 
 ```js
@@ -15582,6 +15915,7 @@ console.log(a);
 
 ## `uglify/default-values/issue_5057_2`
 
+- tags: `remove unused`
 - size: oxc 90 vs reference 96 (-6 bytes)
 
 ```js
@@ -15607,6 +15941,7 @@ console.log(typeof b);
 
 ## `uglify/destructured/funarg_reduce_vars_4`
 
+- tags: `join vars`
 - size: oxc 75 vs reference 81 (-6 bytes)
 
 ```js
@@ -15634,6 +15969,7 @@ try {
 
 ## `uglify/destructured/issue_4584`
 
+- tags: `join vars`
 - size: oxc 93 vs reference 99 (-6 bytes)
 
 ```js
@@ -15661,6 +15997,7 @@ try {
 
 ## `uglify/drop-unused/issue_3146_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 111 vs reference 117 (-6 bytes)
 
 ```js
@@ -15693,6 +16030,7 @@ try {
 
 ## `uglify/drop-unused/issue_3146_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 111 vs reference 117 (-6 bytes)
 
 ```js
@@ -15761,6 +16099,7 @@ alert(42);
 
 ## `uglify/hoist_props/issue_5441`
 
+- tags: `join vars`, `2 iterations`
 - size: oxc 91 vs reference 97 (-6 bytes)
 
 ```js
@@ -16071,6 +16410,7 @@ console.log(a);
 
 ## `uglify/if_return/if_return_9`
 
+- tags: `sequences`
 - size: oxc 85 vs reference 91 (-6 bytes)
 
 ```js
@@ -16098,6 +16438,7 @@ console.log(a);
 
 ## `uglify/if_return/issue_1437`
 
+- tags: `sequences`
 - size: oxc 72 vs reference 78 (-6 bytes)
 
 ```js
@@ -16166,6 +16507,7 @@ console.log(null, undefined, Infinity, NaN, Infinity * undefined, Infinity.toStr
 
 ## `uglify/join_vars/join_object_assignments_return_2`
 
+- tags: `join vars`
 - size: oxc 84 vs reference 90 (-6 bytes)
 
 ```js
@@ -16235,6 +16577,7 @@ try {
 
 ## `uglify/let/issue_5741`
 
+- tags: `join vars`
 - size: oxc 113 vs reference 119 (-6 bytes)
 
 ```js
@@ -16273,6 +16616,7 @@ try {
 
 ## `uglify/let/issue_5756_1`
 
+- tags: `join vars`
 - size: oxc 112 vs reference 118 (-6 bytes)
 
 ```js
@@ -16305,6 +16649,7 @@ do {
 
 ## `uglify/merge_vars/conditional_branch`
 
+- tags: `join vars`
 - size: oxc 88 vs reference 94 (-6 bytes)
 
 ```js
@@ -16331,6 +16676,7 @@ console.log(function(a) {
 
 ## `uglify/merge_vars/cross_branch_1_4`
 
+- tags: `join vars`
 - size: oxc 118 vs reference 124 (-6 bytes)
 
 ```js
@@ -16372,6 +16718,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_1_9`
 
+- tags: `join vars`
 - size: oxc 118 vs reference 124 (-6 bytes)
 
 ```js
@@ -16412,6 +16759,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2a_10`
 
+- tags: `join vars`
 - size: oxc 189 vs reference 195 (-6 bytes)
 
 ```js
@@ -16460,6 +16808,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2a_14`
 
+- tags: `join vars`
 - size: oxc 189 vs reference 195 (-6 bytes)
 
 ```js
@@ -16507,6 +16856,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2a_16`
 
+- tags: `join vars`
 - size: oxc 188 vs reference 194 (-6 bytes)
 
 ```js
@@ -16554,6 +16904,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2a_8`
 
+- tags: `join vars`
 - size: oxc 188 vs reference 194 (-6 bytes)
 
 ```js
@@ -16598,6 +16949,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2b_11`
 
+- tags: `join vars`
 - size: oxc 180 vs reference 186 (-6 bytes)
 
 ```js
@@ -16641,6 +16993,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2b_12`
 
+- tags: `join vars`
 - size: oxc 188 vs reference 194 (-6 bytes)
 
 ```js
@@ -16689,6 +17042,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2b_14`
 
+- tags: `join vars`
 - size: oxc 188 vs reference 194 (-6 bytes)
 
 ```js
@@ -16736,6 +17090,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2b_15`
 
+- tags: `join vars`
 - size: oxc 180 vs reference 186 (-6 bytes)
 
 ```js
@@ -16780,6 +17135,7 @@ f();
 
 ## `uglify/merge_vars/issue_4112`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 153 vs reference 159 (-6 bytes)
 
 ```js
@@ -16838,6 +17194,7 @@ console.log(~x === 42, x % y === 42);
 
 ## `uglify/optional-chains/issue_5292_sub_pure_getters`
 
+- tags: `pure getters`
 - size: oxc 65 vs reference 71 (-6 bytes)
 
 ```js
@@ -16915,6 +17272,7 @@ console.log({ f() {
 
 ## `uglify/reduce_vars/issue_5050`
 
+- tags: `join vars`
 - size: oxc 76 vs reference 82 (-6 bytes)
 
 ```js
@@ -17126,6 +17484,7 @@ else {}
 
 ## `uglify/arguments/issue_3420_4`
 
+- tags: `join vars`
 - size: oxc 100 vs reference 107 (-7 bytes)
 
 ```js
@@ -17154,6 +17513,7 @@ else {}
 
 ## `uglify/arguments/issue_3420_5`
 
+- tags: `join vars`
 - size: oxc 114 vs reference 121 (-7 bytes)
 
 ```js
@@ -17184,6 +17544,7 @@ else {}
 
 ## `uglify/arrays/unsafe_evaluate_modified_sequence`
 
+- tags: `join vars`
 - size: oxc 69 vs reference 76 (-7 bytes)
 
 ```js
@@ -17227,6 +17588,7 @@ console.log((1n + 2n) * (3n - -4n) >> 5n - 6n);
 
 ## `uglify/collapse_vars/collapse_rhs_boolean_2`
 
+- tags: `join vars`
 - size: oxc 123 vs reference 130 (-7 bytes)
 
 ```js
@@ -17264,6 +17626,7 @@ console.log(function f2() {
 
 ## `uglify/collapse_vars/dot_non_local`
 
+- tags: `join vars`
 - size: oxc 100 vs reference 107 (-7 bytes)
 
 ```js
@@ -17301,6 +17664,7 @@ try {
 
 ## `uglify/collapse_vars/issue_3651`
 
+- tags: `join vars`
 - size: oxc 180 vs reference 187 (-7 bytes)
 
 ```js
@@ -17347,6 +17711,7 @@ try {
 
 ## `uglify/collapse_vars/reduce_vars_assign`
 
+- tags: `join vars`
 - size: oxc 56 vs reference 63 (-7 bytes)
 
 ```js
@@ -17373,6 +17738,7 @@ try {
 
 ## `uglify/collapse_vars/switch_case_3`
 
+- tags: `join vars`
 - size: oxc 85 vs reference 92 (-7 bytes)
 
 ```js
@@ -17403,6 +17769,7 @@ console.log(b);
 
 ## `uglify/destructured/issue_4286_1`
 
+- tags: `join vars`
 - size: oxc 51 vs reference 58 (-7 bytes)
 
 ```js
@@ -17425,6 +17792,7 @@ console.log(b);
 
 ## `uglify/drop-unused/issue_3986`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 110 vs reference 117 (-7 bytes)
 
 ```js
@@ -17461,6 +17829,7 @@ console.log(b);
 
 ## `uglify/evaluate/conditional_function`
 
+- tags: `join vars`
 - size: oxc 81 vs reference 88 (-7 bytes)
 
 ```js
@@ -17525,6 +17894,7 @@ console.log(Math.pow(-0, A) / 1);
 
 ## `uglify/functions/issue_5316_2`
 
+- tags: `join vars`
 - size: oxc 110 vs reference 117 (-7 bytes)
 
 ```js
@@ -17557,6 +17927,7 @@ do {
 
 ## `uglify/if_return/if_var_return_2`
 
+- tags: `sequences`
 - size: oxc 62 vs reference 69 (-7 bytes)
 
 ```js
@@ -17641,6 +18012,7 @@ else import.meta.url.replace(/bar/g, console.log);
 
 ## `uglify/issue-1639/issue_1639_3`
 
+- tags: `join vars`, `sequences`
 - size: oxc 38 vs reference 45 (-7 bytes)
 
 ```js
@@ -17663,6 +18035,7 @@ console.log(a, b);
 
 ## `uglify/issue-1673/side_effects_else`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 77 vs reference 84 (-7 bytes)
 
 ```js
@@ -17697,6 +18070,7 @@ f(0);
 
 ## `uglify/join_vars/join_expr`
 
+- tags: `join vars`
 - size: oxc 112 vs reference 119 (-7 bytes)
 
 ```js
@@ -17730,6 +18104,7 @@ console.log(c);
 
 ## `uglify/join_vars/join_object_assignments_return_1`
 
+- tags: `join vars`
 - size: oxc 71 vs reference 78 (-7 bytes)
 
 ```js
@@ -17758,6 +18133,7 @@ console.log(function() {
 
 ## `uglify/let/issue_5319`
 
+- tags: `join vars`
 - size: oxc 119 vs reference 126 (-7 bytes)
 
 ```js
@@ -17793,6 +18169,7 @@ console.log(function() {
 
 ## `uglify/merge_vars/issue_4253`
 
+- tags: `join vars`
 - size: oxc 115 vs reference 122 (-7 bytes)
 
 ```js
@@ -17886,6 +18263,7 @@ console.log(f(o) ? 'PASS' : 'FAIL');
 
 ## `uglify/reduce_vars/try_abort`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 93 vs reference 100 (-7 bytes)
 
 ```js
@@ -17921,6 +18299,7 @@ console.log(f(o) ? 'PASS' : 'FAIL');
 
 ## `uglify/sandbox/timers`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 173 vs reference 180 (-7 bytes)
 
 ```js
@@ -17951,6 +18330,7 @@ var timer = setInterval(function() {
 
 ## `uglify/side_effects/issue_5912_2`
 
+- tags: `join vars`
 - size: oxc 105 vs reference 112 (-7 bytes)
 
 ```js
@@ -18052,6 +18432,7 @@ bar\nbaz`);
 
 ## `uglify/typeof/reassign_for`
 
+- tags: `join vars`, `2 iterations`
 - size: oxc 121 vs reference 128 (-7 bytes)
 
 ```js
@@ -18070,6 +18451,7 @@ if (A = console, 'undefined' != typeof A) for (var a = A, i = 0; i < 2; i++) con
 
 ## `uglify/typeof/reassign_for_in`
 
+- tags: `join vars`, `2 iterations`
 - size: oxc 144 vs reference 151 (-7 bytes)
 
 ```js
@@ -18099,6 +18481,7 @@ if (A = console, 'undefined' != typeof A) for (var a = A, i = 0; i < 2; i++) con
 
 ## `uglify/typeof/reassign_property`
 
+- tags: `2 iterations`
 - size: oxc 128 vs reference 135 (-7 bytes)
 
 ```js
@@ -18128,6 +18511,7 @@ else {
 
 ## `uglify/varify/reduce_merge_let`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 77 vs reference 84 (-7 bytes)
 
 ```js
@@ -18155,6 +18539,7 @@ console.log(b);
 
 ## `uglify/varify/scope_adjustment_const`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 41 vs reference 48 (-7 bytes)
 
 ```js
@@ -18177,6 +18562,7 @@ for (var k in [42]) console.log(function f() {
 
 ## `uglify/varify/scope_adjustment_let`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 55 vs reference 62 (-7 bytes)
 
 ```js
@@ -18223,6 +18609,7 @@ console.log(function* () {
 
 ## `uglify/arrows/drop_arguments`
 
+- tags: `join vars`
 - size: oxc 73 vs reference 81 (-8 bytes)
 
 ```js
@@ -18246,6 +18633,7 @@ console.log(function() {
 
 ## `uglify/arrows/single_use_recursive`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 53 vs reference 61 (-8 bytes)
 
 ```js
@@ -18272,6 +18660,7 @@ console.log(typeof f());
 
 ## `uglify/collapse_vars/collapse_vars_arguments_1`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 64 vs reference 72 (-8 bytes)
 
 ```js
@@ -18301,6 +18690,7 @@ outer();
 
 ## `uglify/collapse_vars/iife_2`
 
+- tags: `join vars`
 - size: oxc 43 vs reference 51 (-8 bytes)
 
 ```js
@@ -18326,6 +18716,7 @@ var foo = bar();
 
 ## `uglify/collapse_vars/issue_4920_4`
 
+- tags: `join vars`
 - size: oxc 115 vs reference 123 (-8 bytes)
 
 ```js
@@ -18357,6 +18748,7 @@ log(b);
 
 ## `uglify/collapse_vars/issue_4935`
 
+- tags: `join vars`
 - size: oxc 68 vs reference 76 (-8 bytes)
 
 ```js
@@ -18386,6 +18778,7 @@ console.log(a, b);
 
 ## `uglify/collapse_vars/unsafe_builtin_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 70 vs reference 78 (-8 bytes)
 
 ```js
@@ -18635,6 +19028,7 @@ try {
 
 ## `uglify/destructured/fn_name_unused`
 
+- tags: `remove unused`
 - size: oxc 102 vs reference 110 (-8 bytes)
 
 ```js
@@ -18662,6 +19056,7 @@ console.log(function f({ [typeof f]: a }) {
 
 ## `uglify/destructured/issue_5017`
 
+- tags: `join vars`
 - size: oxc 92 vs reference 100 (-8 bytes)
 
 ```js
@@ -18686,6 +19081,7 @@ console.log(c[0] === a ? 'PASS' : 'FAIL');
 
 ## `uglify/drop-unused/issue_4464_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 82 vs reference 90 (-8 bytes)
 
 ```js
@@ -18712,6 +19108,7 @@ console.log(typeof f()[1]);
 
 ## `uglify/drop-unused/issue_4464_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 87 vs reference 95 (-8 bytes)
 
 ```js
@@ -18738,6 +19135,7 @@ console.log(typeof f(42)[0][0]);
 
 ## `uglify/drop-unused/issue_4464_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 111 vs reference 119 (-8 bytes)
 
 ```js
@@ -18766,6 +19164,7 @@ console.log(typeof f(42)[0][0]);
 
 ## `uglify/functions/new_target_collapse_vars`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 86 vs reference 94 (-8 bytes)
 
 ```js
@@ -18790,6 +19189,7 @@ new function(a) {
 
 ## `uglify/functions/new_target_reduce_vars`
 
+- tags: `join vars`
 - size: oxc 86 vs reference 94 (-8 bytes)
 
 ```js
@@ -18814,6 +19214,7 @@ new function(a) {
 
 ## `uglify/functions/recursive_collapse`
 
+- tags: `join vars`
 - size: oxc 68 vs reference 76 (-8 bytes)
 
 ```js
@@ -19063,6 +19464,7 @@ function f() {
 
 ## `uglify/let/issue_5756_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 93 vs reference 101 (-8 bytes)
 
 ```js
@@ -19212,6 +19614,7 @@ else bar();
 
 ## `uglify/merge_vars/cross_branch_2b_13`
 
+- tags: `join vars`
 - size: oxc 178 vs reference 186 (-8 bytes)
 
 ```js
@@ -19257,6 +19660,7 @@ f();
 
 ## `uglify/merge_vars/issue_5772_1`
 
+- tags: `join vars`
 - size: oxc 105 vs reference 113 (-8 bytes)
 
 ```js
@@ -19346,6 +19750,7 @@ x = { baz: 'ban' };
 
 ## `uglify/reduce_vars/boolean_binary_assign`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 45 vs reference 53 (-8 bytes)
 
 ```js
@@ -19373,6 +19778,7 @@ x = { baz: 'ban' };
 
 ## `uglify/reduce_vars/issue_3140_5`
 
+- tags: `join vars`
 - size: oxc 139 vs reference 147 (-8 bytes)
 
 ```js
@@ -19407,6 +19813,7 @@ console.log(c);
 
 ## `uglify/reduce_vars/issue_3240_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 181 vs reference 189 (-8 bytes)
 
 ```js
@@ -19444,6 +19851,7 @@ console.log(c);
 
 ## `uglify/reduce_vars/issue_3240_4`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 181 vs reference 189 (-8 bytes)
 
 ```js
@@ -19481,6 +19889,7 @@ console.log(c);
 
 ## `uglify/reduce_vars/perf_4`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 227 vs reference 235 (-8 bytes)
 
 ```js
@@ -19533,6 +19942,7 @@ console.log(sum);
 
 ## `uglify/sequences/hoist_decl`
 
+- tags: `join vars`, `sequences`
 - size: oxc 40 vs reference 48 (-8 bytes)
 
 ```js
@@ -19561,6 +19971,7 @@ var d;
 
 ## `uglify/sequences/missing_link`
 
+- tags: `sequences`
 - size: oxc 38 vs reference 46 (-8 bytes)
 
 ```js
@@ -19662,6 +20073,7 @@ if (typeof bar);
 
 ## `uglify/typeof/reassign`
 
+- tags: `2 iterations`
 - size: oxc 135 vs reference 143 (-8 bytes)
 
 ```js
@@ -19691,6 +20103,7 @@ else {
 
 ## `uglify/typeof/reassign_call`
 
+- tags: `2 iterations`
 - size: oxc 158 vs reference 166 (-8 bytes)
 
 ```js
@@ -19725,6 +20138,7 @@ else {
 
 ## `uglify/typeof/reassign_conditional`
 
+- tags: `2 iterations`
 - size: oxc 137 vs reference 145 (-8 bytes)
 
 ```js
@@ -19774,6 +20188,7 @@ console.log(f(42));
 
 ## `uglify/arrows/collapse_value`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 41 vs reference 50 (-9 bytes)
 
 ```js
@@ -19794,6 +20209,7 @@ console.log(((b) => Math.floor(b))(a));
 
 ## `uglify/collapse_vars/cascade_if_1`
 
+- tags: `join vars`
 - size: oxc 35 vs reference 44 (-9 bytes)
 
 ```js
@@ -19819,6 +20235,7 @@ if (a = x(), a) {
 
 ## `uglify/collapse_vars/collapse_for_init`
 
+- tags: `join vars`
 - size: oxc 39 vs reference 48 (-9 bytes)
 
 ```js
@@ -19838,6 +20255,7 @@ for (var a = (Math, console), b = a.log('PASS'); b;);
 
 ## `uglify/collapse_vars/issue_2914_2`
 
+- tags: `join vars`
 - size: oxc 181 vs reference 190 (-9 bytes)
 
 ```js
@@ -19879,6 +20297,7 @@ console.log(read([129]));
 
 ## `uglify/collapse_vars/issue_3971`
 
+- tags: `join vars`
 - size: oxc 62 vs reference 71 (-9 bytes)
 
 ```js
@@ -19903,6 +20322,7 @@ console.log(b);
 
 ## `uglify/collapse_vars/issue_4047_1`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 94 vs reference 103 (-9 bytes)
 
 ```js
@@ -19929,6 +20349,7 @@ console.log(+function(a) {
 
 ## `uglify/collapse_vars/issue_5277`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 21 vs reference 30 (-9 bytes)
 
 ```js
@@ -19952,6 +20373,7 @@ console.log(function() {
 
 ## `uglify/const/issue_5319`
 
+- tags: `join vars`
 - size: oxc 105 vs reference 114 (-9 bytes)
 
 ```js
@@ -20014,6 +20436,7 @@ function f() {
 
 ## `uglify/destructured/funarg_unused_6_keep_fargs`
 
+- tags: `remove unused`
 - size: oxc 58 vs reference 67 (-9 bytes)
 
 ```js
@@ -20058,6 +20481,7 @@ console.log('foo') || (console.log('bar'), 'baz') || console.log('moo');
 
 ## `uglify/evaluate/unsafe_object_accessor`
 
+- tags: `join vars`
 - size: oxc 66 vs reference 75 (-9 bytes)
 
 ```js
@@ -20089,6 +20513,7 @@ function f() {
 
 ## `uglify/exports/issue_5444`
 
+- tags: `remove unused`
 - size: oxc 24 vs reference 33 (-9 bytes)
 
 ```js
@@ -20107,6 +20532,7 @@ export var a = (console, console);
 
 ## `uglify/global_defs/issue_3217`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 8 vs reference 17 (-9 bytes)
 
 ```js
@@ -20125,6 +20551,7 @@ o.fn();
 
 ## `uglify/hoist_props/object_super`
 
+- tags: `join vars`
 - size: oxc 75 vs reference 84 (-9 bytes)
 
 ```js
@@ -20150,6 +20577,7 @@ o.f(42);
 
 ## `uglify/hoist_vars/issue_4487_1`
 
+- tags: `join vars`, `remove unused`, `keep function names`
 - size: oxc 54 vs reference 63 (-9 bytes)
 
 ```js
@@ -20205,6 +20633,7 @@ console.log(function() {
 
 ## `uglify/join_vars/assign_for_var`
 
+- tags: `join vars`
 - size: oxc 97 vs reference 106 (-9 bytes)
 
 ```js
@@ -20231,6 +20660,7 @@ for (var i = 2; --i >= 0;) {
 
 ## `uglify/join_vars/assign_sequence_var`
 
+- tags: `join vars`
 - size: oxc 68 vs reference 77 (-9 bytes)
 
 ```js
@@ -20255,6 +20685,7 @@ console.log(a, b, c);
 
 ## `uglify/join_vars/issue_3916_2`
 
+- tags: `join vars`
 - size: oxc 251 vs reference 260 (-9 bytes)
 
 ```js
@@ -20322,6 +20753,7 @@ log(o.q);
 
 ## `uglify/let/issue_4218`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 63 vs reference 72 (-9 bytes)
 
 ```js
@@ -20349,6 +20781,7 @@ console.log(typeof a, b);
 
 ## `uglify/let/issue_4305_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 90 vs reference 99 (-9 bytes)
 
 ```js
@@ -20421,6 +20854,7 @@ f();
 
 ## `uglify/merge_vars/issue_4257`
 
+- tags: `join vars`
 - size: oxc 145 vs reference 154 (-9 bytes)
 
 ```js
@@ -20554,6 +20988,7 @@ console.log({
 
 ## `uglify/pure_funcs/boolean_and`
 
+- tags: `pure functions`
 - size: oxc 53 vs reference 62 (-9 bytes)
 
 ```js
@@ -20583,6 +21018,7 @@ bar() && 'bar';
 
 ## `uglify/reduce_vars/issue_5048`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 21 vs reference 30 (-9 bytes)
 
 ```js
@@ -20627,6 +21063,7 @@ for (var k in o) console.log(k, o[k]);
 
 ## `uglify/rests/issue_4666`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 80 vs reference 89 (-9 bytes)
 
 ```js
@@ -20652,6 +21089,7 @@ console.log(a, b);
 
 ## `uglify/spreads/issue_4331`
 
+- tags: `join vars`
 - size: oxc 69 vs reference 78 (-9 bytes)
 
 ```js
@@ -20707,6 +21145,7 @@ switch (42) {
 
 ## `uglify/typeof/reassign_do`
 
+- tags: `join vars`, `2 iterations`
 - size: oxc 160 vs reference 169 (-9 bytes)
 
 ```js
@@ -20747,6 +21186,7 @@ A = console;
 
 ## `uglify/varify/hoist_props_const`
 
+- tags: `join vars`, `2 iterations`
 - size: oxc 30 vs reference 39 (-9 bytes)
 
 ```js
@@ -20769,6 +21209,7 @@ A = console;
 
 ## `uglify/varify/hoist_props_let`
 
+- tags: `join vars`, `2 iterations`
 - size: oxc 44 vs reference 53 (-9 bytes)
 
 ```js
@@ -20843,6 +21284,7 @@ console.log(a.next('FAIL 3').done);
 
 ## `uglify/yields/lift_sequence`
 
+- tags: `sequences`
 - size: oxc 61 vs reference 70 (-9 bytes)
 
 ```js
@@ -20865,6 +21307,7 @@ console.log(function* () {
 
 ## `uglify/arguments/modified_strict`
 
+- tags: `join vars`
 - size: oxc 202 vs reference 212 (-10 bytes)
 
 ```js
@@ -20917,6 +21360,7 @@ console.log(function* () {
 
 ## `uglify/arrows/reduce_iife_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 17 vs reference 27 (-10 bytes)
 
 ```js
@@ -20936,6 +21380,7 @@ var a = 21;
 
 ## `uglify/collapse_vars/boolean_binary_1`
 
+- tags: `join vars`
 - size: oxc 60 vs reference 70 (-10 bytes)
 
 ```js
@@ -20960,6 +21405,7 @@ console.log(a);
 
 ## `uglify/collapse_vars/issue_2187_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 79 vs reference 89 (-10 bytes)
 
 ```js
@@ -20993,6 +21439,7 @@ var a = 1;
 
 ## `uglify/collapse_vars/issue_315`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 214 vs reference 224 (-10 bytes)
 
 ```js
@@ -21027,6 +21474,7 @@ console.log(function(s) {
 
 ## `uglify/collapse_vars/issue_4012`
 
+- tags: `join vars`
 - size: oxc 121 vs reference 131 (-10 bytes)
 
 ```js
@@ -21087,6 +21535,7 @@ b.c !== b.c;
 
 ## `uglify/dead-code/throw_assignment`
 
+- tags: `remove unused`
 - size: oxc 945 vs reference 955 (-10 bytes)
 
 ```js
@@ -21229,6 +21678,7 @@ test(-1);
 
 ## `uglify/functions/issue_3512`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 97 vs reference 107 (-10 bytes)
 
 ```js
@@ -21278,6 +21728,7 @@ console.log(N, N);
 
 ## `uglify/imports/forbid_merge`
 
+- tags: `join vars`
 - size: oxc 79 vs reference 89 (-10 bytes)
 
 ```js
@@ -21303,6 +21754,7 @@ f();
 
 ## `uglify/issue-1105/assorted_Infinity_NaN_undefined_in_with_scope`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 280 vs reference 290 (-10 bytes)
 
 ```js
@@ -21386,6 +21838,7 @@ console.log(obj[void 0], obj[undefined], obj['undefined'], obj[0 / 0], obj[NaN],
 
 ## `uglify/merge_vars/collapse_vars_1`
 
+- tags: `join vars`
 - size: oxc 55 vs reference 65 (-10 bytes)
 
 ```js
@@ -21408,6 +21861,7 @@ var b = b && console.log(b);
 
 ## `uglify/merge_vars/conditional_chain_4`
 
+- tags: `join vars`
 - size: oxc 141 vs reference 151 (-10 bytes)
 
 ```js
@@ -21574,6 +22028,7 @@ console.log(f(o));
 
 ## `uglify/reduce_vars/booleans`
 
+- tags: `join vars`
 - size: oxc 102 vs reference 112 (-10 bytes)
 
 ```js
@@ -21649,6 +22104,7 @@ console.log(`P${`A${'S'}`}S`);
 
 ## `uglify/typeof/issue_2728_5`
 
+- tags: `join vars`
 - size: oxc 61 vs reference 71 (-10 bytes)
 
 ```js
@@ -21671,6 +22127,7 @@ console.log(`P${`A${'S'}`}S`);
 
 ## `uglify/annotations/inline_pure_call_4`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 64 vs reference 75 (-11 bytes)
 
 ```js
@@ -21696,6 +22153,7 @@ console.log(a);
 
 ## `uglify/arguments/issue_3282_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 198 vs reference 209 (-11 bytes)
 
 ```js
@@ -21815,6 +22273,7 @@ o[42]().then(console.log);
 
 ## `uglify/awaits/collapse_funarg_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 86 vs reference 97 (-11 bytes)
 
 ```js
@@ -21843,6 +22302,7 @@ console.log(A);
 
 ## `uglify/classes/issue_5389_2`
 
+- tags: `join vars`
 - size: oxc 121 vs reference 132 (-11 bytes)
 
 ```js
@@ -21877,6 +22337,7 @@ log(a, b.FAIL);
 
 ## `uglify/collapse_vars/cascade_return`
 
+- tags: `join vars`
 - size: oxc 35 vs reference 46 (-11 bytes)
 
 ```js
@@ -21900,6 +22361,7 @@ function f(a) {
 
 ## `uglify/collapse_vars/issue_4874`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 69 vs reference 80 (-11 bytes)
 
 ```js
@@ -21926,6 +22388,7 @@ a = null;
 
 ## `uglify/const/issue_4305_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 76 vs reference 87 (-11 bytes)
 
 ```js
@@ -21956,6 +22419,7 @@ a = null;
 
 ## `uglify/const/merge_vars_1`
 
+- tags: `join vars`
 - size: oxc 65 vs reference 76 (-11 bytes)
 
 ```js
@@ -21980,6 +22444,7 @@ console.log(b);
 
 ## `uglify/destructured/funarg_collapse_vars_4`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 55 vs reference 66 (-11 bytes)
 
 ```js
@@ -22059,6 +22524,7 @@ try {
 
 ## `uglify/drop-unused/cascade_drop_assign`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 21 vs reference 32 (-11 bytes)
 
 ```js
@@ -22079,6 +22545,7 @@ console.log(b);
 
 ## `uglify/drop-unused/single_use_catch_redefined`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 81 vs reference 92 (-11 bytes)
 
 ```js
@@ -22107,6 +22574,7 @@ console.log(g());
 
 ## `uglify/evaluate/issue_5940`
 
+- tags: `sequences`, `remove unused`
 - size: oxc 75 vs reference 86 (-11 bytes)
 
 ```js
@@ -22159,6 +22627,7 @@ console.log(typeof o.f());
 
 ## `uglify/issue-2719/warn`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 112 vs reference 123 (-11 bytes)
 
 ```js
@@ -22193,6 +22662,7 @@ console.log(f(1, 2, 3).length);
 
 ## `uglify/let/issue_4689`
 
+- tags: `sequences`
 - size: oxc 54 vs reference 65 (-11 bytes)
 
 ```js
@@ -22217,6 +22687,7 @@ for (let a in 42);
 
 ## `uglify/let/merge_vars_1`
 
+- tags: `join vars`
 - size: oxc 77 vs reference 88 (-11 bytes)
 
 ```js
@@ -22270,6 +22741,7 @@ console.log(a);
 
 ## `uglify/merge_vars/not_redefined`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 104 vs reference 115 (-11 bytes)
 
 ```js
@@ -22429,6 +22901,7 @@ console.log({ [(console, 'foo')]: 'PASS' }.foo);
 
 ## `uglify/pure_getters/side_effects_assign`
 
+- tags: `join vars`, `sequences`, `pure getters`
 - size: oxc 26 vs reference 37 (-11 bytes)
 
 ```js
@@ -22449,6 +22922,7 @@ console.log(a);
 
 ## `uglify/reduce_vars/issue_2449`
 
+- tags: `join vars`, `remove unused`, `10 iterations`
 - size: oxc 129 vs reference 140 (-11 bytes)
 
 ```js
@@ -22490,6 +22964,7 @@ function g() {
 
 ## `uglify/reduce_vars/toplevel_off`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 16 vs reference 27 (-11 bytes)
 
 ```js
@@ -22510,6 +22985,7 @@ console.log(x);
 
 ## `uglify/sequences/make_sequences_4`
 
+- tags: `sequences`
 - size: oxc 134 vs reference 145 (-11 bytes)
 
 ```js
@@ -22543,6 +23019,7 @@ with(obj) {}
 
 ## `uglify/side_effects/issue_3983_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 21 vs reference 32 (-11 bytes)
 
 ```js
@@ -22571,6 +23048,7 @@ console.log(a);
 
 ## `uglify/spreads/keep_getter_4`
 
+- tags: `join vars`
 - size: oxc 48 vs reference 59 (-11 bytes)
 
 ```js
@@ -22635,6 +23113,7 @@ console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
 
 ## `uglify/templates/tag_parentheses_binary`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 42 vs reference 53 (-11 bytes)
 
 ```js
@@ -22698,6 +23177,7 @@ console.log(a);
 
 ## `uglify/varify/reduce_block_const`
 
+- tags: `join vars`
 - size: oxc 29 vs reference 40 (-11 bytes)
 
 ```js
@@ -22720,6 +23200,7 @@ console.log(a);
 
 ## `uglify/varify/reduce_block_let`
 
+- tags: `join vars`
 - size: oxc 43 vs reference 54 (-11 bytes)
 
 ```js
@@ -22816,6 +23297,7 @@ console.log((() => ({ 4: 2 }))()[4]);
 
 ## `uglify/collapse_vars/issue_2571_1`
 
+- tags: `join vars`
 - size: oxc 98 vs reference 110 (-12 bytes)
 
 ```js
@@ -22850,6 +23332,7 @@ console.log(b);
 
 ## `uglify/collapse_vars/issue_3526_1`
 
+- tags: `join vars`
 - size: oxc 82 vs reference 94 (-12 bytes)
 
 ```js
@@ -22880,6 +23363,7 @@ console.log(a);
 
 ## `uglify/collapse_vars/issue_3526_2`
 
+- tags: `join vars`
 - size: oxc 86 vs reference 98 (-12 bytes)
 
 ```js
@@ -22912,6 +23396,7 @@ console.log(a);
 
 ## `uglify/collapse_vars/issue_4038`
 
+- tags: `join vars`
 - size: oxc 71 vs reference 83 (-12 bytes)
 
 ```js
@@ -22939,6 +23424,7 @@ a ? console.log('FAIL') : console.log('PASS');
 
 ## `uglify/collapse_vars/issue_5638_1`
 
+- tags: `join vars`
 - size: oxc 52 vs reference 64 (-12 bytes)
 
 ```js
@@ -22965,6 +23451,7 @@ console.log(a++);
 
 ## `uglify/collapse_vars/issue_5638_2`
 
+- tags: `join vars`
 - size: oxc 54 vs reference 66 (-12 bytes)
 
 ```js
@@ -22991,6 +23478,7 @@ console.log(a *= 7);
 
 ## `uglify/const/issue_5930_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 85 vs reference 97 (-12 bytes)
 
 ```js
@@ -23053,6 +23541,7 @@ console.log(a *= 7);
 
 ## `uglify/drop-unused/issue_1709`
 
+- tags: `remove unused`
 - size: oxc 88 vs reference 100 (-12 bytes)
 
 ```js
@@ -23082,6 +23571,7 @@ console.log(function x() {
 
 ## `uglify/drop-unused/issue_3664`
 
+- tags: `remove unused`
 - size: oxc 95 vs reference 107 (-12 bytes)
 
 ```js
@@ -23171,6 +23661,7 @@ console.log(function() {
 
 ## `uglify/functions/issue_3364`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 370 vs reference 382 (-12 bytes)
 
 ```js
@@ -23244,6 +23735,7 @@ console.log(c);
 
 ## `uglify/functions/issue_4788`
 
+- tags: `join vars`, `remove unused`, `keep function names`
 - size: oxc 101 vs reference 113 (-12 bytes)
 
 ```js
@@ -23287,6 +23779,7 @@ f();
 
 ## `uglify/functions/issue_5230`
 
+- tags: `join vars`
 - size: oxc 107 vs reference 119 (-12 bytes)
 
 ```js
@@ -23323,6 +23816,7 @@ while (function() {
 
 ## `uglify/hoist_props/issue_3411`
 
+- tags: `join vars`
 - size: oxc 75 vs reference 87 (-12 bytes)
 
 ```js
@@ -23485,6 +23979,7 @@ console.log((a = parseInt('100')) != a);
 
 ## `uglify/let/retain_assignment`
 
+- tags: `join vars`
 - size: oxc 92 vs reference 104 (-12 bytes)
 
 ```js
@@ -23521,6 +24016,7 @@ try {
 
 ## `uglify/merge_vars/collapse_vars_2`
 
+- tags: `join vars`
 - size: oxc 122 vs reference 134 (-12 bytes)
 
 ```js
@@ -23557,6 +24053,7 @@ var log = console.log;
 
 ## `uglify/merge_vars/conditional_chain_1`
 
+- tags: `join vars`
 - size: oxc 165 vs reference 177 (-12 bytes)
 
 ```js
@@ -23594,6 +24091,7 @@ f(42, true);
 
 ## `uglify/merge_vars/conditional_chain_3`
 
+- tags: `join vars`
 - size: oxc 145 vs reference 157 (-12 bytes)
 
 ```js
@@ -23631,6 +24129,7 @@ f(42, true);
 
 ## `uglify/merge_vars/issue_4115`
 
+- tags: `join vars`
 - size: oxc 82 vs reference 94 (-12 bytes)
 
 ```js
@@ -23659,6 +24158,7 @@ console.log(typeof a);
 
 ## `uglify/reduce_vars/iife_arguments_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 84 vs reference 96 (-12 bytes)
 
 ```js
@@ -23688,6 +24188,7 @@ console.log(typeof a);
 
 ## `uglify/reduce_vars/issue_3068_1`
 
+- tags: `join vars`
 - size: oxc 68 vs reference 80 (-12 bytes)
 
 ```js
@@ -23716,6 +24217,7 @@ console.log(typeof a);
 
 ## `uglify/rests/issue_5552_1`
 
+- tags: `join vars`
 - size: oxc 96 vs reference 108 (-12 bytes)
 
 ```js
@@ -23743,6 +24245,7 @@ log(a);
 
 ## `uglify/sequences/issue_1758`
 
+- tags: `sequences`
 - size: oxc 106 vs reference 118 (-12 bytes)
 
 ```js
@@ -23773,6 +24276,7 @@ console.log(function(c) {
 
 ## `uglify/varify/issue_4954`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 125 vs reference 137 (-12 bytes)
 
 ```js
@@ -23807,6 +24311,7 @@ console.log(function(c) {
 
 ## `uglify/arguments/issue_3420_2`
 
+- tags: `join vars`
 - size: oxc 42 vs reference 55 (-13 bytes)
 
 ```js
@@ -23832,6 +24337,7 @@ foo();
 
 ## `uglify/arguments/issue_3420_3`
 
+- tags: `join vars`
 - size: oxc 56 vs reference 69 (-13 bytes)
 
 ```js
@@ -23877,6 +24383,7 @@ console.log(4 || (() => 2));
 
 ## `uglify/awaits/issue_4347_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 69 vs reference 82 (-13 bytes)
 
 ```js
@@ -23904,6 +24411,7 @@ console.log(a);
 
 ## `uglify/classes/issue_5015_2`
 
+- tags: `join vars`
 - size: oxc 83 vs reference 96 (-13 bytes)
 
 ```js
@@ -23938,6 +24446,7 @@ try {
 
 ## `uglify/collapse_vars/global_read`
 
+- tags: `join vars`
 - size: oxc 64 vs reference 77 (-13 bytes)
 
 ```js
@@ -23962,6 +24471,7 @@ a ? console.log('FAIL') : console.log('PASS');
 
 ## `uglify/collapse_vars/issue_2313_1`
 
+- tags: `join vars`
 - size: oxc 150 vs reference 163 (-13 bytes)
 
 ```js
@@ -24005,6 +24515,7 @@ foo.d();
 
 ## `uglify/const/issue_4689`
 
+- tags: `sequences`
 - size: oxc 54 vs reference 67 (-13 bytes)
 
 ```js
@@ -24057,6 +24568,7 @@ console.log(a);
 
 ## `uglify/destructured/issue_4298`
 
+- tags: `join vars`
 - size: oxc 129 vs reference 142 (-13 bytes)
 
 ```js
@@ -24090,6 +24602,7 @@ console.log(a);
 
 ## `uglify/drop-unused/issue_1830_1`
 
+- tags: `remove unused`
 - size: oxc 48 vs reference 61 (-13 bytes)
 
 ```js
@@ -24144,6 +24657,7 @@ do {
 
 ## `uglify/functions/issue_5173_1`
 
+- tags: `join vars`
 - size: oxc 58 vs reference 71 (-13 bytes)
 
 ```js
@@ -24331,6 +24845,7 @@ f();
 
 ## `uglify/let/issue_4210`
 
+- tags: `join vars`
 - size: oxc 159 vs reference 172 (-13 bytes)
 
 ```js
@@ -24386,6 +24901,7 @@ null ? .42 : console.log('PASS');
 
 ## `uglify/reduce_vars/issue_1670_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 74 vs reference 87 (-13 bytes)
 
 ```js
@@ -24499,6 +25015,7 @@ f();
 
 ## `uglify/rests/issue_5552_2`
 
+- tags: `join vars`
 - size: oxc 88 vs reference 101 (-13 bytes)
 
 ```js
@@ -24599,6 +25116,7 @@ switch (foo) {
 
 ## `uglify/varify/issue_4191_const`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 33 vs reference 46 (-13 bytes)
 
 ```js
@@ -24620,6 +25138,7 @@ console.log(typeof a, a());
 
 ## `uglify/varify/issue_4191_let`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 47 vs reference 60 (-13 bytes)
 
 ```js
@@ -24679,6 +25198,7 @@ console.log(typeof function foo(bar) {});
 
 ## `uglify/arguments/issue_3282_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 138 vs reference 152 (-14 bytes)
 
 ```js
@@ -24788,6 +25308,7 @@ console.log(f('PASS'), g('FAIL'));
 
 ## `uglify/assignments/issue_4876`
 
+- tags: `join vars`
 - size: oxc 70 vs reference 84 (-14 bytes)
 
 ```js
@@ -24839,6 +25360,7 @@ if (class {}) console.log('PASS');
 
 ## `uglify/classes/issue_5015_3`
 
+- tags: `join vars`
 - size: oxc 35 vs reference 49 (-14 bytes)
 
 ```js
@@ -24864,6 +25386,7 @@ console.log('PASS');
 
 ## `uglify/collapse_vars/issue_2313_2`
 
+- tags: `join vars`
 - size: oxc 70 vs reference 84 (-14 bytes)
 
 ```js
@@ -24896,6 +25419,7 @@ console.log(c);
 
 ## `uglify/collapse_vars/issue_2914_1`
 
+- tags: `join vars`
 - size: oxc 182 vs reference 196 (-14 bytes)
 
 ```js
@@ -24937,6 +25461,7 @@ console.log(read([129]));
 
 ## `uglify/collapse_vars/issue_3908`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 21 vs reference 35 (-14 bytes)
 
 ```js
@@ -24958,6 +25483,7 @@ console.log('PASS');
 
 ## `uglify/collapse_vars/issue_4910`
 
+- tags: `join vars`
 - size: oxc 57 vs reference 71 (-14 bytes)
 
 ```js
@@ -25011,6 +25537,7 @@ f(['PASS']);
 
 ## `uglify/destructured/issue_4508`
 
+- tags: `remove unused`
 - size: oxc 99 vs reference 113 (-14 bytes)
 
 ```js
@@ -25034,6 +25561,7 @@ for (var i = 0; i < 2; i++) (function f([a]) {
 
 ## `uglify/destructured/side_effects_object`
 
+- tags: `remove unused`
 - size: oxc 77 vs reference 91 (-14 bytes)
 
 ```js
@@ -25081,6 +25609,7 @@ export default 'function' == 42;
 
 ## `uglify/hoist_vars/catch_var`
 
+- tags: `remove unused`
 - size: oxc 21 vs reference 35 (-14 bytes)
 
 ```js
@@ -25108,6 +25637,7 @@ console.log(a);
 
 ## `uglify/imports/issue_4708_1`
 
+- tags: `remove unused`
 - size: oxc 14 vs reference 28 (-14 bytes)
 
 ```js
@@ -25153,6 +25683,7 @@ function f(undefined) {
 
 ## `uglify/issue-640/conditional`
 
+- tags: `pure functions`
 - size: oxc 96 vs reference 110 (-14 bytes)
 
 ```js
@@ -25190,6 +25721,7 @@ pure(3 ? 4 : 5);
 
 ## `uglify/let/issue_4290_1`
 
+- tags: `remove unused`
 - size: oxc 14 vs reference 28 (-14 bytes)
 
 ```js
@@ -25211,6 +25743,7 @@ var a;
 
 ## `uglify/let/issue_4985`
 
+- tags: `join vars`
 - size: oxc 54 vs reference 68 (-14 bytes)
 
 ```js
@@ -25280,6 +25813,7 @@ x = { baz: 'ban' };
 
 ## `uglify/reduce_vars/issue_1606`
 
+- tags: `join vars`
 - size: oxc 49 vs reference 63 (-14 bytes)
 
 ```js
@@ -25310,6 +25844,7 @@ function f() {
 
 ## `uglify/reduce_vars/issue_3240_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 105 vs reference 119 (-14 bytes)
 
 ```js
@@ -25406,6 +25941,7 @@ console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
 
 ## `uglify/annotations/compress_and_output_annotations_disabled`
 
+- tags: `sequences`
 - size: oxc 26 vs reference 41 (-15 bytes)
 
 ```js
@@ -25427,6 +25963,7 @@ d(effect());
 
 ## `uglify/annotations/compress_annotations_disabled_output_annotations_enabled`
 
+- tags: `sequences`
 - size: oxc 26 vs reference 41 (-15 bytes)
 
 ```js
@@ -25549,6 +26086,7 @@ console.log(a, b, typeof c);
 
 ## `uglify/collapse_vars/chained_5`
 
+- tags: `join vars`
 - size: oxc 46 vs reference 61 (-15 bytes)
 
 ```js
@@ -25573,6 +26111,7 @@ a && ++a;
 
 ## `uglify/collapse_vars/issue_4586_1`
 
+- tags: `join vars`
 - size: oxc 85 vs reference 100 (-15 bytes)
 
 ```js
@@ -25600,6 +26139,7 @@ var a = 42;
 
 ## `uglify/collapse_vars/issue_4868`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 59 vs reference 74 (-15 bytes)
 
 ```js
@@ -25715,6 +26255,7 @@ a = condition ? 1 : 0;
 
 ## `uglify/const/issue_4210`
 
+- tags: `join vars`
 - size: oxc 138 vs reference 153 (-15 bytes)
 
 ```js
@@ -25750,6 +26291,7 @@ console.log(typeof a);
 
 ## `uglify/const/issue_4220`
 
+- tags: `join vars`, `sequences`
 - size: oxc 81 vs reference 96 (-15 bytes)
 
 ```js
@@ -25782,6 +26324,7 @@ console.log(typeof a);
 
 ## `uglify/evaluate/threshold_evaluate_30`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 88 vs reference 103 (-15 bytes)
 
 ```js
@@ -25806,6 +26349,7 @@ console.log(b('1'), b(2), b(b(b('ABCDEFGHIJK'))));
 
 ## `uglify/hoist_props/issue_4985`
 
+- tags: `join vars`
 - size: oxc 40 vs reference 55 (-15 bytes)
 
 ```js
@@ -25831,6 +26375,7 @@ console.log(function() {
 
 ## `uglify/if_return/empty_try`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 80 vs reference 95 (-15 bytes)
 
 ```js
@@ -25886,6 +26431,7 @@ console.log(function() {
 
 ## `uglify/issue-640/iife_drop_side_effect_free`
 
+- tags: `sequences`
 - size: oxc 8 vs reference 23 (-15 bytes)
 
 ```js
@@ -25911,6 +26457,7 @@ typeof function g() {}();
 
 ## `uglify/nullish/issue_5829_1`
 
+- tags: `join vars`
 - size: oxc 68 vs reference 83 (-15 bytes)
 
 ```js
@@ -25936,6 +26483,7 @@ typeof function g() {}();
 
 ## `uglify/sequences/call_drop_side_effect_free`
 
+- tags: `sequences`
 - size: oxc 380 vs reference 395 (-15 bytes)
 
 ```js
@@ -25989,6 +26537,7 @@ console.log(typeof (a, b)['c']);
 
 ## `uglify/sequences/issue_2313`
 
+- tags: `join vars`, `sequences`
 - size: oxc 146 vs reference 161 (-15 bytes)
 
 ```js
@@ -26053,6 +26602,7 @@ if (!console ? 0 : () => 1) console.log('PASS');
 
 ## `uglify/awaits/issue_5791`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 308 vs reference 324 (-16 bytes)
 
 ```js
@@ -26171,6 +26721,7 @@ console.log('PASS');
 
 ## `uglify/collapse_vars/return_4`
 
+- tags: `join vars`
 - size: oxc 66 vs reference 82 (-16 bytes)
 
 ```js
@@ -26231,6 +26782,7 @@ console.log(a, b);
 
 ## `uglify/destructured/funarg_merge_vars_2`
 
+- tags: `join vars`
 - size: oxc 67 vs reference 83 (-16 bytes)
 
 ```js
@@ -26258,6 +26810,7 @@ var a = 0;
 
 ## `uglify/hoist_props/name_collision_1`
 
+- tags: `join vars`
 - size: oxc 195 vs reference 211 (-16 bytes)
 
 ```js
@@ -26302,6 +26855,7 @@ f();
 
 ## `uglify/issue-1105/assorted_Infinity_NaN_undefined_in_with_scope_keep_infinity`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 280 vs reference 296 (-16 bytes)
 
 ```js
@@ -26411,6 +26965,7 @@ RegExp('should', 'fail');
 
 ## `uglify/join_vars/issue_3789_1`
 
+- tags: `join vars`
 - size: oxc 91 vs reference 107 (-16 bytes)
 
 ```js
@@ -26448,6 +27003,7 @@ try {} catch (c) {
 
 ## `uglify/keep_fargs/issue_2203_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 145 vs reference 161 (-16 bytes)
 
 ```js
@@ -26552,6 +27108,7 @@ do {
 
 ## `uglify/pure_funcs/boolean_or`
 
+- tags: `pure functions`
 - size: oxc 46 vs reference 62 (-16 bytes)
 
 ```js
@@ -26597,6 +27154,7 @@ bar() || 'bar';
 
 ## `uglify/spreads/keep_fargs`
 
+- tags: `remove unused`
 - size: oxc 56 vs reference 72 (-16 bytes)
 
 ```js
@@ -26621,6 +27179,7 @@ var a = ['PASS'];
 
 ## `uglify/arrows/issue_5416_1`
 
+- tags: `remove unused`
 - size: oxc 87 vs reference 104 (-17 bytes)
 
 ```js
@@ -26657,6 +27216,7 @@ f();
 
 ## `uglify/collapse_vars/collapse_vars_regexp`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 510 vs reference 527 (-17 bytes)
 
 ```js
@@ -26734,6 +27294,7 @@ function f3() {
 
 ## `uglify/collapse_vars/issue_2203_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 145 vs reference 162 (-17 bytes)
 
 ```js
@@ -26773,6 +27334,7 @@ console.log({
 
 ## `uglify/collapse_vars/issue_2364_3`
 
+- tags: `join vars`, `pure getters`
 - size: oxc 194 vs reference 211 (-17 bytes)
 
 ```js
@@ -26805,6 +27367,7 @@ console.log(foo.amount, answer);
 
 ## `uglify/collapse_vars/switch_case_2`
 
+- tags: `join vars`
 - size: oxc 74 vs reference 91 (-17 bytes)
 
 ```js
@@ -26837,6 +27400,7 @@ console.log(a);
 
 ## `uglify/collapse_vars/toplevel_single_reference`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 23 vs reference 40 (-17 bytes)
 
 ```js
@@ -26964,6 +27528,7 @@ console.log(f(true, true, 4, -4));
 
 ## `uglify/evaluate/collapse_vars_regexp`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 510 vs reference 527 (-17 bytes)
 
 ```js
@@ -27265,6 +27830,7 @@ else B:;
 
 ## `uglify/let/collapse_block`
 
+- tags: `join vars`
 - size: oxc 43 vs reference 60 (-17 bytes)
 
 ```js
@@ -27291,6 +27857,7 @@ else B:;
 
 ## `uglify/let/hoist_props`
 
+- tags: `join vars`
 - size: oxc 44 vs reference 61 (-17 bytes)
 
 ```js
@@ -27317,6 +27884,7 @@ else B:;
 
 ## `uglify/let/issue_4207`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 49 vs reference 66 (-17 bytes)
 
 ```js
@@ -27343,6 +27911,7 @@ else B:;
 
 ## `uglify/let/reduce_block_1`
 
+- tags: `join vars`
 - size: oxc 43 vs reference 60 (-17 bytes)
 
 ```js
@@ -27369,6 +27938,7 @@ else B:;
 
 ## `uglify/let/reduce_block_2`
 
+- tags: `join vars`
 - size: oxc 66 vs reference 83 (-17 bytes)
 
 ```js
@@ -27397,6 +27967,7 @@ console.log(typeof a);
 
 ## `uglify/let/reduce_block_2_toplevel`
 
+- tags: `join vars`
 - size: oxc 66 vs reference 83 (-17 bytes)
 
 ```js
@@ -27519,6 +28090,7 @@ console.log(typeof new function() {
 
 ## `uglify/properties/keep_substituted_property_quotes`
 
+- tags: `join vars`
 - size: oxc 62 vs reference 79 (-17 bytes)
 
 ```js
@@ -27545,6 +28117,7 @@ console.log(f({ p: 'PASS' }));
 
 ## `uglify/reduce_vars/iife_assign`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 85 vs reference 102 (-17 bytes)
 
 ```js
@@ -27582,6 +28155,7 @@ console.log(f({ p: 'PASS' }));
 
 ## `uglify/reduce_vars/immutable`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 37 vs reference 54 (-17 bytes)
 
 ```js
@@ -27607,6 +28181,7 @@ console.log(f({ p: 'PASS' }));
 
 ## `uglify/sandbox/typeof_arguments_assigned`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 16 vs reference 33 (-17 bytes)
 
 ```js
@@ -27626,6 +28201,7 @@ console.log((typeof arguments).length);
 
 ## `uglify/sequences/delete_seq_4`
 
+- tags: `sequences`
 - size: oxc 199 vs reference 216 (-17 bytes)
 
 ```js
@@ -27651,6 +28227,7 @@ console.log(delete (f(), 0 / 0));
 
 ## `uglify/switches/issue_5912_1`
 
+- tags: `join vars`
 - size: oxc 112 vs reference 129 (-17 bytes)
 
 ```js
@@ -27730,6 +28307,7 @@ console.log(µþ);
 
 ## `uglify/collapse_vars/call_1`
 
+- tags: `join vars`
 - size: oxc 51 vs reference 69 (-18 bytes)
 
 ```js
@@ -27756,6 +28334,7 @@ console.log(µþ);
 
 ## `uglify/collapse_vars/issue_2203_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 115 vs reference 133 (-18 bytes)
 
 ```js
@@ -27980,6 +28559,7 @@ do {
 
 ## `uglify/default-values/issue_4510_1`
 
+- tags: `remove unused`
 - size: oxc 42 vs reference 60 (-18 bytes)
 
 ```js
@@ -28000,6 +28580,7 @@ var [, b = console.log('PASS')] = [...a, null];
 
 ## `uglify/default-values/issue_4510_2`
 
+- tags: `remove unused`
 - size: oxc 63 vs reference 81 (-18 bytes)
 
 ```js
@@ -28026,6 +28607,7 @@ var { p: a = console.log('PASS') } = {
 
 ## `uglify/destructured/redefine_arguments_1`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 18 (-18 bytes)
 
 ```js
@@ -28043,6 +28625,7 @@ function f([arguments]) {}
 
 ## `uglify/functions/issue_5316_1`
 
+- tags: `join vars`
 - size: oxc 85 vs reference 103 (-18 bytes)
 
 ```js
@@ -28071,6 +28654,7 @@ do {
 
 ## `uglify/reduce_vars/issue_3110_3`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 140 vs reference 158 (-18 bytes)
 
 ```js
@@ -28104,6 +28688,7 @@ do {
 
 ## `uglify/sequences/delete_seq_5`
 
+- tags: `sequences`
 - size: oxc 199 vs reference 217 (-18 bytes)
 
 ```js
@@ -28152,6 +28737,7 @@ console.log(delete (f(), 0 / 0));
 
 ## `uglify/arguments/issue_3282_2_passes`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 198 vs reference 217 (-19 bytes)
 
 ```js
@@ -28301,6 +28887,7 @@ console.log(f(true, true, 4));
 
 ## `uglify/const/collapse_block`
 
+- tags: `join vars`
 - size: oxc 29 vs reference 48 (-19 bytes)
 
 ```js
@@ -28325,6 +28912,7 @@ console.log(f(true, true, 4));
 
 ## `uglify/const/hoist_props`
 
+- tags: `join vars`
 - size: oxc 30 vs reference 49 (-19 bytes)
 
 ```js
@@ -28349,6 +28937,7 @@ console.log(f(true, true, 4));
 
 ## `uglify/const/issue_4207`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 35 vs reference 54 (-19 bytes)
 
 ```js
@@ -28373,6 +28962,7 @@ console.log(f(true, true, 4));
 
 ## `uglify/const/reduce_block_1`
 
+- tags: `join vars`
 - size: oxc 29 vs reference 48 (-19 bytes)
 
 ```js
@@ -28397,6 +28987,7 @@ console.log(f(true, true, 4));
 
 ## `uglify/const/reduce_block_2`
 
+- tags: `join vars`
 - size: oxc 52 vs reference 71 (-19 bytes)
 
 ```js
@@ -28423,6 +29014,7 @@ console.log(typeof a);
 
 ## `uglify/const/reduce_block_2_toplevel`
 
+- tags: `join vars`
 - size: oxc 52 vs reference 71 (-19 bytes)
 
 ```js
@@ -28479,6 +29071,7 @@ console.log(function() {
 
 ## `uglify/let/issue_4276_1`
 
+- tags: `remove unused`
 - size: oxc 76 vs reference 95 (-19 bytes)
 
 ```js
@@ -28653,6 +29246,7 @@ try {
 
 ## `uglify/classes/issue_4705`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 21 vs reference 41 (-20 bytes)
 
 ```js
@@ -28677,6 +29271,7 @@ class A {
 
 ## `uglify/classes/unused_await`
 
+- tags: `remove unused`
 - size: oxc 74 vs reference 94 (-20 bytes)
 
 ```js
@@ -28707,6 +29302,7 @@ var await = 'PASS';
 
 ## `uglify/collapse_vars/issue_3238_6`
 
+- tags: `join vars`
 - size: oxc 104 vs reference 124 (-20 bytes)
 
 ```js
@@ -28741,6 +29337,7 @@ console.log(f(0), f(1));
 
 ## `uglify/collapse_vars/var_side_effects_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 100 vs reference 120 (-20 bytes)
 
 ```js
@@ -28821,6 +29418,7 @@ console.log(f(true, true, 4));
 
 ## `uglify/const/issue_4290_1`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 20 (-20 bytes)
 
 ```js
@@ -28840,6 +29438,7 @@ var a;
 
 ## `uglify/drop-unused/issue_1715_3`
 
+- tags: `remove unused`
 - size: oxc 87 vs reference 107 (-20 bytes)
 
 ```js
@@ -28878,6 +29477,7 @@ console.log(a);
 
 ## `uglify/functions/issue_2898`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 105 vs reference 125 (-20 bytes)
 
 ```js
@@ -28911,6 +29511,7 @@ console.log(c);
 
 ## `uglify/issue-1105/with_in_global_scope`
 
+- tags: `remove unused`
 - size: oxc 39 vs reference 59 (-20 bytes)
 
 ```js
@@ -28935,6 +29536,7 @@ doSomething(o);
 
 ## `uglify/let/retain_block_2`
 
+- tags: `remove unused`
 - size: oxc 14 vs reference 34 (-20 bytes)
 
 ```js
@@ -28960,6 +29562,7 @@ doSomething(o);
 
 ## `uglify/let/retain_block_3`
 
+- tags: `remove unused`
 - size: oxc 14 vs reference 34 (-20 bytes)
 
 ```js
@@ -28985,6 +29588,7 @@ doSomething(o);
 
 ## `uglify/merge_vars/issue_4956_2`
 
+- tags: `join vars`
 - size: oxc 105 vs reference 125 (-20 bytes)
 
 ```js
@@ -29024,6 +29628,7 @@ f(1);
 
 ## `uglify/reduce_vars/cond_assign`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 45 vs reference 65 (-20 bytes)
 
 ```js
@@ -29164,6 +29769,7 @@ console.log((a = 'PASS', [] + '' && (a = 'FAIL')), a);
 
 ## `uglify/drop-unused/iife`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 21 (-21 bytes)
 
 ```js
@@ -29186,6 +29792,7 @@ function f() {
 
 ## `uglify/hoist_props/name_collision_2`
 
+- tags: `join vars`
 - size: oxc 149 vs reference 170 (-21 bytes)
 
 ```js
@@ -29227,6 +29834,7 @@ console.log(o.p === o.p, o['+'](4), o['-'](5), o__$0, o__$1);
 
 ## `uglify/issue-5614/conditional_property_write`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 88 vs reference 109 (-21 bytes)
 
 ```js
@@ -29319,6 +29927,7 @@ console.log(1 - (2 + a));
 
 ## `uglify/reduce_vars/issue_3974`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 49 vs reference 70 (-21 bytes)
 
 ```js
@@ -29348,6 +29957,7 @@ try {
 
 ## `uglify/sequences/angularjs_chain`
 
+- tags: `sequences`
 - size: oxc 253 vs reference 274 (-21 bytes)
 
 ```js
@@ -29412,6 +30022,7 @@ if (void 0 == null);
 
 ## `uglify/arguments/issue_3282_1_passes`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 138 vs reference 160 (-22 bytes)
 
 ```js
@@ -29461,6 +30072,7 @@ if (void 0 == null);
 
 ## `uglify/awaits/issue_4454_2`
 
+- tags: `join vars`
 - size: oxc 93 vs reference 115 (-22 bytes)
 
 ```js
@@ -29490,6 +30102,7 @@ f('PASS');
 
 ## `uglify/collapse_vars/issue_2364_1`
 
+- tags: `join vars`, `pure getters`
 - size: oxc 217 vs reference 239 (-22 bytes)
 
 ```js
@@ -29528,6 +30141,7 @@ console.log(foo.amount, answer);
 
 ## `uglify/conditionals/equality_conditionals_true`
 
+- tags: `sequences`
 - size: oxc 221 vs reference 243 (-22 bytes)
 
 ```js
@@ -29628,6 +30242,7 @@ function g6() {
 
 ## `uglify/const/issue_4365_1`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 22 (-22 bytes)
 
 ```js
@@ -29821,6 +30436,7 @@ else bar();
 
 ## `uglify/merge_vars/merge`
 
+- tags: `join vars`
 - size: oxc 122 vs reference 144 (-22 bytes)
 
 ```js
@@ -29863,6 +30479,7 @@ console.log(d);
 
 ## `uglify/merge_vars/merge_toplevel`
 
+- tags: `join vars`
 - size: oxc 122 vs reference 144 (-22 bytes)
 
 ```js
@@ -29973,6 +30590,7 @@ _is_selected = function(tags, slug) {
 
 ## `uglify/spreads/issue_4361`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 61 vs reference 83 (-22 bytes)
 
 ```js
@@ -29999,6 +30617,7 @@ console.log(function() {
 
 ## `uglify/varify/issue_5516`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 75 vs reference 97 (-22 bytes)
 
 ```js
@@ -30032,6 +30651,7 @@ console.log(typeof function() {
 
 ## `uglify/yields/issue_4454_2`
 
+- tags: `join vars`
 - size: oxc 89 vs reference 111 (-22 bytes)
 
 ```js
@@ -30173,6 +30793,7 @@ console && async function() {} && console.log('PASS');
 
 ## `uglify/functions/issue_4659_1`
 
+- tags: `join vars`
 - size: oxc 114 vs reference 137 (-23 bytes)
 
 ```js
@@ -30211,6 +30832,7 @@ console.log(a);
 
 ## `uglify/let/merge_vars_3`
 
+- tags: `join vars`
 - size: oxc 83 vs reference 106 (-23 bytes)
 
 ```js
@@ -30244,6 +30866,7 @@ console.log(typeof a);
 
 ## `uglify/let/merge_vars_4`
 
+- tags: `join vars`
 - size: oxc 83 vs reference 106 (-23 bytes)
 
 ```js
@@ -30277,6 +30900,7 @@ console.log(typeof a);
 
 ## `uglify/merge_vars/issue_4139`
 
+- tags: `join vars`
 - size: oxc 88 vs reference 111 (-23 bytes)
 
 ```js
@@ -30344,6 +30968,7 @@ console.log(function() {
 
 ## `uglify/return_undefined/return_void`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 23 (-23 bytes)
 
 ```js
@@ -30368,6 +30993,7 @@ function f() {
 
 ## `uglify/collapse_vars/issue_3744`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 103 vs reference 127 (-24 bytes)
 
 ```js
@@ -30406,6 +31032,7 @@ function f() {
 
 ## `uglify/hoist_props/issue_2473_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 24 (-24 bytes)
 
 ```js
@@ -30426,6 +31053,7 @@ var z = {};
 
 ## `uglify/hoist_props/issue_2473_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 24 (-24 bytes)
 
 ```js
@@ -30497,6 +31125,7 @@ console.log(typeof (a + 1 - .1 - .1 - .1));
 
 ## `uglify/templates/issue_5199`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 44 vs reference 68 (-24 bytes)
 
 ```js
@@ -30544,6 +31173,7 @@ if (console ? function* () {} : 0) console.log('PASS');
 
 ## `uglify/const/merge_vars_3`
 
+- tags: `join vars`
 - size: oxc 69 vs reference 94 (-25 bytes)
 
 ```js
@@ -30576,6 +31206,7 @@ console.log(typeof a);
 
 ## `uglify/const/merge_vars_4`
 
+- tags: `join vars`
 - size: oxc 69 vs reference 94 (-25 bytes)
 
 ```js
@@ -30608,6 +31239,7 @@ console.log(typeof a);
 
 ## `uglify/drop-unused/drop_toplevel_keep_assign`
 
+- tags: `remove unused`
 - size: oxc 16 vs reference 41 (-25 bytes)
 
 ```js
@@ -30637,6 +31269,7 @@ console.log(b = 3);
 
 ## `uglify/let/issue_4305_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 74 vs reference 99 (-25 bytes)
 
 ```js
@@ -30710,6 +31343,7 @@ console.log(b = 3);
 
 ## `uglify/merge_vars/issue_4168`
 
+- tags: `join vars`
 - size: oxc 199 vs reference 224 (-25 bytes)
 
 ```js
@@ -30755,6 +31389,7 @@ o.f('PASS', true, 42);
 
 ## `uglify/merge_vars/issue_4168_use_strict`
 
+- tags: `join vars`
 - size: oxc 213 vs reference 238 (-25 bytes)
 
 ```js
@@ -30838,6 +31473,7 @@ console?.['log'](null?.[console.log('FAIL')]);
 
 ## `uglify/const/legacy_scope`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 26 (-26 bytes)
 
 ```js
@@ -30882,6 +31518,7 @@ function λ(δλ) {}
 
 ## `uglify/merge_vars/switch_branch`
 
+- tags: `join vars`
 - size: oxc 94 vs reference 120 (-26 bytes)
 
 ```js
@@ -30984,6 +31621,7 @@ console.log(a);
 
 ## `uglify/collapse_vars/call_2_symbol`
 
+- tags: `join vars`
 - size: oxc 85 vs reference 112 (-27 bytes)
 
 ```js
@@ -31018,6 +31656,7 @@ console.log(a);
 
 ## `uglify/collapse_vars/issue_2954_3`
 
+- tags: `join vars`
 - size: oxc 128 vs reference 155 (-27 bytes)
 
 ```js
@@ -31061,6 +31700,7 @@ console.log(a);
 
 ## `uglify/const/issue_4305_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 74 vs reference 101 (-27 bytes)
 
 ```js
@@ -31091,6 +31731,7 @@ console.log(a);
 
 ## `uglify/evaluate/issue_2535_1`
 
+- tags: `sequences`
 - size: oxc 129 vs reference 156 (-27 bytes)
 
 ```js
@@ -31123,6 +31764,7 @@ if (x() && false && y()) z();
 
 ## `uglify/issue-1105/Infinity_not_in_with_scope`
 
+- tags: `remove unused`
 - size: oxc 74 vs reference 101 (-27 bytes)
 
 ```js
@@ -31209,6 +31851,7 @@ console.log(function(a) {
 
 ## `uglify/reduce_vars/issue_3509`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 44 vs reference 71 (-27 bytes)
 
 ```js
@@ -31240,6 +31883,7 @@ a();
 
 ## `uglify/arrows/issue_5416_4`
 
+- tags: `remove unused`
 - size: oxc 63 vs reference 91 (-28 bytes)
 
 ```js
@@ -31272,6 +31916,7 @@ f();
 
 ## `uglify/classes/issue_5481`
 
+- tags: `join vars`
 - size: oxc 110 vs reference 138 (-28 bytes)
 
 ```js
@@ -31305,6 +31950,7 @@ try {
 
 ## `uglify/collapse_vars/assignment`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 28 (-28 bytes)
 
 ```js
@@ -31328,6 +31974,7 @@ function f() {
 
 ## `uglify/conditionals/issue_5673_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 64 vs reference 92 (-28 bytes)
 
 ```js
@@ -31352,6 +31999,7 @@ console.log(function(c) {
 
 ## `uglify/let/issue_4191`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 37 vs reference 65 (-28 bytes)
 
 ```js
@@ -31377,6 +32025,7 @@ console.log(typeof a);
 
 ## `uglify/merge_vars/conditional_chain_2`
 
+- tags: `join vars`
 - size: oxc 145 vs reference 173 (-28 bytes)
 
 ```js
@@ -31414,6 +32063,7 @@ f(42, true);
 
 ## `uglify/reduce_vars/defun_inline_3`
 
+- tags: `join vars`, `remove unused`, `3 iterations`
 - size: oxc 0 vs reference 28 (-28 bytes)
 
 ```js
@@ -31438,6 +32088,7 @@ function f() {
 
 ## `uglify/reduce_vars/redefine_arguments_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 158 vs reference 186 (-28 bytes)
 
 ```js
@@ -31517,6 +32168,7 @@ console.log('PASS');
 
 ## `uglify/classes/keep_extends_3`
 
+- tags: `remove unused`
 - size: oxc 35 vs reference 64 (-29 bytes)
 
 ```js
@@ -31538,6 +32190,7 @@ console.log('PASS');
 
 ## `uglify/collapse_vars/cond_branch_switch`
 
+- tags: `join vars`
 - size: oxc 38 vs reference 67 (-29 bytes)
 
 ```js
@@ -31560,6 +32213,7 @@ console.log(c);
 
 ## `uglify/drop-unused/issue_1539`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 29 (-29 bytes)
 
 ```js
@@ -31583,6 +32237,7 @@ function f() {
 
 ## `uglify/functions/issue_4233`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 143 vs reference 172 (-29 bytes)
 
 ```js
@@ -31624,6 +32279,7 @@ function f() {
 
 ## `uglify/issue-611/issue_611`
 
+- tags: `sequences`
 - size: oxc 42 vs reference 71 (-29 bytes)
 
 ```js
@@ -31650,6 +32306,7 @@ define(function() {
 
 ## `uglify/merge_vars/issue_4237_1`
 
+- tags: `join vars`
 - size: oxc 127 vs reference 156 (-29 bytes)
 
 ```js
@@ -31686,6 +32343,7 @@ console.log(function(a) {
 
 ## `uglify/varify/issue_4933_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 58 vs reference 87 (-29 bytes)
 
 ```js
@@ -31718,6 +32376,7 @@ function f() {
 
 ## `uglify/awaits/issue_4454_1`
 
+- tags: `join vars`
 - size: oxc 93 vs reference 123 (-30 bytes)
 
 ```js
@@ -31792,6 +32451,7 @@ console.log(function() {
 
 ## `uglify/const/issue_4191`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 23 vs reference 53 (-30 bytes)
 
 ```js
@@ -31815,6 +32475,7 @@ console.log(typeof a);
 
 ## `uglify/const/issue_4218`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 42 vs reference 72 (-30 bytes)
 
 ```js
@@ -31841,6 +32502,7 @@ console.log(typeof a, b);
 
 ## `uglify/const/issue_4222`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 68 vs reference 98 (-30 bytes)
 
 ```js
@@ -31875,6 +32537,7 @@ console.log(typeof a);
 
 ## `uglify/drop-unused/assign_binding`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 30 (-30 bytes)
 
 ```js
@@ -31897,6 +32560,7 @@ function f() {
 
 ## `uglify/drop-unused/assign_chain`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 30 (-30 bytes)
 
 ```js
@@ -31919,6 +32583,7 @@ function f() {
 
 ## `uglify/functions/issue_4171_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 119 vs reference 149 (-30 bytes)
 
 ```js
@@ -31986,6 +32651,7 @@ console.log(a, ꀈ1, Ā, က, 㾀);
 
 ## `uglify/yields/issue_4454_1`
 
+- tags: `join vars`
 - size: oxc 89 vs reference 119 (-30 bytes)
 
 ```js
@@ -32014,6 +32680,7 @@ f('PASS');
 
 ## `uglify/arrows/issue_5416_3`
 
+- tags: `remove unused`
 - size: oxc 54 vs reference 85 (-31 bytes)
 
 ```js
@@ -32071,6 +32738,7 @@ console.log(typeof class {
 
 ## `uglify/drop-unused/issue_1838`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 31 (-31 bytes)
 
 ```js
@@ -32125,6 +32793,7 @@ f();
 
 ## `uglify/let/drop_unused`
 
+- tags: `remove unused`
 - size: oxc 35 vs reference 66 (-31 bytes)
 
 ```js
@@ -32153,6 +32822,7 @@ console.log(f());
 
 ## `uglify/typeof/issue_3817`
 
+- tags: `2 iterations`
 - size: oxc 85 vs reference 116 (-31 bytes)
 
 ```js
@@ -32274,6 +32944,7 @@ console.log(a);
 
 ## `uglify/const/drop_unused`
 
+- tags: `remove unused`
 - size: oxc 21 vs reference 54 (-33 bytes)
 
 ```js
@@ -32300,6 +32971,7 @@ console.log(f());
 
 ## `uglify/loops/issue_1648`
 
+- tags: `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 0 vs reference 33 (-33 bytes)
 
 ```js
@@ -32323,6 +32995,7 @@ function f() {
 
 ## `uglify/awaits/issue_4618`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 89 vs reference 123 (-34 bytes)
 
 ```js
@@ -32353,6 +33026,7 @@ console.log(typeof function() {
 
 ## `uglify/dead-code/collapse_vars_assignment`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 0 vs reference 34 (-34 bytes)
 
 ```js
@@ -32408,6 +33082,7 @@ console.log(function() {
 
 ## `uglify/merge_vars/segment`
 
+- tags: `join vars`
 - size: oxc 125 vs reference 159 (-34 bytes)
 
 ```js
@@ -32449,6 +33124,7 @@ console.log(d);
 
 ## `uglify/reduce_vars/issue_5716_5`
 
+- tags: `join vars`
 - size: oxc 59 vs reference 93 (-34 bytes)
 
 ```js
@@ -32478,6 +33154,7 @@ console.log(function() {
 
 ## `uglify/sequences/negate_iife_for`
 
+- tags: `sequences`
 - size: oxc 76 vs reference 110 (-34 bytes)
 
 ```js
@@ -32501,6 +33178,7 @@ for (; i < 10; i++) console.log(i);
 
 ## `uglify/yields/issue_4618`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 84 vs reference 118 (-34 bytes)
 
 ```js
@@ -32531,6 +33209,7 @@ console.log(typeof function() {
 
 ## `uglify/collapse_vars/Infinity_assignment`
 
+- tags: `join vars`
 - size: oxc 17 vs reference 52 (-35 bytes)
 
 ```js
@@ -32553,6 +33232,7 @@ console.log(Infinity);
 
 ## `uglify/collapse_vars/cascade_call`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 35 (-35 bytes)
 
 ```js
@@ -32604,6 +33284,7 @@ function f(a) {
 
 ## `uglify/merge_vars/issue_4628`
 
+- tags: `join vars`
 - size: oxc 72 vs reference 107 (-35 bytes)
 
 ```js
@@ -32672,6 +33353,7 @@ function f() {
 
 ## `uglify/drop-unused/unused_circular_references_1`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 36 (-36 bytes)
 
 ```js
@@ -32700,6 +33382,7 @@ function f(x, y) {
 
 ## `uglify/drop-unused/unused_circular_references_3`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 36 (-36 bytes)
 
 ```js
@@ -32727,6 +33410,7 @@ function f(x, y) {
 
 ## `uglify/drop-unused/unused_nested_function`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 36 (-36 bytes)
 
 ```js
@@ -32751,6 +33435,7 @@ function f(x, y) {
 
 ## `uglify/if_return/if_return_5`
 
+- tags: `sequences`, `remove unused`
 - size: oxc 0 vs reference 36 (-36 bytes)
 
 ```js
@@ -32835,6 +33520,7 @@ try {} catch (a) {
 
 ## `uglify/pure_getters/unsafe`
 
+- tags: `pure getters`
 - size: oxc 33 vs reference 69 (-36 bytes)
 
 ```js
@@ -32864,6 +33550,7 @@ undefined.prop;
 
 ## `uglify/pure_getters/unsafe_reduce_vars`
 
+- tags: `join vars`, `pure getters`
 - size: oxc 33 vs reference 69 (-36 bytes)
 
 ```js
@@ -32982,6 +33669,7 @@ try {
 
 ## `uglify/collapse_vars/issue_4852`
 
+- tags: `join vars`
 - size: oxc 103 vs reference 140 (-37 bytes)
 
 ```js
@@ -33022,6 +33710,7 @@ var a = 'PASS';
 
 ## `uglify/if_return/if_return_1`
 
+- tags: `sequences`, `remove unused`
 - size: oxc 0 vs reference 37 (-37 bytes)
 
 ```js
@@ -33045,6 +33734,7 @@ function f(x) {
 
 ## `uglify/let/issue_5950`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 35 vs reference 72 (-37 bytes)
 
 ```js
@@ -33097,6 +33787,7 @@ console.log(1 / (a - (+b + +c)));
 
 ## `uglify/reduce_vars/issue_5055_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 45 vs reference 82 (-37 bytes)
 
 ```js
@@ -33124,6 +33815,7 @@ f(0 && (a = 0)(f(this)));
 
 ## `uglify/sequences/cascade_assignment_in_return`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 37 (-37 bytes)
 
 ```js
@@ -33243,6 +33935,7 @@ f();
 
 ## `uglify/optional-chains/reduce_vars_1`
 
+- tags: `join vars`
 - size: oxc 21 vs reference 60 (-39 bytes)
 
 ```js
@@ -33265,6 +33958,7 @@ console.log(a ? 'PASS' : 'FAIL');
 
 ## `uglify/optional-chains/reduce_vars_2`
 
+- tags: `join vars`
 - size: oxc 21 vs reference 60 (-39 bytes)
 
 ```js
@@ -33386,6 +34080,7 @@ console.log(y() && false && x());
 
 ## `uglify/drop-console/drop_console_2`
 
+- tags: `drop console`
 - size: oxc 39 vs reference 79 (-40 bytes)
 
 ```js
@@ -33407,6 +34102,7 @@ console.log.apply(console, arguments);
 
 ## `uglify/drop-unused/drop_fnames`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 40 (-40 bytes)
 
 ```js
@@ -33430,6 +34126,7 @@ function f() {
 
 ## `uglify/issue-5614/reassign_2`
 
+- tags: `join vars`
 - size: oxc 21 vs reference 61 (-40 bytes)
 
 ```js
@@ -33479,6 +34176,7 @@ var Infinity, NaN;
 
 ## `uglify/issue-640/drop_console_2`
 
+- tags: `drop console`
 - size: oxc 39 vs reference 79 (-40 bytes)
 
 ```js
@@ -33500,6 +34198,7 @@ console.log.apply(console, arguments);
 
 ## `uglify/let/issue_5756_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 85 vs reference 125 (-40 bytes)
 
 ```js
@@ -33591,6 +34290,7 @@ console.log(typeof arguments);
 
 ## `uglify/join_vars/issue_3789_2`
 
+- tags: `join vars`
 - size: oxc 91 vs reference 132 (-41 bytes)
 
 ```js
@@ -33633,6 +34333,7 @@ try {} catch (c) {
 
 ## `uglify/reduce_vars/issue_2455`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 41 (-41 bytes)
 
 ```js
@@ -33655,6 +34356,7 @@ function foo() {
 
 ## `uglify/collapse_vars/undeclared_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 42 (-42 bytes)
 
 ```js
@@ -33679,6 +34381,7 @@ function f(x, y) {
 
 ## `uglify/collapse_vars/undeclared_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 42 (-42 bytes)
 
 ```js
@@ -33703,6 +34406,7 @@ function f(x, y) {
 
 ## `uglify/conditionals/equality_conditionals_false`
 
+- tags: `sequences`
 - size: oxc 221 vs reference 263 (-42 bytes)
 
 ```js
@@ -33733,6 +34437,7 @@ f(NaN, 'foo');
 
 ## `uglify/merge_vars/issue_4130`
 
+- tags: `join vars`
 - size: oxc 102 vs reference 144 (-42 bytes)
 
 ```js
@@ -33771,6 +34476,7 @@ while (a) try {
 
 ## `uglify/reduce_vars/issue_2992`
 
+- tags: `join vars`
 - size: oxc 73 vs reference 115 (-42 bytes)
 
 ```js
@@ -33804,6 +34510,7 @@ console.log(c);
 
 ## `uglify/side_effects/issue_5912_3`
 
+- tags: `join vars`
 - size: oxc 89 vs reference 131 (-42 bytes)
 
 ```js
@@ -33846,6 +34553,7 @@ try {
 
 ## `uglify/collapse_vars/undeclared_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 44 (-44 bytes)
 
 ```js
@@ -33870,6 +34578,7 @@ function f(x, y) {
 
 ## `uglify/drop-unused/unused_circular_references_2`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 44 (-44 bytes)
 
 ```js
@@ -33913,6 +34622,7 @@ a = 'PASS', b ?? (a = 'FAIL'), console.log(a);
 
 ## `uglify/nullish/conditional_assignment_3`
 
+- tags: `join vars`
 - size: oxc 21 vs reference 65 (-44 bytes)
 
 ```js
@@ -33933,6 +34643,7 @@ a = 'PASS', b ?? (a = 'FAIL'), console.log(a);
 
 ## `uglify/switches/issue_5890`
 
+- tags: `join vars`
 - size: oxc 96 vs reference 141 (-45 bytes)
 
 ```js
@@ -33973,6 +34684,7 @@ try {
 
 ## `uglify/collapse_vars/undeclared_4`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 46 (-46 bytes)
 
 ```js
@@ -33998,6 +34710,7 @@ function f(x, y) {
 
 ## `uglify/merge_vars/issue_4237_2`
 
+- tags: `join vars`
 - size: oxc 185 vs reference 231 (-46 bytes)
 
 ```js
@@ -34074,6 +34787,7 @@ a ? log(...b) : log(...c);
 
 ## `uglify/collapse_vars/for_init`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 47 (-47 bytes)
 
 ```js
@@ -34098,6 +34812,7 @@ function f(x, y) {
 
 ## `uglify/collapse_vars/issue_2931`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 21 vs reference 68 (-47 bytes)
 
 ```js
@@ -34125,6 +34840,7 @@ console.log(function() {
 
 ## `uglify/collapse_vars/issue_3976`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 21 vs reference 68 (-47 bytes)
 
 ```js
@@ -34162,6 +34878,7 @@ console.log('PASS');
 
 ## `uglify/if_return/if_return_3`
 
+- tags: `sequences`, `remove unused`
 - size: oxc 0 vs reference 47 (-47 bytes)
 
 ```js
@@ -34187,6 +34904,7 @@ function f(x) {
 
 ## `uglify/reduce_vars/func_inline`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 47 (-47 bytes)
 
 ```js
@@ -34280,6 +34998,7 @@ const a = 42;
 
 ## `uglify/drop-unused/drop_toplevel_funcs`
 
+- tags: `remove unused`
 - size: oxc 16 vs reference 64 (-48 bytes)
 
 ```js
@@ -34339,6 +35058,7 @@ let a = 42;
 
 ## `uglify/reduce_vars/double_reference_2`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 0 vs reference 48 (-48 bytes)
 
 ```js
@@ -34365,6 +35085,7 @@ function f() {
 
 ## `uglify/drop-unused/keep_fnames`
 
+- tags: `remove unused`, `keep function names`
 - size: oxc 0 vs reference 49 (-49 bytes)
 
 ```js
@@ -34522,6 +35243,7 @@ console.log(function f() {
 
 ## `uglify/collapse_vars/issue_1605_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 51 (-51 bytes)
 
 ```js
@@ -34547,6 +35269,7 @@ o.p = 1;
 
 ## `uglify/drop-unused/unused_var_in_catch`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 52 (-52 bytes)
 
 ```js
@@ -34574,6 +35297,7 @@ function foo() {
 
 ## `uglify/drop-unused/var_catch_redefined`
 
+- tags: `remove unused`
 - size: oxc 54 vs reference 106 (-52 bytes)
 
 ```js
@@ -34661,6 +35385,7 @@ console.log(typeof f === typeof g);
 
 ## `uglify/if_return/if_return_7`
 
+- tags: `sequences`, `remove unused`
 - size: oxc 0 vs reference 52 (-52 bytes)
 
 ```js
@@ -34710,6 +35435,7 @@ function f(x) {
 
 ## `uglify/issue-44/issue_44_valid_ast_1`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 52 (-52 bytes)
 
 ```js
@@ -34750,6 +35476,7 @@ function a(b) {
 
 ## `uglify/let/issue_4276_2`
 
+- tags: `remove unused`
 - size: oxc 76 vs reference 128 (-52 bytes)
 
 ```js
@@ -34786,6 +35513,7 @@ try {
 
 ## `uglify/switches/issue_5892_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 76 vs reference 128 (-52 bytes)
 
 ```js
@@ -34822,6 +35550,7 @@ try {
 
 ## `uglify/switches/issue_5892_2`
 
+- tags: `join vars`
 - size: oxc 76 vs reference 128 (-52 bytes)
 
 ```js
@@ -34858,6 +35587,7 @@ try {
 
 ## `uglify/directives/drop_lone_use_strict`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 53 (-53 bytes)
 
 ```js
@@ -34888,6 +35618,7 @@ function f2() {
 
 ## `uglify/issue-1261/pure_function_calls`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 65 vs reference 118 (-53 bytes)
 
 ```js
@@ -34933,6 +35664,7 @@ a.b(), c.d.e(), f.g();
 
 ## `uglify/pure_funcs/unused`
 
+- tags: `remove unused`, `pure functions`
 - size: oxc 0 vs reference 53 (-53 bytes)
 
 ```js
@@ -34959,6 +35691,7 @@ function foo() {
 
 ## `uglify/collapse_vars/issue_2364_5`
 
+- tags: `join vars`, `remove unused`, `pure getters`
 - size: oxc 0 vs reference 54 (-54 bytes)
 
 ```js
@@ -34985,6 +35718,7 @@ function f0(o, a, h) {
 
 ## `uglify/const/issue_5516`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 61 vs reference 116 (-55 bytes)
 
 ```js
@@ -35021,6 +35755,7 @@ console.log(typeof function() {
 
 ## `uglify/if_return/if_return_2`
 
+- tags: `sequences`, `remove unused`
 - size: oxc 0 vs reference 55 (-55 bytes)
 
 ```js
@@ -35043,6 +35778,7 @@ function f(x, y) {
 
 ## `uglify/if_return/if_return_6`
 
+- tags: `sequences`, `remove unused`
 - size: oxc 0 vs reference 55 (-55 bytes)
 
 ```js
@@ -35066,6 +35802,7 @@ function f(x) {
 
 ## `uglify/sequences/call`
 
+- tags: `sequences`
 - size: oxc 380 vs reference 435 (-55 bytes)
 
 ```js
@@ -35119,6 +35856,7 @@ console.log(typeof (a, b)['c']);
 
 ## `uglify/collapse_vars/call_2`
 
+- tags: `join vars`
 - size: oxc 51 vs reference 107 (-56 bytes)
 
 ```js
@@ -35151,6 +35889,7 @@ console.log(typeof (a, b)['c']);
 
 ## `uglify/functions/inlined_single_use`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 51 vs reference 107 (-56 bytes)
 
 ```js
@@ -35190,6 +35929,7 @@ console.log(function(f) {
 
 ## `uglify/pure_getters/collapse_vars_1_true`
 
+- tags: `join vars`, `remove unused`, `pure getters`
 - size: oxc 0 vs reference 56 (-56 bytes)
 
 ```js
@@ -35215,6 +35955,7 @@ function f(a, b) {
 
 ## `uglify/let/issue_5787`
 
+- tags: `remove unused`
 - size: oxc 47 vs reference 104 (-57 bytes)
 
 ```js
@@ -35350,6 +36091,7 @@ var a;
 
 ## `uglify/drop-unused/drop_duplicated_var_catch`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 58 (-58 bytes)
 
 ```js
@@ -35379,6 +36121,7 @@ function f() {
 
 ## `uglify/reduce_vars/double_reference_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 58 (-58 bytes)
 
 ```js
@@ -35406,6 +36149,7 @@ function f() {
 
 ## `uglify/side_effects/issue_2233_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 33 vs reference 92 (-59 bytes)
 
 ```js
@@ -35438,6 +36182,7 @@ function foo() {
 
 ## `uglify/drop-unused/global_var`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 60 (-60 bytes)
 
 ```js
@@ -35470,6 +36215,7 @@ function foo(b) {
 
 ## `uglify/hoist_vars/issue_2295`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 60 (-60 bytes)
 
 ```js
@@ -35495,6 +36241,7 @@ function foo(o) {
 
 ## `uglify/const/issue_5787`
 
+- tags: `remove unused`
 - size: oxc 47 vs reference 108 (-61 bytes)
 
 ```js
@@ -35527,6 +36274,7 @@ console.log(function() {
 
 ## `uglify/rests/issue_4544_1`
 
+- tags: `keep function names`
 - size: oxc 0 vs reference 61 (-61 bytes)
 
 ```js
@@ -35552,6 +36300,7 @@ try {
 
 ## `uglify/collapse_vars/issue_1605_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 62 (-62 bytes)
 
 ```js
@@ -35578,6 +36327,7 @@ o.p = 1;
 
 ## `uglify/drop-unused/drop_toplevel_all_retain`
 
+- tags: `remove unused`
 - size: oxc 16 vs reference 78 (-62 bytes)
 
 ```js
@@ -35611,6 +36361,7 @@ console.log(b = 3);
 
 ## `uglify/drop-unused/drop_toplevel_retain`
 
+- tags: `remove unused`
 - size: oxc 16 vs reference 78 (-62 bytes)
 
 ```js
@@ -35644,6 +36395,7 @@ console.log(b = 3);
 
 ## `uglify/drop-unused/drop_toplevel_retain_array`
 
+- tags: `remove unused`
 - size: oxc 16 vs reference 78 (-62 bytes)
 
 ```js
@@ -35677,6 +36429,7 @@ console.log(b = 3);
 
 ## `uglify/drop-unused/drop_toplevel_retain_regex`
 
+- tags: `remove unused`
 - size: oxc 16 vs reference 78 (-62 bytes)
 
 ```js
@@ -35710,6 +36463,7 @@ console.log(b = 3);
 
 ## `uglify/sequences/for_sequences`
 
+- tags: `sequences`
 - size: oxc 148 vs reference 211 (-63 bytes)
 
 ```js
@@ -35761,6 +36515,7 @@ for (y = 5; false;);
 
 ## `uglify/issue-973/this_binding_collapse_vars`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 65 (-65 bytes)
 
 ```js
@@ -35791,6 +36546,7 @@ function f() {
 
 ## `uglify/reduce_vars/issue_3068_2`
 
+- tags: `join vars`
 - size: oxc 68 vs reference 134 (-66 bytes)
 
 ```js
@@ -35871,6 +36627,7 @@ console.log(1 + (2 + 3), 1 + (2 + '3'), 1 + ('2' + 3), 1 + ('2' + '3'), '1' + (2
 
 ## `uglify/if_return/if_return_4`
 
+- tags: `sequences`, `remove unused`
 - size: oxc 0 vs reference 67 (-67 bytes)
 
 ```js
@@ -35895,6 +36652,7 @@ function f(x, y) {
 
 ## `uglify/classes/keep_extends_1`
 
+- tags: `remove unused`
 - size: oxc 14 vs reference 82 (-68 bytes)
 
 ```js
@@ -35956,6 +36714,7 @@ else try {
 
 ## `uglify/issue-44/issue_44_valid_ast_2`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 69 (-69 bytes)
 
 ```js
@@ -36203,6 +36962,7 @@ else (function(z) {
 
 ## `uglify/drop-unused/vardef_value`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 74 (-74 bytes)
 
 ```js
@@ -36231,6 +36991,7 @@ function f() {
 
 ## `uglify/reduce_vars/var_if`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 75 (-75 bytes)
 
 ```js
@@ -36260,6 +37021,7 @@ function f() {
 
 ## `uglify/issue-1833/iife_do`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 77 (-77 bytes)
 
 ```js
@@ -36291,6 +37053,7 @@ f();
 
 ## `uglify/evaluate/threshold_evaluate_100`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 88 vs reference 166 (-78 bytes)
 
 ```js
@@ -36315,6 +37078,7 @@ console.log(b('1'), b(2), b(b(b('ABCDEFGHIJK'))));
 
 ## `uglify/drop-unused/used_var_in_catch`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 79 (-79 bytes)
 
 ```js
@@ -36346,6 +37110,7 @@ function foo() {
 
 ## `uglify/drop-unused/unused_keep_setter_arg`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 80 (-80 bytes)
 
 ```js
@@ -36375,6 +37140,7 @@ var x = {
 
 ## `uglify/hoist_vars/sequences_funs`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 80 (-80 bytes)
 
 ```js
@@ -36401,6 +37167,7 @@ function f() {
 
 ## `uglify/hoist_vars/statements`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 80 (-80 bytes)
 
 ```js
@@ -36428,6 +37195,7 @@ function f() {
 
 ## `uglify/hoist_vars/statements_funs`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 80 (-80 bytes)
 
 ```js
@@ -36455,6 +37223,7 @@ function f() {
 
 ## `uglify/annotations/issue_3858`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 81 (-81 bytes)
 
 ```js
@@ -36509,6 +37278,7 @@ try {
 
 ## `uglify/issue-1105/with_in_function_scope`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 81 (-81 bytes)
 
 ```js
@@ -36613,6 +37383,7 @@ else try {
 
 ## `uglify/drop-unused/issue_2288`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 82 (-82 bytes)
 
 ```js
@@ -36637,6 +37408,7 @@ function foo(o) {
 
 ## `uglify/issue-1034/non_hoisted_function_after_return_2a`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 0 vs reference 82 (-82 bytes)
 
 ```js
@@ -36673,6 +37445,7 @@ function foo(x) {
 
 ## `uglify/issue-1034/non_hoisted_function_after_return_2b`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 82 (-82 bytes)
 
 ```js
@@ -36750,6 +37523,7 @@ switch (b) {
 
 ## `uglify/drop-unused/drop_toplevel_vars`
 
+- tags: `remove unused`
 - size: oxc 16 vs reference 99 (-83 bytes)
 
 ```js
@@ -36784,6 +37558,7 @@ console.log(b = 3);
 
 ## `uglify/drop-unused/self_assign`
 
+- tags: `remove unused`, `2 iterations`
 - size: oxc 0 vs reference 83 (-83 bytes)
 
 ```js
@@ -36818,6 +37593,7 @@ function g(a, b, c) {
 
 ## `uglify/dead-code/collapse_vars_misc`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 84 (-84 bytes)
 
 ```js
@@ -36848,6 +37624,7 @@ function f11(x) {
 
 ## `uglify/hoist_vars/sequences`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 84 (-84 bytes)
 
 ```js
@@ -36875,6 +37652,7 @@ function f() {
 
 ## `uglify/issue-640/limit_1`
 
+- tags: `sequences`
 - size: oxc 33 vs reference 117 (-84 bytes)
 
 ```js
@@ -37099,6 +37877,7 @@ console.log([
 
 ## `uglify/pure_getters/collapse_vars_1_false`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 89 (-89 bytes)
 
 ```js
@@ -37128,6 +37907,7 @@ function f(a, b) {
 
 ## `uglify/pure_getters/collapse_vars_1_strict`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 89 (-89 bytes)
 
 ```js
@@ -37157,6 +37937,7 @@ function f(a, b) {
 
 ## `uglify/collapse_vars/switch_case_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 91 (-91 bytes)
 
 ```js
@@ -37232,6 +38013,7 @@ console.log(function foo() {
 
 ## `uglify/issue-979/reported`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 92 (-92 bytes)
 
 ```js
@@ -37260,6 +38042,7 @@ function f2() {
 
 ## `uglify/drop-unused/drop_toplevel_vars_retain`
 
+- tags: `remove unused`
 - size: oxc 16 vs reference 110 (-94 bytes)
 
 ```js
@@ -37338,6 +38121,7 @@ console.log(function foo() {
 
 ## `uglify/reduce_vars/defun_inline_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 94 (-94 bytes)
 
 ```js
@@ -37369,6 +38153,7 @@ function f() {
 
 ## `uglify/reduce_vars/defun_inline_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 94 (-94 bytes)
 
 ```js
@@ -37400,6 +38185,7 @@ function f() {
 
 ## `uglify/collapse_vars/collapse_vars_properties`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 100 (-100 bytes)
 
 ```js
@@ -37430,6 +38216,7 @@ function f2(obj) {
 
 ## `uglify/drop-unused/drop_toplevel_funcs_retain`
 
+- tags: `remove unused`
 - size: oxc 16 vs reference 116 (-100 bytes)
 
 ```js
@@ -37528,6 +38315,7 @@ console.log(b = 3);
 
 ## `uglify/issue-1034/non_hoisted_function_after_return`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 113 (-113 bytes)
 
 ```js
@@ -37659,6 +38447,7 @@ RegExp('\\\nfo\n[\n]o\\bbb');
 
 ## `uglify/functions/issue_3297_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 118 (-118 bytes)
 
 ```js
@@ -38115,6 +38904,7 @@ console.log(c);
 
 ## `uglify/issue-1105/compress_with_with_in_other_scope`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 121 (-121 bytes)
 
 ```js
@@ -38149,6 +38939,7 @@ function bar() {
 
 ## `uglify/keep_fargs/issue_1583`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 0 vs reference 124 (-124 bytes)
 
 ```js
@@ -38236,6 +39027,7 @@ console.log('1' + 2 + (3 + 4 + 5), '1' + 2 + (3 + 4 + '5'), '1' + 2 + (3 + '4' +
 
 ## `uglify/drop-unused/issue_1583`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 0 vs reference 126 (-126 bytes)
 
 ```js
@@ -38269,6 +39061,7 @@ function m(t) {
 
 ## `uglify/if_return/issue_1089`
 
+- tags: `sequences`, `remove unused`
 - size: oxc 0 vs reference 128 (-128 bytes)
 
 ```js
@@ -38296,6 +39089,7 @@ function x() {
 
 ## `uglify/issue-1105/with_using_existing_variable_outside_scope`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 128 (-128 bytes)
 
 ```js
@@ -38349,6 +39143,7 @@ console.log('1' + '2' + (3 + 4 + 5), '1' + '2' + (3 + 4 + '5'), '1' + '2' + (3 +
 
 ## `uglify/drop-unused/drop_assign`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 144 (-144 bytes)
 
 ```js
@@ -38402,6 +39197,7 @@ function f5() {
 
 ## `uglify/collapse_vars/issue_2436_12`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 145 (-145 bytes)
 
 ```js
@@ -38455,6 +39251,7 @@ function f() {
 
 ## `uglify/drop-unused/issue_2226_1`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 149 (-149 bytes)
 
 ```js
@@ -38504,6 +39301,7 @@ function f5(a) {
 
 ## `uglify/issue-640/iife`
 
+- tags: `sequences`
 - size: oxc 8 vs reference 157 (-149 bytes)
 
 ```js
@@ -38529,6 +39327,7 @@ typeof function g() {}();
 
 ## `uglify/keep_fargs/issue_2226_1`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 149 (-149 bytes)
 
 ```js
@@ -38578,6 +39377,7 @@ function f5(a) {
 
 ## `uglify/sequences/iife`
 
+- tags: `sequences`
 - size: oxc 8 vs reference 157 (-149 bytes)
 
 ```js
@@ -38603,6 +39403,7 @@ typeof function g() {}();
 
 ## `uglify/dead-code/collapse_vars_lvalues_drop_assign`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 154 (-154 bytes)
 
 ```js
@@ -38684,6 +39485,7 @@ console.log((0 + 0 * -[].length) / 1);
 
 ## `uglify/pure_funcs/babel`
 
+- tags: `remove unused`, `pure functions`
 - size: oxc 0 vs reference 176 (-176 bytes)
 
 ```js
@@ -38775,6 +39577,7 @@ switch (1) {
 
 ## `uglify/issue-281/collapse_vars_constants`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 193 (-193 bytes)
 
 ```js
@@ -38811,6 +39614,7 @@ function f2(x) {
 
 ## `uglify/collapse_vars/issue_2497`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 195 (-195 bytes)
 
 ```js
@@ -38847,6 +39651,7 @@ function sample() {
 
 ## `uglify/drop-unused/keep_assign`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 200 (-200 bytes)
 
 ```js
@@ -38904,6 +39709,7 @@ function f5() {
 
 ## `uglify/collapse_vars/collapse_vars_array_1`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 201 (-201 bytes)
 
 ```js
@@ -38965,6 +39771,7 @@ function f3(x, y) {
 
 ## `uglify/collapse_vars/collapse_vars_try`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 201 (-201 bytes)
 
 ```js
@@ -39017,6 +39824,7 @@ function f2() {
 
 ## `uglify/collapse_vars/collapse_vars_while`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 204 (-204 bytes)
 
 ```js
@@ -39074,6 +39882,7 @@ function f3(y) {
 
 ## `uglify/collapse_vars/collapse_vars_if`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 210 (-210 bytes)
 
 ```js
@@ -39125,6 +39934,7 @@ function f3(x) {
 
 ## `uglify/collapse_vars/collapse_vars_closures`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 220 (-220 bytes)
 
 ```js
@@ -39163,6 +39973,7 @@ function non_constant_vars_can_only_be_replace_in_same_scope(x) {
 
 ## `uglify/evaluate/threshold_evaluate_999`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 88 vs reference 324 (-236 bytes)
 
 ```js
@@ -39187,6 +39998,7 @@ console.log(b('1'), b(2), b(b(b('ABCDEFGHIJK'))));
 
 ## `uglify/issue-1105/check_drop_unused_in_peer_function`
 
+- tags: `remove unused`
 - size: oxc 0 vs reference 245 (-245 bytes)
 
 ```js
@@ -39240,6 +40052,7 @@ function outer() {
 
 ## `uglify/issue-979/test_negated_is_best`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 245 (-245 bytes)
 
 ```js
@@ -39289,6 +40102,7 @@ function f7() {
 
 ## `uglify/collapse_vars/collapse_vars_unary`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 276 (-276 bytes)
 
 ```js
@@ -39355,6 +40169,7 @@ function f5(n) {
 
 ## `uglify/conditionals/ternary_boolean_alternative`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 299 (-299 bytes)
 
 ```js
@@ -39418,6 +40233,7 @@ function f8() {
 
 ## `uglify/conditionals/ternary_boolean_consequent`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 299 (-299 bytes)
 
 ```js
@@ -39481,6 +40297,7 @@ function f8() {
 
 ## `uglify/collapse_vars/collapse_vars_constants`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 325 (-325 bytes)
 
 ```js
@@ -39531,6 +40348,7 @@ function f3(x) {
 
 ## `uglify/issue-368/collapse`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 325 (-325 bytes)
 
 ```js
@@ -39589,6 +40407,7 @@ function f4(c) {
 
 ## `uglify/collapse_vars/collapse_vars_object_1`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 328 (-328 bytes)
 
 ```js
@@ -39676,6 +40495,7 @@ function f3(x, y) {
 
 ## `uglify/collapse_vars/collapse_vars_switch_1`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 358 (-358 bytes)
 
 ```js
@@ -39733,6 +40553,7 @@ function f3(x) {
 
 ## `uglify/collapse_vars/collapse_vars_do_while_drop_assign`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 369 (-369 bytes)
 
 ```js
@@ -39821,6 +40642,7 @@ function f5(y) {
 
 ## `uglify/collapse_vars/collapse_vars_do_while`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 380 (-380 bytes)
 
 ```js
@@ -39909,6 +40731,7 @@ function f5(y) {
 
 ## `uglify/collapse_vars/issue_2436_11`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 380 (-380 bytes)
 
 ```js
@@ -39951,6 +40774,7 @@ function f(arg1, arg2) {
 
 ## `uglify/collapse_vars/collapse_vars_assignment`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 384 (-384 bytes)
 
 ```js
@@ -40030,6 +40854,7 @@ function f6(c) {
 
 ## `uglify/return_undefined/return_undefined`
 
+- tags: `drop debugger`, `join vars`, `remove unused`
 - size: oxc 0 vs reference 484 (-484 bytes)
 
 ```js
@@ -40140,6 +40965,7 @@ function f12() {
 
 ## `uglify/collapse_vars/collapse_vars_lvalues_drop_assign`
 
+- tags: `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 0 vs reference 513 (-513 bytes)
 
 ```js
@@ -40232,6 +41058,7 @@ function f9(x) {
 
 ## `uglify/collapse_vars/collapse_vars_lvalues`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 600 (-600 bytes)
 
 ```js
@@ -40327,6 +41154,7 @@ function f9(x) {
 
 ## `uglify/collapse_vars/collapse_vars_misc`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 613 (-613 bytes)
 
 ```js
@@ -40436,6 +41264,7 @@ function f11(x) {
 
 ## `uglify/collapse_vars/collapse_vars_short_circuited_conditions`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 0 vs reference 974 (-974 bytes)
 
 ```js
@@ -40559,6 +41388,7 @@ function i6(x) {
 
 ## `uglify/collapse_vars/collapse_vars_short_circuit`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 979 (-979 bytes)
 
 ```js
@@ -40694,6 +41524,7 @@ function f14(x, y) {
 
 ## `uglify/asm/asm_mixed`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 0 vs reference 1053 (-1053 bytes)
 
 ```js

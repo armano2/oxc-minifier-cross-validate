@@ -6,6 +6,7 @@ Fixtures: 149
 
 ## `uglify/arguments/issue_4291_2`
 
+- tags: `join vars`
 
 ```js
 var a = function() {
@@ -82,6 +83,7 @@ console.log(Number(-1148098955808013229n));
 
 ## `uglify/bigint/issue_4801`
 
+- tags: `join vars`, `remove unused`
 
 ```js
 try {
@@ -115,6 +117,7 @@ try {
 
 ## `uglify/classes/issue_5294_1`
 
+- tags: `join vars`
 
 ```js
 (class A {
@@ -264,6 +267,7 @@ new class A {
 
 ## `uglify/collapse_vars/chained_3`
 
+- tags: `join vars`, `remove unused`
 
 ```js
 console.log(function(a, b) {
@@ -290,6 +294,7 @@ console.log(function(a, b) {
 
 ## `uglify/collapse_vars/collapse_arg_sequence`
 
+- tags: `join vars`, `remove unused`
 
 ```js
 (function(a) {
@@ -312,6 +317,7 @@ console.log(function(a, b) {
 
 ## `uglify/collapse_vars/collapse_rhs_conditional_1`
 
+- tags: `join vars`
 
 ```js
 var a = 'PASS', b = 'FAIL';
@@ -335,6 +341,7 @@ console.log(a, b);
 
 ## `uglify/collapse_vars/collapse_rhs_undefined`
 
+- tags: `join vars`
 
 ```js
 var a, b;
@@ -366,6 +373,7 @@ console.log(a === b, b === c, c === a);
 
 ## `uglify/collapse_vars/issue_2908`
 
+- tags: `join vars`
 
 ```js
 var a = 0, b = 0;
@@ -399,6 +407,7 @@ console.log(b);
 
 ## `uglify/collapse_vars/issue_3562`
 
+- tags: `join vars`, `sequences`
 
 ```js
 function f(a) {
@@ -437,6 +446,7 @@ h(c);
 
 ## `uglify/collapse_vars/issue_4891`
 
+- tags: `join vars`
 
 ```js
 var a = 0, b;
@@ -464,6 +474,7 @@ console.log(b);
 
 ## `uglify/collapse_vars/issue_4908`
 
+- tags: `join vars`
 
 ```js
 var a = 0;
@@ -488,6 +499,7 @@ console.log(d[1]);
 
 ## `uglify/collapse_vars/issue_5779`
 
+- tags: `join vars`
 
 ```js
 var a = A = 'foo';
@@ -509,6 +521,7 @@ if (a && !a.p) console.log('PASS');
 
 ## `uglify/collapse_vars/replace_all_var_scope`
 
+- tags: `join vars`, `remove unused`
 
 ```js
 var a = 100, b = 10;
@@ -541,6 +554,7 @@ console.log(a, b);
 
 ## `uglify/collapse_vars/var_side_effects_1`
 
+- tags: `join vars`, `remove unused`
 
 ```js
 var print = console.log.bind(console);
@@ -567,6 +581,7 @@ foo(10);
 
 ## `uglify/collapse_vars/var_side_effects_3`
 
+- tags: `join vars`, `remove unused`, `pure getters`
 
 ```js
 var print = console.log.bind(console);
@@ -801,6 +816,7 @@ console.log(foo({ p: 3 }, [null]), foo({ p: 0 }, [7]), foo({ p: true }, [false])
 
 ## `uglify/default-values/collapse_arg_sequence`
 
+- tags: `join vars`, `remove unused`
 
 ```js
 (function(a = (console.log('bar'), console.log)) {
@@ -823,6 +839,7 @@ console.log(foo({ p: 3 }, [null]), foo({ p: 0 }, [7]), foo({ p: true }, [false])
 
 ## `uglify/default-values/collapse_preceding_simple_arg`
 
+- tags: `join vars`, `remove unused`
 
 ```js
 var a = 'foo';
@@ -1127,6 +1144,7 @@ console.log(v);
 
 ## `uglify/destructured/drop_hole`
 
+- tags: `remove unused`
 
 ```js
 var [a] = [,];
@@ -1146,6 +1164,7 @@ console.log(a);
 
 ## `uglify/destructured/issue_4288`
 
+- tags: `join vars`
 
 ```js
 function f({ [new function() {
@@ -1176,6 +1195,7 @@ f(0);
 
 ## `uglify/destructured/issue_5866_8`
 
+- tags: `remove unused`
 
 ```js
 var a = {}, b, c;
@@ -1197,6 +1217,7 @@ console.log(b === c ? 'PASS' : 'FAIL');
 
 ## `uglify/drop-unused/issue_2660_1`
 
+- tags: `join vars`, `remove unused`
 
 ```js
 var a = 2;
@@ -1225,6 +1246,7 @@ console.log(a);
 
 ## `uglify/drop-unused/issue_3375`
 
+- tags: `join vars`, `remove unused`
 
 ```js
 var b = 1;
@@ -1277,6 +1299,7 @@ console.log(2 == Object(1) || 0 || void 0 || 'ok' || null || Object(2));
 
 ## `uglify/evaluate/void_returns_recursive`
 
+- tags: `join vars`, `remove unused`
 
 ```js
 var a = function f() {
@@ -1380,6 +1403,7 @@ console.log(f());
 
 ## `uglify/functions/issue_4471`
 
+- tags: `join vars`, `remove unused`
 
 ```js
 f(f());
@@ -1408,6 +1432,7 @@ function g() {
 
 ## `uglify/functions/issue_5239`
 
+- tags: `join vars`, `remove unused`
 
 ```js
 (function() {
@@ -1438,6 +1463,7 @@ function g() {
 
 ## `uglify/hoist_props/name_collision_4`
 
+- tags: `join vars`
 
 ```js
 console.log(function() {
@@ -1473,6 +1499,7 @@ console.log(function() {
 
 ## `uglify/hoist_vars/issue_4487_2`
 
+- tags: `join vars`, `remove unused`, `keep function names`, `2 iterations`
 
 ```js
 var a = function f() {
@@ -1681,6 +1708,7 @@ if (f(console)) console.log('PASS');
 
 ## `uglify/issue-1202/mangle_keep_fnames_false`
 
+- tags: `keep function names`
 
 ```js
 'use strict';
@@ -1709,6 +1737,7 @@ function total() {
 
 ## `uglify/issue-1202/mangle_keep_fnames_true`
 
+- tags: `keep function names`
 
 ```js
 'use strict';
@@ -1812,6 +1841,7 @@ console.log(x.foo, x['a']);
 
 ## `uglify/issue-1431/level_one`
 
+- tags: `keep function names`
 
 ```js
 function f(x) {
@@ -1846,6 +1876,7 @@ function f(x) {
 
 ## `uglify/issue-1431/level_three`
 
+- tags: `keep function names`
 
 ```js
 function f(x) {
@@ -1904,6 +1935,7 @@ function f(x) {
 
 ## `uglify/issue-1431/level_two`
 
+- tags: `keep function names`
 
 ```js
 function f(x) {
@@ -1950,6 +1982,7 @@ function f(x) {
 
 ## `uglify/issue-1431/level_zero`
 
+- tags: `keep function names`
 
 ```js
 function f(x) {
@@ -2003,6 +2036,7 @@ console.log(String(x), Number(x), Boolean(x), String(), Number(), Boolean());
 
 ## `uglify/join_vars/issue_3791_1`
 
+- tags: `join vars`
 
 ```js
 var a = 'PASS';
@@ -2056,6 +2090,7 @@ var a = A;
 
 ## `uglify/keep_fargs/issue_2319_1`
 
+- tags: `join vars`, `remove unused`
 
 ```js
 console.log(function(a) {
@@ -2085,6 +2120,7 @@ console.log(function(a) {
 
 ## `uglify/keep_fargs/issue_2319_3`
 
+- tags: `join vars`, `remove unused`
 
 ```js
 'use strict';
@@ -2116,6 +2152,7 @@ console.log(function(a) {
 
 ## `uglify/keep_fargs/try_increment`
 
+- tags: `join vars`, `remove unused`
 
 ```js
 console.log(function(a) {
@@ -2271,6 +2308,7 @@ console.log(function(n) {
 
 ## `uglify/merge_vars/conditional_write`
 
+- tags: `join vars`
 
 ```js
 var a = 'FAIL', b;
@@ -2297,6 +2335,7 @@ console.log(b);
 
 ## `uglify/merge_vars/cross_branch_1_1`
 
+- tags: `join vars`
 
 ```js
 var a;
@@ -2337,6 +2376,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_1_2`
 
+- tags: `join vars`
 
 ```js
 var a;
@@ -2380,6 +2420,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_1_3`
 
+- tags: `join vars`
 
 ```js
 var a;
@@ -2423,6 +2464,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2a_1`
 
+- tags: `join vars`
 
 ```js
 var a, b;
@@ -2471,6 +2513,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2a_3`
 
+- tags: `join vars`
 
 ```js
 var a, b;
@@ -2519,6 +2562,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2a_4`
 
+- tags: `join vars`
 
 ```js
 var a, b;
@@ -2570,6 +2614,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2a_7`
 
+- tags: `join vars`
 
 ```js
 var a, b;
@@ -2610,6 +2655,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2b_2`
 
+- tags: `join vars`
 
 ```js
 var a, b;
@@ -2650,6 +2696,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2b_3`
 
+- tags: `join vars`
 
 ```js
 var a, b;
@@ -2697,6 +2744,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2b_4`
 
+- tags: `join vars`
 
 ```js
 var a, b;
@@ -2738,6 +2786,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2b_5`
 
+- tags: `join vars`
 
 ```js
 var a, b;
@@ -2785,6 +2834,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2b_6`
 
+- tags: `join vars`
 
 ```js
 var a, b;
@@ -2825,6 +2875,7 @@ f();
 
 ## `uglify/merge_vars/cross_branch_2b_7`
 
+- tags: `join vars`
 
 ```js
 var a, b;
@@ -2875,6 +2926,7 @@ f();
 
 ## `uglify/merge_vars/if_branch`
 
+- tags: `join vars`
 
 ```js
 console.log(function(a) {
@@ -2900,6 +2952,7 @@ console.log(function(a) {
 
 ## `uglify/merge_vars/issue_4255`
 
+- tags: `join vars`
 
 ```js
 L: for (var a = 2; --a;) for (var b = 0; console.log(b); --b) break L;
@@ -3339,6 +3392,7 @@ console.log(a.p, A);
 
 ## `uglify/properties/prop_side_effects_1`
 
+- tags: `join vars`, `remove unused`
 
 ```js
 var C = 1;
@@ -3369,6 +3423,7 @@ console.log(obj.bar());
 
 ## `uglify/pure_funcs/unary`
 
+- tags: `pure functions`
 
 ```js
 typeof foo();
@@ -3417,6 +3472,7 @@ a['bar']++;
 
 ## `uglify/pure_getters/issue_2062`
 
+- tags: `join vars`, `pure getters`
 
 ```js
 var a = 1;
@@ -3442,6 +3498,7 @@ console.log(a);
 
 ## `uglify/pure_getters/nested_property_assignments_3`
 
+- tags: `join vars`, `remove unused`, `pure getters`
 
 ```js
 var o = { p: {} };
@@ -3475,6 +3532,7 @@ console.log(o.p.q === o.p ? 'PASS' : 'FAIL');
 
 ## `uglify/reduce_vars/iife_arguments_3`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 
 ```js
 (function() {
@@ -3502,6 +3560,7 @@ console.log(o.p.q === o.p ? 'PASS' : 'FAIL');
 
 ## `uglify/reduce_vars/inner_var_for_1`
 
+- tags: `join vars`
 
 ```js
 function f() {
@@ -3538,6 +3597,7 @@ function f() {
 
 ## `uglify/reduce_vars/inner_var_for_in_1`
 
+- tags: `join vars`
 
 ```js
 function f() {
@@ -3575,6 +3635,7 @@ function f() {
 
 ## `uglify/reduce_vars/multi_def_2`
 
+- tags: `join vars`
 
 ```js
 function f() {
@@ -3604,6 +3665,7 @@ function f() {
 
 ## `uglify/reduce_vars/recursive_inlining_3`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 
 ```js
 !function() {
@@ -3657,6 +3719,7 @@ function f() {
 
 ## `uglify/reduce_vars/redefine_farg_1`
 
+- tags: `join vars`, `remove unused`
 
 ```js
 function f(a) {
@@ -3697,6 +3760,7 @@ console.log(f([]), g([]), h([]));
 
 ## `uglify/rests/drop_unused_call_args_2`
 
+- tags: `remove unused`
 
 ```js
 console.log(function(a, ...b) {
@@ -3719,6 +3783,7 @@ console.log(function(a, ...b) {
 
 ## `uglify/rests/merge_funarg`
 
+- tags: `join vars`
 
 ```js
 (function(...a) {
@@ -3743,6 +3808,7 @@ console.log(function(a, ...b) {
 
 ## `uglify/rests/merge_funarg_destructured_array`
 
+- tags: `join vars`
 
 ```js
 (function([ ...a]) {
@@ -3767,6 +3833,7 @@ console.log(function(a, ...b) {
 
 ## `uglify/rests/merge_funarg_destructured_object`
 
+- tags: `join vars`
 
 ```js
 (function({ ...a }) {
@@ -3791,6 +3858,7 @@ console.log(function(a, ...b) {
 
 ## `uglify/sequences/hoist_defun`
 
+- tags: `join vars`, `sequences`
 
 ```js
 x();
@@ -3812,6 +3880,7 @@ y();
 
 ## `uglify/sequences/issue_3703`
 
+- tags: `sequences`
 
 ```js
 var a = 'FAIL';
@@ -3833,6 +3902,7 @@ console.log(a);
 
 ## `uglify/sequences/limit_1`
 
+- tags: `sequences`
 
 ```js
 a;
@@ -3863,6 +3933,7 @@ k;
 
 ## `uglify/sequences/limit_2`
 
+- tags: `sequences`
 
 ```js
 a, b;
@@ -3887,6 +3958,7 @@ k;
 
 ## `uglify/side_effects/issue_4325`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 
 ```js
 (function f() {
@@ -4123,6 +4195,7 @@ console.log(`${typeof A}${typeof B}${typeof C} PASS`);
 
 ## `uglify/transform/if_return`
 
+- tags: `sequences`, `2 iterations`
 
 ```js
 function f(w, x, y, z) {
@@ -4176,6 +4249,7 @@ function f(w, x, y, z) {
 
 ## `uglify/varify/escaped_let`
 
+- tags: `join vars`
 
 ```js
 'use strict';
@@ -4197,6 +4271,7 @@ log('PASS');
 
 ## `uglify/varify/forin_const_1`
 
+- tags: `join vars`
 
 ```js
 const o = {
@@ -4223,6 +4298,7 @@ for (const k in o) console.log(k, o[k]);
 
 ## `uglify/varify/forin_const_3`
 
+- tags: `join vars`
 
 ```js
 'use strict';
@@ -4295,6 +4371,7 @@ L: for (let a in console.log('PASS'));
 
 ## `uglify/yields/issue_5663`
 
+- tags: `remove unused`
 
 ```js
 var [, a] = function* () {

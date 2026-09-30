@@ -6,6 +6,7 @@ Fixtures: 33
 
 ## `swc/issues/10250`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 export function example(value) {
@@ -33,6 +34,7 @@ export function example(value) {
 
 ## `swc/issues/10466`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 const G = { setPackageName({ packageName }) {
@@ -58,6 +60,7 @@ packageName = '@clerk/clerk-react', G.setPackageName({ packageName }), console.l
 
 ## `swc/issues/10720`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 export function someFn({ someVal, shouldBreak }) {
@@ -93,6 +96,7 @@ export function someFn({ someVal, shouldBreak }) {
 
 ## `swc/issues/11084`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 // Test case 1: Object property destructuring assignment
@@ -153,6 +157,7 @@ console.log(state.flag);
 
 ## `swc/issues/11512-exhaustive/iife-default-reassigned`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
 
 ```js
 export function iifeDefaultReassigned(value) {
@@ -182,6 +187,7 @@ export function iifeDefaultReassigned(value) {
 
 ## `swc/issues/11645/unresolved-global-rebind`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
 
 ```js
 f = (a) => a;
@@ -203,6 +209,7 @@ console.log(f(1, 2));
 
 ## `swc/issues/11684/identifier-aliases`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 function FunctionTarget(value) {
@@ -253,6 +260,7 @@ out.destructured = new DestructuredCtor(1, 2, 3);
 
 ## `swc/issues/11684/nested-eval`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 class OuterEvalMutableClass {}
@@ -294,6 +302,7 @@ out.constructOuterFunctionAfterEval = constructOuterFunctionAfterEval;
 
 ## `swc/issues/2078/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 let rerenderQueue = [1];
@@ -318,6 +327,7 @@ while (rerenderQueue.length > 0) {
 
 ## `swc/issues/2679`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 (function() {
@@ -345,6 +355,7 @@ while (rerenderQueue.length > 0) {
 
 ## `swc/issues/2779/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 const e = Math.random();
@@ -363,6 +374,7 @@ console.log(e === -1 / 0);
 
 ## `swc/issues/3173/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 export const IndexPage = (value) => {
@@ -389,6 +401,7 @@ export const IndexPage = (value) => {
 
 ## `swc/issues/4845`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 console.log(a + ((b ? 'c' : 'd') + 1));
@@ -406,6 +419,7 @@ console.log(a + ((b ? 'c' : 'd') + 1));
 
 ## `swc/issues/6422/2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 import assert from 'assert';
@@ -432,6 +446,7 @@ assert.strictEqual(result, 'PASS');
 
 ## `swc/issues/7591`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 var x = someFunction;
@@ -458,6 +473,7 @@ console.log(x);
 
 ## `swc/issues/7634/1`
 
+- tags: `mangle`, `mangle top level`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 import Foo from './foo.js';
@@ -489,6 +505,7 @@ export default someRecursiveFunction;
 
 ## `swc/issues/7969`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 let a = 0;
@@ -532,6 +549,7 @@ console.log(a);
 
 ## `swc/issues/8161`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 function run(flag, output = 'a output') {
@@ -559,6 +577,7 @@ run('b');
 
 ## `swc/issues/8705`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 console.log(Math.pow({ valueOf() {
@@ -580,6 +599,7 @@ console.log(Math.pow({ valueOf() {
 
 ## `swc/issues/9650`
 
+- tags: `mangle`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 export function logVariables(var1, var2, var3, var4, var5, var6, var7, var8, var9, var10, var11, var12, var13, var14, var15, var16, var17, var18, var19, var20, var21, var22, var23, var24, var25, var26, var27, var28, var29, var30, var101, var201, var301, var401, var501, var601, var701, var801, var901, var1001, var1101, var1201, var1301, var1401, var1501, var1601, var1701, var1801, var1901, var2001, var2101, var2201, var2301, var2401, var2501, var2601, var2701, var2801, var2901, var3001) {
@@ -602,6 +622,7 @@ export function logVariables(var1, var2, var3, var4, var5, var6, var7, var8, var
 
 ## `swc/issues/framer-motion/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 // `resolveVariantFromProps` in framer-motion
@@ -649,6 +670,7 @@ export function resolveVariantFromProps(props, definition, custom, visualElement
 
 ## `swc/next/30498/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 export function string_create() {
@@ -702,6 +724,7 @@ string_create.prototype = StringSchema.prototype;
 
 ## `swc/projects/backbone/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 var _ = root._;
@@ -721,6 +744,7 @@ if (!_ && typeof require !== 'undefined') _ = require('underscore');
 
 ## `swc/projects/jquery/22`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 export const obj = { set: function(elem, value, extra) {
@@ -744,6 +768,7 @@ export const obj = { set: function(elem, value, extra) {
 
 ## `swc/projects/jquery/8`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 for (; list && firingIndex < firingLength; firingIndex++) {
@@ -769,6 +794,7 @@ for (; list && firingIndex < firingLength; firingIndex++) {
 
 ## `swc/projects/mootools/4`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 export const obj = { flatten: function() {
@@ -800,6 +826,7 @@ export const obj = { flatten: function() {
 
 ## `swc/projects/underscore/11`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 if (typeof /./ !== 'function') {
@@ -824,6 +851,7 @@ if (typeof /./ !== 'function') {
 
 ## `swc/projects/underscore/13`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 _.result = function(object, property) {
@@ -849,6 +877,7 @@ _.result = function(object, property) {
 
 ## `swc/projects/underscore/20`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 if ((name == 'shift' || name == 'splice') && obj.length === 0) delete obj[0];
@@ -866,6 +895,7 @@ if ((name == 'shift' || name == 'splice') && obj.length === 0) delete obj[0];
 
 ## `swc/projects/underscore/23`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 _.once = function(func) {
@@ -896,6 +926,7 @@ _.once = function(func) {
 
 ## `swc/projects/underscore/9`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 _.once = function(func) {
@@ -926,6 +957,7 @@ _.once = function(func) {
 
 ## `swc/projects/yui/1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 export const E = { test: function(Y) {
@@ -949,6 +981,7 @@ export const E = { test: function(Y) {
 
 ## `swc/projects/yui/12`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 export const E = { test: function(cat, name, args) {

@@ -77,6 +77,7 @@ pub(crate) struct Outcome {
     pub(crate) relative: String,
     pub(crate) family: String,
     pub(crate) kind: Kind,
+    pub(crate) tags: Vec<String>,
     pub(crate) unsupported_keys: Vec<String>,
     pub(crate) input: String,
     pub(crate) expected: String,

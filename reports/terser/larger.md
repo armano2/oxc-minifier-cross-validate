@@ -6,6 +6,7 @@ Fixtures: 858
 
 ## `terser/arguments/arguments_and_destructuring_2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 86 vs reference 85 (+1 bytes)
 
 ```js
@@ -29,6 +30,7 @@ Fixtures: 858
 
 ## `terser/arguments/arguments_and_destructuring_3`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 88 vs reference 87 (+1 bytes)
 
 ```js
@@ -79,6 +81,7 @@ async function f2() {
 
 ## `terser/collapse_vars/chained_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 38 vs reference 37 (+1 bytes)
 
 ```js
@@ -100,6 +103,7 @@ console.log(a);
 
 ## `terser/collapse_vars/chained_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 41 vs reference 40 (+1 bytes)
 
 ```js
@@ -124,6 +128,7 @@ console.log(a);
 
 ## `terser/collapse_vars/collapse_rhs_conditional_2`
 
+- tags: `join vars`
 - size: oxc 79 vs reference 78 (+1 bytes)
 
 ```js
@@ -147,6 +152,7 @@ console.log(a, b);
 
 ## `terser/collapse_vars/issue_1858`
 
+- tags: `join vars`, `remove unused`, `pure getters`
 - size: oxc 78 vs reference 77 (+1 bytes)
 
 ```js
@@ -172,6 +178,7 @@ console.log((function(x) {
 
 ## `terser/collapse_vars/issue_2187_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 66 vs reference 65 (+1 bytes)
 
 ```js
@@ -197,6 +204,7 @@ console.log((function(a) {
 
 ## `terser/collapse_vars/issue_2436_14`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 105 vs reference 104 (+1 bytes)
 
 ```js
@@ -230,6 +238,7 @@ var b = {};
 
 ## `terser/collapse_vars/issue_2954_2`
 
+- tags: `join vars`
 - size: oxc 165 vs reference 164 (+1 bytes)
 
 ```js
@@ -276,6 +285,7 @@ console.log(a);
 
 ## `terser/collapse_vars/switch_case_3`
 
+- tags: `join vars`
 - size: oxc 85 vs reference 84 (+1 bytes)
 
 ```js
@@ -368,6 +378,7 @@ x = y ? 'foo' : 'fo';
 
 ## `terser/destructuring/unused_destructuring_getter_side_effect_2`
 
+- tags: `remove unused`, `pure getters`
 - size: oxc 181 vs reference 180 (+1 bytes)
 
 ```js
@@ -405,6 +416,7 @@ extract({
 
 ## `terser/drop_unused/issue_2660_2`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 80 vs reference 79 (+1 bytes)
 
 ```js
@@ -435,6 +447,7 @@ console.log(a);
 
 ## `terser/export/async_func`
 
+- tags: `remove unused`
 - size: oxc 32 vs reference 31 (+1 bytes)
 
 ```js
@@ -453,6 +466,7 @@ export async function Foo(x) {}
 
 ## `terser/export/issue_2131`
 
+- tags: `remove unused`
 - size: oxc 71 vs reference 70 (+1 bytes)
 
 ```js
@@ -484,6 +498,7 @@ export function main() {
 
 ## `terser/export/issue_2134_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 46 vs reference 45 (+1 bytes)
 
 ```js
@@ -504,6 +519,7 @@ Foo.prototype = {};
 
 ## `terser/export/issue_2134_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 52 vs reference 51 (+1 bytes)
 
 ```js
@@ -524,6 +540,7 @@ Foo.prototype = {};
 
 ## `terser/harmony/issue_2345`
 
+- tags: `remove unused`
 - size: oxc 78 vs reference 77 (+1 bytes)
 
 ```js
@@ -564,6 +581,7 @@ console.log([...a].join('-'));
 
 ## `terser/hoist_props/hoist_function_with_call`
 
+- tags: `join vars`, `remove unused`, `keep function names`, `2 iterations`
 - size: oxc 133 vs reference 132 (+1 bytes)
 
 ```js
@@ -592,6 +610,7 @@ console.log(o.p.name, o.p === o.p, o.p(o.x), o.p(o.y));
 
 ## `terser/if_return/issue_1437`
 
+- tags: `sequences`
 - size: oxc 72 vs reference 71 (+1 bytes)
 
 ```js
@@ -619,6 +638,7 @@ function x() {
 
 ## `terser/if_return/issue_1437_conditionals`
 
+- tags: `sequences`
 - size: oxc 72 vs reference 71 (+1 bytes)
 
 ```js
@@ -646,6 +666,7 @@ function x() {
 
 ## `terser/issue_1466/different_variable_in_multiple_forIn`
 
+- tags: `join vars`
 - size: oxc 151 vs reference 150 (+1 bytes)
 
 ```js
@@ -718,6 +739,7 @@ for (let tmp in test) {
 
 ## `terser/issue_913/keep_var_for_in`
 
+- tags: `remove unused`
 - size: oxc 69 vs reference 68 (+1 bytes)
 
 ```js
@@ -793,6 +815,7 @@ while (foo) {
 
 ## `terser/properties/issue_2816`
 
+- tags: `join vars`
 - size: oxc 87 vs reference 86 (+1 bytes)
 
 ```js
@@ -824,6 +847,7 @@ console.log(o.a, o.b, o.c);
 
 ## `terser/properties/join_object_assignments_undefined_2`
 
+- tags: `join vars`
 - size: oxc 51 vs reference 50 (+1 bytes)
 
 ```js
@@ -846,6 +870,7 @@ console.log(o[undefined]);
 
 ## `terser/properties/join_object_assignments_void_0`
 
+- tags: `join vars`
 - size: oxc 51 vs reference 50 (+1 bytes)
 
 ```js
@@ -868,6 +893,7 @@ console.log(o[void 0]);
 
 ## `terser/reduce_vars/boolean_binary_assign`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 45 vs reference 44 (+1 bytes)
 
 ```js
@@ -894,6 +920,7 @@ console.log(o[void 0]);
 
 ## `terser/reduce_vars/cond_assign`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 45 vs reference 44 (+1 bytes)
 
 ```js
@@ -920,6 +947,7 @@ console.log(o[void 0]);
 
 ## `terser/reduce_vars/redefine_farg_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 153 vs reference 152 (+1 bytes)
 
 ```js
@@ -962,6 +990,7 @@ console.log(f([]), g([]), h([]));
 
 ## `terser/sequences/side_effects_cascade_1`
 
+- tags: `join vars`, `sequences`
 - size: oxc 58 vs reference 57 (+1 bytes)
 
 ```js
@@ -1013,6 +1042,7 @@ console.log(a);
 
 ## `terser/classes/class_duplication`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 65 vs reference 63 (+2 bytes)
 
 ```js
@@ -1042,6 +1072,7 @@ export default Foo;
 
 ## `terser/collapse_vars/issue_2187_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 66 vs reference 64 (+2 bytes)
 
 ```js
@@ -1067,6 +1098,7 @@ console.log((function(a) {
 
 ## `terser/collapse_vars/may_throw_1`
 
+- tags: `join vars`
 - size: oxc 58 vs reference 56 (+2 bytes)
 
 ```js
@@ -1094,6 +1126,7 @@ function f() {
 
 ## `terser/collapse_vars/ref_scope`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 125 vs reference 123 (+2 bytes)
 
 ```js
@@ -1123,6 +1156,7 @@ console.log((function() {
 
 ## `terser/dead_code/dead_code_const_declaration`
 
+- tags: `join vars`
 - size: oxc 50 vs reference 48 (+2 bytes)
 
 ```js
@@ -1149,6 +1183,7 @@ if (CONST_FOO) {
 
 ## `terser/destructuring/issue_t111_1`
 
+- tags: `remove unused`
 - size: oxc 57 vs reference 55 (+2 bytes)
 
 ```js
@@ -1169,6 +1204,7 @@ var p = (x) => (console.log(x), x), unused = p(1), {} = p(2);
 
 ## `terser/destructuring/issue_t111_2a`
 
+- tags: `remove unused`
 - size: oxc 69 vs reference 67 (+2 bytes)
 
 ```js
@@ -1192,6 +1228,7 @@ var p = (x) => (console.log(x), x), a = p(1), {} = p(2), c = p(3), d = p(4);
 
 ## `terser/destructuring/issue_t111_2b`
 
+- tags: `remove unused`
 - size: oxc 69 vs reference 67 (+2 bytes)
 
 ```js
@@ -1215,6 +1252,7 @@ let p = (x) => (console.log(x), x), a = p(1), {} = p(2), c = p(3), d = p(4);
 
 ## `terser/drop_unused/issue_1830_2`
 
+- tags: `remove unused`
 - size: oxc 78 vs reference 76 (+2 bytes)
 
 ```js
@@ -1257,6 +1295,7 @@ console.log(+'', +-'', 1 / +0, 1 / +'');
 
 ## `terser/hoist_props/issue_3071_3`
 
+- tags: `join vars`
 - size: oxc 133 vs reference 131 (+2 bytes)
 
 ```js
@@ -1291,6 +1330,7 @@ console.log(c);
 
 ## `terser/inline/noinline_annotation_2`
 
+- tags: `join vars`
 - size: oxc 30 vs reference 28 (+2 bytes)
 
 ```js
@@ -1315,6 +1355,7 @@ console.log(c);
 
 ## `terser/issue_1466/same_variable_in_multiple_forIn_sequences_const`
 
+- tags: `join vars`, `sequences`
 - size: oxc 155 vs reference 153 (+2 bytes)
 
 ```js
@@ -1363,6 +1404,7 @@ for (const tmp in test) {
 
 ## `terser/issue_1833/iife_while`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 70 vs reference 68 (+2 bytes)
 
 ```js
@@ -1397,6 +1439,7 @@ f();
 
 ## `terser/issue_281/drop_fargs`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 74 vs reference 72 (+2 bytes)
 
 ```js
@@ -1424,6 +1467,7 @@ console.log(a);
 
 ## `terser/issue_281/keep_fargs`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 74 vs reference 72 (+2 bytes)
 
 ```js
@@ -1451,6 +1495,7 @@ console.log(a);
 
 ## `terser/keep_names/keep_some_classnames`
 
+- tags: `mangle`, `keep function names`, `keep class names`
 - size: oxc 54 vs reference 52 (+2 bytes)
 
 ```js
@@ -1475,6 +1520,7 @@ function foo() {
 
 ## `terser/keep_names/keep_some_fnames`
 
+- tags: `mangle`, `keep function names`, `keep class names`
 - size: oxc 64 vs reference 62 (+2 bytes)
 
 ```js
@@ -1499,6 +1545,7 @@ function foo() {
 
 ## `terser/logical_assignment/assignment_in_left_part_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 103 vs reference 101 (+2 bytes)
 
 ```js
@@ -1523,6 +1570,7 @@ console.log(status, x.PASS);
 
 ## `terser/loops/keep_collapse_const_in_own_block_scope_2`
 
+- tags: `join vars`
 - size: oxc 69 vs reference 67 (+2 bytes)
 
 ```js
@@ -1606,6 +1654,7 @@ for (var k in o) {
 
 ## `terser/properties/join_object_assignments_regex`
 
+- tags: `join vars`
 - size: oxc 47 vs reference 45 (+2 bytes)
 
 ```js
@@ -1628,6 +1677,7 @@ console.log(o[/rx/]);
 
 ## `terser/pure_getters/issue_2313_6`
 
+- tags: `pure getters`
 - size: oxc 16 vs reference 14 (+2 bytes)
 
 ```js
@@ -1648,6 +1698,7 @@ x().y;
 
 ## `terser/pure_getters/set_immutable_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 75 vs reference 73 (+2 bytes)
 
 ```js
@@ -1673,6 +1724,7 @@ else console.log('PASS');
 
 ## `terser/pure_getters/set_immutable_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 89 vs reference 87 (+2 bytes)
 
 ```js
@@ -1700,6 +1752,7 @@ else console.log('PASS');
 
 ## `terser/reduce_vars/issue_1850_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 56 vs reference 54 (+2 bytes)
 
 ```js
@@ -1728,6 +1781,7 @@ f();
 
 ## `terser/reduce_vars/issue_2423_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 69 vs reference 67 (+2 bytes)
 
 ```js
@@ -1762,6 +1816,7 @@ p();
 
 ## `terser/reduce_vars/issue_2450_4`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 105 vs reference 103 (+2 bytes)
 
 ```js
@@ -1794,6 +1849,7 @@ for (var i = 3; --i >= 0;) f(g);
 
 ## `terser/reduce_vars/issue_2669`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 49 vs reference 47 (+2 bytes)
 
 ```js
@@ -1814,6 +1870,7 @@ console.log(([foo] = ['PASS']) && foo);
 
 ## `terser/reduce_vars/issue_2774`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 71 vs reference 69 (+2 bytes)
 
 ```js
@@ -1840,6 +1897,7 @@ console.log({ get a() {
 
 ## `terser/reduce_vars/unused_modified`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 98 vs reference 96 (+2 bytes)
 
 ```js
@@ -1870,6 +1928,7 @@ console.log((function() {
 
 ## `terser/arrow/issue_27`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 65 vs reference 62 (+3 bytes)
 
 ```js
@@ -1895,6 +1954,7 @@ console.log((function() {
 
 ## `terser/collapse_vars/cascade_forin`
 
+- tags: `join vars`
 - size: oxc 102 vs reference 99 (+3 bytes)
 
 ```js
@@ -1924,6 +1984,7 @@ for (var c in a = console, f(a)) console.log(c);
 
 ## `terser/collapse_vars/issue_1631_2`
 
+- tags: `join vars`, `sequences`
 - size: oxc 124 vs reference 121 (+3 bytes)
 
 ```js
@@ -2048,6 +2109,7 @@ f();
 
 ## `terser/destructuring/issue_3205_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 105 vs reference 102 (+3 bytes)
 
 ```js
@@ -2085,6 +2147,7 @@ f({
 
 ## `terser/destructuring/mangle_destructuring_assign_toplevel_false`
 
+- tags: `mangle`, `keep function names`, `keep class names`, `remove unused`
 - size: oxc 226 vs reference 223 (+3 bytes)
 
 ```js
@@ -2181,6 +2244,7 @@ console.log(a?.b.c);
 
 ## `terser/issue_1673/side_effects_else`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 77 vs reference 74 (+3 bytes)
 
 ```js
@@ -2213,6 +2277,7 @@ f(0);
 
 ## `terser/issue_1673/side_effects_label`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 96 vs reference 93 (+3 bytes)
 
 ```js
@@ -2250,6 +2315,7 @@ f(0);
 
 ## `terser/issue_1673/side_effects_switch`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 107 vs reference 104 (+3 bytes)
 
 ```js
@@ -2287,6 +2353,7 @@ f();
 
 ## `terser/issue_1833/iife_for`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 70 vs reference 67 (+3 bytes)
 
 ```js
@@ -2320,6 +2387,7 @@ f();
 
 ## `terser/issue_1833/iife_for_in`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 78 vs reference 75 (+3 bytes)
 
 ```js
@@ -2371,6 +2439,7 @@ var a = !a || !b || !c || !d || !e || !f;
 
 ## `terser/object/concise_methods_and_mangle_props`
 
+- tags: `mangle`, `keep function names`, `keep class names`
 - size: oxc 53 vs reference 50 (+3 bytes)
 
 ```js
@@ -2397,6 +2466,7 @@ function x() {
 
 ## `terser/properties/join_object_assignments_forin`
 
+- tags: `join vars`
 - size: oxc 91 vs reference 88 (+3 bytes)
 
 ```js
@@ -2422,6 +2492,7 @@ console.log((function() {
 
 ## `terser/pure_funcs/conditional`
 
+- tags: `pure functions`
 - size: oxc 96 vs reference 93 (+3 bytes)
 
 ```js
@@ -2458,6 +2529,7 @@ pure(3 ? 4 : 5);
 
 ## `terser/pure_getters/destructuring`
 
+- tags: `remove unused`, `pure getters`, `1 iteration`
 - size: oxc 285 vs reference 282 (+3 bytes)
 
 ```js
@@ -2501,6 +2573,7 @@ fn({
 
 ## `terser/reduce_vars/defun_label`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 103 vs reference 100 (+3 bytes)
 
 ```js
@@ -2538,6 +2611,7 @@ fn({
 
 ## `terser/reduce_vars/immutable`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 37 vs reference 34 (+3 bytes)
 
 ```js
@@ -2561,6 +2635,7 @@ fn({
 
 ## `terser/reduce_vars/inner_var_for_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 83 vs reference 80 (+3 bytes)
 
 ```js
@@ -2588,6 +2663,7 @@ fn({
 
 ## `terser/reduce_vars/issue_3140_5`
 
+- tags: `join vars`
 - size: oxc 141 vs reference 138 (+3 bytes)
 
 ```js
@@ -2626,6 +2702,7 @@ console.log(c);
 
 ## `terser/reduce_vars/perf_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 227 vs reference 224 (+3 bytes)
 
 ```js
@@ -2663,6 +2740,7 @@ console.log(sum);
 
 ## `terser/reduce_vars/pure_getters_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 21 vs reference 18 (+3 bytes)
 
 ```js
@@ -2682,6 +2760,7 @@ var a = a && a.b;
 
 ## `terser/reduce_vars/recursive_inlining_3`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 227 vs reference 224 (+3 bytes)
 
 ```js
@@ -2738,6 +2817,7 @@ var a = a && a.b;
 
 ## `terser/reduce_vars/side_effects_assign`
 
+- tags: `join vars`, `sequences`
 - size: oxc 52 vs reference 49 (+3 bytes)
 
 ```js
@@ -2758,6 +2838,7 @@ console.log(a);
 
 ## `terser/sequences/lift_sequences_5`
 
+- tags: `sequences`
 - size: oxc 47 vs reference 44 (+3 bytes)
 
 ```js
@@ -2779,6 +2860,7 @@ console.log(a);
 
 ## `terser/sequences/lift_sequences_6`
 
+- tags: `sequences`
 - size: oxc 53 vs reference 50 (+3 bytes)
 
 ```js
@@ -2843,6 +2925,7 @@ console.log(arguments[0]);
 
 ## `terser/arguments/replace_index_keep_fargs_strict`
 
+- tags: `join vars`
 - size: oxc 190 vs reference 186 (+4 bytes)
 
 ```js
@@ -2875,6 +2958,7 @@ console.log(arguments[0]);
 
 ## `terser/classes/class_duplication_2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 56 vs reference 52 (+4 bytes)
 
 ```js
@@ -2904,6 +2988,7 @@ leak(Foo);
 
 ## `terser/collapse_vars/cascade_conditional`
 
+- tags: `join vars`
 - size: oxc 59 vs reference 55 (+4 bytes)
 
 ```js
@@ -2926,6 +3011,7 @@ function f(a, b) {
 
 ## `terser/collapse_vars/issue_1631_1`
 
+- tags: `join vars`, `sequences`
 - size: oxc 123 vs reference 119 (+4 bytes)
 
 ```js
@@ -2963,6 +3049,7 @@ console.log(x());
 
 ## `terser/collapse_vars/reduce_vars_assign`
 
+- tags: `join vars`
 - size: oxc 56 vs reference 52 (+4 bytes)
 
 ```js
@@ -2989,6 +3076,7 @@ console.log(x());
 
 ## `terser/destructuring/issue_t111_2c`
 
+- tags: `remove unused`
 - size: oxc 73 vs reference 69 (+4 bytes)
 
 ```js
@@ -3012,6 +3100,7 @@ const p = (x) => (console.log(x), x), a = p(1), {} = p(2), c = p(3), d = p(4);
 
 ## `terser/destructuring/issue_t111_3`
 
+- tags: `remove unused`
 - size: oxc 78 vs reference 74 (+4 bytes)
 
 ```js
@@ -3034,6 +3123,7 @@ let p = (x) => (console.log(x), x), a = p(1), {} = p(2), c = p(3), {} = p(4);
 
 ## `terser/destructuring/unused_destructuring_declaration_complex_1`
 
+- tags: `remove unused`, `pure getters`
 - size: oxc 79 vs reference 75 (+4 bytes)
 
 ```js
@@ -3062,6 +3152,7 @@ console.log(x, z);
 
 ## `terser/drop_unused/double_assign_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 71 vs reference 67 (+4 bytes)
 
 ```js
@@ -3082,6 +3173,7 @@ var a;
 
 ## `terser/drop_unused/issue_2136_1`
 
+- tags: `remove unused`
 - size: oxc 44 vs reference 40 (+4 bytes)
 
 ```js
@@ -3105,6 +3197,7 @@ var a;
 
 ## `terser/drop_unused/issue_3192`
 
+- tags: `remove unused`
 - size: oxc 145 vs reference 141 (+4 bytes)
 
 ```js
@@ -3133,6 +3226,7 @@ var a;
 
 ## `terser/drop_unused/issue_t161_top_retain_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 79 vs reference 75 (+4 bytes)
 
 ```js
@@ -3278,6 +3372,7 @@ of: foo();
 
 ## `terser/hoist_vars/issue_2295`
 
+- tags: `join vars`
 - size: oxc 64 vs reference 60 (+4 bytes)
 
 ```js
@@ -3324,6 +3419,7 @@ var Bar;
 
 ## `terser/if_return/issue_512`
 
+- tags: `sequences`
 - size: oxc 47 vs reference 43 (+4 bytes)
 
 ```js
@@ -3352,6 +3448,7 @@ function a() {
 
 ## `terser/join_vars/issue_1079_with_vars`
 
+- tags: `join vars`
 - size: oxc 84 vs reference 80 (+4 bytes)
 
 ```js
@@ -3452,6 +3549,7 @@ a[undefined] = 8;
 
 ## `terser/pure_funcs/assign`
 
+- tags: `pure functions`
 - size: oxc 72 vs reference 68 (+4 bytes)
 
 ```js
@@ -3479,6 +3577,7 @@ function f(b) {
 
 ## `terser/pure_getters/set_mutable_2`
 
+- tags: `join vars`, `sequences`
 - size: oxc 87 vs reference 83 (+4 bytes)
 
 ```js
@@ -3504,6 +3603,7 @@ function f(b) {
 
 ## `terser/reduce_vars/duplicate_lambda_defun_name_1`
 
+- tags: `join vars`
 - size: oxc 69 vs reference 65 (+4 bytes)
 
 ```js
@@ -3530,6 +3630,7 @@ console.log((function f(a) {
 
 ## `terser/reduce_vars/escape_expansion`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 212 vs reference 208 (+4 bytes)
 
 ```js
@@ -3578,6 +3679,7 @@ main();
 
 ## `terser/reduce_vars/var_assign_6`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 63 vs reference 59 (+4 bytes)
 
 ```js
@@ -3622,6 +3724,7 @@ console.log(A == 1);
 
 ## `terser/class_properties/class_expression_constant`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 126 vs reference 121 (+5 bytes)
 
 ```js
@@ -3784,6 +3887,7 @@ var nameless = class {};
 
 ## `terser/hoist_props/issue_2508_5`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 59 vs reference 54 (+5 bytes)
 
 ```js
@@ -3810,6 +3914,7 @@ o.f(o.f);
 
 ## `terser/hoist_props/issue_2508_6`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 54 vs reference 49 (+5 bytes)
 
 ```js
@@ -3836,6 +3941,7 @@ o.f(o.f);
 
 ## `terser/issue_1466/same_variable_in_multiple_forIn`
 
+- tags: `join vars`
 - size: oxc 155 vs reference 150 (+5 bytes)
 
 ```js
@@ -3925,6 +4031,7 @@ new Function('aa, bb', 'return aa;');
 
 ## `terser/properties/issue_t64`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 192 vs reference 187 (+5 bytes)
 
 ```js
@@ -3964,6 +4071,7 @@ new obj.Derived();
 
 ## `terser/properties/join_object_assignments_null_1`
 
+- tags: `join vars`
 - size: oxc 47 vs reference 42 (+5 bytes)
 
 ```js
@@ -3987,6 +4095,7 @@ console.log(o[null]);
 
 ## `terser/pure_getters/issue_2110_1`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 117 vs reference 112 (+5 bytes)
 
 ```js
@@ -4021,6 +4130,7 @@ console.log(typeof f());
 
 ## `terser/pure_getters/issue_2110_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 118 vs reference 113 (+5 bytes)
 
 ```js
@@ -4056,6 +4166,7 @@ console.log(typeof f());
 
 ## `terser/reduce_vars/iife_func_side_effects`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 231 vs reference 226 (+5 bytes)
 
 ```js
@@ -4100,6 +4211,7 @@ function z() {
 
 ## `terser/reduce_vars/issue_2450_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 71 vs reference 66 (+5 bytes)
 
 ```js
@@ -4126,6 +4238,7 @@ console.log(g() === g());
 
 ## `terser/reduce_vars/issue_3113_5`
 
+- tags: `join vars`
 - size: oxc 87 vs reference 82 (+5 bytes)
 
 ```js
@@ -4224,6 +4337,7 @@ function x() {
 
 ## `terser/destructuring/export_function_containing_destructuring_decl`
 
+- tags: `remove unused`, `pure getters`
 - size: oxc 79 vs reference 73 (+6 bytes)
 
 ```js
@@ -4252,6 +4366,7 @@ export function f() {
 
 ## `terser/destructuring/mangle_destructuring_assign_toplevel_true`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `remove unused`
 - size: oxc 232 vs reference 226 (+6 bytes)
 
 ```js
@@ -4313,6 +4428,7 @@ test({});
 
 ## `terser/destructuring/unused_destructuring_class_method_param`
 
+- tags: `remove unused`, `pure getters`
 - size: oxc 119 vs reference 113 (+6 bytes)
 
 ```js
@@ -4343,6 +4459,7 @@ new class {
 
 ## `terser/destructuring/unused_destructuring_function_param`
 
+- tags: `remove unused`, `pure getters`
 - size: oxc 109 vs reference 103 (+6 bytes)
 
 ```js
@@ -4371,6 +4488,7 @@ foo({
 
 ## `terser/destructuring/unused_destructuring_multipass`
 
+- tags: `remove unused`, `pure getters`, `2 iterations`
 - size: oxc 62 vs reference 56 (+6 bytes)
 
 ```js
@@ -4400,6 +4518,7 @@ if (0) {
 
 ## `terser/destructuring/unused_destructuring_object_method_param`
 
+- tags: `remove unused`, `pure getters`
 - size: oxc 106 vs reference 100 (+6 bytes)
 
 ```js
@@ -4427,6 +4546,7 @@ if (0) {
 
 ## `terser/drop_unused/issue_2226_2`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 60 vs reference 54 (+6 bytes)
 
 ```js
@@ -4451,6 +4571,7 @@ console.log((function(a, b) {
 
 ## `terser/drop_unused/issue_2846`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 87 vs reference 81 (+6 bytes)
 
 ```js
@@ -4483,6 +4604,7 @@ console.log(c);
 
 ## `terser/evaluate/issue_2916_1`
 
+- tags: `join vars`
 - size: oxc 123 vs reference 117 (+6 bytes)
 
 ```js
@@ -4535,6 +4657,7 @@ console.log(s.charAt(0), 'string'.charAt(x), (typeof x).charAt());
 
 ## `terser/functions/issue_2476`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 150 vs reference 144 (+6 bytes)
 
 ```js
@@ -4586,6 +4709,7 @@ console.log(function() {
 
 ## `terser/issue_1466/same_variable_in_multiple_forIn_sequences_let`
 
+- tags: `join vars`, `sequences`
 - size: oxc 155 vs reference 149 (+6 bytes)
 
 ```js
@@ -4712,6 +4836,7 @@ console.log(x + 1 + 2, x * 1 * 2, +x + 1 + 2, 1 + x + 2 + 3, 1 | x | 2 | 3, 1 + 
 
 ## `terser/properties/join_object_assignments_1`
 
+- tags: `join vars`
 - size: oxc 173 vs reference 167 (+6 bytes)
 
 ```js
@@ -4756,6 +4881,7 @@ console.log((function() {
 
 ## `terser/pure_getters/collapse_vars_2_true`
 
+- tags: `join vars`, `pure getters`
 - size: oxc 79 vs reference 73 (+6 bytes)
 
 ```js
@@ -4784,6 +4910,7 @@ function f() {
 
 ## `terser/reduce_vars/delay_def`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 95 vs reference 89 (+6 bytes)
 
 ```js
@@ -4819,6 +4946,7 @@ console.log(f(), g());
 
 ## `terser/reduce_vars/duplicate_lambda_defun_name_2`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 69 vs reference 63 (+6 bytes)
 
 ```js
@@ -4845,6 +4973,7 @@ console.log((function f(a) {
 
 ## `terser/reduce_vars/issue_3113_1`
 
+- tags: `join vars`
 - size: oxc 141 vs reference 135 (+6 bytes)
 
 ```js
@@ -4884,6 +5013,7 @@ console.log(c);
 
 ## `terser/reduce_vars/issue_3113_2`
 
+- tags: `join vars`
 - size: oxc 144 vs reference 138 (+6 bytes)
 
 ```js
@@ -4924,6 +5054,7 @@ console.log(c);
 
 ## `terser/reduce_vars/unsafe_evaluate_escaped`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 272 vs reference 266 (+6 bytes)
 
 ```js
@@ -4975,6 +5106,7 @@ console.log((function() {
 
 ## `terser/reduce_vars/unsafe_evaluate_modified`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 777 vs reference 771 (+6 bytes)
 
 ```js
@@ -5056,6 +5188,7 @@ console.log((function() {
 
 ## `terser/regexp/unsafe_slashes`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 34 vs reference 28 (+6 bytes)
 
 ```js
@@ -5118,6 +5251,7 @@ var c = `${4 ** 14}`;
 
 ## `terser/typeof/duplicate_defun_arg_name`
 
+- tags: `join vars`
 - size: oxc 104 vs reference 98 (+6 bytes)
 
 ```js
@@ -5142,6 +5276,7 @@ console.log(typeof long_name, long_name());
 
 ## `terser/typeof/duplicate_lambda_arg_name`
 
+- tags: `join vars`
 - size: oxc 68 vs reference 62 (+6 bytes)
 
 ```js
@@ -5166,6 +5301,7 @@ console.log((function long_name(long_name) {
 
 ## `terser/collapse_vars/collapse_vars_seq`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 98 vs reference 91 (+7 bytes)
 
 ```js
@@ -5196,6 +5332,7 @@ console.log(f1(1, 2));
 
 ## `terser/collapse_vars/conditional_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 136 vs reference 129 (+7 bytes)
 
 ```js
@@ -5227,6 +5364,7 @@ console.log(f(0, 0), f(0, 1), f(1, 0), f(1, 1));
 
 ## `terser/collapse_vars/issue_1537_destructuring_1`
 
+- tags: `join vars`
 - size: oxc 29 vs reference 22 (+7 bytes)
 
 ```js
@@ -5248,6 +5386,7 @@ var x = 1, y = 2;
 
 ## `terser/collapse_vars/return_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 103 vs reference 96 (+7 bytes)
 
 ```js
@@ -5381,6 +5520,7 @@ console.log(a, x, y, z, b);
 
 ## `terser/drop_unused/chained_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 77 vs reference 70 (+7 bytes)
 
 ```js
@@ -5408,6 +5548,7 @@ console.log((function(a, b) {
 
 ## `terser/drop_unused/issue_2226_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 61 vs reference 54 (+7 bytes)
 
 ```js
@@ -5433,6 +5574,7 @@ console.log((function(a, b) {
 
 ## `terser/evaluate/unsafe_object`
 
+- tags: `join vars`
 - size: oxc 67 vs reference 60 (+7 bytes)
 
 ```js
@@ -5453,6 +5595,7 @@ console.log(o + 1, o.a + 1, o.b + 1, o.a.b + 1);
 
 ## `terser/evaluate/unsafe_object_repeated`
 
+- tags: `join vars`
 - size: oxc 82 vs reference 75 (+7 bytes)
 
 ```js
@@ -5496,6 +5639,7 @@ f(String(x), Number(x), Boolean(x), String(), Number(), Boolean());
 
 ## `terser/properties/issue_2816_ecma6`
 
+- tags: `join vars`
 - size: oxc 87 vs reference 80 (+7 bytes)
 
 ```js
@@ -5551,6 +5695,7 @@ new { f: function(a) {
 
 ## `terser/sequences/lift_sequences_2`
 
+- tags: `sequences`
 - size: oxc 87 vs reference 80 (+7 bytes)
 
 ```js
@@ -5652,6 +5797,7 @@ function f() {
 
 ## `terser/dead_code/issue_2860_1`
 
+- tags: `join vars`
 - size: oxc 50 vs reference 42 (+8 bytes)
 
 ```js
@@ -5676,6 +5822,7 @@ console.log((function(a) {
 
 ## `terser/evaluate/in_boolean_context`
 
+- tags: `sequences`
 - size: oxc 105 vs reference 97 (+8 bytes)
 
 ```js
@@ -5702,6 +5849,7 @@ console.log(!42, !'foo', ![1, 2], !/foo/, !b(42), !b('foo'), !b([1, 2]), !b(/foo
 
 ## `terser/evaluate/unsafe_object_nested`
 
+- tags: `join vars`
 - size: oxc 74 vs reference 66 (+8 bytes)
 
 ```js
@@ -5837,6 +5985,7 @@ function foo(bar) {
 
 ## `terser/nullish/nullish_coalescing_boolean_context`
 
+- tags: `join vars`
 - size: oxc 54 vs reference 46 (+8 bytes)
 
 ```js
@@ -5900,6 +6049,7 @@ console.log({
 
 ## `terser/object/dont_join_repeat_object_keys`
 
+- tags: `join vars`
 - size: oxc 37 vs reference 29 (+8 bytes)
 
 ```js
@@ -5939,6 +6089,7 @@ obj.foo = 2;
 
 ## `terser/pure_getters/strict_reduce_vars`
 
+- tags: `join vars`
 - size: oxc 98 vs reference 90 (+8 bytes)
 
 ```js
@@ -5969,6 +6120,7 @@ undefined.prop;
 
 ## `terser/reduce_vars/escape_yield`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 219 vs reference 211 (+8 bytes)
 
 ```js
@@ -6012,6 +6164,7 @@ main();
 
 ## `terser/reduce_vars/issue_2860_1`
 
+- tags: `join vars`
 - size: oxc 50 vs reference 42 (+8 bytes)
 
 ```js
@@ -6037,6 +6190,7 @@ console.log((function(a) {
 
 ## `terser/sequences/side_effects_cascade_3`
 
+- tags: `join vars`
 - size: oxc 79 vs reference 71 (+8 bytes)
 
 ```js
@@ -6181,6 +6335,7 @@ x = g() & x;
 
 ## `terser/collapse_vars/cascade_statement`
 
+- tags: `join vars`
 - size: oxc 261 vs reference 252 (+9 bytes)
 
 ```js
@@ -6233,6 +6388,7 @@ function f3(a, b) {
 
 ## `terser/comparing/self_comparison_2`
 
+- tags: `join vars`
 - size: oxc 58 vs reference 49 (+9 bytes)
 
 ```js
@@ -6255,6 +6411,7 @@ console.log(f != f, o === o);
 
 ## `terser/debugger/drop_debugger`
 
+- tags: `drop debugger`
 - size: oxc 19 vs reference 10 (+9 bytes)
 
 ```js
@@ -6397,6 +6554,7 @@ new Function('[[aa]], [{bb}]', 'return aa;');
 
 ## `terser/issue_976/eval_unused`
 
+- tags: `remove unused`
 - size: oxc 168 vs reference 159 (+9 bytes)
 
 ```js
@@ -6426,6 +6584,7 @@ function f3(a, eval, c, d, e) {
 
 ## `terser/pure_getters/set_immutable_2`
 
+- tags: `join vars`, `sequences`
 - size: oxc 75 vs reference 66 (+9 bytes)
 
 ```js
@@ -6448,6 +6607,7 @@ else console.log('PASS');
 
 ## `terser/pure_getters/set_immutable_4`
 
+- tags: `join vars`, `sequences`
 - size: oxc 89 vs reference 80 (+9 bytes)
 
 ```js
@@ -6472,6 +6632,7 @@ else console.log('PASS');
 
 ## `terser/pure_getters/set_immutable_5`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 89 vs reference 80 (+9 bytes)
 
 ```js
@@ -6498,6 +6659,7 @@ else console.log('PASS');
 
 ## `terser/reduce_vars/escape_local_sequence`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 171 vs reference 162 (+9 bytes)
 
 ```js
@@ -6539,6 +6701,7 @@ main();
 
 ## `terser/reduce_vars/escape_local_throw`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 212 vs reference 203 (+9 bytes)
 
 ```js
@@ -6587,6 +6750,7 @@ main();
 
 ## `terser/reduce_vars/issue_2420_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 249 vs reference 240 (+9 bytes)
 
 ```js
@@ -6627,6 +6791,7 @@ f.call({});
 
 ## `terser/reduce_vars/regex_loop`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 134 vs reference 125 (+9 bytes)
 
 ```js
@@ -6729,6 +6894,7 @@ if (foo) {
 
 ## `terser/drop_unused/issue_1715_2`
 
+- tags: `remove unused`
 - size: oxc 100 vs reference 90 (+10 bytes)
 
 ```js
@@ -6766,6 +6932,7 @@ console.log(a);
 
 ## `terser/issue_1443/keep_fnames`
 
+- tags: `mangle`, `keep function names`, `keep class names`
 - size: oxc 120 vs reference 110 (+10 bytes)
 
 ```js
@@ -6854,6 +7021,7 @@ out: while (foo) {
 
 ## `terser/properties/join_object_assignments_negative`
 
+- tags: `join vars`
 - size: oxc 77 vs reference 67 (+10 bytes)
 
 ```js
@@ -6904,6 +7072,7 @@ w(), x(), y();
 
 ## `terser/reduce_vars/issue_2420_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 217 vs reference 207 (+10 bytes)
 
 ```js
@@ -6943,6 +7112,7 @@ run.call(o);
 
 ## `terser/reduce_vars/issue_2420_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 244 vs reference 234 (+10 bytes)
 
 ```js
@@ -6983,6 +7153,7 @@ f.call({});
 
 ## `terser/reduce_vars/issue_2496`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 249 vs reference 239 (+10 bytes)
 
 ```js
@@ -7033,6 +7204,7 @@ new Foo('FAIL').run();
 
 ## `terser/reduce_vars/issue_2799_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 111 vs reference 101 (+10 bytes)
 
 ```js
@@ -7063,6 +7235,7 @@ new Foo('FAIL').run();
 
 ## `terser/reduce_vars/unsafe_evaluate_array_2`
 
+- tags: `join vars`
 - size: oxc 144 vs reference 134 (+10 bytes)
 
 ```js
@@ -7094,6 +7267,7 @@ console.log(arr[0], arr[1], arr[2](2), arr[3]);
 
 ## `terser/sequences/for_init_var`
 
+- tags: `join vars`
 - size: oxc 116 vs reference 106 (+10 bytes)
 
 ```js
@@ -7149,6 +7323,7 @@ var baz = `1 ${2 + `3 ${any} 4` + 5} 6`;
 
 ## `terser/collapse_vars/issue_1631_3`
 
+- tags: `join vars`, `sequences`
 - size: oxc 128 vs reference 117 (+11 bytes)
 
 ```js
@@ -7187,6 +7362,7 @@ console.log(g());
 
 ## `terser/collapse_vars/issue_2506`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 180 vs reference 169 (+11 bytes)
 
 ```js
@@ -7234,6 +7410,7 @@ console.log(c);
 
 ## `terser/drop_unused/delete_assign_2`
 
+- tags: `remove unused`
 - size: oxc 170 vs reference 159 (+11 bytes)
 
 ```js
@@ -7268,6 +7445,7 @@ console.log(delete (a = 0 / 0));
 
 ## `terser/drop_unused/drop_var`
 
+- tags: `remove unused`
 - size: oxc 93 vs reference 82 (+11 bytes)
 
 ```js
@@ -7339,6 +7517,7 @@ console.log((four ** one) ** two, (four ** one) ** (one / two));
 
 ## `terser/export/issue_2126`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`
 - size: oxc 105 vs reference 94 (+11 bytes)
 
 ```js
@@ -7365,6 +7544,7 @@ export { dog };
 
 ## `terser/export/redirection`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`
 - size: oxc 107 vs reference 96 (+11 bytes)
 
 ```js
@@ -7390,6 +7570,7 @@ export { foo as var } from 'module.js';
 
 ## `terser/functions/empty_body`
 
+- tags: `join vars`
 - size: oxc 51 vs reference 40 (+11 bytes)
 
 ```js
@@ -7415,6 +7596,7 @@ function f() {
 
 ## `terser/issue_2001/export_mangle_4`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `join vars`, `remove unused`
 - size: oxc 75 vs reference 64 (+11 bytes)
 
 ```js
@@ -7464,6 +7646,7 @@ console.log(1 + Number(x) + 2);
 
 ## `terser/reduce_vars/iife`
 
+- tags: `join vars`
 - size: oxc 75 vs reference 64 (+11 bytes)
 
 ```js
@@ -7489,6 +7672,7 @@ console.log(1 + Number(x) + 2);
 
 ## `terser/reduce_vars/obj_for_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 62 vs reference 51 (+11 bytes)
 
 ```js
@@ -7509,6 +7693,7 @@ for (var i = o.a--; i; i--) console.log(i);
 
 ## `terser/reduce_vars/unsafe_evaluate_array_1`
 
+- tags: `join vars`
 - size: oxc 205 vs reference 194 (+11 bytes)
 
 ```js
@@ -7727,6 +7912,7 @@ x = g() & x;
 
 ## `terser/collapse_vars/issue_2436_13`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 139 vs reference 127 (+12 bytes)
 
 ```js
@@ -7848,6 +8034,7 @@ for (let i = 0; i < 8; ++i) {
 
 ## `terser/destructuring/unused_destructuring_decl_2`
 
+- tags: `remove unused`, `pure getters`
 - size: oxc 184 vs reference 172 (+12 bytes)
 
 ```js
@@ -7880,6 +8067,7 @@ console.log(c, e, z + 0);
 
 ## `terser/destructuring/unused_destructuring_decl_3`
 
+- tags: `remove unused`
 - size: oxc 184 vs reference 172 (+12 bytes)
 
 ```js
@@ -7912,6 +8100,7 @@ console.log(c, e, z + 0);
 
 ## `terser/destructuring/unused_destructuring_decl_4`
 
+- tags: `pure getters`
 - size: oxc 184 vs reference 172 (+12 bytes)
 
 ```js
@@ -7998,6 +8187,7 @@ console.log([function() {}].toString());
 
 ## `terser/functions/unsafe_call_2`
 
+- tags: `join vars`
 - size: oxc 165 vs reference 153 (+12 bytes)
 
 ```js
@@ -8101,6 +8291,7 @@ function a([anArg]) {
 
 ## `terser/inline/inline_within_extends_2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 384 vs reference 372 (+12 bytes)
 
 ```js
@@ -8167,6 +8358,7 @@ console.log(new Baz(1, 'PASS', 3).second());
 
 ## `terser/issue_t120/issue_t120_1`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 243 vs reference 231 (+12 bytes)
 
 ```js
@@ -8215,6 +8407,7 @@ console.log(foo(x).a, foo({ a: 'world' }).a);
 
 ## `terser/issue_t120/issue_t120_2`
 
+- tags: `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 243 vs reference 231 (+12 bytes)
 
 ```js
@@ -8263,6 +8456,7 @@ console.log(foo(x).a, foo({ a: 'world' }).a);
 
 ## `terser/pure_funcs/array`
 
+- tags: `pure functions`
 - size: oxc 41 vs reference 29 (+12 bytes)
 
 ```js
@@ -8289,6 +8483,7 @@ function f(b) {
 
 ## `terser/pure_funcs/issue_3065_2b`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `join vars`, `remove unused`, `pure functions`
 - size: oxc 59 vs reference 47 (+12 bytes)
 
 ```js
@@ -8331,6 +8526,7 @@ print(3);
 
 ## `terser/reduce_vars/iife_new`
 
+- tags: `join vars`
 - size: oxc 87 vs reference 75 (+12 bytes)
 
 ```js
@@ -8355,6 +8551,7 @@ var A = new (function(a, b, c) {
 
 ## `terser/reduce_vars/unsafe_evaluate_object_2`
 
+- tags: `join vars`
 - size: oxc 176 vs reference 164 (+12 bytes)
 
 ```js
@@ -8404,6 +8601,7 @@ console.log(JSON.stringify('COMPASS? Overpass.'.match(new RegExp('([Sap]+)', 'ig
 
 ## `terser/sequences/issue_2062`
 
+- tags: `join vars`
 - size: oxc 66 vs reference 54 (+12 bytes)
 
 ```js
@@ -8430,6 +8628,7 @@ console.log(a);
 
 ## `terser/sequences/unsafe_undefined`
 
+- tags: `sequences`
 - size: oxc 130 vs reference 118 (+12 bytes)
 
 ```js
@@ -8518,6 +8717,7 @@ function f(a) {
 
 ## `terser/dead_code/return_assignment`
 
+- tags: `remove unused`
 - size: oxc 771 vs reference 758 (+13 bytes)
 
 ```js
@@ -8623,6 +8823,7 @@ test(-1);
 
 ## `terser/destructuring/destructure_empty_array_3`
 
+- tags: `remove unused`, `pure getters`
 - size: oxc 54 vs reference 41 (+13 bytes)
 
 ```js
@@ -8642,6 +8843,7 @@ let {} = Object, [] = {}, unused = console.log('not reached');
 
 ## `terser/issue_1447/conditional_false_stray_else_in_loop`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 73 vs reference 60 (+13 bytes)
 
 ```js
@@ -8666,6 +8868,7 @@ for (var i = 1; i <= 4; ++i) {
 
 ## `terser/issue_2001/export_mangle_3`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `join vars`, `remove unused`
 - size: oxc 67 vs reference 54 (+13 bytes)
 
 ```js
@@ -8695,6 +8898,7 @@ export class C {
 
 ## `terser/nullish/simplify_nullish_coalescing`
 
+- tags: `drop debugger`, `join vars`, `remove unused`
 - size: oxc 91 vs reference 78 (+13 bytes)
 
 ```js
@@ -8725,6 +8929,7 @@ console.log(folded_false ?? y);
 
 ## `terser/properties/join_object_assignments_NaN_2`
 
+- tags: `join vars`
 - size: oxc 65 vs reference 52 (+13 bytes)
 
 ```js
@@ -8750,6 +8955,7 @@ console.log(o[NaN], o[NaN]);
 
 ## `terser/reduce_vars/issue_1850_4`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 56 vs reference 43 (+13 bytes)
 
 ```js
@@ -8778,6 +8984,7 @@ f();
 
 ## `terser/reduce_vars/issue_2799_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 171 vs reference 158 (+13 bytes)
 
 ```js
@@ -8824,6 +9031,7 @@ console.log((function() {
 
 ## `terser/reduce_vars/toplevel_on_loops_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 29 vs reference 16 (+13 bytes)
 
 ```js
@@ -8871,6 +9079,7 @@ switch (w(), 42) {
 
 ## `terser/drop_unused/issue_2163`
 
+- tags: `pure functions`
 - size: oxc 27 vs reference 13 (+14 bytes)
 
 ```js
@@ -8923,6 +9132,7 @@ console.log(Number.POSITIVE_INFINITY);
 
 ## `terser/evaluate/unsafe_object_complex`
 
+- tags: `join vars`
 - size: oxc 82 vs reference 68 (+14 bytes)
 
 ```js
@@ -9085,6 +9295,7 @@ function e() {
 
 ## `terser/pure_getters/issue_2265_4`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 14 vs reference 0 (+14 bytes)
 
 ```js
@@ -9103,6 +9314,7 @@ var a = { b: 1 };
 
 ## `terser/reduce_vars/issue_3140_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 220 vs reference 206 (+14 bytes)
 
 ```js
@@ -9150,6 +9362,7 @@ var a = { b: 1 };
 
 ## `terser/reduce_vars/var_assign_5`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 80 vs reference 66 (+14 bytes)
 
 ```js
@@ -9182,6 +9395,7 @@ var a = { b: 1 };
 
 ## `terser/arrays/for_loop`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 371 vs reference 356 (+15 bytes)
 
 ```js
@@ -9250,6 +9464,7 @@ console.log(f0(), f1(), f2());
 
 ## `terser/dead_code/issue_2233_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 33 vs reference 18 (+15 bytes)
 
 ```js
@@ -9277,6 +9492,7 @@ function foo() {
 
 ## `terser/functions/issue_3076`
 
+- tags: `sequences`, `remove unused`
 - size: oxc 169 vs reference 154 (+15 bytes)
 
 ```js
@@ -9345,6 +9561,7 @@ function f() {
 
 ## `terser/issue_1034/non_hoisted_function_after_return_strict`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 171 vs reference 156 (+15 bytes)
 
 ```js
@@ -9387,6 +9604,7 @@ console.log(foo(0), foo(1));
 
 ## `terser/logical_assignment/assign_in_conditional_part`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 167 vs reference 152 (+15 bytes)
 
 ```js
@@ -9543,6 +9761,7 @@ console.log({ async p() {
 
 ## `terser/properties/issue_3188_3`
 
+- tags: `join vars`
 - size: oxc 105 vs reference 90 (+15 bytes)
 
 ```js
@@ -9603,6 +9822,7 @@ console.log({ async p() {
 
 ## `terser/reduce_vars/unsafe_evaluate_array_4`
 
+- tags: `join vars`
 - size: oxc 105 vs reference 90 (+15 bytes)
 
 ```js
@@ -9631,6 +9851,7 @@ console.log(arr[0], arr[1], arr[2], arr[0]);
 
 ## `terser/sequences/issue_1758`
 
+- tags: `sequences`
 - size: oxc 110 vs reference 95 (+15 bytes)
 
 ```js
@@ -9699,6 +9920,7 @@ console.log((function(c) {
 
 ## `terser/collapse_vars/double_def_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 28 vs reference 12 (+16 bytes)
 
 ```js
@@ -9844,6 +10066,7 @@ f(String(x + 'str'), String('str' + x));
 
 ## `terser/issue_t120/issue_t120_4`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 90 vs reference 74 (+16 bytes)
 
 ```js
@@ -9869,6 +10092,7 @@ for (var x = 1, t = (o) => {
 
 ## `terser/pure_funcs/issue_3065_3`
 
+- tags: `join vars`, `remove unused`, `pure functions`
 - size: oxc 58 vs reference 42 (+16 bytes)
 
 ```js
@@ -9895,6 +10119,7 @@ debug((function() {
 
 ## `terser/pure_funcs/issue_3065_4`
 
+- tags: `join vars`, `remove unused`, `pure functions`
 - size: oxc 58 vs reference 42 (+16 bytes)
 
 ```js
@@ -9921,6 +10146,7 @@ debug((function() {
 
 ## `terser/reduce_vars/multi_def_3`
 
+- tags: `join vars`
 - size: oxc 79 vs reference 63 (+16 bytes)
 
 ```js
@@ -9949,6 +10175,7 @@ function f(a) {
 
 ## `terser/collapse_vars/cond_branch_2`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 279 vs reference 262 (+17 bytes)
 
 ```js
@@ -10005,6 +10232,7 @@ f3(5, 6);
 
 ## `terser/collapse_vars/issue_2436_4`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 83 vs reference 66 (+17 bytes)
 
 ```js
@@ -10048,6 +10276,7 @@ console.log((function(c) {
 
 ## `terser/collapse_vars/issue_2436_5`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 83 vs reference 66 (+17 bytes)
 
 ```js
@@ -10129,6 +10358,7 @@ f();
 
 ## `terser/destructuring/export_unreferenced_declarations_2`
 
+- tags: `remove unused`, `pure getters`
 - size: oxc 129 vs reference 112 (+17 bytes)
 
 ```js
@@ -10153,6 +10383,7 @@ export var [, [{ e, f = 3 }]] = obj;
 
 ## `terser/drop_unused/issue_1715_1`
 
+- tags: `remove unused`
 - size: oxc 96 vs reference 79 (+17 bytes)
 
 ```js
@@ -10271,6 +10502,7 @@ console.log({ p: () => (function() {
 
 ## `terser/reduce_vars/defun_var_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 80 vs reference 63 (+17 bytes)
 
 ```js
@@ -10296,6 +10528,7 @@ var a = 42, b;
 
 ## `terser/collapse_vars/issue_2436_10`
 
+- tags: `join vars`, `remove unused`, `pure getters`
 - size: oxc 152 vs reference 134 (+18 bytes)
 
 ```js
@@ -10380,6 +10613,7 @@ function f(x, y) {
 
 ## `terser/dead_code/issue_2749`
 
+- tags: `remove unused`
 - size: oxc 112 vs reference 94 (+18 bytes)
 
 ```js
@@ -10432,6 +10666,7 @@ console.log(c);
 
 ## `terser/destructuring/empty_object_destructuring_misc`
 
+- tags: `remove unused`, `pure getters`
 - size: oxc 193 vs reference 175 (+18 bytes)
 
 ```js
@@ -10457,6 +10692,7 @@ console.log(`${foo} ${prop} ${baz} ${JSON.stringify(out)}`);
 
 ## `terser/drop_unused/issue_t161_top_retain_7`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 68 vs reference 50 (+18 bytes)
 
 ```js
@@ -10478,6 +10714,7 @@ console.log(x, y, z, x * y, x * z, y * z);
 
 ## `terser/functions/unsafe_apply_2`
 
+- tags: `join vars`
 - size: oxc 171 vs reference 153 (+18 bytes)
 
 ```js
@@ -10594,6 +10831,7 @@ for (var i = 0; i < 5; ++i) {
 
 ## `terser/properties/issue_3188_1`
 
+- tags: `join vars`
 - size: oxc 118 vs reference 100 (+18 bytes)
 
 ```js
@@ -10657,6 +10895,7 @@ w(), new x(), y();
 
 ## `terser/reduce_vars/escape_local_conditional`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 201 vs reference 183 (+18 bytes)
 
 ```js
@@ -10736,6 +10975,7 @@ console.log(a, b);
 
 ## `terser/collapse_vars/conditional_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 98 vs reference 79 (+19 bytes)
 
 ```js
@@ -10762,6 +11002,7 @@ console.log(f(3, 0), f(4, 1));
 
 ## `terser/functions/issue_2663_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 191 vs reference 172 (+19 bytes)
 
 ```js
@@ -10810,6 +11051,7 @@ console.log(f(3, 0), f(4, 1));
 
 ## `terser/identity/inline_identity_dont_lose_this_when_arg`
 
+- tags: `join vars`
 - size: oxc 81 vs reference 62 (+19 bytes)
 
 ```js
@@ -10834,6 +11076,7 @@ leak(id(func_bag.leak));
 
 ## `terser/issue_281/issue_1288_side_effects`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 40 vs reference 21 (+19 bytes)
 
 ```js
@@ -10868,6 +11111,7 @@ else (function(z) {
 
 ## `terser/collapse_vars/collapse_vars_throw`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 137 vs reference 117 (+20 bytes)
 
 ```js
@@ -10901,6 +11145,7 @@ try {
 
 ## `terser/collapse_vars/issue_2436_8`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 68 vs reference 48 (+20 bytes)
 
 ```js
@@ -10933,6 +11178,7 @@ console.log((function(c) {
 
 ## `terser/collapse_vars/issue_2436_9`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 74 vs reference 54 (+20 bytes)
 
 ```js
@@ -10966,6 +11212,7 @@ console.log((function(c) {
 
 ## `terser/evaluate/issue_2926_1`
 
+- tags: `join vars`
 - size: oxc 101 vs reference 81 (+20 bytes)
 
 ```js
@@ -11007,6 +11254,7 @@ console.log(typeof function() {}.valueOf());
 
 ## `terser/export/module_mangle_export_default_class`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 119 vs reference 99 (+20 bytes)
 
 ```js
@@ -11039,6 +11287,7 @@ console.log(foo, bar, baz, qux);
 
 ## `terser/functions/issue_203`
 
+- tags: `remove unused`
 - size: oxc 122 vs reference 102 (+20 bytes)
 
 ```js
@@ -11142,6 +11391,7 @@ console.log([
 
 ## `terser/harmony/inline_arrow_using_arguments`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 103 vs reference 83 (+20 bytes)
 
 ```js
@@ -11168,6 +11418,7 @@ console.log([
 
 ## `terser/issue_1034/non_hoisted_function_after_return_2a_strict`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 145 vs reference 125 (+20 bytes)
 
 ```js
@@ -11208,6 +11459,7 @@ console.log(foo(0), foo(1));
 
 ## `terser/issue_1034/non_hoisted_function_after_return_2b_strict`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 145 vs reference 125 (+20 bytes)
 
 ```js
@@ -11246,6 +11498,7 @@ console.log(foo(0), foo(1));
 
 ## `terser/issue_t120/issue_t120_3`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 79 vs reference 59 (+20 bytes)
 
 ```js
@@ -11319,6 +11572,7 @@ switch (1) {
 
 ## `terser/arrow/call_args_drop_param`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 53 vs reference 32 (+21 bytes)
 
 ```js
@@ -11345,6 +11599,7 @@ console.log(a);
 
 ## `terser/evaluate/call_args_drop_param`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 53 vs reference 32 (+21 bytes)
 
 ```js
@@ -11371,6 +11626,7 @@ console.log(a);
 
 ## `terser/issue_t120/issue_t120_5`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 90 vs reference 69 (+21 bytes)
 
 ```js
@@ -11424,6 +11680,7 @@ out: while (foo) {
 
 ## `terser/loops/evaluate`
 
+- tags: `2 iterations`
 - size: oxc 54 vs reference 33 (+21 bytes)
 
 ```js
@@ -11460,6 +11717,7 @@ do {
 
 ## `terser/reduce_vars/issue_2757_2`
 
+- tags: `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 53 vs reference 32 (+21 bytes)
 
 ```js
@@ -11489,6 +11747,7 @@ do {
 
 ## `terser/reduce_vars/pure_getters_3`
 
+- tags: `join vars`, `remove unused`, `pure getters`
 - size: oxc 21 vs reference 0 (+21 bytes)
 
 ```js
@@ -11507,6 +11766,7 @@ var a = a && a.b;
 
 ## `terser/reduce_vars/var_assign_1`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 37 vs reference 16 (+21 bytes)
 
 ```js
@@ -11694,6 +11954,7 @@ console.log(arguments[0]);
 
 ## `terser/arguments/replace_index_strict`
 
+- tags: `join vars`
 - size: oxc 190 vs reference 168 (+22 bytes)
 
 ```js
@@ -11722,6 +11983,7 @@ console.log(arguments[0]);
 
 ## `terser/arrays/index`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 41 vs reference 19 (+22 bytes)
 
 ```js
@@ -11742,6 +12004,7 @@ console.log(a[0], a[1]);
 
 ## `terser/collapse_vars/issue_2436_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 83 vs reference 61 (+22 bytes)
 
 ```js
@@ -11849,6 +12112,7 @@ out: {
 
 ## `terser/loops/issue_2740_2`
 
+- tags: `2 iterations`
 - size: oxc 27 vs reference 5 (+22 bytes)
 
 ```js
@@ -11913,6 +12177,7 @@ new ((a()) || (b()))(c(), d());
 
 ## `terser/conditionals/hoist_decl`
 
+- tags: `join vars`, `sequences`
 - size: oxc 50 vs reference 27 (+23 bytes)
 
 ```js
@@ -12018,6 +12283,7 @@ console.log(b);
 
 ## `terser/identity/inline_identity_undefined`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 52 vs reference 29 (+23 bytes)
 
 ```js
@@ -12082,6 +12348,7 @@ console.log(id(), id(undefined));
 
 ## `terser/pure_getters/set_immutable_6`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 75 vs reference 52 (+23 bytes)
 
 ```js
@@ -12105,6 +12372,7 @@ else console.log('PASS');
 
 ## `terser/reduce_vars/unsafe_evaluate_object_1`
 
+- tags: `join vars`
 - size: oxc 140 vs reference 117 (+23 bytes)
 
 ```js
@@ -12140,6 +12408,7 @@ function f1() {
 
 ## `terser/reduce_vars/unsafe_evaluate_side_effect_free_2`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 84 vs reference 61 (+23 bytes)
 
 ```js
@@ -12201,6 +12470,7 @@ OUT: switch (1) {
 
 ## `terser/template_string/tagged_template_function_inline_2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 23 vs reference 0 (+23 bytes)
 
 ```js
@@ -12255,6 +12525,7 @@ console.log('\ud83d' + '\ude00', '\ud83d' + '@' + '\ude00');
 
 ## `terser/destructuring/unused_destructuring_decl_5`
 
+- tags: `remove unused`, `pure getters`
 - size: oxc 184 vs reference 160 (+24 bytes)
 
 ```js
@@ -12287,6 +12558,7 @@ console.log(c, e, z + 0);
 
 ## `terser/functions/issue_1841_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 108 vs reference 84 (+24 bytes)
 
 ```js
@@ -12315,6 +12587,7 @@ console.log(b);
 
 ## `terser/functions/issue_1841_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 108 vs reference 84 (+24 bytes)
 
 ```js
@@ -12343,6 +12616,7 @@ console.log(b);
 
 ## `terser/functions/issue_2737_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 76 vs reference 52 (+24 bytes)
 
 ```js
@@ -12469,6 +12743,7 @@ out: {
 
 ## `terser/reduce_vars/issue_2757_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 55 vs reference 31 (+24 bytes)
 
 ```js
@@ -12529,6 +12804,7 @@ switch (2) {
 
 ## `terser/collapse_vars/issue_2436_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 120 vs reference 95 (+25 bytes)
 
 ```js
@@ -12624,6 +12900,7 @@ console.log(Object.keys({ foo: 'bar' })[0]);
 
 ## `terser/evaluate/issue_2916_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 112 vs reference 87 (+25 bytes)
 
 ```js
@@ -12775,6 +13052,7 @@ console.log({ p() {
 
 ## `terser/reduce_vars/issue_2916`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 112 vs reference 87 (+25 bytes)
 
 ```js
@@ -12844,6 +13122,7 @@ OUT: switch (1) {
 
 ## `terser/arrays/index_length`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 45 vs reference 19 (+26 bytes)
 
 ```js
@@ -12864,6 +13143,7 @@ console.log(a[0], a.length);
 
 ## `terser/destructuring/issue_3205_3`
 
+- tags: `remove unused`
 - size: oxc 91 vs reference 65 (+26 bytes)
 
 ```js
@@ -12894,6 +13174,7 @@ console.log(a[0], a.length);
 
 ## `terser/drop_unused/var_catch_toplevel`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 97 vs reference 71 (+26 bytes)
 
 ```js
@@ -12936,6 +13217,7 @@ f();
 
 ## `terser/export/name_cache_mangle_export_default_function`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 146 vs reference 120 (+26 bytes)
 
 ```js
@@ -13040,6 +13322,7 @@ console.log(a);
 
 ## `terser/identity/inline_identity_async`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 89 vs reference 63 (+26 bytes)
 
 ```js
@@ -13142,6 +13425,7 @@ console.log(a, b);
 
 ## `terser/destructuring/issue_3205_2`
 
+- tags: `remove unused`
 - size: oxc 95 vs reference 68 (+27 bytes)
 
 ```js
@@ -13173,6 +13457,7 @@ console.log(a, b);
 
 ## `terser/destructuring/issue_3205_4`
 
+- tags: `remove unused`
 - size: oxc 97 vs reference 70 (+27 bytes)
 
 ```js
@@ -13206,6 +13491,7 @@ console.log(a, b);
 
 ## `terser/destructuring/issue_3205_5`
 
+- tags: `join vars`, `remove unused`, `4 iterations`
 - size: oxc 97 vs reference 70 (+27 bytes)
 
 ```js
@@ -13238,6 +13524,7 @@ console.log(a, b);
 
 ## `terser/functions/issue_2620_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 180 vs reference 153 (+27 bytes)
 
 ```js
@@ -13288,6 +13575,7 @@ console.log(c);
 
 ## `terser/functions/issue_2737_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 98 vs reference 71 (+27 bytes)
 
 ```js
@@ -13315,6 +13603,7 @@ console.log(c);
 
 ## `terser/issue_281/ref_scope`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 125 vs reference 98 (+27 bytes)
 
 ```js
@@ -13447,6 +13736,7 @@ a = [
 
 ## `terser/reduce_vars/toplevel_on_loops_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 79 vs reference 52 (+27 bytes)
 
 ```js
@@ -13560,6 +13850,7 @@ var foo = {};
 
 ## `terser/comparing/issue_2857_6`
 
+- tags: `join vars`
 - size: oxc 168 vs reference 140 (+28 bytes)
 
 ```js
@@ -13612,6 +13903,7 @@ foo = (function() {
 
 ## `terser/issue_640/conditional`
 
+- tags: `pure functions`
 - size: oxc 96 vs reference 68 (+28 bytes)
 
 ```js
@@ -13691,6 +13983,7 @@ pure(3 ? 4 : 5);
 
 ## `terser/reduce_vars/defun_reference`
 
+- tags: `join vars`
 - size: oxc 129 vs reference 101 (+28 bytes)
 
 ```js
@@ -13732,6 +14025,7 @@ function f() {
 
 ## `terser/reduce_vars/issue_3042_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 470 vs reference 442 (+28 bytes)
 
 ```js
@@ -13811,6 +14105,7 @@ await(2);
 
 ## `terser/collapse_vars/recursive_function_replacement`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 89 vs reference 60 (+29 bytes)
 
 ```js
@@ -13843,6 +14138,7 @@ console.log(f(c));
 
 ## `terser/harmony/object_spread_unsafe`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `join vars`, `remove unused`, `3 iterations`
 - size: oxc 103 vs reference 74 (+29 bytes)
 
 ```js
@@ -13888,6 +14184,7 @@ console.log(cloned, merged);
 
 ## `terser/identity/inline_identity`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 48 vs reference 19 (+29 bytes)
 
 ```js
@@ -13908,6 +14205,7 @@ console.log(id(1), id(2));
 
 ## `terser/issue_1212/issue_1212_debug_false`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 95 vs reference 66 (+29 bytes)
 
 ```js
@@ -13937,6 +14235,7 @@ new foo().bar();
 
 ## `terser/properties/join_object_assignments_Infinity`
 
+- tags: `join vars`
 - size: oxc 137 vs reference 108 (+29 bytes)
 
 ```js
@@ -13969,6 +14268,7 @@ console.log(o[Infinity], o[1 / 0], o[-Infinity], o[-1 / 0]);
 
 ## `terser/reduce_vars/issue_1670_6`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 109 vs reference 80 (+29 bytes)
 
 ```js
@@ -14004,6 +14304,7 @@ console.log(o[Infinity], o[1 / 0], o[-Infinity], o[-1 / 0]);
 
 ## `terser/template_string/tagged_template_function_inline_3`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 29 vs reference 0 (+29 bytes)
 
 ```js
@@ -14056,6 +14357,7 @@ var obj = {
 
 ## `terser/drop_unused/issue_t161_top_retain_3`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 79 vs reference 49 (+30 bytes)
 
 ```js
@@ -14114,6 +14416,7 @@ console.log('1234' + 1, '1234'[0] + 1, '1234'[6 - 5] + 1, ('12' + '34')[0] + 1, 
 
 ## `terser/functions/inline_loop_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 44 vs reference 14 (+30 bytes)
 
 ```js
@@ -14138,6 +14441,7 @@ for (;;) f();
 
 ## `terser/functions/inline_loop_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 44 vs reference 14 (+30 bytes)
 
 ```js
@@ -14162,6 +14466,7 @@ function f() {
 
 ## `terser/hoist_props/issue_2508_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 71 vs reference 41 (+30 bytes)
 
 ```js
@@ -14194,6 +14499,7 @@ o.f(o.a);
 
 ## `terser/hoist_props/issue_2508_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 76 vs reference 46 (+30 bytes)
 
 ```js
@@ -14226,6 +14532,7 @@ o.f(o.a);
 
 ## `terser/identity/inline_identity_extra_params`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 67 vs reference 37 (+30 bytes)
 
 ```js
@@ -14246,6 +14553,7 @@ console.log(id(1, console.log(2)), id(3, 4));
 
 ## `terser/issue_1212/issue_1212_debug_true`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 95 vs reference 65 (+30 bytes)
 
 ```js
@@ -14275,6 +14583,7 @@ new foo().bar();
 
 ## `terser/issue_281/modified`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 98 vs reference 68 (+30 bytes)
 
 ```js
@@ -14305,6 +14614,7 @@ console.log(f5(1));
 
 ## `terser/loops/issue_2740_5`
 
+- tags: `2 iterations`
 - size: oxc 74 vs reference 44 (+30 bytes)
 
 ```js
@@ -14399,6 +14709,7 @@ new f.undefined();
 
 ## `terser/reduce_vars/inner_var_for_in_1`
 
+- tags: `join vars`
 - size: oxc 147 vs reference 117 (+30 bytes)
 
 ```js
@@ -14437,6 +14748,7 @@ function f() {
 
 ## `terser/reduce_vars/issue_2423_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 74 vs reference 44 (+30 bytes)
 
 ```js
@@ -14495,6 +14807,7 @@ switch (foo) {
 
 ## `terser/typeof/issue_2728_4`
 
+- tags: `join vars`
 - size: oxc 55 vs reference 25 (+30 bytes)
 
 ```js
@@ -14637,6 +14950,7 @@ console.log(function() {
 
 ## `terser/typeof/issue_2728_3`
 
+- tags: `join vars`
 - size: oxc 77 vs reference 46 (+31 bytes)
 
 ```js
@@ -14661,6 +14975,7 @@ console.log(function() {
 
 ## `terser/collapse_vars/issue_2436_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 104 vs reference 72 (+32 bytes)
 
 ```js
@@ -14701,6 +15016,7 @@ console.log((function(c) {
 
 ## `terser/drop_unused/issue_t161_top_retain_4`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 89 vs reference 57 (+32 bytes)
 
 ```js
@@ -14731,6 +15047,7 @@ console.log(f(), f(), g(), g());
 
 ## `terser/global_defs/issue_2167`
 
+- tags: `2 iterations`
 - size: oxc 42 vs reference 10 (+32 bytes)
 
 ```js
@@ -14752,6 +15069,7 @@ doWork();
 
 ## `terser/hoist_props/direct_access_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 79 vs reference 47 (+32 bytes)
 
 ```js
@@ -14779,6 +15097,7 @@ console.log(f('a'));
 
 ## `terser/issue_976/eval_collapse_vars`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 413 vs reference 381 (+32 bytes)
 
 ```js
@@ -14826,6 +15145,7 @@ function p2() {
 
 ## `terser/reduce_vars/perf_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 221 vs reference 189 (+32 bytes)
 
 ```js
@@ -14866,6 +15186,7 @@ console.log(sum);
 
 ## `terser/reduce_vars/var_assign_3`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 59 vs reference 27 (+32 bytes)
 
 ```js
@@ -14892,6 +15213,7 @@ console.log(sum);
 
 ## `terser/functions/unsafe_call_1`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 128 vs reference 95 (+33 bytes)
 
 ```js
@@ -14920,6 +15242,7 @@ console.log(sum);
 
 ## `terser/pure_funcs/relational`
 
+- tags: `pure functions`
 - size: oxc 75 vs reference 42 (+33 bytes)
 
 ```js
@@ -14950,6 +15273,7 @@ bar() !== 'bar';
 
 ## `terser/switch/if_else8`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 123 vs reference 90 (+33 bytes)
 
 ```js
@@ -14980,6 +15304,7 @@ console.log(test('bar'));
 
 ## `terser/arrow/call_args`
 
+- tags: `join vars`
 - size: oxc 63 vs reference 29 (+34 bytes)
 
 ```js
@@ -15005,6 +15330,7 @@ console.log(a);
 
 ## `terser/conditionals/issue_2560`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 182 vs reference 148 (+34 bytes)
 
 ```js
@@ -15050,6 +15376,7 @@ bar();
 
 ## `terser/dead_code/issue_2860_2`
 
+- tags: `join vars`, `2 iterations`
 - size: oxc 50 vs reference 16 (+34 bytes)
 
 ```js
@@ -15072,6 +15399,7 @@ console.log((function(a) {
 
 ## `terser/evaluate/call_args`
 
+- tags: `join vars`
 - size: oxc 63 vs reference 29 (+34 bytes)
 
 ```js
@@ -15097,6 +15425,7 @@ console.log(a);
 
 ## `terser/hoist_props/issue_2473_4`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 74 vs reference 40 (+34 bytes)
 
 ```js
@@ -15127,6 +15456,7 @@ console.log(a);
 
 ## `terser/issue_281/issue_1595_3`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 40 vs reference 6 (+34 bytes)
 
 ```js
@@ -15149,6 +15479,7 @@ console.log(a);
 
 ## `terser/issue_281/negate_iife_issue_1073`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 88 vs reference 54 (+34 bytes)
 
 ```js
@@ -15178,6 +15509,7 @@ new ((function(a) {
 
 ## `terser/reduce_vars/issue_1595_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 40 vs reference 6 (+34 bytes)
 
 ```js
@@ -15200,6 +15532,7 @@ new ((function(a) {
 
 ## `terser/reduce_vars/issue_1595_3`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 40 vs reference 6 (+34 bytes)
 
 ```js
@@ -15222,6 +15555,7 @@ new ((function(a) {
 
 ## `terser/reduce_vars/issue_2860_2`
 
+- tags: `join vars`, `2 iterations`
 - size: oxc 50 vs reference 16 (+34 bytes)
 
 ```js
@@ -15245,6 +15579,7 @@ console.log((function(a) {
 
 ## `terser/reduce_vars/issue_308`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 237 vs reference 203 (+34 bytes)
 
 ```js
@@ -15287,6 +15622,7 @@ function withStyles() {
 
 ## `terser/template_string/tagged_template_function_inline_4`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 34 vs reference 0 (+34 bytes)
 
 ```js
@@ -15305,6 +15641,7 @@ t.pl`test`;
 
 ## `terser/hoist_props/hoist_class`
 
+- tags: `join vars`, `remove unused`, `keep function names`, `keep class names`, `2 iterations`
 - size: oxc 214 vs reference 179 (+35 bytes)
 
 ```js
@@ -15351,6 +15688,7 @@ console.log(o.p.name, o.p === o.p, run(o.p, o.x), run(o.p, o.y));
 
 ## `terser/hoist_props/hoist_class_with_new`
 
+- tags: `join vars`, `remove unused`, `keep function names`, `keep class names`, `2 iterations`
 - size: oxc 177 vs reference 142 (+35 bytes)
 
 ```js
@@ -15391,6 +15729,7 @@ console.log(o.p.name, o.p === o.p, new o.p(o.x).value, new o.p(o.y).value);
 
 ## `terser/loops/issue_2740_4`
 
+- tags: `2 iterations`
 - size: oxc 93 vs reference 58 (+35 bytes)
 
 ```js
@@ -15437,6 +15776,7 @@ console.log({ p: function() {
 
 ## `terser/reduce_vars/issue_2836`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 84 vs reference 49 (+35 bytes)
 
 ```js
@@ -15468,6 +15808,7 @@ function f() {
 
 ## `terser/reduce_vars/perf_5`
 
+- tags: `join vars`, `remove unused`, `10 iterations`
 - size: oxc 224 vs reference 189 (+35 bytes)
 
 ```js
@@ -15508,6 +15849,7 @@ console.log(sum);
 
 ## `terser/async/async_shorthand_property`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`
 - size: oxc 307 vs reference 271 (+36 bytes)
 
 ```js
@@ -15590,6 +15932,7 @@ print({
 
 ## `terser/class_properties/static_means_execution`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 225 vs reference 189 (+36 bytes)
 
 ```js
@@ -15652,6 +15995,7 @@ console.log(x + 1 + 2, x * 1 * 2, +x + 1 + 2, 1 + x + 2 + 3, 1 | x | 2 | 3, 1 + 
 
 ## `terser/reduce_vars/obj_arg_1`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 91 vs reference 55 (+36 bytes)
 
 ```js
@@ -15710,6 +16054,7 @@ console.log('1234' + 1, '1234'.charAt(0) + 1, '1234'.charAt(6 - 5) + 1, ('12' + 
 
 ## `terser/functions/inline_loop_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 51 vs reference 14 (+37 bytes)
 
 ```js
@@ -15734,6 +16079,7 @@ for (;;) f();
 
 ## `terser/issue_281/inner_var_for_in_1`
 
+- tags: `join vars`
 - size: oxc 147 vs reference 110 (+37 bytes)
 
 ```js
@@ -15803,6 +16149,7 @@ console.log({ p: function() {
 
 ## `terser/arrow/issue_2136_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 79 vs reference 41 (+38 bytes)
 
 ```js
@@ -15831,6 +16178,7 @@ function f(x) {
 
 ## `terser/collapse_vars/collapse_vars_repeated`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 144 vs reference 106 (+38 bytes)
 
 ```js
@@ -15898,6 +16246,7 @@ null instanceof null;
 
 ## `terser/drop_unused/issue_2136_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 79 vs reference 41 (+38 bytes)
 
 ```js
@@ -15945,6 +16294,7 @@ console.log(0 in x, 0 in y);
 
 ## `terser/export/module_mangle_export_default_function`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 146 vs reference 108 (+38 bytes)
 
 ```js
@@ -15982,6 +16332,7 @@ console.log(foo(), bar(), qux());
 
 ## `terser/identity/inline_identity_function`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 57 vs reference 19 (+38 bytes)
 
 ```js
@@ -16006,6 +16357,7 @@ console.log(id(1), id(2));
 
 ## `terser/inline/inline_annotation`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 62 vs reference 24 (+38 bytes)
 
 ```js
@@ -16033,6 +16385,7 @@ inline();
 
 ## `terser/issue_1787/unary_prefix`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 61 vs reference 23 (+38 bytes)
 
 ```js
@@ -16056,6 +16409,7 @@ console.log((function() {
 
 ## `terser/issue_t120/pr_152_regression`
 
+- tags: `join vars`, `sequences`, `remove unused`, `1 iteration`
 - size: oxc 293 vs reference 255 (+38 bytes)
 
 ```js
@@ -16104,6 +16458,7 @@ console.log(result);
 
 ## `terser/drop_console/drop_console_2`
 
+- tags: `drop console`
 - size: oxc 39 vs reference 0 (+39 bytes)
 
 ```js
@@ -16122,6 +16477,7 @@ console.log.apply(console, arguments);
 
 ## `terser/drop_unused/issue_2516_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 241 vs reference 202 (+39 bytes)
 
 ```js
@@ -16169,6 +16525,7 @@ Baz(2);
 
 ## `terser/drop_unused/issue_2516_2`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 241 vs reference 202 (+39 bytes)
 
 ```js
@@ -16216,6 +16573,7 @@ Baz(2);
 
 ## `terser/functions/unsafe_apply_1`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 205 vs reference 166 (+39 bytes)
 
 ```js
@@ -16251,6 +16609,7 @@ Baz(2);
 
 ## `terser/harmony/issue_2794_2`
 
+- tags: `mangle`, `keep function names`, `keep class names`, `join vars`, `remove unused`, `1 iteration`
 - size: oxc 200 vs reference 161 (+39 bytes)
 
 ```js
@@ -16302,6 +16661,7 @@ foo();
 
 ## `terser/inline/inline_within_extends_1`
 
+- tags: `join vars`, `remove unused`, `1 iteration`
 - size: oxc 224 vs reference 185 (+39 bytes)
 
 ```js
@@ -16340,6 +16700,7 @@ foo();
 
 ## `terser/issue_2719/warn`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 107 vs reference 68 (+39 bytes)
 
 ```js
@@ -16371,6 +16732,7 @@ console.log(f(1, 2, 3).length);
 
 ## `terser/issue_640/drop_console_2`
 
+- tags: `drop console`
 - size: oxc 39 vs reference 0 (+39 bytes)
 
 ```js
@@ -16410,6 +16772,7 @@ console.log.apply(console, arguments);
 
 ## `terser/reduce_vars/obj_var_2`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 55 vs reference 16 (+39 bytes)
 
 ```js
@@ -16434,6 +16797,7 @@ console.log(obj.bar());
 
 ## `terser/sequences/delete_seq_4`
 
+- tags: `sequences`
 - size: oxc 199 vs reference 160 (+39 bytes)
 
 ```js
@@ -16459,6 +16823,7 @@ console.log(delete (f(), 0 / 0));
 
 ## `terser/sequences/delete_seq_5`
 
+- tags: `sequences`
 - size: oxc 199 vs reference 160 (+39 bytes)
 
 ```js
@@ -16551,6 +16916,7 @@ console.log(Math.pow(Math.PI, Math.E - Math.LN10).toFixed(15));
 
 ## `terser/reduce_vars/var_assign_2`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 56 vs reference 16 (+40 bytes)
 
 ```js
@@ -16575,6 +16941,7 @@ console.log(Math.pow(Math.PI, Math.E - Math.LN10).toFixed(15));
 
 ## `terser/class_properties/class_expression_properties_side_effects`
 
+- tags: `remove unused`
 - size: oxc 112 vs reference 71 (+41 bytes)
 
 ```js
@@ -16607,6 +16974,7 @@ global.side = () => {
 
 ## `terser/harmony/issue_2794_1`
 
+- tags: `join vars`, `remove unused`, `1 iteration`
 - size: oxc 202 vs reference 161 (+41 bytes)
 
 ```js
@@ -16648,6 +17016,7 @@ foo();
 
 ## `terser/issue_281/issue_1758`
 
+- tags: `sequences`
 - size: oxc 110 vs reference 69 (+41 bytes)
 
 ```js
@@ -16703,6 +17072,7 @@ console.log((function(c) {
 
 ## `terser/drop_unused/issue_2768`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 118 vs reference 76 (+42 bytes)
 
 ```js
@@ -16754,6 +17124,7 @@ console.log(a, typeof c);
 
 ## `terser/hoist_props/does_not_hoist_objects_with_computed_props`
 
+- tags: `join vars`
 - size: oxc 42 vs reference 0 (+42 bytes)
 
 ```js
@@ -16797,6 +17168,7 @@ const x = { [console.log('PASS')]: 123 };
 
 ## `terser/collapse_vars/issue_2453`
 
+- tags: `join vars`, `sequences`, `2 iterations`
 - size: oxc 60 vs reference 17 (+43 bytes)
 
 ```js
@@ -16847,6 +17219,7 @@ console.log((function(b) {
 
 ## `terser/functions/issue_2630_2`
 
+- tags: `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 125 vs reference 82 (+43 bytes)
 
 ```js
@@ -16883,6 +17256,7 @@ console.log(c);
 
 ## `terser/harmony/issue_2874_1`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 245 vs reference 202 (+43 bytes)
 
 ```js
@@ -16949,6 +17323,7 @@ console.log(c);
 
 ## `terser/hoist_props/undefined_key`
 
+- tags: `join vars`, `remove unused`, `4 iterations`
 - size: oxc 59 vs reference 16 (+43 bytes)
 
 ```js
@@ -16973,6 +17348,7 @@ console.log(o[a] + o.b);
 
 ## `terser/issue_1609/chained_evaluation_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 99 vs reference 56 (+43 bytes)
 
 ```js
@@ -17003,6 +17379,7 @@ console.log(o[a] + o.b);
 
 ## `terser/reduce_vars/issue_432_1`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 43 vs reference 0 (+43 bytes)
 
 ```js
@@ -17032,6 +17409,7 @@ console.log('PASS');
 
 ## `terser/reduce_vars/issue_432_2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 43 vs reference 0 (+43 bytes)
 
 ```js
@@ -17122,6 +17500,7 @@ fn(3);
 
 ## `terser/destructuring/unused_destructuring_decl_1`
 
+- tags: `remove unused`, `pure getters`
 - size: oxc 110 vs reference 66 (+44 bytes)
 
 ```js
@@ -17183,6 +17562,7 @@ var h = { toString: 0 }.toString();
 
 ## `terser/export/issue_333_toplevel`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 158 vs reference 114 (+44 bytes)
 
 ```js
@@ -17215,6 +17595,7 @@ export { _setToString };
 
 ## `terser/issue_281/negate_iife_4`
 
+- tags: `sequences`
 - size: oxc 114 vs reference 70 (+44 bytes)
 
 ```js
@@ -17242,6 +17623,7 @@ export { _setToString };
 
 ## `terser/issue_281/negate_iife_5`
 
+- tags: `sequences`
 - size: oxc 98 vs reference 54 (+44 bytes)
 
 ```js
@@ -17273,6 +17655,7 @@ if ((function() {
 
 ## `terser/issue_281/negate_iife_5_off`
 
+- tags: `sequences`
 - size: oxc 98 vs reference 54 (+44 bytes)
 
 ```js
@@ -17356,6 +17739,7 @@ if ((function() {
 
 ## `terser/loops/issue_2904`
 
+- tags: `join vars`
 - size: oxc 44 vs reference 0 (+44 bytes)
 
 ```js
@@ -17379,6 +17763,7 @@ do {
 
 ## `terser/pure_getters/collapse_rhs_call`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 44 vs reference 0 (+44 bytes)
 
 ```js
@@ -17404,6 +17789,7 @@ f();
 
 ## `terser/reduce_vars/toplevel_on_loops_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 74 vs reference 30 (+44 bytes)
 
 ```js
@@ -17553,6 +17939,7 @@ var l = 2 ** (5 - 7);
 
 ## `terser/reduce_vars/defun_var_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 80 vs reference 35 (+45 bytes)
 
 ```js
@@ -17577,6 +17964,7 @@ console.log(typeof a, typeof b);
 
 ## `terser/reduce_vars/defun_var_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 80 vs reference 35 (+45 bytes)
 
 ```js
@@ -17601,6 +17989,7 @@ console.log(typeof a, typeof b);
 
 ## `terser/reduce_vars/func_arg_2`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 66 vs reference 21 (+45 bytes)
 
 ```js
@@ -17628,6 +18017,7 @@ var a = 42;
 
 ## `terser/drop_unused/issue_t161_top_retain_13`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 113 vs reference 67 (+46 bytes)
 
 ```js
@@ -17652,6 +18042,7 @@ console.log(x, y, z, x * y, x * z, y * z, f(), g(), h());
 
 ## `terser/drop_unused/issue_t183`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 121 vs reference 75 (+46 bytes)
 
 ```js
@@ -17687,6 +18078,7 @@ console.log(foo('PASS'));
 
 ## `terser/evaluate/self_comparison_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 95 vs reference 49 (+46 bytes)
 
 ```js
@@ -17707,6 +18099,7 @@ console.log(typeof o.n, o.n == o.n, o.n === o.n, o.n != o.n, o.n !== o.n);
 
 ## `terser/evaluate/self_comparison_2`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 95 vs reference 49 (+46 bytes)
 
 ```js
@@ -17745,6 +18138,7 @@ console.log({ 0: 1 } + 1, { 0: 1 }[0] + 1, { 0: 1 }['0'] + 1, { 0: 1 }[1] + 1, {
 
 ## `terser/loops/dead_code_condition`
 
+- tags: `sequences`
 - size: oxc 92 vs reference 46 (+46 bytes)
 
 ```js
@@ -17773,6 +18167,7 @@ console.log(a);
 
 ## `terser/reduce_vars/escaped_prop_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 106 vs reference 60 (+46 bytes)
 
 ```js
@@ -17804,6 +18199,7 @@ var obj = { o: { a: 1 } };
 
 ## `terser/reduce_vars/escaped_prop_2`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 106 vs reference 60 (+46 bytes)
 
 ```js
@@ -17835,6 +18231,7 @@ var obj = { o: { a: 1 } };
 
 ## `terser/reduce_vars/issue_2423_5`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 90 vs reference 44 (+46 bytes)
 
 ```js
@@ -17876,6 +18273,7 @@ z();
 
 ## `terser/reduce_vars/shorthand_obj_arg_1`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 101 vs reference 55 (+46 bytes)
 
 ```js
@@ -17908,6 +18306,7 @@ console.log(f({ bar }));
 
 ## `terser/reduce_vars/shorthand_obj_arg_2`
 
+- tags: `join vars`, `remove unused`, `3 iterations`
 - size: oxc 101 vs reference 55 (+46 bytes)
 
 ```js
@@ -17989,6 +18388,7 @@ console.log(...y);
 
 ## `terser/functions/issue_2107`
 
+- tags: `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 144 vs reference 97 (+47 bytes)
 
 ```js
@@ -18143,6 +18543,7 @@ Math.abs(y);
 
 ## `terser/drop_unused/issue_t161_top_retain_12`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 167 vs reference 119 (+48 bytes)
 
 ```js
@@ -18182,6 +18583,7 @@ console.log(x, y, z, x * y, x * z, y * z, f(), g(), h());
 
 ## `terser/reduce_vars/unsafe_evaluate_side_effect_free_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 250 vs reference 202 (+48 bytes)
 
 ```js
@@ -18258,6 +18660,7 @@ console.log((function() {
 
 ## `terser/reduce_vars/func_arg_1`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 66 vs reference 17 (+49 bytes)
 
 ```js
@@ -18285,6 +18688,7 @@ var a = 42;
 
 ## `terser/async/async_inline`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 356 vs reference 306 (+50 bytes)
 
 ```js
@@ -18352,6 +18756,7 @@ async_top();
 
 ## `terser/harmony/issue_2874_3`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 105 vs reference 55 (+50 bytes)
 
 ```js
@@ -18387,6 +18792,7 @@ a(2);
 
 ## `terser/identity/inline_identity_duplicate_arg_var`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 69 vs reference 19 (+50 bytes)
 
 ```js
@@ -18534,6 +18940,7 @@ console.log(a, b);
 
 ## `terser/collapse_vars/cond_branch_1`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 266 vs reference 215 (+51 bytes)
 
 ```js
@@ -18587,6 +18994,7 @@ f3(5, 6);
 
 ## `terser/destructuring/empty_object_destructuring_3`
 
+- tags: `remove unused`, `pure getters`
 - size: oxc 103 vs reference 52 (+51 bytes)
 
 ```js
@@ -18609,6 +19017,7 @@ const bar = 'bar', { prop: C1, C2 = console.log('side effect'), C3 } = Object;
 
 ## `terser/destructuring/empty_object_destructuring_4`
 
+- tags: `remove unused`, `pure getters`
 - size: oxc 103 vs reference 52 (+51 bytes)
 
 ```js
@@ -18631,6 +19040,7 @@ const bar = 'bar', { prop: C1, C2 = console.log('side effect'), C3 } = Object;
 
 ## `terser/functions/issue_2084`
 
+- tags: `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 168 vs reference 117 (+51 bytes)
 
 ```js
@@ -18672,6 +19082,7 @@ console.log(c);
 
 ## `terser/harmony/issue_2874_2`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 293 vs reference 242 (+51 bytes)
 
 ```js
@@ -18738,6 +19149,7 @@ console.log(c);
 
 ## `terser/collapse_vars/issue_2436_6`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 83 vs reference 31 (+52 bytes)
 
 ```js
@@ -18776,6 +19188,7 @@ console.log((function(c) {
 
 ## `terser/collapse_vars/issue_2436_7`
 
+- tags: `join vars`, `remove unused`, `3 iterations`
 - size: oxc 83 vs reference 31 (+52 bytes)
 
 ```js
@@ -18814,6 +19227,7 @@ console.log((function(c) {
 
 ## `terser/functions/avoid_generating_duplicate_functions_compared_together_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 52 vs reference 0 (+52 bytes)
 
 ```js
@@ -18871,6 +19285,7 @@ var f2 = () => {
 
 ## `terser/reduce_vars/variables_collision_in_immediately_invoked_func`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 204 vs reference 152 (+52 bytes)
 
 ```js
@@ -18913,6 +19328,7 @@ var f2 = () => {
 
 ## `terser/functions/issue_2630_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 142 vs reference 89 (+53 bytes)
 
 ```js
@@ -18956,6 +19372,7 @@ console.log(a);
 
 ## `terser/hoist_props/name_collision_2`
 
+- tags: `join vars`
 - size: oxc 149 vs reference 96 (+53 bytes)
 
 ```js
@@ -18997,6 +19414,7 @@ console.log(o.p === o.p, o['+'](4), o['-'](5), o__$0, o__$1);
 
 ## `terser/hoist_props/name_collision_3`
 
+- tags: `join vars`
 - size: oxc 165 vs reference 112 (+53 bytes)
 
 ```js
@@ -19038,6 +19456,7 @@ console.log(o.p === o.p, o['+'](4), o['-'](5));
 
 ## `terser/properties/prop_side_effects_2`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 85 vs reference 32 (+53 bytes)
 
 ```js
@@ -19066,6 +19485,7 @@ console.log(obj['']());
 
 ## `terser/reduce_vars/issue_1670_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 74 vs reference 21 (+53 bytes)
 
 ```js
@@ -19095,6 +19515,7 @@ console.log(obj['']());
 
 ## `terser/reduce_vars/issue_1670_2`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 74 vs reference 21 (+53 bytes)
 
 ```js
@@ -19124,6 +19545,7 @@ console.log(obj['']());
 
 ## `terser/reduce_vars/issue_1670_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 74 vs reference 21 (+53 bytes)
 
 ```js
@@ -19153,6 +19575,7 @@ console.log(obj['']());
 
 ## `terser/reduce_vars/issue_1670_4`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 74 vs reference 21 (+53 bytes)
 
 ```js
@@ -19182,6 +19605,7 @@ console.log(obj['']());
 
 ## `terser/reduce_vars/issue_2423_4`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 69 vs reference 16 (+53 bytes)
 
 ```js
@@ -19212,6 +19636,7 @@ p();
 
 ## `terser/collapse_vars/issue_2437`
 
+- tags: `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 458 vs reference 404 (+54 bytes)
 
 ```js
@@ -19265,6 +19690,7 @@ foo();
 
 ## `terser/classes/pure_prop_assignment_for_classes`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 55 vs reference 0 (+55 bytes)
 
 ```js
@@ -19290,6 +19716,7 @@ B.staticProp = '';
 
 ## `terser/drop_unused/delete_assign_1`
 
+- tags: `remove unused`
 - size: oxc 170 vs reference 115 (+55 bytes)
 
 ```js
@@ -19324,6 +19751,7 @@ console.log(delete (a = 0 / 0));
 
 ## `terser/arrow/issue_2084`
 
+- tags: `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 168 vs reference 111 (+57 bytes)
 
 ```js
@@ -19478,6 +19906,7 @@ console.log([
 
 ## `terser/hoist_props/issue_851_hoist_to_conflicting_name`
 
+- tags: `join vars`
 - size: oxc 92 vs reference 35 (+57 bytes)
 
 ```js
@@ -19537,6 +19966,7 @@ console.log((function() {
 
 ## `terser/try_catch/issue_452`
 
+- tags: `remove unused`
 - size: oxc 58 vs reference 0 (+58 bytes)
 
 ```js
@@ -19561,6 +19991,7 @@ try {
 
 ## `terser/functions/issue_2630_5`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 161 vs reference 102 (+59 bytes)
 
 ```js
@@ -19603,6 +20034,7 @@ console.log(c);
 
 ## `terser/identity/inline_identity_higher_order`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 78 vs reference 19 (+59 bytes)
 
 ```js
@@ -19624,6 +20056,7 @@ console.log(id(inc(1)), id(inc)(2));
 
 ## `terser/identity/inline_identity_inline_function`
 
+- tags: `join vars`, `remove unused`, `3 iterations`
 - size: oxc 78 vs reference 19 (+59 bytes)
 
 ```js
@@ -19668,6 +20101,7 @@ for (var a = console.log, s = 1; s <= 3;) {
 
 ## `terser/dead_code/try_catch_finally`
 
+- tags: `2 iterations`
 - size: oxc 144 vs reference 84 (+60 bytes)
 
 ```js
@@ -19716,6 +20150,7 @@ try {
 
 ## `terser/evaluate/issue_1964_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 154 vs reference 94 (+60 bytes)
 
 ```js
@@ -19745,6 +20180,7 @@ console.log(f());
 
 ## `terser/functions/issue_2647_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 95 vs reference 35 (+60 bytes)
 
 ```js
@@ -19773,6 +20209,7 @@ console.log(f());
 
 ## `terser/functions/issue_2647_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 95 vs reference 35 (+60 bytes)
 
 ```js
@@ -19801,6 +20238,7 @@ console.log(f());
 
 ## `terser/issue_1275/string_plus_optimization`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 335 vs reference 275 (+60 bytes)
 
 ```js
@@ -19846,6 +20284,7 @@ foo();
 
 ## `terser/pure_getters/issue_2838`
 
+- tags: `pure getters`
 - size: oxc 145 vs reference 85 (+60 bytes)
 
 ```js
@@ -19878,6 +20317,7 @@ console.log(o.c);
 
 ## `terser/drop_unused/double_assign_1`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 333 vs reference 272 (+61 bytes)
 
 ```js
@@ -20003,6 +20443,7 @@ console.log([
 
 ## `terser/functions/avoid_generating_duplicate_functions_compared_together`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 61 vs reference 0 (+61 bytes)
 
 ```js
@@ -20023,6 +20464,7 @@ console.log(y() === y());
 
 ## `terser/issue_t50/issue_t50_const`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 83 vs reference 22 (+61 bytes)
 
 ```js
@@ -20153,6 +20595,7 @@ console.log(y() === y());
 
 ## `terser/issue_t50/issue_t50_let`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 83 vs reference 22 (+61 bytes)
 
 ```js
@@ -20283,6 +20726,7 @@ console.log(y() === y());
 
 ## `terser/classes/class_recursive_refs`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 62 vs reference 0 (+62 bytes)
 
 ```js
@@ -20321,6 +20765,7 @@ class c {
 
 ## `terser/functions/issue_2114_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 170 vs reference 108 (+62 bytes)
 
 ```js
@@ -20359,6 +20804,7 @@ console.log(c);
 
 ## `terser/functions/issue_2114_2`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 170 vs reference 108 (+62 bytes)
 
 ```js
@@ -20397,6 +20843,7 @@ console.log(c);
 
 ## `terser/functions/issue_2663_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 146 vs reference 84 (+62 bytes)
 
 ```js
@@ -20439,6 +20886,7 @@ console.log(c);
 
 ## `terser/arrow/issue_2136_3`
 
+- tags: `join vars`, `remove unused`, `3 iterations`
 - size: oxc 79 vs reference 16 (+63 bytes)
 
 ```js
@@ -20467,6 +20915,7 @@ function f(x) {
 
 ## `terser/collapse_vars/collapse_vars_side_effects_1`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 576 vs reference 513 (+63 bytes)
 
 ```js
@@ -20542,6 +20991,7 @@ f1(), f2(), f3(), f4();
 
 ## `terser/drop_unused/issue_2136_3`
 
+- tags: `join vars`, `remove unused`, `3 iterations`
 - size: oxc 79 vs reference 16 (+63 bytes)
 
 ```js
@@ -20570,6 +21020,7 @@ function f(x) {
 
 ## `terser/functions/issue_2604_1`
 
+- tags: `remove unused`
 - size: oxc 147 vs reference 84 (+63 bytes)
 
 ```js
@@ -20614,6 +21065,7 @@ console.log(a);
 
 ## `terser/functions/issue_2604_2`
 
+- tags: `join vars`, `remove unused`, `3 iterations`
 - size: oxc 147 vs reference 84 (+63 bytes)
 
 ```js
@@ -20658,6 +21110,7 @@ console.log(a);
 
 ## `terser/issue_1609/chained_evaluation_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 78 vs reference 14 (+64 bytes)
 
 ```js
@@ -20688,6 +21141,7 @@ console.log(a);
 
 ## `terser/class_properties/static_property_side_effects`
 
+- tags: `remove unused`
 - size: oxc 65 vs reference 0 (+65 bytes)
 
 ```js
@@ -20715,6 +21169,7 @@ class cls2 {
 
 ## `terser/functions/issue_2428`
 
+- tags: `join vars`, `remove unused`, `3 iterations`
 - size: oxc 124 vs reference 59 (+65 bytes)
 
 ```js
@@ -20892,6 +21347,7 @@ console.log(delete (0 / 0));
 
 ## `terser/issue_281/safe_undefined`
 
+- tags: `remove unused`
 - size: oxc 118 vs reference 52 (+66 bytes)
 
 ```js
@@ -20922,6 +21378,7 @@ console.log((function(undefined) {
 
 ## `terser/drop_unused/issue_t161_top_retain_11`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 167 vs reference 100 (+67 bytes)
 
 ```js
@@ -21266,6 +21723,7 @@ console.log(delete (false || 0 / 0));
 
 ## `terser/logical_assignment/logical_assignment_not_always_happens`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 68 vs reference 0 (+68 bytes)
 
 ```js
@@ -21287,6 +21745,7 @@ console.log(result);
 
 ## `terser/functions/issue_2630_1`
 
+- tags: `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 124 vs reference 55 (+69 bytes)
 
 ```js
@@ -21323,6 +21782,7 @@ console.log(c);
 
 ## `terser/properties/lhs_prop_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 130 vs reference 61 (+69 bytes)
 
 ```js
@@ -21404,6 +21864,7 @@ String.prototype.indexOf.call(e, 'bar');
 
 ## `terser/reduce_vars/iife_assign`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 85 vs reference 16 (+69 bytes)
 
 ```js
@@ -21436,6 +21897,7 @@ String.prototype.indexOf.call(e, 'bar');
 
 ## `terser/arguments/issue_687`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 70 vs reference 0 (+70 bytes)
 
 ```js
@@ -21459,6 +21921,7 @@ shouldBePure();
 
 ## `terser/functions/duplicate_argnames`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 91 vs reference 21 (+70 bytes)
 
 ```js
@@ -21524,6 +21987,7 @@ switch (foo) {
 
 ## `terser/drop_unused/issue_t161_top_retain_10`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 167 vs reference 96 (+71 bytes)
 
 ```js
@@ -21563,6 +22027,7 @@ console.log(x, y, z, x * y, x * z, y * z, f(), g(), h());
 
 ## `terser/if_return/if_return_8`
 
+- tags: `sequences`
 - size: oxc 418 vs reference 346 (+72 bytes)
 
 ```js
@@ -21630,6 +22095,7 @@ function i(e) {
 
 ## `terser/reduce_vars/issue_2423_6`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 133 vs reference 61 (+72 bytes)
 
 ```js
@@ -21677,6 +22143,7 @@ z();
 
 ## `terser/collapse_vars/issue_1562`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 173 vs reference 99 (+74 bytes)
 
 ```js
@@ -21776,6 +22243,7 @@ console.log({ 2.72: 1 } + 1, { 2.72: 1 }[2.72] + 1, { 2.72: 1 }['2.72'] + 1, { 2
 
 ## `terser/typeof/typeof_defun_2`
 
+- tags: `join vars`
 - size: oxc 174 vs reference 100 (+74 bytes)
 
 ```js
@@ -21809,6 +22277,7 @@ x++ < 2 && typeof f == 'function' && f();
 
 ## `terser/drop_unused/issue_2665`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 137 vs reference 62 (+75 bytes)
 
 ```js
@@ -21842,6 +22311,7 @@ console.log(a);
 
 ## `terser/reduce_vars/obj_arg_2`
 
+- tags: `join vars`, `remove unused`, `3 iterations`
 - size: oxc 91 vs reference 16 (+75 bytes)
 
 ```js
@@ -21871,6 +22341,7 @@ console.log(f({ bar: function() {
 
 ## `terser/identity/inline_identity_regression`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 76 vs reference 0 (+76 bytes)
 
 ```js
@@ -21890,6 +22361,7 @@ console.log(foo({ bar: 'PASS' }));
 
 ## `terser/if_return/if_var_return`
 
+- tags: `join vars`, `sequences`
 - size: oxc 208 vs reference 132 (+76 bytes)
 
 ```js
@@ -21958,6 +22430,7 @@ function g() {
 
 ## `terser/logical_assignment/.assignment_in_left_part`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 76 vs reference 0 (+76 bytes)
 
 ```js
@@ -22019,6 +22492,7 @@ switch (foo) {
 
 ## `terser/evaluate/pow_sequence_with_parens_evaluated`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 97 vs reference 20 (+77 bytes)
 
 ```js
@@ -22041,6 +22515,7 @@ console.log((four ** one) ** two, (four ** one) ** (one / two));
 
 ## `terser/inline/inline_annotation_2`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 102 vs reference 24 (+78 bytes)
 
 ```js
@@ -22063,6 +22538,7 @@ console.log(a, b);
 
 ## `terser/properties/join_object_assignments_2`
 
+- tags: `join vars`, `remove unused`, `3 iterations`
 - size: oxc 100 vs reference 22 (+78 bytes)
 
 ```js
@@ -22087,6 +22563,7 @@ console.log(o.foo, o.bar + o.bar, o.foo * o.bar * o.baz);
 
 ## `terser/functions/issue_2630_4`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 150 vs reference 71 (+79 bytes)
 
 ```js
@@ -22123,6 +22600,7 @@ console.log(a);
 
 ## `terser/drop_unused/unused_seq_elements`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 80 vs reference 0 (+80 bytes)
 
 ```js
@@ -22142,6 +22620,7 @@ console.log('just-make-sure-it-is-compilable') && (a++, b++);
 
 ## `terser/functions/issue_2616`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 150 vs reference 70 (+80 bytes)
 
 ```js
@@ -22180,6 +22659,7 @@ console.log(c);
 
 ## `terser/pure_funcs/arithmetic`
 
+- tags: `pure functions`
 - size: oxc 122 vs reference 42 (+80 bytes)
 
 ```js
@@ -22316,6 +22796,7 @@ console.log(delete (1, 2, 0 / 0));
 
 ## `terser/functions/issue_2657`
 
+- tags: `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 139 vs reference 57 (+82 bytes)
 
 ```js
@@ -22355,6 +22836,7 @@ console.log((function f() {
 
 ## `terser/reduce_vars/issue_443`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 83 vs reference 0 (+83 bytes)
 
 ```js
@@ -22383,6 +22865,7 @@ var get_one = () => {
 
 ## `terser/expansions/object_spread`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 84 vs reference 0 (+84 bytes)
 
 ```js
@@ -22409,6 +22892,7 @@ console.log(Object.keys(objWithKeys).join(','));
 
 ## `terser/hoist_props/issue_3071_1`
 
+- tags: `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 84 vs reference 0 (+84 bytes)
 
 ```js
@@ -22574,6 +23058,7 @@ new A();
 
 ## `terser/collapse_vars/collapse_vars_self_reference`
 
+- tags: `join vars`, `sequences`
 - size: oxc 120 vs reference 34 (+86 bytes)
 
 ```js
@@ -22607,6 +23092,7 @@ function f2() {
 
 ## `terser/drop_unused/issue_t161_top_retain_15`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 309 vs reference 223 (+86 bytes)
 
 ```js
@@ -22672,6 +23158,7 @@ console.log(x, y, z, x * y, x * z, y * z, f(), g(), h(), new Alpha().num(), new 
 
 ## `terser/drop_unused/issue_t161_top_retain_5`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 106 vs reference 19 (+87 bytes)
 
 ```js
@@ -22706,6 +23193,7 @@ console.log(x, y, z, x * y, x * z, y * z, f(), g(), h(), new Alpha().num(), new 
 
 ## `terser/drop_unused/function_argument_modified_by_function_statement`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 88 vs reference 0 (+88 bytes)
 
 ```js
@@ -22734,6 +23222,7 @@ printTest();
 
 ## `terser/functions/function_returning_constant_literal`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 116 vs reference 28 (+88 bytes)
 
 ```js
@@ -22760,6 +23249,7 @@ console.log(greeting.message);
 
 ## `terser/harmony/classes_extending_classes_out_of_pure_iifes`
 
+- tags: `remove unused`
 - size: oxc 89 vs reference 0 (+89 bytes)
 
 ```js
@@ -22787,6 +23277,7 @@ class Sub extends Base {}
 
 ## `terser/hoist_props/issue_3071_2`
 
+- tags: `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 89 vs reference 0 (+89 bytes)
 
 ```js
@@ -22813,6 +23304,7 @@ class Sub extends Base {}
 
 ## `terser/hoist_props/issue_3071_2_toplevel`
 
+- tags: `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 89 vs reference 0 (+89 bytes)
 
 ```js
@@ -22839,6 +23331,7 @@ class Sub extends Base {}
 
 ## `terser/reduce_vars/issue_1670_5`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 105 vs reference 16 (+89 bytes)
 
 ```js
@@ -22902,6 +23395,7 @@ async({
 
 ## `terser/drop_unused/issue_t161_top_retain_14`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 309 vs reference 219 (+90 bytes)
 
 ```js
@@ -22963,6 +23457,7 @@ console.log(x, y, z, x * y, x * z, y * z, f(), g(), h(), new Alpha().num(), new 
 
 ## `terser/identity/inline_identity_inner_ref`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 125 vs reference 35 (+90 bytes)
 
 ```js
@@ -22988,6 +23483,7 @@ console.log(id(1), id(2), undef(3), undef(4));
 
 ## `terser/properties/const_prop_assign_pure`
 
+- tags: `pure getters`
 - size: oxc 142 vs reference 52 (+90 bytes)
 
 ```js
@@ -23044,6 +23540,7 @@ function Simulator() {
 
 ## `terser/drop_unused/issue_t161_top_retain_6`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 116 vs reference 25 (+91 bytes)
 
 ```js
@@ -23078,6 +23575,7 @@ function Simulator() {
 
 ## `terser/functions/issue_2842`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 220 vs reference 128 (+92 bytes)
 
 ```js
@@ -23134,6 +23632,7 @@ function Simulator() {
 
 ## `terser/properties/join_object_assignments_4`
 
+- tags: `join vars`, `sequences`
 - size: oxc 93 vs reference 0 (+93 bytes)
 
 ```js
@@ -23158,6 +23657,7 @@ console.log(o.a);
 
 ## `terser/collapse_vars/collapse_rhs_vardef`
 
+- tags: `join vars`
 - size: oxc 94 vs reference 0 (+94 bytes)
 
 ```js
@@ -23187,6 +23687,7 @@ console.log(a, b);
 
 ## `terser/hoist_props/issue_2519`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 156 vs reference 62 (+94 bytes)
 
 ```js
@@ -23221,6 +23722,7 @@ console.log(testFunc());
 
 ## `terser/functions/issue_2620_1`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 136 vs reference 41 (+95 bytes)
 
 ```js
@@ -23259,6 +23761,7 @@ console.log(c);
 
 ## `terser/functions/issue_2620_2`
 
+- tags: `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 136 vs reference 41 (+95 bytes)
 
 ```js
@@ -23297,6 +23800,7 @@ console.log(c);
 
 ## `terser/functions/issue_2783`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 172 vs reference 76 (+96 bytes)
 
 ```js
@@ -23339,6 +23843,7 @@ console.log(c);
 
 ## `terser/functions/avoid_generating_duplicate_functions_compared_together_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 97 vs reference 0 (+97 bytes)
 
 ```js
@@ -23359,6 +23864,7 @@ console.log(fn() === fn());
 
 ## `terser/reduce_vars/issue_3113_3`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 100 vs reference 0 (+100 bytes)
 
 ```js
@@ -23395,6 +23901,7 @@ console.log(c);
 
 ## `terser/functions/issue_2531_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 202 vs reference 101 (+101 bytes)
 
 ```js
@@ -23437,6 +23944,7 @@ console.log('Greeting:', outer()());
 
 ## `terser/functions/issue_2531_2`
 
+- tags: `join vars`, `remove unused`, `3 iterations`
 - size: oxc 202 vs reference 101 (+101 bytes)
 
 ```js
@@ -23479,6 +23987,7 @@ console.log('Greeting:', outer()());
 
 ## `terser/harmony/issue_2349b`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `join vars`, `remove unused`, `3 iterations`
 - size: oxc 158 vs reference 57 (+101 bytes)
 
 ```js
@@ -23545,6 +24054,7 @@ console.log(x);
 
 ## `terser/collapse_vars/collapse_rhs_undefined`
 
+- tags: `join vars`
 - size: oxc 106 vs reference 0 (+106 bytes)
 
 ```js
@@ -23606,6 +24116,7 @@ console.log(x);
 
 ## `terser/arrow/issue_2105_2`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 173 vs reference 66 (+107 bytes)
 
 ```js
@@ -23653,6 +24164,7 @@ console.log(x);
 
 ## `terser/block_scope/issue_508`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `pure getters`
 - size: oxc 107 vs reference 0 (+107 bytes)
 
 ```js
@@ -23693,6 +24205,7 @@ foo();
 
 ## `terser/collapse_vars/collapse_rhs_var`
 
+- tags: `join vars`
 - size: oxc 107 vs reference 0 (+107 bytes)
 
 ```js
@@ -23757,6 +24270,7 @@ console.log(x);
 
 ## `terser/reduce_vars/redefine_farg_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 153 vs reference 46 (+107 bytes)
 
 ```js
@@ -23797,6 +24311,7 @@ console.log(f([]), g([]), h([]));
 
 ## `terser/reduce_vars/redefine_farg_3`
 
+- tags: `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 153 vs reference 46 (+107 bytes)
 
 ```js
@@ -23837,6 +24352,7 @@ console.log(f([]), g([]), h([]));
 
 ## `terser/drop_unused/issue_t161_top_retain_8`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 167 vs reference 59 (+108 bytes)
 
 ```js
@@ -23876,6 +24392,7 @@ console.log(x, y, z, x * y, x * z, y * z, f(), g(), h());
 
 ## `terser/drop_unused/issue_t161_top_retain_9`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 167 vs reference 59 (+108 bytes)
 
 ```js
@@ -23915,6 +24432,7 @@ console.log(x, y, z, x * y, x * z, y * z, f(), g(), h());
 
 ## `terser/collapse_vars/collapse_rhs_boolean_1`
 
+- tags: `join vars`
 - size: oxc 110 vs reference 0 (+110 bytes)
 
 ```js
@@ -23946,6 +24464,7 @@ console.log(a === b, b === c, c === a);
 
 ## `terser/collapse_vars/collapse_rhs_number`
 
+- tags: `join vars`
 - size: oxc 110 vs reference 0 (+110 bytes)
 
 ```js
@@ -23977,6 +24496,7 @@ console.log(a === b, b === c, c === a);
 
 ## `terser/functions/issue_2620_4`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 180 vs reference 68 (+112 bytes)
 
 ```js
@@ -24103,6 +24623,7 @@ if ('BAR' in X) {
 
 ## `terser/collapse_vars/collapse_rhs_this`
 
+- tags: `join vars`
 - size: oxc 116 vs reference 0 (+116 bytes)
 
 ```js
@@ -24188,6 +24709,7 @@ console.log({
 
 ## `terser/inline/issue_308`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `4 iterations`
 - size: oxc 300 vs reference 183 (+117 bytes)
 
 ```js
@@ -24232,6 +24754,7 @@ function withStyles() {
 
 ## `terser/collapse_vars/collapse_rhs_string`
 
+- tags: `join vars`
 - size: oxc 119 vs reference 0 (+119 bytes)
 
 ```js
@@ -24263,6 +24786,7 @@ console.log(a === b, b === c, c === a);
 
 ## `terser/pure_getters/collapse_rhs_setter`
 
+- tags: `join vars`
 - size: oxc 119 vs reference 0 (+119 bytes)
 
 ```js
@@ -24292,6 +24816,7 @@ try {
 
 ## `terser/functions/issue_3054`
 
+- tags: `join vars`
 - size: oxc 120 vs reference 0 (+120 bytes)
 
 ```js
@@ -24323,6 +24848,7 @@ console.log((function(b) {
 
 ## `terser/inline/dont_inline_funcs_into_default_param`
 
+- tags: `remove unused`
 - size: oxc 120 vs reference 0 (+120 bytes)
 
 ```js
@@ -24349,6 +24875,7 @@ print();
 
 ## `terser/reduce_vars/issue_294`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 223 vs reference 103 (+120 bytes)
 
 ```js
@@ -24463,6 +24990,7 @@ console.log(x);
 
 ## `terser/reduce_vars/issue_369`
 
+- tags: `join vars`
 - size: oxc 121 vs reference 0 (+121 bytes)
 
 ```js
@@ -24524,6 +25052,7 @@ console.log(x);
 
 ## `terser/block_scope/issue_334`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 153 vs reference 29 (+124 bytes)
 
 ```js
@@ -24564,6 +25093,7 @@ function print(A) {
 
 ## `terser/collapse_vars/collapse_rhs_boolean_2`
 
+- tags: `join vars`
 - size: oxc 125 vs reference 0 (+125 bytes)
 
 ```js
@@ -24597,6 +25127,7 @@ console.log((function f2() {
 
 ## `terser/collapse_vars/issue_805`
 
+- tags: `join vars`
 - size: oxc 125 vs reference 0 (+125 bytes)
 
 ```js
@@ -24663,6 +25194,7 @@ console.log(x);
 
 ## `terser/functions/issue_2601_2`
 
+- tags: `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 169 vs reference 44 (+125 bytes)
 
 ```js
@@ -24705,6 +25237,7 @@ console.log(a);
 
 ## `terser/hoist_props/name_collision_1`
 
+- tags: `join vars`
 - size: oxc 195 vs reference 69 (+126 bytes)
 
 ```js
@@ -24749,6 +25282,7 @@ f();
 
 ## `terser/functions/issue_2601_1`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 169 vs reference 41 (+128 bytes)
 
 ```js
@@ -24791,6 +25325,7 @@ console.log(a);
 
 ## `terser/properties/issue_3188_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 128 vs reference 0 (+128 bytes)
 
 ```js
@@ -24831,6 +25366,7 @@ console.log(a);
 
 ## `terser/collapse_vars/issue_2974`
 
+- tags: `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 132 vs reference 0 (+132 bytes)
 
 ```js
@@ -24902,6 +25438,7 @@ for (j(); k(); l()) break;
 
 ## `terser/reduce_vars/modified`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 744 vs reference 612 (+132 bytes)
 
 ```js
@@ -25023,6 +25560,7 @@ f0(), f1(), f2(), f3(), f4(), f5();
 
 ## `terser/functions/inner_ref`
 
+- tags: `remove unused`
 - size: oxc 155 vs reference 22 (+133 bytes)
 
 ```js
@@ -25057,6 +25595,7 @@ console.log((function(a) {
 
 ## `terser/issue_1656/f7`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 156 vs reference 23 (+133 bytes)
 
 ```js
@@ -25085,6 +25624,7 @@ console.log(a, b);
 
 ## `terser/issue_1704/mangle_catch_redef_3_ie8_toplevel`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`
 - size: oxc 134 vs reference 0 (+134 bytes)
 
 ```js
@@ -25124,6 +25664,7 @@ console.log(o);
 
 ## `terser/issue_1704/mangle_catch_redef_3_toplevel`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`
 - size: oxc 134 vs reference 0 (+134 bytes)
 
 ```js
@@ -25163,6 +25704,7 @@ console.log(o);
 
 ## `terser/issue_t292/no_flatten_with_arg_colliding_with_arg_value_inner_scope`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 211 vs reference 77 (+134 bytes)
 
 ```js
@@ -25251,6 +25793,7 @@ bar();
 
 ## `terser/hoist_props/issue_2377_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 155 vs reference 20 (+135 bytes)
 
 ```js
@@ -25289,6 +25832,7 @@ console.log(obj.foo, obj.cube(3));
 
 ## `terser/hoist_props/issue_2377_2`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 155 vs reference 20 (+135 bytes)
 
 ```js
@@ -25327,6 +25871,7 @@ console.log(obj.foo, obj.cube(3));
 
 ## `terser/hoist_props/issue_2377_3`
 
+- tags: `join vars`, `remove unused`, `4 iterations`
 - size: oxc 155 vs reference 20 (+135 bytes)
 
 ```js
@@ -25365,6 +25910,7 @@ console.log(obj.foo, obj.cube(3));
 
 ## `terser/collapse_vars/issue_348`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 136 vs reference 0 (+136 bytes)
 
 ```js
@@ -25424,6 +25970,7 @@ print();
 
 ## `terser/reduce_vars/reduce_class_with_side_effects_in_properties`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 137 vs reference 0 (+137 bytes)
 
 ```js
@@ -25457,6 +26004,7 @@ console.log(x);
 
 ## `terser/reduce_vars/issue_3110_2`
 
+- tags: `join vars`, `sequences`, `remove unused`, `4 iterations`
 - size: oxc 139 vs reference 0 (+139 bytes)
 
 ```js
@@ -25488,6 +26036,7 @@ console.log(x);
 
 ## `terser/reduce_vars/issue_3110_shorthand_2`
 
+- tags: `join vars`, `sequences`, `remove unused`, `4 iterations`
 - size: oxc 139 vs reference 0 (+139 bytes)
 
 ```js
@@ -25519,6 +26068,7 @@ console.log(x);
 
 ## `terser/evaluate/issue_2968`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 140 vs reference 0 (+140 bytes)
 
 ```js
@@ -25550,6 +26100,7 @@ console.log(c);
 
 ## `terser/harmony/issue_2794_3`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `join vars`, `remove unused`, `3 iterations`
 - size: oxc 192 vs reference 51 (+141 bytes)
 
 ```js
@@ -25602,6 +26153,7 @@ foo();
 
 ## `terser/keep_names/keep_fnames_and_avoid_collisions`
 
+- tags: `mangle`, `keep function names`, `keep class names`
 - size: oxc 142 vs reference 0 (+142 bytes)
 
 ```js
@@ -25634,6 +26186,7 @@ global.t = 'ttttttttttttttttttttt';
 
 ## `terser/reduce_vars/reduce_class_with_side_effects_in_extends`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 143 vs reference 0 (+143 bytes)
 
 ```js
@@ -25820,6 +26373,7 @@ var l = [foo, bar + 'baz'].join('');
 
 ## `terser/inline/inline_into_scope_conflict`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 147 vs reference 0 (+147 bytes)
 
 ```js
@@ -26003,6 +26557,7 @@ var f = [
 
 ## `terser/reduce_vars/issue_3110_1`
 
+- tags: `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 150 vs reference 0 (+150 bytes)
 
 ```js
@@ -26034,6 +26589,7 @@ var f = [
 
 ## `terser/reduce_vars/issue_3110_shorthand_1`
 
+- tags: `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 150 vs reference 0 (+150 bytes)
 
 ```js
@@ -26065,6 +26621,7 @@ var f = [
 
 ## `terser/collapse_vars/collapse_vars_unary_2`
 
+- tags: `join vars`
 - size: oxc 151 vs reference 0 (+151 bytes)
 
 ```js
@@ -26104,6 +26661,7 @@ for (const i in [
 
 ## `terser/issue_1261/pure_function_calls`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 271 vs reference 120 (+151 bytes)
 
 ```js
@@ -26156,6 +26714,7 @@ a.b(), c.d.e(), f.g();
 
 ## `terser/collapse_vars/collapse_vars_issue_721`
 
+- tags: `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 547 vs reference 395 (+152 bytes)
 
 ```js
@@ -26238,6 +26797,7 @@ def(function(hb) {
 
 ## `terser/reduce_vars/chained_assignments`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 178 vs reference 25 (+153 bytes)
 
 ```js
@@ -26319,6 +26879,7 @@ console.log(scan());
 
 ## `terser/functions/issue_t131b`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 231 vs reference 73 (+158 bytes)
 
 ```js
@@ -26366,6 +26927,7 @@ console.log(scan());
 
 ## `terser/functions/avoid_generating_duplicate_functions_compared_together_4`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 161 vs reference 0 (+161 bytes)
 
 ```js
@@ -26397,6 +26959,7 @@ console.log(fns_obj.a === fns_obj.b);
 
 ## `terser/issue_t292/no_flatten_with_var_colliding_with_arg_value_inner_scope`
 
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 255 vs reference 94 (+161 bytes)
 
 ```js
@@ -26448,6 +27011,7 @@ console.log(c('a'));
 
 ## `terser/functions/issue_t131a`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 235 vs reference 73 (+162 bytes)
 
 ```js
@@ -26497,6 +27061,7 @@ console.log(c('a'));
 
 ## `terser/typeof/typeof_defun_1`
 
+- tags: `join vars`, `remove unused`, `2 iterations`
 - size: oxc 225 vs reference 63 (+162 bytes)
 
 ```js
@@ -26542,6 +27107,7 @@ g = 42;
 
 ## `terser/reduce_vars/reduce_funcs_in_array_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 166 vs reference 0 (+166 bytes)
 
 ```js
@@ -26577,6 +27143,7 @@ g = 42;
 
 ## `terser/functions/issue_2531_3`
 
+- tags: `join vars`, `remove unused`, `3 iterations`
 - size: oxc 202 vs reference 35 (+167 bytes)
 
 ```js
@@ -26617,6 +27184,7 @@ console.log('Greeting:', outer()());
 
 ## `terser/inline/inline_func_with_name_existing_in_block_scope`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 170 vs reference 0 (+170 bytes)
 
 ```js
@@ -26656,6 +27224,7 @@ main();
 
 ## `terser/reduce_vars/reduce_funcs_in_array_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 176 vs reference 0 (+176 bytes)
 
 ```js
@@ -26691,6 +27260,7 @@ main();
 
 ## `terser/reduce_vars/reduce_funcs_in_object_literal_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 176 vs reference 0 (+176 bytes)
 
 ```js
@@ -26726,6 +27296,7 @@ main();
 
 ## `terser/reduce_vars/reduce_funcs_in_object_literal_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 181 vs reference 0 (+181 bytes)
 
 ```js
@@ -26761,6 +27332,7 @@ main();
 
 ## `terser/reduce_vars/reduce_funcs_in_shorthand_object_literal_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 181 vs reference 0 (+181 bytes)
 
 ```js
@@ -26797,6 +27369,7 @@ main();
 
 ## `terser/functions/issue_2663_3`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 748 vs reference 564 (+184 bytes)
 
 ```js
@@ -26992,6 +27565,7 @@ console.log((function(same_name) {
 
 ## `terser/drop_unused/issue_2105_1`
 
+- tags: `join vars`, `remove unused`, `3 iterations`
 - size: oxc 262 vs reference 71 (+191 bytes)
 
 ```js
@@ -27153,6 +27727,7 @@ var e = '	\n';
 
 ## `terser/reduce_vars/single_use_class_referenced_in_array`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 198 vs reference 0 (+198 bytes)
 
 ```js
@@ -27192,6 +27767,7 @@ var e = '	\n';
 
 ## `terser/arrow/issue_2105_1`
 
+- tags: `join vars`, `remove unused`, `3 iterations`
 - size: oxc 262 vs reference 61 (+201 bytes)
 
 ```js
@@ -27246,6 +27822,7 @@ var e = '	\n';
 
 ## `terser/drop_unused/issue_805_2`
 
+- tags: `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 202 vs reference 0 (+202 bytes)
 
 ```js
@@ -27334,6 +27911,7 @@ console.log({
 
 ## `terser/inline/inline_into_scope_conflict_enclosed`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 205 vs reference 0 (+205 bytes)
 
 ```js
@@ -27371,6 +27949,7 @@ $('FAIL');
 
 ## `terser/drop_unused/issue_805_1`
 
+- tags: `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 209 vs reference 0 (+209 bytes)
 
 ```js
@@ -27405,6 +27984,7 @@ $('FAIL');
 
 ## `terser/reduce_vars/single_use_class_referenced_in_object_literal`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 213 vs reference 0 (+213 bytes)
 
 ```js
@@ -27444,6 +28024,7 @@ $('FAIL');
 
 ## `terser/reduce_vars/single_use_class_referenced_in_shorthand_object_literal`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 213 vs reference 0 (+213 bytes)
 
 ```js
@@ -27484,6 +28065,7 @@ $('FAIL');
 
 ## `terser/reduce_vars/inverted_var`
 
+- tags: `join vars`, `remove unused`, `3 iterations`
 - size: oxc 345 vs reference 127 (+218 bytes)
 
 ```js
@@ -27559,6 +28141,7 @@ console.log((function() {
 
 ## `terser/functions/issue_2647_1`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 223 vs reference 0 (+223 bytes)
 
 ```js
@@ -27598,6 +28181,7 @@ console.log((function() {
 
 ## `terser/reduce_vars/issue_581`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 226 vs reference 0 (+226 bytes)
 
 ```js
@@ -27638,6 +28222,7 @@ new Yellow().method();
 
 ## `terser/functions/iifes_returning_constants_keep_fargs_false`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 351 vs reference 120 (+231 bytes)
 
 ```js
@@ -27700,6 +28285,7 @@ console.log((function(x, y) {
 
 ## `terser/functions/iifes_returning_constants_keep_fargs_true`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 351 vs reference 120 (+231 bytes)
 
 ```js
@@ -27762,6 +28348,7 @@ console.log((function(x, y) {
 
 ## `terser/collapse_vars/ignore_class`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 239 vs reference 0 (+239 bytes)
 
 ```js
@@ -27798,6 +28385,7 @@ console.log(new module.exports().pass);
 
 ## `terser/drop_unused/issue_2105_2`
 
+- tags: `join vars`, `remove unused`, `3 iterations`
 - size: oxc 262 vs reference 21 (+241 bytes)
 
 ```js
@@ -27893,6 +28481,7 @@ console.log(new A().toString());
 
 ## `terser/drop_unused/variable_refs_outside_unused_class`
 
+- tags: `remove unused`
 - size: oxc 247 vs reference 0 (+247 bytes)
 
 ```js
@@ -27996,6 +28585,7 @@ console.log(1.23.toString(void 0));
 
 ## `terser/pure_getters/collapse_rhs_false`
 
+- tags: `join vars`
 - size: oxc 266 vs reference 0 (+266 bytes)
 
 ```js
@@ -28025,6 +28615,7 @@ console.log(({ get length() {
 
 ## `terser/pure_getters/collapse_rhs_strict`
 
+- tags: `join vars`
 - size: oxc 266 vs reference 0 (+266 bytes)
 
 ```js
@@ -28054,6 +28645,7 @@ console.log(({ get length() {
 
 ## `terser/pure_getters/collapse_rhs_true`
 
+- tags: `join vars`, `pure getters`
 - size: oxc 266 vs reference 0 (+266 bytes)
 
 ```js
@@ -28083,6 +28675,7 @@ console.log(({ get length() {
 
 ## `terser/sequences/call`
 
+- tags: `sequences`
 - size: oxc 273 vs reference 0 (+273 bytes)
 
 ```js
@@ -28130,6 +28723,7 @@ new (a, function() {
 
 ## `terser/inline/inline_into_scope_conflict_enclosed_2`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 282 vs reference 0 (+282 bytes)
 
 ```js
@@ -28175,6 +28769,7 @@ $();
 
 ## `terser/issue_973/this_binding_sequences`
 
+- tags: `sequences`
 - size: oxc 288 vs reference 0 (+288 bytes)
 
 ```js
@@ -28307,6 +28902,7 @@ getExtFn()('name');
 
 ## `terser/collapse_vars/issue_2437_1`
 
+- tags: `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 337 vs reference 0 (+337 bytes)
 
 ```js
@@ -28352,6 +28948,7 @@ console.log(foo());
 
 ## `terser/issue_1261/pure_function_calls_toplevel`
 
+- tags: `join vars`, `remove unused`
 - size: oxc 374 vs reference 29 (+345 bytes)
 
 ```js
@@ -28413,6 +29010,7 @@ a.b(), c.d.e(), f.g();
 
 ## `terser/block_scope/issue_241`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 361 vs reference 0 (+361 bytes)
 
 ```js
@@ -28728,6 +29326,7 @@ var g = [].join('foo');
 
 ## `terser/collapse_vars/issue_2437_2`
 
+- tags: `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 451 vs reference 0 (+451 bytes)
 
 ```js

@@ -6,6 +6,7 @@ Fixtures: 28
 
 ## `terser/class_properties/mangle_class_properties`
 
+- tags: `mangle`, `keep function names`, `keep class names`, `mangle properties`
 
 ```js
 class Foo {
@@ -50,6 +51,7 @@ class Foo {
 
 ## `terser/class_properties/mangle_class_properties_keep_quoted`
 
+- tags: `mangle`, `keep function names`, `keep class names`, `mangle properties`
 
 ```js
 class Foo {
@@ -94,6 +96,7 @@ class Foo {
 
 ## `terser/drop_unused/issue_1715_4`
 
+- tags: `remove unused`
 
 ```js
 var a = 1;
@@ -234,6 +237,7 @@ console.log(a);
 
 ## `terser/issue_1321/issue_1321_debug`
 
+- tags: `mangle`, `keep function names`, `keep class names`, `mangle properties`
 
 ```js
 var x = {};
@@ -269,6 +273,7 @@ console.i(e.n, e.r);
 
 ## `terser/issue_1321/issue_1321_no_debug`
 
+- tags: `mangle`, `keep function names`, `keep class names`, `mangle properties`
 
 ```js
 var x = {};
@@ -304,6 +309,7 @@ console.i(e.n, e.r);
 
 ## `terser/issue_1321/issue_1321_with_quoted`
 
+- tags: `mangle`, `keep function names`, `keep class names`, `mangle properties`
 
 ```js
 var x = {};
@@ -339,6 +345,7 @@ console.a(e.r, e.i);
 
 ## `terser/issue_1770/mangle_props`
 
+- tags: `mangle`, `keep function names`, `keep class names`, `mangle properties`
 
 ```js
 var obj = {
@@ -386,6 +393,7 @@ console.r(e[void 0], e[void 0], e.s, e[NaN], e[NaN], e.NaN, e[1 / 0], e[Infinity
 
 ## `terser/issue_1770/numeric_literal`
 
+- tags: `mangle`, `keep function names`, `keep class names`, `mangle properties`
 
 ```js
 var obj = {
@@ -450,6 +458,7 @@ console.r(e[1e42], e.i, e['1e+42']);
 
 ## `terser/keep_quoted_strict/keep_quoted_strict`
 
+- tags: `mangle`, `keep function names`, `keep class names`, `mangle properties`
 
 ```js
 var a = {
@@ -560,6 +569,7 @@ console.s(n.a, n.propc);
 
 ## `terser/properties/dont_mangle_computed_property_1`
 
+- tags: `mangle`, `keep function names`, `keep class names`, `mangle properties`
 
 ```js
 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
@@ -647,6 +657,7 @@ console.o(t.u, t.l, t.Infinity, t.NaN);
 
 ## `terser/properties/dont_mangle_computed_property_2`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `mangle properties`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 const prop = Symbol('foo');
@@ -718,6 +729,7 @@ console.o(t[e], t.f, t.c, t[7], t[0], t[1], t[null], t[void 0], t[1 / 0], t[NaN]
 
 ## `terser/properties/issue_2256`
 
+- tags: `mangle`, `keep function names`, `keep class names`, `mangle properties`
 
 ```js
 var g = {};
@@ -746,6 +758,7 @@ e.n = e.r;
 
 ## `terser/properties/issue_869_1`
 
+- tags: `mangle`, `keep function names`, `keep class names`, `mangle properties`
 
 ```js
 var o = { p: 'FAIL' };
@@ -783,6 +796,7 @@ console.i(e.r);
 
 ## `terser/properties/issue_869_2`
 
+- tags: `mangle`, `keep function names`, `keep class names`, `mangle properties`
 
 ```js
 var o = { p: 'FAIL' };
@@ -820,6 +834,7 @@ console.i(e.r);
 
 ## `terser/properties/mangle_debug`
 
+- tags: `mangle`, `keep function names`, `keep class names`, `mangle properties`
 
 ```js
 var a = {};
@@ -851,6 +866,7 @@ x = { n: 'ban' };
 
 ## `terser/properties/mangle_debug_suffix`
 
+- tags: `mangle`, `keep function names`, `keep class names`, `mangle properties`
 
 ```js
 var a = {};
@@ -882,6 +898,7 @@ x = { n: 'ban' };
 
 ## `terser/properties/mangle_debug_suffix_keep_quoted`
 
+- tags: `mangle`, `keep function names`, `keep class names`, `mangle properties`
 
 ```js
 var a = {};
@@ -981,6 +998,7 @@ function f2() {
 
 ## `terser/properties/mangle_debug_true`
 
+- tags: `mangle`, `keep function names`, `keep class names`, `mangle properties`
 
 ```js
 var a = {};
@@ -1011,6 +1029,7 @@ x = { _$_$baz$_$_: 'ban' };
 
 ## `terser/properties/mangle_define_property_arg`
 
+- tags: `mangle`, `keep function names`, `keep class names`, `mangle properties`
 
 ```js
 var some_prop = 'propname';
@@ -1059,6 +1078,7 @@ Object.i(console, 'lag', { a: 3 });
 
 ## `terser/properties/mangle_properties`
 
+- tags: `mangle`, `keep function names`, `keep class names`, `mangle properties`
 
 ```js
 a['foo'] = 'bar';
@@ -1109,6 +1129,7 @@ a.o({
 
 ## `terser/properties/mangle_undeclared_properties`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `mangle properties`
 
 ```js
 var Foo = { foo: function() {
@@ -1139,6 +1160,7 @@ var e = { r: function() {
 
 ## `terser/properties/mangle_unquoted_properties`
 
+- tags: `mangle`, `keep function names`, `keep class names`, `mangle properties`
 
 ```js
 var a = {};
@@ -1238,6 +1260,7 @@ function f2() {
 
 ## `terser/properties/methods_keep_quoted_false`
 
+- tags: `mangle`, `keep function names`, `keep class names`, `mangle properties`
 
 ```js
 class C {
@@ -1295,6 +1318,7 @@ f3({ r: () => {} });
 
 ## `terser/properties/methods_keep_quoted_from_dead_code`
 
+- tags: `mangle`, `keep function names`, `keep class names`, `mangle properties`, `join vars`
 
 ```js
 class C {
@@ -1355,6 +1379,7 @@ f3({ r: () => {} });
 
 ## `terser/properties/methods_keep_quoted_true`
 
+- tags: `mangle`, `keep function names`, `keep class names`, `mangle properties`
 
 ```js
 class C {
@@ -1414,6 +1439,7 @@ f3({ r: () => {} });
 
 ## `terser/properties/skip_undeclared_properties_by_default`
 
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `mangle properties`
 
 ```js
 var Foo = { foo: function() {

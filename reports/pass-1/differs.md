@@ -6,6 +6,7 @@ Fixtures: 2
 
 ## `pass-1/4`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
 
 ```js
 export function Nj(a) {
@@ -49,6 +50,7 @@ export function Nj(a) {
 
 ## `pass-1/5`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
 
 ```js
 export function Nj(a) {

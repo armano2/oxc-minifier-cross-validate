@@ -6,6 +6,7 @@ Fixtures: 1
 
 ## `swc/issues/string-index-utf16`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - note: range end index 7 out of range for slice of length 3
 
 ```js

@@ -89,6 +89,7 @@ export default async function f({ c }, ...[ d ]) {};
 
 ## `uglify/exports/drop_unused`
 
+- tags: `remove unused`
 - note: Cannot use export statement outside a module
 
 ```js
@@ -105,6 +106,7 @@ function h() {}
 
 ## `uglify/exports/hoist_exports_2`
 
+- tags: `join vars`, `remove unused`
 - note: Cannot use export statement outside a module
 
 ```js
@@ -122,6 +124,7 @@ export default async function g(x, ...{ [ccc]: y }) {
 
 ## `uglify/exports/keep_return_values`
 
+- tags: `join vars`
 - note: Cannot use export statement outside a module
 
 ```js

@@ -6,6 +6,7 @@ Fixtures: 2
 
 ## `swc/issues/10448`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - note: Unexpected JSX expression
 
 ```js
@@ -27,6 +28,7 @@ console.log(x)
 
 ## `swc/issues/8953`
 
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
 - note: Async functions can only be declared at the top level or inside a block
 
 ```js

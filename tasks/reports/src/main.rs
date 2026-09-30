@@ -7,6 +7,7 @@ mod outcome;
 mod pipeline;
 mod report;
 mod runner;
+mod tags;
 
 use std::path::Path;
 

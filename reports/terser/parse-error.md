@@ -6,6 +6,7 @@ Fixtures: 8
 
 ## `terser/evaluate/unsafe_object_accessor`
 
+- tags: `join vars`
 - note: A 'set' accessor must have exactly one parameter.
 
 ```js
@@ -73,6 +74,7 @@ export { C };
 
 ## `terser/issue_12/keep_name_of_setter`
 
+- tags: `remove unused`
 - note: A 'set' accessor must have exactly one parameter.
 
 ```js
@@ -82,6 +84,7 @@ a = { set foo() {} };
 
 ## `terser/pure_getters/issue_2265_3`
 
+- tags: `join vars`, `remove unused`
 - note: A 'set' accessor must have exactly one parameter.
 
 ```js

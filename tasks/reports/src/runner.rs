@@ -14,6 +14,7 @@ use crate::{
     fixture::Fixture,
     outcome::{Kind, Outcome},
     pipeline::{compress, print_normalized, source_type_for},
+    tags,
 };
 
 /// Why a fixture was excluded from the results instead of producing an outcome.
@@ -82,11 +83,13 @@ pub(crate) fn run_fixture(root: &Path, fixture: &Fixture) -> Result<Outcome, Ski
     if config.is_ie8 {
         return Err(Skip::Ie8);
     }
+    let tags = tags::from_options(&config.options);
 
     let mut outcome = Outcome {
         relative: fixture.relative.clone(),
         family: fixture.family.clone(),
         kind: Kind::Pass,
+        tags,
         unsupported_keys: config.unsupported_keys,
         input: String::new(),
         expected: String::new(),
