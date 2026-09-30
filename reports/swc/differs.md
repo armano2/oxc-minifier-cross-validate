@@ -1,6 +1,6 @@
 # swc / differs — Output differs at equal length
 
-Fixtures: 32
+Fixtures: 33
 
 [← swc](README.md) · [← all families](../README.md)
 
@@ -453,6 +453,37 @@ console.log(x);
  }
 -console.log(someFunction), console.log(someFunction);
 +console.log(x), console.log(x);
+
+```
+
+## `swc/issues/7634/1`
+
+
+```js
+import Foo from './foo.js';
+export const Bar = Foo;
+function someRecursiveFunction(value) {
+	return value.map(someRecursiveFunction);
+}
+export default someRecursiveFunction;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,6 @@
+-import o from './foo.js';
+-export const Bar = o;
+-export default (function o(r) {
+-	return r.map(o);
+-});
++import e from './foo.js';
++export const Bar = e;
++function t(e) {
++	return e.map(t);
++}
++export default t;
 
 ```
 

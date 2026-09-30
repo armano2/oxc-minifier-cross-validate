@@ -1,6 +1,6 @@
 # swc / larger — Output longer than expected (possible missing optimization)
 
-Fixtures: 269
+Fixtures: 267
 
 [← swc](README.md) · [← all families](../README.md)
 
@@ -1243,37 +1243,6 @@ foo((a, b) => true);
  }
 -foo(() => !0);
 +foo((a, b) => !0);
-
-```
-
-## `swc/issues/9263`
-
-- size: oxc 112 vs reference 108 (+4 bytes)
-
-```js
-'use strict';
-const k = (function() {
-	var x = 42;
-	for (var x in [4242]) break;
-	return x;
-})();
-export { k };
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
- 'use strict';
--let k = function() {
-+const k = (function() {
- 	var x = 42;
- 	for (var x in [4242]) break;
- 	return x;
--}();
-+})();
- export { k };
 
 ```
 
@@ -6414,44 +6383,6 @@ export function source() {
 -	console.log(6, 1, 1);
 +	let c = 0, a = 1;
 +	c += a, a += 5, console.log(a, c, c);
- }
-
-```
-
-## `swc/issues/vercel/004`
-
-- size: oxc 607 vs reference 572 (+35 bytes)
-
-```js
-export function ItemsList() {
-	var _ref;
-	var _temp, _this, _ret;
-	_classCallCheck(this, ItemsList);
-	for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-		args[_key] = arguments[_key];
-	}
-	return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ItemsList.__proto__ || Object.getPrototypeOf(ItemsList)).call.apply(_ref, [this].concat(args))), _this), _this.storeHighlightedItemReference = function(highlightedItem) {
-		_this.props.onHighlightedItemChange(highlightedItem === null ? null : highlightedItem.item);
-	}, _temp), _possibleConstructorReturn(_this, _ret);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,8 @@
- export function ItemsList() {
-+	var _ref, _temp, _this, _ret;
- 	_classCallCheck(this, ItemsList);
--	for (var _ref, _temp, _this, _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) args[_key] = arguments[_key];
--	return _temp = _this = _possibleConstructorReturn(this, (_ref = ItemsList.__proto__ || Object.getPrototypeOf(ItemsList)).call.apply(_ref, [this].concat(args))), _this.storeHighlightedItemReference = function(highlightedItem) {
--		_this.props.onHighlightedItemChange(null === highlightedItem ? null : highlightedItem.item);
--	}, _possibleConstructorReturn(_this, _temp);
-+	for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) args[_key] = arguments[_key];
-+	return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ItemsList.__proto__ || Object.getPrototypeOf(ItemsList)).call.apply(_ref, [this].concat(args))), _this), _this.storeHighlightedItemReference = function(highlightedItem) {
-+		_this.props.onHighlightedItemChange(highlightedItem === null ? null : highlightedItem.item);
-+	}, _temp), _possibleConstructorReturn(_this, _ret);
  }
 
 ```

@@ -1,6 +1,6 @@
 # terser / larger — Output longer than expected (possible missing optimization)
 
-Fixtures: 859
+Fixtures: 858
 
 [← terser](README.md) · [← all families](../README.md)
 
@@ -2130,24 +2130,6 @@ test({});
  }
  let t, e, n;
  test({ a: {
-
-```
-
-## `terser/export/issue_2129`
-
-- size: oxc 35 vs reference 32 (+3 bytes)
-
-```js
-export const { keys } = Object;
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--export const { keys } = Object;
-+export const { keys: e } = Object;
 
 ```
 

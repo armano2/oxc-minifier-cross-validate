@@ -1,6 +1,6 @@
 # swc / smaller — Output shorter than expected (possible over-optimization / bug)
 
-Fixtures: 109
+Fixtures: 110
 
 [← swc](README.md) · [← all families](../README.md)
 
@@ -219,38 +219,6 @@ obj = unknown(), obj && obj.__esModule;
 -(obj = unknown()) && obj.__esModule;
 +var obj = unknown();
 +obj && obj.__esModule;
-
-```
-
-## `swc/issues/7634/1`
-
-- size: oxc 100 vs reference 102 (-2 bytes)
-
-```js
-import Foo from './foo.js';
-export const Bar = Foo;
-function someRecursiveFunction(value) {
-	return value.map(someRecursiveFunction);
-}
-export default someRecursiveFunction;
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,6 @@
--import o from './foo.js';
--export const Bar = o;
--export default (function o(r) {
--	return r.map(o);
--});
-+import e from './foo.js';
-+export const t = e;
-+function n(e) {
-+	return e.map(n);
-+}
-+export default n;
 
 ```
 
@@ -1377,6 +1345,37 @@ var d;
 -var c, d;
  export var a;
  export var b;
+
+```
+
+## `swc/issues/9263`
+
+- size: oxc 98 vs reference 108 (-10 bytes)
+
+```js
+'use strict';
+const k = (function() {
+	var x = 42;
+	for (var x in [4242]) break;
+	return x;
+})();
+export { k };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,6 @@
+-'use strict';
+-let k = function() {
++const k = (function() {
+ 	var x = 42;
+ 	for (var x in [4242]) break;
+ 	return x;
+-}();
++})();
+ export { k };
 
 ```
 
@@ -2822,29 +2821,21 @@ var application;
 
 ```
 
-## `swc/issues/react/hooks/4`
+## `swc/issues/vercel/004`
 
-- size: oxc 635 vs reference 687 (-52 bytes)
+- size: oxc 519 vs reference 572 (-53 bytes)
 
 ```js
-'use strict';
-var router = __webpack_require__(86677);
-var index_esm = __webpack_require__(45205);
-var use_team = __webpack_require__(502);
-var fetch_api = __webpack_require__(78869);
-var authenticate = __webpack_require__(16966);
-var api_endpoints = __webpack_require__(96236);
-var qs = __webpack_require__(70326);
-export function useProjectBranches(projectId, opts) {
-	var token = (0, authenticate.LP)();
-	var ref = (0, use_team.ZP)(), team = ref.team;
-	var teamId = team === null || team === void 0 ? void 0 : team.id;
-	return (0, index_esm.ZP)(projectId ? ''.concat(api_endpoints.Ms, '/git-branches').concat((0, qs.c)({
-		projectId,
-		teamId
-	})) : '', function(endpoint) {
-		return (0, fetch_api.Z)(endpoint, token, { throwOnHTTPError: true });
-	}, opts);
+export function ItemsList() {
+	var _ref;
+	var _temp, _this, _ret;
+	_classCallCheck(this, ItemsList);
+	for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+		args[_key] = arguments[_key];
+	}
+	return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ItemsList.__proto__ || Object.getPrototypeOf(ItemsList)).call.apply(_ref, [this].concat(args))), _this), _this.storeHighlightedItemReference = function(highlightedItem) {
+		_this.props.onHighlightedItemChange(highlightedItem === null ? null : highlightedItem.item);
+	}, _temp), _possibleConstructorReturn(_this, _ret);
 }
 
 ```
@@ -2852,20 +2843,18 @@ export function useProjectBranches(projectId, opts) {
 ```diff
 --- reference
 +++ oxc
-@@ -2,11 +2,11 @@
- __webpack_require__(86677);
- var index_esm = __webpack_require__(45205), use_team = __webpack_require__(502), fetch_api = __webpack_require__(78869), authenticate = __webpack_require__(16966), api_endpoints = __webpack_require__(96236), qs = __webpack_require__(70326);
- export function useProjectBranches(projectId, opts) {
--	var token = (0, authenticate.LP)(), team = (0, use_team.ZP)().team, teamId = null == team ? void 0 : team.id;
--	return (0, index_esm.ZP)(projectId ? ''.concat(api_endpoints.Ms, '/git-branches').concat((0, qs.c)({
-+	var token = (0, authenticate.LP)(), teamId = (0, use_team.ZP)().team?.id;
-+	return (0, index_esm.ZP)(projectId ? `${api_endpoints.Ms}/git-branches${(0, qs.c)({
- 		projectId,
- 		teamId
--	})) : '', function(endpoint) {
-+	})}` : '', function(endpoint) {
- 		return (0, fetch_api.Z)(endpoint, token, { throwOnHTTPError: !0 });
- 	}, opts);
+@@ -1,7 +1,8 @@
+ export function ItemsList() {
++	var _ref, _temp, _this, _ret;
+ 	_classCallCheck(this, ItemsList);
+-	for (var _ref, _temp, _this, _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) args[_key] = arguments[_key];
+-	return _temp = _this = _possibleConstructorReturn(this, (_ref = ItemsList.__proto__ || Object.getPrototypeOf(ItemsList)).call.apply(_ref, [this].concat(args))), _this.storeHighlightedItemReference = function(highlightedItem) {
+-		_this.props.onHighlightedItemChange(null === highlightedItem ? null : highlightedItem.item);
+-	}, _possibleConstructorReturn(_this, _temp);
++	var args = [...arguments];
++	return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ItemsList.__proto__ || Object.getPrototypeOf(ItemsList)).call.apply(_ref, [this].concat(args))), _this), _this.storeHighlightedItemReference = function(highlightedItem) {
++		_this.props.onHighlightedItemChange(highlightedItem === null ? null : highlightedItem.item);
++	}, _temp), _possibleConstructorReturn(_this, _ret);
  }
 
 ```
@@ -2893,6 +2882,55 @@ class A extends B {
 -	}
 -}
 +B;
+
+```
+
+## `swc/issues/react/hooks/4`
+
+- size: oxc 621 vs reference 687 (-66 bytes)
+
+```js
+'use strict';
+var router = __webpack_require__(86677);
+var index_esm = __webpack_require__(45205);
+var use_team = __webpack_require__(502);
+var fetch_api = __webpack_require__(78869);
+var authenticate = __webpack_require__(16966);
+var api_endpoints = __webpack_require__(96236);
+var qs = __webpack_require__(70326);
+export function useProjectBranches(projectId, opts) {
+	var token = (0, authenticate.LP)();
+	var ref = (0, use_team.ZP)(), team = ref.team;
+	var teamId = team === null || team === void 0 ? void 0 : team.id;
+	return (0, index_esm.ZP)(projectId ? ''.concat(api_endpoints.Ms, '/git-branches').concat((0, qs.c)({
+		projectId,
+		teamId
+	})) : '', function(endpoint) {
+		return (0, fetch_api.Z)(endpoint, token, { throwOnHTTPError: true });
+	}, opts);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,12 +1,11 @@
+-'use strict';
+ __webpack_require__(86677);
+ var index_esm = __webpack_require__(45205), use_team = __webpack_require__(502), fetch_api = __webpack_require__(78869), authenticate = __webpack_require__(16966), api_endpoints = __webpack_require__(96236), qs = __webpack_require__(70326);
+ export function useProjectBranches(projectId, opts) {
+-	var token = (0, authenticate.LP)(), team = (0, use_team.ZP)().team, teamId = null == team ? void 0 : team.id;
+-	return (0, index_esm.ZP)(projectId ? ''.concat(api_endpoints.Ms, '/git-branches').concat((0, qs.c)({
++	var token = (0, authenticate.LP)(), teamId = (0, use_team.ZP)().team?.id;
++	return (0, index_esm.ZP)(projectId ? `${api_endpoints.Ms}/git-branches${(0, qs.c)({
+ 		projectId,
+ 		teamId
+-	})) : '', function(endpoint) {
++	})}` : '', function(endpoint) {
+ 		return (0, fetch_api.Z)(endpoint, token, { throwOnHTTPError: !0 });
+ 	}, opts);
+ }
 
 ```
 
@@ -2946,62 +2984,6 @@ function foo() {
 -		return !!(obj || 0 === obj);
 -	};
 -}
-
-```
-
-## `swc/issues/3256/2`
-
-- size: oxc 423 vs reference 516 (-93 bytes)
-
-```js
-// real life example taken from https://github.com/nodeca/pako/blob/master/lib/zlib/adler32.js#L26
-const adler32 = (adler, buf, len, pos) => {
-	let s1 = adler & 65535 | 0, s2 = adler >>> 16 & 65535 | 0, n = 0;
-	while (len !== 0) {
-		// Set limit ~ twice less than 5552, to keep
-		// s2 in 31-bits, because we force signed ints.
-		// in other case %= will fail.
-		n = len > 2e3 ? 2e3 : len;
-		len -= n;
-		do {
-			s1 = s1 + buf[pos++] | 0;
-			s2 = s2 + s1 | 0;
-		} while (--n);
-		s1 %= 65521;
-		s2 %= 65521;
-	}
-	return s1 | s2 << 16 | 0;
-};
-export default adler32;
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,15 +1,13 @@
- // real life example taken from https://github.com/nodeca/pako/blob/master/lib/zlib/adler32.js#L26
--export default ((adler, buf, len, pos) => {
--	let s1 = 65535 & adler, s2 = adler >>> 16 & 65535, n = 0;
--	for (; 0 !== len;) {
--		// Set limit ~ twice less than 5552, to keep
--		// s2 in 31-bits, because we force signed ints.
--		// in other case %= will fail.
-+const adler32 = (adler, buf, len, pos) => {
-+	let s1 = adler & 65535 | 0, s2 = adler >>> 16 & 65535 | 0, n = 0;
-+	for (; len !== 0;) {
- 		n = len > 2e3 ? 2e3 : len, len -= n;
- 		do
--			s2 = s2 + (s1 = s1 + buf[pos++] | 0) | 0;
-+			s1 = s1 + buf[pos++] | 0, s2 = s2 + s1 | 0;
- 		while (--n);
- 		s1 %= 65521, s2 %= 65521;
- 	}
--	return s1 | s2 << 16;
--});
-+	return s1 | s2 << 16 | 0;
-+};
-+export default adler32;
 
 ```
 
@@ -3069,6 +3051,61 @@ const y = JSON.parse('{}');
 -var _JSON_parse = JSON.parse;
 -Object.assign({}, {}), _JSON_parse('{}'), _JSON_parse('{}');
 +Object.assign({}, {}), JSON.parse('{}'), JSON.parse('{}');
+
+```
+
+## `swc/issues/3256/2`
+
+- size: oxc 411 vs reference 516 (-105 bytes)
+
+```js
+// real life example taken from https://github.com/nodeca/pako/blob/master/lib/zlib/adler32.js#L26
+const adler32 = (adler, buf, len, pos) => {
+	let s1 = adler & 65535 | 0, s2 = adler >>> 16 & 65535 | 0, n = 0;
+	while (len !== 0) {
+		// Set limit ~ twice less than 5552, to keep
+		// s2 in 31-bits, because we force signed ints.
+		// in other case %= will fail.
+		n = len > 2e3 ? 2e3 : len;
+		len -= n;
+		do {
+			s1 = s1 + buf[pos++] | 0;
+			s2 = s2 + s1 | 0;
+		} while (--n);
+		s1 %= 65521;
+		s2 %= 65521;
+	}
+	return s1 | s2 << 16 | 0;
+};
+export default adler32;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,15 +1,13 @@
+ // real life example taken from https://github.com/nodeca/pako/blob/master/lib/zlib/adler32.js#L26
+-export default ((adler, buf, len, pos) => {
+-	let s1 = 65535 & adler, s2 = adler >>> 16 & 65535, n = 0;
+-	for (; 0 !== len;) {
+-		// Set limit ~ twice less than 5552, to keep
+-		// s2 in 31-bits, because we force signed ints.
+-		// in other case %= will fail.
++const adler32 = (adler, buf, len, pos) => {
++	let s1 = adler & 65535, s2 = adler >>> 16 & 65535, n = 0;
++	for (; len !== 0;) {
+ 		n = len > 2e3 ? 2e3 : len, len -= n;
+ 		do
+-			s2 = s2 + (s1 = s1 + buf[pos++] | 0) | 0;
++			s1 = s1 + buf[pos++] | 0, s2 = s2 + s1 | 0;
+ 		while (--n);
+ 		s1 %= 65521, s2 %= 65521;
+ 	}
+ 	return s1 | s2 << 16;
+-});
++};
++export default adler32;
 
 ```
 

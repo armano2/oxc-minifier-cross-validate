@@ -18,7 +18,7 @@ function f() {
 
 ## `terser/export/keyword_invalid_1`
 
-- note: A reserved word cannot be used as an exported binding without `from`
+- note: Cannot use export statement outside a module
 
 ```js
 export { default };
@@ -27,7 +27,7 @@ export { default };
 
 ## `terser/export/keyword_invalid_2`
 
-- note: A reserved word cannot be used as an exported binding without `from`
+- note: Cannot use export statement outside a module
 
 ```js
 export { default as Alias };
@@ -36,7 +36,7 @@ export { default as Alias };
 
 ## `terser/export/keyword_invalid_3`
 
-- note: A reserved word cannot be used as an exported binding without `from`
+- note: Cannot use export statement outside a module
 
 ```js
 export { default };
@@ -61,7 +61,7 @@ x = class {
 
 ## `terser/harmony/export_module_statement`
 
-- note: Duplicated export 'A'
+- note: Cannot use export statement outside a module
 
 ```js
 export * from "a.js";

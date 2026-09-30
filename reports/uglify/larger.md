@@ -19066,6 +19066,36 @@ console.log(a() === a ? 'PASS' : 'FAIL');
 
 ```
 
+## `uglify/functions/issue_5140`
+
+- size: oxc 73 vs reference 63 (+10 bytes)
+
+```js
+A = 42;
+function f(b) {
+	return b >> 0;
+}
+var a = f(42 in []);
+console.log(f(A));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,6 @@
++A = 42;
+ function f(b) {
+-	return b >> 0;
++	return b | 0;
+ }
+-A = 42;
+-console.log(A >> 0);
++f(42 in []);
++console.log(f(A));
+
+```
+
 ## `uglify/hoist_props/issue_3440`
 
 - size: oxc 96 vs reference 86 (+10 bytes)
@@ -20227,35 +20257,6 @@ try {
 +} catch {
  	console.log('PASS');
  }
-
-```
-
-## `uglify/functions/issue_5140`
-
-- size: oxc 74 vs reference 63 (+11 bytes)
-
-```js
-A = 42;
-function f(b) {
-	return b >> 0;
-}
-var a = f(42 in []);
-console.log(f(A));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,6 @@
-+A = 42;
- function f(b) {
- 	return b >> 0;
- }
--A = 42;
--console.log(A >> 0);
-+f(42 in []);
-+console.log(f(A));
 
 ```
 

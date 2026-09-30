@@ -1,6 +1,6 @@
 # terser / smaller — Output shorter than expected (possible over-optimization / bug)
 
-Fixtures: 593
+Fixtures: 592
 
 [← terser](README.md) · [← all families](../README.md)
 
@@ -3580,27 +3580,6 @@ L: do {
  	continue L;
 -} while (0);
 +while (0);
-
-```
-
-## `terser/issue_2001/export_mangle_6`
-
-- size: oxc 36 vs reference 40 (-4 bytes)
-
-```js
-var baz = 2;
-export let foo = 1, bar = baz;
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,2 @@
--var o = 2;
--export let foo = 1, bar = o;
-+var e = 2;
-+export let t = 1, n = e;
 
 ```
 
@@ -10134,6 +10113,66 @@ console.log({
 
 ```
 
+## `terser/export/name_cache_do_not_mangle_export_destructuring_name`
+
+- size: oxc 103 vs reference 121 (-18 bytes)
+
+```js
+export const [add] = [
+	1,
+	2,
+	3
+];
+const [mul, sub] = [
+	1,
+	2,
+	3
+];
+console.log(add, add, sub, sub, mul, mul);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -3,9 +3,9 @@
+ 	2,
+ 	3
+ ];
+-const [d, _$SUB$_] = [
++const [e, t] = [
+ 	1,
+ 	2,
+ 	3
+ ];
+-console.log(add, add, _$SUB$_, _$SUB$_, d, d);
++console.log(add, add, t, t, e, e);
+
+```
+
+## `terser/export/name_cache_do_not_mangle_export_var_name`
+
+- size: oxc 73 vs reference 91 (-18 bytes)
+
+```js
+export var add = 1;
+var sub = 2, mul = 3;
+console.log(add, add, sub, sub, mul, mul);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ export var add = 1;
+-var _$SUB$_ = 2, d = 3;
+-console.log(add, add, _$SUB$_, _$SUB$_, d, d);
++var e = 2, t = 3;
++console.log(add, add, e, e, t, t);
+
+```
+
 ## `terser/issue_229/template_strings`
 
 - size: oxc 31 vs reference 49 (-18 bytes)
@@ -11438,70 +11477,6 @@ test({});
  }
  test({ a: {
  	t: 1,
-
-```
-
-## `terser/export/name_cache_do_not_mangle_export_destructuring_name`
-
-- size: oxc 97 vs reference 121 (-24 bytes)
-
-```js
-export const [add] = [
-	1,
-	2,
-	3
-];
-const [mul, sub] = [
-	1,
-	2,
-	3
-];
-console.log(add, add, sub, sub, mul, mul);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,11 +1,11 @@
--export const [add] = [
-+export const [e] = [
- 	1,
- 	2,
- 	3
- ];
--const [d, _$SUB$_] = [
-+const [t, n] = [
- 	1,
- 	2,
- 	3
- ];
--console.log(add, add, _$SUB$_, _$SUB$_, d, d);
-+console.log(e, e, n, n, t, t);
-
-```
-
-## `terser/export/name_cache_do_not_mangle_export_var_name`
-
-- size: oxc 67 vs reference 91 (-24 bytes)
-
-```js
-export var add = 1;
-var sub = 2, mul = 3;
-console.log(add, add, sub, sub, mul, mul);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,3 @@
--export var add = 1;
--var _$SUB$_ = 2, d = 3;
--console.log(add, add, _$SUB$_, _$SUB$_, d, d);
-+export var e = 1;
-+var t = 2, n = 3;
-+console.log(e, e, t, t, n, n);
 
 ```
 
@@ -13417,6 +13392,28 @@ function foo() {
 
 ```
 
+## `terser/export/name_cache_do_not_mangle_export_let_name`
+
+- size: oxc 51 vs reference 91 (-40 bytes)
+
+```js
+export let add = 1;
+let sub = 2, mul = 3;
+console.log(add, add, sub, sub, mul, mul);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,2 @@
+ export let add = 1;
+-let _$SUB$_ = 2, d = 3;
+-console.log(add, add, _$SUB$_, _$SUB$_, d, d);
++console.log(1, 1, 2, 2, 3, 3);
+
+```
+
 ## `terser/loops/in_parenthesis_2`
 
 - size: oxc 0 vs reference 40 (-40 bytes)
@@ -13501,13 +13498,13 @@ function foo() {
 
 ```
 
-## `terser/export/name_cache_do_not_mangle_export_let_name`
+## `terser/export/name_cache_do_not_mangle_export_const_name`
 
-- size: oxc 49 vs reference 91 (-42 bytes)
+- size: oxc 53 vs reference 95 (-42 bytes)
 
 ```js
-export let add = 1;
-let sub = 2, mul = 3;
+export const add = 1;
+const sub = 2, mul = 3;
 console.log(add, add, sub, sub, mul, mul);
 
 ```
@@ -13516,10 +13513,9 @@ console.log(add, add, sub, sub, mul, mul);
 --- reference
 +++ oxc
 @@ -1,3 +1,2 @@
--export let add = 1;
--let _$SUB$_ = 2, d = 3;
+ export const add = 1;
+-const _$SUB$_ = 2, d = 3;
 -console.log(add, add, _$SUB$_, _$SUB$_, d, d);
-+export let e = 1;
 +console.log(1, 1, 2, 2, 3, 3);
 
 ```
@@ -13667,29 +13663,6 @@ function f(x, y) {
 -	moo();
 -	return x + y;
 -}
-
-```
-
-## `terser/export/name_cache_do_not_mangle_export_const_name`
-
-- size: oxc 51 vs reference 95 (-44 bytes)
-
-```js
-export const add = 1;
-const sub = 2, mul = 3;
-console.log(add, add, sub, sub, mul, mul);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,2 @@
--export const add = 1;
--const _$SUB$_ = 2, d = 3;
--console.log(add, add, _$SUB$_, _$SUB$_, d, d);
-+export const e = 1;
-+console.log(1, 1, 2, 2, 3, 3);
 
 ```
 

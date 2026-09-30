@@ -383,29 +383,6 @@ console.log(2 == Object(1) || 0 || void 0 || 'ok' || null || Object(2));
 
 ```
 
-## `terser/export/issue_2038_1`
-
-
-```js
-export var V = 1;
-export let L = 2;
-export const C = 3;
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,3 @@
--export var V = 1;
--export let L = 2;
--export const C = 3;
-+export var e = 1;
-+export let t = 2;
-+export const n = 3;
-
-```
-
 ## `terser/export/issue_2038_2`
 
 
@@ -1368,6 +1345,26 @@ export default { prop: function(one, two) {
 +export default { prop: function(e, t) {
 +	return e - t;
  } };
+
+```
+
+## `terser/issue_2001/export_mangle_6`
+
+
+```js
+var baz = 2;
+export let foo = 1, bar = baz;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+-var o = 2;
+-export let foo = 1, bar = o;
++var e = 2;
++export let foo = 1, bar = e;
 
 ```
 

@@ -75,7 +75,7 @@ console.log((-4 ** 3) ** 2);
 
 ## `uglify/exports/defaults`
 
-- note: A module cannot have multiple default exports.
+- note: Cannot use export statement outside a module
 
 ```js
 export default 42;
@@ -89,7 +89,7 @@ export default async function f({ c }, ...[ d ]) {};
 
 ## `uglify/exports/drop_unused`
 
-- note: A module cannot have multiple default exports.
+- note: Cannot use export statement outside a module
 
 ```js
 export default 42;
@@ -105,7 +105,7 @@ function h() {}
 
 ## `uglify/exports/hoist_exports_2`
 
-- note: A module cannot have multiple default exports.
+- note: Cannot use export statement outside a module
 
 ```js
 const a = 42;
@@ -122,7 +122,7 @@ export default async function g(x, ...{ [ccc]: y }) {
 
 ## `uglify/exports/keep_return_values`
 
-- note: A module cannot have multiple default exports.
+- note: Cannot use export statement outside a module
 
 ```js
 export default function() {
@@ -136,7 +136,7 @@ export default function f() {
 
 ## `uglify/exports/mangle`
 
-- note: A module cannot have multiple default exports.
+- note: Cannot use export statement outside a module
 
 ```js
 const a = 42;
@@ -153,7 +153,7 @@ export default async function g(x, ...{ [c]: y }) {
 
 ## `uglify/exports/mangle_rename`
 
-- note: A module cannot have multiple default exports.
+- note: Cannot use export statement outside a module
 
 ```js
 const a = 42;
@@ -170,7 +170,7 @@ export default async function g(x, ...{ [c]: y }) {
 
 ## `uglify/exports/non_identifiers`
 
-- note: Duplicated export '42'
+- note: Cannot use export statement outside a module
 
 ```js
 export * as "42" from 'foo';
