@@ -6,9 +6,9 @@ Fixtures run: 4109
 
 ## Summary
 
-| smaller | not-idempotent | panic | larger | differs | parse-error | config-error | no-expected | pass | total |
-|---|---|---|---|---|---|---|---|---|---|
-| 1291 | 6 | 0 | 1611 | 211 | 23 | 0 | 0 | 967 | 4109 |
+| smaller | not-idempotent | panic | larger | differs | parse-error | config-error | pass | total |
+|---|---|---|---|---|---|---|---|---|
+| 1291 | 6 | 0 | 1611 | 211 | 23 | 0 | 967 | 4109 |
 
 ## Reports
 

@@ -9,7 +9,6 @@ pub enum Kind {
     Differs,
     ParseError,
     ConfigError,
-    NoExpected,
     Pass,
 }
 
@@ -23,7 +22,6 @@ impl Kind {
             Self::Differs => "differs",
             Self::ParseError => "parse-error",
             Self::ConfigError => "config-error",
-            Self::NoExpected => "no-expected",
             Self::Pass => "pass",
         }
     }
@@ -37,12 +35,11 @@ impl Kind {
             Self::Differs => "Output differs at equal length",
             Self::ParseError => "failed to parse",
             Self::ConfigError => "`config.json` failed to parse",
-            Self::NoExpected => "No `output.js` to compare against",
             Self::Pass => "Matches the reference output",
         }
     }
 
-    pub const fn all() -> [Self; 9] {
+    pub const fn all() -> [Self; 8] {
         [
             Self::Smaller,
             Self::NotIdempotent,
@@ -51,7 +48,6 @@ impl Kind {
             Self::Differs,
             Self::ParseError,
             Self::ConfigError,
-            Self::NoExpected,
             Self::Pass,
         ]
     }

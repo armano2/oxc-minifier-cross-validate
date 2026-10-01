@@ -112,11 +112,7 @@ pub fn run_fixture(root: &Path, fixture: &Fixture) -> Result<Outcome, Skip> {
         return Ok(outcome);
     };
 
-    let Ok(expected_source) = fs::read_to_string(fixture.dir.join("output.js")) else {
-        outcome.input = input;
-        outcome.kind = Kind::NoExpected;
-        return Ok(outcome);
-    };
+    let expected_source = fs::read_to_string(fixture.dir.join("output.js")).unwrap_or_default();
 
     let run_compress = |source: &str, source_type: SourceType| {
         panic::catch_unwind(AssertUnwindSafe(|| {

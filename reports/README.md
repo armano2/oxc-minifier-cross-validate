@@ -4,13 +4,13 @@ Fixtures run: 6786
 
 ## Summary
 
-| family | smaller | not-idempotent | panic | larger | differs | parse-error | config-error | no-expected | pass | total |
-|---|---|---|---|---|---|---|---|---|---|---|
-| pass-1 | 2 | 0 | 0 | 9 | 2 | 0 | 0 | 0 | 5 | 18 |
-| swc | 109 | 2 | 1 | 267 | 33 | 2 | 0 | 0 | 112 | 526 |
-| terser | 593 | 28 | 1 | 852 | 78 | 8 | 0 | 0 | 573 | 2133 |
-| uglify | 1291 | 6 | 0 | 1611 | 211 | 23 | 0 | 0 | 967 | 4109 |
-| **all** | 1995 | 36 | 2 | 2739 | 324 | 33 | 0 | 0 | 1657 | 6786 |
+| family | smaller | not-idempotent | panic | larger | differs | parse-error | config-error | pass | total |
+|---|---|---|---|---|---|---|---|---|---|
+| pass-1 | 2 | 0 | 0 | 9 | 2 | 0 | 0 | 5 | 18 |
+| swc | 109 | 2 | 1 | 267 | 33 | 2 | 0 | 112 | 526 |
+| terser | 593 | 28 | 1 | 852 | 78 | 8 | 0 | 573 | 2133 |
+| uglify | 1291 | 6 | 0 | 1611 | 211 | 23 | 0 | 967 | 4109 |
+| **all** | 1995 | 36 | 2 | 2739 | 324 | 33 | 0 | 1657 | 6786 |
 
 ## Families
 
