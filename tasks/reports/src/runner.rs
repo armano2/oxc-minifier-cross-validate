@@ -207,6 +207,6 @@ fn panic_message(payload: &Box<dyn Any + Send>) -> String {
                 .downcast_ref::<String>()
                 .map_or_else(|| "unknown panic".to_string(), std::clone::Clone::clone)
         },
-        |message| (*message).to_string(),
+        ToString::to_string,
     )
 }
