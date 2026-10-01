@@ -7,17 +7,17 @@ Fixtures run: 6786
 | family | smaller | not-idempotent | panic | larger | differs | parse-error | config-error | no-expected | pass | total |
 |---|---|---|---|---|---|---|---|---|---|---|
 | pass-1 | 2 | 0 | 0 | 9 | 2 | 0 | 0 | 0 | 5 | 18 |
-| swc | 109 | 2 | 1 | 267 | 33 | 2 | 0 | 1 | 111 | 526 |
+| swc | 109 | 2 | 1 | 267 | 33 | 2 | 0 | 0 | 112 | 526 |
 | terser | 593 | 28 | 1 | 852 | 78 | 8 | 0 | 0 | 573 | 2133 |
 | uglify | 1291 | 6 | 0 | 1611 | 211 | 23 | 0 | 0 | 967 | 4109 |
-| **all** | 1995 | 36 | 2 | 2739 | 324 | 33 | 0 | 1 | 1656 | 6786 |
+| **all** | 1995 | 36 | 2 | 2739 | 324 | 33 | 0 | 0 | 1657 | 6786 |
 
 ## Families
 
 | family | fixtures | reports | details |
 |---|---:|---:|---|
 | pass-1 | 18 | 3 | [pass-1/](pass-1/README.md) |
-| swc | 526 | 7 | [swc/](swc/README.md) |
+| swc | 526 | 6 | [swc/](swc/README.md) |
 | terser | 2133 | 6 | [terser/](terser/README.md) |
 | uglify | 4109 | 5 | [uglify/](uglify/README.md) |
 
@@ -34,7 +34,6 @@ Fixtures run: 6786
 | swc | larger | 267 | [swc/larger.md](swc/larger.md) |
 | swc | differs | 33 | [swc/differs.md](swc/differs.md) |
 | swc | parse-error | 2 | [swc/parse-error.md](swc/parse-error.md) |
-| swc | no-expected | 1 | [swc/no-expected.md](swc/no-expected.md) |
 | terser | smaller | 593 | [terser/smaller.md](terser/smaller.md) |
 | terser | not-idempotent | 28 | [terser/not-idempotent.md](terser/not-idempotent.md) |
 | terser | panic | 1 | [terser/panic.md](terser/panic.md) |
