@@ -5,21 +5,21 @@ use std::{
 
 use crate::report::MAX_SNIPPET_BYTES;
 
-pub(crate) struct Fixture {
-    pub(crate) dir: PathBuf,
+pub struct Fixture {
+    pub dir: PathBuf,
     /// Path relative to the fixture root, always `/`-separated.
-    pub(crate) relative: String,
+    pub relative: String,
     /// First component of [`Fixture::relative`], e.g. `terser` or `swc`.
-    pub(crate) family: String,
+    pub family: String,
 }
 
-pub(crate) struct Discovery {
-    pub(crate) fixtures: Vec<Fixture>,
-    pub(crate) skipped_oversized: usize,
+pub struct Discovery {
+    pub fixtures: Vec<Fixture>,
+    pub skipped_oversized: usize,
 }
 
 /// Recursively collect every directory under `root` that contains `input.js`.
-pub(crate) fn discover(root: &Path) -> Discovery {
+pub fn discover(root: &Path) -> Discovery {
     let mut discovery = Discovery { fixtures: Vec::new(), skipped_oversized: 0 };
     walk(root, root, &mut discovery);
     discovery

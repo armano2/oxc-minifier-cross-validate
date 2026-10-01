@@ -9,12 +9,12 @@ use oxc::{
     },
 };
 
-pub(crate) struct MappedOptions {
-    pub(crate) options: MinifierOptions,
-    pub(crate) is_module: bool,
-    pub(crate) is_ie8: bool,
-    pub(crate) unsupported_keys: Vec<String>,
-    pub(crate) errors: Vec<String>,
+pub struct MappedOptions {
+    pub options: MinifierOptions,
+    pub is_module: bool,
+    pub is_ie8: bool,
+    pub unsupported_keys: Vec<String>,
+    pub errors: Vec<String>,
 }
 
 fn json_truthy(value: &Json) -> Option<bool> {
@@ -64,7 +64,7 @@ fn resolve(
 }
 
 /// Read, merge, and map the configuration for a fixture.
-pub(crate) fn load(root: &Path, dir: &Path) -> MappedOptions {
+pub fn load(root: &Path, dir: &Path) -> MappedOptions {
     let mut unsupported_keys = Vec::new();
     let mut errors = Vec::new();
 
@@ -72,7 +72,7 @@ pub(crate) fn load(root: &Path, dir: &Path) -> MappedOptions {
 
     let mangle_config = resolve(root, dir, "mangle.json", &mut errors);
 
-    let is_module = config.get("is_module").and_then(Value::as_bool).is_some_and(|e| e == true);
+    let is_module = config.get("is_module").and_then(Value::as_bool).is_some_and(|e| e);
     let is_ie8 =
         config.contains_key("ie8") | config.contains_key("ie") | config.contains_key("webkit");
 
@@ -82,7 +82,7 @@ pub(crate) fn load(root: &Path, dir: &Path) -> MappedOptions {
         compress: Some(map_compress(&config, &mut unsupported_keys)),
     };
 
-    MappedOptions { options, unsupported_keys, errors, is_module, is_ie8 }
+    MappedOptions { options, is_module, is_ie8, unsupported_keys, errors }
 }
 
 fn map_mangle(
@@ -102,8 +102,7 @@ fn map_mangle(
         match key.as_str() {
             "keep_classnames" => options.keep_names.class = json_truthy(value).unwrap_or(true),
             "keep_fnames" => options.keep_names.function = json_truthy(value).unwrap_or(true),
-            "toplevel" => options.top_level = json_truthy(value),
-            "module" => options.top_level = json_truthy(value),
+            "toplevel" | "module" => options.top_level = json_truthy(value),
             "reserved" => match json_string_array(value) {
                 Some(reserved) => options.reserved.extend(reserved.into_iter().map(Into::into)),
                 None => unsupported_keys.push(key.clone()),
@@ -142,12 +141,9 @@ fn map_mangle_properties(
         }
         None => ".*",
     };
-    let mut options = match ManglePropertiesOptions::from_pattern(regex) {
-        Ok(options) => options,
-        Err(_) => {
-            unsupported_keys.push("regex".to_string());
-            return None;
-        }
+    let Ok(mut options) = ManglePropertiesOptions::from_pattern(regex) else {
+        unsupported_keys.push("regex".to_string());
+        return None;
     };
     if let Some(properties) = properties {
         for (key, value) in properties {
@@ -159,7 +155,6 @@ fn map_mangle_properties(
                 },
                 "debug" => match value {
                     Json::Bool(debug) => options.debug = *debug,
-                    Json::String(_) => unsupported_keys.push(key.clone()),
                     _ => unsupported_keys.push(key.clone()),
                 },
                 "reserved" => match json_string_array(value) {
@@ -209,17 +204,14 @@ fn map_compress(
         // enable the pass, e.g. `"sequences": 100`.
         let enabled = json_truthy(value).unwrap_or(true);
         match key.as_str() {
-            "defaults" => {}
             "drop_console" => options.drop_console = enabled,
             "drop_debugger" => options.drop_debugger = enabled,
             "join_vars" | "merge_vars" | "reduce_vars" | "collapse_vars" => {
-                options.join_vars = options.join_vars || enabled
+                options.join_vars = options.join_vars || enabled;
             }
             "sequences" => options.sequences = enabled,
             "keep_fnames" => options.keep_names.function = enabled,
             "keep_classnames" => options.keep_names.class = enabled,
-            "module" => {}   // handled in different place
-            "toplevel" => {} // unsupported
             "unused" => {
                 options.unused = if enabled {
                     CompressOptionsUnused::Remove
@@ -228,17 +220,16 @@ fn map_compress(
                 };
             }
             "passes" => {
-                #[expect(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
-                let passes = value.as_f64().map(|passes| passes.trunc().clamp(0.0, 255.0) as u8);
+                let passes = value.as_u64().map(|passes| passes.clamp(0, 255));
                 if let Some(passes) = passes
                     && passes >= 1
                 {
-                    options.max_iterations = Some(passes);
+                    options.max_iterations = u8::try_from(passes).ok();
                 }
             }
             "pure_funcs" => {
-                if let Some(funcs) = json_string_array(value) {
-                    options.treeshake.manual_pure_functions = funcs;
+                if let Some(pure_func) = json_string_array(value) {
+                    options.treeshake.manual_pure_functions = pure_func;
                 } else {
                     unsupported_keys.push(key.clone());
                 }
@@ -250,18 +241,10 @@ fn map_compress(
                     unsupported_keys.push(key.clone());
                 }
             }
-            "global_defs" => {
-                // TODO:
-            }
-            "evaluate" => {
-                // TODO:
-            }
             "dead_code" | "switches" | "typeofs" | "if_return" | "booleans" | "side_effects"
             | "comparisons" | "loops" | "templates" | "arrows" | "varify" | "yields"
-            | "conditionals" | "spreads" | "objects" => {
-                // enabled by default
-            }
-            "webkit" | "ie" | "ie8" => {}
+            | "conditionals" | "spreads" | "objects" | "defaults" | "module" | "toplevel"
+            | "global_defs" | "webkit" | "ie" | "ie8" => {}
             _ => unsupported_keys.push(key.clone()),
         }
     }

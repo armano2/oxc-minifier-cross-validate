@@ -7,16 +7,13 @@ use oxc::{
     span::SourceType,
 };
 
-pub(crate) fn source_type_for(is_module: bool) -> SourceType {
+pub const fn source_type_for(is_module: bool) -> SourceType {
     if is_module { SourceType::mjs() } else { SourceType::cjs() }
 }
 
 /// Parse + codegen without compression, so both sides are compared in the same
 /// normalized form.
-pub(crate) fn print_normalized(
-    source_text: &str,
-    source_type: SourceType,
-) -> Result<String, String> {
+pub fn print_normalized(source_text: &str, source_type: SourceType) -> Result<String, String> {
     let allocator = Allocator::default();
     let ret = parse(&allocator, source_text, source_type)?;
     Ok(codegen(&ret.program, None, false))
@@ -28,7 +25,7 @@ pub(crate) fn print_normalized(
 /// `for (; b++;);` are equivalent, but formatting alone makes the first look
 /// shorter. Whitespace is stripped for measurement only, so reports can keep
 /// the readable text for diffs.
-pub(crate) fn print_minified(source_text: &str, source_type: SourceType) -> Result<String, String> {
+pub fn print_minified(source_text: &str, source_type: SourceType) -> Result<String, String> {
     let allocator = Allocator::default();
     let ret = parse(&allocator, source_text, source_type)?;
     Ok(codegen(&ret.program, None, true))
@@ -36,7 +33,7 @@ pub(crate) fn print_minified(source_text: &str, source_type: SourceType) -> Resu
 
 /// Run the full public `Minifier` pipeline, not just `Compressor`, so the
 /// results reflect what consumers actually get.
-pub(crate) fn compress(
+pub fn compress(
     source_text: &str,
     source_type: SourceType,
     options: MinifierOptions,

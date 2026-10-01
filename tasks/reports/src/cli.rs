@@ -2,18 +2,18 @@ use std::path::PathBuf;
 
 use pico_args::Arguments;
 
-pub(crate) struct Options {
-    pub(crate) fixtures: PathBuf,
-    pub(crate) family: Option<String>,
-    pub(crate) only: Option<String>,
-    pub(crate) limit: Option<usize>,
-    pub(crate) clean_only: bool,
-    pub(crate) verbose: bool,
-    pub(crate) filter: Option<String>,
+pub struct Options {
+    pub fixtures: PathBuf,
+    pub family: Option<String>,
+    pub only: Option<String>,
+    pub limit: Option<usize>,
+    pub clean_only: bool,
+    pub verbose: bool,
+    pub filter: Option<String>,
 }
 
 impl Options {
-    pub(crate) fn from_env() -> Self {
+    pub fn from_env() -> Self {
         let mut args = Arguments::from_env();
         let fixtures: Option<String> = args.opt_value_from_str("--fixtures").unwrap_or(None);
         let family = args.opt_value_from_str("--family").unwrap_or(None);

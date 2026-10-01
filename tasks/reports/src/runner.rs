@@ -18,19 +18,19 @@ use crate::{
 };
 
 /// Why a fixture was excluded from the results instead of producing an outcome.
-pub(crate) enum Skip {
+pub enum Skip {
     /// `ie8` changes semantics globally (named function expressions, `catch`
     /// scoping, `undefined` handling) and oxc has no equivalent.
     Ie8,
 }
 
-pub(crate) struct Run {
-    pub(crate) outcomes: Vec<Outcome>,
-    pub(crate) skipped_ie8: usize,
+pub struct Run {
+    pub outcomes: Vec<Outcome>,
+    pub skipped_ie8: usize,
 }
 
 /// Run every fixture that passes the CLI filters, stopping at `--limit`.
-pub(crate) fn run_all(root: &Path, fixtures: &[Fixture], options: &Options) -> Run {
+pub fn run_all(root: &Path, fixtures: &[Fixture], options: &Options) -> Run {
     // Panics are expected; keep the console readable unless asked otherwise.
     let hook = panic::take_hook();
     if !options.verbose {
@@ -78,7 +78,7 @@ pub(crate) fn run_all(root: &Path, fixtures: &[Fixture], options: &Options) -> R
     run
 }
 
-pub(crate) fn run_fixture(root: &Path, fixture: &Fixture) -> Result<Outcome, Skip> {
+pub fn run_fixture(root: &Path, fixture: &Fixture) -> Result<Outcome, Skip> {
     let config = config::load(root, &fixture.dir);
     if config.is_ie8 {
         return Err(Skip::Ie8);
@@ -140,7 +140,7 @@ pub(crate) fn run_fixture(root: &Path, fixture: &Fixture) -> Result<Outcome, Ski
     // Print the input through the same parse + codegen pipeline so that input,
     // expected and actual differ only in content, never in formatting.
     outcome.input = panic::catch_unwind(AssertUnwindSafe(|| print_normalized(&input, source_type)))
-        .unwrap_or(Ok(input.clone()))
+        .unwrap_or_else(|_| Ok(input.clone()))
         .unwrap_or(input);
 
     outcome.actual = match compressed {
@@ -205,11 +205,12 @@ fn minified_size(source: &str, source_type: SourceType) -> usize {
 }
 
 fn panic_message(payload: &Box<dyn Any + Send>) -> String {
-    if let Some(message) = payload.downcast_ref::<&str>() {
-        (*message).to_string()
-    } else if let Some(message) = payload.downcast_ref::<String>() {
-        message.clone()
-    } else {
-        "unknown panic".to_string()
-    }
+    payload.downcast_ref::<&str>().map_or_else(
+        || {
+            payload
+                .downcast_ref::<String>()
+                .map_or_else(|| "unknown panic".to_string(), std::clone::Clone::clone)
+        },
+        |message| (*message).to_string(),
+    )
 }

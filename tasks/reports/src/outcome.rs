@@ -1,7 +1,7 @@
 use std::cmp::Ordering;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
-pub(crate) enum Kind {
+pub enum Kind {
     Smaller,
     NotIdempotent,
     Panic,
@@ -14,7 +14,7 @@ pub(crate) enum Kind {
 }
 
 impl Kind {
-    pub(crate) fn id(self) -> &'static str {
+    pub const fn id(self) -> &'static str {
         match self {
             Self::Smaller => "smaller",
             Self::NotIdempotent => "not-idempotent",
@@ -28,7 +28,7 @@ impl Kind {
         }
     }
 
-    pub(crate) fn headline(self) -> &'static str {
+    pub const fn headline(self) -> &'static str {
         match self {
             Self::Smaller => "Output shorter than expected (possible over-optimization / bug)",
             Self::NotIdempotent => "Not idempotent (re-compressing changes the output)",
@@ -42,7 +42,7 @@ impl Kind {
         }
     }
 
-    pub(crate) fn all() -> [Self; 9] {
+    pub const fn all() -> [Self; 9] {
         [
             Self::Smaller,
             Self::NotIdempotent,
@@ -61,7 +61,7 @@ impl Kind {
     ///
     /// Sizes are measured on whitespace-free output so formatting differences
     /// alone never decide between [`Self::Smaller`] and [`Self::Larger`].
-    pub(crate) fn classify(
+    pub fn classify(
         actual: &str,
         expected: &str,
         actual_size: usize,
@@ -82,20 +82,20 @@ impl Kind {
     }
 }
 
-pub(crate) struct Outcome {
-    pub(crate) relative: String,
-    pub(crate) family: String,
-    pub(crate) kind: Kind,
-    pub(crate) tags: Vec<String>,
-    pub(crate) unsupported_keys: Vec<String>,
-    pub(crate) input: String,
-    pub(crate) expected: String,
-    pub(crate) actual: String,
+pub struct Outcome {
+    pub relative: String,
+    pub family: String,
+    pub kind: Kind,
+    pub tags: Vec<String>,
+    pub unsupported_keys: Vec<String>,
+    pub input: String,
+    pub expected: String,
+    pub actual: String,
     /// Byte length of [`Outcome::expected`] without whitespace.
-    pub(crate) expected_size: usize,
+    pub expected_size: usize,
     /// Byte length of [`Outcome::actual`] without whitespace.
-    pub(crate) actual_size: usize,
+    pub actual_size: usize,
     /// Output of a second compression pass, set only when it differs from `actual`.
-    pub(crate) idempotency: Option<String>,
-    pub(crate) note: String,
+    pub idempotency: Option<String>,
+    pub note: String,
 }

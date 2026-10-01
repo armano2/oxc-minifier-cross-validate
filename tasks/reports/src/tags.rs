@@ -1,6 +1,6 @@
 use oxc::minifier::{CompressOptionsUnused, MinifierOptions, PropertyReadSideEffects};
 
-pub(crate) fn from_options(options: &MinifierOptions) -> Vec<String> {
+pub fn from_options(options: &MinifierOptions) -> Vec<String> {
     let mut tags = Vec::new();
     if let Some(mangle) = &options.mangle {
         tags.push("mangle".to_string());

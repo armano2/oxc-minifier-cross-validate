@@ -4,7 +4,7 @@ use similar::TextDiff;
 
 use crate::{Kind, Outcome};
 
-pub(crate) const MAX_SNIPPET_BYTES: usize = 1600;
+pub const MAX_SNIPPET_BYTES: usize = 1600;
 
 fn snippet(text: &str) -> String {
     if text.len() <= MAX_SNIPPET_BYTES {
@@ -30,10 +30,10 @@ struct KindReport {
 }
 
 #[derive(Debug)]
-pub(crate) struct FamilyReport {
-    pub(crate) family: String,
-    pub(crate) dir_name: String,
-    pub(crate) total: usize,
+pub struct FamilyReport {
+    pub family: String,
+    pub dir_name: String,
+    pub total: usize,
     kind_reports: Vec<KindReport>,
 }
 
@@ -41,7 +41,7 @@ fn should_write_kind(kind: Kind, only: Option<&str>) -> bool {
     if kind == Kind::Pass {
         return false;
     }
-    !only.is_some_and(|only| only != kind.id())
+    only.is_none_or(|only| only == kind.id())
 }
 
 fn rows_for_kind<'a>(outcomes: &[&'a Outcome], kind: Kind) -> Vec<&'a Outcome> {
@@ -101,14 +101,11 @@ fn write_kind_table_row(out: &mut String, leading: &[&str], rows: &[&Outcome]) {
 }
 
 fn write_config_breakdown_rows(out: &mut String, rows: &[&Outcome], prefix: Option<&str>) {
-    let subset: Vec<&Outcome> = rows.iter().copied().collect();
+    let subset: Vec<&Outcome> = rows.to_vec();
     if subset.is_empty() {
         return;
     }
-    let leading = match prefix {
-        Some(prefix) => vec![prefix],
-        None => vec![],
-    };
+    let leading = prefix.map_or_else(Vec::new, |prefix| vec![prefix]);
     write_kind_table_row(out, &leading, &subset);
 }
 
@@ -233,7 +230,7 @@ fn write_outcome_markdown(out: &mut String, outcome: &Outcome, kind: Kind) {
     }
 }
 
-pub(crate) fn write_reports(
+pub fn write_reports(
     outcomes: &[Outcome],
     only: Option<&str>,
     report_dir: &Path,
