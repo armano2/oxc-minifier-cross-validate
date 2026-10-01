@@ -1,13 +1,13 @@
 # swc / larger — Output longer than expected (possible missing optimization)
 
-Fixtures: 267
+Fixtures: 263
 
 [← swc](README.md) · [← all families](../README.md)
 
 ## `swc/issues/10412`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 193 vs reference 192 (+1 bytes, no whitespaces)
+- size: oxc 193 vs reference 192 (no whitespaces: +1, formatted: +1)
 
 ```js
 (function(e, i) {
@@ -38,37 +38,10 @@ Fixtures: 267
 
 ```
 
-## `swc/issues/10466`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 194 vs reference 193 (+1 bytes, no whitespaces)
-
-```js
-const G = { setPackageName({ packageName }) {
-	if ('string' == typeof packageName) this.packageName = packageName;
-	return this;
-} };
-var packageName;
-packageName = '@clerk/clerk-react', G.setPackageName({ packageName }), console.log(G.packageName);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
- const G = { setPackageName({ packageName }) {
--	return 'string' == typeof packageName && (this.packageName = packageName), this;
-+	return typeof packageName == 'string' && (this.packageName = packageName), this;
- } };
- G.setPackageName({ packageName: '@clerk/clerk-react' }), console.log(G.packageName);
-
-```
-
 ## `swc/issues/11512-exhaustive/iife-anon-first-default-unused`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
-- size: oxc 98 vs reference 97 (+1 bytes, no whitespaces)
+- size: oxc 98 vs reference 97 (no whitespaces: +1, formatted: +2)
 
 ```js
 export function iifeAnonFirstDefaultUnused(value) {
@@ -93,41 +66,10 @@ export function iifeAnonFirstDefaultUnused(value) {
 
 ```
 
-## `swc/issues/11512-exhaustive/iife-default-reassigned`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
-- size: oxc 90 vs reference 89 (+1 bytes, no whitespaces)
-
-```js
-export function iifeDefaultReassigned(value) {
-	return (function(a, b = 1) {
-		b = 2;
-		return a;
-	})(value);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,5 @@
- export function iifeDefaultReassigned(value) {
--	return function(a, b = 1) {
--		b = 2;
--		return a;
--	}(value);
-+	return (function(a, b = 1) {
-+		return b = 2, a;
-+	})(value);
- }
-
-```
-
 ## `swc/issues/11512-exhaustive/iife-default-ref-prev`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
-- size: oxc 83 vs reference 82 (+1 bytes, no whitespaces)
+- size: oxc 83 vs reference 82 (no whitespaces: +1, formatted: +2)
 
 ```js
 export function iifeDefaultRefPrev(value) {
@@ -155,7 +97,7 @@ export function iifeDefaultRefPrev(value) {
 ## `swc/issues/11512-exhaustive/iife-default-used`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
-- size: oxc 80 vs reference 79 (+1 bytes, no whitespaces)
+- size: oxc 80 vs reference 79 (no whitespaces: +1, formatted: +2)
 
 ```js
 export function iifeDefaultUsed(value) {
@@ -183,7 +125,7 @@ export function iifeDefaultUsed(value) {
 ## `swc/issues/11512-exhaustive/iife-named-default-length`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
-- size: oxc 113 vs reference 112 (+1 bytes, no whitespaces)
+- size: oxc 113 vs reference 112 (no whitespaces: +1, formatted: +2)
 
 ```js
 export function iifeNamedDefaultLength(value) {
@@ -211,7 +153,7 @@ export function iifeNamedDefaultLength(value) {
 ## `swc/issues/11684/disabled`
 
 - tags: `drop debugger`, `join vars`, `sequences`
-- size: oxc 113 vs reference 112 (+1 bytes, no whitespaces)
+- size: oxc 113 vs reference 112 (no whitespaces: +1, formatted: +2)
 
 ```js
 out.fn = new (function() {
@@ -240,39 +182,10 @@ out.class = new class {
 
 ```
 
-## `swc/issues/2679`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 38 vs reference 37 (+1 bytes, no whitespaces)
-
-```js
-(function() {
-	var a = {};
-	a.b = 1;
-	a = null;
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,4 @@
--!function() {
-+(function() {
- 	var a = {};
--	a.b = 1;
--	a = null;
--}();
-+	a.b = 1, a = null;
-+})();
-
-```
-
 ## `swc/issues/6141`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 121 vs reference 120 (+1 bytes, no whitespaces)
+- size: oxc 121 vs reference 120 (no whitespaces: +1, formatted: +1)
 
 ```js
 (function foo(obj) {
@@ -309,7 +222,7 @@ out.class = new class {
 ## `swc/issues/7412`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 171 vs reference 170 (+1 bytes, no whitespaces)
+- size: oxc 171 vs reference 170 (no whitespaces: +1, formatted: +1)
 
 ```js
 export function throttleTime(interval) {
@@ -346,7 +259,7 @@ export function throttleTime(interval) {
 ## `swc/issues/7784/3`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 97 vs reference 96 (+1 bytes, no whitespaces)
+- size: oxc 97 vs reference 96 (no whitespaces: +1, formatted: +1)
 
 ```js
 export function f(i, e, cmp) {
@@ -378,7 +291,7 @@ export function f(i, e, cmp) {
 ## `swc/projects/jquery/27`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 177 vs reference 176 (+1 bytes, no whitespaces)
+- size: oxc 177 vs reference 176 (no whitespaces: +1, formatted: +1)
 
 ```js
 if (!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.push(context.createTextNode(rleadingWhitespace.exec(elem)[0])), !jQuery.support.tbody) {
@@ -399,7 +312,7 @@ if (!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.
 ## `swc/projects/next/archive-1/916.2317bfea2c41354132bd`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 484 vs reference 483 (+1 bytes, no whitespaces)
+- size: oxc 484 vs reference 483 (no whitespaces: +1, formatted: +1)
 
 ```js
 'use strict';
@@ -431,7 +344,7 @@ if (!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.
 ## `swc/projects/next/archive-1/974.b9fed4786fc6d4a5745d`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 484 vs reference 483 (+1 bytes, no whitespaces)
+- size: oxc 484 vs reference 483 (no whitespaces: +1, formatted: +1)
 
 ```js
 'use strict';
@@ -463,7 +376,7 @@ if (!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.
 ## `swc/projects/next/archive-1/hello-world.1af1130392dd1b8d7964`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 487 vs reference 486 (+1 bytes, no whitespaces)
+- size: oxc 487 vs reference 486 (no whitespaces: +1, formatted: +1)
 
 ```js
 'use strict';
@@ -495,7 +408,7 @@ if (!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.
 ## `swc/projects/next/archive-1/hello1.4066327636ea41cc1002`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 480 vs reference 479 (+1 bytes, no whitespaces)
+- size: oxc 480 vs reference 479 (no whitespaces: +1, formatted: +1)
 
 ```js
 'use strict';
@@ -527,7 +440,7 @@ if (!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.
 ## `swc/projects/next/archive-1/hello2.339fbf9b6616133531f3`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 480 vs reference 479 (+1 bytes, no whitespaces)
+- size: oxc 480 vs reference 479 (no whitespaces: +1, formatted: +1)
 
 ```js
 'use strict';
@@ -559,7 +472,7 @@ if (!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.
 ## `swc/projects/react/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 1063 vs reference 1062 (+1 bytes, no whitespaces)
+- size: oxc 1063 vs reference 1062 (no whitespaces: +1, formatted: +1)
 
 ```js
 (function() {
@@ -606,36 +519,10 @@ if (!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.
 
 ```
 
-## `swc/projects/underscore/11`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 83 vs reference 82 (+1 bytes, no whitespaces)
-
-```js
-if (typeof /./ !== 'function') {
-	_.isFunction = function(obj) {
-		return typeof obj === 'function';
-	};
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,3 @@
--'function' != typeof /./ && (_.isFunction = function(obj) {
--	return 'function' == typeof obj;
-+typeof /./ != 'function' && (_.isFunction = function(obj) {
-+	return typeof obj == 'function';
- });
-
-```
-
 ## `swc/projects/underscore/22`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 385 vs reference 384 (+1 bytes, no whitespaces)
+- size: oxc 385 vs reference 384 (no whitespaces: +1, formatted: +8)
 
 ```js
 _.indexOf = function(array, item, isSorted) {
@@ -679,7 +566,7 @@ _.indexOf = function(array, item, isSorted) {
 ## `swc/projects/underscore/24`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 110 vs reference 109 (+1 bytes, no whitespaces)
+- size: oxc 110 vs reference 109 (no whitespaces: +1, formatted: +1)
 
 ```js
 (function() {
@@ -711,7 +598,7 @@ _.indexOf = function(array, item, isSorted) {
 ## `swc/projects/underscore/6`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 385 vs reference 384 (+1 bytes, no whitespaces)
+- size: oxc 385 vs reference 384 (no whitespaces: +1, formatted: +8)
 
 ```js
 _.indexOf = function(array, item, isSorted) {
@@ -755,7 +642,7 @@ _.indexOf = function(array, item, isSorted) {
 ## `swc/issues/10824`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
-- size: oxc 151 vs reference 149 (+2 bytes, no whitespaces)
+- size: oxc 151 vs reference 149 (no whitespaces: +2, formatted: +2)
 
 ```js
 class A {
@@ -794,7 +681,7 @@ export {};
 ## `swc/issues/11645/control-known-arity-drop`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 43 vs reference 41 (+2 bytes, no whitespaces)
+- size: oxc 43 vs reference 41 (no whitespaces: +2, formatted: +3)
 
 ```js
 function f(a) {
@@ -819,7 +706,7 @@ console.log(f(1, 2));
 ## `swc/issues/11645/logical-and-assign-stale-arity`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 46 vs reference 44 (+2 bytes, no whitespaces)
+- size: oxc 46 vs reference 44 (no whitespaces: +2, formatted: +2)
 
 ```js
 let f = (a) => a;
@@ -842,7 +729,7 @@ console.log(f(1, 2));
 ## `swc/issues/11684/preserved`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 1097 vs reference 1095 (+2 bytes, no whitespaces)
+- size: oxc 1097 vs reference 1095 (no whitespaces: +2, formatted: +8)
 
 ```js
 out.fnArguments = new (function() {
@@ -944,7 +831,7 @@ out.unknown = new Constructor(1, 2, 3);
 ## `swc/issues/12118/export`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 48 vs reference 46 (+2 bytes, no whitespaces)
+- size: oxc 48 vs reference 46 (no whitespaces: +2, formatted: +3)
 
 ```js
 export var a;
@@ -965,7 +852,7 @@ for (var a of [0]) a = 1, console.log(a);
 ## `swc/issues/12126`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 62 vs reference 60 (+2 bytes, no whitespaces)
+- size: oxc 62 vs reference 60 (no whitespaces: +2, formatted: +2)
 
 ```js
 console.log((function(a) {
@@ -991,7 +878,7 @@ console.log((function(a) {
 ## `swc/issues/7783/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 136 vs reference 134 (+2 bytes, no whitespaces)
+- size: oxc 136 vs reference 134 (no whitespaces: +2, formatted: +2)
 
 ```js
 export default function Home() {
@@ -1026,7 +913,7 @@ const foo = {
 ## `swc/issues/8718/7`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 42 vs reference 40 (+2 bytes, no whitespaces)
+- size: oxc 42 vs reference 40 (no whitespaces: +2, formatted: +3)
 
 ```js
 export function foo(a) {
@@ -1051,7 +938,7 @@ export function foo(a) {
 ## `swc/issues/8907`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 61 vs reference 59 (+2 bytes, no whitespaces)
+- size: oxc 61 vs reference 59 (no whitespaces: +2, formatted: +2)
 
 ```js
 const used = (0, forwardRef)(
@@ -1077,7 +964,7 @@ export default used;
 ## `swc/issues/8974`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 85 vs reference 83 (+2 bytes, no whitespaces)
+- size: oxc 85 vs reference 83 (no whitespaces: +2, formatted: +2)
 
 ```js
 const one = {
@@ -1109,7 +996,7 @@ export {};
 ## `swc/issues/vercel/002`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 118 vs reference 116 (+2 bytes, no whitespaces)
+- size: oxc 118 vs reference 116 (no whitespaces: +2, formatted: +2)
 
 ```js
 const globalStyles = new String(':root {--a-b:4px}');
@@ -1132,7 +1019,7 @@ export default globalStyles;
 ## `swc/projects/underscore/5`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 378 vs reference 376 (+2 bytes, no whitespaces)
+- size: oxc 378 vs reference 376 (no whitespaces: +2, formatted: +2)
 
 ```js
 _.uniq = _.unique = function(array, isSorted, iterator, context) {
@@ -1172,7 +1059,7 @@ _.uniq = _.unique = function(array, isSorted, iterator, context) {
 ## `swc/projects/wmr/archive-1/chunks/json.5609c5fa`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 323 vs reference 321 (+2 bytes, no whitespaces)
+- size: oxc 323 vs reference 321 (no whitespaces: +2, formatted: +2)
 
 ```js
 import { a as l, y, m } from '../index.f66dda46.js';
@@ -1207,7 +1094,7 @@ export { JSONView };
 ## `swc/projects/yui/11`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 54 vs reference 52 (+2 bytes, no whitespaces)
+- size: oxc 54 vs reference 52 (no whitespaces: +2, formatted: +3)
 
 ```js
 export function foo() {
@@ -1230,7 +1117,7 @@ export function foo() {
 ## `swc/simple/block/.0001`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 91 vs reference 89 (+2 bytes, no whitespaces)
+- size: oxc 91 vs reference 89 (no whitespaces: +2, formatted: +3)
 
 ```js
 do {
@@ -1253,7 +1140,7 @@ do {
 ## `swc/simple/sequences/.0001`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 6 vs reference 4 (+2 bytes, no whitespaces)
+- size: oxc 6 vs reference 4 (no whitespaces: +2, formatted: +3)
 
 ```js
 h--, 0 > h;
@@ -1272,7 +1159,7 @@ h--, 0 > h;
 ## `swc/issues/11684/bindings`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 620 vs reference 617 (+3 bytes, no whitespaces)
+- size: oxc 620 vs reference 617 (no whitespaces: +3, formatted: +10)
 
 ```js
 const FunctionBinding = function(value) {
@@ -1341,7 +1228,7 @@ out.assignedClass = new AssignedClass(1, 2, 3, 4);
 ## `swc/issues/5955`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 164 vs reference 161 (+3 bytes, no whitespaces)
+- size: oxc 164 vs reference 161 (no whitespaces: +3, formatted: +5)
 
 ```js
 export var foo;
@@ -1383,7 +1270,7 @@ export function init1() {
 ## `swc/issues/8626`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 44 vs reference 41 (+3 bytes, no whitespaces)
+- size: oxc 44 vs reference 41 (no whitespaces: +3, formatted: +4)
 
 ```js
 export function foo(cb) {
@@ -1408,7 +1295,7 @@ foo((a, b) => true);
 ## `swc/issues/8670`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `pure getters`
-- size: oxc 44 vs reference 41 (+3 bytes, no whitespaces)
+- size: oxc 44 vs reference 41 (no whitespaces: +3, formatted: +3)
 
 ```js
 const [a, b, c, d, e] = [
@@ -1437,7 +1324,7 @@ console.log(c);
 ## `swc/issues/arguments-parameter-injection-size`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
-- size: oxc 123 vs reference 120 (+3 bytes, no whitespaces)
+- size: oxc 123 vs reference 120 (no whitespaces: +3, formatted: +3)
 
 ```js
 (function(zero, one) {
@@ -1462,7 +1349,7 @@ console.log(c);
 ## `swc/projects/backbone/11`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 141 vs reference 138 (+3 bytes, no whitespaces)
+- size: oxc 141 vs reference 138 (no whitespaces: +3, formatted: +3)
 
 ```js
 export const obj = { navigate: function(fragment, options) {
@@ -1487,7 +1374,7 @@ export const obj = { navigate: function(fragment, options) {
 ## `swc/projects/backbone/3`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 47 vs reference 44 (+3 bytes, no whitespaces)
+- size: oxc 47 vs reference 44 (no whitespaces: +3, formatted: +3)
 
 ```js
 if (!name && !callback && !context) {
@@ -1508,7 +1395,7 @@ if (!name && !callback && !context) {
 ## `swc/issues/11108`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 49 vs reference 45 (+4 bytes, no whitespaces)
+- size: oxc 49 vs reference 45 (no whitespaces: +4, formatted: +6)
 
 ```js
 this.test = function(a) {
@@ -1531,7 +1418,7 @@ this.test = function(a) {
 ## `swc/issues/11684/scopes-and-mutations`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 1213 vs reference 1209 (+4 bytes, no whitespaces)
+- size: oxc 1213 vs reference 1209 (no whitespaces: +4, formatted: +6)
 
 ```js
 class Global {
@@ -1649,7 +1536,7 @@ out.constructAfterEval = constructAfterEval;
 ## `swc/issues/12118`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 35 vs reference 31 (+4 bytes, no whitespaces)
+- size: oxc 35 vs reference 31 (no whitespaces: +4, formatted: +7)
 
 ```js
 for (let a of [0]) a = 1, console.log(a);
@@ -1668,7 +1555,7 @@ for (let a of [0]) a = 1, console.log(a);
 ## `swc/issues/7754/1`
 
 - tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 54 vs reference 50 (+4 bytes, no whitespaces)
+- size: oxc 54 vs reference 50 (no whitespaces: +4, formatted: +4)
 
 ```js
 const foo = 1;
@@ -1691,7 +1578,7 @@ eval(`console.log(foo)`);
 ## `swc/issues/9186/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 128 vs reference 124 (+4 bytes, no whitespaces)
+- size: oxc 128 vs reference 124 (no whitespaces: +4, formatted: +10)
 
 ```js
 o = {
@@ -1738,7 +1625,7 @@ console.log(o.foo().length);
 ## `swc/projects/backbone/18`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 260 vs reference 256 (+4 bytes, no whitespaces)
+- size: oxc 260 vs reference 256 (no whitespaces: +4, formatted: +5)
 
 ```js
 export const obj = { _routeToRegExp: function(route) {
@@ -1767,7 +1654,7 @@ export const obj = { _routeToRegExp: function(route) {
 ## `swc/projects/jquery/7`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 458 vs reference 454 (+4 bytes, no whitespaces)
+- size: oxc 458 vs reference 454 (no whitespaces: +4, formatted: +5)
 
 ```js
 export const obj = { proxy: function(fn, context) {
@@ -1813,7 +1700,7 @@ export const obj = { proxy: function(fn, context) {
 ## `swc/projects/mootools/6`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 433 vs reference 429 (+4 bytes, no whitespaces)
+- size: oxc 433 vs reference 429 (no whitespaces: +4, formatted: +5)
 
 ```js
 export const obj = { removeEvents: function(events) {
@@ -1860,7 +1747,7 @@ export const obj = { removeEvents: function(events) {
 ## `swc/projects/mootools/7`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 460 vs reference 456 (+4 bytes, no whitespaces)
+- size: oxc 460 vs reference 456 (no whitespaces: +4, formatted: +8)
 
 ```js
 export const exported = { toQueryString: function(object, base) {
@@ -1921,7 +1808,7 @@ export const exported = { toQueryString: function(object, base) {
 ## `swc/issues/7749`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 82 vs reference 77 (+5 bytes, no whitespaces)
+- size: oxc 82 vs reference 77 (no whitespaces: +5, formatted: +5)
 
 ```js
 let depth = 0;
@@ -1955,7 +1842,7 @@ blackbox(foo);
 ## `swc/issues/8704`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 42 vs reference 37 (+5 bytes, no whitespaces)
+- size: oxc 42 vs reference 37 (no whitespaces: +5, formatted: +8)
 
 ```js
 console.log({ toString() {
@@ -1978,7 +1865,7 @@ console.log({ toString() {
 ## `swc/issues/firebase/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 367 vs reference 362 (+5 bytes, no whitespaces)
+- size: oxc 367 vs reference 362 (no whitespaces: +5, formatted: +6)
 
 ```js
 export function treeSubTree(tree, pathObj) {
@@ -2023,7 +1910,7 @@ export function treeSubTree(tree, pathObj) {
 ## `swc/projects/yui/10`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 126 vs reference 121 (+5 bytes, no whitespaces)
+- size: oxc 126 vs reference 121 (no whitespaces: +5, formatted: +6)
 
 ```js
 export var _path = function(dir, file, type, nomin) {
@@ -2052,7 +1939,7 @@ export var _path = function(dir, file, type, nomin) {
 ## `swc/issues/10281`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 140 vs reference 134 (+6 bytes, no whitespaces)
+- size: oxc 140 vs reference 134 (no whitespaces: +6, formatted: +13)
 
 ```js
 export function bitwise1(a, b) {
@@ -2090,7 +1977,7 @@ export function bitwise3(a, b) {
 ## `swc/issues/10816`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 133 vs reference 127 (+6 bytes, no whitespaces)
+- size: oxc 133 vs reference 127 (no whitespaces: +6, formatted: +10)
 
 ```js
 class A {
@@ -2138,7 +2025,7 @@ fn();
 ## `swc/issues/11512-exhaustive/fn-multi-use-default-unused`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
-- size: oxc 104 vs reference 98 (+6 bytes, no whitespaces)
+- size: oxc 104 vs reference 98 (no whitespaces: +6, formatted: +6)
 
 ```js
 function id(a, b = 1) {
@@ -2166,7 +2053,7 @@ export function fnMultiUseDefaultUnused(value) {
 ## `swc/issues/5680`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 30 vs reference 24 (+6 bytes, no whitespaces)
+- size: oxc 30 vs reference 24 (no whitespaces: +6, formatted: +11)
 
 ```js
 const totalCount = (a ? a.length : 0) + (b ? b.length : 0);
@@ -2185,7 +2072,7 @@ const totalCount = (a ? a.length : 0) + (b ? b.length : 0);
 ## `swc/pr/11446`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 52 vs reference 46 (+6 bytes, no whitespaces)
+- size: oxc 52 vs reference 46 (no whitespaces: +6, formatted: +8)
 
 ```js
 function f(a, b = a, c = b) {
@@ -2211,7 +2098,7 @@ expect(f(3)).toBe(3);
 ## `swc/issues/2319/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 172 vs reference 165 (+7 bytes, no whitespaces)
+- size: oxc 172 vs reference 165 (no whitespaces: +7, formatted: +8)
 
 ```js
 function foo(l, r) {
@@ -2249,7 +2136,7 @@ module.exports = foo;
 ## `swc/issues/6463`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 64 vs reference 57 (+7 bytes, no whitespaces)
+- size: oxc 64 vs reference 57 (no whitespaces: +7, formatted: +8)
 
 ```js
 var foo_1 = foo;
@@ -2278,7 +2165,7 @@ foo_1();
 ## `swc/issues/8622`
 
 - tags: `mangle`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 142 vs reference 135 (+7 bytes, no whitespaces)
+- size: oxc 142 vs reference 135 (no whitespaces: +7, formatted: +5)
 
 ```js
 export function foo(cond) {
@@ -2320,7 +2207,7 @@ function bar(cond) {
 ## `swc/issues/8826`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 237 vs reference 230 (+7 bytes, no whitespaces)
+- size: oxc 237 vs reference 230 (no whitespaces: +7, formatted: +1)
 
 ```js
 export function createTypeChecker(host) {
@@ -2345,7 +2232,7 @@ export function createTypeChecker(host) {
 ## `swc/next/feedback-1/reduced/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 263 vs reference 256 (+7 bytes, no whitespaces)
+- size: oxc 263 vs reference 256 (no whitespaces: +7, formatted: +14)
 
 ```js
 export function getInsertStringLength(a, e, t, i) {
@@ -2378,7 +2265,7 @@ export function getInsertStringLength(a, e, t, i) {
 ## `swc/projects/underscore/18`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 279 vs reference 272 (+7 bytes, no whitespaces)
+- size: oxc 279 vs reference 272 (no whitespaces: +7, formatted: +9)
 
 ```js
 _.sortedIndex = function(array, obj, iterator, context) {
@@ -2411,7 +2298,7 @@ _.sortedIndex = function(array, obj, iterator, context) {
 ## `swc/issues/10721`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 84 vs reference 76 (+8 bytes, no whitespaces)
+- size: oxc 84 vs reference 76 (no whitespaces: +8, formatted: +11)
 
 ```js
 var _ref1 = { b1: { b11: 'world' } }, tmp = _ref1.b1, b11 = (tmp === void 0 ? { b11: 'string' } : tmp).b11;
@@ -2436,7 +2323,7 @@ export { b11 };
 ## `swc/issues/11089`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 56 vs reference 48 (+8 bytes, no whitespaces)
+- size: oxc 56 vs reference 48 (no whitespaces: +8, formatted: +8)
 
 ```js
 let k = 0;
@@ -2460,7 +2347,7 @@ fn('Hi');
 ## `swc/issues/11684/identifier-reduce-vars-only`
 
 - tags: `drop debugger`, `join vars`, `sequences`
-- size: oxc 229 vs reference 221 (+8 bytes, no whitespaces)
+- size: oxc 229 vs reference 221 (no whitespaces: +8, formatted: +12)
 
 ```js
 function FunctionCtor(value) {
@@ -2502,7 +2389,7 @@ out.classCtor = new ClassCtor(1, 2, 3);
 ## `swc/issues/11684/identifier-unused-only`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 229 vs reference 221 (+8 bytes, no whitespaces)
+- size: oxc 229 vs reference 221 (no whitespaces: +8, formatted: +12)
 
 ```js
 function FunctionCtor(value) {
@@ -2544,7 +2431,7 @@ out.classCtor = new ClassCtor(1, 2, 3);
 ## `swc/issues/4234`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 74 vs reference 66 (+8 bytes, no whitespaces)
+- size: oxc 74 vs reference 66 (no whitespaces: +8, formatted: +8)
 
 ```js
 bar(new RegExp(''));
@@ -2569,7 +2456,7 @@ bar(new RegExp('a', 'u'));
 ## `swc/issues/6049/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 15 vs reference 7 (+8 bytes, no whitespaces)
+- size: oxc 15 vs reference 7 (no whitespaces: +8, formatted: +11)
 
 ```js
 var a = z();
@@ -2590,7 +2477,7 @@ g(a);
 ## `swc/issues/6422/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 271 vs reference 263 (+8 bytes, no whitespaces)
+- size: oxc 271 vs reference 263 (no whitespaces: +8, formatted: +14)
 
 ```js
 let getter_effect = 'FAIL';
@@ -2639,7 +2526,7 @@ assert.strictEqual(setter_effect, 'PASS');
 ## `swc/issues/9610-destructuring`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `pure getters`, `3 iterations`
-- size: oxc 562 vs reference 554 (+8 bytes, no whitespaces)
+- size: oxc 562 vs reference 554 (no whitespaces: +8, formatted: +13)
 
 ```js
 // Test: Destructuring patterns with default values
@@ -2696,7 +2583,7 @@ export function example() {
 ## `swc/issues/9610-nested-defaults`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `pure getters`, `3 iterations`
-- size: oxc 487 vs reference 479 (+8 bytes, no whitespaces)
+- size: oxc 487 vs reference 479 (no whitespaces: +8, formatted: +10)
 
 ```js
 // Test: Nested default patterns
@@ -2740,7 +2627,7 @@ export function example() {
 ## `swc/issues/10938`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 35 vs reference 26 (+9 bytes, no whitespaces)
+- size: oxc 35 vs reference 26 (no whitespaces: +9, formatted: +10)
 
 ```js
 let Number;
@@ -2761,7 +2648,7 @@ console.log(Number.NaN);
 ## `swc/issues/11829`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 167 vs reference 158 (+9 bytes, no whitespaces)
+- size: oxc 167 vs reference 158 (no whitespaces: +9, formatted: +8)
 
 ```js
 function run(options) {
@@ -2803,7 +2690,7 @@ run({ cb(value) {
 ## `swc/issues/5343`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 59 vs reference 50 (+9 bytes, no whitespaces)
+- size: oxc 59 vs reference 50 (no whitespaces: +9, formatted: +13)
 
 ```js
 ({ x: 0 }).x = _iter[_i];
@@ -2826,7 +2713,7 @@ for ({ x: 0 }.x of iter()) {
 ## `swc/issues/5864`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 21 vs reference 12 (+9 bytes, no whitespaces)
+- size: oxc 21 vs reference 12 (no whitespaces: +9, formatted: +9)
 
 ```js
 foo = { v: 0 .toFixed() };
@@ -2845,7 +2732,7 @@ foo = { v: 0 .toFixed() };
 ## `swc/issues/spread-primitives`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 395 vs reference 386 (+9 bytes, no whitespaces)
+- size: oxc 395 vs reference 386 (no whitespaces: +9, formatted: +9)
 
 ```js
 // Object spread of a primitive with no own enumerable properties contributes
@@ -2924,7 +2811,7 @@ console.log([1, ...[2, 3]]);
 ## `swc/member_expr/undetermined_prop`
 
 - tags: `drop debugger`, `join vars`, `sequences`
-- size: oxc 24 vs reference 15 (+9 bytes, no whitespaces)
+- size: oxc 24 vs reference 15 (no whitespaces: +9, formatted: +12)
 
 ```js
 ({ a: 1 })[undetermined()];
@@ -2943,7 +2830,7 @@ console.log([1, ...[2, 3]]);
 ## `swc/issues/9030`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 261 vs reference 251 (+10 bytes, no whitespaces)
+- size: oxc 261 vs reference 251 (no whitespaces: +10, formatted: +16)
 
 ```js
 var FRUITS = { MANGO: 'mango' };
@@ -2988,7 +2875,7 @@ export default (name) => {
 ## `swc/issues/cycle-1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 98 vs reference 88 (+10 bytes, no whitespaces)
+- size: oxc 98 vs reference 88 (no whitespaces: +10, formatted: +26)
 
 ```js
 (() => {
@@ -3050,7 +2937,7 @@ export default (name) => {
 ## `swc/issues/cycle-2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 80 vs reference 70 (+10 bytes, no whitespaces)
+- size: oxc 80 vs reference 70 (no whitespaces: +10, formatted: +26)
 
 ```js
 (() => {
@@ -3106,7 +2993,7 @@ export default (name) => {
 ## `swc/issues/non-finite-conditional-arithmetic`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
-- size: oxc 312 vs reference 302 (+10 bytes, no whitespaces)
+- size: oxc 312 vs reference 302 (no whitespaces: +10, formatted: +6)
 
 ```js
 function classify(value) {
@@ -3153,7 +3040,7 @@ test(globalThis.falseValue);
 ## `swc/issues/vercel/003`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 588 vs reference 578 (+10 bytes, no whitespaces)
+- size: oxc 588 vs reference 578 (no whitespaces: +10, formatted: +1)
 
 ```js
 import { a, b } from './utils';
@@ -3271,7 +3158,7 @@ export const { q } = manager;
 ## `swc/pr/7856/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 32 vs reference 22 (+10 bytes, no whitespaces)
+- size: oxc 32 vs reference 22 (no whitespaces: +10, formatted: +13)
 
 ```js
 const a = () => '';
@@ -3294,7 +3181,7 @@ b.c = c;
 ## `swc/projects/yui/8`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 277 vs reference 267 (+10 bytes, no whitespaces)
+- size: oxc 277 vs reference 267 (no whitespaces: +10, formatted: +13)
 
 ```js
 export const E = { _onProgress: function(e) {
@@ -3336,7 +3223,7 @@ export const E = { _onProgress: function(e) {
 ## `swc/simple/switch/const/call`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 38 vs reference 28 (+10 bytes, no whitespaces)
+- size: oxc 38 vs reference 28 (no whitespaces: +10, formatted: +13)
 
 ```js
 switch (a()) {
@@ -3359,7 +3246,7 @@ switch (a()) {
 ## `swc/issues/4386/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 324 vs reference 313 (+11 bytes, no whitespaces)
+- size: oxc 324 vs reference 313 (no whitespaces: +11, formatted: +22)
 
 ```js
 var application;
@@ -3411,7 +3298,7 @@ var application;
 ## `swc/issues/6407/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 293 vs reference 282 (+11 bytes, no whitespaces)
+- size: oxc 293 vs reference 282 (no whitespaces: +11, formatted: +6)
 
 ```js
 export default class Demo {
@@ -3456,7 +3343,7 @@ console.log(Deno.encode());
 ## `swc/member_expr/seq`
 
 - tags: `drop debugger`, `join vars`, `sequences`
-- size: oxc 55 vs reference 44 (+11 bytes, no whitespaces)
+- size: oxc 55 vs reference 44 (no whitespaces: +11, formatted: +17)
 
 ```js
 console.log((f(), [2, 4])[5]);
@@ -3476,7 +3363,7 @@ console.log((f(), { b: 2 }).a);
 ## `swc/projects/yui/14`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 381 vs reference 370 (+11 bytes, no whitespaces)
+- size: oxc 381 vs reference 370 (no whitespaces: +11, formatted: +14)
 
 ```js
 YArray.indexOf = Lang._isNative(Native.indexOf) ? function(array, value, from) {
@@ -3519,7 +3406,7 @@ YArray.indexOf = Lang._isNative(Native.indexOf) ? function(array, value, from) {
 ## `swc/issues/12128`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 153 vs reference 141 (+12 bytes, no whitespaces)
+- size: oxc 153 vs reference 141 (no whitespaces: +12, formatted: +15)
 
 ```js
 var callback;
@@ -3553,7 +3440,7 @@ console.log(callback());
 ## `swc/issues/9610-side-effects`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
-- size: oxc 635 vs reference 623 (+12 bytes, no whitespaces)
+- size: oxc 635 vs reference 623 (no whitespaces: +12, formatted: +15)
 
 ```js
 // Test: Default values with side effects should NOT be removed
@@ -3599,7 +3486,7 @@ export function example() {
 ## `swc/issues/react-instancesearch/001`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 553 vs reference 541 (+12 bytes, no whitespaces)
+- size: oxc 553 vs reference 541 (no whitespaces: +12, formatted: +24)
 
 ```js
 import { defer } from './utils';
@@ -3664,7 +3551,7 @@ export default function createWidgetsManager(onWidgetsUpdate) {
 
 ## `swc/issues/11545`
 
-- size: oxc 206 vs reference 193 (+13 bytes, no whitespaces)
+- size: oxc 206 vs reference 193 (no whitespaces: +13, formatted: +14)
 
 ```js
 function joinArrayWithUndefined(bool) {
@@ -3697,7 +3584,7 @@ console.log(x);
 ## `swc/issues/react-countup/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 521 vs reference 508 (+13 bytes, no whitespaces)
+- size: oxc 521 vs reference 508 (no whitespaces: +13, formatted: +22)
 
 ```js
 export function formatNumber(t) {
@@ -3746,7 +3633,7 @@ export function formatNumber(t) {
 ## `swc/projects/wmr/archive-1/chunks/index.5a544c41`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 231 vs reference 218 (+13 bytes, no whitespaces)
+- size: oxc 231 vs reference 218 (no whitespaces: +13, formatted: +13)
 
 ```js
 import { m } from '../index.f66dda46.js';
@@ -3777,7 +3664,7 @@ export default Files;
 ## `swc/reduced/3`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 194 vs reference 181 (+13 bytes, no whitespaces)
+- size: oxc 194 vs reference 181 (no whitespaces: +13, formatted: +21)
 
 ```js
 var element = jqLite(element);
@@ -3804,7 +3691,7 @@ if (element.injector()) {
 ## `swc/issues/11970`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 108 vs reference 94 (+14 bytes, no whitespaces)
+- size: oxc 108 vs reference 94 (no whitespaces: +14, formatted: +17)
 
 ```js
 export async function classify(code) {
@@ -3838,7 +3725,7 @@ export async function classify(code) {
 ## `swc/issues/2926/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 184 vs reference 170 (+14 bytes, no whitespaces)
+- size: oxc 184 vs reference 170 (no whitespaces: +14, formatted: +16)
 
 ```js
 export var webpackJsonpCallback = function(parentChunkLoadingFunction, data) {
@@ -3870,7 +3757,7 @@ export var webpackJsonpCallback = function(parentChunkLoadingFunction, data) {
 ## `swc/next/36127/2/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 413 vs reference 399 (+14 bytes, no whitespaces)
+- size: oxc 413 vs reference 399 (no whitespaces: +14, formatted: +12)
 
 ```js
 /**
@@ -3925,7 +3812,7 @@ export function regexCheck(regex) {
 ## `swc/next/36127/2/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 716 vs reference 702 (+14 bytes, no whitespaces)
+- size: oxc 716 vs reference 702 (no whitespaces: +14, formatted: +12)
 
 ```js
 /**
@@ -3991,7 +3878,7 @@ console.log(regexCheck('Foo'));
 ## `swc/issues/10328`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 119 vs reference 104 (+15 bytes, no whitespaces)
+- size: oxc 119 vs reference 104 (no whitespaces: +15, formatted: +13)
 
 ```js
 function f() {
@@ -4033,7 +3920,7 @@ g('b');
 ## `swc/issues/11368`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 672 vs reference 657 (+15 bytes, no whitespaces)
+- size: oxc 672 vs reference 657 (no whitespaces: +15, formatted: +17)
 
 ```js
 /**
@@ -4097,7 +3984,7 @@ console.log(result === 'A' ? 'OK: got A' : 'BUG: expected A, got ' + result);
 ## `swc/issues/11684/reduce-vars-only`
 
 - tags: `drop debugger`, `join vars`, `sequences`
-- size: oxc 113 vs reference 98 (+15 bytes, no whitespaces)
+- size: oxc 113 vs reference 98 (no whitespaces: +15, formatted: +16)
 
 ```js
 out.fn = new (function() {
@@ -4132,7 +4019,7 @@ out.class = new class {
 ## `swc/issues/11684/unused-only`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 113 vs reference 98 (+15 bytes, no whitespaces)
+- size: oxc 113 vs reference 98 (no whitespaces: +15, formatted: +16)
 
 ```js
 out.fn = new (function() {
@@ -4167,7 +4054,7 @@ out.class = new class {
 ## `swc/issues/4412`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 87 vs reference 72 (+15 bytes, no whitespaces)
+- size: oxc 87 vs reference 72 (no whitespaces: +15, formatted: +26)
 
 ```js
 export function foo(arg) {
@@ -4205,7 +4092,7 @@ export function foo(arg) {
 ## `swc/projects/react/5`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 313 vs reference 298 (+15 bytes, no whitespaces)
+- size: oxc 313 vs reference 298 (no whitespaces: +15, formatted: +14)
 
 ```js
 var emptyObject = {};
@@ -4248,7 +4135,7 @@ Component.prototype.isReactComponent = {};
 ## `swc/projects/underscore/3`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 406 vs reference 391 (+15 bytes, no whitespaces)
+- size: oxc 406 vs reference 391 (no whitespaces: +15, formatted: +9)
 
 ```js
 _.max = function(obj, iterator, context) {
@@ -4294,7 +4181,7 @@ _.max = function(obj, iterator, context) {
 ## `swc/projects/wmr/archive-1/chunks/index.bf24abaa`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 400 vs reference 385 (+15 bytes, no whitespaces)
+- size: oxc 400 vs reference 385 (no whitespaces: +15, formatted: +28)
 
 ```js
 import { s as style, m } from '../index.f66dda46.js';
@@ -4351,7 +4238,7 @@ export { Environment };
 ## `swc/issues/11320`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 258 vs reference 242 (+16 bytes, no whitespaces)
+- size: oxc 258 vs reference 242 (no whitespaces: +16, formatted: +32)
 
 ```js
 // Empty class expression should be removed
@@ -4399,7 +4286,7 @@ new class {
 ## `swc/issues/11684`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 67 vs reference 51 (+16 bytes, no whitespaces)
+- size: oxc 67 vs reference 51 (no whitespaces: +16, formatted: +15)
 
 ```js
 n = new (function() {
@@ -4429,7 +4316,7 @@ n = new A(1, 2, 3);
 ## `swc/issues/11684/function-expression`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 175 vs reference 159 (+16 bytes, no whitespaces)
+- size: oxc 175 vs reference 159 (no whitespaces: +16, formatted: +22)
 
 ```js
 out.zero = new (function() {
@@ -4465,7 +4352,7 @@ out.destructured = new (function({ value }) {
 ## `swc/issues/5846`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 559 vs reference 543 (+16 bytes, no whitespaces)
+- size: oxc 559 vs reference 543 (no whitespaces: +16, formatted: +18)
 
 ```js
 function processNode(node, index, parent, pathNodes) {
@@ -4540,7 +4427,7 @@ processNode(null);
 ## `swc/issues/7847`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 287 vs reference 271 (+16 bytes, no whitespaces)
+- size: oxc 287 vs reference 271 (no whitespaces: +16, formatted: +25)
 
 ```js
 function requireState() {
@@ -4579,7 +4466,7 @@ if (g()) {
 ## `swc/issues/8886`
 
 - tags: `mangle`, `drop debugger`, `join vars`, `sequences`, `remove unused`, `99 iterations`
-- size: oxc 54 vs reference 38 (+16 bytes, no whitespaces)
+- size: oxc 54 vs reference 38 (no whitespaces: +16, formatted: +24)
 
 ```js
 const bar = ((v) => v)(1);
@@ -4602,7 +4489,7 @@ eval(foo);
 ## `swc/issues/9176`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 47 vs reference 31 (+16 bytes, no whitespaces)
+- size: oxc 47 vs reference 31 (no whitespaces: +16, formatted: +21)
 
 ```js
 'use strict';
@@ -4632,7 +4519,7 @@ const k = (function() {
 ## `swc/issues/9610`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
-- size: oxc 194 vs reference 178 (+16 bytes, no whitespaces)
+- size: oxc 194 vs reference 178 (no whitespaces: +16, formatted: +22)
 
 ```js
 const defaultMessage = 'hello';
@@ -4680,7 +4567,7 @@ export function example() {
 ## `swc/issues/9823/3`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 36 vs reference 20 (+16 bytes, no whitespaces)
+- size: oxc 36 vs reference 20 (no whitespaces: +16, formatted: +21)
 
 ```js
 (function() {
@@ -4704,7 +4591,7 @@ export function example() {
 ## `swc/issues/drop-console-es2015`
 
 - tags: `drop console`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 184 vs reference 168 (+16 bytes, no whitespaces)
+- size: oxc 184 vs reference 168 (no whitespaces: +16, formatted: +11)
 
 ```js
 const err = console.error.bind(console);
@@ -4746,7 +4633,7 @@ process.stdout.write(threw + '\n');
 ## `swc/projects/react/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 356 vs reference 340 (+16 bytes, no whitespaces)
+- size: oxc 356 vs reference 340 (no whitespaces: +16, formatted: +28)
 
 ```js
 (function() {
@@ -4801,7 +4688,7 @@ process.stdout.write(threw + '\n');
 ## `swc/issues/11684/class-expression`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 278 vs reference 261 (+17 bytes, no whitespaces)
+- size: oxc 278 vs reference 261 (no whitespaces: +17, formatted: +22)
 
 ```js
 out.zero = new class {
@@ -4857,7 +4744,7 @@ out.derived = new class extends Base {
 ## `swc/issues/11684/identifier-side-effects`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 521 vs reference 504 (+17 bytes, no whitespaces)
+- size: oxc 521 vs reference 504 (no whitespaces: +17, formatted: +27)
 
 ```js
 function FunctionCtor(value) {
@@ -4907,7 +4794,7 @@ out.conditional = new Zero(1, condition ? effect('yes') : 2, 3);
 ## `swc/issues/6864`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 458 vs reference 441 (+17 bytes, no whitespaces)
+- size: oxc 458 vs reference 441 (no whitespaces: +17, formatted: +18)
 
 ```js
 export function removeFromMatrix(matrix, id) {
@@ -4961,7 +4848,7 @@ export function removeFromMatrix(matrix, id) {
 ## `swc/issues/8465`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 63 vs reference 46 (+17 bytes, no whitespaces)
+- size: oxc 63 vs reference 46 (no whitespaces: +17, formatted: +17)
 
 ```js
 function Infinity() {
@@ -4987,7 +4874,7 @@ export default Infinity;
 ## `swc/issues/8718/5`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 33 vs reference 15 (+18 bytes, no whitespaces)
+- size: oxc 33 vs reference 15 (no whitespaces: +18, formatted: +26)
 
 ```js
 let a = 0;
@@ -5012,7 +4899,7 @@ console.log((a += 1, a += 2));
 ## `swc/issues/8718/6`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 33 vs reference 15 (+18 bytes, no whitespaces)
+- size: oxc 33 vs reference 15 (no whitespaces: +18, formatted: +26)
 
 ```js
 let a = 0;
@@ -5041,7 +4928,7 @@ console.log((a += 1, a += 2));
 ## `swc/issues/8737`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 67 vs reference 49 (+18 bytes, no whitespaces)
+- size: oxc 67 vs reference 49 (no whitespaces: +18, formatted: +24)
 
 ```js
 d(() => {
@@ -5072,7 +4959,7 @@ d(() => {
 ## `swc/issues/8737/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 102 vs reference 84 (+18 bytes, no whitespaces)
+- size: oxc 102 vs reference 84 (no whitespaces: +18, formatted: +24)
 
 ```js
 d(function() {
@@ -5104,7 +4991,7 @@ d(function() {
 ## `swc/issues/8919`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 51 vs reference 33 (+18 bytes, no whitespaces)
+- size: oxc 51 vs reference 33 (no whitespaces: +18, formatted: +26)
 
 ```js
 'use strict';
@@ -5135,7 +5022,7 @@ console.log(k);
 ## `swc/simple/inline/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 52 vs reference 34 (+18 bytes, no whitespaces)
+- size: oxc 52 vs reference 34 (no whitespaces: +18, formatted: +26)
 
 ```js
 var a = 1;
@@ -5168,7 +5055,7 @@ function h() {
 ## `swc/issues/11684/function-decl`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 420 vs reference 401 (+19 bytes, no whitespaces)
+- size: oxc 420 vs reference 401 (no whitespaces: +19, formatted: +25)
 
 ```js
 function Zero() {
@@ -5223,7 +5110,7 @@ out.default = new Default(undefined, 2, 3, 4);
 ## `swc/issues/11684/side-effects`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 382 vs reference 363 (+19 bytes, no whitespaces)
+- size: oxc 382 vs reference 363 (no whitespaces: +19, formatted: +31)
 
 ```js
 out.fn = new (function(value) {
@@ -5273,7 +5160,7 @@ out.conditional = new class {
 ## `swc/issues/8718/3`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 71 vs reference 52 (+19 bytes, no whitespaces)
+- size: oxc 71 vs reference 52 (no whitespaces: +19, formatted: +26)
 
 ```js
 let a;
@@ -5302,7 +5189,7 @@ console.log((a += 1, a += 2));
 ## `swc/issues/8841`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 42 vs reference 23 (+19 bytes, no whitespaces)
+- size: oxc 42 vs reference 23 (no whitespaces: +19, formatted: +28)
 
 ```js
 export const k = (() => {
@@ -5328,7 +5215,7 @@ export const k = (() => {
 ## `swc/issues/arguments-canonical-index`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
-- size: oxc 161 vs reference 142 (+19 bytes, no whitespaces)
+- size: oxc 161 vs reference 142 (no whitespaces: +19, formatted: +19)
 
 ```js
 (function(zero, one) {
@@ -5368,7 +5255,7 @@ export const k = (() => {
 ## `swc/issues/7331/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 83 vs reference 63 (+20 bytes, no whitespaces)
+- size: oxc 83 vs reference 63 (no whitespaces: +20, formatted: +26)
 
 ```js
 export default function() {
@@ -5401,7 +5288,7 @@ export default function() {
 ## `swc/issues/8718/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 38 vs reference 18 (+20 bytes, no whitespaces)
+- size: oxc 38 vs reference 18 (no whitespaces: +20, formatted: +31)
 
 ```js
 let a = 0;
@@ -5423,7 +5310,7 @@ console.log((a += 1, a += 2));
 ## `swc/pr/6169/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 44 vs reference 23 (+21 bytes, no whitespaces)
+- size: oxc 44 vs reference 23 (no whitespaces: +21, formatted: +25)
 
 ```js
 var ref = ['foo'], key = ref[0], value = ref[1];
@@ -5444,7 +5331,7 @@ value.toUpperCase();
 ## `swc/projects/next/extra/if_return/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 352 vs reference 331 (+21 bytes, no whitespaces)
+- size: oxc 352 vs reference 331 (no whitespaces: +21, formatted: +21)
 
 ```js
 export function foo() {
@@ -5487,7 +5374,7 @@ export function foo() {
 ## `swc/simple/switch/merge/simple`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 89 vs reference 68 (+21 bytes, no whitespaces)
+- size: oxc 89 vs reference 68 (no whitespaces: +21, formatted: +27)
 
 ```js
 switch (a) {
@@ -5523,7 +5410,7 @@ switch (a) {
 ## `swc/issues/5280`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 66 vs reference 44 (+22 bytes, no whitespaces)
+- size: oxc 66 vs reference 44 (no whitespaces: +22, formatted: +35)
 
 ```js
 export function source() {
@@ -5552,7 +5439,7 @@ export function source() {
 ## `swc/issues/5693`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
-- size: oxc 149 vs reference 127 (+22 bytes, no whitespaces)
+- size: oxc 149 vs reference 127 (no whitespaces: +22, formatted: +29)
 
 ```js
 API.prototype._getIngestEndpoint = function(target) {
@@ -5578,7 +5465,7 @@ API.prototype._getIngestEndpoint = function(target) {
 ## `swc/issues/6957/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 105 vs reference 83 (+22 bytes, no whitespaces)
+- size: oxc 105 vs reference 83 (no whitespaces: +22, formatted: +22)
 
 ```js
 assertEquals('1', .5.toFixed(0), '0.5.toFixed(0)');
@@ -5599,7 +5486,7 @@ assertEquals('-1', (-.5).toFixed(0), '(-0.5).toFixed(0)');
 ## `swc/issues/9148`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 178 vs reference 156 (+22 bytes, no whitespaces)
+- size: oxc 178 vs reference 156 (no whitespaces: +22, formatted: +38)
 
 ```js
 function foo() {
@@ -5658,7 +5545,7 @@ export default foo();
 ## `swc/issues/10885`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 310 vs reference 287 (+23 bytes, no whitespaces)
+- size: oxc 310 vs reference 287 (no whitespaces: +23, formatted: +50)
 
 ```js
 import { useState } from 'react';
@@ -5716,7 +5603,7 @@ export default function useMeow() {
 ## `swc/issues/6492/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 57 vs reference 34 (+23 bytes, no whitespaces)
+- size: oxc 57 vs reference 34 (no whitespaces: +23, formatted: +29)
 
 ```js
 const obj = { key: 42 };
@@ -5738,7 +5625,7 @@ console.log('val', val);
 ## `swc/issues/7500`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 140 vs reference 117 (+23 bytes, no whitespaces)
+- size: oxc 140 vs reference 117 (no whitespaces: +23, formatted: +27)
 
 ```js
 var globalArray = [
@@ -5771,7 +5658,7 @@ module.exports = function() {
 ## `swc/issues/9453`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 132 vs reference 109 (+23 bytes, no whitespaces)
+- size: oxc 132 vs reference 109 (no whitespaces: +23, formatted: +32)
 
 ```js
 'use strict';
@@ -5800,7 +5687,7 @@ console.log(typeof class {});
 ## `swc/issues/object-accessor-function-boundary`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 163 vs reference 140 (+23 bytes, no whitespaces)
+- size: oxc 163 vs reference 140 (no whitespaces: +23, formatted: +34)
 
 ```js
 function make(key) {
@@ -5850,7 +5737,7 @@ object.value = undefined;
 ## `swc/member_expr/object`
 
 - tags: `drop debugger`, `join vars`, `sequences`
-- size: oxc 251 vs reference 228 (+23 bytes, no whitespaces)
+- size: oxc 251 vs reference 228 (no whitespaces: +23, formatted: +28)
 
 ```js
 // Invalid
@@ -5888,7 +5775,7 @@ object.value = undefined;
 ## `swc/projects/wmr/archive-1/chunks/class-fields.43d5f69c`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 295 vs reference 272 (+23 bytes, no whitespaces)
+- size: oxc 295 vs reference 272 (no whitespaces: +23, formatted: +23)
 
 ```js
 import { _, m } from '../index.f66dda46.js';
@@ -5927,7 +5814,7 @@ export default ClassFields;
 ## `swc/simple/inline/3`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 83 vs reference 60 (+23 bytes, no whitespaces)
+- size: oxc 83 vs reference 60 (no whitespaces: +23, formatted: +29)
 
 ```js
 function foo(x) {
@@ -5963,7 +5850,7 @@ foo(1);
 ## `swc/issues/6279/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 79 vs reference 55 (+24 bytes, no whitespaces)
+- size: oxc 79 vs reference 55 (no whitespaces: +24, formatted: +31)
 
 ```js
 function run(str, r) {
@@ -5993,7 +5880,7 @@ run('abcda', /a/g);
 ## `swc/issues/6492/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 46 vs reference 22 (+24 bytes, no whitespaces)
+- size: oxc 46 vs reference 22 (no whitespaces: +24, formatted: +30)
 
 ```js
 const obj = { key: 42 };
@@ -6015,7 +5902,7 @@ console.log('val', val);
 ## `swc/issues/6492/3`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 58 vs reference 34 (+24 bytes, no whitespaces)
+- size: oxc 58 vs reference 34 (no whitespaces: +24, formatted: +30)
 
 ```js
 const obj = { key: 42 };
@@ -6037,7 +5924,7 @@ console.log('val', val);
 ## `swc/issues/6492/4`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 58 vs reference 34 (+24 bytes, no whitespaces)
+- size: oxc 58 vs reference 34 (no whitespaces: +24, formatted: +30)
 
 ```js
 const obj = { key: 42 };
@@ -6059,7 +5946,7 @@ console.log('val', val);
 ## `swc/issues/9504`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 684 vs reference 660 (+24 bytes, no whitespaces)
+- size: oxc 684 vs reference 660 (no whitespaces: +24, formatted: +32)
 
 ```js
 export function panUpdate(e) {
@@ -6137,7 +6024,7 @@ export function panUpdate(e) {
 ## `swc/issues/react/hooks/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 402 vs reference 378 (+24 bytes, no whitespaces)
+- size: oxc 402 vs reference 378 (no whitespaces: +24, formatted: +26)
 
 ```js
 import { jsx as _jsx, Fragment as _Fragment } from 'react/jsx-runtime';
@@ -6175,7 +6062,7 @@ export default function MyComp() {
 ## `swc/simple/if/var`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 62 vs reference 38 (+24 bytes, no whitespaces)
+- size: oxc 62 vs reference 38 (no whitespaces: +24, formatted: +28)
 
 ```js
 if (false) {
@@ -6207,7 +6094,7 @@ if (true) {
 ## `swc/member_expr/string`
 
 - tags: `drop debugger`, `join vars`, `sequences`
-- size: oxc 796 vs reference 771 (+25 bytes, no whitespaces)
+- size: oxc 796 vs reference 771 (no whitespaces: +25, formatted: +32)
 
 ```js
 // Invalid
@@ -6296,7 +6183,7 @@ if (true) {
 ## `swc/projects/wmr/archive-1/chunks/alias-outside.6e8773c7`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 167 vs reference 142 (+25 bytes, no whitespaces)
+- size: oxc 167 vs reference 142 (no whitespaces: +25, formatted: +25)
 
 ```js
 import { m } from '../index.f66dda46.js';
@@ -6326,7 +6213,7 @@ export default AliasOutside;
 ## `swc/issues/7739/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 210 vs reference 184 (+26 bytes, no whitespaces)
+- size: oxc 210 vs reference 184 (no whitespaces: +26, formatted: +29)
 
 ```js
 const formatterOpt = {
@@ -6358,7 +6245,7 @@ console.log(formatter.format(amount));
 ## `swc/issues/11684/constructor-scopes`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 781 vs reference 754 (+27 bytes, no whitespaces)
+- size: oxc 781 vs reference 754 (no whitespaces: +27, formatted: +38)
 
 ```js
 class ExplicitDerived extends Base {
@@ -6443,7 +6330,7 @@ out.structuredParameters = new StructuredParameters({ value: 1 }, undefined, 3, 
 ## `swc/issues/11983`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 79 vs reference 52 (+27 bytes, no whitespaces)
+- size: oxc 79 vs reference 52 (no whitespaces: +27, formatted: +31)
 
 ```js
 const N = 260;
@@ -6477,7 +6364,7 @@ export function dyn(w) {
 ## `swc/issues/9610-mixed-params`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
-- size: oxc 784 vs reference 757 (+27 bytes, no whitespaces)
+- size: oxc 784 vs reference 757 (no whitespaces: +27, formatted: +43)
 
 ```js
 // Test: Mixed used and unused parameters with defaults
@@ -6549,7 +6436,7 @@ export function example() {
 ## `swc/projects/yui/9`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 492 vs reference 465 (+27 bytes, no whitespaces)
+- size: oxc 492 vs reference 465 (no whitespaces: +27, formatted: +30)
 
 ```js
 export const E = { _addLangPack: function(lang, m, packName) {
@@ -6605,7 +6492,7 @@ export const E = { _addLangPack: function(lang, m, packName) {
 ## `swc/check/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 285 vs reference 257 (+28 bytes, no whitespaces)
+- size: oxc 285 vs reference 257 (no whitespaces: +28, formatted: +32)
 
 ```js
 import { upper } from 'module';
@@ -6650,7 +6537,7 @@ function internal() {
 ## `swc/issues/11512-exhaustive/fn-multi-use-default-side-effect`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
-- size: oxc 172 vs reference 144 (+28 bytes, no whitespaces)
+- size: oxc 172 vs reference 144 (no whitespaces: +28, formatted: +34)
 
 ```js
 let sideCalls = 0;
@@ -6686,7 +6573,7 @@ export function fnMultiUseDefaultSideEffect(value) {
 ## `swc/issues/11512-exhaustive/iife-anon-default-unused`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
-- size: oxc 86 vs reference 58 (+28 bytes, no whitespaces)
+- size: oxc 86 vs reference 58 (no whitespaces: +28, formatted: +39)
 
 ```js
 export function iifeAnonDefaultUnused(value) {
@@ -6713,7 +6600,7 @@ export function iifeAnonDefaultUnused(value) {
 ## `swc/next/swc-4559`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 421 vs reference 393 (+28 bytes, no whitespaces)
+- size: oxc 421 vs reference 393 (no whitespaces: +28, formatted: +45)
 
 ```js
 (self['webpackChunk_N_E'] = self['webpackChunk_N_E'] || []).push([[657], { 
@@ -6750,7 +6637,7 @@ export function iifeAnonDefaultUnused(value) {
 ## `swc/issues/11512-exhaustive/iife-default-side-effect`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
-- size: oxc 136 vs reference 107 (+29 bytes, no whitespaces)
+- size: oxc 136 vs reference 107 (no whitespaces: +29, formatted: +36)
 
 ```js
 let calls = 0;
@@ -6787,7 +6674,7 @@ export function iifeDefaultSideEffect(value) {
 ## `swc/issues/10054/for`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 105 vs reference 75 (+30 bytes, no whitespaces)
+- size: oxc 105 vs reference 75 (no whitespaces: +30, formatted: +36)
 
 ```js
 // Input:
@@ -6820,7 +6707,7 @@ window.a = [function() {
 ## `swc/issues/10054/if`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 113 vs reference 83 (+30 bytes, no whitespaces)
+- size: oxc 113 vs reference 83 (no whitespaces: +30, formatted: +36)
 
 ```js
 // Input:
@@ -6853,7 +6740,7 @@ window.a = [function() {
 ## `swc/issues/10849`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 46 vs reference 16 (+30 bytes, no whitespaces)
+- size: oxc 46 vs reference 16 (no whitespaces: +30, formatted: +38)
 
 ```js
 (function() {
@@ -6877,7 +6764,7 @@ window.a = [function() {
 ## `swc/issues/11512-exhaustive/iife-anon-arg-unused`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
-- size: oxc 84 vs reference 54 (+30 bytes, no whitespaces)
+- size: oxc 84 vs reference 54 (no whitespaces: +30, formatted: +42)
 
 ```js
 export function iifeAnonArgUnused(value) {
@@ -6904,7 +6791,7 @@ export function iifeAnonArgUnused(value) {
 ## `swc/pr/7690`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 68 vs reference 38 (+30 bytes, no whitespaces)
+- size: oxc 68 vs reference 38 (no whitespaces: +30, formatted: +43)
 
 ```js
 export function foo() {
@@ -6930,7 +6817,7 @@ export function foo() {
 ## `swc/issues/11730`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 74 vs reference 43 (+31 bytes, no whitespaces)
+- size: oxc 74 vs reference 43 (no whitespaces: +31, formatted: +47)
 
 ```js
 someFunction(function f() {
@@ -6963,7 +6850,7 @@ someFunction(function f() {
 ## `swc/issues/9468`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 194 vs reference 163 (+31 bytes, no whitespaces)
+- size: oxc 194 vs reference 163 (no whitespaces: +31, formatted: +30)
 
 ```js
 function func1(arg1, arg2) {
@@ -6999,7 +6886,7 @@ console.log(func1(7, getX('data-y')));
 ## `swc/issues/10532`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 166 vs reference 134 (+32 bytes, no whitespaces)
+- size: oxc 166 vs reference 134 (no whitespaces: +32, formatted: +50)
 
 ```js
 (function() {
@@ -7046,7 +6933,7 @@ console.log(func1(7, getX('data-y')));
 ## `swc/issues/10876/3`
 
 - tags: `join vars`, `sequences`, `2 iterations`
-- size: oxc 162 vs reference 130 (+32 bytes, no whitespaces)
+- size: oxc 162 vs reference 130 (no whitespaces: +32, formatted: +30)
 
 ```js
 const createCounter = () => {
@@ -7093,7 +6980,7 @@ export {};
 ## `swc/issues/7984`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 168 vs reference 136 (+32 bytes, no whitespaces)
+- size: oxc 168 vs reference 136 (no whitespaces: +32, formatted: +50)
 
 ```js
 getInitialProps = (code) => {
@@ -7138,7 +7025,7 @@ getInitialProps = (code) => {
 ## `swc/issues/react/hooks/5`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 391 vs reference 357 (+34 bytes, no whitespaces)
+- size: oxc 391 vs reference 357 (no whitespaces: +34, formatted: +26)
 
 ```js
 const CONST_1 = 'const1';
@@ -7214,7 +7101,7 @@ export function HeaderCTA() {
 ## `swc/issues/8806`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
-- size: oxc 85 vs reference 50 (+35 bytes, no whitespaces)
+- size: oxc 85 vs reference 50 (no whitespaces: +35, formatted: +45)
 
 ```js
 function logTheNine() {
@@ -7243,7 +7130,7 @@ logTheNine();
 ## `swc/projects/jquery/3`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 526 vs reference 491 (+35 bytes, no whitespaces)
+- size: oxc 526 vs reference 491 (no whitespaces: +35, formatted: +35)
 
 ```js
 export const obj = { ready: function(wait) {
@@ -7293,7 +7180,7 @@ export const obj = { ready: function(wait) {
 ## `swc/issues/8718/4`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 118 vs reference 82 (+36 bytes, no whitespaces)
+- size: oxc 118 vs reference 82 (no whitespaces: +36, formatted: +50)
 
 ```js
 let a;
@@ -7331,7 +7218,7 @@ console.log((a += 1, a += 2));
 ## `swc/projects/jquery/6`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 258 vs reference 222 (+36 bytes, no whitespaces)
+- size: oxc 258 vs reference 222 (no whitespaces: +36, formatted: +38)
 
 ```js
 export const obj = { inArray: function(elem, arr, i) {
@@ -7374,7 +7261,7 @@ export const obj = { inArray: function(elem, arr, i) {
 ## `swc/issues/spread-primitives-void-call`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 202 vs reference 164 (+38 bytes, no whitespaces)
+- size: oxc 202 vs reference 164 (no whitespaces: +38, formatted: +47)
 
 ```js
 // The motivating case: a pure call inside `void` is reduced to `void 0` by
@@ -7409,7 +7296,7 @@ console.log({
 ## `swc/issues/10981`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 106 vs reference 67 (+39 bytes, no whitespaces)
+- size: oxc 106 vs reference 67 (no whitespaces: +39, formatted: +53)
 
 ```js
 class C {
@@ -7447,7 +7334,7 @@ class D {
 ## `swc/issues/11103`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 241 vs reference 202 (+39 bytes, no whitespaces)
+- size: oxc 241 vs reference 202 (no whitespaces: +39, formatted: +58)
 
 ```js
 import assert from 'node:assert';
@@ -7489,7 +7376,7 @@ export default function Home() {
 ## `swc/issues/5910/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 142 vs reference 102 (+40 bytes, no whitespaces)
+- size: oxc 142 vs reference 102 (no whitespaces: +40, formatted: +48)
 
 ```js
 export function fn1() {
@@ -7525,7 +7412,7 @@ export function fn1() {
 ## `swc/issues/9922/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 41 vs reference 0 (+41 bytes, no whitespaces)
+- size: oxc 41 vs reference 0 (no whitespaces: +41, formatted: +55)
 
 ```js
 switch (0) {
@@ -7551,7 +7438,7 @@ switch (0) {
 ## `swc/member_expr/array_side_effects`
 
 - tags: `drop debugger`, `join vars`, `sequences`
-- size: oxc 248 vs reference 207 (+41 bytes, no whitespaces)
+- size: oxc 248 vs reference 207 (no whitespaces: +41, formatted: +101)
 
 ```js
 // Out of bounds
@@ -7659,7 +7546,7 @@ f([
 ## `swc/issues/11684/class-decl`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 169 vs reference 126 (+43 bytes, no whitespaces)
+- size: oxc 169 vs reference 126 (no whitespaces: +43, formatted: +47)
 
 ```js
 class A {
@@ -7694,7 +7581,7 @@ console.log(new C(1, 2, 3), new C(4, 5, 6));
 ## `swc/issues/6279/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 100 vs reference 55 (+45 bytes, no whitespaces)
+- size: oxc 100 vs reference 55 (no whitespaces: +45, formatted: +56)
 
 ```js
 const r = new RegExp('a', 'g');
@@ -7726,7 +7613,7 @@ run('abcda', r);
 ## `swc/issues/7402`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
-- size: oxc 261 vs reference 216 (+45 bytes, no whitespaces)
+- size: oxc 261 vs reference 216 (no whitespaces: +45, formatted: +61)
 
 ```js
 export function mutate(out) {
@@ -7794,7 +7681,7 @@ myFunc(out);
 ## `swc/issues/8173`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 1022 vs reference 977 (+45 bytes, no whitespaces)
+- size: oxc 1022 vs reference 977 (no whitespaces: +45, formatted: +71)
 
 ```js
 'use strict';
@@ -7901,7 +7788,7 @@ badFunction();
 ## `swc/issues/next-97517`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
-- size: oxc 189 vs reference 144 (+45 bytes, no whitespaces)
+- size: oxc 189 vs reference 144 (no whitespaces: +45, formatted: +22)
 
 ```js
 module.exports = [50708, (context) => {
@@ -7948,7 +7835,7 @@ module.exports = [50708, (context) => {
 ## `swc/issues/pure-callee-call`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 224 vs reference 179 (+45 bytes, no whitespaces)
+- size: oxc 224 vs reference 179 (no whitespaces: +45, formatted: +48)
 
 ```js
 function identity(value) {
@@ -8003,7 +7890,7 @@ console.log(count);
 ## `swc/projects/wmr/archive-1/chunks/index.ddc4110d`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 357 vs reference 312 (+45 bytes, no whitespaces)
+- size: oxc 357 vs reference 312 (no whitespaces: +45, formatted: +51)
 
 ```js
 import { s as style, y, m } from '../index.f66dda46.js';
@@ -8043,7 +7930,7 @@ export default About;
 ## `swc/next/joda`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 334 vs reference 288 (+46 bytes, no whitespaces)
+- size: oxc 334 vs reference 288 (no whitespaces: +46, formatted: +62)
 
 ```js
 'use strict';
@@ -8091,7 +7978,7 @@ export default About;
 ## `swc/issues/10876/2`
 
 - tags: `join vars`, `sequences`, `2 iterations`
-- size: oxc 151 vs reference 104 (+47 bytes, no whitespaces)
+- size: oxc 151 vs reference 104 (no whitespaces: +47, formatted: +57)
 
 ```js
 const createCounter1 = () => {
@@ -8132,7 +8019,7 @@ export {};
 ## `swc/issues/7287/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 87 vs reference 40 (+47 bytes, no whitespaces)
+- size: oxc 87 vs reference 40 (no whitespaces: +47, formatted: +64)
 
 ```js
 (function() {
@@ -8164,7 +8051,7 @@ export {};
 ## `swc/issues/9459`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 84 vs reference 37 (+47 bytes, no whitespaces)
+- size: oxc 84 vs reference 37 (no whitespaces: +47, formatted: +63)
 
 ```js
 export default function Component() {
@@ -8188,7 +8075,7 @@ export default function Component() {
 ## `swc/issues/10425`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
-- size: oxc 68 vs reference 19 (+49 bytes, no whitespaces)
+- size: oxc 68 vs reference 19 (no whitespaces: +49, formatted: +63)
 
 ```js
 export const foo = 6;
@@ -8221,7 +8108,7 @@ class Ban {
 ## `swc/member_expr/object_side_effects`
 
 - tags: `drop debugger`, `join vars`, `sequences`
-- size: oxc 154 vs reference 105 (+49 bytes, no whitespaces)
+- size: oxc 154 vs reference 105 (no whitespaces: +49, formatted: +82)
 
 ```js
 // foo(), {}.__proto__
@@ -8273,7 +8160,7 @@ f({
 ## `swc/issues/9785`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 152 vs reference 102 (+50 bytes, no whitespaces)
+- size: oxc 152 vs reference 102 (no whitespaces: +50, formatted: +62)
 
 ```js
 function dist_index_es_P(e) {
@@ -8318,7 +8205,7 @@ dist_index_es_P('aa');
 ## `swc/issues/7575/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 117 vs reference 65 (+52 bytes, no whitespaces)
+- size: oxc 117 vs reference 65 (no whitespaces: +52, formatted: +57)
 
 ```js
 export const envKey = 'staging' || 'production';
@@ -8355,7 +8242,7 @@ export const environment = environmentResolver();
 ## `swc/non-finite-number-literals`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
-- size: oxc 303 vs reference 250 (+53 bytes, no whitespaces)
+- size: oxc 303 vs reference 250 (no whitespaces: +53, formatted: +47)
 
 ```js
 globalThis.values = [
@@ -8425,7 +8312,7 @@ switch (1 / 0) {
 ## `swc/issues/2028`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 125 vs reference 71 (+54 bytes, no whitespaces)
+- size: oxc 125 vs reference 71 (no whitespaces: +54, formatted: +62)
 
 ```js
 function isSymbol(s) {
@@ -8461,7 +8348,7 @@ module.exports = isKey;
 ## `swc/issues/9610-arrow-functions`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
-- size: oxc 191 vs reference 137 (+54 bytes, no whitespaces)
+- size: oxc 191 vs reference 137 (no whitespaces: +54, formatted: +74)
 
 ```js
 // Test: Arrow functions with unused default parameters
@@ -8492,7 +8379,7 @@ export const example = () => foo(1) + bar(2) + baz(3) + qux(4);
 ## `swc/simple/switch/const/order`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 96 vs reference 42 (+54 bytes, no whitespaces)
+- size: oxc 96 vs reference 42 (no whitespaces: +54, formatted: +71)
 
 ```js
 switch (1) {
@@ -8527,7 +8414,7 @@ switch (1) {
 ## `swc/issues/10936`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 904 vs reference 849 (+55 bytes, no whitespaces)
+- size: oxc 904 vs reference 849 (no whitespaces: +55, formatted: +75)
 
 ```js
 const variable = {};
@@ -8652,7 +8539,7 @@ export const test11 = [
 ## `swc/issues/7331/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 83 vs reference 27 (+56 bytes, no whitespaces)
+- size: oxc 83 vs reference 27 (no whitespaces: +56, formatted: +74)
 
 ```js
 export default function() {
@@ -8683,7 +8570,7 @@ export default function() {
 ## `swc/issues/8271`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 334 vs reference 278 (+56 bytes, no whitespaces)
+- size: oxc 334 vs reference 278 (no whitespaces: +56, formatted: +75)
 
 ```js
 let $eb2fd35624c84372$var$A = (() => {
@@ -8748,7 +8635,7 @@ console.log(new $eb2fd35624c84372$var$A().tagName);
 ## `swc/issues/10178`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 84 vs reference 27 (+57 bytes, no whitespaces)
+- size: oxc 84 vs reference 27 (no whitespaces: +57, formatted: +63)
 
 ```js
 //// [indexerWithTuple.ts]
@@ -8770,7 +8657,7 @@ strNumTuple[0], strNumTuple['0'];
 ## `swc/projects/jquery/5`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 441 vs reference 383 (+58 bytes, no whitespaces)
+- size: oxc 441 vs reference 383 (no whitespaces: +58, formatted: +71)
 
 ```js
 export const obj = { each: function(obj, callback, args) {
@@ -8837,7 +8724,7 @@ export const obj = { each: function(obj, callback, args) {
 ## `swc/projects/mootools/8`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 940 vs reference 881 (+59 bytes, no whitespaces)
+- size: oxc 940 vs reference 881 (no whitespaces: +59, formatted: +62)
 
 ```js
 var Browser = window.Browser || {};
@@ -8920,7 +8807,7 @@ if (Browser.name == 'unknown') {
 ## `swc/simple/inline/6`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 315 vs reference 256 (+59 bytes, no whitespaces)
+- size: oxc 315 vs reference 256 (no whitespaces: +59, formatted: +67)
 
 ```js
 export function endOf(units) {
@@ -8963,7 +8850,7 @@ export function endOf(units) {
 ## `swc/issues/11755`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 235 vs reference 175 (+60 bytes, no whitespaces)
+- size: oxc 235 vs reference 175 (no whitespaces: +60, formatted: +73)
 
 ```js
 function f() {
@@ -9007,7 +8894,7 @@ f();
 ## `swc/projects/jquery/.19`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 496 vs reference 436 (+60 bytes, no whitespaces)
+- size: oxc 496 vs reference 436 (no whitespaces: +60, formatted: +58)
 
 ```js
 // Functions to create xhrs
@@ -9059,7 +8946,7 @@ createStandardXHR;
 ## `swc/projects/wmr/archive-1/chunks/prerender.93c6f601`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 552 vs reference 489 (+63 bytes, no whitespaces)
+- size: oxc 552 vs reference 489 (no whitespaces: +63, formatted: +70)
 
 ```js
 import '../index.f66dda46.js';
@@ -9119,7 +9006,7 @@ export { prerender };
 ## `swc/issues/11303`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 96 vs reference 31 (+65 bytes, no whitespaces)
+- size: oxc 96 vs reference 31 (no whitespaces: +65, formatted: +86)
 
 ```js
 class X {
@@ -9153,7 +9040,7 @@ const t = (a) => ((b) => {
 ## `swc/issues/10746`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 149 vs reference 81 (+68 bytes, no whitespaces)
+- size: oxc 149 vs reference 81 (no whitespaces: +68, formatted: +74)
 
 ```js
 const ErrorResponse = (statusCode, message) => {
@@ -9176,7 +9063,7 @@ export const unknownError = ErrorResponse(520, 'Unknown error.');
 ## `swc/issues/2807/1`
 
 - tags: `drop console`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 98 vs reference 29 (+69 bytes, no whitespaces)
+- size: oxc 98 vs reference 29 (no whitespaces: +69, formatted: +76)
 
 ```js
 export default function A() {
@@ -9203,7 +9090,7 @@ export default function A() {
 ## `swc/issues/9922/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 73 vs reference 4 (+69 bytes, no whitespaces)
+- size: oxc 73 vs reference 4 (no whitespaces: +69, formatted: +91)
 
 ```js
 switch (g()) {
@@ -9236,7 +9123,7 @@ switch (g()) {
 ## `swc/issues/11512-simple`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `7 iterations`
-- size: oxc 259 vs reference 189 (+70 bytes, no whitespaces)
+- size: oxc 259 vs reference 189 (no whitespaces: +70, formatted: +82)
 
 ```js
 // Test that functions with side-effect-free default parameters can be inlined.
@@ -9269,7 +9156,7 @@ export function test() {
 ## `swc/issues/7784/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 87 vs reference 15 (+72 bytes, no whitespaces)
+- size: oxc 87 vs reference 15 (no whitespaces: +72, formatted: +97)
 
 ```js
 let a = 1;
@@ -9306,7 +9193,7 @@ console.log(a);
 ## `swc/issues/7784/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 87 vs reference 15 (+72 bytes, no whitespaces)
+- size: oxc 87 vs reference 15 (no whitespaces: +72, formatted: +97)
 
 ```js
 let a = 1;
@@ -9343,7 +9230,7 @@ console.log(a);
 ## `swc/issues/11007`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 150 vs reference 76 (+74 bytes, no whitespaces)
+- size: oxc 150 vs reference 76 (no whitespaces: +74, formatted: +93)
 
 ```js
 const profile = (_s, fn) => {
@@ -9378,7 +9265,7 @@ profile('trace1', () => {
 ## `swc/projects/underscore/17`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 562 vs reference 488 (+74 bytes, no whitespaces)
+- size: oxc 562 vs reference 488 (no whitespaces: +74, formatted: +78)
 
 ```js
 export function foo() {
@@ -9438,7 +9325,7 @@ export function foo() {
 ## `swc/issues/7770/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 221 vs reference 145 (+76 bytes, no whitespaces)
+- size: oxc 221 vs reference 145 (no whitespaces: +76, formatted: +92)
 
 ```js
 const sWidth = 'asdasd';
@@ -9493,7 +9380,7 @@ exports.MainCSS = `
 ## `swc/issues/drop-console-computed`
 
 - tags: `drop console`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 207 vs reference 131 (+76 bytes, no whitespaces)
+- size: oxc 207 vs reference 131 (no whitespaces: +76, formatted: +77)
 
 ```js
 const cb = console.error['bind'](console);
@@ -9523,7 +9410,7 @@ process.stdout.write(typeof r + '\n');
 ## `swc/issues/10630`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 129 vs reference 50 (+79 bytes, no whitespaces)
+- size: oxc 129 vs reference 50 (no whitespaces: +79, formatted: +90)
 
 ```js
 var constants = {
@@ -9556,7 +9443,7 @@ var y = constants.second;
 ## `swc/issues/11977`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 352 vs reference 272 (+80 bytes, no whitespaces)
+- size: oxc 352 vs reference 272 (no whitespaces: +80, formatted: +104)
 
 ```js
 var Subscription = (function() {
@@ -9606,7 +9493,7 @@ var x = class extends d {};
 ## `swc/simple/inline/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 96 vs reference 16 (+80 bytes, no whitespaces)
+- size: oxc 96 vs reference 16 (no whitespaces: +80, formatted: +95)
 
 ```js
 const A = 10, B = 5;
@@ -9632,7 +9519,7 @@ console.log(mod(A, A + B));
 ## `swc/issues/11083`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 237 vs reference 153 (+84 bytes, no whitespaces)
+- size: oxc 237 vs reference 153 (no whitespaces: +84, formatted: +95)
 
 ```js
 (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
@@ -9689,7 +9576,7 @@ console.log(mod(A, A + B));
 ## `swc/issues/7241`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 116 vs reference 25 (+91 bytes, no whitespaces)
+- size: oxc 116 vs reference 25 (no whitespaces: +91, formatted: +115)
 
 ```js
 (function() {
@@ -9729,7 +9616,7 @@ console.log(mod(A, A + B));
 ## `swc/issues/10041`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 241 vs reference 149 (+92 bytes, no whitespaces)
+- size: oxc 241 vs reference 149 (no whitespaces: +92, formatted: +124)
 
 ```js
 (function() {
@@ -9785,7 +9672,7 @@ console.log(mod(A, A + B));
 ## `swc/issues/6957/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 422 vs reference 330 (+92 bytes, no whitespaces)
+- size: oxc 422 vs reference 330 (no whitespaces: +92, formatted: +76)
 
 ```js
 // prettier-ignore
@@ -9844,7 +9731,7 @@ export function foo() {
 ## `swc/simple/inline/4`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 230 vs reference 138 (+92 bytes, no whitespaces)
+- size: oxc 230 vs reference 138 (no whitespaces: +92, formatted: +102)
 
 ```js
 function $parcel$export(a, b, c) {
@@ -9888,7 +9775,7 @@ const A = 'A', B = 'B', C = 'C';
 ## `swc/issues/11871`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
-- size: oxc 626 vs reference 531 (+95 bytes, no whitespaces)
+- size: oxc 626 vs reference 531 (no whitespaces: +95, formatted: +120)
 
 ```js
 var window = {};
@@ -9939,7 +9826,7 @@ console.log(window.x.f(0, 0));
 ## `swc/issues/6730`
 
 - tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`
-- size: oxc 620 vs reference 514 (+106 bytes, no whitespaces)
+- size: oxc 620 vs reference 514 (no whitespaces: +106, formatted: +106)
 
 ```js
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
@@ -10059,7 +9946,7 @@ export const styleLoader = () => {
 ## `swc/issues/12177`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 526 vs reference 413 (+113 bytes, no whitespaces)
+- size: oxc 526 vs reference 413 (no whitespaces: +113, formatted: +126)
 
 ```js
 const effects = [];
@@ -10144,7 +10031,7 @@ console.log(effects.join(','));
 ## `swc/issues/6751/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 265 vs reference 144 (+121 bytes, no whitespaces)
+- size: oxc 265 vs reference 144 (no whitespaces: +121, formatted: +133)
 
 ```js
 let current_component;
@@ -10198,7 +10085,7 @@ try {
 ## `swc/issues/9757`
 
 - tags: `drop console`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 153 vs reference 29 (+124 bytes, no whitespaces)
+- size: oxc 153 vs reference 29 (no whitespaces: +124, formatted: +134)
 
 ```js
 export default function A() {
@@ -10225,7 +10112,7 @@ export default function A() {
 ## `swc/issues/non-finite-number-method-call`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 482 vs reference 357 (+125 bytes, no whitespaces)
+- size: oxc 482 vs reference 357 (no whitespaces: +125, formatted: +121)
 
 ```js
 console.log(1.23.toFixed(-1));
@@ -10270,7 +10157,7 @@ console.log(NaN.toPrecision(-1));
 ## `swc/no-side-effect`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 126 vs reference 0 (+126 bytes, no whitespaces)
+- size: oxc 126 vs reference 0 (no whitespaces: +126, formatted: +151)
 
 ```js
 function fnA(args) {
@@ -10357,7 +10244,7 @@ fnD();
 ## `swc/pr/11814_class_effect_guards`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 444 vs reference 313 (+131 bytes, no whitespaces)
+- size: oxc 444 vs reference 313 (no whitespaces: +131, formatted: +167)
 
 ```js
 class KeepThis {
@@ -10437,7 +10324,7 @@ class KeepNonExpressionBlock {
 ## `swc/issues/10876/1`
 
 - tags: `join vars`, `sequences`, `2 iterations`
-- size: oxc 524 vs reference 391 (+133 bytes, no whitespaces)
+- size: oxc 524 vs reference 391 (no whitespaces: +133, formatted: +147)
 
 ```js
 const createCounter1 = () => {
@@ -10523,7 +10410,7 @@ export {};
 ## `swc/issues/7004`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 250 vs reference 105 (+145 bytes, no whitespaces)
+- size: oxc 250 vs reference 105 (no whitespaces: +145, formatted: +166)
 
 ```js
 function getDescription(option, parentGroup) {
@@ -10568,7 +10455,7 @@ printDescription();
 ## `swc/issues/8284`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 707 vs reference 562 (+145 bytes, no whitespaces)
+- size: oxc 707 vs reference 562 (no whitespaces: +145, formatted: +171)
 
 ```js
 (function(global, factory) {
@@ -10631,7 +10518,7 @@ printDescription();
 ## `swc/issues/11102`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 168 vs reference 21 (+147 bytes, no whitespaces)
+- size: oxc 168 vs reference 21 (no whitespaces: +147, formatted: +176)
 
 ```js
 const decideZoomByAccuracy = (range) => {
@@ -10669,7 +10556,7 @@ export const zoom = decideZoomByAccuracy(75);
 ## `swc/issues/9610-methods`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
-- size: oxc 575 vs reference 425 (+150 bytes, no whitespaces)
+- size: oxc 575 vs reference 425 (no whitespaces: +150, formatted: +174)
 
 ```js
 // Test: Object and class methods with unused default parameters
@@ -10746,7 +10633,7 @@ export function example() {
 ## `swc/issues/11512`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `7 iterations`
-- size: oxc 236 vs reference 84 (+152 bytes, no whitespaces)
+- size: oxc 236 vs reference 84 (no whitespaces: +152, formatted: +182)
 
 ```js
 const defaultMessage = 'hello';
@@ -10798,7 +10685,7 @@ export function example() {
 ## `swc/issues/11158`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 251 vs reference 82 (+169 bytes, no whitespaces)
+- size: oxc 251 vs reference 82 (no whitespaces: +169, formatted: +225)
 
 ```js
 (() => {
@@ -10846,7 +10733,7 @@ export function example() {
 ## `swc/pr/11814_class_effect_order`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 548 vs reference 354 (+194 bytes, no whitespaces)
+- size: oxc 548 vs reference 354 (no whitespaces: +194, formatted: +238)
 
 ```js
 class DeclarationOrder extends effect('decl:extends') {
@@ -10899,7 +10786,7 @@ class DeclarationOrder extends effect('decl:extends') {
 ## `swc/issues/drop-console-value-refs`
 
 - tags: `drop console`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 915 vs reference 705 (+210 bytes, no whitespaces)
+- size: oxc 915 vs reference 705 (no whitespaces: +210, formatted: +192)
 
 ```js
 const err = console.error.bind(console);
@@ -10973,7 +10860,7 @@ process.stdout.write(typeof st + '\n');
 ## `swc/issues/8813`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 528 vs reference 310 (+218 bytes, no whitespaces)
+- size: oxc 528 vs reference 310 (no whitespaces: +218, formatted: +345)
 
 ```js
 const k1 = (() => {
@@ -11122,7 +11009,7 @@ console.log(c);
 ## `swc/projects/backbone/9`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 549 vs reference 212 (+337 bytes, no whitespaces)
+- size: oxc 549 vs reference 212 (no whitespaces: +337, formatted: +354)
 
 ```js
 (function() {
@@ -11185,7 +11072,7 @@ console.log(c);
 ## `swc/issues/numeric-property-key`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
-- size: oxc 532 vs reference 175 (+357 bytes, no whitespaces)
+- size: oxc 532 vs reference 175 (no whitespaces: +357, formatted: +461)
 
 ```js
 console.log([

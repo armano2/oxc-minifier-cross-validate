@@ -6,9 +6,9 @@ Fixtures run: 4109
 
 ## Summary
 
-| smaller | not-idempotent | panic | larger | differs | parse-error | config-error | pass | total |
-|---|---|---|---|---|---|---|---|---|
-| 1291 | 6 | 0 | 1611 | 211 | 23 | 0 | 967 | 4109 |
+| smaller | not-idempotent | panic | larger | whitespace | differs | parse-error | config-error | pass | total |
+|---|---|---|---|---|---|---|---|---|---|
+| 1291 | 6 | 0 | 1594 | 17 | 211 | 23 | 0 | 967 | 4109 |
 
 ## Reports
 
@@ -16,6 +16,7 @@ Fixtures run: 4109
 |---|---:|---|
 | smaller | 1291 | [smaller.md](smaller.md) |
 | not-idempotent | 6 | [not-idempotent.md](not-idempotent.md) |
-| larger | 1611 | [larger.md](larger.md) |
+| larger | 1594 | [larger.md](larger.md) |
+| whitespace | 17 | [whitespace.md](whitespace.md) |
 | differs | 211 | [differs.md](differs.md) |
 | parse-error | 23 | [parse-error.md](parse-error.md) |

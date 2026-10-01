@@ -7,7 +7,7 @@ Fixtures: 2
 ## `pass-1/7`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 52 vs reference 53 (-1 bytes, no whitespaces)
+- size: oxc 52 vs reference 53 (no whitespaces: -1, formatted: -2)
 
 ```js
 export function foo(i) {
@@ -33,7 +33,7 @@ export function foo(i) {
 ## `pass-1/issue-6405/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 23 vs reference 89 (-66 bytes, no whitespaces)
+- size: oxc 23 vs reference 89 (no whitespaces: -66, formatted: -86)
 
 ```js
 export const fn = () => {

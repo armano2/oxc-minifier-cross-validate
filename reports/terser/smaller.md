@@ -7,7 +7,7 @@ Fixtures: 593
 ## `terser/arguments/arguments_and_destructuring_1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 64 vs reference 65 (-1 bytes, no whitespaces)
+- size: oxc 64 vs reference 65 (no whitespaces: -1, formatted: -1)
 
 ```js
 (function({ d }) {
@@ -30,7 +30,7 @@ Fixtures: 593
 ## `terser/arguments/duplicate_parameter_with_arguments`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 64 vs reference 65 (-1 bytes, no whitespaces)
+- size: oxc 64 vs reference 65 (no whitespaces: -1, formatted: -1)
 
 ```js
 (function(a, a) {
@@ -53,7 +53,7 @@ Fixtures: 593
 ## `terser/collapse_vars/cascade_switch`
 
 - tags: `join vars`
-- size: oxc 50 vs reference 51 (-1 bytes, no whitespaces)
+- size: oxc 50 vs reference 51 (no whitespaces: -1, formatted: -1)
 
 ```js
 function f(a, b) {
@@ -81,7 +81,7 @@ function f(a, b) {
 ## `terser/collapse_vars/issue_2313_2`
 
 - tags: `join vars`
-- size: oxc 54 vs reference 55 (-1 bytes, no whitespaces)
+- size: oxc 54 vs reference 55 (no whitespaces: -1, formatted: -1)
 
 ```js
 var c = 0;
@@ -112,7 +112,7 @@ console.log(c);
 ## `terser/collapse_vars/issue_2954_2`
 
 - tags: `join vars`
-- size: oxc 118 vs reference 119 (-1 bytes, no whitespaces)
+- size: oxc 118 vs reference 119 (no whitespaces: -1, formatted: +1)
 
 ```js
 var a = 'FAIL_1', b;
@@ -159,7 +159,7 @@ console.log(a);
 ## `terser/collapse_vars/switch_case_3`
 
 - tags: `join vars`
-- size: oxc 64 vs reference 65 (-1 bytes, no whitespaces)
+- size: oxc 64 vs reference 65 (no whitespaces: -1, formatted: +1)
 
 ```js
 var a = 1, b = 2;
@@ -194,7 +194,7 @@ console.log(b);
 ## `terser/destructuring/issue_2140`
 
 - tags: `remove unused`
-- size: oxc 54 vs reference 55 (-1 bytes, no whitespaces)
+- size: oxc 54 vs reference 55 (no whitespaces: -1, formatted: -1)
 
 ```js
 !(function() {
@@ -219,7 +219,7 @@ console.log(b);
 ## `terser/drop_unused/issue_2660_1`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 61 vs reference 62 (-1 bytes, no whitespaces)
+- size: oxc 61 vs reference 62 (no whitespaces: -1, formatted: +0)
 
 ```js
 var a = 2;
@@ -249,7 +249,7 @@ console.log(a);
 ## `terser/drop_unused/issue_2660_2`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 65 vs reference 66 (-1 bytes, no whitespaces)
+- size: oxc 65 vs reference 66 (no whitespaces: -1, formatted: +1)
 
 ```js
 var a = 1;
@@ -279,7 +279,7 @@ console.log(a);
 
 ## `terser/evaluate/unsafe_constant`
 
-- size: oxc 45 vs reference 46 (-1 bytes, no whitespaces)
+- size: oxc 45 vs reference 46 (no whitespaces: -1, formatted: -1)
 
 ```js
 console.log(true.a, false.a, null.a, undefined.a);
@@ -298,7 +298,7 @@ console.log(true.a, false.a, null.a, undefined.a);
 ## `terser/functions/recursive_inline_2`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 52 vs reference 53 (-1 bytes, no whitespaces)
+- size: oxc 52 vs reference 53 (no whitespaces: -1, formatted: +0)
 
 ```js
 function f(n) {
@@ -323,7 +323,7 @@ console.log(f(5));
 
 ## `terser/if_return/issue_1317`
 
-- size: oxc 76 vs reference 77 (-1 bytes, no whitespaces)
+- size: oxc 76 vs reference 77 (no whitespaces: -1, formatted: -1)
 
 ```js
 !(function(a) {
@@ -356,7 +356,7 @@ console.log(f(5));
 
 ## `terser/if_return/issue_1317_strict`
 
-- size: oxc 89 vs reference 90 (-1 bytes, no whitespaces)
+- size: oxc 89 vs reference 90 (no whitespaces: -1, formatted: -1)
 
 ```js
 'use strict';
@@ -392,7 +392,7 @@ console.log(f(5));
 ## `terser/issue_1833/iife_while`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 51 vs reference 52 (-1 bytes, no whitespaces)
+- size: oxc 51 vs reference 52 (no whitespaces: -1, formatted: +2)
 
 ```js
 function f() {
@@ -426,7 +426,7 @@ f();
 
 ## `terser/loops/issue_186_beautify_braces`
 
-- size: oxc 63 vs reference 64 (-1 bytes, no whitespaces)
+- size: oxc 63 vs reference 64 (no whitespaces: -1, formatted: -13)
 
 ```js
 var x = 3;
@@ -465,7 +465,7 @@ if (foo()) {
 
 ## `terser/loops/issue_186_beautify_braces_ie8`
 
-- size: oxc 63 vs reference 64 (-1 bytes, no whitespaces)
+- size: oxc 63 vs reference 64 (no whitespaces: -1, formatted: -13)
 
 ```js
 var x = 3;
@@ -504,7 +504,7 @@ if (foo()) {
 
 ## `terser/loops/issue_186_beautify_ie8`
 
-- size: oxc 63 vs reference 64 (-1 bytes, no whitespaces)
+- size: oxc 63 vs reference 64 (no whitespaces: -1, formatted: -13)
 
 ```js
 var x = 3;
@@ -541,7 +541,7 @@ if (foo()) {
 
 ## `terser/loops/issue_186_braces`
 
-- size: oxc 63 vs reference 64 (-1 bytes, no whitespaces)
+- size: oxc 63 vs reference 64 (no whitespaces: -1, formatted: -13)
 
 ```js
 var x = 3;
@@ -580,7 +580,7 @@ if (foo()) {
 
 ## `terser/loops/issue_186_braces_ie8`
 
-- size: oxc 63 vs reference 64 (-1 bytes, no whitespaces)
+- size: oxc 63 vs reference 64 (no whitespaces: -1, formatted: -13)
 
 ```js
 var x = 3;
@@ -619,7 +619,7 @@ if (foo()) {
 
 ## `terser/loops/issue_186_ie8`
 
-- size: oxc 63 vs reference 64 (-1 bytes, no whitespaces)
+- size: oxc 63 vs reference 64 (no whitespaces: -1, formatted: -13)
 
 ```js
 var x = 3;
@@ -656,7 +656,7 @@ if (foo()) {
 
 ## `terser/negate_iife/issue_1254_negate_iife_nested`
 
-- size: oxc 63 vs reference 64 (-1 bytes, no whitespaces)
+- size: oxc 63 vs reference 64 (no whitespaces: -1, formatted: -1)
 
 ```js
 (function() {
@@ -681,7 +681,7 @@ if (foo()) {
 
 ## `terser/negate_iife/issue_1254_negate_iife_true`
 
-- size: oxc 57 vs reference 58 (-1 bytes, no whitespaces)
+- size: oxc 57 vs reference 58 (no whitespaces: -1, formatted: -1)
 
 ```js
 (function() {
@@ -706,7 +706,7 @@ if (foo()) {
 
 ## `terser/negate_iife/negate_iife_1`
 
-- size: oxc 24 vs reference 25 (-1 bytes, no whitespaces)
+- size: oxc 24 vs reference 25 (no whitespaces: -1, formatted: -1)
 
 ```js
 (function() {
@@ -728,7 +728,7 @@ if (foo()) {
 
 ## `terser/new/dot_parenthesis_2`
 
-- size: oxc 49 vs reference 50 (-1 bytes, no whitespaces)
+- size: oxc 49 vs reference 50 (no whitespaces: -1, formatted: -2)
 
 ```js
 console.log(typeof new function() {
@@ -748,7 +748,7 @@ console.log(typeof new function() {
 
 ## `terser/new/new_statements_2`
 
-- size: oxc 137 vs reference 138 (-1 bytes, no whitespaces)
+- size: oxc 137 vs reference 138 (no whitespaces: -1, formatted: +0)
 
 ```js
 new x();
@@ -784,7 +784,7 @@ new (bar = function(foo) {
 ## `terser/properties/join_object_assignments_if`
 
 - tags: `join vars`
-- size: oxc 63 vs reference 64 (-1 bytes, no whitespaces)
+- size: oxc 63 vs reference 64 (no whitespaces: -1, formatted: -2)
 
 ```js
 console.log((function() {
@@ -810,7 +810,7 @@ console.log((function() {
 ## `terser/pure_funcs/unary`
 
 - tags: `pure functions`
-- size: oxc 131 vs reference 132 (-1 bytes, no whitespaces)
+- size: oxc 131 vs reference 132 (no whitespaces: -1, formatted: +0)
 
 ```js
 typeof foo();
@@ -860,7 +860,7 @@ a['bar']++;
 ## `terser/reduce_vars/escape_await`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 187 vs reference 188 (-1 bytes, no whitespaces)
+- size: oxc 187 vs reference 188 (no whitespaces: -1, formatted: -1)
 
 ```js
 function main() {
@@ -913,7 +913,7 @@ main();
 ## `terser/reduce_vars/escape_conditional`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 166 vs reference 167 (-1 bytes, no whitespaces)
+- size: oxc 166 vs reference 167 (no whitespaces: -1, formatted: +0)
 
 ```js
 function main() {
@@ -955,7 +955,7 @@ main();
 ## `terser/reduce_vars/escape_throw`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 169 vs reference 170 (-1 bytes, no whitespaces)
+- size: oxc 169 vs reference 170 (no whitespaces: -1, formatted: +0)
 
 ```js
 function main() {
@@ -1002,7 +1002,7 @@ main();
 ## `terser/reduce_vars/escaped_prop_3`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 94 vs reference 95 (-1 bytes, no whitespaces)
+- size: oxc 94 vs reference 95 (no whitespaces: -1, formatted: -3)
 
 ```js
 var a;
@@ -1044,7 +1044,7 @@ h();
 ## `terser/reduce_vars/issue_2869`
 
 - tags: `join vars`
-- size: oxc 77 vs reference 78 (-1 bytes, no whitespaces)
+- size: oxc 77 vs reference 78 (no whitespaces: -1, formatted: -1)
 
 ```js
 var c = 'FAIL';
@@ -1075,7 +1075,7 @@ console.log(c);
 
 ## `terser/reduce_vars/issue_379`
 
-- size: oxc 56 vs reference 57 (-1 bytes, no whitespaces)
+- size: oxc 56 vs reference 57 (no whitespaces: -1, formatted: -1)
 
 ```js
 global.a = ((...args) => (a1, a2) => a1.foo === a2.foo)(...args);
@@ -1094,7 +1094,7 @@ global.a = ((...args) => (a1, a2) => a1.foo === a2.foo)(...args);
 ## `terser/reduce_vars/lvalues_def_2`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 38 vs reference 39 (-1 bytes, no whitespaces)
+- size: oxc 38 vs reference 39 (no whitespaces: -1, formatted: -1)
 
 ```js
 var b = 1;
@@ -1117,7 +1117,7 @@ console.log(a, b);
 ## `terser/reduce_vars/recursive_inlining_1`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 36 vs reference 37 (-1 bytes, no whitespaces)
+- size: oxc 36 vs reference 37 (no whitespaces: -1, formatted: -1)
 
 ```js
 !(function() {
@@ -1146,7 +1146,7 @@ console.log(a, b);
 ## `terser/reduce_vars/recursive_inlining_2`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 36 vs reference 37 (-1 bytes, no whitespaces)
+- size: oxc 36 vs reference 37 (no whitespaces: -1, formatted: -1)
 
 ```js
 !(function() {
@@ -1178,7 +1178,7 @@ console.log(a, b);
 ## `terser/reduce_vars/var_assign_4`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 37 vs reference 38 (-1 bytes, no whitespaces)
+- size: oxc 37 vs reference 38 (no whitespaces: -1, formatted: -1)
 
 ```js
 !(function a() {
@@ -1201,7 +1201,7 @@ console.log(a, b);
 
 ## `terser/template_string/issue_1856`
 
-- size: oxc 51 vs reference 52 (-1 bytes, no whitespaces)
+- size: oxc 51 vs reference 52 (no whitespaces: -1, formatted: +0)
 
 ```js
 console.log(`\\n\\r\\u2028\\u2029\n\r\u2028\u2029`);
@@ -1219,7 +1219,7 @@ console.log(`\\n\\r\\u2028\\u2029\n\r\u2028\u2029`);
 
 ## `terser/template_string/issue_1856_ascii_only`
 
-- size: oxc 51 vs reference 52 (-1 bytes, no whitespaces)
+- size: oxc 51 vs reference 52 (no whitespaces: -1, formatted: +0)
 
 ```js
 console.log(`\\n\\r\\u2028\\u2029\n\r\u2028\u2029`);
@@ -1237,7 +1237,7 @@ console.log(`\\n\\r\\u2028\\u2029\n\r\u2028\u2029`);
 
 ## `terser/template_string/template_ending_with_newline`
 
-- size: oxc 52 vs reference 53 (-1 bytes, no whitespaces)
+- size: oxc 52 vs reference 53 (no whitespaces: -1, formatted: +0)
 
 ```js
 function foo(e) {
@@ -1259,7 +1259,7 @@ function foo(e) {
 
 ## `terser/template_string/template_starting_with_newline`
 
-- size: oxc 52 vs reference 53 (-1 bytes, no whitespaces)
+- size: oxc 52 vs reference 53 (no whitespaces: -1, formatted: +0)
 
 ```js
 function foo(e) {
@@ -1281,7 +1281,7 @@ function foo(e) {
 
 ## `terser/template_string/template_with_newline`
 
-- size: oxc 56 vs reference 57 (-1 bytes, no whitespaces)
+- size: oxc 56 vs reference 57 (no whitespaces: -1, formatted: +0)
 
 ```js
 function foo(e) {
@@ -1303,7 +1303,7 @@ function foo(e) {
 
 ## `terser/arguments/arguments_in_arrow_func_1`
 
-- size: oxc 219 vs reference 221 (-2 bytes, no whitespaces)
+- size: oxc 219 vs reference 221 (no whitespaces: -2, formatted: -4)
 
 ```js
 (function(a, b) {
@@ -1338,7 +1338,7 @@ function foo(e) {
 
 ## `terser/asm/asm_function_expression`
 
-- size: oxc 72 vs reference 74 (-2 bytes, no whitespaces)
+- size: oxc 72 vs reference 74 (no whitespaces: -2, formatted: -9)
 
 ```js
 0;
@@ -1377,7 +1377,7 @@ function f() {
 
 ## `terser/asm/asm_nested_functions`
 
-- size: oxc 76 vs reference 78 (-2 bytes, no whitespaces)
+- size: oxc 76 vs reference 78 (no whitespaces: -2, formatted: -9)
 
 ```js
 0;
@@ -1422,7 +1422,7 @@ function b() {
 
 ## `terser/async/for_await_of`
 
-- size: oxc 105 vs reference 107 (-2 bytes, no whitespaces)
+- size: oxc 105 vs reference 107 (no whitespaces: -2, formatted: -2)
 
 ```js
 async function f(x) {
@@ -1449,7 +1449,7 @@ async function f(x) {
 
 ## `terser/block_scope/do_not_remove_anon_blocks_if_they_have_decls`
 
-- size: oxc 61 vs reference 63 (-2 bytes, no whitespaces)
+- size: oxc 61 vs reference 63 (no whitespaces: -2, formatted: -2)
 
 ```js
 function x() {
@@ -1491,7 +1491,7 @@ function x() {
 ## `terser/collapse_vars/collapse_rhs_lhs_2`
 
 - tags: `join vars`
-- size: oxc 56 vs reference 58 (-2 bytes, no whitespaces)
+- size: oxc 56 vs reference 58 (no whitespaces: -2, formatted: +0)
 
 ```js
 var b = 1;
@@ -1521,7 +1521,7 @@ console.log('PASS');
 ## `terser/collapse_vars/collapse_rhs_loop`
 
 - tags: `join vars`
-- size: oxc 107 vs reference 109 (-2 bytes, no whitespaces)
+- size: oxc 107 vs reference 109 (no whitespaces: -2, formatted: -3)
 
 ```js
 var s;
@@ -1546,7 +1546,7 @@ console.log(s);
 ## `terser/collapse_vars/compound_assignment`
 
 - tags: `join vars`
-- size: oxc 30 vs reference 32 (-2 bytes, no whitespaces)
+- size: oxc 30 vs reference 32 (no whitespaces: -2, formatted: -3)
 
 ```js
 var a;
@@ -1571,7 +1571,7 @@ console.log(a);
 ## `terser/collapse_vars/double_def_1`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 19 vs reference 21 (-2 bytes, no whitespaces)
+- size: oxc 19 vs reference 21 (no whitespaces: -2, formatted: -1)
 
 ```js
 var a = x, a = a && y;
@@ -1593,7 +1593,7 @@ a();
 ## `terser/collapse_vars/issue_27`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 59 vs reference 61 (-2 bytes, no whitespaces)
+- size: oxc 59 vs reference 61 (no whitespaces: -2, formatted: -2)
 
 ```js
 (function(jQuery) {
@@ -1619,7 +1619,7 @@ a();
 ## `terser/collapse_vars/issue_2878`
 
 - tags: `join vars`, `sequences`
-- size: oxc 86 vs reference 88 (-2 bytes, no whitespaces)
+- size: oxc 86 vs reference 88 (no whitespaces: -2, formatted: -2)
 
 ```js
 var c = 0;
@@ -1654,7 +1654,7 @@ console.log(c);
 ## `terser/collapse_vars/var_defs`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 61 vs reference 63 (-2 bytes, no whitespaces)
+- size: oxc 61 vs reference 63 (no whitespaces: -2, formatted: -1)
 
 ```js
 var f1 = function(x, y) {
@@ -1683,7 +1683,7 @@ f1('1', 0);
 
 ## `terser/conditionals/cond_8`
 
-- size: oxc 276 vs reference 278 (-2 bytes, no whitespaces)
+- size: oxc 276 vs reference 278 (no whitespaces: -2, formatted: -1)
 
 ```js
 var a;
@@ -1748,7 +1748,7 @@ a = condition ? 1 : 0;
 
 ## `terser/conditionals/cond_8b`
 
-- size: oxc 276 vs reference 278 (-2 bytes, no whitespaces)
+- size: oxc 276 vs reference 278 (no whitespaces: -2, formatted: -1)
 
 ```js
 var a;
@@ -1813,7 +1813,7 @@ a = condition ? 1 : 0;
 
 ## `terser/conditionals/cond_8c`
 
-- size: oxc 276 vs reference 278 (-2 bytes, no whitespaces)
+- size: oxc 276 vs reference 278 (no whitespaces: -2, formatted: -1)
 
 ```js
 var a;
@@ -1879,7 +1879,7 @@ a = condition ? 1 : 0;
 ## `terser/conditionals/equality_conditionals_true`
 
 - tags: `sequences`
-- size: oxc 159 vs reference 161 (-2 bytes, no whitespaces)
+- size: oxc 159 vs reference 161 (no whitespaces: -2, formatted: -6)
 
 ```js
 function f(a, b, c) {
@@ -1909,7 +1909,7 @@ f(NaN, 'foo');
 ## `terser/const/regexp_literal_not_const`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 125 vs reference 127 (-2 bytes, no whitespaces)
+- size: oxc 125 vs reference 127 (no whitespaces: -2, formatted: -1)
 
 ```js
 (function() {
@@ -1940,7 +1940,7 @@ f(NaN, 'foo');
 ## `terser/destructuring/destructuring_assign_of_numeric_key`
 
 - tags: `remove unused`
-- size: oxc 36 vs reference 38 (-2 bytes, no whitespaces)
+- size: oxc 36 vs reference 38 (no whitespaces: -2, formatted: -2)
 
 ```js
 let x;
@@ -1963,7 +1963,7 @@ console.log(x);
 ## `terser/destructuring/destructuring_decl_of_numeric_key`
 
 - tags: `remove unused`
-- size: oxc 31 vs reference 33 (-2 bytes, no whitespaces)
+- size: oxc 31 vs reference 33 (no whitespaces: -2, formatted: -2)
 
 ```js
 let { 3: x } = { [1 + 2]: 42 };
@@ -1984,7 +1984,7 @@ console.log(x);
 ## `terser/destructuring/unused_destructuring_getter_side_effect_1`
 
 - tags: `remove unused`
-- size: oxc 137 vs reference 139 (-2 bytes, no whitespaces)
+- size: oxc 137 vs reference 139 (no whitespaces: -2, formatted: -2)
 
 ```js
 function extract(obj) {
@@ -2021,7 +2021,7 @@ extract({
 
 ## `terser/functions/no_webkit`
 
-- size: oxc 30 vs reference 32 (-2 bytes, no whitespaces)
+- size: oxc 30 vs reference 32 (no whitespaces: -2, formatted: -2)
 
 ```js
 console.log(function() {
@@ -2041,7 +2041,7 @@ console.log(function() {
 
 ## `terser/functions/webkit`
 
-- size: oxc 30 vs reference 32 (-2 bytes, no whitespaces)
+- size: oxc 30 vs reference 32 (no whitespaces: -2, formatted: -2)
 
 ```js
 console.log(function() {
@@ -2061,7 +2061,7 @@ console.log(function() {
 
 ## `terser/global_defs/mixed`
 
-- size: oxc 187 vs reference 189 (-2 bytes, no whitespaces)
+- size: oxc 187 vs reference 189 (no whitespaces: -2, formatted: -5)
 
 ```js
 const FOO = { BAR: 0 };
@@ -2094,7 +2094,7 @@ console.log(CONFIG);
 
 ## `terser/issue_1447/else_with_empty_block`
 
-- size: oxc 9 vs reference 11 (-2 bytes, no whitespaces)
+- size: oxc 9 vs reference 11 (no whitespaces: -2, formatted: -2)
 
 ```js
 if (x) yes();
@@ -2113,7 +2113,7 @@ else {}
 
 ## `terser/issue_1447/else_with_empty_statement`
 
-- size: oxc 9 vs reference 11 (-2 bytes, no whitespaces)
+- size: oxc 9 vs reference 11 (no whitespaces: -2, formatted: -2)
 
 ```js
 if (x) yes();
@@ -2133,7 +2133,7 @@ else;
 ## `terser/issue_1639/issue_1639_1`
 
 - tags: `join vars`, `sequences`
-- size: oxc 69 vs reference 71 (-2 bytes, no whitespaces)
+- size: oxc 69 vs reference 71 (no whitespaces: -2, formatted: -4)
 
 ```js
 var a = 100, b = 10;
@@ -2162,7 +2162,7 @@ console.log(a, b);
 ## `terser/issue_1639/issue_1639_3`
 
 - tags: `join vars`, `sequences`
-- size: oxc 32 vs reference 34 (-2 bytes, no whitespaces)
+- size: oxc 32 vs reference 34 (no whitespaces: -2, formatted: -4)
 
 ```js
 var a = 100, b = 10;
@@ -2185,7 +2185,7 @@ console.log(a, b);
 ## `terser/issue_1673/side_effects_catch`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 73 vs reference 75 (-2 bytes, no whitespaces)
+- size: oxc 73 vs reference 75 (no whitespaces: -2, formatted: -1)
 
 ```js
 function f() {
@@ -2226,7 +2226,7 @@ f();
 ## `terser/issue_1673/side_effects_finally`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 78 vs reference 80 (-2 bytes, no whitespaces)
+- size: oxc 78 vs reference 80 (no whitespaces: -2, formatted: -1)
 
 ```js
 function f() {
@@ -2266,7 +2266,7 @@ f();
 
 ## `terser/issue_59/keep_continue`
 
-- size: oxc 52 vs reference 54 (-2 bytes, no whitespaces)
+- size: oxc 52 vs reference 54 (no whitespaces: -2, formatted: -1)
 
 ```js
 while (a) {
@@ -2298,7 +2298,7 @@ while (a) {
 
 ## `terser/issue_597/NaN_and_Infinity_should_not_be_replaced_when_they_are_redefined`
 
-- size: oxc 52 vs reference 54 (-2 bytes, no whitespaces)
+- size: oxc 52 vs reference 54 (no whitespaces: -2, formatted: -4)
 
 ```js
 var Infinity, NaN;
@@ -2321,7 +2321,7 @@ NaN.toString();
 ## `terser/keep_names/drop_fnames`
 
 - tags: `mangle`, `keep class names`
-- size: oxc 42 vs reference 44 (-2 bytes, no whitespaces)
+- size: oxc 42 vs reference 44 (no whitespaces: -2, formatted: -2)
 
 ```js
 function foo() {
@@ -2349,7 +2349,7 @@ function foo() {
 ## `terser/negate_iife/negate_iife_nested`
 
 - tags: `sequences`
-- size: oxc 101 vs reference 103 (-2 bytes, no whitespaces)
+- size: oxc 101 vs reference 103 (no whitespaces: -2, formatted: -2)
 
 ```js
 function Foo(f) {
@@ -2385,7 +2385,7 @@ new Foo(function() {
 ## `terser/properties/join_object_assignments_return_1`
 
 - tags: `join vars`
-- size: oxc 58 vs reference 60 (-2 bytes, no whitespaces)
+- size: oxc 58 vs reference 60 (no whitespaces: -2, formatted: -7)
 
 ```js
 console.log((function() {
@@ -2414,7 +2414,7 @@ console.log((function() {
 ## `terser/properties/prop_side_effects_1`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 71 vs reference 73 (-2 bytes, no whitespaces)
+- size: oxc 71 vs reference 73 (no whitespaces: -2, formatted: +0)
 
 ```js
 var C = 1;
@@ -2446,7 +2446,7 @@ console.log(obj.bar());
 ## `terser/pure_funcs/conditional`
 
 - tags: `pure functions`
-- size: oxc 62 vs reference 64 (-2 bytes, no whitespaces)
+- size: oxc 62 vs reference 64 (no whitespaces: -2, formatted: +3)
 
 ```js
 pure(1 | a() ? 2 & b() : 7 ^ c());
@@ -2483,7 +2483,7 @@ pure(3 ? 4 : 5);
 ## `terser/pure_getters/destructuring`
 
 - tags: `remove unused`, `pure getters`, `1 iteration`
-- size: oxc 222 vs reference 224 (-2 bytes, no whitespaces)
+- size: oxc 222 vs reference 224 (no whitespaces: -2, formatted: +3)
 
 ```js
 import declare from 'phantom';
@@ -2527,7 +2527,7 @@ fn({
 ## `terser/pure_getters/set_immutable_1`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 64 vs reference 66 (-2 bytes, no whitespaces)
+- size: oxc 64 vs reference 66 (no whitespaces: -2, formatted: +2)
 
 ```js
 var a = 1;
@@ -2553,7 +2553,7 @@ else console.log('PASS');
 ## `terser/pure_getters/set_immutable_3`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 77 vs reference 79 (-2 bytes, no whitespaces)
+- size: oxc 77 vs reference 79 (no whitespaces: -2, formatted: +2)
 
 ```js
 'use strict';
@@ -2581,7 +2581,7 @@ else console.log('PASS');
 ## `terser/reduce_vars/immutable`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 31 vs reference 33 (-2 bytes, no whitespaces)
+- size: oxc 31 vs reference 33 (no whitespaces: -2, formatted: +3)
 
 ```js
 !(function() {
@@ -2605,7 +2605,7 @@ else console.log('PASS');
 ## `terser/reduce_vars/issue_1595_4`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 67 vs reference 69 (-2 bytes, no whitespaces)
+- size: oxc 67 vs reference 69 (no whitespaces: -2, formatted: -2)
 
 ```js
 (function iife(a, b, c) {
@@ -2630,7 +2630,7 @@ else console.log('PASS');
 ## `terser/reduce_vars/issue_1606`
 
 - tags: `join vars`
-- size: oxc 38 vs reference 40 (-2 bytes, no whitespaces)
+- size: oxc 38 vs reference 40 (no whitespaces: -2, formatted: -3)
 
 ```js
 function f() {
@@ -2658,7 +2658,7 @@ function f() {
 ## `terser/reduce_vars/issue_1814_1`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 54 vs reference 56 (-2 bytes, no whitespaces)
+- size: oxc 54 vs reference 56 (no whitespaces: -2, formatted: -3)
 
 ```js
 const a = 42;
@@ -2691,7 +2691,7 @@ const a = 42;
 ## `terser/reduce_vars/issue_3110_3`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 113 vs reference 115 (-2 bytes, no whitespaces)
+- size: oxc 113 vs reference 115 (no whitespaces: -2, formatted: -2)
 
 ```js
 (function() {
@@ -2723,7 +2723,7 @@ const a = 42;
 ## `terser/reduce_vars/issue_3110_shorthand_3`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 113 vs reference 115 (-2 bytes, no whitespaces)
+- size: oxc 113 vs reference 115 (no whitespaces: -2, formatted: -2)
 
 ```js
 (function() {
@@ -2755,7 +2755,7 @@ const a = 42;
 ## `terser/reduce_vars/recursive_inlining_4`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 177 vs reference 179 (-2 bytes, no whitespaces)
+- size: oxc 177 vs reference 179 (no whitespaces: -2, formatted: -3)
 
 ```js
 !(function() {
@@ -2808,7 +2808,7 @@ const a = 42;
 ## `terser/reduce_vars/unary_delete`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 61 vs reference 63 (-2 bytes, no whitespaces)
+- size: oxc 61 vs reference 63 (no whitespaces: -2, formatted: -2)
 
 ```js
 var b = 10;
@@ -2839,7 +2839,7 @@ console.log(b);
 ## `terser/sequences/func_def_1`
 
 - tags: `join vars`
-- size: oxc 45 vs reference 47 (-2 bytes, no whitespaces)
+- size: oxc 45 vs reference 47 (no whitespaces: -2, formatted: -2)
 
 ```js
 function f() {
@@ -2864,7 +2864,7 @@ console.log(f());
 ## `terser/sequences/func_def_3`
 
 - tags: `join vars`
-- size: oxc 59 vs reference 61 (-2 bytes, no whitespaces)
+- size: oxc 59 vs reference 61 (no whitespaces: -2, formatted: -2)
 
 ```js
 function f() {
@@ -2891,7 +2891,7 @@ console.log(f());
 ## `terser/sequences/func_def_4`
 
 - tags: `join vars`
-- size: oxc 69 vs reference 71 (-2 bytes, no whitespaces)
+- size: oxc 69 vs reference 71 (no whitespaces: -2, formatted: -2)
 
 ```js
 function f() {
@@ -2921,7 +2921,7 @@ console.log(f());
 ## `terser/sequences/issue_27`
 
 - tags: `join vars`, `sequences`, `remove unused`, `2 iterations`
-- size: oxc 59 vs reference 61 (-2 bytes, no whitespaces)
+- size: oxc 59 vs reference 61 (no whitespaces: -2, formatted: -2)
 
 ```js
 (function(jQuery) {
@@ -2947,7 +2947,7 @@ console.log(f());
 ## `terser/sequences/lift_sequences_1`
 
 - tags: `sequences`
-- size: oxc 33 vs reference 35 (-2 bytes, no whitespaces)
+- size: oxc 33 vs reference 35 (no whitespaces: -2, formatted: -3)
 
 ```js
 var foo, x, y, bar;
@@ -2967,7 +2967,7 @@ foo = !(x(), y(), bar());
 
 ## `terser/sequences/lift_sequences_4`
 
-- size: oxc 22 vs reference 24 (-2 bytes, no whitespaces)
+- size: oxc 22 vs reference 24 (no whitespaces: -2, formatted: -3)
 
 ```js
 var x, foo, bar, baz;
@@ -2987,7 +2987,7 @@ x = (foo, bar, baz);
 
 ## `terser/switch/drop_case`
 
-- size: oxc 19 vs reference 21 (-2 bytes, no whitespaces)
+- size: oxc 19 vs reference 21 (no whitespaces: -2, formatted: -2)
 
 ```js
 switch (foo) {
@@ -3010,7 +3010,7 @@ switch (foo) {
 
 ## `terser/switch/drop_default_1`
 
-- size: oxc 19 vs reference 21 (-2 bytes, no whitespaces)
+- size: oxc 19 vs reference 21 (no whitespaces: -2, formatted: -2)
 
 ```js
 switch (foo) {
@@ -3031,7 +3031,7 @@ switch (foo) {
 
 ## `terser/switch/drop_default_2`
 
-- size: oxc 19 vs reference 21 (-2 bytes, no whitespaces)
+- size: oxc 19 vs reference 21 (no whitespaces: -2, formatted: -2)
 
 ```js
 switch (foo) {
@@ -3054,7 +3054,7 @@ switch (foo) {
 
 ## `terser/template_string/special_chars_in_string`
 
-- size: oxc 115 vs reference 117 (-2 bytes, no whitespaces)
+- size: oxc 115 vs reference 117 (no whitespaces: -2, formatted: -2)
 
 ```js
 var str = `foo ${'`;\n`${any}'} bar`;
@@ -3079,7 +3079,7 @@ var template = `foo ${'`;\n`${any}'} ${any} bar`;
 
 ## `terser/template_string/template_string_with_predefined_constants`
 
-- size: oxc 376 vs reference 378 (-2 bytes, no whitespaces)
+- size: oxc 376 vs reference 378 (no whitespaces: -2, formatted: +6)
 
 ```js
 var foo = `This is ${undefined}`;
@@ -3123,7 +3123,7 @@ var c = `${4 ** 14}`;
 
 ## `terser/template_string/template_strings_without_ascii_only`
 
-- size: oxc 43 vs reference 45 (-2 bytes, no whitespaces)
+- size: oxc 43 vs reference 45 (no whitespaces: -2, formatted: +0)
 
 ```js
 var foo = `foo\n        bar\n        ↂωↂ`;
@@ -3141,7 +3141,7 @@ var foo = `foo\n        bar\n        ↂωↂ`;
 
 ## `terser/yield/issue_2832`
 
-- size: oxc 174 vs reference 176 (-2 bytes, no whitespaces)
+- size: oxc 174 vs reference 176 (no whitespaces: -2, formatted: -2)
 
 ```js
 function* gen(i) {
@@ -3173,7 +3173,7 @@ console.log(x.next('second').value);
 ## `terser/yield/issue_t60`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 97 vs reference 99 (-2 bytes, no whitespaces)
+- size: oxc 97 vs reference 99 (no whitespaces: -2, formatted: -2)
 
 ```js
 function* t() {
@@ -3201,7 +3201,7 @@ console.log(g.next().value, g.next().value);
 
 ## `terser/blocks/issue_1672_if`
 
-- size: oxc 82 vs reference 85 (-3 bytes, no whitespaces)
+- size: oxc 82 vs reference 85 (no whitespaces: -3, formatted: -4)
 
 ```js
 switch (function() {
@@ -3236,7 +3236,7 @@ switch (function() {
 ## `terser/collapse_vars/issue_2571_2`
 
 - tags: `join vars`
-- size: oxc 45 vs reference 48 (-3 bytes, no whitespaces)
+- size: oxc 45 vs reference 48 (no whitespaces: -3, formatted: -4)
 
 ```js
 try {
@@ -3265,7 +3265,7 @@ try {
 ## `terser/collapse_vars/issue_2891_1`
 
 - tags: `join vars`
-- size: oxc 62 vs reference 65 (-3 bytes, no whitespaces)
+- size: oxc 62 vs reference 65 (no whitespaces: -3, formatted: -4)
 
 ```js
 var a = 'PASS', b;
@@ -3297,7 +3297,7 @@ console.log(a);
 ## `terser/collapse_vars/issue_2891_2`
 
 - tags: `join vars`
-- size: oxc 73 vs reference 76 (-3 bytes, no whitespaces)
+- size: oxc 73 vs reference 76 (no whitespaces: -3, formatted: -4)
 
 ```js
 'use strict';
@@ -3331,7 +3331,7 @@ console.log(a);
 ## `terser/collapse_vars/issue_2954_1`
 
 - tags: `join vars`
-- size: oxc 95 vs reference 98 (-3 bytes, no whitespaces)
+- size: oxc 95 vs reference 98 (no whitespaces: -3, formatted: -4)
 
 ```js
 var a = 'PASS', b;
@@ -3370,7 +3370,7 @@ console.log(a);
 ## `terser/collapse_vars/may_throw_2`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 71 vs reference 74 (-3 bytes, no whitespaces)
+- size: oxc 71 vs reference 74 (no whitespaces: -3, formatted: -4)
 
 ```js
 function f(b) {
@@ -3402,7 +3402,7 @@ f(0);
 
 ## `terser/dead_code/issue_2929`
 
-- size: oxc 82 vs reference 85 (-3 bytes, no whitespaces)
+- size: oxc 82 vs reference 85 (no whitespaces: -3, formatted: -4)
 
 ```js
 console.log((function(a) {
@@ -3432,7 +3432,7 @@ console.log((function(a) {
 
 ## `terser/evaluate/global_hasOwnProperty`
 
-- size: oxc 79 vs reference 82 (-3 bytes, no whitespaces)
+- size: oxc 79 vs reference 82 (no whitespaces: -3, formatted: -3)
 
 ```js
 hasOwnProperty.call(a, b);
@@ -3455,7 +3455,7 @@ hasOwnProperty.call(a['b'], b);
 ## `terser/functions/issue_2097`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 63 vs reference 66 (-3 bytes, no whitespaces)
+- size: oxc 63 vs reference 66 (no whitespaces: -3, formatted: -3)
 
 ```js
 function f() {
@@ -3489,7 +3489,7 @@ f(1);
 
 ## `terser/harmony/classes_can_have_computed_static`
 
-- size: oxc 32 vs reference 35 (-3 bytes, no whitespaces)
+- size: oxc 32 vs reference 35 (no whitespaces: -3, formatted: -4)
 
 ```js
 class C4 {
@@ -3512,7 +3512,7 @@ class C4 {
 ## `terser/harmony/issue_2345`
 
 - tags: `remove unused`
-- size: oxc 62 vs reference 65 (-3 bytes, no whitespaces)
+- size: oxc 62 vs reference 65 (no whitespaces: -3, formatted: +1)
 
 ```js
 console.log([...[
@@ -3553,7 +3553,7 @@ console.log([...a].join('-'));
 ## `terser/hoist_props/issue_3021`
 
 - tags: `join vars`
-- size: oxc 82 vs reference 85 (-3 bytes, no whitespaces)
+- size: oxc 82 vs reference 85 (no whitespaces: -3, formatted: -5)
 
 ```js
 var a = 1, b = 2;
@@ -3584,7 +3584,7 @@ console.log(a, b);
 ## `terser/ie8/issue_2120_1`
 
 - tags: `mangle`, `keep function names`, `keep class names`
-- size: oxc 97 vs reference 100 (-3 bytes, no whitespaces)
+- size: oxc 97 vs reference 100 (no whitespaces: -3, formatted: -4)
 
 ```js
 'aaaaaaaa';
@@ -3629,7 +3629,7 @@ console.log(b);
 ## `terser/ie8/issue_2120_2`
 
 - tags: `mangle`, `keep function names`, `keep class names`
-- size: oxc 97 vs reference 100 (-3 bytes, no whitespaces)
+- size: oxc 97 vs reference 100 (no whitespaces: -3, formatted: -4)
 
 ```js
 'aaaaaaaa';
@@ -3674,7 +3674,7 @@ console.log(b);
 ## `terser/issue_1733/function_catch_catch`
 
 - tags: `mangle`, `keep function names`, `keep class names`
-- size: oxc 103 vs reference 106 (-3 bytes, no whitespaces)
+- size: oxc 103 vs reference 106 (no whitespaces: -3, formatted: -4)
 
 ```js
 var o = 0;
@@ -3726,7 +3726,7 @@ f();
 ## `terser/issue_1733/function_catch_catch_ie8`
 
 - tags: `mangle`, `keep function names`, `keep class names`
-- size: oxc 103 vs reference 106 (-3 bytes, no whitespaces)
+- size: oxc 103 vs reference 106 (no whitespaces: -3, formatted: -4)
 
 ```js
 var o = 0;
@@ -3777,7 +3777,7 @@ f();
 
 ## `terser/issue_1833/label_while`
 
-- size: oxc 14 vs reference 17 (-3 bytes, no whitespaces)
+- size: oxc 14 vs reference 17 (no whitespaces: -3, formatted: -8)
 
 ```js
 function f() {
@@ -3799,7 +3799,7 @@ function f() {
 
 ## `terser/issue_637/wrongly_optimized`
 
-- size: oxc 35 vs reference 38 (-3 bytes, no whitespaces)
+- size: oxc 35 vs reference 38 (no whitespaces: -3, formatted: -5)
 
 ```js
 function func() {
@@ -3826,7 +3826,7 @@ if (func() || true) {
 ## `terser/issue_640/negate_iife_5_off`
 
 - tags: `sequences`
-- size: oxc 82 vs reference 85 (-3 bytes, no whitespaces)
+- size: oxc 82 vs reference 85 (no whitespaces: -3, formatted: -3)
 
 ```js
 if ((function() {
@@ -3859,7 +3859,7 @@ if ((function() {
 ## `terser/negate_iife/negate_iife_5_off`
 
 - tags: `sequences`
-- size: oxc 82 vs reference 85 (-3 bytes, no whitespaces)
+- size: oxc 82 vs reference 85 (no whitespaces: -3, formatted: -3)
 
 ```js
 if ((function() {
@@ -3891,7 +3891,7 @@ if ((function() {
 
 ## `terser/properties/dot_properties_es5`
 
-- size: oxc 75 vs reference 78 (-3 bytes, no whitespaces)
+- size: oxc 75 vs reference 78 (no whitespaces: -3, formatted: -3)
 
 ```js
 a['foo'] = 'bar';
@@ -3917,7 +3917,7 @@ a[''] = 'whitespace';
 
 ## `terser/properties/keep_properties`
 
-- size: oxc 12 vs reference 15 (-3 bytes, no whitespaces)
+- size: oxc 12 vs reference 15 (no whitespaces: -3, formatted: -3)
 
 ```js
 a['foo'] = 'bar';
@@ -3936,7 +3936,7 @@ a['foo'] = 'bar';
 ## `terser/pure_getters/set_mutable_1`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 74 vs reference 77 (-3 bytes, no whitespaces)
+- size: oxc 74 vs reference 77 (no whitespaces: -3, formatted: -1)
 
 ```js
 !(function a() {
@@ -3964,7 +3964,7 @@ a['foo'] = 'bar';
 ## `terser/reduce_vars/conditional_chain_certain_part`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 71 vs reference 74 (-3 bytes, no whitespaces)
+- size: oxc 71 vs reference 74 (no whitespaces: -3, formatted: -3)
 
 ```js
 global.a = { b: null };
@@ -3989,7 +3989,7 @@ console.log(foo);
 ## `terser/reduce_vars/inner_var_catch`
 
 - tags: `join vars`
-- size: oxc 50 vs reference 53 (-3 bytes, no whitespaces)
+- size: oxc 50 vs reference 53 (no whitespaces: -3, formatted: -4)
 
 ```js
 function f() {
@@ -4021,7 +4021,7 @@ function f() {
 ## `terser/reduce_vars/inner_var_if`
 
 - tags: `join vars`
-- size: oxc 45 vs reference 48 (-3 bytes, no whitespaces)
+- size: oxc 45 vs reference 48 (no whitespaces: -3, formatted: -3)
 
 ```js
 function f(a) {
@@ -4046,7 +4046,7 @@ function f(a) {
 ## `terser/reduce_vars/issue_2485`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 250 vs reference 253 (-3 bytes, no whitespaces)
+- size: oxc 250 vs reference 253 (no whitespaces: -3, formatted: -7)
 
 ```js
 var foo = function(bar) {
@@ -4109,7 +4109,7 @@ console.log(bar.baz([
 ## `terser/reduce_vars/issue_2598`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 69 vs reference 72 (-3 bytes, no whitespaces)
+- size: oxc 69 vs reference 72 (no whitespaces: -3, formatted: -3)
 
 ```js
 function f() {}
@@ -4135,7 +4135,7 @@ console.log(g(false) === g(null));
 ## `terser/reduce_vars/pure_getters_1`
 
 - tags: `join vars`
-- size: oxc 40 vs reference 43 (-3 bytes, no whitespaces)
+- size: oxc 40 vs reference 43 (no whitespaces: -3, formatted: -4)
 
 ```js
 try {
@@ -4160,7 +4160,7 @@ console.log(a);
 ## `terser/rename/function_catch_catch`
 
 - tags: `mangle`, `keep function names`, `keep class names`
-- size: oxc 103 vs reference 106 (-3 bytes, no whitespaces)
+- size: oxc 103 vs reference 106 (no whitespaces: -3, formatted: -4)
 
 ```js
 var o = 0;
@@ -4212,7 +4212,7 @@ f();
 ## `terser/rename/function_catch_catch_ie8`
 
 - tags: `mangle`, `keep function names`, `keep class names`
-- size: oxc 103 vs reference 106 (-3 bytes, no whitespaces)
+- size: oxc 103 vs reference 106 (no whitespaces: -3, formatted: -4)
 
 ```js
 var o = 0;
@@ -4264,7 +4264,7 @@ f();
 ## `terser/rename/issue_2120_1`
 
 - tags: `mangle`, `keep function names`, `keep class names`
-- size: oxc 97 vs reference 100 (-3 bytes, no whitespaces)
+- size: oxc 97 vs reference 100 (no whitespaces: -3, formatted: -4)
 
 ```js
 'aaaaaaaa';
@@ -4309,7 +4309,7 @@ console.log(b);
 ## `terser/rename/issue_2120_2`
 
 - tags: `mangle`, `keep function names`, `keep class names`
-- size: oxc 97 vs reference 100 (-3 bytes, no whitespaces)
+- size: oxc 97 vs reference 100 (no whitespaces: -3, formatted: -4)
 
 ```js
 'aaaaaaaa';
@@ -4353,7 +4353,7 @@ console.log(b);
 
 ## `terser/template_string/sequence_1`
 
-- size: oxc 21 vs reference 24 (-3 bytes, no whitespaces)
+- size: oxc 21 vs reference 24 (no whitespaces: -3, formatted: -3)
 
 ```js
 console.log(`${1, 2} ${/a/, /b/}`);
@@ -4371,7 +4371,7 @@ console.log(`${1, 2} ${/a/, /b/}`);
 
 ## `terser/arrow/concise_methods_with_computed_property2`
 
-- size: oxc 47 vs reference 51 (-4 bytes, no whitespaces)
+- size: oxc 47 vs reference 51 (no whitespaces: -4, formatted: -7)
 
 ```js
 var foo = { [[1]](v) {
@@ -4395,7 +4395,7 @@ console.log(foo[[1]]('PASS'));
 
 ## `terser/async/for_await_of_2`
 
-- size: oxc 213 vs reference 217 (-4 bytes, no whitespaces)
+- size: oxc 213 vs reference 217 (no whitespaces: -4, formatted: -4)
 
 ```js
 async function foo(x) {
@@ -4436,7 +4436,7 @@ const bar = async (x) => {
 ## `terser/collapse_vars/inner_lvalues`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 65 vs reference 69 (-4 bytes, no whitespaces)
+- size: oxc 65 vs reference 69 (no whitespaces: -4, formatted: -5)
 
 ```js
 var a, b = 10;
@@ -4460,7 +4460,7 @@ console.log(null, a, b);
 ## `terser/collapse_vars/issue_2364_2`
 
 - tags: `join vars`, `pure getters`
-- size: oxc 146 vs reference 150 (-4 bytes, no whitespaces)
+- size: oxc 146 vs reference 150 (no whitespaces: -4, formatted: -5)
 
 ```js
 function callValidate() {
@@ -4487,7 +4487,7 @@ function callValidate() {
 ## `terser/collapse_vars/issue_2364_4`
 
 - tags: `join vars`, `pure getters`
-- size: oxc 186 vs reference 190 (-4 bytes, no whitespaces)
+- size: oxc 186 vs reference 190 (no whitespaces: -4, formatted: -4)
 
 ```js
 function inc(obj) {
@@ -4520,7 +4520,7 @@ console.log(foo.amount, answer);
 ## `terser/collapse_vars/issue_2858`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 86 vs reference 90 (-4 bytes, no whitespaces)
+- size: oxc 86 vs reference 90 (no whitespaces: -4, formatted: -5)
 
 ```js
 var b;
@@ -4556,7 +4556,7 @@ console.log(b);
 ## `terser/collapse_vars/issue_3096`
 
 - tags: `join vars`
-- size: oxc 80 vs reference 84 (-4 bytes, no whitespaces)
+- size: oxc 80 vs reference 84 (no whitespaces: -4, formatted: -5)
 
 ```js
 console.log((function() {
@@ -4583,7 +4583,7 @@ console.log((function() {
 ## `terser/collapse_vars/lvalues_def`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 51 vs reference 55 (-4 bytes, no whitespaces)
+- size: oxc 51 vs reference 55 (no whitespaces: -4, formatted: -4)
 
 ```js
 var a = 0, b = 1;
@@ -4608,7 +4608,7 @@ console.log(a, b);
 ## `terser/collapse_vars/side_effects_property`
 
 - tags: `join vars`
-- size: oxc 72 vs reference 76 (-4 bytes, no whitespaces)
+- size: oxc 72 vs reference 76 (no whitespaces: -4, formatted: -4)
 
 ```js
 var a = [];
@@ -4636,7 +4636,7 @@ console.log(c);
 
 ## `terser/destructuring/destructuring_arrays`
 
-- size: oxc 142 vs reference 146 (-4 bytes, no whitespaces)
+- size: oxc 142 vs reference 146 (no whitespaces: -4, formatted: -4)
 
 ```js
 {
@@ -4677,7 +4677,7 @@ var [, , zzz, ,] = xxx;
 
 ## `terser/destructuring/destructuring_objects`
 
-- size: oxc 196 vs reference 200 (-4 bytes, no whitespaces)
+- size: oxc 196 vs reference 200 (no whitespaces: -4, formatted: -4)
 
 ```js
 {
@@ -4747,7 +4747,7 @@ var { aa, bb: { cc, dd } } = {
 ## `terser/drop_unused/issue_3146_1`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 87 vs reference 91 (-4 bytes, no whitespaces)
+- size: oxc 87 vs reference 91 (no whitespaces: -4, formatted: -6)
 
 ```js
 (function(f) {
@@ -4780,7 +4780,7 @@ var { aa, bb: { cc, dd } } = {
 ## `terser/drop_unused/issue_3146_2`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 87 vs reference 91 (-4 bytes, no whitespaces)
+- size: oxc 87 vs reference 91 (no whitespaces: -4, formatted: -6)
 
 ```js
 (function(f) {
@@ -4813,7 +4813,7 @@ var { aa, bb: { cc, dd } } = {
 ## `terser/export/export_default_named_async_function`
 
 - tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `join vars`, `remove unused`
-- size: oxc 55 vs reference 59 (-4 bytes, no whitespaces)
+- size: oxc 55 vs reference 59 (no whitespaces: -4, formatted: -4)
 
 ```js
 export default async function bar() {
@@ -4836,7 +4836,7 @@ export default async function bar() {
 ## `terser/export/export_default_named_generator`
 
 - tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `join vars`, `remove unused`
-- size: oxc 42 vs reference 46 (-4 bytes, no whitespaces)
+- size: oxc 42 vs reference 46 (no whitespaces: -4, formatted: -4)
 
 ```js
 export default function* gen() {
@@ -4858,7 +4858,7 @@ export default function* gen() {
 
 ## `terser/harmony/regression_for_of_const`
 
-- size: oxc 32 vs reference 36 (-4 bytes, no whitespaces)
+- size: oxc 32 vs reference 36 (no whitespaces: -4, formatted: -4)
 
 ```js
 for (const x of y) {}
@@ -4880,7 +4880,7 @@ for (const x in y) {}
 ## `terser/hoist_props/direct_access_1`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 64 vs reference 68 (-4 bytes, no whitespaces)
+- size: oxc 64 vs reference 68 (no whitespaces: -4, formatted: -4)
 
 ```js
 var a = 0;
@@ -4909,7 +4909,7 @@ console.log(a, obj.a);
 ## `terser/if_return/if_return_same_value`
 
 - tags: `sequences`
-- size: oxc 106 vs reference 110 (-4 bytes, no whitespaces)
+- size: oxc 106 vs reference 110 (no whitespaces: -4, formatted: -6)
 
 ```js
 function f() {
@@ -4957,7 +4957,7 @@ function h() {
 ## `terser/issue_1202/mangle_keep_fnames_false`
 
 - tags: `mangle`, `keep class names`, `keep function names`
-- size: oxc 65 vs reference 69 (-4 bytes, no whitespaces)
+- size: oxc 65 vs reference 69 (no whitespaces: -4, formatted: -4)
 
 ```js
 'use strict';
@@ -4986,7 +4986,7 @@ function total() {
 
 ## `terser/issue_640/negate_iife_3`
 
-- size: oxc 57 vs reference 61 (-4 bytes, no whitespaces)
+- size: oxc 57 vs reference 61 (no whitespaces: -4, formatted: -4)
 
 ```js
 (function() {
@@ -5010,7 +5010,7 @@ function total() {
 ## `terser/issue_892/dont_mangle_arguments`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 70 vs reference 74 (-4 bytes, no whitespaces)
+- size: oxc 70 vs reference 74 (no whitespaces: -4, formatted: -7)
 
 ```js
 (function() {
@@ -5035,7 +5035,7 @@ function total() {
 
 ## `terser/issue_973/this_binding_side_effects`
 
-- size: oxc 151 vs reference 155 (-4 bytes, no whitespaces)
+- size: oxc 151 vs reference 155 (no whitespaces: -4, formatted: -5)
 
 ```js
 (function(foo) {
@@ -5067,7 +5067,7 @@ function total() {
 
 ## `terser/loops/issue_1532`
 
-- size: oxc 45 vs reference 49 (-4 bytes, no whitespaces)
+- size: oxc 45 vs reference 49 (no whitespaces: -4, formatted: -4)
 
 ```js
 function f(x, y) {
@@ -5094,7 +5094,7 @@ function f(x, y) {
 
 ## `terser/loops/parse_do_while_with_semicolon`
 
-- size: oxc 20 vs reference 24 (-4 bytes, no whitespaces)
+- size: oxc 20 vs reference 24 (no whitespaces: -4, formatted: -4)
 
 ```js
 do {
@@ -5118,7 +5118,7 @@ y();
 
 ## `terser/loops/parse_do_while_without_semicolon`
 
-- size: oxc 20 vs reference 24 (-4 bytes, no whitespaces)
+- size: oxc 20 vs reference 24 (no whitespaces: -4, formatted: -4)
 
 ```js
 do {
@@ -5143,7 +5143,7 @@ y();
 ## `terser/negate_iife/negate_iife_issue_1073`
 
 - tags: `sequences`
-- size: oxc 69 vs reference 73 (-4 bytes, no whitespaces)
+- size: oxc 69 vs reference 73 (no whitespaces: -4, formatted: -4)
 
 ```js
 new ((function(a) {
@@ -5170,7 +5170,7 @@ new ((function(a) {
 
 ## `terser/object/computed_property_names`
 
-- size: oxc 12 vs reference 16 (-4 bytes, no whitespaces)
+- size: oxc 12 vs reference 16 (no whitespaces: -4, formatted: -4)
 
 ```js
 obj({ ['x' + 'x']: 6 });
@@ -5188,7 +5188,7 @@ obj({ ['x' + 'x']: 6 });
 
 ## `terser/pure_funcs/issue_2629_1`
 
-- size: oxc 0 vs reference 4 (-4 bytes, no whitespaces)
+- size: oxc 0 vs reference 4 (no whitespaces: -4, formatted: -5)
 
 ```js
 a();
@@ -5209,7 +5209,7 @@ d();
 ## `terser/reduce_vars/issue_1814_2`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 57 vs reference 61 (-4 bytes, no whitespaces)
+- size: oxc 57 vs reference 61 (no whitespaces: -4, formatted: -5)
 
 ```js
 const a = '32';
@@ -5242,7 +5242,7 @@ const a = '32';
 ## `terser/reduce_vars/lvalues_def_1`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 37 vs reference 41 (-4 bytes, no whitespaces)
+- size: oxc 37 vs reference 41 (no whitespaces: -4, formatted: -6)
 
 ```js
 var b = 1;
@@ -5265,7 +5265,7 @@ console.log(a, b);
 ## `terser/reduce_vars/named_function_with_recursive_ref_reuse`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 127 vs reference 131 (-4 bytes, no whitespaces)
+- size: oxc 127 vs reference 131 (no whitespaces: -4, formatted: -4)
 
 ```js
 var result = [];
@@ -5293,7 +5293,7 @@ console.log(result[0] === result[1]);
 ## `terser/sequences/make_sequences_2`
 
 - tags: `sequences`
-- size: oxc 38 vs reference 42 (-4 bytes, no whitespaces)
+- size: oxc 38 vs reference 42 (no whitespaces: -4, formatted: -3)
 
 ```js
 if (boo) {
@@ -5321,7 +5321,7 @@ if (boo) {
 ## `terser/template_string/tagged_call_with_invalid_escape_2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 82 vs reference 86 (-4 bytes, no whitespaces)
+- size: oxc 82 vs reference 86 (no whitespaces: -4, formatted: -5)
 
 ```js
 var x = { y: () => String.raw };
@@ -5342,7 +5342,7 @@ console.log(z()`\4321\u\x`);
 
 ## `terser/template_string/tagged_template_parens`
 
-- size: oxc 84 vs reference 88 (-4 bytes, no whitespaces)
+- size: oxc 84 vs reference 88 (no whitespaces: -4, formatted: -4)
 
 ```js
 a`0`;
@@ -5379,7 +5379,7 @@ a()`9`;
 
 ## `terser/big_int/big_int_negative`
 
-- size: oxc 0 vs reference 5 (-5 bytes, no whitespaces)
+- size: oxc 0 vs reference 5 (no whitespaces: -5, formatted: -6)
 
 ```js
 -15n;
@@ -5396,7 +5396,7 @@ a()`9`;
 
 ## `terser/blocks/issue_1672_for`
 
-- size: oxc 85 vs reference 90 (-5 bytes, no whitespaces)
+- size: oxc 85 vs reference 90 (no whitespaces: -5, formatted: -13)
 
 ```js
 switch (function() {
@@ -5433,7 +5433,7 @@ switch (function() {
 ## `terser/collapse_vars/cascade_if_1`
 
 - tags: `join vars`
-- size: oxc 25 vs reference 30 (-5 bytes, no whitespaces)
+- size: oxc 25 vs reference 30 (no whitespaces: -5, formatted: -9)
 
 ```js
 var a;
@@ -5459,7 +5459,7 @@ if (a = x(), a) {
 ## `terser/collapse_vars/return_2`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 121 vs reference 126 (-5 bytes, no whitespaces)
+- size: oxc 121 vs reference 126 (no whitespaces: -5, formatted: -5)
 
 ```js
 var log = console.log;
@@ -5498,7 +5498,7 @@ f(true, function() {
 ## `terser/collapse_vars/return_3`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 85 vs reference 90 (-5 bytes, no whitespaces)
+- size: oxc 85 vs reference 90 (no whitespaces: -5, formatted: -5)
 
 ```js
 var log = console.log;
@@ -5528,7 +5528,7 @@ f(true, 2);
 
 ## `terser/conditionals/condition_symbol_matches_consequent`
 
-- size: oxc 124 vs reference 129 (-5 bytes, no whitespaces)
+- size: oxc 124 vs reference 129 (no whitespaces: -5, formatted: -5)
 
 ```js
 function foo(x, y) {
@@ -5557,7 +5557,7 @@ console.log(foo(3, null), foo(0, 7), foo(true, false), bar());
 
 ## `terser/conditionals/to_and_or`
 
-- size: oxc 152 vs reference 157 (-5 bytes, no whitespaces)
+- size: oxc 152 vs reference 157 (no whitespaces: -5, formatted: -5)
 
 ```js
 var values = [
@@ -5599,7 +5599,7 @@ values.forEach(function(x) {
 
 ## `terser/dead_code/issue_2597`
 
-- size: oxc 107 vs reference 112 (-5 bytes, no whitespaces)
+- size: oxc 107 vs reference 112 (no whitespaces: -5, formatted: -6)
 
 ```js
 function f(b) {
@@ -5638,7 +5638,7 @@ console.log(a);
 
 ## `terser/harmony/class_extends_class`
 
-- size: oxc 57 vs reference 62 (-5 bytes, no whitespaces)
+- size: oxc 57 vs reference 62 (no whitespaces: -5, formatted: -5)
 
 ```js
 class anon extends class {} {}
@@ -5658,7 +5658,7 @@ class named extends class base {} {}
 
 ## `terser/harmony/class_extends_function`
 
-- size: oxc 67 vs reference 72 (-5 bytes, no whitespaces)
+- size: oxc 67 vs reference 72 (no whitespaces: -5, formatted: -5)
 
 ```js
 class anon extends function() {} {}
@@ -5678,7 +5678,7 @@ class named extends function base() {} {}
 
 ## `terser/harmony/module_enables_strict_mode`
 
-- size: oxc 18 vs reference 23 (-5 bytes, no whitespaces)
+- size: oxc 18 vs reference 23 (no whitespaces: -5, formatted: -7)
 
 ```js
 if (1) {
@@ -5700,7 +5700,7 @@ if (1) {
 
 ## `terser/issue_640/negate_iife_3_off`
 
-- size: oxc 57 vs reference 62 (-5 bytes, no whitespaces)
+- size: oxc 57 vs reference 62 (no whitespaces: -5, formatted: -5)
 
 ```js
 (function() {
@@ -5722,7 +5722,7 @@ if (1) {
 
 ## `terser/loops/do_switch`
 
-- size: oxc 38 vs reference 43 (-5 bytes, no whitespaces)
+- size: oxc 38 vs reference 43 (no whitespaces: -5, formatted: -8)
 
 ```js
 do {
@@ -5749,7 +5749,7 @@ do {
 
 ## `terser/parameters/regression_arrow_functions_and_hoist`
 
-- size: oxc 0 vs reference 5 (-5 bytes, no whitespaces)
+- size: oxc 0 vs reference 5 (no whitespaces: -5, formatted: -10)
 
 ```js
 (a) => b;
@@ -5767,7 +5767,7 @@ do {
 ## `terser/reduce_vars/issue_1865`
 
 - tags: `join vars`
-- size: oxc 106 vs reference 111 (-5 bytes, no whitespaces)
+- size: oxc 106 vs reference 111 (no whitespaces: -5, formatted: -5)
 
 ```js
 function f(some) {
@@ -5801,7 +5801,7 @@ console.log((function() {
 ## `terser/reduce_vars/issue_3140_1`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 145 vs reference 150 (-5 bytes, no whitespaces)
+- size: oxc 145 vs reference 150 (no whitespaces: -5, formatted: -5)
 
 ```js
 (function() {
@@ -5843,7 +5843,7 @@ console.log((function() {
 ## `terser/reduce_vars/issue_3140_3`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 182 vs reference 187 (-5 bytes, no whitespaces)
+- size: oxc 182 vs reference 187 (no whitespaces: -5, formatted: -5)
 
 ```js
 (function() {
@@ -5890,7 +5890,7 @@ console.log((function() {
 ## `terser/reduce_vars/issue_3140_4`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 159 vs reference 164 (-5 bytes, no whitespaces)
+- size: oxc 159 vs reference 164 (no whitespaces: -5, formatted: -5)
 
 ```js
 (function() {
@@ -5933,7 +5933,7 @@ console.log((function() {
 ## `terser/reduce_vars/perf_7`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 162 vs reference 167 (-5 bytes, no whitespaces)
+- size: oxc 162 vs reference 167 (no whitespaces: -5, formatted: -6)
 
 ```js
 var indirect_foo = function(x, y, z) {
@@ -5968,7 +5968,7 @@ console.log(sum);
 
 ## `terser/arrow/issue_3092b`
 
-- size: oxc 111 vs reference 117 (-6 bytes, no whitespaces)
+- size: oxc 111 vs reference 117 (no whitespaces: -6, formatted: -7)
 
 ```js
 var obj = {
@@ -6004,7 +6004,7 @@ console.log(obj.gen('pass').next().value);
 
 ## `terser/blocks/issue_1672_for_strict`
 
-- size: oxc 98 vs reference 104 (-6 bytes, no whitespaces)
+- size: oxc 98 vs reference 104 (no whitespaces: -6, formatted: -14)
 
 ```js
 'use strict';
@@ -6041,7 +6041,7 @@ switch (function() {
 
 ## `terser/blocks/issue_1672_if_strict`
 
-- size: oxc 95 vs reference 101 (-6 bytes, no whitespaces)
+- size: oxc 95 vs reference 101 (no whitespaces: -6, formatted: -14)
 
 ```js
 'use strict';
@@ -6079,7 +6079,7 @@ switch (function() {
 ## `terser/collapse_vars/collapse_vars_eval_and_with`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 197 vs reference 203 (-6 bytes, no whitespaces)
+- size: oxc 197 vs reference 203 (no whitespaces: -6, formatted: -6)
 
 ```js
 (function f0() {
@@ -6123,7 +6123,7 @@ switch (function() {
 ## `terser/collapse_vars/switch_case_2`
 
 - tags: `join vars`
-- size: oxc 56 vs reference 62 (-6 bytes, no whitespaces)
+- size: oxc 56 vs reference 62 (no whitespaces: -6, formatted: -11)
 
 ```js
 var a = 1, b = 2;
@@ -6155,7 +6155,7 @@ console.log(a);
 ## `terser/collapse_vars/unused_orig`
 
 - tags: `join vars`, `remove unused`, `2 iterations`
-- size: oxc 91 vs reference 97 (-6 bytes, no whitespaces)
+- size: oxc 91 vs reference 97 (no whitespaces: -6, formatted: -8)
 
 ```js
 var a = 1;
@@ -6194,7 +6194,7 @@ console.log((function(b) {
 
 ## `terser/comparing/self_comparison_1`
 
-- size: oxc 24 vs reference 30 (-6 bytes, no whitespaces)
+- size: oxc 24 vs reference 30 (no whitespaces: -6, formatted: -10)
 
 ```js
 a === a;
@@ -6221,7 +6221,7 @@ b.c !== b.c;
 
 ## `terser/destructuring/destructuring_constdef_in_loops`
 
-- size: oxc 57 vs reference 63 (-6 bytes, no whitespaces)
+- size: oxc 57 vs reference 63 (no whitespaces: -6, formatted: -6)
 
 ```js
 for (const [x, y] in pairs);
@@ -6246,7 +6246,7 @@ for (const { c } of cees);
 ## `terser/destructuring/reduce_vars`
 
 - tags: `join vars`
-- size: oxc 376 vs reference 382 (-6 bytes, no whitespaces)
+- size: oxc 376 vs reference 382 (no whitespaces: -6, formatted: -21)
 
 ```js
 {
@@ -6345,7 +6345,7 @@ for ([x, y] in pairs);
 ## `terser/destructuring/unused_destructuring_arrow_param`
 
 - tags: `remove unused`, `pure getters`
-- size: oxc 74 vs reference 80 (-6 bytes, no whitespaces)
+- size: oxc 74 vs reference 80 (no whitespaces: -6, formatted: -7)
 
 ```js
 let bar = ({ w = console.log('side effect'), x, y: z }) => {
@@ -6378,7 +6378,7 @@ bar({
 ## `terser/drop_unused/issue_2063`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 6 (-6 bytes, no whitespaces)
+- size: oxc 0 vs reference 6 (no whitespaces: -6, formatted: -7)
 
 ```js
 var a;
@@ -6397,7 +6397,7 @@ var a;
 ## `terser/export/dynamic_import`
 
 - tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`
-- size: oxc 133 vs reference 139 (-6 bytes, no whitespaces)
+- size: oxc 133 vs reference 139 (no whitespaces: -6, formatted: -9)
 
 ```js
 import traditional from './traditional.js';
@@ -6430,7 +6430,7 @@ dynamic.foo();
 
 ## `terser/global_defs/issue_1986`
 
-- size: oxc 10 vs reference 16 (-6 bytes, no whitespaces)
+- size: oxc 10 vs reference 16 (no whitespaces: -6, formatted: -6)
 
 ```js
 alert(42);
@@ -6448,7 +6448,7 @@ alert(42);
 
 ## `terser/harmony/array_literal_with_spread_1`
 
-- size: oxc 38 vs reference 44 (-6 bytes, no whitespaces)
+- size: oxc 38 vs reference 44 (no whitespaces: -6, formatted: -9)
 
 ```js
 var f = (x) => [...x][0];
@@ -6468,7 +6468,7 @@ console.log(f(['PASS']));
 
 ## `terser/harmony/issue_1898`
 
-- size: oxc 106 vs reference 112 (-6 bytes, no whitespaces)
+- size: oxc 106 vs reference 112 (no whitespaces: -6, formatted: -22)
 
 ```js
 class Foo {
@@ -6506,7 +6506,7 @@ new Foo().bar();
 
 ## `terser/harmony/regression_cannot_destructure`
 
-- size: oxc 15 vs reference 21 (-6 bytes, no whitespaces)
+- size: oxc 15 vs reference 21 (no whitespaces: -6, formatted: -9)
 
 ```js
 var x = { x: 3 };
@@ -6527,7 +6527,7 @@ x({ x: 3 });
 ## `terser/identity/inline_identity_lose_this`
 
 - tags: `join vars`
-- size: oxc 219 vs reference 225 (-6 bytes, no whitespaces)
+- size: oxc 219 vs reference 225 (no whitespaces: -6, formatted: -8)
 
 ```js
 'use strict';
@@ -6568,7 +6568,7 @@ console.log(id(func_bag.func2)());
 ## `terser/ie8/issue_2254_1`
 
 - tags: `mangle`, `keep function names`, `keep class names`
-- size: oxc 89 vs reference 95 (-6 bytes, no whitespaces)
+- size: oxc 89 vs reference 95 (no whitespaces: -6, formatted: -8)
 
 ```js
 'eeeeee';
@@ -6608,7 +6608,7 @@ function f(s) {
 ## `terser/ie8/issue_2254_2`
 
 - tags: `mangle`, `keep function names`, `keep class names`
-- size: oxc 89 vs reference 95 (-6 bytes, no whitespaces)
+- size: oxc 89 vs reference 95 (no whitespaces: -6, formatted: -8)
 
 ```js
 'eeeeee';
@@ -6650,7 +6650,7 @@ function f(s) {
 ## `terser/issue_1105/assorted_Infinity_NaN_undefined_in_with_scope_keep_infinity`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 221 vs reference 227 (-6 bytes, no whitespaces)
+- size: oxc 221 vs reference 227 (no whitespaces: -6, formatted: -16)
 
 ```js
 var f = console.log;
@@ -6704,7 +6704,7 @@ with(o) {
 ## `terser/issue_640/negate_iife_4`
 
 - tags: `sequences`
-- size: oxc 98 vs reference 104 (-6 bytes, no whitespaces)
+- size: oxc 98 vs reference 104 (no whitespaces: -6, formatted: -6)
 
 ```js
 (function() {
@@ -6733,7 +6733,7 @@ with(o) {
 ## `terser/issue_640/negate_iife_5`
 
 - tags: `sequences`
-- size: oxc 82 vs reference 88 (-6 bytes, no whitespaces)
+- size: oxc 82 vs reference 88 (no whitespaces: -6, formatted: -6)
 
 ```js
 if ((function() {
@@ -6766,7 +6766,7 @@ if ((function() {
 ## `terser/issue_747/dont_reuse_prop`
 
 - tags: `mangle`, `keep function names`, `keep class names`
-- size: oxc 62 vs reference 68 (-6 bytes, no whitespaces)
+- size: oxc 62 vs reference 68 (no whitespaces: -6, formatted: -6)
 
 ```js
 'aaaaaaaaaabbbbb';
@@ -6796,7 +6796,7 @@ console.log(obj.a);
 ## `terser/issue_747/unmangleable_props_should_always_be_reserved`
 
 - tags: `mangle`, `keep function names`, `keep class names`
-- size: oxc 62 vs reference 68 (-6 bytes, no whitespaces)
+- size: oxc 62 vs reference 68 (no whitespaces: -6, formatted: -6)
 
 ```js
 'aaaaaaaaaabbbbb';
@@ -6825,7 +6825,7 @@ console.log(obj.a);
 
 ## `terser/negate_iife/negate_iife_3`
 
-- size: oxc 57 vs reference 63 (-6 bytes, no whitespaces)
+- size: oxc 57 vs reference 63 (no whitespaces: -6, formatted: -6)
 
 ```js
 (function() {
@@ -6848,7 +6848,7 @@ console.log(obj.a);
 
 ## `terser/negate_iife/negate_iife_3_off`
 
-- size: oxc 57 vs reference 63 (-6 bytes, no whitespaces)
+- size: oxc 57 vs reference 63 (no whitespaces: -6, formatted: -6)
 
 ```js
 (function() {
@@ -6871,7 +6871,7 @@ console.log(obj.a);
 
 ## `terser/negate_iife/negate_iife_3_side_effects`
 
-- size: oxc 57 vs reference 63 (-6 bytes, no whitespaces)
+- size: oxc 57 vs reference 63 (no whitespaces: -6, formatted: -6)
 
 ```js
 (function() {
@@ -6895,7 +6895,7 @@ console.log(obj.a);
 ## `terser/negate_iife/negate_iife_4`
 
 - tags: `sequences`
-- size: oxc 98 vs reference 104 (-6 bytes, no whitespaces)
+- size: oxc 98 vs reference 104 (no whitespaces: -6, formatted: -6)
 
 ```js
 (function() {
@@ -6924,7 +6924,7 @@ console.log(obj.a);
 ## `terser/negate_iife/negate_iife_5`
 
 - tags: `sequences`
-- size: oxc 82 vs reference 88 (-6 bytes, no whitespaces)
+- size: oxc 82 vs reference 88 (no whitespaces: -6, formatted: -6)
 
 ```js
 if ((function() {
@@ -6956,7 +6956,7 @@ if ((function() {
 
 ## `terser/object/computed_property_names_evaluated_1`
 
-- size: oxc 16 vs reference 22 (-6 bytes, no whitespaces)
+- size: oxc 16 vs reference 22 (no whitespaces: -6, formatted: -6)
 
 ```js
 obj({
@@ -6981,7 +6981,7 @@ obj({
 
 ## `terser/object/concise_methods_with_computed_property`
 
-- size: oxc 70 vs reference 76 (-6 bytes, no whitespaces)
+- size: oxc 70 vs reference 76 (no whitespaces: -6, formatted: -6)
 
 ```js
 var foo = {
@@ -7019,7 +7019,7 @@ var foo = {
 
 ## `terser/object/getter_setter_with_computed_value`
 
-- size: oxc 150 vs reference 156 (-6 bytes, no whitespaces)
+- size: oxc 150 vs reference 156 (no whitespaces: -6, formatted: -8)
 
 ```js
 class C {
@@ -7060,7 +7060,7 @@ class MyArray extends Array {
 
 ## `terser/parameters/regression_assign_arrow_functions`
 
-- size: oxc 33 vs reference 39 (-6 bytes, no whitespaces)
+- size: oxc 33 vs reference 39 (no whitespaces: -6, formatted: -6)
 
 ```js
 oninstall = (e) => false;
@@ -7081,7 +7081,7 @@ oninstall = () => false;
 
 ## `terser/properties/dot_properties`
 
-- size: oxc 90 vs reference 96 (-6 bytes, no whitespaces)
+- size: oxc 90 vs reference 96 (no whitespaces: -6, formatted: -6)
 
 ```js
 a['foo'] = 'bar';
@@ -7111,7 +7111,7 @@ a['1_1'] = 'foo';
 ## `terser/reduce_vars/reduce_vars`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 218 vs reference 224 (-6 bytes, no whitespaces)
+- size: oxc 218 vs reference 224 (no whitespaces: -6, formatted: -7)
 
 ```js
 var A = 1;
@@ -7158,7 +7158,7 @@ console.log(A + 1);
 ## `terser/reduce_vars/try_abort`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 66 vs reference 72 (-6 bytes, no whitespaces)
+- size: oxc 66 vs reference 72 (no whitespaces: -6, formatted: -9)
 
 ```js
 !(function() {
@@ -7192,7 +7192,7 @@ console.log(A + 1);
 
 ## `terser/switch/constant_switch_7`
 
-- size: oxc 86 vs reference 92 (-6 bytes, no whitespaces)
+- size: oxc 86 vs reference 92 (no whitespaces: -6, formatted: -15)
 
 ```js
 OUT: {
@@ -7235,7 +7235,7 @@ OUT: {
 
 ## `terser/template_string/regex_1`
 
-- size: oxc 42 vs reference 48 (-6 bytes, no whitespaces)
+- size: oxc 42 vs reference 48 (no whitespaces: -6, formatted: -6)
 
 ```js
 console.log(`${/a/} ${6 / 2} ${/b/.test('b')} ${1 ? /c/ : /d/}`);
@@ -7253,7 +7253,7 @@ console.log(`${/a/} ${6 / 2} ${/b/.test('b')} ${1 ? /c/ : /d/}`);
 
 ## `terser/template_string/semicolons`
 
-- size: oxc 4 vs reference 10 (-6 bytes, no whitespaces)
+- size: oxc 4 vs reference 10 (no whitespaces: -6, formatted: -7)
 
 ```js
 foo;
@@ -7272,7 +7272,7 @@ foo;
 
 ## `terser/typeof/issue_1668`
 
-- size: oxc 0 vs reference 6 (-6 bytes, no whitespaces)
+- size: oxc 0 vs reference 6 (no whitespaces: -6, formatted: -8)
 
 ```js
 if (typeof bar);
@@ -7290,7 +7290,7 @@ if (typeof bar);
 ## `terser/collapse_vars/iife_2`
 
 - tags: `join vars`
-- size: oxc 37 vs reference 44 (-7 bytes, no whitespaces)
+- size: oxc 37 vs reference 44 (no whitespaces: -7, formatted: -8)
 
 ```js
 var foo = bar();
@@ -7316,7 +7316,7 @@ var foo = bar();
 ## `terser/collapse_vars/issue_2187_1`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 66 vs reference 73 (-7 bytes, no whitespaces)
+- size: oxc 66 vs reference 73 (no whitespaces: -7, formatted: -10)
 
 ```js
 var a = 1;
@@ -7350,7 +7350,7 @@ var a = 1;
 ## `terser/dead_code/dead_code_const_annotation`
 
 - tags: `join vars`
-- size: oxc 41 vs reference 48 (-7 bytes, no whitespaces)
+- size: oxc 41 vs reference 48 (no whitespaces: -7, formatted: -6)
 
 ```js
 var unused;
@@ -7379,7 +7379,7 @@ if (CONST_FOO_ANN) {
 ## `terser/export/export_default_anonymous_function_not_call`
 
 - tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `join vars`, `remove unused`
-- size: oxc 27 vs reference 34 (-7 bytes, no whitespaces)
+- size: oxc 27 vs reference 34 (no whitespaces: -7, formatted: -7)
 
 ```js
 export default (function() {})(foo);
@@ -7397,7 +7397,7 @@ export default (function() {})(foo);
 
 ## `terser/hoist_vars/statements_funs`
 
-- size: oxc 52 vs reference 59 (-7 bytes, no whitespaces)
+- size: oxc 52 vs reference 59 (no whitespaces: -7, formatted: -10)
 
 ```js
 function f() {
@@ -7428,7 +7428,7 @@ function f() {
 ## `terser/issue_1733/function_iife_catch`
 
 - tags: `mangle`, `keep function names`, `keep class names`
-- size: oxc 73 vs reference 80 (-7 bytes, no whitespaces)
+- size: oxc 73 vs reference 80 (no whitespaces: -7, formatted: -13)
 
 ```js
 function f(n) {
@@ -7471,7 +7471,7 @@ f();
 ## `terser/pure_funcs/boolean_and`
 
 - tags: `pure functions`
-- size: oxc 44 vs reference 51 (-7 bytes, no whitespaces)
+- size: oxc 44 vs reference 51 (no whitespaces: -7, formatted: -9)
 
 ```js
 foo() && foo();
@@ -7501,7 +7501,7 @@ bar() && 'bar';
 ## `terser/reduce_vars/recursive_inlining_5`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 184 vs reference 191 (-7 bytes, no whitespaces)
+- size: oxc 184 vs reference 191 (no whitespaces: -7, formatted: -7)
 
 ```js
 !(function() {
@@ -7553,7 +7553,7 @@ bar() && 'bar';
 ## `terser/rename/function_iife_catch`
 
 - tags: `mangle`, `keep function names`, `keep class names`
-- size: oxc 73 vs reference 80 (-7 bytes, no whitespaces)
+- size: oxc 73 vs reference 80 (no whitespaces: -7, formatted: -13)
 
 ```js
 function f(n) {
@@ -7596,7 +7596,7 @@ f();
 ## `terser/sequences/hoist_decl`
 
 - tags: `join vars`, `sequences`
-- size: oxc 32 vs reference 39 (-7 bytes, no whitespaces)
+- size: oxc 32 vs reference 39 (no whitespaces: -7, formatted: -10)
 
 ```js
 var a;
@@ -7624,7 +7624,7 @@ var d;
 
 ## `terser/template_string/allow_null_character`
 
-- size: oxc 7 vs reference 14 (-7 bytes, no whitespaces)
+- size: oxc 7 vs reference 14 (no whitespaces: -7, formatted: -8)
 
 ```js
 `\0`;
@@ -7645,7 +7645,7 @@ var d;
 ## `terser/arguments/modified_strict`
 
 - tags: `join vars`
-- size: oxc 168 vs reference 176 (-8 bytes, no whitespaces)
+- size: oxc 168 vs reference 176 (no whitespaces: -8, formatted: -10)
 
 ```js
 'use strict';
@@ -7679,7 +7679,7 @@ var d;
 
 ## `terser/block_scope/regression_block_scope_resolves`
 
-- size: oxc 145 vs reference 153 (-8 bytes, no whitespaces)
+- size: oxc 145 vs reference 153 (no whitespaces: -8, formatted: -12)
 
 ```js
 (function() {
@@ -7729,7 +7729,7 @@ var d;
 ## `terser/collapse_vars/collapse_vars_arguments`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 50 vs reference 58 (-8 bytes, no whitespaces)
+- size: oxc 50 vs reference 58 (no whitespaces: -8, formatted: -8)
 
 ```js
 var outer = function() {
@@ -7758,7 +7758,7 @@ outer();
 ## `terser/collapse_vars/issue_2571_1`
 
 - tags: `join vars`
-- size: oxc 74 vs reference 82 (-8 bytes, no whitespaces)
+- size: oxc 74 vs reference 82 (no whitespaces: -8, formatted: -10)
 
 ```js
 var b = 1;
@@ -7792,7 +7792,7 @@ console.log(b);
 
 ## `terser/defaults/defaults_false`
 
-- size: oxc 15 vs reference 23 (-8 bytes, no whitespaces)
+- size: oxc 15 vs reference 23 (no whitespaces: -8, formatted: -10)
 
 ```js
 if (true) {
@@ -7812,7 +7812,7 @@ if (true) {
 
 ## `terser/defaults/defaults_false_evaluate_true`
 
-- size: oxc 15 vs reference 23 (-8 bytes, no whitespaces)
+- size: oxc 15 vs reference 23 (no whitespaces: -8, formatted: -10)
 
 ```js
 if (true) {
@@ -7832,7 +7832,7 @@ if (true) {
 
 ## `terser/defaults/defaults_undefined`
 
-- size: oxc 15 vs reference 23 (-8 bytes, no whitespaces)
+- size: oxc 15 vs reference 23 (no whitespaces: -8, formatted: -10)
 
 ```js
 if (true) {
@@ -7852,7 +7852,7 @@ if (true) {
 
 ## `terser/destructuring/destructuring_expressions`
 
-- size: oxc 13 vs reference 21 (-8 bytes, no whitespaces)
+- size: oxc 13 vs reference 21 (no whitespaces: -8, formatted: -14)
 
 ```js
 ({
@@ -7881,7 +7881,7 @@ f({ x });
 
 ## `terser/destructuring/issue_2044_ecma_5`
 
-- size: oxc 18 vs reference 26 (-8 bytes, no whitespaces)
+- size: oxc 18 vs reference 26 (no whitespaces: -8, formatted: -22)
 
 ```js
 ({x: a = 1, y: y = 2 + b, z: z = 3 - c} = obj);
@@ -7899,7 +7899,7 @@ f({ x });
 
 ## `terser/destructuring/issue_2044_ecma_5_beautify`
 
-- size: oxc 18 vs reference 26 (-8 bytes, no whitespaces)
+- size: oxc 18 vs reference 26 (no whitespaces: -8, formatted: -22)
 
 ```js
 ({x: a = 1, y: y = 2 + b, z: z = 3 - c} = obj);
@@ -7918,7 +7918,7 @@ f({ x });
 ## `terser/evaluate/issue_2535_2`
 
 - tags: `sequences`
-- size: oxc 60 vs reference 68 (-8 bytes, no whitespaces)
+- size: oxc 60 vs reference 68 (no whitespaces: -8, formatted: -12)
 
 ```js
 x() || true || y();
@@ -7944,7 +7944,7 @@ x() && false && y();
 ## `terser/export/issue_333`
 
 - tags: `join vars`
-- size: oxc 138 vs reference 146 (-8 bytes, no whitespaces)
+- size: oxc 138 vs reference 146 (no whitespaces: -8, formatted: -8)
 
 ```js
 function shortOut() {
@@ -7978,7 +7978,7 @@ export { _setToString };
 
 ## `terser/functions/inline_0`
 
-- size: oxc 97 vs reference 105 (-8 bytes, no whitespaces)
+- size: oxc 97 vs reference 105 (no whitespaces: -8, formatted: -12)
 
 ```js
 (function() {
@@ -8010,7 +8010,7 @@ export { _setToString };
 
 ## `terser/functions/inline_false`
 
-- size: oxc 97 vs reference 105 (-8 bytes, no whitespaces)
+- size: oxc 97 vs reference 105 (no whitespaces: -8, formatted: -12)
 
 ```js
 (function() {
@@ -8042,7 +8042,7 @@ export { _setToString };
 
 ## `terser/global_defs/must_replace`
 
-- size: oxc 15 vs reference 23 (-8 bytes, no whitespaces)
+- size: oxc 15 vs reference 23 (no whitespaces: -8, formatted: -8)
 
 ```js
 console.log(D);
@@ -8061,7 +8061,7 @@ console.log(D);
 ## `terser/logical_assignment/assign_in_conditional_part_reused`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 162 vs reference 170 (-8 bytes, no whitespaces)
+- size: oxc 162 vs reference 170 (no whitespaces: -8, formatted: -8)
 
 ```js
 var status = 'PASS';
@@ -8090,7 +8090,7 @@ console.log(status, nil, nil_prop.prop);
 ## `terser/logical_assignment/prematurely_evaluate_assignment`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 124 vs reference 132 (-8 bytes, no whitespaces)
+- size: oxc 124 vs reference 132 (no whitespaces: -8, formatted: -8)
 
 ```js
 var or = null;
@@ -8120,7 +8120,7 @@ console.log(or, null_coalesce, and);
 ## `terser/logical_assignment/prematurely_evaluate_assignment_inv`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 128 vs reference 136 (-8 bytes, no whitespaces)
+- size: oxc 128 vs reference 136 (no whitespaces: -8, formatted: -8)
 
 ```js
 var or = 'PASS';
@@ -8149,7 +8149,7 @@ console.log(or, null_coalesce, and);
 
 ## `terser/object/use_shorthand_opportunity`
 
-- size: oxc 18 vs reference 26 (-8 bytes, no whitespaces)
+- size: oxc 18 vs reference 26 (no whitespaces: -8, formatted: -10)
 
 ```js
 var foo = 123;
@@ -8170,7 +8170,7 @@ var obj = { foo };
 ## `terser/reduce_vars/toplevel_off`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 15 vs reference 23 (-8 bytes, no whitespaces)
+- size: oxc 15 vs reference 23 (no whitespaces: -8, formatted: -11)
 
 ```js
 var x = 3;
@@ -8190,7 +8190,7 @@ console.log(x);
 
 ## `terser/template_string/tagged_template_with_comment`
 
-- size: oxc 56 vs reference 64 (-8 bytes, no whitespaces)
+- size: oxc 56 vs reference 64 (no whitespaces: -8, formatted: -10)
 
 ```js
 console.log(String.raw`\u`);
@@ -8211,7 +8211,7 @@ console.log((() => String.raw)()`\x`);
 ## `terser/collapse_vars/cascade_return`
 
 - tags: `join vars`
-- size: oxc 27 vs reference 36 (-9 bytes, no whitespaces)
+- size: oxc 27 vs reference 36 (no whitespaces: -9, formatted: -11)
 
 ```js
 function f(a) {
@@ -8235,7 +8235,7 @@ function f(a) {
 ## `terser/collapse_vars/issue_2914_2`
 
 - tags: `join vars`
-- size: oxc 131 vs reference 140 (-9 bytes, no whitespaces)
+- size: oxc 131 vs reference 140 (no whitespaces: -9, formatted: -9)
 
 ```js
 function read(input) {
@@ -8277,7 +8277,7 @@ console.log(read([129]));
 ## `terser/collapse_vars/issue_315`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 184 vs reference 193 (-9 bytes, no whitespaces)
+- size: oxc 184 vs reference 193 (no whitespaces: -9, formatted: -10)
 
 ```js
 console.log((function(s) {
@@ -8312,7 +8312,7 @@ console.log((function(s) {
 ## `terser/collapse_vars/toplevel_single_reference`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 20 vs reference 29 (-9 bytes, no whitespaces)
+- size: oxc 20 vs reference 29 (no whitespaces: -9, formatted: -17)
 
 ```js
 var a;
@@ -8338,7 +8338,7 @@ for (var b in x) {
 ## `terser/collapse_vars/unsafe_builtin`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 60 vs reference 69 (-9 bytes, no whitespaces)
+- size: oxc 60 vs reference 69 (no whitespaces: -9, formatted: -8)
 
 ```js
 function f(a) {
@@ -8364,7 +8364,7 @@ console.log(f(-1), f(2));
 ## `terser/dead_code/throw_assignment`
 
 - tags: `remove unused`
-- size: oxc 673 vs reference 682 (-9 bytes, no whitespaces)
+- size: oxc 673 vs reference 682 (no whitespaces: -9, formatted: -10)
 
 ```js
 function f1() {
@@ -8506,7 +8506,7 @@ test(-1);
 
 ## `terser/export/issue_2977`
 
-- size: oxc 22 vs reference 31 (-9 bytes, no whitespaces)
+- size: oxc 22 vs reference 31 (no whitespaces: -9, formatted: -11)
 
 ```js
 export default (function() {})();
@@ -8525,7 +8525,7 @@ export default (function() {})();
 ## `terser/global_defs/issue_3217`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 7 vs reference 16 (-9 bytes, no whitespaces)
+- size: oxc 7 vs reference 16 (no whitespaces: -9, formatted: -9)
 
 ```js
 o.fn();
@@ -8543,7 +8543,7 @@ o.fn();
 
 ## `terser/issue_1446/undefined_redefined_mangle`
 
-- size: oxc 31 vs reference 40 (-9 bytes, no whitespaces)
+- size: oxc 31 vs reference 40 (no whitespaces: -9, formatted: -14)
 
 ```js
 function f(undefined) {
@@ -8568,7 +8568,7 @@ function f(undefined) {
 
 ## `terser/issue_1569/inner_reference`
 
-- size: oxc 40 vs reference 49 (-9 bytes, no whitespaces)
+- size: oxc 40 vs reference 49 (no whitespaces: -9, formatted: -10)
 
 ```js
 !(function f(a) {
@@ -8595,7 +8595,7 @@ function f(undefined) {
 ## `terser/issue_1733/function_iife_catch_ie8`
 
 - tags: `mangle`, `keep function names`, `keep class names`
-- size: oxc 73 vs reference 82 (-9 bytes, no whitespaces)
+- size: oxc 73 vs reference 82 (no whitespaces: -9, formatted: -15)
 
 ```js
 function f(n) {
@@ -8636,7 +8636,7 @@ f();
 ## `terser/reduce_vars/booleans`
 
 - tags: `join vars`
-- size: oxc 83 vs reference 92 (-9 bytes, no whitespaces)
+- size: oxc 83 vs reference 92 (no whitespaces: -9, formatted: -14)
 
 ```js
 console.log((function(a) {
@@ -8664,7 +8664,7 @@ console.log((function(a) {
 ## `terser/rename/function_iife_catch_ie8`
 
 - tags: `mangle`, `keep function names`, `keep class names`
-- size: oxc 73 vs reference 82 (-9 bytes, no whitespaces)
+- size: oxc 73 vs reference 82 (no whitespaces: -9, formatted: -15)
 
 ```js
 function f(n) {
@@ -8704,7 +8704,7 @@ f();
 
 ## `terser/unsafe_symbols/unsafe_symbols_2`
 
-- size: oxc 0 vs reference 9 (-9 bytes, no whitespaces)
+- size: oxc 0 vs reference 9 (no whitespaces: -9, formatted: -10)
 
 ```js
 Symbol('kDog');
@@ -8721,7 +8721,7 @@ Symbol('kDog');
 
 ## `terser/yield/yield_sub`
 
-- size: oxc 70 vs reference 79 (-9 bytes, no whitespaces)
+- size: oxc 70 vs reference 79 (no whitespaces: -9, formatted: -9)
 
 ```js
 function* foo() {
@@ -8749,7 +8749,7 @@ function* foo() {
 
 ## `terser/async/async_arrow_iife_negate_iife`
 
-- size: oxc 37 vs reference 47 (-10 bytes, no whitespaces)
+- size: oxc 37 vs reference 47 (no whitespaces: -10, formatted: -16)
 
 ```js
 (async () => {
@@ -8778,7 +8778,7 @@ function* foo() {
 ## `terser/collapse_vars/issue_2298`
 
 - tags: `join vars`, `remove unused`, `2 iterations`
-- size: oxc 142 vs reference 152 (-10 bytes, no whitespaces)
+- size: oxc 142 vs reference 152 (no whitespaces: -10, formatted: -11)
 
 ```js
 !(function() {
@@ -8833,7 +8833,7 @@ function* foo() {
 ## `terser/collapse_vars/issue_2313_1`
 
 - tags: `join vars`
-- size: oxc 105 vs reference 115 (-10 bytes, no whitespaces)
+- size: oxc 105 vs reference 115 (no whitespaces: -10, formatted: -13)
 
 ```js
 var a = 0, b = 0;
@@ -8876,7 +8876,7 @@ foo.d();
 
 ## `terser/harmony/arrow_function_parens`
 
-- size: oxc 10 vs reference 20 (-10 bytes, no whitespaces)
+- size: oxc 10 vs reference 20 (no whitespaces: -10, formatted: -14)
 
 ```js
 something && (() => {});
@@ -8894,7 +8894,7 @@ something && (() => {});
 
 ## `terser/new/new_statements_3`
 
-- size: oxc 138 vs reference 148 (-10 bytes, no whitespaces)
+- size: oxc 138 vs reference 148 (no whitespaces: -10, formatted: -10)
 
 ```js
 new (function(foo) {
@@ -8933,7 +8933,7 @@ new (function test(foo) {
 ## `terser/reduce_vars/issue_3068_1`
 
 - tags: `join vars`
-- size: oxc 48 vs reference 58 (-10 bytes, no whitespaces)
+- size: oxc 48 vs reference 58 (no whitespaces: -10, formatted: -12)
 
 ```js
 (function() {
@@ -8962,7 +8962,7 @@ new (function test(foo) {
 ## `terser/sequences/make_sequences_4`
 
 - tags: `sequences`
-- size: oxc 98 vs reference 108 (-10 bytes, no whitespaces)
+- size: oxc 98 vs reference 108 (no whitespaces: -10, formatted: -11)
 
 ```js
 x = 5;
@@ -8996,7 +8996,7 @@ with(obj) {}
 ## `terser/typeof/issue_2728_5`
 
 - tags: `join vars`
-- size: oxc 55 vs reference 65 (-10 bytes, no whitespaces)
+- size: oxc 55 vs reference 65 (no whitespaces: -10, formatted: -10)
 
 ```js
 (function arguments(arguments) {
@@ -9018,7 +9018,7 @@ with(obj) {}
 
 ## `terser/yield/yield_before_punctuators`
 
-- size: oxc 147 vs reference 157 (-10 bytes, no whitespaces)
+- size: oxc 147 vs reference 157 (no whitespaces: -10, formatted: -13)
 
 ```js
 iter = (function* () {
@@ -9061,7 +9061,7 @@ function* g4() {
 
 ## `terser/ascii/ascii_only_false_identifier_es2015`
 
-- size: oxc 34 vs reference 45 (-11 bytes, no whitespaces)
+- size: oxc 34 vs reference 45 (no whitespaces: -11, formatted: -14)
 
 ```js
 function f() {
@@ -9085,7 +9085,7 @@ function f() {
 
 ## `terser/ascii/ascii_only_true_identifier_es2015`
 
-- size: oxc 34 vs reference 45 (-11 bytes, no whitespaces)
+- size: oxc 34 vs reference 45 (no whitespaces: -11, formatted: -14)
 
 ```js
 function f() {
@@ -9109,7 +9109,7 @@ function f() {
 
 ## `terser/async/issue_3079`
 
-- size: oxc 130 vs reference 141 (-11 bytes, no whitespaces)
+- size: oxc 130 vs reference 141 (no whitespaces: -11, formatted: -16)
 
 ```js
 (async) => 1;
@@ -9137,7 +9137,7 @@ console.log({ m: (async) => async ? '3' : '4' }.m(true));
 
 ## `terser/blocks/issue_1664`
 
-- size: oxc 82 vs reference 93 (-11 bytes, no whitespaces)
+- size: oxc 82 vs reference 93 (no whitespaces: -11, formatted: -15)
 
 ```js
 var a = 1;
@@ -9173,7 +9173,7 @@ console.log(a);
 ## `terser/collapse_vars/issue_2914_1`
 
 - tags: `join vars`
-- size: oxc 132 vs reference 143 (-11 bytes, no whitespaces)
+- size: oxc 132 vs reference 143 (no whitespaces: -11, formatted: -14)
 
 ```js
 function read(input) {
@@ -9215,7 +9215,7 @@ console.log(read([129]));
 ## `terser/collapse_vars/issue_2954_3`
 
 - tags: `join vars`
-- size: oxc 100 vs reference 111 (-11 bytes, no whitespaces)
+- size: oxc 100 vs reference 111 (no whitespaces: -11, formatted: -21)
 
 ```js
 var a = 'FAIL_1', b;
@@ -9260,7 +9260,7 @@ console.log(a);
 ## `terser/drop_unused/issue_1715_3`
 
 - tags: `remove unused`
-- size: oxc 65 vs reference 76 (-11 bytes, no whitespaces)
+- size: oxc 65 vs reference 76 (no whitespaces: -11, formatted: -20)
 
 ```js
 var a = 1;
@@ -9298,7 +9298,7 @@ console.log(a);
 
 ## `terser/evaluate/or`
 
-- size: oxc 412 vs reference 423 (-11 bytes, no whitespaces)
+- size: oxc 412 vs reference 423 (no whitespaces: -11, formatted: -14)
 
 ```js
 var a;
@@ -9368,7 +9368,7 @@ a = condition + 3 || null;
 
 ## `terser/harmony/new_target`
 
-- size: oxc 16 vs reference 27 (-11 bytes, no whitespaces)
+- size: oxc 16 vs reference 27 (no whitespaces: -11, formatted: -12)
 
 ```js
 new.target;
@@ -9388,7 +9388,7 @@ new.target.name;
 ## `terser/negate_iife/sequence_off`
 
 - tags: `sequences`, `2 iterations`
-- size: oxc 222 vs reference 233 (-11 bytes, no whitespaces)
+- size: oxc 222 vs reference 233 (no whitespaces: -11, formatted: -11)
 
 ```js
 function f() {
@@ -9435,7 +9435,7 @@ function g() {
 
 ## `terser/switch/issue_1083_1`
 
-- size: oxc 169 vs reference 180 (-11 bytes, no whitespaces)
+- size: oxc 169 vs reference 180 (no whitespaces: -11, formatted: -11)
 
 ```js
 function test(definitely_true, maybe_true) {
@@ -9477,7 +9477,7 @@ test(true, true);
 
 ## `terser/switch/issue_1083_2`
 
-- size: oxc 169 vs reference 180 (-11 bytes, no whitespaces)
+- size: oxc 169 vs reference 180 (no whitespaces: -11, formatted: -11)
 
 ```js
 function test(definitely_true, maybe_true) {
@@ -9519,7 +9519,7 @@ test(true, true);
 
 ## `terser/switch/issue_1083_5`
 
-- size: oxc 208 vs reference 219 (-11 bytes, no whitespaces)
+- size: oxc 208 vs reference 219 (no whitespaces: -11, formatted: -11)
 
 ```js
 function test(definitely_true, maybe_true) {
@@ -9563,7 +9563,7 @@ test(true, true);
 
 ## `terser/switch/issue_1083_6`
 
-- size: oxc 208 vs reference 219 (-11 bytes, no whitespaces)
+- size: oxc 208 vs reference 219 (no whitespaces: -11, formatted: -11)
 
 ```js
 function test(definitely_true, maybe_true) {
@@ -9608,7 +9608,7 @@ test(true, true);
 ## `terser/collapse_vars/return_4`
 
 - tags: `join vars`
-- size: oxc 54 vs reference 66 (-12 bytes, no whitespaces)
+- size: oxc 54 vs reference 66 (no whitespaces: -12, formatted: -16)
 
 ```js
 var a = 'FAIL';
@@ -9638,7 +9638,7 @@ console.log(a);
 ## `terser/export/name_cache_do_not_mangle_export_class_name`
 
 - tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 58 vs reference 70 (-12 bytes, no whitespaces)
+- size: oxc 58 vs reference 70 (no whitespaces: -12, formatted: -12)
 
 ```js
 export class add {}
@@ -9662,7 +9662,7 @@ console.log(add, add, sub, sub);
 ## `terser/export/name_cache_do_not_mangle_export_function_name`
 
 - tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 114 vs reference 126 (-12 bytes, no whitespaces)
+- size: oxc 114 vs reference 126 (no whitespaces: -12, formatted: -12)
 
 ```js
 export function add(x, y) {
@@ -9696,7 +9696,7 @@ console.log(add(1, 2), add(3, 4), sub(5, 6), sub(7, 8));
 
 ## `terser/harmony/import_meta`
 
-- size: oxc 16 vs reference 28 (-12 bytes, no whitespaces)
+- size: oxc 16 vs reference 28 (no whitespaces: -12, formatted: -13)
 
 ```js
 import.meta;
@@ -9715,7 +9715,7 @@ import.meta.url;
 
 ## `terser/harmony/typeof_arrow_functions`
 
-- size: oxc 24 vs reference 36 (-12 bytes, no whitespaces)
+- size: oxc 24 vs reference 36 (no whitespaces: -12, formatted: -15)
 
 ```js
 var foo = typeof ((x) => null);
@@ -9735,7 +9735,7 @@ console.log(foo);
 
 ## `terser/hoist_vars/sequences_funs`
 
-- size: oxc 47 vs reference 59 (-12 bytes, no whitespaces)
+- size: oxc 47 vs reference 59 (no whitespaces: -12, formatted: -15)
 
 ```js
 function f() {
@@ -9763,7 +9763,7 @@ function f() {
 
 ## `terser/object/computed_property_names_evaluated_2`
 
-- size: oxc 40 vs reference 52 (-12 bytes, no whitespaces)
+- size: oxc 40 vs reference 52 (no whitespaces: -12, formatted: -15)
 
 ```js
 var foo = something();
@@ -9788,7 +9788,7 @@ var obj = { [foo]() {
 ## `terser/properties/mangle_properties_which_matches_pattern`
 
 - tags: `mangle`, `keep function names`, `keep class names`, `mangle properties`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 45 vs reference 57 (-12 bytes, no whitespaces)
+- size: oxc 45 vs reference 57 (no whitespaces: -12, formatted: -15)
 
 ```js
 var acd = {
@@ -9821,7 +9821,7 @@ console.log(acd);
 
 ## `terser/pure_funcs/issue_2638`
 
-- size: oxc 16 vs reference 28 (-12 bytes, no whitespaces)
+- size: oxc 16 vs reference 28 (no whitespaces: -12, formatted: -14)
 
 ```js
 (g() || h())(x(), y());
@@ -9842,7 +9842,7 @@ console.log(acd);
 ## `terser/sequences/issue_2313`
 
 - tags: `join vars`, `sequences`
-- size: oxc 105 vs reference 117 (-12 bytes, no whitespaces)
+- size: oxc 105 vs reference 117 (no whitespaces: -12, formatted: -15)
 
 ```js
 var a = 0, b = 0;
@@ -9888,7 +9888,7 @@ foo.d();
 
 ## `terser/template_string/template_strings_ascii_only`
 
-- size: oxc 55 vs reference 67 (-12 bytes, no whitespaces)
+- size: oxc 55 vs reference 67 (no whitespaces: -12, formatted: -10)
 
 ```js
 var foo = `foo\n        bar\n        \u2182\u03c9\u2182`;
@@ -9909,7 +9909,7 @@ var bar = `\``;
 ## `terser/export/name_cache_mangle_export_default_class`
 
 - tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 107 vs reference 120 (-13 bytes, no whitespaces)
+- size: oxc 107 vs reference 120 (no whitespaces: -13, formatted: -12)
 
 ```js
 export default class foo {}
@@ -9942,7 +9942,7 @@ console.log(foo, bar, baz, qux, qux);
 
 ## `terser/harmony/arrow_function_parens_2`
 
-- size: oxc 0 vs reference 13 (-13 bytes, no whitespaces)
+- size: oxc 0 vs reference 13 (no whitespaces: -13, formatted: -16)
 
 ```js
 (() => null)();
@@ -9959,7 +9959,7 @@ console.log(foo, bar, baz, qux, qux);
 
 ## `terser/issue_229/template_strings`
 
-- size: oxc 25 vs reference 38 (-13 bytes, no whitespaces)
+- size: oxc 25 vs reference 38 (no whitespaces: -13, formatted: -18)
 
 ```js
 var x = {};
@@ -9981,7 +9981,7 @@ y.hello = 'world';
 
 ## `terser/numbers/no_number_function_transform_without_unsafe_math`
 
-- size: oxc 0 vs reference 13 (-13 bytes, no whitespaces)
+- size: oxc 0 vs reference 13 (no whitespaces: -13, formatted: -14)
 
 ```js
 Number(1234);
@@ -9999,7 +9999,7 @@ Number(1234);
 ## `terser/pure_funcs/boolean_or`
 
 - tags: `pure functions`
-- size: oxc 38 vs reference 51 (-13 bytes, no whitespaces)
+- size: oxc 38 vs reference 51 (no whitespaces: -13, formatted: -16)
 
 ```js
 foo() || foo();
@@ -10027,7 +10027,7 @@ bar() || 'bar';
 
 ## `terser/ascii/ascii_only_false_identifier_es5`
 
-- size: oxc 34 vs reference 48 (-14 bytes, no whitespaces)
+- size: oxc 34 vs reference 48 (no whitespaces: -14, formatted: -17)
 
 ```js
 function f() {
@@ -10051,7 +10051,7 @@ function f() {
 
 ## `terser/ascii/ascii_only_true_identifier_es5`
 
-- size: oxc 34 vs reference 48 (-14 bytes, no whitespaces)
+- size: oxc 34 vs reference 48 (no whitespaces: -14, formatted: -17)
 
 ```js
 function f() {
@@ -10075,7 +10075,7 @@ function f() {
 
 ## `terser/blocks/keep_some_blocks`
 
-- size: oxc 74 vs reference 88 (-14 bytes, no whitespaces)
+- size: oxc 74 vs reference 88 (no whitespaces: -14, formatted: -21)
 
 ```js
 if (foo) {
@@ -10120,7 +10120,7 @@ if (foo) {
 ## `terser/collapse_vars/issue_2203_2`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 112 vs reference 126 (-14 bytes, no whitespaces)
+- size: oxc 112 vs reference 126 (no whitespaces: -14, formatted: -19)
 
 ```js
 a = 'PASS';
@@ -10160,7 +10160,7 @@ console.log({
 ## `terser/collapse_vars/issue_2364_3`
 
 - tags: `join vars`, `pure getters`
-- size: oxc 167 vs reference 181 (-14 bytes, no whitespaces)
+- size: oxc 167 vs reference 181 (no whitespaces: -14, formatted: -17)
 
 ```js
 function inc(obj) {
@@ -10193,7 +10193,7 @@ console.log(foo.amount, answer);
 ## `terser/const/unused_regexp_literal`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 14 (-14 bytes, no whitespaces)
+- size: oxc 0 vs reference 14 (no whitespaces: -14, formatted: -16)
 
 ```js
 function f() {
@@ -10213,7 +10213,7 @@ function f() {
 ## `terser/destructuring/mangle_destructuring_decl`
 
 - tags: `remove unused`
-- size: oxc 127 vs reference 141 (-14 bytes, no whitespaces)
+- size: oxc 127 vs reference 141 (no whitespaces: -14, formatted: -24)
 
 ```js
 function test(opts) {
@@ -10259,7 +10259,7 @@ test({});
 ## `terser/destructuring/mangle_destructuring_decl_collapse_vars`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 127 vs reference 141 (-14 bytes, no whitespaces)
+- size: oxc 127 vs reference 141 (no whitespaces: -14, formatted: -24)
 
 ```js
 function test(opts) {
@@ -10305,7 +10305,7 @@ test({});
 ## `terser/drop_unused/drop_fargs`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 14 (-14 bytes, no whitespaces)
+- size: oxc 0 vs reference 14 (no whitespaces: -14, formatted: -16)
 
 ```js
 function f(a) {
@@ -10325,7 +10325,7 @@ function f(a) {
 ## `terser/drop_unused/issue_1830_1`
 
 - tags: `remove unused`
-- size: oxc 39 vs reference 53 (-14 bytes, no whitespaces)
+- size: oxc 39 vs reference 53 (no whitespaces: -14, formatted: -15)
 
 ```js
 !(function() {
@@ -10349,7 +10349,7 @@ function f(a) {
 ## `terser/harmony/class_name_can_be_preserved`
 
 - tags: `mangle`, `keep function names`, `keep class names`
-- size: oxc 25 vs reference 39 (-14 bytes, no whitespaces)
+- size: oxc 25 vs reference 39 (no whitespaces: -14, formatted: -17)
 
 ```js
 function x() {
@@ -10372,7 +10372,7 @@ function x() {
 
 ## `terser/hoist_vars/sequences`
 
-- size: oxc 47 vs reference 61 (-14 bytes, no whitespaces)
+- size: oxc 47 vs reference 61 (no whitespaces: -14, formatted: -19)
 
 ```js
 function f() {
@@ -10402,7 +10402,7 @@ function f() {
 ## `terser/issue_1466/different_variable_in_multiple_for_loop`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 96 vs reference 110 (-14 bytes, no whitespaces)
+- size: oxc 96 vs reference 110 (no whitespaces: -14, formatted: -23)
 
 ```js
 for (let i = 0; i < 3; i++) {
@@ -10441,7 +10441,7 @@ for (let i = 0; i < 3; i++) {
 ## `terser/issue_1466/same_variable_in_multiple_for_loop`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 96 vs reference 110 (-14 bytes, no whitespaces)
+- size: oxc 96 vs reference 110 (no whitespaces: -14, formatted: -23)
 
 ```js
 for (let i = 0; i < 3; i++) {
@@ -10479,7 +10479,7 @@ for (let i = 0; i < 3; i++) {
 
 ## `terser/template_string/tagged_call_with_invalid_escape`
 
-- size: oxc 35 vs reference 49 (-14 bytes, no whitespaces)
+- size: oxc 35 vs reference 49 (no whitespaces: -14, formatted: -19)
 
 ```js
 let z = () => String.raw;
@@ -10500,7 +10500,7 @@ console.log(z()`\4321\u\x`);
 ## `terser/drop_unused/iife`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 15 (-15 bytes, no whitespaces)
+- size: oxc 0 vs reference 15 (no whitespaces: -15, formatted: -21)
 
 ```js
 function f() {
@@ -10523,7 +10523,7 @@ function f() {
 ## `terser/export/name_cache_import_star_as_name_from_module`
 
 - tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 106 vs reference 121 (-15 bytes, no whitespaces)
+- size: oxc 106 vs reference 121 (no whitespaces: -15, formatted: -15)
 
 ```js
 import * as fs from 'filesystem';
@@ -10552,7 +10552,7 @@ export { fs, stuff };
 ## `terser/harmony/object_rest_spread`
 
 - tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`
-- size: oxc 365 vs reference 380 (-15 bytes, no whitespaces)
+- size: oxc 365 vs reference 380 (no whitespaces: -15, formatted: -21)
 
 ```js
 var { w: w1, ...V } = {
@@ -10696,7 +10696,7 @@ console.log({
 
 ## `terser/hoist_vars/statements`
 
-- size: oxc 52 vs reference 67 (-15 bytes, no whitespaces)
+- size: oxc 52 vs reference 67 (no whitespaces: -15, formatted: -20)
 
 ```js
 function f() {
@@ -10723,7 +10723,7 @@ function f() {
 
 ## `terser/issue_143/tranformation_sort_order_equal`
 
-- size: oxc 8 vs reference 23 (-15 bytes, no whitespaces)
+- size: oxc 8 vs reference 23 (no whitespaces: -15, formatted: -16)
 
 ```js
 (a = parseInt('100')) == a;
@@ -10741,7 +10741,7 @@ function f() {
 
 ## `terser/issue_143/tranformation_sort_order_greater_or_equal`
 
-- size: oxc 8 vs reference 23 (-15 bytes, no whitespaces)
+- size: oxc 8 vs reference 23 (no whitespaces: -15, formatted: -16)
 
 ```js
 (a = parseInt('100')) >= a;
@@ -10759,7 +10759,7 @@ function f() {
 
 ## `terser/issue_143/tranformation_sort_order_lesser_or_equal`
 
-- size: oxc 8 vs reference 23 (-15 bytes, no whitespaces)
+- size: oxc 8 vs reference 23 (no whitespaces: -15, formatted: -16)
 
 ```js
 (a = parseInt('100')) <= a;
@@ -10777,7 +10777,7 @@ function f() {
 
 ## `terser/issue_143/tranformation_sort_order_unequal`
 
-- size: oxc 8 vs reference 23 (-15 bytes, no whitespaces)
+- size: oxc 8 vs reference 23 (no whitespaces: -15, formatted: -16)
 
 ```js
 (a = parseInt('100')) != a;
@@ -10795,7 +10795,7 @@ function f() {
 
 ## `terser/object/prop_func_to_concise_method`
 
-- size: oxc 75 vs reference 90 (-15 bytes, no whitespaces)
+- size: oxc 75 vs reference 90 (no whitespaces: -15, formatted: -14)
 
 ```js
 ({
@@ -10828,7 +10828,7 @@ function f() {
 
 ## `terser/unsafe_symbols/unsafe_symbols_1`
 
-- size: oxc 0 vs reference 15 (-15 bytes, no whitespaces)
+- size: oxc 0 vs reference 15 (no whitespaces: -15, formatted: -16)
 
 ```js
 Symbol('kDog');
@@ -10846,7 +10846,7 @@ Symbol('kDog');
 ## `terser/collapse_vars/issue_2203_1`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 89 vs reference 105 (-16 bytes, no whitespaces)
+- size: oxc 89 vs reference 105 (no whitespaces: -16, formatted: -18)
 
 ```js
 a = 'FAIL';
@@ -10878,7 +10878,7 @@ console.log({
 ## `terser/collapse_vars/noinline_annotation`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 14 vs reference 30 (-16 bytes, no whitespaces)
+- size: oxc 14 vs reference 30 (no whitespaces: -16, formatted: -21)
 
 ```js
 const x = () => console.log();
@@ -10899,7 +10899,7 @@ x();
 ## `terser/drop_unused/drop_toplevel_keep_assign`
 
 - tags: `remove unused`
-- size: oxc 15 vs reference 31 (-16 bytes, no whitespaces)
+- size: oxc 15 vs reference 31 (no whitespaces: -16, formatted: -25)
 
 ```js
 var a, b = 1, c = g;
@@ -10928,7 +10928,7 @@ console.log(b = 3);
 
 ## `terser/evaluate/and`
 
-- size: oxc 346 vs reference 362 (-16 bytes, no whitespaces)
+- size: oxc 346 vs reference 362 (no whitespaces: -16, formatted: -21)
 
 ```js
 var a;
@@ -11006,7 +11006,7 @@ a = condition + 3 && null;
 ## `terser/export/name_cache_do_not_mangle_export_from_names`
 
 - tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 112 vs reference 128 (-16 bytes, no whitespaces)
+- size: oxc 112 vs reference 128 (no whitespaces: -16, formatted: -16)
 
 ```js
 function add() {
@@ -11049,7 +11049,7 @@ export { keep };
 ## `terser/harmony/issue_2676`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 16 (-16 bytes, no whitespaces)
+- size: oxc 0 vs reference 16 (no whitespaces: -16, formatted: -21)
 
 ```js
 class A {}
@@ -11068,7 +11068,7 @@ A.a = 42;
 
 ## `terser/issue_126/concatenate_rhs_strings`
 
-- size: oxc 210 vs reference 226 (-16 bytes, no whitespaces)
+- size: oxc 210 vs reference 226 (no whitespaces: -16, formatted: -16)
 
 ```js
 foo(bar() + 123 + 'Hello' + 'World');
@@ -11099,7 +11099,7 @@ foo(bar() + 'Foo' + (10 + parseInt('10')));
 
 ## `terser/object/getter_setter`
 
-- size: oxc 393 vs reference 409 (-16 bytes, no whitespaces)
+- size: oxc 393 vs reference 409 (no whitespaces: -16, formatted: -18)
 
 ```js
 var get = 'bar';
@@ -11177,7 +11177,7 @@ var d = {
 
 ## `terser/transform/condition_evaluate`
 
-- size: oxc 8 vs reference 24 (-16 bytes, no whitespaces)
+- size: oxc 8 vs reference 24 (no whitespaces: -16, formatted: -21)
 
 ```js
 while (1 === 2);
@@ -11200,7 +11200,7 @@ if (void 0 == null);
 ## `terser/harmony/import_statement_mangling`
 
 - tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`
-- size: oxc 75 vs reference 92 (-17 bytes, no whitespaces)
+- size: oxc 75 vs reference 92 (no whitespaces: -17, formatted: -22)
 
 ```js
 import Foo from 'foo';
@@ -11234,7 +11234,7 @@ Whatever();
 
 ## `terser/issue_1446/undefined_redefined`
 
-- size: oxc 31 vs reference 48 (-17 bytes, no whitespaces)
+- size: oxc 31 vs reference 48 (no whitespaces: -17, formatted: -22)
 
 ```js
 function f(undefined) {
@@ -11258,7 +11258,7 @@ function f(undefined) {
 
 ## `terser/issue_597/NaN_and_Infinity_must_have_parens_evaluate`
 
-- size: oxc 0 vs reference 17 (-17 bytes, no whitespaces)
+- size: oxc 0 vs reference 17 (no whitespaces: -17, formatted: -19)
 
 ```js
 (123456789 / 0).toString();
@@ -11277,7 +11277,7 @@ function f(undefined) {
 
 ## `terser/issue_597/NaN_and_Infinity_should_not_be_replaced_when_they_are_redefined_evaluate`
 
-- size: oxc 17 vs reference 34 (-17 bytes, no whitespaces)
+- size: oxc 17 vs reference 34 (no whitespaces: -17, formatted: -19)
 
 ```js
 var Infinity, NaN;
@@ -11299,7 +11299,7 @@ var Infinity, NaN;
 ## `terser/return_undefined/return_void`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 17 (-17 bytes, no whitespaces)
+- size: oxc 0 vs reference 17 (no whitespaces: -17, formatted: -23)
 
 ```js
 function f() {
@@ -11323,7 +11323,7 @@ function f() {
 
 ## `terser/array_constructor/array_constructor_unsafe`
 
-- size: oxc 231 vs reference 249 (-18 bytes, no whitespaces)
+- size: oxc 231 vs reference 249 (no whitespaces: -18, formatted: -64)
 
 ```js
 console.log(new Array());
@@ -11389,7 +11389,7 @@ console.log(Array('foo'));
 ## `terser/collapse_vars/issue_2364_1`
 
 - tags: `join vars`, `pure getters`
-- size: oxc 187 vs reference 205 (-18 bytes, no whitespaces)
+- size: oxc 187 vs reference 205 (no whitespaces: -18, formatted: -22)
 
 ```js
 function inc(obj) {
@@ -11427,7 +11427,7 @@ console.log(foo.amount, answer);
 
 ## `terser/conditionals/issue_1154`
 
-- size: oxc 305 vs reference 323 (-18 bytes, no whitespaces)
+- size: oxc 305 vs reference 323 (no whitespaces: -18, formatted: -22)
 
 ```js
 function f1(x) {
@@ -11498,7 +11498,7 @@ function g6() {
 ## `terser/drop_unused/issue_1709`
 
 - tags: `remove unused`
-- size: oxc 102 vs reference 120 (-18 bytes, no whitespaces)
+- size: oxc 102 vs reference 120 (no whitespaces: -18, formatted: -26)
 
 ```js
 console.log((function x() {
@@ -11535,7 +11535,7 @@ console.log((function x() {
 ## `terser/export/name_cache_do_not_mangle_export_destructuring_name`
 
 - tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 74 vs reference 92 (-18 bytes, no whitespaces)
+- size: oxc 74 vs reference 92 (no whitespaces: -18, formatted: -18)
 
 ```js
 export const [add] = [
@@ -11573,7 +11573,7 @@ console.log(add, add, sub, sub, mul, mul);
 ## `terser/export/name_cache_do_not_mangle_export_var_name`
 
 - tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 58 vs reference 76 (-18 bytes, no whitespaces)
+- size: oxc 58 vs reference 76 (no whitespaces: -18, formatted: -18)
 
 ```js
 export var add = 1;
@@ -11596,7 +11596,7 @@ console.log(add, add, sub, sub, mul, mul);
 
 ## `terser/functions/unsafe_call_expansion_2`
 
-- size: oxc 58 vs reference 76 (-18 bytes, no whitespaces)
+- size: oxc 58 vs reference 76 (no whitespaces: -18, formatted: -21)
 
 ```js
 var values = [2, 3];
@@ -11622,7 +11622,7 @@ var values = [2, 3];
 ## `terser/harmony/class_name_can_be_preserved_with_reserved`
 
 - tags: `mangle`, `keep function names`, `keep class names`
-- size: oxc 92 vs reference 110 (-18 bytes, no whitespaces)
+- size: oxc 92 vs reference 110 (no whitespaces: -18, formatted: -26)
 
 ```js
 function x() {
@@ -11666,7 +11666,7 @@ function y() {
 ## `terser/hoist_props/issue_2473_1`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 18 (-18 bytes, no whitespaces)
+- size: oxc 0 vs reference 18 (no whitespaces: -18, formatted: -24)
 
 ```js
 var x = {};
@@ -11687,7 +11687,7 @@ var z = {};
 ## `terser/hoist_props/issue_2473_2`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 18 (-18 bytes, no whitespaces)
+- size: oxc 0 vs reference 18 (no whitespaces: -18, formatted: -24)
 
 ```js
 var x = {};
@@ -11708,7 +11708,7 @@ var z = {};
 ## `terser/issue_1105/with_in_global_scope`
 
 - tags: `remove unused`
-- size: oxc 33 vs reference 51 (-18 bytes, no whitespaces)
+- size: oxc 33 vs reference 51 (no whitespaces: -18, formatted: -20)
 
 ```js
 var o = 42;
@@ -11733,7 +11733,7 @@ doSomething(o);
 ## `terser/issue_1466/same_variable_in_multiple_forOf`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 91 vs reference 109 (-18 bytes, no whitespaces)
+- size: oxc 91 vs reference 109 (no whitespaces: -18, formatted: -25)
 
 ```js
 var test = [
@@ -11786,7 +11786,7 @@ for (let tmp of test) {
 ## `terser/issue_1466/same_variable_in_multiple_forOf_sequences_let`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 91 vs reference 109 (-18 bytes, no whitespaces)
+- size: oxc 91 vs reference 109 (no whitespaces: -18, formatted: -24)
 
 ```js
 var test = [
@@ -11838,7 +11838,7 @@ for (let tmp of test) {
 ## `terser/reduce_vars/shorthand_inline_proto`
 
 - tags: `join vars`, `sequences`, `remove unused`, `2 iterations`
-- size: oxc 26 vs reference 44 (-18 bytes, no whitespaces)
+- size: oxc 26 vs reference 44 (no whitespaces: -18, formatted: -23)
 
 ```js
 var __proto__ = null;
@@ -11861,7 +11861,7 @@ foo(o);
 ## `terser/functions/issue_2898`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 76 vs reference 95 (-19 bytes, no whitespaces)
+- size: oxc 76 vs reference 95 (no whitespaces: -19, formatted: -20)
 
 ```js
 var c = 0;
@@ -11895,7 +11895,7 @@ console.log(c);
 ## `terser/collapse_vars/cond_branch_switch`
 
 - tags: `join vars`
-- size: oxc 29 vs reference 49 (-20 bytes, no whitespaces)
+- size: oxc 29 vs reference 49 (no whitespaces: -20, formatted: -29)
 
 ```js
 var c = 0;
@@ -11918,7 +11918,7 @@ console.log(c);
 ## `terser/destructuring/destructuring_assign_of_computed_key`
 
 - tags: `remove unused`
-- size: oxc 36 vs reference 56 (-20 bytes, no whitespaces)
+- size: oxc 36 vs reference 56 (no whitespaces: -20, formatted: -25)
 
 ```js
 let x;
@@ -11943,7 +11943,7 @@ console.log(x);
 ## `terser/destructuring/destructuring_decl_of_computed_key`
 
 - tags: `remove unused`
-- size: oxc 31 vs reference 51 (-20 bytes, no whitespaces)
+- size: oxc 31 vs reference 51 (no whitespaces: -20, formatted: -25)
 
 ```js
 let four = 4;
@@ -11966,7 +11966,7 @@ console.log(x);
 ## `terser/drop_unused/assign_chain`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 20 (-20 bytes, no whitespaces)
+- size: oxc 0 vs reference 20 (no whitespaces: -20, formatted: -30)
 
 ```js
 function f() {
@@ -11988,7 +11988,7 @@ function f() {
 
 ## `terser/functions/unsafe_apply_expansion_2`
 
-- size: oxc 37 vs reference 57 (-20 bytes, no whitespaces)
+- size: oxc 37 vs reference 57 (no whitespaces: -20, formatted: -17)
 
 ```js
 var values = [2, 3];
@@ -12017,7 +12017,7 @@ console.log.apply(console, [
 
 ## `terser/template_string/return_template_string_with_trailing_backslash`
 
-- size: oxc 144 vs reference 164 (-20 bytes, no whitespaces)
+- size: oxc 144 vs reference 164 (no whitespaces: -20, formatted: -30)
 
 ```js
 function a() {
@@ -12072,7 +12072,7 @@ console.log(a(), b(), c(), d(), e());
 
 ## `terser/template_string/template_strings`
 
-- size: oxc 28 vs reference 48 (-20 bytes, no whitespaces)
+- size: oxc 28 vs reference 48 (no whitespaces: -20, formatted: -22)
 
 ```js
 ``;
@@ -12096,7 +12096,7 @@ console.log(a(), b(), c(), d(), e());
 
 ## `terser/asm/asm_toplevel`
 
-- size: oxc 24 vs reference 45 (-21 bytes, no whitespaces)
+- size: oxc 24 vs reference 45 (no whitespaces: -21, formatted: -36)
 
 ```js
 'use asm';
@@ -12130,7 +12130,7 @@ function f() {
 
 ## `terser/harmony/issue_2762`
 
-- size: oxc 108 vs reference 129 (-21 bytes, no whitespaces)
+- size: oxc 108 vs reference 129 (no whitespaces: -21, formatted: -29)
 
 ```js
 var bar = 1, T = true;
@@ -12177,7 +12177,7 @@ var bar = 1, T = true;
 ## `terser/collapse_vars/assignment`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 22 (-22 bytes, no whitespaces)
+- size: oxc 0 vs reference 22 (no whitespaces: -22, formatted: -28)
 
 ```js
 function f() {
@@ -12201,7 +12201,7 @@ function f() {
 ## `terser/evaluate/issue_2535_1`
 
 - tags: `sequences`
-- size: oxc 98 vs reference 120 (-22 bytes, no whitespaces)
+- size: oxc 98 vs reference 120 (no whitespaces: -22, formatted: -27)
 
 ```js
 if (x() || true || y()) z();
@@ -12234,7 +12234,7 @@ if (x() && false && y()) z();
 ## `terser/issue_1466/different_variable_in_multiple_forOf`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 87 vs reference 109 (-22 bytes, no whitespaces)
+- size: oxc 87 vs reference 109 (no whitespaces: -22, formatted: -29)
 
 ```js
 var test = [
@@ -12287,7 +12287,7 @@ for (let tmp of test) {
 ## `terser/issue_1466/same_variable_in_multiple_forOf_sequences_const`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 91 vs reference 113 (-22 bytes, no whitespaces)
+- size: oxc 91 vs reference 113 (no whitespaces: -22, formatted: -28)
 
 ```js
 var test = [
@@ -12339,7 +12339,7 @@ for (const tmp of test) {
 ## `terser/reduce_vars/defun_call`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 22 (-22 bytes, no whitespaces)
+- size: oxc 0 vs reference 22 (no whitespaces: -22, formatted: -28)
 
 ```js
 function f() {
@@ -12367,7 +12367,7 @@ function f() {
 ## `terser/reduce_vars/defun_inline_3`
 
 - tags: `join vars`, `remove unused`, `3 iterations`
-- size: oxc 0 vs reference 22 (-22 bytes, no whitespaces)
+- size: oxc 0 vs reference 22 (no whitespaces: -22, formatted: -28)
 
 ```js
 function f() {
@@ -12391,7 +12391,7 @@ function f() {
 
 ## `terser/arrays/spread_with_variable_as_last_element`
 
-- size: oxc 20 vs reference 43 (-23 bytes, no whitespaces)
+- size: oxc 20 vs reference 43 (no whitespaces: -23, formatted: -29)
 
 ```js
 var values = [
@@ -12431,7 +12431,7 @@ var a = [
 
 ## `terser/arrays/spread_with_variable_at_front`
 
-- size: oxc 20 vs reference 43 (-23 bytes, no whitespaces)
+- size: oxc 20 vs reference 43 (no whitespaces: -23, formatted: -29)
 
 ```js
 var values = [
@@ -12469,7 +12469,7 @@ var a = [
 
 ## `terser/arrays/spread_with_variable_at_front_after_elisions`
 
-- size: oxc 23 vs reference 46 (-23 bytes, no whitespaces)
+- size: oxc 23 vs reference 46 (no whitespaces: -23, formatted: -29)
 
 ```js
 var values = [
@@ -12514,7 +12514,7 @@ var a = [
 
 ## `terser/arrays/spread_with_variable_in_middle`
 
-- size: oxc 25 vs reference 48 (-23 bytes, no whitespaces)
+- size: oxc 25 vs reference 48 (no whitespaces: -23, formatted: -29)
 
 ```js
 var values = [
@@ -12560,7 +12560,7 @@ var a = [
 ## `terser/collapse_vars/issue_2203_4`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 72 vs reference 95 (-23 bytes, no whitespaces)
+- size: oxc 72 vs reference 95 (no whitespaces: -23, formatted: -27)
 
 ```js
 a = 'FAIL';
@@ -12590,7 +12590,7 @@ console.log({
 ## `terser/drop_console/unexpected_side_effects_dropping_console`
 
 - tags: `drop console`, `join vars`, `remove unused`
-- size: oxc 0 vs reference 23 (-23 bytes, no whitespaces)
+- size: oxc 0 vs reference 23 (no whitespaces: -23, formatted: -29)
 
 ```js
 function f() {
@@ -12614,7 +12614,7 @@ function f() {
 ## `terser/drop_unused/assign_binding`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 23 (-23 bytes, no whitespaces)
+- size: oxc 0 vs reference 23 (no whitespaces: -23, formatted: -30)
 
 ```js
 function f() {
@@ -12637,7 +12637,7 @@ function f() {
 ## `terser/drop_unused/issue_1539`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 0 vs reference 23 (-23 bytes, no whitespaces)
+- size: oxc 0 vs reference 23 (no whitespaces: -23, formatted: -29)
 
 ```js
 function f() {
@@ -12661,7 +12661,7 @@ function f() {
 ## `terser/drop_unused/issue_2418_1`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 23 (-23 bytes, no whitespaces)
+- size: oxc 0 vs reference 23 (no whitespaces: -23, formatted: -27)
 
 ```js
 class C {}
@@ -12683,7 +12683,7 @@ function F() {}
 ## `terser/drop_unused/issue_2418_2`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 23 (-23 bytes, no whitespaces)
+- size: oxc 0 vs reference 23 (no whitespaces: -23, formatted: -27)
 
 ```js
 class C {}
@@ -12705,7 +12705,7 @@ function F() {}
 ## `terser/drop_unused/issue_2418_3`
 
 - tags: `remove unused`, `keep function names`
-- size: oxc 0 vs reference 23 (-23 bytes, no whitespaces)
+- size: oxc 0 vs reference 23 (no whitespaces: -23, formatted: -27)
 
 ```js
 class C {}
@@ -12727,7 +12727,7 @@ function F() {}
 ## `terser/drop_unused/issue_2418_4`
 
 - tags: `remove unused`, `keep class names`
-- size: oxc 0 vs reference 23 (-23 bytes, no whitespaces)
+- size: oxc 0 vs reference 23 (no whitespaces: -23, formatted: -27)
 
 ```js
 class C {}
@@ -12749,7 +12749,7 @@ function F() {}
 ## `terser/drop_unused/issue_2418_5`
 
 - tags: `remove unused`, `keep function names`, `keep class names`
-- size: oxc 0 vs reference 23 (-23 bytes, no whitespaces)
+- size: oxc 0 vs reference 23 (no whitespaces: -23, formatted: -27)
 
 ```js
 class C {}
@@ -12771,7 +12771,7 @@ function F() {}
 ## `terser/collapse_vars/issue_2203_3`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 89 vs reference 113 (-24 bytes, no whitespaces)
+- size: oxc 89 vs reference 113 (no whitespaces: -24, formatted: -28)
 
 ```js
 a = 'FAIL';
@@ -12803,7 +12803,7 @@ console.log({
 ## `terser/drop_unused/issue_1838`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 24 (-24 bytes, no whitespaces)
+- size: oxc 0 vs reference 24 (no whitespaces: -24, formatted: -31)
 
 ```js
 function f() {
@@ -12826,7 +12826,7 @@ function f() {
 ## `terser/inline/noinline_annotation`
 
 - tags: `join vars`
-- size: oxc 32 vs reference 56 (-24 bytes, no whitespaces)
+- size: oxc 32 vs reference 56 (no whitespaces: -24, formatted: -26)
 
 ```js
 function no_inline() {
@@ -12852,7 +12852,7 @@ function no_inline() {
 ## `terser/issue_611/issue_611`
 
 - tags: `sequences`
-- size: oxc 36 vs reference 60 (-24 bytes, no whitespaces)
+- size: oxc 36 vs reference 60 (no whitespaces: -24, formatted: -29)
 
 ```js
 define(function() {
@@ -12879,7 +12879,7 @@ define(function() {
 ## `terser/collapse_vars/collapse_vars_regexp`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 261 vs reference 286 (-25 bytes, no whitespaces)
+- size: oxc 261 vs reference 286 (no whitespaces: -25, formatted: -25)
 
 ```js
 function f1() {
@@ -12943,7 +12943,7 @@ function f2() {
 ## `terser/loops/issue_1648`
 
 - tags: `join vars`, `sequences`, `remove unused`, `2 iterations`
-- size: oxc 0 vs reference 25 (-25 bytes, no whitespaces)
+- size: oxc 0 vs reference 25 (no whitespaces: -25, formatted: -31)
 
 ```js
 function f() {
@@ -12967,7 +12967,7 @@ function f() {
 ## `terser/conditionals/equality_conditionals_false`
 
 - tags: `sequences`
-- size: oxc 159 vs reference 185 (-26 bytes, no whitespaces)
+- size: oxc 159 vs reference 185 (no whitespaces: -26, formatted: -46)
 
 ```js
 function f(a, b, c) {
@@ -12998,7 +12998,7 @@ f(NaN, 'foo');
 ## `terser/dead_code/collapse_vars_assignment`
 
 - tags: `join vars`, `remove unused`, `2 iterations`
-- size: oxc 0 vs reference 26 (-26 bytes, no whitespaces)
+- size: oxc 0 vs reference 26 (no whitespaces: -26, formatted: -34)
 
 ```js
 function f0(c) {
@@ -13021,7 +13021,7 @@ function f0(c) {
 ## `terser/harmony/class_expression_statement_unused`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 26 (-26 bytes, no whitespaces)
+- size: oxc 0 vs reference 26 (no whitespaces: -26, formatted: -32)
 
 ```js
 (class {});
@@ -13043,7 +13043,7 @@ class C {}
 ## `terser/reduce_vars/issue_2406_1`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 115 vs reference 141 (-26 bytes, no whitespaces)
+- size: oxc 115 vs reference 141 (no whitespaces: -26, formatted: -35)
 
 ```js
 const c = { fn: function() {
@@ -13082,7 +13082,7 @@ console.log(c.fn(), l.fn(), v.fn());
 
 ## `terser/arrow/arrow_with_regexp`
 
-- size: oxc 0 vs reference 27 (-27 bytes, no whitespaces)
+- size: oxc 0 vs reference 27 (no whitespaces: -27, formatted: -32)
 
 ```js
 (num) => /\d{11,14}/.test(num);
@@ -13100,7 +13100,7 @@ console.log(c.fn(), l.fn(), v.fn());
 ## `terser/drop_unused/unused_circular_references_1`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 27 (-27 bytes, no whitespaces)
+- size: oxc 0 vs reference 27 (no whitespaces: -27, formatted: -36)
 
 ```js
 function f(x, y) {
@@ -13128,7 +13128,7 @@ function f(x, y) {
 ## `terser/drop_unused/unused_circular_references_3`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 27 (-27 bytes, no whitespaces)
+- size: oxc 0 vs reference 27 (no whitespaces: -27, formatted: -36)
 
 ```js
 function f(x, y) {
@@ -13156,7 +13156,7 @@ function f(x, y) {
 ## `terser/drop_unused/unused_funarg_1`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 27 (-27 bytes, no whitespaces)
+- size: oxc 0 vs reference 27 (no whitespaces: -27, formatted: -36)
 
 ```js
 function f(a, b, c, d, e) {
@@ -13178,7 +13178,7 @@ function f(a, b, c, d, e) {
 ## `terser/drop_unused/unused_nested_function`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 27 (-27 bytes, no whitespaces)
+- size: oxc 0 vs reference 27 (no whitespaces: -27, formatted: -36)
 
 ```js
 function f(x, y) {
@@ -13202,7 +13202,7 @@ function f(x, y) {
 
 ## `terser/conditionals/issue_2535_2`
 
-- size: oxc 371 vs reference 399 (-28 bytes, no whitespaces)
+- size: oxc 371 vs reference 399 (no whitespaces: -28, formatted: -40)
 
 ```js
 function x() {}
@@ -13271,7 +13271,7 @@ console.log(y() && false && x());
 ## `terser/drop_unused/unused_keep_harmony_destructuring`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 28 (-28 bytes, no whitespaces)
+- size: oxc 0 vs reference 28 (no whitespaces: -28, formatted: -40)
 
 ```js
 function foo() {
@@ -13294,7 +13294,7 @@ function foo() {
 ## `terser/if_return/if_return_1`
 
 - tags: `sequences`, `remove unused`
-- size: oxc 0 vs reference 28 (-28 bytes, no whitespaces)
+- size: oxc 0 vs reference 28 (no whitespaces: -28, formatted: -37)
 
 ```js
 function f(x) {
@@ -13318,7 +13318,7 @@ function f(x) {
 ## `terser/if_return/if_return_5`
 
 - tags: `sequences`, `remove unused`
-- size: oxc 0 vs reference 28 (-28 bytes, no whitespaces)
+- size: oxc 0 vs reference 28 (no whitespaces: -28, formatted: -36)
 
 ```js
 function f() {
@@ -13342,7 +13342,7 @@ function f() {
 ## `terser/collapse_vars/cascade_call`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 29 (-29 bytes, no whitespaces)
+- size: oxc 0 vs reference 29 (no whitespaces: -29, formatted: -35)
 
 ```js
 function f(a) {
@@ -13365,7 +13365,7 @@ function f(a) {
 ## `terser/dead_code/dead_code_const_annotation_complex_scope`
 
 - tags: `join vars`, `sequences`
-- size: oxc 103 vs reference 132 (-29 bytes, no whitespaces)
+- size: oxc 103 vs reference 132 (no whitespaces: -29, formatted: -30)
 
 ```js
 var unused_var;
@@ -13413,7 +13413,7 @@ if (test === 'test') {
 ## `terser/drop_unused/unused_funarg_2`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 29 (-29 bytes, no whitespaces)
+- size: oxc 0 vs reference 29 (no whitespaces: -29, formatted: -39)
 
 ```js
 function f(a, b, c, d, e) {
@@ -13435,7 +13435,7 @@ function f(a, b, c, d, e) {
 ## `terser/harmony/expansion`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 29 (-29 bytes, no whitespaces)
+- size: oxc 0 vs reference 29 (no whitespaces: -29, formatted: -35)
 
 ```js
 function f(a, ...b) {
@@ -13457,7 +13457,7 @@ function f(a, ...b) {
 ## `terser/reduce_vars/issue_2992`
 
 - tags: `join vars`
-- size: oxc 59 vs reference 88 (-29 bytes, no whitespaces)
+- size: oxc 59 vs reference 88 (no whitespaces: -29, formatted: -42)
 
 ```js
 var c = 'PASS';
@@ -13490,7 +13490,7 @@ console.log(c);
 
 ## `terser/loops/in_parenthesis_2`
 
-- size: oxc 0 vs reference 30 (-30 bytes, no whitespaces)
+- size: oxc 0 vs reference 30 (no whitespaces: -30, formatted: -40)
 
 ```js
 for (function() {
@@ -13512,7 +13512,7 @@ for (function() {
 ## `terser/properties/mangle_private_properties`
 
 - tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`
-- size: oxc 11 vs reference 41 (-30 bytes, no whitespaces)
+- size: oxc 11 vs reference 41 (no whitespaces: -30, formatted: -46)
 
 ```js
 class Foo {
@@ -13540,7 +13540,7 @@ class Foo {
 
 ## `terser/pure_funcs/issue_2705_2`
 
-- size: oxc 15 vs reference 45 (-30 bytes, no whitespaces)
+- size: oxc 15 vs reference 45 (no whitespaces: -30, formatted: -32)
 
 ```js
 new a(1)(2)(3);
@@ -13567,7 +13567,7 @@ new h(1)(2)(3);
 ## `terser/sequences/cascade_assignment_in_return`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 30 (-30 bytes, no whitespaces)
+- size: oxc 0 vs reference 30 (no whitespaces: -30, formatted: -37)
 
 ```js
 function f(a, b) {
@@ -13589,7 +13589,7 @@ function f(a, b) {
 ## `terser/arrow/arrow_unused_toplevel`
 
 - tags: `remove unused`
-- size: oxc 112 vs reference 143 (-31 bytes, no whitespaces)
+- size: oxc 112 vs reference 143 (no whitespaces: -31, formatted: -49)
 
 ```js
 (top) => dog;
@@ -13642,7 +13642,7 @@ fn(3);
 ## `terser/collapse_vars/undeclared`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 31 (-31 bytes, no whitespaces)
+- size: oxc 0 vs reference 31 (no whitespaces: -31, formatted: -44)
 
 ```js
 function f(x, y) {
@@ -13668,7 +13668,7 @@ function f(x, y) {
 ## `terser/drop_unused/unused_block_decls`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 32 (-32 bytes, no whitespaces)
+- size: oxc 0 vs reference 32 (no whitespaces: -32, formatted: -39)
 
 ```js
 function foo() {
@@ -13696,7 +13696,7 @@ function foo() {
 ## `terser/if_return/if_return_6`
 
 - tags: `sequences`, `remove unused`
-- size: oxc 0 vs reference 32 (-32 bytes, no whitespaces)
+- size: oxc 0 vs reference 32 (no whitespaces: -32, formatted: -41)
 
 ```js
 function f(x) {
@@ -13719,7 +13719,7 @@ function f(x) {
 ## `terser/drop_unused/drop_fnames`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 33 (-33 bytes, no whitespaces)
+- size: oxc 0 vs reference 33 (no whitespaces: -33, formatted: -40)
 
 ```js
 function f() {
@@ -13743,7 +13743,7 @@ function f() {
 ## `terser/drop_unused/unused_circular_references_2`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 33 (-33 bytes, no whitespaces)
+- size: oxc 0 vs reference 33 (no whitespaces: -33, formatted: -44)
 
 ```js
 function f(x, y) {
@@ -13766,7 +13766,7 @@ function f(x, y) {
 
 ## `terser/pure_funcs/issue_2629_2`
 
-- size: oxc 0 vs reference 33 (-33 bytes, no whitespaces)
+- size: oxc 0 vs reference 33 (no whitespaces: -33, formatted: -36)
 
 ```js
 a(1)(2)(3);
@@ -13793,7 +13793,7 @@ h(1)(2)(3);
 ## `terser/pure_getters/unsafe`
 
 - tags: `pure getters`
-- size: oxc 25 vs reference 58 (-33 bytes, no whitespaces)
+- size: oxc 25 vs reference 58 (no whitespaces: -33, formatted: -36)
 
 ```js
 var a, b = null, c = {};
@@ -13823,7 +13823,7 @@ undefined.prop;
 ## `terser/pure_getters/unsafe_reduce_vars`
 
 - tags: `join vars`, `pure getters`
-- size: oxc 25 vs reference 58 (-33 bytes, no whitespaces)
+- size: oxc 25 vs reference 58 (no whitespaces: -33, formatted: -36)
 
 ```js
 var a, b = null, c = {};
@@ -13853,7 +13853,7 @@ undefined.prop;
 ## `terser/reduce_vars/issue_2455`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 33 (-33 bytes, no whitespaces)
+- size: oxc 0 vs reference 33 (no whitespaces: -33, formatted: -41)
 
 ```js
 function foo() {
@@ -13876,7 +13876,7 @@ function foo() {
 ## `terser/sequences/for_sequences`
 
 - tags: `sequences`
-- size: oxc 115 vs reference 148 (-33 bytes, no whitespaces)
+- size: oxc 115 vs reference 148 (no whitespaces: -33, formatted: -38)
 
 ```js
 foo();
@@ -13918,7 +13918,7 @@ for (y = 5; false;);
 ## `terser/drop_unused/drop_toplevel_funcs`
 
 - tags: `remove unused`
-- size: oxc 15 vs reference 49 (-34 bytes, no whitespaces)
+- size: oxc 15 vs reference 49 (no whitespaces: -34, formatted: -48)
 
 ```js
 var a, b = 1, c = g;
@@ -13949,7 +13949,7 @@ console.log(b = 3);
 ## `terser/export/name_cache_do_not_mangle_export_let_name`
 
 - tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 42 vs reference 76 (-34 bytes, no whitespaces)
+- size: oxc 42 vs reference 76 (no whitespaces: -34, formatted: -40)
 
 ```js
 export let add = 1;
@@ -13971,7 +13971,7 @@ console.log(add, add, sub, sub, mul, mul);
 
 ## `terser/harmony/import_statement`
 
-- size: oxc 95 vs reference 129 (-34 bytes, no whitespaces)
+- size: oxc 95 vs reference 129 (no whitespaces: -34, formatted: -44)
 
 ```js
 import 'mod-name';
@@ -13997,7 +13997,7 @@ import { Bar as kex, Baz as food } from 'lel';
 
 ## `terser/arrow/no_leading_parentheses`
 
-- size: oxc 0 vs reference 35 (-35 bytes, no whitespaces)
+- size: oxc 0 vs reference 35 (no whitespaces: -35, formatted: -44)
 
 ```js
 (x, y) => x(y);
@@ -14017,7 +14017,7 @@ async (x, y) => await x(y);
 ## `terser/collapse_vars/for_init`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 35 (-35 bytes, no whitespaces)
+- size: oxc 0 vs reference 35 (no whitespaces: -35, formatted: -47)
 
 ```js
 function f(x, y) {
@@ -14042,7 +14042,7 @@ function f(x, y) {
 ## `terser/reduce_vars/double_reference`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 35 (-35 bytes, no whitespaces)
+- size: oxc 0 vs reference 35 (no whitespaces: -35, formatted: -48)
 
 ```js
 function f() {
@@ -14069,7 +14069,7 @@ function f() {
 ## `terser/yield/issue_2689`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 35 (-35 bytes, no whitespaces)
+- size: oxc 0 vs reference 35 (no whitespaces: -35, formatted: -45)
 
 ```js
 function* y() {
@@ -14092,7 +14092,7 @@ function* y() {
 ## `terser/export/name_cache_do_not_mangle_export_const_name`
 
 - tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 44 vs reference 80 (-36 bytes, no whitespaces)
+- size: oxc 44 vs reference 80 (no whitespaces: -36, formatted: -42)
 
 ```js
 export const add = 1;
@@ -14115,7 +14115,7 @@ console.log(add, add, sub, sub, mul, mul);
 ## `terser/drop_unused/unused_block_decls_in_catch`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 37 (-37 bytes, no whitespaces)
+- size: oxc 0 vs reference 37 (no whitespaces: -37, formatted: -52)
 
 ```js
 function foo() {
@@ -14145,7 +14145,7 @@ function foo() {
 ## `terser/drop_unused/unused_var_in_catch`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 37 (-37 bytes, no whitespaces)
+- size: oxc 0 vs reference 37 (no whitespaces: -37, formatted: -52)
 
 ```js
 function foo() {
@@ -14173,7 +14173,7 @@ function foo() {
 ## `terser/if_return/if_return_3`
 
 - tags: `sequences`, `remove unused`
-- size: oxc 0 vs reference 37 (-37 bytes, no whitespaces)
+- size: oxc 0 vs reference 37 (no whitespaces: -37, formatted: -47)
 
 ```js
 function f(x) {
@@ -14198,7 +14198,7 @@ function f(x) {
 
 ## `terser/issue_597/NaN_and_Infinity_must_have_parens`
 
-- size: oxc 0 vs reference 37 (-37 bytes, no whitespaces)
+- size: oxc 0 vs reference 37 (no whitespaces: -37, formatted: -41)
 
 ```js
 Infinity.toString();
@@ -14217,7 +14217,7 @@ NaN.toString();
 
 ## `terser/switch/issue_1705_1`
 
-- size: oxc 0 vs reference 37 (-37 bytes, no whitespaces)
+- size: oxc 0 vs reference 37 (no whitespaces: -37, formatted: -45)
 
 ```js
 var a = 0;
@@ -14239,7 +14239,7 @@ switch (a) {
 
 ## `terser/async/issue_3079_2`
 
-- size: oxc 0 vs reference 38 (-38 bytes, no whitespaces)
+- size: oxc 0 vs reference 38 (no whitespaces: -38, formatted: -48)
 
 ```js
 async (async) => async;
@@ -14259,7 +14259,7 @@ async (async) => async;
 ## `terser/collapse_vars/issue_2931`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 20 vs reference 58 (-38 bytes, no whitespaces)
+- size: oxc 20 vs reference 58 (no whitespaces: -38, formatted: -51)
 
 ```js
 console.log((function() {
@@ -14287,7 +14287,7 @@ console.log((function() {
 ## `terser/collapse_vars/issue_1605_1`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 40 (-40 bytes, no whitespaces)
+- size: oxc 0 vs reference 40 (no whitespaces: -40, formatted: -52)
 
 ```js
 function foo(x) {
@@ -14313,7 +14313,7 @@ o.p = 1;
 
 ## `terser/dead_code/dead_code_const_annotation_regex`
 
-- size: oxc 32 vs reference 72 (-40 bytes, no whitespaces)
+- size: oxc 32 vs reference 72 (no whitespaces: -40, formatted: -43)
 
 ```js
 var unused;
@@ -14337,7 +14337,7 @@ if (CONST_FOO_ANN) {
 ## `terser/if_return/if_return_2`
 
 - tags: `sequences`, `remove unused`
-- size: oxc 0 vs reference 40 (-40 bytes, no whitespaces)
+- size: oxc 0 vs reference 40 (no whitespaces: -40, formatted: -55)
 
 ```js
 function f(x, y) {
@@ -14360,7 +14360,7 @@ function f(x, y) {
 ## `terser/if_return/if_return_7`
 
 - tags: `sequences`, `remove unused`
-- size: oxc 0 vs reference 40 (-40 bytes, no whitespaces)
+- size: oxc 0 vs reference 40 (no whitespaces: -40, formatted: -52)
 
 ```js
 function f(x) {
@@ -14386,7 +14386,7 @@ function f(x) {
 
 ## `terser/issue_640/dead_code_const_annotation_regex`
 
-- size: oxc 32 vs reference 72 (-40 bytes, no whitespaces)
+- size: oxc 32 vs reference 72 (no whitespaces: -40, formatted: -43)
 
 ```js
 var unused;
@@ -14410,7 +14410,7 @@ if (CONST_FOO_ANN) {
 ## `terser/functions/drop_lone_use_strict_arrows_2`
 
 - tags: `remove unused`, `2 iterations`
-- size: oxc 0 vs reference 41 (-41 bytes, no whitespaces)
+- size: oxc 0 vs reference 41 (no whitespaces: -41, formatted: -56)
 
 ```js
 let f0 = () => 0;
@@ -14443,7 +14443,7 @@ let f2 = () => {
 ## `terser/issue_44/issue_44_valid_ast_1`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 41 (-41 bytes, no whitespaces)
+- size: oxc 0 vs reference 41 (no whitespaces: -41, formatted: -52)
 
 ```js
 function a(b) {
@@ -14466,7 +14466,7 @@ function a(b) {
 ## `terser/reduce_vars/redefine_arguments_2`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 134 vs reference 175 (-41 bytes, no whitespaces)
+- size: oxc 134 vs reference 175 (no whitespaces: -41, formatted: -45)
 
 ```js
 function f() {
@@ -14514,7 +14514,7 @@ console.log(f(), g(), h());
 ## `terser/reduce_vars/redefine_arguments_3`
 
 - tags: `join vars`, `remove unused`, `3 iterations`
-- size: oxc 134 vs reference 175 (-41 bytes, no whitespaces)
+- size: oxc 134 vs reference 175 (no whitespaces: -41, formatted: -45)
 
 ```js
 function f() {
@@ -14562,7 +14562,7 @@ console.log(f(), g(), h());
 ## `terser/collapse_vars/issue_1605_2`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 42 (-42 bytes, no whitespaces)
+- size: oxc 0 vs reference 42 (no whitespaces: -42, formatted: -51)
 
 ```js
 function foo(x) {
@@ -14588,7 +14588,7 @@ o.p = 1;
 ## `terser/collapse_vars/issue_2364_5`
 
 - tags: `join vars`, `remove unused`, `pure getters`
-- size: oxc 0 vs reference 42 (-42 bytes, no whitespaces)
+- size: oxc 0 vs reference 42 (no whitespaces: -42, formatted: -54)
 
 ```js
 function f0(o, a, h) {
@@ -14615,7 +14615,7 @@ function f0(o, a, h) {
 ## `terser/drop_unused/keep_fnames`
 
 - tags: `remove unused`, `keep function names`
-- size: oxc 0 vs reference 42 (-42 bytes, no whitespaces)
+- size: oxc 0 vs reference 42 (no whitespaces: -42, formatted: -49)
 
 ```js
 function foo() {
@@ -14636,7 +14636,7 @@ function foo() {
 
 ## `terser/issue_1052/single_function`
 
-- size: oxc 0 vs reference 42 (-42 bytes, no whitespaces)
+- size: oxc 0 vs reference 42 (no whitespaces: -42, formatted: -51)
 
 ```js
 (function() {
@@ -14662,7 +14662,7 @@ function foo() {
 ## `terser/issue_1105/Infinity_in_with_scope`
 
 - tags: `remove unused`
-- size: oxc 38 vs reference 80 (-42 bytes, no whitespaces)
+- size: oxc 38 vs reference 80 (no whitespaces: -42, formatted: -47)
 
 ```js
 var o = { Infinity: 'oInfinity' };
@@ -14686,7 +14686,7 @@ with(o) {
 
 ## `terser/async/issue_2344_1`
 
-- size: oxc 0 vs reference 43 (-43 bytes, no whitespaces)
+- size: oxc 0 vs reference 43 (no whitespaces: -43, formatted: -55)
 
 ```js
 async () => {
@@ -14711,7 +14711,7 @@ async () => {
 
 ## `terser/async/issue_2344_2`
 
-- size: oxc 0 vs reference 43 (-43 bytes, no whitespaces)
+- size: oxc 0 vs reference 43 (no whitespaces: -43, formatted: -55)
 
 ```js
 async () => {
@@ -14736,7 +14736,7 @@ async () => {
 
 ## `terser/expansions/expand_parameters`
 
-- size: oxc 0 vs reference 43 (-43 bytes, no whitespaces)
+- size: oxc 0 vs reference 43 (no whitespaces: -43, formatted: -48)
 
 ```js
 (function(a, ...b) {});
@@ -14755,7 +14755,7 @@ async () => {
 
 ## `terser/nullish/conditional_to_nullish_coalescing_2`
 
-- size: oxc 226 vs reference 269 (-43 bytes, no whitespaces)
+- size: oxc 226 vs reference 269 (no whitespaces: -43, formatted: -57)
 
 ```js
 const foo = id('something');
@@ -14794,7 +14794,7 @@ foo === undefined || foo === null ? bar : foo;
 ## `terser/reduce_vars/issue_3068_2`
 
 - tags: `join vars`
-- size: oxc 48 vs reference 91 (-43 bytes, no whitespaces)
+- size: oxc 48 vs reference 91 (no whitespaces: -43, formatted: -66)
 
 ```js
 (function() {
@@ -14832,7 +14832,7 @@ foo === undefined || foo === null ? bar : foo;
 ## `terser/block_scope/remove_unused_in_global_block`
 
 - tags: `remove unused`
-- size: oxc 21 vs reference 65 (-44 bytes, no whitespaces)
+- size: oxc 21 vs reference 65 (no whitespaces: -44, formatted: -52)
 
 ```js
 {
@@ -14865,7 +14865,7 @@ console.log(x, y, Zee);
 ## `terser/drop_unused/drop_toplevel_all_retain`
 
 - tags: `remove unused`
-- size: oxc 15 vs reference 59 (-44 bytes, no whitespaces)
+- size: oxc 15 vs reference 59 (no whitespaces: -44, formatted: -55)
 
 ```js
 var a, b = 1, c = g;
@@ -14897,7 +14897,7 @@ console.log(b = 3);
 ## `terser/drop_unused/drop_toplevel_retain`
 
 - tags: `remove unused`
-- size: oxc 15 vs reference 59 (-44 bytes, no whitespaces)
+- size: oxc 15 vs reference 59 (no whitespaces: -44, formatted: -55)
 
 ```js
 var a, b = 1, c = g;
@@ -14929,7 +14929,7 @@ console.log(b = 3);
 ## `terser/drop_unused/drop_toplevel_retain_array`
 
 - tags: `remove unused`
-- size: oxc 15 vs reference 59 (-44 bytes, no whitespaces)
+- size: oxc 15 vs reference 59 (no whitespaces: -44, formatted: -55)
 
 ```js
 var a, b = 1, c = g;
@@ -14961,7 +14961,7 @@ console.log(b = 3);
 ## `terser/drop_unused/drop_toplevel_retain_regex`
 
 - tags: `remove unused`
-- size: oxc 15 vs reference 60 (-45 bytes, no whitespaces)
+- size: oxc 15 vs reference 60 (no whitespaces: -45, formatted: -62)
 
 ```js
 var a, b = 1, c = g;
@@ -14995,7 +14995,7 @@ console.log(b = 3);
 ## `terser/drop_unused/global_var`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 45 (-45 bytes, no whitespaces)
+- size: oxc 0 vs reference 45 (no whitespaces: -45, formatted: -60)
 
 ```js
 var a;
@@ -15028,7 +15028,7 @@ function foo(b) {
 ## `terser/pure_funcs/unused`
 
 - tags: `remove unused`, `pure functions`
-- size: oxc 0 vs reference 45 (-45 bytes, no whitespaces)
+- size: oxc 0 vs reference 45 (no whitespaces: -45, formatted: -53)
 
 ```js
 function foo() {
@@ -15055,7 +15055,7 @@ function foo() {
 ## `terser/pure_getters/collapse_vars_1_true`
 
 - tags: `join vars`, `remove unused`, `pure getters`
-- size: oxc 0 vs reference 45 (-45 bytes, no whitespaces)
+- size: oxc 0 vs reference 45 (no whitespaces: -45, formatted: -63)
 
 ```js
 function f(a, b) {
@@ -15083,7 +15083,7 @@ function f(a, b) {
 ## `terser/const/issue_1191`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 47 (-47 bytes, no whitespaces)
+- size: oxc 0 vs reference 47 (no whitespaces: -47, formatted: -63)
 
 ```js
 function foo(rot) {
@@ -15108,7 +15108,7 @@ function foo(rot) {
 ## `terser/reduce_vars/defun_redefine`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 47 (-47 bytes, no whitespaces)
+- size: oxc 0 vs reference 47 (no whitespaces: -47, formatted: -64)
 
 ```js
 function f() {
@@ -15141,7 +15141,7 @@ function f() {
 
 ## `terser/yield/yield_as_identifier_outside_strict_mode`
 
-- size: oxc 158 vs reference 205 (-47 bytes, no whitespaces)
+- size: oxc 158 vs reference 205 (no whitespaces: -47, formatted: -62)
 
 ```js
 import yield from 'bar';
@@ -15185,7 +15185,7 @@ var yield = 'foo';
 ## `terser/arrow/arrow_unused`
 
 - tags: `remove unused`
-- size: oxc 112 vs reference 162 (-50 bytes, no whitespaces)
+- size: oxc 112 vs reference 162 (no whitespaces: -50, formatted: -78)
 
 ```js
 (top) => dog;
@@ -15239,7 +15239,7 @@ fn(3);
 ## `terser/drop_unused/vardef_value`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 50 (-50 bytes, no whitespaces)
+- size: oxc 0 vs reference 50 (no whitespaces: -50, formatted: -64)
 
 ```js
 function f() {
@@ -15267,7 +15267,7 @@ function f() {
 ## `terser/if_return/if_return_4`
 
 - tags: `sequences`, `remove unused`
-- size: oxc 0 vs reference 50 (-50 bytes, no whitespaces)
+- size: oxc 0 vs reference 50 (no whitespaces: -50, formatted: -67)
 
 ```js
 function f(x, y) {
@@ -15292,7 +15292,7 @@ function f(x, y) {
 ## `terser/issue_44/issue_44_valid_ast_2`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 50 (-50 bytes, no whitespaces)
+- size: oxc 0 vs reference 50 (no whitespaces: -50, formatted: -69)
 
 ```js
 function a(b) {
@@ -15316,7 +15316,7 @@ function a(b) {
 
 ## `terser/object/shorthand_properties`
 
-- size: oxc 0 vs reference 50 (-50 bytes, no whitespaces)
+- size: oxc 0 vs reference 50 (no whitespaces: -50, formatted: -67)
 
 ```js
 (function() {
@@ -15342,7 +15342,7 @@ function a(b) {
 ## `terser/reduce_vars/redefine_arguments_1`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 134 vs reference 184 (-50 bytes, no whitespaces)
+- size: oxc 134 vs reference 184 (no whitespaces: -50, formatted: -57)
 
 ```js
 function f() {
@@ -15384,7 +15384,7 @@ console.log(f(), g(), h());
 ## `terser/reduce_vars/var_if`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 50 (-50 bytes, no whitespaces)
+- size: oxc 0 vs reference 50 (no whitespaces: -50, formatted: -75)
 
 ```js
 function f() {
@@ -15414,7 +15414,7 @@ function f() {
 ## `terser/dead_code/issue_2233_2`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 31 vs reference 82 (-51 bytes, no whitespaces)
+- size: oxc 31 vs reference 82 (no whitespaces: -51, formatted: -59)
 
 ```js
 var RegExp;
@@ -15447,7 +15447,7 @@ function foo() {
 ## `terser/async/async_generator_function`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 0 vs reference 52 (-52 bytes, no whitespaces)
+- size: oxc 0 vs reference 52 (no whitespaces: -52, formatted: -59)
 
 ```js
 async function* baz() {
@@ -15468,7 +15468,7 @@ async function* baz() {
 
 ## `terser/harmony/class_expression_statement`
 
-- size: oxc 26 vs reference 78 (-52 bytes, no whitespaces)
+- size: oxc 26 vs reference 78 (no whitespaces: -52, formatted: -56)
 
 ```js
 (class {});
@@ -15493,7 +15493,7 @@ class C {}
 ## `terser/issue_1833/iife_do`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 52 (-52 bytes, no whitespaces)
+- size: oxc 0 vs reference 52 (no whitespaces: -52, formatted: -73)
 
 ```js
 function f() {
@@ -15525,7 +15525,7 @@ f();
 ## `terser/drop_unused/used_var_in_catch`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 53 (-53 bytes, no whitespaces)
+- size: oxc 0 vs reference 53 (no whitespaces: -53, formatted: -79)
 
 ```js
 function foo() {
@@ -15557,7 +15557,7 @@ function foo() {
 ## `terser/async/async_generator_class_method`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 0 vs reference 54 (-54 bytes, no whitespaces)
+- size: oxc 0 vs reference 54 (no whitespaces: -54, formatted: -67)
 
 ```js
 class Foo {
@@ -15582,7 +15582,7 @@ class Foo {
 
 ## `terser/issue_1446/typeof_eq_undefined`
 
-- size: oxc 48 vs reference 102 (-54 bytes, no whitespaces)
+- size: oxc 48 vs reference 102 (no whitespaces: -54, formatted: -68)
 
 ```js
 var a = typeof b != 'undefined';
@@ -15614,7 +15614,7 @@ var h = 'undefined' == typeof i.j;
 ## `terser/template_string/template_evaluate_undefined`
 
 - tags: `join vars`
-- size: oxc 0 vs reference 54 (-54 bytes, no whitespaces)
+- size: oxc 0 vs reference 54 (no whitespaces: -54, formatted: -63)
 
 ```js
 () => {
@@ -15637,7 +15637,7 @@ var h = 'undefined' == typeof i.j;
 
 ## `terser/issue_1052/multiple_functions`
 
-- size: oxc 0 vs reference 56 (-56 bytes, no whitespaces)
+- size: oxc 0 vs reference 56 (no whitespaces: -56, formatted: -68)
 
 ```js
 (function() {
@@ -15665,7 +15665,7 @@ var h = 'undefined' == typeof i.j;
 ## `terser/drop_unused/used_block_decls_in_catch`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 57 (-57 bytes, no whitespaces)
+- size: oxc 0 vs reference 57 (no whitespaces: -57, formatted: -77)
 
 ```js
 function foo() {
@@ -15697,7 +15697,7 @@ function foo() {
 ## `terser/export/name_cache_mangle_local_import_and_export_aliases`
 
 - tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 102 vs reference 159 (-57 bytes, no whitespaces)
+- size: oxc 102 vs reference 159 (no whitespaces: -57, formatted: -57)
 
 ```js
 import { foo as bar, cat as dog, bird } from 'stuff';
@@ -15721,7 +15721,7 @@ export { bar as qux, dog, bird };
 
 ## `terser/parameters/arrow_return`
 
-- size: oxc 0 vs reference 58 (-58 bytes, no whitespaces)
+- size: oxc 0 vs reference 58 (no whitespaces: -58, formatted: -91)
 
 ```js
 () => {};
@@ -15754,7 +15754,7 @@ export { bar as qux, dog, bird };
 
 ## `terser/arrow/object_parens`
 
-- size: oxc 0 vs reference 59 (-59 bytes, no whitespaces)
+- size: oxc 0 vs reference 59 (no whitespaces: -59, formatted: -84)
 
 ```js
 () => ({});
@@ -15788,7 +15788,7 @@ export { bar as qux, dog, bird };
 ## `terser/drop_unused/issue_2288`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 59 (-59 bytes, no whitespaces)
+- size: oxc 0 vs reference 59 (no whitespaces: -59, formatted: -82)
 
 ```js
 function foo(o) {
@@ -15813,7 +15813,7 @@ function foo(o) {
 ## `terser/reduce_vars/func_inline`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 59 (-59 bytes, no whitespaces)
+- size: oxc 0 vs reference 59 (no whitespaces: -59, formatted: -78)
 
 ```js
 function f() {
@@ -15844,7 +15844,7 @@ function f() {
 ## `terser/drop_unused/const_assign`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 60 (-60 bytes, no whitespaces)
+- size: oxc 0 vs reference 60 (no whitespaces: -60, formatted: -82)
 
 ```js
 function f() {
@@ -15877,7 +15877,7 @@ function g() {
 ## `terser/async/async_generator_static_class_method`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 0 vs reference 61 (-61 bytes, no whitespaces)
+- size: oxc 0 vs reference 61 (no whitespaces: -61, formatted: -74)
 
 ```js
 class Foo {
@@ -15903,7 +15903,7 @@ class Foo {
 ## `terser/drop_unused/unused_keep_setter_arg`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 61 (-61 bytes, no whitespaces)
+- size: oxc 0 vs reference 61 (no whitespaces: -61, formatted: -80)
 
 ```js
 var x = {
@@ -15933,7 +15933,7 @@ var x = {
 ## `terser/pure_getters/collapse_vars_1_false`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 61 (-61 bytes, no whitespaces)
+- size: oxc 0 vs reference 61 (no whitespaces: -61, formatted: -89)
 
 ```js
 function f(a, b) {
@@ -15963,7 +15963,7 @@ function f(a, b) {
 ## `terser/pure_getters/collapse_vars_1_strict`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 61 (-61 bytes, no whitespaces)
+- size: oxc 0 vs reference 61 (no whitespaces: -61, formatted: -89)
 
 ```js
 function f(a, b) {
@@ -15992,7 +15992,7 @@ function f(a, b) {
 
 ## `terser/blocks/issue_2946_else_const`
 
-- size: oxc 30 vs reference 92 (-62 bytes, no whitespaces)
+- size: oxc 30 vs reference 92 (no whitespaces: -62, formatted: -90)
 
 ```js
 if (1) {
@@ -16042,7 +16042,7 @@ if (3) {
 ## `terser/dead_code/collapse_vars_misc1`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 62 (-62 bytes, no whitespaces)
+- size: oxc 0 vs reference 62 (no whitespaces: -62, formatted: -80)
 
 ```js
 function f10(x) {
@@ -16073,7 +16073,7 @@ function f11(x) {
 ## `terser/issue_1034/non_hoisted_function_after_return_2a`
 
 - tags: `join vars`, `remove unused`, `2 iterations`
-- size: oxc 0 vs reference 62 (-62 bytes, no whitespaces)
+- size: oxc 0 vs reference 62 (no whitespaces: -62, formatted: -82)
 
 ```js
 function foo(x) {
@@ -16110,7 +16110,7 @@ function foo(x) {
 ## `terser/issue_1034/non_hoisted_function_after_return_2b`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 62 (-62 bytes, no whitespaces)
+- size: oxc 0 vs reference 62 (no whitespaces: -62, formatted: -82)
 
 ```js
 function foo(x) {
@@ -16145,7 +16145,7 @@ function foo(x) {
 ## `terser/drop_unused/drop_toplevel_vars_fargs`
 
 - tags: `remove unused`
-- size: oxc 15 vs reference 79 (-64 bytes, no whitespaces)
+- size: oxc 15 vs reference 79 (no whitespaces: -64, formatted: -82)
 
 ```js
 var a, b = 1, c = g;
@@ -16180,7 +16180,7 @@ console.log(b = 3);
 ## `terser/issue_979/issue979_reported`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 0 vs reference 64 (-64 bytes, no whitespaces)
+- size: oxc 0 vs reference 64 (no whitespaces: -64, formatted: -92)
 
 ```js
 function f1() {
@@ -16212,7 +16212,7 @@ function f2() {
 ## `terser/drop_unused/drop_toplevel_vars`
 
 - tags: `remove unused`
-- size: oxc 15 vs reference 80 (-65 bytes, no whitespaces)
+- size: oxc 15 vs reference 80 (no whitespaces: -65, formatted: -83)
 
 ```js
 var a, b = 1, c = g;
@@ -16246,7 +16246,7 @@ console.log(b = 3);
 
 ## `terser/switch/beautify`
 
-- size: oxc 24 vs reference 89 (-65 bytes, no whitespaces)
+- size: oxc 24 vs reference 89 (no whitespaces: -65, formatted: -82)
 
 ```js
 switch (a) {
@@ -16290,7 +16290,7 @@ switch (b) {
 ## `terser/issue_1105/with_in_function_scope`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 66 (-66 bytes, no whitespaces)
+- size: oxc 0 vs reference 66 (no whitespaces: -66, formatted: -81)
 
 ```js
 function foo() {
@@ -16318,7 +16318,7 @@ function foo() {
 ## `terser/collapse_vars/switch_case_1`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 67 (-67 bytes, no whitespaces)
+- size: oxc 0 vs reference 67 (no whitespaces: -67, formatted: -91)
 
 ```js
 function f(x, y, z) {
@@ -16350,7 +16350,7 @@ function f(x, y, z) {
 
 ## `terser/harmony/shorthand_keywords`
 
-- size: oxc 161 vs reference 229 (-68 bytes, no whitespaces)
+- size: oxc 161 vs reference 229 (no whitespaces: -68, formatted: -80)
 
 ```js
 var foo = 0, async = 1, await = 2, implements = 3, package = 4, private = 5, protected = 6, static = 7, yield = 8;
@@ -16417,7 +16417,7 @@ console.log({
 ## `terser/issue_1105/Infinity_not_in_with_scope`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 68 (-68 bytes, no whitespaces)
+- size: oxc 0 vs reference 68 (no whitespaces: -68, formatted: -82)
 
 ```js
 var o = { Infinity: 'oInfinity' };
@@ -16438,7 +16438,7 @@ vInfinity = Infinity;
 
 ## `terser/negate_iife/issue_1288`
 
-- size: oxc 28 vs reference 96 (-68 bytes, no whitespaces)
+- size: oxc 28 vs reference 96 (no whitespaces: -68, formatted: -81)
 
 ```js
 if (w);
@@ -16476,7 +16476,7 @@ else (function(z) {
 
 ## `terser/parameters/arrow_functions`
 
-- size: oxc 0 vs reference 68 (-68 bytes, no whitespaces)
+- size: oxc 0 vs reference 68 (no whitespaces: -68, formatted: -114)
 
 ```js
 (a) => b;
@@ -16508,7 +16508,7 @@ else (function(z) {
 ## `terser/reduce_vars/defun_inline_1`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 70 (-70 bytes, no whitespaces)
+- size: oxc 0 vs reference 70 (no whitespaces: -70, formatted: -92)
 
 ```js
 function f() {
@@ -16540,7 +16540,7 @@ function f() {
 ## `terser/reduce_vars/defun_inline_2`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 70 (-70 bytes, no whitespaces)
+- size: oxc 0 vs reference 70 (no whitespaces: -70, formatted: -92)
 
 ```js
 function f() {
@@ -16572,7 +16572,7 @@ function f() {
 ## `terser/drop_unused/drop_toplevel_funcs_retain`
 
 - tags: `remove unused`
-- size: oxc 15 vs reference 86 (-71 bytes, no whitespaces)
+- size: oxc 15 vs reference 86 (no whitespaces: -71, formatted: -100)
 
 ```js
 var a, b = 1, c = g;
@@ -16608,7 +16608,7 @@ console.log(b = 3);
 ## `terser/drop_unused/drop_toplevel_vars_retain`
 
 - tags: `remove unused`
-- size: oxc 15 vs reference 88 (-73 bytes, no whitespaces)
+- size: oxc 15 vs reference 88 (no whitespaces: -73, formatted: -94)
 
 ```js
 var a, b = 1, c = g;
@@ -16644,7 +16644,7 @@ console.log(b = 3);
 ## `terser/const/issue_1194`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 75 (-75 bytes, no whitespaces)
+- size: oxc 0 vs reference 75 (no whitespaces: -75, formatted: -96)
 
 ```js
 function f1() {
@@ -16681,7 +16681,7 @@ function f3() {
 ## `terser/reduce_vars/passes`
 
 - tags: `join vars`, `remove unused`, `2 iterations`
-- size: oxc 0 vs reference 75 (-75 bytes, no whitespaces)
+- size: oxc 0 vs reference 75 (no whitespaces: -75, formatted: -89)
 
 ```js
 function f() {
@@ -16716,7 +16716,7 @@ function f() {
 ## `terser/harmony/default_assign`
 
 - tags: `remove unused`
-- size: oxc 46 vs reference 123 (-77 bytes, no whitespaces)
+- size: oxc 46 vs reference 123 (no whitespaces: -77, formatted: -102)
 
 ```js
 function f(a, b = 3) {
@@ -16764,7 +16764,7 @@ function i([[x, y, z] = [
 ## `terser/collapse_vars/issue_2250_1`
 
 - tags: `join vars`, `remove unused`, `2 iterations`
-- size: oxc 0 vs reference 78 (-78 bytes, no whitespaces)
+- size: oxc 0 vs reference 78 (no whitespaces: -78, formatted: -102)
 
 ```js
 function f(x) {
@@ -16807,7 +16807,7 @@ function h(x) {
 ## `terser/big_int/big_int_math`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 0 vs reference 79 (-79 bytes, no whitespaces)
+- size: oxc 0 vs reference 79 (no whitespaces: -79, formatted: -107)
 
 ```js
 const sum = 10n + 15n;
@@ -16830,7 +16830,7 @@ const regular_number = 1 * 10;
 ## `terser/async/async_function_expression`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 83 (-83 bytes, no whitespaces)
+- size: oxc 0 vs reference 83 (no whitespaces: -83, formatted: -100)
 
 ```js
 var named = async function foo() {
@@ -16858,7 +16858,7 @@ var anon = async function() {
 ## `terser/collapse_vars/collapse_vars_properties`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 0 vs reference 84 (-84 bytes, no whitespaces)
+- size: oxc 0 vs reference 84 (no whitespaces: -84, formatted: -98)
 
 ```js
 function f1(obj) {
@@ -16888,7 +16888,7 @@ function f2(obj) {
 
 ## `terser/issue_1052/deeply_nested`
 
-- size: oxc 0 vs reference 84 (-84 bytes, no whitespaces)
+- size: oxc 0 vs reference 84 (no whitespaces: -84, formatted: -106)
 
 ```js
 (function() {
@@ -16922,7 +16922,7 @@ function f2(obj) {
 
 ## `terser/pure_funcs/issue_2705_3`
 
-- size: oxc 42 vs reference 126 (-84 bytes, no whitespaces)
+- size: oxc 42 vs reference 126 (no whitespaces: -84, formatted: -88)
 
 ```js
 new a.x(1).y(2).z(3);
@@ -16958,7 +16958,7 @@ new n.x(1).y(2).z(3);
 ## `terser/reduce_vars/func_modified`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 84 (-84 bytes, no whitespaces)
+- size: oxc 0 vs reference 84 (no whitespaces: -84, formatted: -116)
 
 ```js
 function f(a) {
@@ -17000,7 +17000,7 @@ function f(a) {
 ## `terser/destructuring/destructuring_remove_unused_2`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 86 (-86 bytes, no whitespaces)
+- size: oxc 0 vs reference 86 (no whitespaces: -86, formatted: -133)
 
 ```js
 function a() {
@@ -17046,7 +17046,7 @@ function b() {
 ## `terser/issue_1034/non_hoisted_function_after_return`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 86 (-86 bytes, no whitespaces)
+- size: oxc 0 vs reference 86 (no whitespaces: -86, formatted: -113)
 
 ```js
 function foo(x) {
@@ -17087,7 +17087,7 @@ function foo(x) {
 
 ## `terser/issue_2871/comparison_with_undefined`
 
-- size: oxc 24 vs reference 114 (-90 bytes, no whitespaces)
+- size: oxc 24 vs reference 114 (no whitespaces: -90, formatted: -114)
 
 ```js
 a == undefined;
@@ -17139,7 +17139,7 @@ void 0 !== a;
 ## `terser/drop_unused/issue_1583`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 92 (-92 bytes, no whitespaces)
+- size: oxc 0 vs reference 92 (no whitespaces: -92, formatted: -127)
 
 ```js
 function m(t) {
@@ -17173,7 +17173,7 @@ function m(t) {
 ## `terser/reduce_vars/unsafe_evaluate`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 93 (-93 bytes, no whitespaces)
+- size: oxc 0 vs reference 93 (no whitespaces: -93, formatted: -129)
 
 ```js
 function f0() {
@@ -17209,7 +17209,7 @@ function f1() {
 
 ## `terser/arrow/arrow_functions_with_body`
 
-- size: oxc 245 vs reference 340 (-95 bytes, no whitespaces)
+- size: oxc 245 vs reference 340 (no whitespaces: -95, formatted: -135)
 
 ```js
 var a1 = () => {
@@ -17281,7 +17281,7 @@ var a7 = (...b) => {
 ## `terser/issue_1105/with_using_existing_variable_outside_scope`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 99 (-99 bytes, no whitespaces)
+- size: oxc 0 vs reference 99 (no whitespaces: -99, formatted: -128)
 
 ```js
 function f() {
@@ -17317,7 +17317,7 @@ function f() {
 ## `terser/issue_1105/compress_with_with_in_other_scope`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 100 (-100 bytes, no whitespaces)
+- size: oxc 0 vs reference 100 (no whitespaces: -100, formatted: -121)
 
 ```js
 function foo() {
@@ -17351,7 +17351,7 @@ function bar() {
 
 ## `terser/pure_funcs/issue_2629_3`
 
-- size: oxc 0 vs reference 102 (-102 bytes, no whitespaces)
+- size: oxc 0 vs reference 102 (no whitespaces: -102, formatted: -108)
 
 ```js
 a.x(1).y(2).z(3);
@@ -17387,7 +17387,7 @@ n.x(1).y(2).z(3);
 ## `terser/drop_unused/drop_assign`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 103 (-103 bytes, no whitespaces)
+- size: oxc 0 vs reference 103 (no whitespaces: -103, formatted: -122)
 
 ```js
 function f1() {
@@ -17433,7 +17433,7 @@ function f5() {
 ## `terser/drop_unused/issue_2226_1`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 108 (-108 bytes, no whitespaces)
+- size: oxc 0 vs reference 108 (no whitespaces: -108, formatted: -144)
 
 ```js
 function f1() {
@@ -17481,7 +17481,7 @@ function f5(a) {
 ## `terser/if_return/issue_1089`
 
 - tags: `sequences`, `remove unused`
-- size: oxc 0 vs reference 112 (-112 bytes, no whitespaces)
+- size: oxc 0 vs reference 112 (no whitespaces: -112, formatted: -128)
 
 ```js
 function x() {
@@ -17509,7 +17509,7 @@ function x() {
 ## `terser/dead_code/collapse_vars_lvalues_drop_assign`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 113 (-113 bytes, no whitespaces)
+- size: oxc 0 vs reference 113 (no whitespaces: -113, formatted: -154)
 
 ```js
 function f0(x) {
@@ -17549,7 +17549,7 @@ function f2(x) {
 ## `terser/collapse_vars/issue_2436_12`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 119 (-119 bytes, no whitespaces)
+- size: oxc 0 vs reference 119 (no whitespaces: -119, formatted: -135)
 
 ```js
 function isUndefined() {}
@@ -17576,7 +17576,7 @@ function f() {
 ## `terser/collapse_vars/collapse_vars_array`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 0 vs reference 122 (-122 bytes, no whitespaces)
+- size: oxc 0 vs reference 122 (no whitespaces: -122, formatted: -189)
 
 ```js
 function f1(x, y) {
@@ -17636,7 +17636,7 @@ function f3(x, y) {
 
 ## `terser/parameters/destructuring_arguments_2`
 
-- size: oxc 96 vs reference 218 (-122 bytes, no whitespaces)
+- size: oxc 96 vs reference 218 (no whitespaces: -122, formatted: -145)
 
 ```js
 (function([]) {});
@@ -17674,7 +17674,7 @@ class a {
 
 ## `terser/object/prop_arrows_to_concise_method_various`
 
-- size: oxc 6 vs reference 135 (-129 bytes, no whitespaces)
+- size: oxc 6 vs reference 135 (no whitespaces: -129, formatted: -200)
 
 ```js
 ({
@@ -17737,7 +17737,7 @@ class a {
 ## `terser/drop_unused/keep_assign`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 143 (-143 bytes, no whitespaces)
+- size: oxc 0 vs reference 143 (no whitespaces: -143, formatted: -200)
 
 ```js
 function f1() {
@@ -17795,7 +17795,7 @@ function f5() {
 ## `terser/collapse_vars/collapse_vars_try`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 0 vs reference 145 (-145 bytes, no whitespaces)
+- size: oxc 0 vs reference 145 (no whitespaces: -145, formatted: -201)
 
 ```js
 function f1() {
@@ -17848,7 +17848,7 @@ function f2() {
 ## `terser/collapse_vars/issue_2497`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 146 (-146 bytes, no whitespaces)
+- size: oxc 0 vs reference 146 (no whitespaces: -146, formatted: -209)
 
 ```js
 function sample() {
@@ -17888,7 +17888,7 @@ function sample() {
 ## `terser/collapse_vars/collapse_vars_while`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 0 vs reference 149 (-149 bytes, no whitespaces)
+- size: oxc 0 vs reference 149 (no whitespaces: -149, formatted: -197)
 
 ```js
 function f1(y) {
@@ -17942,7 +17942,7 @@ function f3(y) {
 ## `terser/issue_281/collapse_vars_constants`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 151 (-151 bytes, no whitespaces)
+- size: oxc 0 vs reference 151 (no whitespaces: -151, formatted: -193)
 
 ```js
 function f1(x) {
@@ -17979,7 +17979,7 @@ function f2(x) {
 ## `terser/pure_funcs/babel`
 
 - tags: `remove unused`, `pure functions`
-- size: oxc 0 vs reference 159 (-159 bytes, no whitespaces)
+- size: oxc 0 vs reference 159 (no whitespaces: -159, formatted: -172)
 
 ```js
 function _classCallCheck(instance, Constructor) {
@@ -18005,7 +18005,7 @@ var Foo = function Foo() {
 ## `terser/collapse_vars/collapse_vars_if`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 0 vs reference 165 (-165 bytes, no whitespaces)
+- size: oxc 0 vs reference 165 (no whitespaces: -165, formatted: -227)
 
 ```js
 function f1() {
@@ -18059,7 +18059,7 @@ function f3(x) {
 
 ## `terser/comparing/issue_2857_2`
 
-- size: oxc 17 vs reference 182 (-165 bytes, no whitespaces)
+- size: oxc 17 vs reference 182 (no whitespaces: -165, formatted: -239)
 
 ```js
 function f(a, p) {
@@ -18095,7 +18095,7 @@ function f(a, p) {
 
 ## `terser/comparing/issue_2857_4`
 
-- size: oxc 17 vs reference 182 (-165 bytes, no whitespaces)
+- size: oxc 17 vs reference 182 (no whitespaces: -165, formatted: -239)
 
 ```js
 function f(a, p) {
@@ -18131,7 +18131,7 @@ function f(a, p) {
 
 ## `terser/object/prop_func_to_concise_method_various`
 
-- size: oxc 9 vs reference 179 (-170 bytes, no whitespaces)
+- size: oxc 9 vs reference 179 (no whitespaces: -170, formatted: -260)
 
 ```js
 ({
@@ -18206,7 +18206,7 @@ function f(a, p) {
 ## `terser/issue_979/issue979_test_negated_is_best`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 0 vs reference 173 (-173 bytes, no whitespaces)
+- size: oxc 0 vs reference 173 (no whitespaces: -173, formatted: -245)
 
 ```js
 function f3() {
@@ -18265,7 +18265,7 @@ function f7() {
 ## `terser/collapse_vars/collapse_vars_closures`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 0 vs reference 174 (-174 bytes, no whitespaces)
+- size: oxc 0 vs reference 174 (no whitespaces: -174, formatted: -200)
 
 ```js
 function constant_vars_can_be_replaced_in_any_scope() {
@@ -18303,7 +18303,7 @@ function non_constant_vars_can_only_be_replace_in_same_scope(x) {
 ## `terser/issue_1105/check_drop_unused_in_peer_function`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 174 (-174 bytes, no whitespaces)
+- size: oxc 0 vs reference 174 (no whitespaces: -174, formatted: -227)
 
 ```js
 function outer() {
@@ -18355,7 +18355,7 @@ function outer() {
 
 ## `terser/comparing/issue_2857_3`
 
-- size: oxc 17 vs reference 195 (-178 bytes, no whitespaces)
+- size: oxc 17 vs reference 195 (no whitespaces: -178, formatted: -256)
 
 ```js
 function f(a, p) {
@@ -18391,7 +18391,7 @@ function f(a, p) {
 
 ## `terser/comparing/issue_2857_5`
 
-- size: oxc 17 vs reference 195 (-178 bytes, no whitespaces)
+- size: oxc 17 vs reference 195 (no whitespaces: -178, formatted: -256)
 
 ```js
 function f(a, p) {
@@ -18428,7 +18428,7 @@ function f(a, p) {
 ## `terser/const/issue_1396`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 178 (-178 bytes, no whitespaces)
+- size: oxc 0 vs reference 178 (no whitespaces: -178, formatted: -212)
 
 ```js
 function foo(a) {
@@ -18468,7 +18468,7 @@ function bar() {
 ## `terser/keep_names/keep_some_fnames_reduce`
 
 - tags: `mangle`, `keep function names`, `keep class names`, `join vars`, `remove unused`
-- size: oxc 0 vs reference 185 (-185 bytes, no whitespaces)
+- size: oxc 0 vs reference 185 (no whitespaces: -185, formatted: -218)
 
 ```js
 function foo() {
@@ -18508,7 +18508,7 @@ function foo() {
 ## `terser/collapse_vars/collapse_vars_switch`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 0 vs reference 188 (-188 bytes, no whitespaces)
+- size: oxc 0 vs reference 188 (no whitespaces: -188, formatted: -252)
 
 ```js
 function f1() {
@@ -18564,7 +18564,7 @@ function f3(x) {
 ## `terser/collapse_vars/collapse_vars_unary`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 0 vs reference 199 (-199 bytes, no whitespaces)
+- size: oxc 0 vs reference 199 (no whitespaces: -199, formatted: -261)
 
 ```js
 function f0(o, p) {
@@ -18626,7 +18626,7 @@ function f5(n) {
 ## `terser/collapse_vars/collapse_vars_object`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 0 vs reference 204 (-204 bytes, no whitespaces)
+- size: oxc 0 vs reference 204 (no whitespaces: -204, formatted: -328)
 
 ```js
 function f0(x, y) {
@@ -18714,7 +18714,7 @@ function f3(x, y) {
 ## `terser/conditionals/ternary_boolean_alternative`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 0 vs reference 222 (-222 bytes, no whitespaces)
+- size: oxc 0 vs reference 222 (no whitespaces: -222, formatted: -299)
 
 ```js
 function f1() {
@@ -18778,7 +18778,7 @@ function f8() {
 ## `terser/conditionals/ternary_boolean_consequent`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 0 vs reference 222 (-222 bytes, no whitespaces)
+- size: oxc 0 vs reference 222 (no whitespaces: -222, formatted: -299)
 
 ```js
 function f1() {
@@ -18842,7 +18842,7 @@ function f8() {
 ## `terser/async/async_function_declaration`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 227 (-227 bytes, no whitespaces)
+- size: oxc 0 vs reference 227 (no whitespaces: -227, formatted: -276)
 
 ```js
 async function f0() {}
@@ -18897,7 +18897,7 @@ async function f6() {
 
 ## `terser/comparing/issue_2857_1`
 
-- size: oxc 32 vs reference 282 (-250 bytes, no whitespaces)
+- size: oxc 32 vs reference 282 (no whitespaces: -250, formatted: -350)
 
 ```js
 function f1(a) {
@@ -18951,7 +18951,7 @@ function f2(a) {
 ## `terser/issue_368/collapse`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 0 vs reference 256 (-256 bytes, no whitespaces)
+- size: oxc 0 vs reference 256 (no whitespaces: -256, formatted: -331)
 
 ```js
 function f1() {
@@ -19010,7 +19010,7 @@ function f4(c) {
 ## `terser/collapse_vars/collapse_vars_do_while_drop_assign`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 0 vs reference 267 (-267 bytes, no whitespaces)
+- size: oxc 0 vs reference 267 (no whitespaces: -267, formatted: -375)
 
 ```js
 function f1(y) {
@@ -19091,7 +19091,7 @@ function f5(y) {
 ## `terser/collapse_vars/collapse_vars_do_while`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 0 vs reference 273 (-273 bytes, no whitespaces)
+- size: oxc 0 vs reference 273 (no whitespaces: -273, formatted: -386)
 
 ```js
 function f1(y) {
@@ -19172,7 +19172,7 @@ function f5(y) {
 ## `terser/collapse_vars/collapse_vars_constants`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 0 vs reference 274 (-274 bytes, no whitespaces)
+- size: oxc 0 vs reference 274 (no whitespaces: -274, formatted: -355)
 
 ```js
 function f1(x) {
@@ -19225,7 +19225,7 @@ function f3(x) {
 ## `terser/collapse_vars/collapse_vars_assignment`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 0 vs reference 283 (-283 bytes, no whitespaces)
+- size: oxc 0 vs reference 283 (no whitespaces: -283, formatted: -370)
 
 ```js
 function log(x) {
@@ -19304,7 +19304,7 @@ function f6(c) {
 ## `terser/destructuring/destructuring_remove_unused_1`
 
 - tags: `remove unused`
-- size: oxc 0 vs reference 285 (-285 bytes, no whitespaces)
+- size: oxc 0 vs reference 285 (no whitespaces: -285, formatted: -436)
 
 ```js
 function a() {
@@ -19403,7 +19403,7 @@ function e() {
 ## `terser/collapse_vars/issue_2436_11`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 327 (-327 bytes, no whitespaces)
+- size: oxc 0 vs reference 327 (no whitespaces: -327, formatted: -387)
 
 ```js
 function matrix() {}
@@ -19447,7 +19447,7 @@ function f(arg1, arg2) {
 
 ## `terser/parameters/destructuring_arguments_1`
 
-- size: oxc 0 vs reference 381 (-381 bytes, no whitespaces)
+- size: oxc 0 vs reference 381 (no whitespaces: -381, formatted: -473)
 
 ```js
 (function(a) {});
@@ -19505,7 +19505,7 @@ function f(arg1, arg2) {
 ## `terser/return_undefined/return_undefined`
 
 - tags: `drop debugger`, `join vars`, `remove unused`
-- size: oxc 0 vs reference 384 (-384 bytes, no whitespaces)
+- size: oxc 0 vs reference 384 (no whitespaces: -384, formatted: -484)
 
 ```js
 function f0() {}
@@ -19616,7 +19616,7 @@ function f12() {
 ## `terser/collapse_vars/collapse_vars_lvalues_drop_assign`
 
 - tags: `join vars`, `sequences`, `remove unused`, `3 iterations`
-- size: oxc 0 vs reference 386 (-386 bytes, no whitespaces)
+- size: oxc 0 vs reference 386 (no whitespaces: -386, formatted: -513)
 
 ```js
 function f0(x) {
@@ -19709,7 +19709,7 @@ function f9(x) {
 ## `terser/collapse_vars/collapse_vars_lvalues`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 0 vs reference 438 (-438 bytes, no whitespaces)
+- size: oxc 0 vs reference 438 (no whitespaces: -438, formatted: -600)
 
 ```js
 function f0(x) {
@@ -19805,7 +19805,7 @@ function f9(x) {
 ## `terser/collapse_vars/collapse_vars_misc1`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 0 vs reference 514 (-514 bytes, no whitespaces)
+- size: oxc 0 vs reference 514 (no whitespaces: -514, formatted: -670)
 
 ```js
 function f0(o, a, h) {
@@ -19918,7 +19918,7 @@ function f11(x) {
 ## `terser/collapse_vars/collapse_vars_short_circuit`
 
 - tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 0 vs reference 732 (-732 bytes, no whitespaces)
+- size: oxc 0 vs reference 732 (no whitespaces: -732, formatted: -979)
 
 ```js
 function f0(x) {
@@ -20054,7 +20054,7 @@ function f14(x, y) {
 ## `terser/collapse_vars/collapse_vars_short_circuited_conditions`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 0 vs reference 746 (-746 bytes, no whitespaces)
+- size: oxc 0 vs reference 746 (no whitespaces: -746, formatted: -974)
 
 ```js
 function c1(x) {
@@ -20178,7 +20178,7 @@ function i6(x) {
 ## `terser/asm/asm_mixed`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 0 vs reference 825 (-825 bytes, no whitespaces)
+- size: oxc 0 vs reference 825 (no whitespaces: -825, formatted: -1065)
 
 ```js
 function asm_GeometricMean(stdlib, foreign, buffer) {

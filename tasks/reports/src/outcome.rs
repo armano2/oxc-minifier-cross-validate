@@ -6,6 +6,7 @@ pub enum Kind {
     NotIdempotent,
     Panic,
     Larger,
+    LargerWhitespace,
     Differs,
     ParseError,
     ConfigError,
@@ -19,6 +20,7 @@ impl Kind {
             Self::NotIdempotent => "not-idempotent",
             Self::Panic => "panic",
             Self::Larger => "larger",
+            Self::LargerWhitespace => "whitespace",
             Self::Differs => "differs",
             Self::ParseError => "parse-error",
             Self::ConfigError => "config-error",
@@ -32,6 +34,7 @@ impl Kind {
             Self::NotIdempotent => "Not idempotent (re-compressing changes the output)",
             Self::Panic => "Panicked",
             Self::Larger => "Output longer than expected (possible missing optimization)",
+            Self::LargerWhitespace => "Output longer after whitespace removal",
             Self::Differs => "Output differs at equal length",
             Self::ParseError => "failed to parse",
             Self::ConfigError => "`config.json` failed to parse",
@@ -39,12 +42,13 @@ impl Kind {
         }
     }
 
-    pub const fn all() -> [Self; 8] {
+    pub const fn all() -> [Self; 9] {
         [
             Self::Smaller,
             Self::NotIdempotent,
             Self::Panic,
             Self::Larger,
+            Self::LargerWhitespace,
             Self::Differs,
             Self::ParseError,
             Self::ConfigError,
@@ -70,7 +74,11 @@ impl Kind {
         if actual == expected {
             return Self::Pass;
         }
-        match actual_size.cmp(&expected_size) {
+        let no_whitespace = actual_size.cmp(&expected_size);
+        if actual.len() == expected.len() && no_whitespace == Ordering::Greater {
+            return Self::LargerWhitespace;
+        }
+        match no_whitespace {
             Ordering::Less => Self::Smaller,
             Ordering::Greater => Self::Larger,
             Ordering::Equal => Self::Differs,

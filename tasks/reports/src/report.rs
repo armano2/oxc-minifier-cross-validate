@@ -213,10 +213,11 @@ fn write_outcome_markdown(out: &mut String, outcome: &Outcome, kind: Kind) {
     }
     if matches!(kind, Kind::Larger | Kind::Smaller) {
         let delta = outcome.actual_size.cast_signed() - outcome.expected_size.cast_signed();
+        let delta_raw = outcome.actual.len().cast_signed() - outcome.expected.len().cast_signed();
         let _ = writeln!(
             out,
-            "- size: oxc {} vs reference {} ({delta:+} bytes, no whitespaces)",
-            outcome.actual_size, outcome.expected_size
+            "- size: oxc {} vs reference {} (no whitespaces: {:+}, formatted: {:+})",
+            outcome.actual_size, outcome.expected_size, delta, delta_raw,
         );
     }
     out.push('\n');

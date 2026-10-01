@@ -7,7 +7,7 @@ Fixtures: 9
 ## `pass-1/3`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 45 vs reference 40 (+5 bytes, no whitespaces)
+- size: oxc 45 vs reference 40 (no whitespaces: +5, formatted: +7)
 
 ```js
 (() => {
@@ -29,7 +29,7 @@ Fixtures: 9
 ## `pass-1/issues/6407/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 293 vs reference 282 (+11 bytes, no whitespaces)
+- size: oxc 293 vs reference 282 (no whitespaces: +11, formatted: +6)
 
 ```js
 export default class Demo {
@@ -74,7 +74,7 @@ console.log(Deno.encode());
 ## `pass-1/joda/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 334 vs reference 322 (+12 bytes, no whitespaces)
+- size: oxc 334 vs reference 322 (no whitespaces: +12, formatted: +18)
 
 ```js
 'use strict';
@@ -123,7 +123,7 @@ console.log(Deno.encode());
 ## `pass-1/8`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 103 vs reference 82 (+21 bytes, no whitespaces)
+- size: oxc 103 vs reference 82 (no whitespaces: +21, formatted: +25)
 
 ```js
 export function MultiPoint(point) {
@@ -148,7 +148,7 @@ export function MultiPoint(point) {
 ## `pass-1/joda/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 277 vs reference 235 (+42 bytes, no whitespaces)
+- size: oxc 277 vs reference 235 (no whitespaces: +42, formatted: +57)
 
 ```js
 'use strict';
@@ -182,7 +182,7 @@ export function MultiPoint(point) {
 ## `pass-1/9/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 87 vs reference 33 (+54 bytes, no whitespaces)
+- size: oxc 87 vs reference 33 (no whitespaces: +54, formatted: +66)
 
 ```js
 console.log('Greeting:', (function(value) {
@@ -209,7 +209,7 @@ console.log('Greeting:', (function(value) {
 ## `pass-1/compute/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 129 vs reference 47 (+82 bytes, no whitespaces)
+- size: oxc 129 vs reference 47 (no whitespaces: +82, formatted: +127)
 
 ```js
 function f() {
@@ -255,7 +255,7 @@ console.log(f().toString(16));
 ## `pass-1/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 157 vs reference 32 (+125 bytes, no whitespaces)
+- size: oxc 157 vs reference 32 (no whitespaces: +125, formatted: +156)
 
 ```js
 (function() {
@@ -279,7 +279,7 @@ console.log(f().toString(16));
 ## `pass-1/9/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 164 vs reference 33 (+131 bytes, no whitespaces)
+- size: oxc 164 vs reference 33 (no whitespaces: +131, formatted: +167)
 
 ```js
 function outer() {

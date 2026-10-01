@@ -6,9 +6,9 @@ Fixtures run: 18
 
 ## Summary
 
-| smaller | not-idempotent | panic | larger | differs | parse-error | config-error | pass | total |
-|---|---|---|---|---|---|---|---|---|
-| 2 | 0 | 0 | 9 | 2 | 0 | 0 | 5 | 18 |
+| smaller | not-idempotent | panic | larger | whitespace | differs | parse-error | config-error | pass | total |
+|---|---|---|---|---|---|---|---|---|---|
+| 2 | 0 | 0 | 9 | 0 | 2 | 0 | 0 | 5 | 18 |
 
 ## Reports
 
