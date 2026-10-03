@@ -11,7 +11,7 @@ path = "src/main.rs"
 test = false
 doctest = false
 
-[workspace.lints.clippy]
+[lints.clippy]
 all = "warn"
 pedantic = { level = "warn", priority = -1 }
 complexity = { level = "warn", priority = -1 }
@@ -30,5 +30,5 @@ overflow-checks = true
 pico-args = "0.5.0"
 similar = "3.2.0"
 oxc = { path = "../oxc/crates/oxc", features = ["minifier", "mangler", "codegen"] }
-serde_json = "1"
+serde_json = "1.0"
 json-strip-comments = "3.1.2"
