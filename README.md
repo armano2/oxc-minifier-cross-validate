@@ -15,19 +15,13 @@ reported without terminating the entire run.
 Run the task from the workspace root:
 
 ```bash
-cargo run -p reports -- [filter] [options]
-```
-
-Check the Rust code with Clippy before changing the reports task:
-
-```bash
-cargo clippy --workspace --all-targets -- -D warnings
+cargo run -- [filter] [options]
 ```
 
 Options:
 
 - `--fixtures <dir>`: fixture root, defaults to `fixtures`
-- `--family <name>`: only run a top-level family (`terser`, `swc`, `pass-1`)
+- `--family <name>`: only run a top-level family (`terser`, `swc`, `pass-1`, `uglify`)
 - `--only <kind>`: only report a classification (`smaller`, `larger`,
   `differs`, `not-idempotent`, `panic`, ...)
 - `--limit <n>`: stop after `n` fixtures

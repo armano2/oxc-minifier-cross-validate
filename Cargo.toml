@@ -1,6 +1,15 @@
-[workspace]
-resolver = "3"
-members = ["tasks/*"]
+[package]
+name = "reports"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.99.0"
+publish = false
+
+[[bin]]
+name = "reports"
+path = "src/main.rs"
+test = false
+doctest = false
 
 [workspace.lints.clippy]
 all = "warn"
@@ -13,6 +22,13 @@ nursery = { level = "warn", priority = -1 }
 panic = "unwind"
 opt-level = 2
 codegen-units = 256
-lto = "thin"
+lto = "fat"
 debug-assertions = true
 overflow-checks = true
+
+[dependencies]
+pico-args = "0.5.0"
+similar = "3.2.0"
+oxc = { path = "../oxc/crates/oxc", features = ["minifier", "mangler", "codegen"] }
+serde_json = "1"
+json-strip-comments = "3.1.2"
