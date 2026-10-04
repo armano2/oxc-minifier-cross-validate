@@ -1,6 +1,6 @@
 # swc / differs — Output differs at equal length
 
-Fixtures: 33
+Fixtures: 39
 
 [← swc](README.md) · [← all families](../README.md)
 
@@ -325,6 +325,189 @@ out.constructOuterFunctionAfterEval = constructOuterFunctionAfterEval;
  }
 -out.OuterEvalMutableClass = OuterEvalMutableClass, out.constructOuterClassAfterEval = constructOuterClassAfterEval, out.OuterEvalMutableFunction = OuterEvalMutableFunction, out.constructOuterFunctionAfterEval = constructOuterFunctionAfterEval;
 +out.constructOuterFunctionAfterEval = constructOuterFunctionAfterEval;
+
+```
+
+## `swc/issues/12182/noinline`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+
+```js
+const logger = { log: (value) => console.log(value) };
+/*#__NOINLINE__*/ logger.log('variable noinline');
+const directResult = (/*#__NOINLINE__*/ { log: (value) => console.log(value) }).log('direct noinline');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-const logger = { log: (value) => console.log(value) };
+-/*#__NOINLINE__*/ logger.log('variable noinline'), { log: (value) => console.log(value) }.log('direct noinline');
++/*#__NOINLINE__*/ ({ log: (value) => console.log(value) }).log('variable noinline'), (/*#__NOINLINE__*/ { log: (value) => console.log(value) }).log('direct noinline');
+
+```
+
+## `swc/issues/12184/computed-members`
+
+
+```js
+function nested(obj) {
+	console.log(obj.a[DEBUG]);
+}
+function optional(obj) {
+	console.log(obj?.[DEBUG]);
+}
+nested({ a: { false: 'nested' } });
+optional({ false: 'optional' });
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,8 @@
+ function nested(obj) {
+-	console.log(obj.a[false]);
++	console.log(obj.a[DEBUG]);
+ }
+ function optional(obj) {
+-	console.log(obj?.[false]);
++	console.log(obj?.[DEBUG]);
+ }
+ nested({ a: { false: 'nested' } });
+ optional({ false: 'optional' });
+
+```
+
+## `swc/issues/12191/binding-control`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
+
+```js
+function* values() {
+	try {
+		console.log('next');
+		yield 1;
+	} finally {
+		console.log('return');
+	}
+}
+let value;
+[value] = values();
+console.log(value);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,3 @@
+-let value;
+ function* values() {
+ 	try {
+ 		console.log('next'), yield 1;
+@@ -6,4 +5,5 @@
+ 		console.log('return');
+ 	}
+ }
++let value;
+ [value] = values(), console.log(value);
+
+```
+
+## `swc/issues/12218/literal-spread`
+
+- tags: `remove unused`
+
+```js
+(function(a, b, c) {
+	console.log(a, c);
+})(...[1, 2], 3);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ (function(a, b, c) {
+ 	console.log(a, c);
+-})(1, 0, 3);
++})(1, 2, 3);
+
+```
+
+## `swc/issues/12218/no-spread`
+
+- tags: `remove unused`
+
+```js
+(function(a, b, c) {
+	console.log(a, c);
+})(1, 2, 3);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ (function(a, b, c) {
+ 	console.log(a, c);
+-})(1, 0, 3);
++})(1, 2, 3);
+
+```
+
+## `swc/issues/12303`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+
+```js
+function* spreadGenerator(name) {
+	console.log(name);
+	yield 1;
+}
+Boolean(...spreadGenerator('call spread'));
+new Boolean(...spreadGenerator('new spread'));
+function g() {
+	console.log('ordinary');
+	return 1;
+}
+Boolean(g());
+function* throwingGenerator() {
+	console.log('throwing');
+	throw new Error('spread throw');
+}
+try {
+	Boolean(...throwingGenerator());
+} catch (error) {
+	console.log(error.message);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,13 +1,14 @@
+ function* spreadGenerator(name) {
+ 	console.log(name), yield 1;
+ }
++Boolean(...spreadGenerator('call spread')), new Boolean(...spreadGenerator('new spread'));
+ function g() {
+ 	return console.log('ordinary'), 1;
+ }
++g();
+ function* throwingGenerator() {
+ 	throw console.log('throwing'), Error('spread throw');
+ }
+-Boolean(...spreadGenerator('call spread')), new Boolean(...spreadGenerator('new spread')), g();
+ try {
+ 	Boolean(...throwingGenerator());
+ } catch (error) {
 
 ```
 

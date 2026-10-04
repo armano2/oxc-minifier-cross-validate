@@ -1,6 +1,6 @@
 # swc / smaller — Output shorter than expected (possible over-optimization / bug)
 
-Fixtures: 109
+Fixtures: 167
 
 [← swc](README.md) · [← all families](../README.md)
 
@@ -363,6 +363,52 @@ export class Class2 extends Class1 {
 
 ```
 
+## `swc/issues/9460/strict-mode`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `pure getters`
+- size: oxc 251 vs reference 253 (no whitespaces: -2, formatted: -2)
+
+```js
+const events = [];
+function record(value) {
+	events.push(value);
+}
+const { value = class {
+	static field = (function() {
+		record(this === undefined);
+	})();
+} } = {};
+try {
+	const { value = class {
+		static field = missing = 1;
+	} } = {};
+} catch {
+	record('strict-assignment-throws');
+}
+console.log(events.join(','));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -4,11 +4,11 @@
+ }
+ const { value = class {
+ 	static field = (function() {
+-		record(void 0 === this);
++		record(this === void 0);
+ 	})();
+ } } = {};
+ try {
+-	const { value = class {
++	let { value = class {
+ 		static field = missing = 1;
+ 	} } = {};
+ } catch {
+
+```
+
 ## `swc/issues/9500`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -486,6 +532,124 @@ var newClass = function() {
 
 ```
 
+## `swc/issues/12223/catch-return-assignment`
+
+- size: oxc 91 vs reference 94 (no whitespaces: -3, formatted: -4)
+
+```js
+function f() {
+	var a = 1;
+	try {
+		throw 0;
+	} catch (e) {
+		return a = 2;
+	} finally {
+		console.log(a);
+	}
+}
+console.log(f());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,7 +2,7 @@
+ 	var a = 1;
+ 	try {
+ 		throw 0;
+-	} catch (e) {
++	} catch {
+ 		return a = 2;
+ 	} finally {
+ 		console.log(a);
+
+```
+
+## `swc/issues/12223/catch-throw-assignment`
+
+- size: oxc 105 vs reference 108 (no whitespaces: -3, formatted: -4)
+
+```js
+function f() {
+	var a = 1;
+	try {
+		throw 0;
+	} catch (e) {
+		throw a = 2;
+	} finally {
+		console.log(a);
+	}
+}
+try {
+	f();
+} catch (e) {
+	console.log(e);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,7 +2,7 @@
+ 	var a = 1;
+ 	try {
+ 		throw 0;
+-	} catch (e) {
++	} catch {
+ 		throw a = 2;
+ 	} finally {
+ 		console.log(a);
+
+```
+
+## `swc/issues/12304`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 202 vs reference 205 (no whitespaces: -3, formatted: +1)
+
+```js
+function codeUnits(value) {
+	return value.split('').map((char) => char.charCodeAt(0).toString(16)).join(',');
+}
+console.log([
+	'\ud800\n',
+	'\udc00\n',
+	'😀\n',
+	'\\uD800\n',
+	'\\${value}`\r\n\n'
+].map(codeUnits).join('|'));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,15 +2,9 @@
+ 	return value.split('').map((char) => char.charCodeAt(0).toString(16)).join(',');
+ }
+ console.log([
+-	`\uD800
+-`,
+-	`\uDC00
+-`,
+-	`😀
+-`,
+-	`\\uD800
+-`,
+-	`\\\${value}\`\x01\r
+-
+-`
++	'\ud800\n',
++	'\udc00\n',
++	'😀\n',
++	'\\uD800\n',
++	'\\${value}`\r\n\n'
+ ].map(codeUnits).join('|'));
+
+```
+
 ## `swc/issues/7591`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -557,8 +721,9 @@ try {
 +++ oxc
 @@ -1,5 +1,5 @@
  try {
- 	({}).bar.baz?.();
+-	(void 0).baz?.();
 -} catch (e) {
++	({}).bar.baz?.();
 +} catch {
  	console.log('PASS');
  }
@@ -609,6 +774,93 @@ export const E = { test: function(Y) {
 -	return !!node && !!node.style && ('MozTransition' in node.style || 'WebkitTransition' in node.style || 'transition' in node.style);
 +	return node && node.style ? 'MozTransition' in node.style || 'WebkitTransition' in node.style || 'transition' in node.style : !1;
  } };
+
+```
+
+## `swc/issues/12282`
+
+- tags: `join vars`, `keep function names`
+- size: oxc 172 vs reference 176 (no whitespaces: -4, formatted: -4)
+
+```js
+function foo(data) {
+	const mutable = [];
+	function f(x) {
+		mutable.push(x);
+		return x + 1;
+	}
+	const processed = data.map((x) => f(x));
+	return {
+		mutable: [...mutable],
+		processed
+	};
+}
+console.log(foo([
+	1,
+	2,
+	3
+]));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,10 @@
+ function foo(data) {
+-	const mutable = [];
++	let mutable = [];
+ 	function f(x) {
+ 		mutable.push(x);
+ 		return x + 1;
+ 	}
+-	const processed = data.map((x) => f(x));
++	let processed = data.map((x) => f(x));
+ 	return {
+ 		mutable: [...mutable],
+ 		processed
+
+```
+
+## `swc/issues/12282/array`
+
+- tags: `join vars`, `keep function names`
+- size: oxc 162 vs reference 166 (no whitespaces: -4, formatted: -4)
+
+```js
+function foo(data) {
+	const mutable = [];
+	function f(x) {
+		mutable.push(x);
+		return x + 1;
+	}
+	const processed = data.map((x) => f(x));
+	return [...mutable, processed];
+}
+console.log(foo([
+	1,
+	2,
+	3
+]));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,10 @@
+ function foo(data) {
+-	const mutable = [];
++	let mutable = [];
+ 	function f(x) {
+ 		mutable.push(x);
+ 		return x + 1;
+ 	}
+-	const processed = data.map((x) => f(x));
++	let processed = data.map((x) => f(x));
+ 	return [...mutable, processed];
+ }
+ console.log(foo([
 
 ```
 
@@ -744,6 +996,97 @@ console.log(run(true), run(false));
  }
 -console.log(run(true), run(false));
 +console.log(run(!0), run(!1));
+
+```
+
+## `swc/issues/12194`
+
+- size: oxc 340 vs reference 345 (no whitespaces: -5, formatted: -6)
+
+```js
+const events = [];
+const value = {
+	get current() {
+		events.push('get');
+		return 0;
+	},
+	set current(value) {
+		events.push('set');
+	}
+};
+console.log(value.current === void (value.current = 1));
+console.log(value.current === !(value.current = 1));
+console.log(value.current === 0);
+console.log(value.current === void 0);
+console.log(value.current === !0);
+console.log(events.join(','));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -9,8 +9,8 @@
+ 	}
+ };
+ console.log(value.current === void (value.current = 1));
+-console.log(value.current === (value.current = 1, false));
+-console.log(0 === value.current);
+-console.log(void 0 === value.current);
+-console.log(!0 === value.current);
++console.log(value.current === !(value.current = 1));
++console.log(value.current === 0);
++console.log(value.current === void 0);
++console.log(value.current === !0);
+ console.log(events.join(','));
+
+```
+
+## `swc/issues/12229`
+
+- size: oxc 145 vs reference 150 (no whitespaces: -5, formatted: +0)
+
+```js
+function f(a, b, c, d) {
+	if (a) return;
+	if (b) return;
+	if (c) {
+		while (log()) {}
+	}
+	if (d) {
+		while (log()) {}
+	}
+}
+var n = 0;
+function log() {
+	console.log(++n);
+	return false;
+}
+f(false, false, true, true);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,12 @@
+ function f(a, b, c, d) {
+-	if (a || b) return;
+-	if (c) while (log());
+-	if (d) while (log());
++	if (a) return;
++	if (b) return;
++	if (c) for (; log(););
++	if (d) for (; log(););
+ }
+ var n = 0;
+ function log() {
+ 	console.log(++n);
+-	return false;
++	return !1;
+ }
+-f(false, false, true, true);
++f(!1, !1, !0, !0);
 
 ```
 
@@ -886,27 +1229,6 @@ const k = (() => {
 -	return x **= void 0;
 +	return x **= void 0, x;
  })();
-
-```
-
-## `swc/issues/9739`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 52 vs reference 58 (no whitespaces: -6, formatted: -8)
-
-```js
-const arr = ['a', 'b'];
-[arr[0], arr[1]] = [arr[1], arr[0]];
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,2 @@
- const arr = ['a', 'b'];
--[['a', 'b'][0], ['a', 'b'][1]] = ['b', 'a'];
-+[arr[0], arr[1]] = [arr[1], arr[0]];
 
 ```
 
@@ -1101,6 +1423,96 @@ _.random = function(min, max) {
 
 ```
 
+## `swc/issues/12199/partial`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 317 vs reference 324 (no whitespaces: -7, formatted: +42)
+
+```js
+function partialLeading(x) {
+	return [
+		,
+		1,
+		2,
+		x
+	].join('-');
+}
+function partialInterior(x) {
+	return [
+		1,
+		,
+		2,
+		x
+	].join('-');
+}
+function partialTrailing(x) {
+	return [
+		x,
+		1,
+		2,
+		,
+	].join('-');
+}
+function partialControl(x) {
+	return [
+		1,
+		2,
+		x
+	].join('-');
+}
+console.log([
+	partialLeading('x'),
+	partialInterior('x'),
+	partialTrailing('x'),
+	partialControl('x')
+].join('|'));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,14 +1,33 @@
+ function partialLeading(x) {
+-	return ['-1-2', x].join('-');
++	return [
++		,
++		1,
++		2,
++		x
++	].join('-');
+ }
+ function partialInterior(x) {
+-	return ['1--2', x].join('-');
++	return [
++		1,
++		,
++		2,
++		x
++	].join('-');
+ }
+ function partialTrailing(x) {
+-	return [x, '1-2-'].join('-');
++	return [
++		x,
++		1,
++		2,
++		,
++	].join('-');
+ }
+ function partialControl(x) {
+-	return ['1-2', x].join('-');
++	return [
++		1,
++		2,
++		x
++	].join('-');
+ }
+ console.log([
+ 	partialLeading('x'),
+
+```
+
 ## `swc/issues/4249`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -1217,6 +1629,178 @@ _.throttle = function(func, wait, options) {
 
 ```
 
+## `swc/issues/12208/independent-optional-operands`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 229 vs reference 237 (no whitespaces: -8, formatted: -13)
+
+```js
+const obj = {};
+const func = () => {};
+const get = (value) => value;
+console.log(obj?.[null?.veryLongProperty]);
+console.log(func?.(null?.veryLongProperty));
+console.log(get(null?.veryLongProperty)?.x);
+console.log(get(null?.veryLongProperty)?.x.y);
+console.log({ value: null?.veryLongProperty }?.value);
+console.log([null?.veryLongProperty]?.[0]);
+console.log((null?.veryLongProperty, obj)?.x);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+ const obj = {}, func = () => {}, get = (value) => value;
+-console.log(obj?.[void 0]), console.log(func?.(void 0)), console.log(((value) => value)(void 0)?.x), console.log(((value) => value)(void 0)?.x.y), console.log(void 0), console.log(void 0), console.log(obj?.x);
++console.log(obj?.[void 0]), console.log(func?.(void 0)), console.log(get(void 0)?.x), console.log(get(void 0)?.x.y), console.log({ value: void 0 }.value), console.log(void 0), console.log(obj?.x);
+
+```
+
+## `swc/issues/12229/no-return`
+
+- size: oxc 111 vs reference 119 (no whitespaces: -8, formatted: -5)
+
+```js
+function f(c, d) {
+	if (c) {
+		while (log()) {}
+	}
+	if (d) {
+		while (log()) {}
+	}
+}
+var n = 0;
+function log() {
+	console.log(++n);
+	return false;
+}
+f(true, true);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,10 @@
+ function f(c, d) {
+-	if (c) while (log());
+-	if (d) while (log());
++	if (c) for (; log(););
++	if (d) for (; log(););
+ }
+ var n = 0;
+ function log() {
+ 	console.log(++n);
+-	return false;
++	return !1;
+ }
+-f(true, true);
++f(!0, !0);
+
+```
+
+## `swc/issues/12299`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 297 vs reference 305 (no whitespaces: -8, formatted: -11)
+
+```js
+function f(x) {
+	try {
+		if (x) throw 1;
+	} finally {
+		return 2;
+	}
+	return 2;
+}
+function finalizerOverridesReturn() {
+	try {
+		return 1;
+	} finally {
+		return 2;
+	}
+	return 2;
+}
+function duplicateReturn(x) {
+	if (x) return 2;
+	return 2;
+}
+console.log(f(false));
+console.log(f(true));
+console.log(finalizerOverridesReturn());
+console.log(duplicateReturn(false));
+console.log(duplicateReturn(true));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -4,7 +4,6 @@
+ 	} finally {
+ 		return 2;
+ 	}
+-	return 2;
+ }
+ function finalizerOverridesReturn() {
+ 	try {
+
+```
+
+## `swc/issues/12306`
+
+- tags: `remove unused`, `keep function names`
+- size: oxc 47 vs reference 55 (no whitespaces: -8, formatted: -11)
+
+```js
+var f = function g() {
+	return 1;
+};
+console.log(f.name === 'g');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,3 @@
+-var f = function g() {
++console.log(function g() {
+ 	return 1;
+-};
+-console.log('g' === f.name);
++}.name === 'g');
+
+```
+
+## `swc/issues/12306/keep-fnames-false`
+
+- tags: `remove unused`
+- size: oxc 45 vs reference 53 (no whitespaces: -8, formatted: -11)
+
+```js
+var f = function g() {
+	return 1;
+};
+console.log(f.name === 'f');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,3 @@
+-var f = function() {
++console.log(function() {
+ 	return 1;
+-};
+-console.log('f' === f.name);
++}.name === 'f');
+
+```
+
 ## `swc/issues/3709`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -1237,6 +1821,51 @@ var d;
 -var c, d;
  export var a;
  export var b;
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/labels-preserved`
+
+- tags: `1 iteration`
+- size: oxc 259 vs reference 267 (no whitespaces: -8, formatted: -8)
+
+```js
+function preservedLabels() {
+	var events = [];
+	first: do {
+		events.push('break');
+		break first;
+	} while (false);
+	events.push('first tail');
+	second: do {
+		events.push('continue');
+		continue second;
+	} while (false);
+	events.push('second tail');
+	return events.join('|');
+}
+console.log(preservedLabels());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -3,12 +3,12 @@
+ 	first: do {
+ 		events.push('break');
+ 		break first;
+-	} while (false);
++	} while (0);
+ 	events.push('first tail');
+ 	second: do {
+ 		events.push('continue');
+ 		continue second;
+-	} while (false);
++	} while (0);
+ 	events.push('second tail');
+ 	return events.join('|');
+ }
 
 ```
 
@@ -1349,6 +1978,205 @@ export { k };
 -}();
 +})();
  export { k };
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/completion/typed-bigint`
+
+- tags: `1 iteration`
+- size: oxc 31 vs reference 41 (no whitespaces: -10, formatted: -16)
+
+```js
+var value;
+do {
+	value = 2n;
+	break;
+} while (false);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+ var value;
+-do {
++do
+ 	value = 2n;
+-	break;
+-} while (false);
++while (0);
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/completion/typed-nan`
+
+- tags: `1 iteration`
+- size: oxc 32 vs reference 42 (no whitespaces: -10, formatted: -18)
+
+```js
+var value;
+do {
+	value = NaN;
+	break;
+} while (false);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+ var value;
+-do {
+-	value = 0 / 0;
+-	break;
+-} while (false);
++do
++	value = NaN;
++while (0);
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/completion/typed-negative-zero`
+
+- tags: `1 iteration`
+- size: oxc 31 vs reference 41 (no whitespaces: -10, formatted: -16)
+
+```js
+var value;
+do {
+	value = -0;
+	break;
+} while (false);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+ var value;
+-do {
++do
+ 	value = -0;
+-	break;
+-} while (false);
++while (0);
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/completion/typed-null`
+
+- tags: `1 iteration`
+- size: oxc 33 vs reference 43 (no whitespaces: -10, formatted: -16)
+
+```js
+var value;
+do {
+	value = null;
+	break;
+} while (false);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+ var value;
+-do {
++do
+ 	value = null;
+-	break;
+-} while (false);
++while (0);
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/completion/typed-positive-zero`
+
+- tags: `1 iteration`
+- size: oxc 30 vs reference 40 (no whitespaces: -10, formatted: -16)
+
+```js
+var value;
+do {
+	value = 0;
+	break;
+} while (false);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+ var value;
+-do {
++do
+ 	value = 0;
+-	break;
+-} while (false);
++while (0);
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/completion/typed-string-number`
+
+- tags: `mangle`, `keep function names`, `keep class names`, `1 iteration`
+- size: oxc 24 vs reference 34 (no whitespaces: -10, formatted: -16)
+
+```js
+var value;
+do {
+	value = '2';
+	break;
+} while (false);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+-var a;
+-do {
+-	a = '2';
+-	break;
+-} while (false);
++var e;
++do
++	e = '2';
++while (0);
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/completion/typed-string-undefined`
+
+- tags: `1 iteration`
+- size: oxc 40 vs reference 50 (no whitespaces: -10, formatted: -16)
+
+```js
+var value;
+do {
+	value = 'undefined';
+	break;
+} while (false);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+ var value;
+-do {
++do
+ 	value = 'undefined';
+-	break;
+-} while (false);
++while (0);
 
 ```
 
@@ -1616,6 +2444,48 @@ export function bar() {
 
 ```
 
+## `swc/issues/12226`
+
+- tags: `sequences`
+- size: oxc 357 vs reference 369 (no whitespaces: -12, formatted: -11)
+
+```js
+try {
+	console.log((console.log('sequence'), ((a) => 1)(missing)));
+} catch (error) {
+	console.log(error.name);
+}
+try {
+	console.log(((a) => 1)(missing));
+} catch (error) {
+	console.log(error.name);
+}
+const object = { get value() {
+	console.log('getter');
+	return 1;
+} };
+console.log((console.log('member'), ((a) => 1)(object.value)));
+console.log((console.log('no-argument'), (() => 2)()));
+console.log((console.log('primitive'), ((a) => a)(3)));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -8,7 +8,6 @@
+ } catch (error) {
+ 	console.log(error.name);
+ }
+-const object = { get value() {
++console.log((console.log('member'), ((a) => 1)({ get value() {
+ 	return console.log('getter'), 1;
+-} };
+-console.log((console.log('member'), ((a) => 1)(object.value))), console.log((console.log('no-argument'), 2)), console.log((console.log('primitive'), 3));
++} }.value))), console.log((console.log('no-argument'), 2)), console.log((console.log('primitive'), ((a) => a)(3)));
+
+```
+
 ## `swc/issues/6628`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -1666,6 +2536,87 @@ export function bar() {
  	Collector.usePlugin(CepRule, 'cep'), exports.Collector = Collector;
 -}();
 +})();
+
+```
+
+## `swc/issues/do-while-false-hoisted-bindings`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
+- size: oxc 423 vs reference 435 (no whitespaces: -12, formatted: -12)
+
+```js
+var shared = 'outer';
+function directReadAfterBreak() {
+	do {
+		break;
+		var local = 'unreachable';
+	} while (false);
+	return local;
+}
+function shadowAfterContinue() {
+	do {
+		continue;
+		var shared = 'unreachable';
+	} while (false);
+	return shared;
+}
+function capturedBinding() {
+	var read = function() {
+		return shared;
+	};
+	do {
+		break;
+		var shared = 'unreachable';
+	} while (false);
+	return read;
+}
+console.log(directReadAfterBreak() === undefined);
+console.log(shadowAfterContinue() === undefined);
+console.log(capturedBinding()() === undefined);
+console.log(shared);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,16 +1,16 @@
+ var shared = 'outer';
+ function directReadAfterBreak() {
+ 	do {
+-		var local;
+ 		break;
+-	} while (false);
++		var local;
++	} while (0);
+ 	return local;
+ }
+ function shadowAfterContinue() {
+ 	do {
+-		var shared;
+ 		continue;
+-	} while (false);
++		var shared;
++	} while (0);
+ 	return shared;
+ }
+ function capturedBinding() {
+@@ -18,12 +18,9 @@
+ 		return shared;
+ 	};
+ 	do {
+-		var shared;
+ 		break;
+-	} while (false);
++		var shared;
++	} while (0);
+ 	return read;
+ }
+-console.log(void 0 === directReadAfterBreak());
+-console.log(void 0 === shadowAfterContinue());
+-console.log(void 0 === capturedBinding()());
+-console.log(shared);
++console.log(directReadAfterBreak() === void 0), console.log(shadowAfterContinue() === void 0), console.log(capturedBinding()() === void 0), console.log(shared);
 
 ```
 
@@ -1736,6 +2687,35 @@ arr.forEach(() => {});
 -let arr = ['foo'];
 -arr.forEach(() => {});
 +['foo'].forEach(() => {});
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/completion/typed-boolean`
+
+- tags: `1 iteration`
+- size: oxc 31 vs reference 44 (no whitespaces: -13, formatted: -19)
+
+```js
+var value;
+do {
+	value = false;
+	break;
+} while (false);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+ var value;
+-do {
+-	value = false;
+-	break;
+-} while (false);
++do
++	value = !1;
++while (0);
 
 ```
 
@@ -1824,6 +2804,55 @@ const k = (() => {
 @@ -1,2 +0,0 @@
 -let x;
 -x?.x?.();
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/guarded-rejected`
+
+- tags: `1 iteration`
+- size: oxc 283 vs reference 298 (no whitespaces: -15, formatted: -19)
+
+```js
+function alternateBranch(stop) {
+	var events = [];
+	try {
+		do {
+			if (stop) throw 'stop';
+			else events.push('alternate');
+			events.push('body');
+			break;
+		} while (false);
+		events.push('tail');
+	} catch (error) {
+		events.push('caught:' + error);
+	}
+	return events.join('|');
+}
+console.log(alternateBranch(false));
+console.log(alternateBranch(true));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -5,13 +5,12 @@
+ 			if (stop) throw 'stop';
+ 			else events.push('alternate');
+ 			events.push('body');
+-			break;
+-		} while (false);
++		} while (0);
+ 		events.push('tail');
+ 	} catch (error) {
+ 		events.push('caught:' + error);
+ 	}
+ 	return events.join('|');
+ }
+-console.log(alternateBranch(false));
+-console.log(alternateBranch(true));
++console.log(alternateBranch(!1));
++console.log(alternateBranch(!0));
 
 ```
 
@@ -1929,6 +2958,129 @@ console.log(a);
 
 ```
 
+## `swc/issues/do-while-false-terminal-jump/completion/assignment-break`
+
+- tags: `1 iteration`
+- size: oxc 32 vs reference 48 (no whitespaces: -16, formatted: -23)
+
+```js
+var value;
+value = 1;
+do {
+	value = 2;
+	break;
+} while (false);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,4 @@
+-var value;
+-value = 1;
+-do {
++var value = 1;
++do
+ 	value = 2;
+-	break;
+-} while (false);
++while (0);
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/completion/empty-break`
+
+- tags: `1 iteration`
+- size: oxc 24 vs reference 40 (no whitespaces: -16, formatted: -22)
+
+```js
+var value;
+value = 1;
+do {
+	break;
+} while (false);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,3 @@
+-var value;
+-value = 1;
+-do {
+-	break;
+-} while (false);
++var value = 1;
++do;
++while (0);
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/completion/guard-before-expression`
+
+- tags: `1 iteration`
+- size: oxc 77 vs reference 93 (no whitespaces: -16, formatted: -19)
+
+```js
+var value, checked;
+value = 1;
+do {
+	if ((checked = 2) < 0) throw 'stop';
+	value = checked + 1;
+	break;
+} while (false);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,5 @@
+-var value, checked;
+-value = 1;
++var value = 1, checked;
+ do {
+ 	if ((checked = 2) < 0) throw 'stop';
+ 	value = checked + 1;
+-	break;
+-} while (false);
++} while (0);
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/completion/undefined-break`
+
+- tags: `1 iteration`
+- size: oxc 37 vs reference 53 (no whitespaces: -16, formatted: -23)
+
+```js
+var value;
+value = 1;
+do {
+	value = undefined;
+	break;
+} while (false);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,4 @@
+-var value;
+-value = 1;
+-do {
++var value = 1;
++do
+ 	value = void 0;
+-	break;
+-} while (false);
++while (0);
+
+```
+
 ## `swc/simple/if/block/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -1953,6 +3105,105 @@ if (a) {
 -	if (b) var _2 = console.log('bar');
 -}
 +a && (console.log('foo'), b && console.log('bar'));
+
+```
+
+## `swc/issues/12208/short-circuit`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 40 vs reference 57 (no whitespaces: -17, formatted: -20)
+
+```js
+const value = null;
+console.log(value?.x.y);
+console.log(value?.x());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-const value = null;
+ console.log(void 0), console.log(void 0);
+
+```
+
+## `swc/issues/12282/call`
+
+- tags: `join vars`, `keep function names`
+- size: oxc 394 vs reference 411 (no whitespaces: -17, formatted: -16)
+
+```js
+function foo(data) {
+	const mutable = [];
+	function f(x) {
+		mutable.push(x);
+		return x + 1;
+	}
+	const processed = data.map((x) => f(x));
+	return Array.of(...mutable, processed);
+}
+class Pair {
+	constructor(...values) {
+		this.values = values;
+	}
+}
+function bar(data) {
+	const mutable = [];
+	function f(x) {
+		mutable.push(x);
+		return x + 1;
+	}
+	const processed = data.map((x) => f(x));
+	return new Pair(...mutable, processed).values;
+}
+console.log(foo([
+	1,
+	2,
+	3
+]));
+console.log(bar([
+	1,
+	2,
+	3
+]));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,11 @@
+ function foo(data) {
+-	const mutable = [];
++	let mutable = [];
+ 	function f(x) {
+ 		mutable.push(x);
+ 		return x + 1;
+ 	}
+-	const processed = data.map((x) => f(x));
+-	return Array.of(...mutable, processed);
++	let processed = data.map((x) => f(x));
++	return [...mutable, processed];
+ }
+ class Pair {
+ 	constructor(...values) {
+@@ -13,12 +13,12 @@
+ 	}
+ }
+ function bar(data) {
+-	const mutable = [];
++	let mutable = [];
+ 	function f(x) {
+ 		mutable.push(x);
+ 		return x + 1;
+ 	}
+-	const processed = data.map((x) => f(x));
++	let processed = data.map((x) => f(x));
+ 	return new Pair(...mutable, processed).values;
+ }
+ console.log(foo([
 
 ```
 
@@ -2040,6 +3291,99 @@ assert.strictEqual(result, 3);
 
 ```
 
+## `swc/issues/do-while-false-terminal-jump/completion/debugger-continue`
+
+- tags: `1 iteration`
+- size: oxc 41 vs reference 60 (no whitespaces: -19, formatted: -22)
+
+```js
+var value;
+value = 1;
+do {
+	value = 2;
+	debugger;
+	continue;
+} while (false);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,5 @@
+-var value;
+-value = 1;
++var value = 1;
+ do {
+ 	value = 2;
+ 	debugger;
+-	continue;
+-} while (false);
++} while (0);
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/completion/empty-continue`
+
+- tags: `1 iteration`
+- size: oxc 24 vs reference 43 (no whitespaces: -19, formatted: -25)
+
+```js
+var value;
+value = 1;
+do {
+	continue;
+} while (false);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,3 @@
+-var value;
+-value = 1;
+-do {
+-	continue;
+-} while (false);
++var value = 1;
++do;
++while (0);
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/completion/guard-after-expression`
+
+- tags: `1 iteration`
+- size: oxc 59 vs reference 78 (no whitespaces: -19, formatted: -22)
+
+```js
+var value;
+value = 1;
+do {
+	value = 2;
+	if ((value = 3) < 0) throw 'stop';
+	continue;
+} while (false);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,5 @@
+-var value;
+-value = 1;
++var value = 1;
+ do {
+ 	value = 2;
+ 	if ((value = 3) < 0) throw 'stop';
+-	continue;
+-} while (false);
++} while (0);
+
+```
+
 ## `swc/projects/mootools/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -2056,6 +3400,224 @@ var isType = object != Object;
 @@ -1 +1 @@
 -var isType = object != Object;
 +object;
+
+```
+
+## `swc/issues/12228/disabled`
+
+- size: oxc 119 vs reference 139 (no whitespaces: -20, formatted: -23)
+
+```js
+const values = { *[Symbol.iterator]() {
+	console.log('iterated');
+	yield 'value';
+} };
+Symbol(...values);
+console.log(Symbol('description').description);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,5 @@
+-const values = { *[Symbol.iterator]() {
++Symbol(...{ *[Symbol.iterator]() {
+ 	console.log('iterated');
+ 	yield 'value';
+-} };
+-Symbol(...values);
++} });
+ console.log(Symbol('description').description);
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/completion/unused-prefix-break`
+
+- tags: `remove unused`, `1 iteration`
+- size: oxc 12 vs reference 32 (no whitespaces: -20, formatted: -25)
+
+```js
+var x;
+x = 1;
+do {
+	void function() {};
+	break;
+} while (false);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,2 @@
+-var x;
+-x = 1;
+-do
+-	break;
+-while (false);
++do;
++while (0);
+
+```
+
+## `swc/collapse-vars/cascade-statement/bailouts`
+
+- tags: `join vars`
+- size: oxc 594 vs reference 617 (no whitespaces: -23, formatted: -33)
+
+```js
+function barrier() {
+	var c = 0;
+	function read() {
+		console.log('before', c);
+		return 1;
+	}
+	return c = 2, read() + c;
+}
+console.log('barrier', barrier());
+function shortCircuit(flag) {
+	var c;
+	c = 3, flag && c;
+	console.log('short', c);
+}
+shortCircuit(false);
+function protectedBinding() {
+	const c = 0;
+	try {
+		return c = 1, c || 2;
+	} catch (error) {
+		console.log('const', error instanceof TypeError, c);
+	}
+}
+protectedBinding();
+function directEval() {
+	var c = 0;
+	c = 4, eval('console.log(\'eval\', c)');
+}
+directEval();
+function protectedCall(fn) {
+	var c;
+	c = fn, c();
+}
+protectedCall(function() {
+	console.log('protected call');
+});
+function argumentsValue() {
+	var c;
+	return c = arguments, c[0];
+}
+console.log('arguments', argumentsValue(5));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -10,7 +10,7 @@
+ function shortCircuit(flag) {
+ 	console.log('short', 3);
+ }
+-shortCircuit(false);
++shortCircuit(!1);
+ function protectedBinding() {
+ 	const c = 0;
+ 	try {
+@@ -26,14 +26,12 @@
+ }
+ directEval();
+ function protectedCall(fn) {
+-	var c;
+-	c = fn, c();
++	fn();
+ }
+ protectedCall(function() {
+ 	console.log('protected call');
+ });
+ function argumentsValue() {
+-	var c;
+-	return c = arguments, c[0];
++	return arguments[0];
+ }
+ console.log('arguments', argumentsValue(5));
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/completion/unused-prefix-continue`
+
+- tags: `remove unused`, `1 iteration`
+- size: oxc 12 vs reference 35 (no whitespaces: -23, formatted: -28)
+
+```js
+var x;
+x = 1;
+do {
+	void function() {};
+	continue;
+} while (false);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,2 @@
+-var x;
+-x = 1;
+-do
+-	continue;
+-while (false);
++do;
++while (0);
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/loops-disabled`
+
+- tags: `1 iteration`
+- size: oxc 214 vs reference 237 (no whitespaces: -23, formatted: -37)
+
+```js
+function disabledLoops() {
+	var events = [];
+	do {
+		events.push('break');
+		break;
+	} while (false);
+	events.push('first tail');
+	do {
+		events.push('continue');
+		continue;
+	} while (false);
+	events.push('second tail');
+	return events.join('|');
+}
+console.log(disabledLoops());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,14 +1,12 @@
+ function disabledLoops() {
+ 	var events = [];
+-	do {
++	do
+ 		events.push('break');
+-		break;
+-	} while (false);
++	while (0);
+ 	events.push('first tail');
+-	do {
++	do
+ 		events.push('continue');
+-		continue;
+-	} while (false);
++	while (0);
+ 	events.push('second tail');
+ 	return events.join('|');
+ }
 
 ```
 
@@ -2132,6 +3694,70 @@ use((function(__unused_webpack_module, exports, __webpack_require__) {
 -});
 +	}));
 +}));
+
+```
+
+## `swc/issues/12218/dynamic-spread`
+
+- tags: `remove unused`
+- size: oxc 319 vs reference 343 (no whitespaces: -24, formatted: -26)
+
+```js
+function run(values) {
+	return (function(a, b, c) {
+		return [a, c];
+	})(...values, 3);
+}
+const events = [];
+const values = { [Symbol.iterator]() {
+	events.push('iterator');
+	let index = 0;
+	return { next() {
+		events.push(`next:${index}`);
+		if (index < 2) {
+			return {
+				value: ++index,
+				done: false
+			};
+		}
+		return { done: true };
+	} };
+} };
+const result = run(values);
+console.log(events.join(','), JSON.stringify(result));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,20 +1,19 @@
+ function run(values) {
+-	return function(a, b, c) {
++	return (function(a, b, c) {
+ 		return [a, c];
+-	}(...values, 3);
++	})(...values, 3);
+ }
+ const events = [];
+-const values = { [Symbol.iterator]() {
++const result = run({ [Symbol.iterator]() {
+ 	events.push('iterator');
+ 	let index = 0;
+ 	return { next() {
+ 		events.push(`next:${index}`);
+ 		if (index < 2) return {
+ 			value: ++index,
+-			done: false
++			done: !1
+ 		};
+-		return { done: true };
++		return { done: !0 };
+ 	} };
+-} };
+-const result = run(values);
++} });
+ console.log(events.join(','), JSON.stringify(result));
 
 ```
 
@@ -2431,6 +4057,211 @@ console.log('hoist after break', hoistAfterBreak());
 ... [truncated]
 ```
 
+## `swc/issues/12182/callee-safety/nested-values`
+
+- size: oxc 270 vs reference 298 (no whitespaces: -28, formatted: -21)
+
+```js
+function work() {
+	console.log('run');
+}
+const tag = 'metadata';
+const candidate = {
+	run: () => work(),
+	objectMeta: { value: tag },
+	arrayMeta: [tag],
+	negatedMeta: !tag
+};
+candidate.run();
+console.log(candidate.objectMeta.value);
+console.log(candidate.arrayMeta[0]);
+console.log(candidate.negatedMeta);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,8 +2,13 @@
+ 	console.log('run');
+ }
+ const tag = 'metadata';
+-const candidate_run = () => work(), candidate_objectMeta_value = tag, candidate_arrayMeta = [tag], candidate_negatedMeta = !tag;
+-candidate_run();
+-console.log(candidate_objectMeta_value);
+-console.log(candidate_arrayMeta[0]);
+-console.log(candidate_negatedMeta);
++const candidate = {
++	run: () => work(),
++	objectMeta: { value: tag },
++	arrayMeta: [tag],
++	negatedMeta: !1
++};
++candidate.run();
++console.log(candidate.objectMeta.value);
++console.log(candidate.arrayMeta[0]);
++console.log(candidate.negatedMeta);
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/completion/call-continue`
+
+- tags: `1 iteration`
+- size: oxc 48 vs reference 77 (no whitespaces: -29, formatted: -37)
+
+```js
+function record(value) {
+	return value;
+}
+record(1);
+do {
+	record(7);
+	continue;
+} while (0);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,5 @@
+ function record(value) {
+ 	return value;
+ }
+-record(1);
+-do {
+-	record(7);
+-	continue;
+-} while (0);
++do;
++while (0);
+
+```
+
+## `swc/issues/12218/leading-argument`
+
+- tags: `remove unused`
+- size: oxc 58 vs reference 89 (no whitespaces: -31, formatted: -34)
+
+```js
+const value = 1;
+const values = [2, 3];
+(function(unused, used) {
+	console.log(used);
+})({ large: value }, ...values);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,3 @@
+-const value = 1;
+-const values = [2, 3];
+ (function(unused, used) {
+ 	console.log(used);
+-})(0, ...values);
++})({ large: 1 }, 2, 3);
+
+```
+
+## `swc/issues/12313`
+
+- size: oxc 619 vs reference 651 (no whitespaces: -32, formatted: -32)
+
+```js
+var key = 'flag';
+var obj = { flag: 1 };
+obj['flag']++;
+console.log(obj[key]);
+obj['flag']++;
+console.log(obj[key]);
+console.log(++obj['flag']);
+console.log(obj['flag']--);
+console.log(--obj['flag']);
+obj.flag++;
+console.log(obj[key]);
+function updateLocal(obj) {
+	obj['flag']++;
+	obj.flag--;
+	return obj['flag'];
+}
+console.log(updateLocal({ flag: 1 }));
+console.log(obj['flag']);
+obj[KEY]++;
+console.log(obj[key]);
+this.flag = 1;
+this[KEY]++;
+console.log(this.flag);
+function getObject() {
+	return obj;
+}
+getObject()[KEY]++;
+console.log(obj[key]);
+(getObject?.())[KEY]++;
+console.log(obj[key]);
+({ flag: 1 })[KEY]++;
+var nested = { flag: { value: 1 } };
+nested[KEY].value++;
+console.log(nested.flag.value);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,34 +1,34 @@
+ var key = 'flag';
+ var obj = { flag: 1 };
+-obj['flag']++;
++obj.flag++;
+ console.log(obj[key]);
+-obj['flag']++;
++obj.flag++;
+ console.log(obj[key]);
+-console.log(++obj['flag']);
+-console.log(obj['flag']--);
+-console.log(--obj['flag']);
++console.log(++obj.flag);
++console.log(obj.flag--);
++console.log(--obj.flag);
+ obj.flag++;
+ console.log(obj[key]);
+ function updateLocal(obj) {
+-	obj['flag']++;
++	obj.flag++;
+ 	obj.flag--;
+-	return obj['flag'];
++	return obj.flag;
+ }
+ console.log(updateLocal({ flag: 1 }));
+-console.log(1);
+-obj['flag']++;
++console.log(obj.flag);
++obj[KEY]++;
+ console.log(obj[key]);
+ this.flag = 1;
+-this['flag']++;
++this[KEY]++;
+ console.log(this.flag);
+ function getObject() {
+ 	return obj;
+ }
+-getObject()['flag']++;
++getObject()[KEY]++;
+ console.log(obj[key]);
+-(getObject?.())['flag']++;
++(getObject?.())[KEY]++;
+ console.log(obj[key]);
+-({ flag: 1 })['flag']++;
++({ flag: 1 })[KEY]++;
+ var nested = { flag: { value: 1 } };
+-nested['flag'].value++;
++nested[KEY].value++;
+ console.log(nested.flag.value);
+
+```
+
 ## `swc/simple/order/fn/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -2450,6 +4281,108 @@ function bar() {}
 -function foo() {}
 -function bar() {}
  console.log('foo');
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/guarded-jump`
+
+- tags: `1 iteration`
+- size: oxc 934 vs reference 967 (no whitespaces: -33, formatted: -45)
+
+```js
+function guardedBreak(value) {
+	var events = [];
+	try {
+		do {
+			if (events.push('guard'), value == null) throw events.push('throw value'), 'null';
+			events.push('work:' + value);
+			break;
+		} while (false);
+		events.push('tail');
+	} catch (error) {
+		events.push('caught:' + error);
+	}
+	return events.join('|');
+}
+function guardedContinue(value) {
+	var events = [];
+	try {
+		do {
+			if (events.push('guard'), value == null) throw events.push('throw value'), 'null';
+			events.push('work:' + value);
+			continue;
+		} while (false);
+		events.push('tail');
+	} catch (error) {
+		events.push('caught:' + error);
+	}
+	return events.join('|');
+}
+function throwingCondition() {
+	var events = [];
+	function check() {
+		events.push('check');
+		throw 'condition';
+	}
+	try {
+		do {
+			if (check()) throw 'wrong throw value';
+			events.push('wrong body');
+			break;
+		} while (false);
+		events.push('wrong tail');
+	} catch (error) {
+		events.push('caught:' + error);
+	}
+	return events.join('|');
+}
+console.log(guardedBreak('ok'));
+console.log(guardedBreak(null));
+console.log(guardedContinue('ok'));
+console.log(guardedContinue(null));
+console.log(throwingCondition());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,10 +2,9 @@
+ 	var events = [];
+ 	try {
+ 		do {
+-			if (events.push('guard'), null == value) throw events.push('throw value'), 'null';
++			if (events.push('guard'), value == null) throw events.push('throw value'), 'null';
+ 			events.push('work:' + value);
+-			break;
+-		} while (false);
++		} while (0);
+ 		events.push('tail');
+ 	} catch (error) {
+ 		events.push('caught:' + error);
+@@ -16,10 +15,9 @@
+ 	var events = [];
+ 	try {
+ 		do {
+-			if (events.push('guard'), null == value) throw events.push('throw value'), 'null';
++			if (events.push('guard'), value == null) throw events.push('throw value'), 'null';
+ 			events.push('work:' + value);
+-			continue;
+-		} while (false);
++		} while (0);
+ 		events.push('tail');
+ 	} catch (error) {
+ 		events.push('caught:' + error);
+@@ -36,8 +34,7 @@
+ 		do {
+ 			if (check()) throw 'wrong throw value';
+ 			events.push('wrong body');
+-			break;
+-		} while (false);
++		} while (0);
+ 		events.push('wrong tail');
+ 	} catch (error) {
+ 		events.push('caught:' + error);
 
 ```
 
@@ -2615,6 +4548,121 @@ Object.assign(b, a);
 
 ```
 
+## `swc/issues/12182/callee-safety/lexical-this`
+
+- size: oxc 132 vs reference 169 (no whitespaces: -37, formatted: -37)
+
+```js
+function readLexicalReceiver() {
+	const lexicalReceiver = { read: () => this.value };
+	return lexicalReceiver.read();
+}
+console.log(readLexicalReceiver.call({ value: 'lexical receiver' }));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+ function readLexicalReceiver() {
+-	const lexicalReceiver_read = () => this.value;
+-	return lexicalReceiver_read();
++	return { read: () => this.value }.read();
+ }
+ console.log(readLexicalReceiver.call({ value: 'lexical receiver' }));
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/skipped-scopes`
+
+- tags: `1 iteration`
+- size: oxc 384 vs reference 421 (no whitespaces: -37, formatted: -68)
+
+```js
+var events = [];
+do {
+	events.push('outside');
+	break;
+} while (false);
+function withScope() {
+	var count = 0;
+	try {
+		with({ undefined: true }) {
+			do {
+				count++;
+				if (count > 1) throw 'stopped';
+				continue;
+			} while (undefined);
+		}
+	} catch (error) {
+		events.push(error + ':' + count);
+	}
+}
+function asmScope() {
+	'use asm';
+	function once(value) {
+		value = value | 0;
+		do {
+			value = value + 1 | 0;
+			break;
+		} while (0);
+		return value | 0;
+	}
+	return once;
+}
+withScope();
+console.log(events.join('|'));
+console.log(asmScope()(2));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,18 +1,14 @@
+ var events = [];
+-do {
++do
+ 	events.push('outside');
+-	break;
+-} while (false);
++while (0);
+ function withScope() {
+ 	var count = 0;
+ 	try {
+-		with({ undefined: true }) {
+-			do {
+-				count++;
+-				if (count > 1) throw 'stopped';
+-				continue;
+-			} while (undefined);
+-		}
++		with({ undefined: !0 }) do {
++			count++;
++			if (count > 1) throw 'stopped';
++		} while (void 0);
+ 	} catch (error) {
+ 		events.push(error + ':' + count);
+ 	}
+@@ -20,11 +16,10 @@
+ function asmScope() {
+ 	'use asm';
+ 	function once(value) {
+-		value = value | 0;
+-		do {
++		value |= 0;
++		do
+ 			value = value + 1 | 0;
+-			break;
+-		} while (0);
++		while (0);
+ 		return value | 0;
+ 	}
+ 	return once;
+
+```
+
 ## `swc/issues/drop-console-nullish-console`
 
 - tags: `drop console`, `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -2691,6 +4739,53 @@ console.log(a, b, c);
 +import H, { default as E, 'default' as F, a, b, c } from 'q.js';
 +import * as ns2 from 'q.js';
  console.log(A, B, C, D, E, F, G, H), console.log(X, Y), console.log(foo, bar), console.log(ns1, ns2), console.log(a, b, c);
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/repeated-directive`
+
+- tags: `1 iteration`
+- size: oxc 80 vs reference 122 (no whitespaces: -42, formatted: -61)
+
+```js
+function f() {
+	({ a: class {
+		static {
+			do {
+				(function() {});
+				break;
+			} while (false);
+		}
+	} });
+	'use strict';
+	return this === undefined;
+}
+console.log(f());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,13 +1,10 @@
+ function f() {
+-	({ a: class {
++	(class {
+ 		static {
+-			do {
+-				(function() {});
+-				break;
+-			} while (false);
++			do			;
++while (0);
+ 		}
+-	} });
+-	'use strict';
+-	return void 0 === this;
++	});
++	return this === void 0;
+ }
+ console.log(f());
 
 ```
 
@@ -2780,6 +4875,40 @@ var application;
 
 ```
 
+## `swc/issues/do-while-false-terminal-jump/completion/conditional-parent`
+
+- tags: `1 iteration`
+- size: oxc 24 vs reference 71 (no whitespaces: -47, formatted: -62)
+
+```js
+var flag = false;
+var value;
+value = 1;
+if (flag) {
+	do {
+		value = 2;
+		break;
+	} while (false);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,2 @@
+-var flag = false;
+-var value;
+-value = 1;
+-if (flag) do {
+-	value = 2;
+-	break;
+-} while (false);
++var flag = !1;
++var value = 1;
+
+```
+
 ## `swc/simple/super/computed`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -2804,6 +4933,126 @@ class A extends B {
 -	}
 -}
 +B;
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/side-effects`
+
+- tags: `1 iteration`
+- size: oxc 717 vs reference 767 (no whitespaces: -50, formatted: -81)
+
+```js
+function conditionEffects() {
+	var events = [];
+	do {
+		events.push('break body');
+		break;
+	} while (events.push('wrong condition'), false);
+	do {
+		events.push('continue body');
+		continue;
+	} while (events.push('continue condition'), false);
+	events.push('tail');
+	return events.join('|');
+}
+function prefixThrows() {
+	var events = [];
+	function fail() {
+		events.push('call');
+		throw 'failure';
+	}
+	try {
+		do {
+			fail();
+			break;
+		} while (false);
+		events.push('wrong break tail');
+	} catch (error) {
+		events.push(error);
+	}
+	try {
+		do {
+			fail();
+			continue;
+		} while (false);
+		events.push('wrong continue tail');
+	} catch (error) {
+		events.push(error);
+	}
+	return events.join('|');
+}
+function explicitThrow() {
+	try {
+		do {
+			throw 'explicit';
+			break;
+		} while (false);
+	} catch (error) {
+		return error;
+	}
+	return 'wrong tail';
+}
+console.log(conditionEffects());
+console.log(prefixThrows());
+console.log(explicitThrow());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -3,11 +3,10 @@
+ 	do {
+ 		events.push('break body');
+ 		break;
+-	} while (events.push('wrong condition'), false);
+-	do {
++	} while (events.push('wrong condition'), 0);
++	do
+ 		events.push('continue body');
+-		continue;
+-	} while (events.push('continue condition'), false);
++	while (events.push('continue condition'), 0);
+ 	events.push('tail');
+ 	return events.join('|');
+ }
+@@ -18,19 +17,17 @@
+ 		throw 'failure';
+ 	}
+ 	try {
+-		do {
++		do
+ 			fail();
+-			break;
+-		} while (false);
++		while (0);
+ 		events.push('wrong break tail');
+ 	} catch (error) {
+ 		events.push(error);
+ 	}
+ 	try {
+-		do {
++		do
+ 			fail();
+-			continue;
+-		} while (false);
++		while (0);
+ 		events.push('wrong continue tail');
+ 	} catch (error) {
+ 		events.push(error);
+@@ -39,10 +36,9 @@
+ }
+ function explicitThrow() {
+ 	try {
+-		do {
++		do
+ 			throw 'explicit';
+-			break;
+-		} while (false);
++		while (0);
+ 	} catch (error) {
+ 		return error;
+ 	}
 
 ```
 
@@ -2867,6 +5116,115 @@ console.log(thing, renamedThing, otherThing);
 
 ```
 
+## `swc/issues/12193`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 576 vs reference 627 (no whitespaces: -51, formatted: -51)
+
+```js
+function returnBeforeFinally() {
+	var value = 1;
+	try {
+		throw 0;
+	} catch (error) {
+		return value;
+	} finally {
+		value = 2;
+	}
+	return value;
+}
+function sideEffectBeforeFinally() {
+	var effects = [];
+	try {
+		throw 0;
+	} catch (error) {
+		return effects.push('catch');
+	} finally {
+		effects.push('finally');
+	}
+	return effects.push('tail');
+}
+function sideEffect() {
+	console.log('side effect');
+	return 1;
+}
+function sideEffectWithoutFinally() {
+	try {
+		throw 0;
+	} catch (error) {
+		return sideEffect();
+	}
+	return sideEffect();
+}
+function safeWithoutFinally() {
+	var value = 1;
+	try {
+		throw 0;
+	} catch (error) {
+		return value;
+	}
+	return value;
+}
+console.log(returnBeforeFinally());
+console.log(sideEffectBeforeFinally());
+console.log(sideEffectWithoutFinally());
+console.log(safeWithoutFinally());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,23 +2,21 @@
+ 	var value = 1;
+ 	try {
+ 		throw 0;
+-	} catch (error) {
++	} catch {
+ 		return value;
+ 	} finally {
+ 		value = 2;
+ 	}
+-	return value;
+ }
+ function sideEffectBeforeFinally() {
+ 	var effects = [];
+ 	try {
+ 		throw 0;
+-	} catch (error) {
++	} catch {
+ 		return effects.push('catch');
+ 	} finally {
+ 		effects.push('finally');
+ 	}
+-	return effects.push('tail');
+ }
+ function sideEffect() {
+ 	return console.log('side effect'), 1;
+@@ -26,13 +24,16 @@
+ function sideEffectWithoutFinally() {
+ 	try {
+ 		throw 0;
+-	} catch (error) {}
+-	return sideEffect();
++	} catch {
++		return sideEffect();
++	}
+ }
+ function safeWithoutFinally() {
++	var value = 1;
+ 	try {
+ 		throw 0;
+-	} catch (error) {}
+-	return 1;
++	} catch {
++		return value;
++	}
+ }
+ console.log(returnBeforeFinally()), console.log(sideEffectBeforeFinally()), console.log(sideEffectWithoutFinally()), console.log(safeWithoutFinally());
+
+```
+
 ## `swc/issues/9741_global_objects`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -2893,6 +5251,222 @@ const j = new Set();
 +++ oxc
 @@ -1 +0,0 @@
 -// Map needs 5+ usages due to short name (3 chars)
+
+```
+
+## `swc/issues/12204/observable-iterables`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 527 vs reference 579 (no whitespaces: -52, formatted: -44)
+
+```js
+function* setGenerator() {
+	console.log('set generator');
+	yield 1;
+}
+new Set(setGenerator());
+function* mapGenerator() {
+	console.log('map generator');
+	yield ['key', 'value'];
+}
+new Map(mapGenerator());
+const setIterator = { [Symbol.iterator]() {
+	console.log('set iterator');
+	let first = true;
+	return { next() {
+		console.log('set next');
+		if (first) {
+			first = false;
+			return {
+				done: false,
+				value: 1
+			};
+		}
+		return { done: true };
+	} };
+} };
+new Set(setIterator);
+const mapIterator = { [Symbol.iterator]() {
+	console.log('map iterator');
+	let first = true;
+	return { next() {
+		console.log('map next');
+		if (first) {
+			first = false;
+			return {
+				done: false,
+				value: ['key', 'value']
+			};
+		}
+		return { done: true };
+	} };
+} };
+new Map(mapIterator);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,25 +1,26 @@
+ function* setGenerator() {
+ 	console.log('set generator'), yield 1;
+ }
++new Set(setGenerator());
+ function* mapGenerator() {
+ 	console.log('map generator'), yield ['key', 'value'];
+ }
+-new Set(setGenerator()), new Map(mapGenerator());
+-const setIterator = { [Symbol.iterator]() {
++new Map(mapGenerator()), new Set({ [Symbol.iterator]() {
+ 	console.log('set iterator');
+ 	let first = !0;
+-	return { next: () => (console.log('set next'), first) ? (first = !1, {
+-		done: !1,
+-		value: 1
+-	}) : { done: !0 } };
+-} };
+-new Set(setIterator);
+-const mapIterator = { [Symbol.iterator]() {
++	return { next() {
++		return console.log('set next'), first ? (first = !1, {
++			done: !1,
++			value: 1
++		}) : { done: !0 };
++	} };
++} }), new Map({ [Symbol.iterator]() {
+ 	console.log('map iterator');
+ 	let first = !0;
+-	return { next: () => (console.log('map next'), first) ? (first = !1, {
+-		done: !1,
+-		value: ['key', 'value']
+-	}) : { done: !0 } };
+-} };
+-new Map(mapIterator);
++	return { next() {
++		return console.log('map next'), first ? (first = !1, {
++			done: !1,
++			value: ['key', 'value']
++		}) : { done: !0 };
++	} };
++} });
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/scope-directives`
+
+- tags: `1 iteration`
+- size: oxc 593 vs reference 645 (no whitespaces: -52, formatted: -64)
+
+```js
+function directiveProbe() {
+	do {
+		'use strict';
+		break;
+	} while (false);
+	return this === undefined;
+}
+function mixedDirectiveProbe() {
+	do {
+		'use strict';
+		console.log('body');
+		continue;
+	} while (false);
+	return this === undefined;
+}
+function lexicalClosure() {
+	var value = 'outer';
+	var read;
+	do {
+		let value = 'inner';
+		read = function() {
+			return value;
+		};
+		break;
+	} while (false);
+	return read() + '|' + value;
+}
+function nestedFunction() {
+	var events = [];
+	do {
+		events.push((function() {
+			for (var i = 0; i < 2; i++) {
+				if (i === 0) continue;
+				break;
+			}
+			return 'function';
+		})());
+		continue;
+	} while (false);
+	events.push('tail');
+	return events.join('|');
+}
+console.log(directiveProbe());
+console.log(mixedDirectiveProbe());
+console.log(lexicalClosure());
+console.log(nestedFunction());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,17 +1,13 @@
+ function directiveProbe() {
+-	do {
+-		'use strict';
+-		break;
+-	} while (false);
+-	return void 0 === this;
++	do	;
++while (0);
++	return this === void 0;
+ }
+ function mixedDirectiveProbe() {
+-	do {
+-		'use strict';
++	do
+ 		console.log('body');
+-		continue;
+-	} while (false);
+-	return void 0 === this;
++	while (0);
++	return this === void 0;
+ }
+ function lexicalClosure() {
+ 	var value = 'outer';
+@@ -19,21 +15,22 @@
+ 	do {
+ 		let value = 'inner';
+ 		read = function() {
+-			return value;
++			return 'inner';
+ 		};
+-		break;
+-	} while (false);
++	} while (0);
+ 	return read() + '|' + value;
+ }
+ function nestedFunction() {
+ 	var events = [];
+-	do {
+-		events.push(function() {
+-			for (var i = 0; i < 2 && 0 === i; i++);
++	do
++		events.push((function() {
++			for (var i = 0; i < 2; i++) {
++				if (i === 0) continue;
++				break;
++			}
+ 			return 'function';
+-		}());
+-		continue;
+-	} while (false);
++		})());
++	while (0);
+ 	events.push('tail');
+ 	return events.join('|');
+ }
 
 ```
 
@@ -2989,6 +5563,42 @@ export function useProjectBranches(projectId, opts) {
 
 ```
 
+## `swc/issues/12201`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 249 vs reference 311 (no whitespaces: -62, formatted: -61)
+
+```js
+function printArray(array) {
+	console.log(array.length, 0 in array, array.join(','));
+}
+function fromSpreads(first, second) {
+	return Array(...first, ...second);
+}
+// Unknown spreads may produce exactly one numeric argument.
+printArray(fromSpreads([3], []));
+// Unknown spreads producing multiple elements must keep their element-list semantics.
+printArray(fromSpreads([3], [4]));
+// Literal spreads have known arity and may still use the existing folds.
+printArray(Array(...[3], ...[]));
+printArray(Array(...[3], ...[4]));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -4,7 +4,6 @@
+ function fromSpreads(first, second) {
+ 	return Array(...first, ...second);
+ }
+-// Unknown spreads may produce exactly one numeric argument.
+ printArray(fromSpreads([3], [])), printArray(fromSpreads([3], [4])), printArray([
+ 	,
+ 	,
+
+```
+
 ## `swc/projects/mootools/3`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -3041,6 +5651,88 @@ export const obj = { clone: function(dataAndEvents, deepDataAndEvents) {
  		return jQuery.clone(this, dataAndEvents, deepDataAndEvents);
  	});
  } };
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/directive-barrier`
+
+- tags: `remove unused`, `1 iteration`
+- size: oxc 283 vs reference 355 (no whitespaces: -72, formatted: -84)
+
+```js
+function directBreak() {
+	do {
+		(function() {});
+		break;
+	} while (false);
+	'use strict';
+	return this === undefined;
+}
+function nestedStringContinue() {
+	do {
+		(function() {});
+		continue;
+	} while (false);
+	{
+		{
+			;
+			'use strict';
+		}
+	}
+	return this === undefined;
+}
+function enclosingBlockBreak() {
+	{
+		do {
+			(function() {});
+			break;
+		} while (false);
+	}
+	'use strict';
+	return this === undefined;
+}
+console.log(directBreak());
+console.log(nestedStringContinue());
+console.log(enclosingBlockBreak());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,23 +1,17 @@
+ function directBreak() {
+-	do
+-		break;
+-	while (false);
+-	'use strict';
+-	return void 0 === this;
++	do	;
++while (0);
++	return this === void 0;
+ }
+ function nestedStringContinue() {
+-	do
+-		continue;
+-	while (false);
+-	'use strict';
+-	return void 0 === this;
++	do	;
++while (0);
++	return this === void 0;
+ }
+ function enclosingBlockBreak() {
+-	do
+-		break;
+-	while (false);
+-	'use strict';
+-	return void 0 === this;
++	do	;
++while (0);
++	return this === void 0;
+ }
+ console.log(directBreak());
+ console.log(nestedStringContinue());
 
 ```
 
@@ -3299,6 +5991,29 @@ function foo() {
 
 ```
 
+## `swc/issues/12373/2`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 7 vs reference 127 (no whitespaces: -120, formatted: -120)
+
+```js
+// A plain binding is not a pattern: dropping the unused binding and the
+// annotated initializer never runs user code.
+const a = x();
+log(b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1 @@
+-// A plain binding is not a pattern: dropping the unused binding and the
+-// annotated initializer never runs user code.
+ log(b);
+
+```
+
 ## `swc/issues/8119`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
@@ -3385,6 +6100,98 @@ export function example() {
 
 ```
 
+## `swc/issues/do-while-false-terminal-jump/parent-rewrites`
+
+- tags: `1 iteration`
+- size: oxc 250 vs reference 384 (no whitespaces: -134, formatted: -191)
+
+```js
+function objectParent() {
+	({ value: class {
+		static {
+			do {
+				(function() {});
+				break;
+			} while (false);
+		}
+	} });
+	'use strict';
+	return this === undefined;
+}
+function switchParent(flag) {
+	switch (flag) {
+		case 1: do {
+			(function() {});
+			break;
+		} while (false);
+		case 2: do {
+			(function() {});
+			break;
+		} while (false);
+		case 3: do {
+			(function() {});
+			break;
+		} while (false);
+	}
+	'use strict';
+	return this === undefined;
+}
+console.log(objectParent());
+console.log(switchParent(1));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,32 +1,22 @@
+ function objectParent() {
+-	({ value: class {
++	(class {
+ 		static {
+-			do {
+-				(function() {});
+-				break;
+-			} while (false);
++			do			;
++while (0);
+ 		}
+-	} });
+-	'use strict';
+-	return void 0 === this;
++	});
++	return this === void 0;
+ }
+ function switchParent(flag) {
+ 	switch (flag) {
+-		case 1: do {
+-			(function() {});
+-			break;
+-		} while (false);
+-		case 2: do {
+-			(function() {});
+-			break;
+-		} while (false);
+-		case 3: do {
+-			(function() {});
+-			break;
+-		} while (false);
++		case 1: do		;
++while (0);
++		case 2: do		;
++while (0);
++		case 3: do		;
++while (0);
+ 	}
+-	'use strict';
+-	return void 0 === this;
++	return this === void 0;
+ }
+ console.log(objectParent());
+ console.log(switchParent(1));
+
+```
+
 ## `swc/issues/7683/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -3467,6 +6274,119 @@ function exceedsLimit() {
 -function exceedsLimit() {
 -	return arguments[5];
 -}
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/condition-exceptions`
+
+- tags: `1 iteration`
+- size: oxc 289 vs reference 447 (no whitespaces: -158, formatted: -250)
+
+```js
+try {
+	do {
+		console.log('body');
+		continue;
+	} while (void class extends 0 {
+		static {
+			do {
+				(function() {});
+				break;
+			} while (false);
+		}
+	});
+	console.log('unexpected');
+} catch (e) {
+	console.log(e.name);
+}
+try {
+	do {
+		console.log('reference');
+		continue;
+	} while (void class {
+		static {
+			do {
+				({ missing });
+				break;
+			} while (false);
+		}
+	});
+	console.log('unexpected');
+} catch (e) {
+	console.log(e.name);
+}
+do {
+	console.log('break');
+	break;
+} while (void class extends 0 {
+	static {
+		do {
+			(function() {});
+			break;
+		} while (false);
+	}
+});
+console.log('after');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,44 +1,26 @@
+ try {
+-	do {
++	do
+ 		console.log('body');
+-		continue;
+-	} while (void class extends 0 {
+-		static {
+-			do {
+-				(function() {});
+-				break;
+-			} while (false);
+-		}
+-	});
++	while (void 0);
+ 	console.log('unexpected');
+ } catch (e) {
+ 	console.log(e.name);
+ }
+ try {
+-	do {
++	do
+ 		console.log('reference');
+-		continue;
+-	} while (void class {
++	while (void class {
+ 		static {
+-			do {
+-				({ missing });
+-				break;
+-			} while (false);
++			do
++				missing;
++			while (0);
+ 		}
+ 	});
+ 	console.log('unexpected');
+ } catch (e) {
+ 	console.log(e.name);
+ }
+-do {
++do
+ 	console.log('break');
+-	break;
+-} while (void class extends 0 {
+-	static {
+-		do {
+-			(function() {});
+-			break;
+-		} while (false);
+-	}
+-});
++while (void 0);
+ console.log('after');
 
 ```
 

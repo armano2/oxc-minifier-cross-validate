@@ -1,8 +1,63 @@
 # swc / not-idempotent — Not idempotent (re-compressing changes the output)
 
-Fixtures: 2
+Fixtures: 3
 
 [← swc](README.md) · [← all families](../README.md)
+
+## `swc/issues/12214`
+
+
+```js
+const __proto__ = 0;
+console.log(Object.keys({
+	__proto__: null,
+	a: 1
+}));
+console.log(Object.keys({
+	'__proto__': null,
+	b: 2
+}));
+console.log(Object.keys({ __proto__ }));
+console.log(Object.keys({ ['__proto__']: 1 }));
+console.log(Object.keys({ __proto__() {} }));
+console.log(Object.keys({
+	a: 1,
+	b: 2
+}));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,16 @@
+ const __proto__ = 0;
+-console.log(['a']);
+-console.log(['b']);
+-console.log(['__proto__']);
++console.log(Object.keys({
++	__proto__: null,
++	a: 1
++}));
++console.log(Object.keys({
++	'__proto__': null,
++	b: 2
++}));
++console.log(Object.keys({ 0 }));
+ console.log(Object.keys({ ['__proto__']: 1 }));
+ console.log(Object.keys({ __proto__() {} }));
+-console.log(['a', 'b']);
++console.log(Object.keys({
++	a: 1,
++	b: 2
++}));
+
+```
+
+```js
+// oxc, second pass
+<reparse failed: Expected `:` but found `}`>
+```
 
 ## `swc/projects/jquery/4`
 
