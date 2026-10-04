@@ -1,6 +1,6 @@
 # uglify / differs — Output differs at equal length
 
-Fixtures: 211
+Fixtures: 216
 
 [← uglify](README.md) · [← all families](../README.md)
 
@@ -136,6 +136,26 @@ console.log(arguments[0]);
  })('bar', 42);
  (function() {
  	var arguments = {
+
+```
+
+## `uglify/arrows/collapse_value`
+
+- tags: `join vars`, `remove unused`
+
+```js
+var a = 42;
+console.log(((b) => Math.floor(b))(a));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+ var a = 42;
+-console.log((() => Math.floor(a))());
++console.log(((b) => Math.floor(b))(a));
 
 ```
 
@@ -335,33 +355,6 @@ function f() {
 -	while (console.log(a));
 +	await ~f();
 +	for (; console.log(a););
- })();
-
-```
-
-## `uglify/awaits/issue_4335_1`
-
-
-```js
-var await = 'PASS';
-(async function() {
-	console.log(function() {
-		return await;
-	}());
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,6 @@
- var await = 'PASS';
- (async function() {
- 	console.log(function() {
--		return await;
-+		return 'PASS';
- 	}());
  })();
 
 ```
@@ -618,6 +611,36 @@ new class A {
 
 ```
 
+## `uglify/classes/unused_await`
+
+- tags: `remove unused`
+
+```js
+var await = 'PASS';
+(async function() {
+	class A {
+		static p = console.log(await);
+	}
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+ var await = 'PASS';
+ (async function() {
+-	(class {
+-		static c = console.log(await);
+-	});
++	class A {
++		static p = console.log(await);
++	}
+ })();
+
+```
+
 ## `uglify/collapse_vars/chained_1`
 
 - tags: `join vars`, `remove unused`
@@ -769,6 +792,103 @@ console.log(a === b, b === c, c === a);
 
 ```
 
+## `uglify/collapse_vars/collapse_vars_short_circuit`
+
+- tags: `join vars`, `sequences`, `remove unused`
+
+```js
+function f0(x) {
+	var a = foo(), b = bar();
+	return b || x;
+}
+function f1(x) {
+	var a = foo(), b = bar();
+	return b && x;
+}
+function f2(x) {
+	var a = foo(), b = bar();
+	return x && a && b;
+}
+function f3(x) {
+	var a = foo(), b = bar();
+	return a && x;
+}
+function f4(x) {
+	var a = foo(), b = bar();
+	return a && x && b;
+}
+function f5(x) {
+	var a = foo(), b = bar();
+	return x || a || b;
+}
+function f6(x) {
+	var a = foo(), b = bar();
+	return a || x || b;
+}
+function f7(x) {
+	var a = foo(), b = bar();
+	return a && b && x;
+}
+function f8(x, y) {
+	var a = foo(), b = bar();
+	return (x || a) && (y || b);
+}
+function f9(x, y) {
+	var a = foo(), b = bar();
+	return x && a || y && b;
+}
+function f10(x, y) {
+	var a = foo(), b = bar();
+	return x - a || y - b;
+}
+function f11(x, y) {
+	var a = foo(), b = bar();
+	return x - b || y - a;
+}
+function f12(x, y) {
+	var a = foo(), b = bar();
+	return x - y || b - a;
+}
+function f13(x, y) {
+	var a = foo(), b = bar();
+	return a - b || x - y;
+}
+function f14(x, y) {
+	var a = foo(), b = bar();
+	return b - a || x - y;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,8 @@
+ function f0(x) {
+-	foo();
+-	return bar() || x;
++	return foo(), bar() || x;
+ }
+ function f1(x) {
+-	foo();
+-	return bar() && x;
++	return foo(), bar() && x;
+ }
+ function f2(x) {
+ 	var a = foo(), b = bar();
+@@ -12,8 +10,7 @@
+ }
+ function f3(x) {
+ 	var a = foo();
+-	bar();
+-	return a && x;
++	return bar(), a && x;
+ }
+ function f4(x) {
+ 	var a = foo(), b = bar();
+
+```
+
 ## `uglify/collapse_vars/compound_assignment_3`
 
 - tags: `join vars`
@@ -836,40 +956,6 @@ console.log(a);
 +	b.toString();
 +})(--a, a |= 10);
  console.log(a);
-
-```
-
-## `uglify/collapse_vars/issue_2436_14`
-
-- tags: `join vars`, `remove unused`
-
-```js
-var a = 'PASS';
-var b = {};
-(function() {
-	var c = a;
-	c && function(c, d) {
-		console.log(c, d);
-	}(b, c);
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
--var a = 'PASS';
- var b = {};
- (function() {
--	a && function(c, d) {
--		console.log(b, d);
--	}(0, a);
-+	var c = 'PASS';
-+	c && function(c, d) {
-+		console.log(c, d);
-+	}(b, c);
- })();
 
 ```
 
@@ -1031,36 +1117,9 @@ f2(null, true);
 
 ```
 
-## `uglify/collapse_vars/var_side_effects_1`
+## `uglify/collapse_vars/var_side_effects_2`
 
 - tags: `join vars`, `remove unused`
-
-```js
-var print = console.log.bind(console);
-function foo(x) {
-	var twice = x * 2;
-	print('Foo:', twice);
-}
-foo(10);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,5 @@
- var print = console.log.bind(console);
- function foo(x) {
--	print('Foo:', 2 * x);
-+	print('Foo:', x * 2);
- }
- foo(10);
-
-```
-
-## `uglify/collapse_vars/var_side_effects_3`
-
-- tags: `join vars`, `remove unused`, `pure getters`
 
 ```js
 var print = console.log.bind(console);
@@ -1075,11 +1134,12 @@ foo({ y: 10 });
 ```diff
 --- reference
 +++ oxc
-@@ -1,5 +1,5 @@
+@@ -1,6 +1,6 @@
  var print = console.log.bind(console);
  function foo(x) {
--	print('Foo:', 2 * x.y);
-+	print('Foo:', x.y * 2);
+-	var twice = 2 * x.y;
++	var twice = x.y * 2;
+ 	print('Foo:', twice);
  }
  foo({ y: 10 });
 
@@ -1436,7 +1496,7 @@ var N = 1;
 -((e, { pname: a } = e, { [a + N]: l } = e) => {
 -	let n;
 -	console.log(l);
-+((o, { pname: p } = o, { [p + 1]: v } = o) => {
++((o, { pname: p } = o, { [p + N]: v } = o) => {
 +	let N;
 +	console.log(v);
  })({
@@ -1469,7 +1529,7 @@ var N = 1;
 -	let n;
 -	console.log(l);
 +var N = 1;
-+((o, { pname: p } = o, { [p + 1]: v } = o) => {
++((o, { pname: p } = o, { [p + N]: v } = o) => {
 +	let N;
 +	console.log(v);
  })({
@@ -1498,7 +1558,7 @@ var N = 1;
 -(({ pname: e = 'x', i: l = N }, { [e + l]: o }) => {
 -	let a;
 -	console.log(o);
-+(({ pname: p = 'x', i: n = 1 }, { [p + n]: v }) => {
++(({ pname: p = 'x', i: n = N }, { [p + n]: v }) => {
 +	let N;
 +	console.log(v);
  })({}, { x1: 'PASS' });
@@ -1526,7 +1586,7 @@ var N = 1;
 -	let a;
 -	console.log(o);
 +var N = 1;
-+(({ pname: p = 'x', i: n = 1 }, { [p + n]: v }) => {
++(({ pname: p = 'x', i: n = N }, { [p + n]: v }) => {
 +	let N;
 +	console.log(v);
  })({}, { x1: 'PASS' });
@@ -1556,7 +1616,7 @@ var N = 1;
 -(function(n, { pname: e } = n, { [e + N]: o } = n) {
 -	let a;
 -	console.log(o);
-+(function(o, { pname: p } = o, { [p + 1]: v } = o) {
++(function(o, { pname: p } = o, { [p + N]: v } = o) {
 +	let N;
 +	console.log(v);
  })({
@@ -1589,7 +1649,7 @@ var N = 1;
 -	let a;
 -	console.log(o);
 +var N = 1;
-+(function(o, { pname: p } = o, { [p + 1]: v } = o) {
++(function(o, { pname: p } = o, { [p + N]: v } = o) {
 +	let N;
 +	console.log(v);
  })({
@@ -1618,7 +1678,7 @@ var N = 1;
 -(function({ pname: n = 'x', i: o = N }, { [n + o]: e }) {
 -	let l;
 -	console.log(e);
-+(function({ pname: p = 'x', i: n = 1 }, { [p + n]: v }) {
++(function({ pname: p = 'x', i: n = N }, { [p + n]: v }) {
 +	let N;
 +	console.log(v);
  })({}, { x1: 'PASS' });
@@ -1646,7 +1706,7 @@ var N = 1;
 -	let l;
 -	console.log(e);
 +var N = 1;
-+(function({ pname: p = 'x', i: n = 1 }, { [p + n]: v }) {
++(function({ pname: p = 'x', i: n = N }, { [p + n]: v }) {
 +	let N;
 +	console.log(v);
  })({}, { x1: 'PASS' });
@@ -1690,6 +1750,31 @@ console.log(v);
 -console.log(l);
 +var N = 1, [{ pname: p = 'x', i: n = N } = {}, { [p + n]: v }] = [, { x1: 'PASS' }];
 +console.log(v);
+
+```
+
+## `uglify/destructured/funarg_collapse_vars_4`
+
+- tags: `join vars`, `remove unused`
+
+```js
+var a = 'PASS';
+(function(b, { log: c }) {
+	c(b);
+})(a, console);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ var a = 'PASS';
+ (function(b, { log: c }) {
+-	c(a);
+-})(0, console);
++	c(b);
++})(a, console);
 
 ```
 
@@ -2068,6 +2153,36 @@ console.log(6, typeof f, typeof g);
 
 ```
 
+## `uglify/functions/issue_3512`
+
+- tags: `join vars`, `sequences`, `remove unused`
+
+```js
+var a = 'PASS';
+(function(b) {
+	(function() {
+		b <<= this || 1;
+		b.a = 'FAIL';
+	})();
+})();
+console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+ var a = 'PASS';
+ (function(b) {
+ 	(function() {
+-		(b <<= this || 1).a = 'FAIL';
++		b <<= this || 1, b.a = 'FAIL';
+ 	})();
+ })(), console.log(a);
+
+```
+
 ## `uglify/functions/issue_3771`
 
 - tags: `join vars`, `remove unused`
@@ -2317,38 +2432,6 @@ console.log(a);
 
 ```
 
-## `uglify/global_defs/mixed`
-
-
-```js
-var FOO = { BAR: 0 };
-console.log(FOO.BAR);
-console.log(++CONFIG.DEBUG);
-console.log(++CONFIG.VALUE);
-console.log(++CONFIG['VAL' + 'UE']);
-console.log(++DEBUG[CONFIG.VALUE]);
-CONFIG.VALUE.FOO = 'bar';
-console.log(CONFIG);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,7 @@
--var FOO = { BAR: 0 };
--console.log('moo');
-+console.log({ BAR: 0 }.BAR);
- console.log(++CONFIG.DEBUG);
- console.log(++CONFIG.VALUE);
- console.log(++CONFIG.VALUE);
--console.log(++DEBUG[42]);
-+console.log(++DEBUG[CONFIG.VALUE]);
- CONFIG.VALUE.FOO = 'bar';
- console.log(CONFIG);
-
-```
-
 ## `uglify/hoist_props/issue_2473_4`
 
 - tags: `join vars`, `remove unused`
@@ -2504,40 +2587,6 @@ while (console.log(typeof o.__proto__));
  var o = { __proto__: 42 };
 -while (console.log(typeof o.__proto__));
 +for (; console.log(typeof o.__proto__););
-
-```
-
-## `uglify/hoist_vars/issue_4736`
-
-- tags: `join vars`, `remove unused`
-
-```js
-var a;
-function f() {
-	(function g() {
-		var b = (a = 0, 1 << 30);
-		var c = (a = 0, console.log(b));
-		var d = c;
-	})(f);
-}
-f();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,6 @@
--(function() {
-+function f() {
- 	(function() {
--		0;
- 		console.log(1 << 30);
--	})();
--})();
-+	})(f);
-+}
-+f();
 
 ```
 
@@ -2736,6 +2785,34 @@ function f() {
 +	var a = w();
 +	if (x()) return y(a);
 +	z();
+ }
+
+```
+
+## `uglify/if_return/issue_1089`
+
+- tags: `sequences`, `remove unused`
+
+```js
+function x() {
+	var f = document.getElementById('fname');
+	if (f.files[0].size > 12345) {
+		alert('alert');
+		f.focus();
+		return false;
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ function x() {
+ 	var f = document.getElementById('fname');
+-	if (12345 < f.files[0].size) return alert('alert'), f.focus(), !1;
++	if (f.files[0].size > 12345) return alert('alert'), f.focus(), !1;
  }
 
 ```
@@ -3147,6 +3224,31 @@ L: do {
 
 ```
 
+## `uglify/issue-44/issue_44_valid_ast_2`
+
+- tags: `remove unused`
+
+```js
+function a(b) {
+	if (foo) for (var i = 0, e = b.qoo();; i++) {}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,3 @@
+ function a(b) {
+-	if (foo) {
+-		var i = 0;
+-		for (b.qoo();; i++);
+-	}
++	if (foo) for (var i = 0, e = b.qoo();; i++);
+ }
+
+```
+
 ## `uglify/issue-597/beautify_off_1`
 
 
@@ -3437,6 +3539,35 @@ while (foo) {
 
 ```
 
+## `uglify/let/issue_5260`
+
+- tags: `join vars`
+
+```js
+'use strict';
+var a = 'foo', o;
+while (console.log('bar'));
+o = { baz: function(b) {
+	console.log(a, b);
+} };
+for (let a in o) o[a](a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+ 'use strict';
+ var a = 'foo', o;
+-while (console.log('bar'));
++for (; console.log('bar'););
+ o = { baz: function(b) {
+ 	console.log(a, b);
+ } };
+
+```
+
 ## `uglify/let/issue_5338`
 
 - tags: `remove unused`
@@ -3478,30 +3609,6 @@ console.log(function(n) {
 -	let o;
 +	let a;
  }());
-
-```
-
-## `uglify/let/join_let_var_2`
-
-- tags: `join vars`
-
-```js
-'use strict';
-let a = 'foo';
-var b = 'bar';
-for (let c of [a, b]) console.log(c);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,3 @@
- 'use strict';
--let a = 'foo', b = 'bar';
--for (let c of [a, b]) console.log(c);
-+let a = 'foo';
-+for (let c of ['foo', 'bar']) console.log(c);
 
 ```
 
@@ -4306,6 +4413,87 @@ console.log(b);
 
 ```
 
+## `uglify/merge_vars/merge`
+
+- tags: `join vars`
+
+```js
+var a = 'foo';
+console.log(a);
+function f(b) {
+	var c;
+	console.log(b);
+	c = 'bar';
+	console.log(c);
+}
+f('baz');
+var d = 'moo';
+console.log(d);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,10 @@
+ var a = 'foo';
+ console.log(a);
+ function f(b) {
+-	var b;
+-	console.log(b);
+-	b = 'bar';
++	var c;
+ 	console.log(b);
++	c = 'bar';
++	console.log(c);
+ }
+ f('baz');
+ var d = 'moo';
+
+```
+
+## `uglify/merge_vars/merge_toplevel`
+
+- tags: `join vars`
+
+```js
+var a = 'foo';
+console.log(a);
+function f(b) {
+	var c;
+	console.log(b);
+	c = 'bar';
+	console.log(c);
+}
+f('baz');
+var d = 'moo';
+console.log(d);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,11 @@
+ var a = 'foo';
+ console.log(a);
+ function f(b) {
+-	var b;
++	var c;
+ 	console.log(b);
+-	b = 'bar';
+-	console.log(b);
++	c = 'bar';
++	console.log(c);
+ }
+ f('baz');
+-var a = 'moo';
+-console.log(a);
++var d = 'moo';
++console.log(d);
+
+```
+
 ## `uglify/numbers/issue_3695`
 
 
@@ -4551,6 +4739,33 @@ console.log(f(o));
  }
  var o = {};
  var p = 'foo';
+
+```
+
+## `uglify/properties/issue_5682_dot_2_computed`
+
+
+```js
+function f(a) {
+	return a.foo;
+}
+var o = { ['foo']: 'PASS' };
+console.log(f(o));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+-function f(o) {
+-	return o.o;
++function f(a) {
++	return a.foo;
+ }
+-var o = { ['o']: 'PASS' };
++var o = { foo: 'PASS' };
+ console.log(f(o));
 
 ```
 
@@ -5291,6 +5506,31 @@ console.log(function(a, ...b) {
 
 ```
 
+## `uglify/rests/issue_4666`
+
+- tags: `join vars`, `remove unused`
+
+```js
+var a = 0, b = 0;
+var o = ((...c) => a++ + c)(b);
+for (var k in o) b++;
+console.log(a, b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,3 @@
+-var a = 0, b = 0;
+-var o = ((c) => +a + c)([b]);
++var a = 0, b = 0, o = ((...c) => a++ + c)(b);
+ for (var k in o) b++;
+-console.log(1, b);
++console.log(a, b);
+
+```
+
 ## `uglify/rests/merge_funarg`
 
 - tags: `join vars`
@@ -5982,39 +6222,6 @@ for (const k in o) console.log(k, o[k]);
  };
 -for (const k in o) console.log(k, o[k]);
 +for (let k in o) console.log(k, o[k]);
-
-```
-
-## `uglify/varify/forin_const_3`
-
-- tags: `join vars`
-
-```js
-'use strict';
-const o = {
-	p: 42,
-	q: 'PASS'
-};
-for (const k in o) (function f() {
-	console.log(k, o[k]);
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,8 @@
- 'use strict';
--let o = {
-+const o = {
- 	p: 42,
- 	q: 'PASS'
- };
--for (let k in o) (function f() {
-+for (let k in o) (function() {
- 	console.log(k, o[k]);
- })();
 
 ```
 

@@ -47,14 +47,15 @@ console.log(k);
 ```diff
 --- reference
 +++ oxc
-@@ -0,0 +1,7 @@
+@@ -0,0 +1,8 @@
 +'use strict';
-+console.log((() => {
++const k = (() => {
 +	switch (1) {
 +		case x: async function x() {}
 +	}
 +	return 1;
-+})());
++})();
++console.log(k);
 
 ```
 

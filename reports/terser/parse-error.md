@@ -1,6 +1,6 @@
 # terser / parse-error — failed to parse
 
-Fixtures: 8
+Fixtures: 9
 
 [← terser](README.md) · [← all families](../README.md)
 
@@ -19,7 +19,7 @@ function f() {
 
 ## `terser/export/keyword_invalid_1`
 
-- note: Cannot use export statement outside a module
+- note: A reserved word cannot be used as an exported binding without `from`
 
 ```js
 export { default };
@@ -28,7 +28,7 @@ export { default };
 
 ## `terser/export/keyword_invalid_2`
 
-- note: Cannot use export statement outside a module
+- note: A reserved word cannot be used as an exported binding without `from`
 
 ```js
 export { default as Alias };
@@ -37,7 +37,7 @@ export { default as Alias };
 
 ## `terser/export/keyword_invalid_3`
 
-- note: Cannot use export statement outside a module
+- note: A reserved word cannot be used as an exported binding without `from`
 
 ```js
 export { default };
@@ -62,13 +62,23 @@ x = class {
 
 ## `terser/harmony/export_module_statement`
 
-- note: Cannot use export statement outside a module
+- note: Duplicated export 'A'
 
 ```js
 export * from "a.js";
 export { A } from "a.js";
 export { A, B } from "a.js";
 export { C };
+
+```
+
+## `terser/harmony/new_target`
+
+- note: Unexpected new.target expression
+
+```js
+new.target;
+new.target.name;
 
 ```
 

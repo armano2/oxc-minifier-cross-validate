@@ -1,6 +1,6 @@
 # terser / not-idempotent — Not idempotent (re-compressing changes the output)
 
-Fixtures: 28
+Fixtures: 27
 
 [← terser](README.md) · [← all families](../README.md)
 
@@ -251,23 +251,22 @@ console.log(x.foo, x['_$foo$_']);
 --- reference
 +++ oxc
 @@ -1,4 +1,4 @@
--var x = {};
+ var x = {};
 -x.o = 1;
 -x['_$foo$_'] = 2 * x.o;
 -console.log(x.o, x['_$foo$_']);
-+var e = {};
-+e.e = 1;
-+e._$foo$_ = 2 * e.e;
-+console.t(e.e, e._$foo$_);
++x.e = 1;
++x._$foo$_ = 2 * x.e;
++console.t(x.e, x._$foo$_);
 
 ```
 
 ```js
 // oxc, second pass
-var e = {};
-e.n = 1;
-e.r = 2 * e.n;
-console.i(e.n, e.r);
+var x = {};
+x.n = 1;
+x.r = 2 * x.n;
+console.i(x.n, x.r);
 
 ```
 
@@ -287,23 +286,22 @@ console.log(x.foo, x['a']);
 --- reference
 +++ oxc
 @@ -1,4 +1,4 @@
--var x = {};
+ var x = {};
 -x.o = 1;
 -x['a'] = 2 * x.o;
 -console.log(x.o, x['a']);
-+var e = {};
-+e.e = 1;
-+e.a = 2 * e.e;
-+console.t(e.e, e.a);
++x.e = 1;
++x.a = 2 * x.e;
++console.t(x.e, x.a);
 
 ```
 
 ```js
 // oxc, second pass
-var e = {};
-e.n = 1;
-e.r = 2 * e.n;
-console.i(e.n, e.r);
+var x = {};
+x.n = 1;
+x.r = 2 * x.n;
+console.i(x.n, x.r);
 
 ```
 
@@ -323,23 +321,22 @@ console.log(x.foo, x['a']);
 --- reference
 +++ oxc
 @@ -1,4 +1,4 @@
--var x = {};
+ var x = {};
 -x.o = 1;
 -x['a'] = 2 * x.o;
 -console.log(x.o, x['a']);
-+var e = {};
-+e.e = 1;
-+e.t = 2 * e.e;
-+console.n(e.e, e.t);
++x.e = 1;
++x.t = 2 * x.e;
++console.n(x.e, x.t);
 
 ```
 
 ```js
 // oxc, second pass
-var e = {};
-e.r = 1;
-e.i = 2 * e.r;
-console.a(e.r, e.i);
+var x = {};
+x.r = 1;
+x.i = 2 * x.r;
+console.a(x.r, x.i);
 
 ```
 
@@ -363,9 +360,8 @@ console.log(obj[void 0], obj[undefined], obj['undefined'], obj[0 / 0], obj[NaN],
 --- reference
 +++ oxc
 @@ -1,8 +1,8 @@
--var obj = {
+ var obj = {
 -	undefined: 1,
-+var e = {
 +	n: 1,
  	NaN: 2,
  	Infinity: 3,
@@ -374,20 +370,20 @@ console.log(obj[void 0], obj[undefined], obj['undefined'], obj[0 / 0], obj[NaN],
 +	t: 5
  };
 -console.log(obj[void 0], obj[void 0], obj['undefined'], obj[0 / 0], obj[NaN], obj['NaN'], obj[1 / 0], obj[1 / 0], obj['Infinity'], obj[-1 / 0], obj[-1 / 0], obj['-Infinity'], obj[null], obj['null']);
-+console.e(e[void 0], e[void 0], e.undefined, e[NaN], e[NaN], e.NaN, e[1 / 0], e[Infinity], e.Infinity, e[-1 / 0], e[-Infinity], e['-Infinity'], e[null], e.null);
++console.e(obj[void 0], obj[void 0], obj.undefined, obj[NaN], obj[NaN], obj.NaN, obj[1 / 0], obj[Infinity], obj.Infinity, obj[-1 / 0], obj[-Infinity], obj['-Infinity'], obj[null], obj.null);
 
 ```
 
 ```js
 // oxc, second pass
-var e = {
+var obj = {
 	i: 1,
 	NaN: 2,
 	Infinity: 3,
 	'-Infinity': 4,
 	o: 5
 };
-console.r(e[void 0], e[void 0], e.s, e[NaN], e[NaN], e.NaN, e[1 / 0], e[Infinity], e.Infinity, e[-1 / 0], e[-Infinity], e['-Infinity'], e[null], e.a);
+console.r(obj[void 0], obj[void 0], obj.s, obj[NaN], obj[NaN], obj.NaN, obj[1 / 0], obj[Infinity], obj.Infinity, obj[-1 / 0], obj[-Infinity], obj['-Infinity'], obj[null], obj.a);
 
 ```
 
@@ -418,7 +414,7 @@ console.log(obj[1e42], obj['j'], obj['1e+42']);
 --- reference
 +++ oxc
 @@ -0,0 +1,15 @@
-+var e = {
++var obj = {
 +	0: 0,
 +	'-0': 1,
 +	42: 2,
@@ -429,16 +425,16 @@ console.log(obj[1e42], obj['j'], obj['1e+42']);
 +	t: 7,
 +	1e42: 8
 +};
-+console.e(e[-0], e[-''], e['-0']);
-+console.e(e[42], e[42]);
-+console.e(e[37], e.o, e[37], e[37]);
-+console.e(e[1e42], e.j, e['1e+42']);
++console.e(obj[-0], obj[-''], obj['-0']);
++console.e(obj[42], obj[42]);
++console.e(obj[37], obj.o, obj[37], obj[37]);
++console.e(obj[1e42], obj.j, obj['1e+42']);
 
 ```
 
 ```js
 // oxc, second pass
-var e = {
+var obj = {
 	0: 0,
 	'-0': 1,
 	42: 2,
@@ -449,10 +445,10 @@ var e = {
 	c: 7,
 	1e42: 8
 };
-console.r(e[-0], e[-''], e['-0']);
-console.r(e[42], e[42]);
-console.r(e[37], e.s, e[37], e[37]);
-console.r(e[1e42], e.i, e['1e+42']);
+console.r(obj[-0], obj[-''], obj['-0']);
+console.r(obj[42], obj[42]);
+console.r(obj[37], obj.s, obj[37], obj[37]);
+console.r(obj[1e42], obj.i, obj['1e+42']);
 
 ```
 
@@ -495,50 +491,45 @@ console.log(c.propa, c['propc']);
 +++ oxc
 @@ -1,7 +1,6 @@
 -var propa = 1;
--var a = {
+ var a = {
 -	p: propa,
 -	get o() {
-+var e = {
 +	e: 1,
 +	get n() {
  		return 2;
  	},
  	propc: 3,
-@@ -9,9 +8,9 @@
- 		return 4;
+@@ -10,8 +9,8 @@
  	}
  };
--var b = {
+ var b = {
 -	propa: 5,
 -	get propb() {
-+var t = {
 +	e: 5,
 +	get n() {
  		return 6;
  	},
  	propc: 7,
-@@ -19,9 +18,9 @@
- 		return 8;
+@@ -20,8 +19,8 @@
  	}
  };
--var c = {};
+ var c = {};
 -Object.defineProperty(c, 'p', { value: 9 });
 -Object.defineProperty(c, 'propc', { value: 10 });
 -console.log(a.p, a.o, a.propc, a.propc, a.propd, a.propd);
 -console.log(b.propa, b.propb, b.propc, b.propc, b.propd, b.propd);
 -console.log(c.p, c.propc);
-+var n = {};
-+Object.r(n, 'propa', { i: 9 });
-+Object.r(n, 'propc', { i: 10 });
-+console.t(e.e, e.n, e.propc, e.propc, e.propd, e.propd);
-+console.t(t.propa, t.propb, t.propc, t.propc, t.propd, t.propd);
-+console.t(n.e, n.propc);
++Object.r(c, 'propa', { i: 9 });
++Object.r(c, 'propc', { i: 10 });
++console.t(a.e, a.n, a.propc, a.propc, a.propd, a.propd);
++console.t(b.propa, b.propb, b.propc, b.propc, b.propd, b.propd);
++console.t(c.e, c.propc);
 
 ```
 
 ```js
 // oxc, second pass
-var e = {
+var a = {
 	a: 1,
 	get o() {
 		return 2;
@@ -548,7 +539,7 @@ var e = {
 		return 4;
 	}
 };
-var t = {
+var b = {
 	a: 5,
 	get o() {
 		return 6;
@@ -558,12 +549,12 @@ var t = {
 		return 8;
 	}
 };
-var n = {};
-Object.l(n, 'propa', { c: 9 });
-Object.l(n, 'propc', { c: 10 });
-console.s(e.a, e.o, e.propc, e.propc, e.propd, e.propd);
-console.s(t.u, t.d, t.propc, t.propc, t.propd, t.propd);
-console.s(n.a, n.propc);
+var c = {};
+Object.l(c, 'propa', { c: 9 });
+Object.l(c, 'propc', { c: 10 });
+console.s(a.a, a.o, a.propc, a.propc, a.propd, a.propd);
+console.s(b.u, b.d, b.propc, b.propc, b.propd, b.propd);
+console.s(c.a, c.propc);
 
 ```
 
@@ -597,19 +588,13 @@ console.log(obj.null, obj.undefined, obj.Infinity, obj.NaN);
 ```diff
 --- reference
 +++ oxc
-@@ -1,19 +1,19 @@
- 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
- 'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB';
- 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC';
--const prop = Symbol('foo');
--const obj = {
--	[prop]: 'bar',
+@@ -4,16 +4,16 @@
+ const prop = Symbol('foo');
+ const obj = {
+ 	[prop]: 'bar',
 -	A: 1,
 -	B: 2,
 -	[3 + 4]: 'seven',
-+const e = Symbol('foo');
-+const t = {
-+	[e]: 'bar',
 +	a: 1,
 +	n: 2,
 +	7: 'seven',
@@ -626,8 +611,8 @@ console.log(obj.null, obj.undefined, obj.Infinity, obj.NaN);
  };
 -console.log(obj[prop], obj['A'], obj.B, obj[7], obj[0], obj[1 + 0], obj[null], obj[void 0], obj[1 / 0], obj[NaN], obj.C);
 -console.log(obj.null, obj.undefined, obj.Infinity, obj.NaN);
-+console.e(t[e], t.baz, t.n, t[7], t[0], t[1], t[null], t[void 0], t[1 / 0], t[NaN], t.i);
-+console.e(t.t, t.r, t.Infinity, t.NaN);
++console.e(obj[prop], obj.baz, obj.n, obj[7], obj[0], obj[1], obj[null], obj[void 0], obj[1 / 0], obj[NaN], obj.i);
++console.e(obj.t, obj.r, obj.Infinity, obj.NaN);
 
 ```
 
@@ -636,9 +621,9 @@ console.log(obj.null, obj.undefined, obj.Infinity, obj.NaN);
 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB';
 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC';
-const e = Symbol('foo');
-const t = {
-	[e]: 'bar',
+const prop = Symbol('foo');
+const obj = {
+	[prop]: 'bar',
 	d: 1,
 	c: 2,
 	7: 'seven',
@@ -650,8 +635,8 @@ const t = {
 	NaN: 'nan',
 	s: 'Void'
 };
-console.o(t[e], t.f, t.c, t[7], t[0], t[1], t[null], t[void 0], t[1 / 0], t[NaN], t.s);
-console.o(t.u, t.l, t.Infinity, t.NaN);
+console.o(obj[prop], obj.f, obj.c, obj[7], obj[0], obj[1], obj[null], obj[void 0], obj[1 / 0], obj[NaN], obj.s);
+console.o(obj.u, obj.l, obj.Infinity, obj.NaN);
 
 ```
 
@@ -742,17 +727,16 @@ g.keep = g.change;
 --- reference
 +++ oxc
 @@ -1,2 +1,2 @@
--var g = {};
+ var g = {};
 -g.keep = g.g;
-+var e = {};
-+e.e = e.t;
++g.e = g.t;
 
 ```
 
 ```js
 // oxc, second pass
-var e = {};
-e.n = e.r;
+var g = {};
+g.n = g.r;
 
 ```
 
@@ -775,22 +759,22 @@ console.log(o.p);
 @@ -1,5 +1,5 @@
 -var o = { o: 'FAIL' };
 -Object.defineProperty(o, 'o', { get: function() {
-+var e = { e: 'FAIL' };
-+Object.t(e, 'p', { get: function() {
++var o = { e: 'FAIL' };
++Object.t(o, 'p', { get: function() {
  	return 'PASS';
  } });
 -console.log(o.o);
-+console.n(e.e);
++console.n(o.e);
 
 ```
 
 ```js
 // oxc, second pass
-var e = { r: 'FAIL' };
-Object.a(e, 'p', { get: function() {
+var o = { r: 'FAIL' };
+Object.a(o, 'p', { get: function() {
 	return 'PASS';
 } });
-console.i(e.r);
+console.i(o.r);
 
 ```
 
@@ -813,22 +797,22 @@ console.log(o.p);
 @@ -1,5 +1,5 @@
 -var o = { o: 'FAIL' };
 -Object.defineProperties(o, { o: { get: function() {
-+var e = { e: 'FAIL' };
-+Object.t(e, { e: { get: function() {
++var o = { e: 'FAIL' };
++Object.t(o, { e: { get: function() {
  	return 'PASS';
  } } });
 -console.log(o.o);
-+console.n(e.e);
++console.n(o.e);
 
 ```
 
 ```js
 // oxc, second pass
-var e = { r: 'FAIL' };
-Object.a(e, { r: { get: function() {
+var o = { r: 'FAIL' };
+Object.a(o, { r: { get: function() {
 	return 'PASS';
 } } });
-console.i(e.r);
+console.i(o.r);
 
 ```
 
@@ -847,19 +831,18 @@ x = { baz: 'ban' };
 --- reference
 +++ oxc
 @@ -1,3 +1,3 @@
--var a = {};
+ var a = {};
 -a._$foo$_ = 'bar';
 -x = { _$baz$_: 'ban' };
-+var e = {};
-+e.t = 'bar';
++a.t = 'bar';
 +x = { e: 'ban' };
 
 ```
 
 ```js
 // oxc, second pass
-var e = {};
-e.r = 'bar';
+var a = {};
+a.r = 'bar';
 x = { n: 'ban' };
 
 ```
@@ -879,19 +862,18 @@ x = { baz: 'ban' };
 --- reference
 +++ oxc
 @@ -1,3 +1,3 @@
--var a = {};
+ var a = {};
 -a._$foo$XYZ_ = 'bar';
 -x = { _$baz$XYZ_: 'ban' };
-+var e = {};
-+e.t = 'bar';
++a.t = 'bar';
 +x = { e: 'ban' };
 
 ```
 
 ```js
 // oxc, second pass
-var e = {};
-e.r = 'bar';
+var a = {};
+a.r = 'bar';
 x = { n: 'ban' };
 
 ```
@@ -930,17 +912,16 @@ function f2() {
 --- reference
 +++ oxc
 @@ -1,22 +1,22 @@
--var a = {};
+ var a = {};
 -a._$top$XYZ_ = 1;
-+var e = {};
-+e.a = 1;
++a.a = 1;
  function f1() {
 -	a['foo'] = 'bar';
 -	a.color = 'red';
 -	a._$stuff$XYZ_ = 2;
-+	e.foo = 'bar';
-+	e.r = 'red';
-+	e.n = 2;
++	a.foo = 'bar';
++	a.r = 'red';
++	a.n = 2;
  	x = {
 -		bar: 10,
 -		_$size$XYZ_: 7
@@ -948,13 +929,13 @@ function f2() {
 +		e: 7
  	};
 -	a._$size$XYZ_ = 9;
-+	e.e = 9;
++	a.e = 9;
  }
  function f2() {
 -	a.foo = 'bar';
 -	a['color'] = 'red';
-+	e.i = 'bar';
-+	e.color = 'red';
++	a.i = 'bar';
++	a.color = 'red';
  	x = {
 -		bar: 10,
 -		_$size$XYZ_: 7
@@ -963,67 +944,36 @@ function f2() {
  	};
 -	a._$size$XYZ_ = 9;
 -	a._$stuff$XYZ_ = 3;
-+	e.e = 9;
-+	e.n = 3;
++	a.e = 9;
++	a.n = 3;
  }
 
 ```
 
 ```js
 // oxc, second pass
-var e = {};
-e.l = 1;
+var a = {};
+a.l = 1;
 function f1() {
-	e.d = 'bar';
-	e.p = 'red';
-	e.s = 2;
+	a.d = 'bar';
+	a.p = 'red';
+	a.s = 2;
 	x = {
 		c: 10,
 		o: 7
 	};
-	e.o = 9;
+	a.o = 9;
 }
 function f2() {
-	e.f = 'bar';
-	e.u = 'red';
+	a.f = 'bar';
+	a.u = 'red';
 	x = {
 		c: 10,
 		o: 7
 	};
-	e.o = 9;
-	e.s = 3;
+	a.o = 9;
+	a.s = 3;
 }
-
-```
-
-## `terser/properties/mangle_debug_true`
-
-- tags: `mangle`, `keep function names`, `keep class names`, `mangle properties`
-
-```js
-var a = {};
-a.foo = 'bar';
-x = { baz: 'ban' };
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,3 @@
--var a = {};
--a._$foo$_ = 'bar';
-+var e = {};
-+e._$foo$_ = 'bar';
- x = { _$baz$_: 'ban' };
-
-```
-
-```js
-// oxc, second pass
-var e = {};
-e._$_$foo$_$_ = 'bar';
-x = { _$_$baz$_$_: 'ban' };
 
 ```
 
@@ -1046,32 +996,32 @@ Object.defineProperty(console, 'lag', { value: 3 });
 ```diff
 --- reference
 +++ oxc
-@@ -1,7 +1,7 @@
--var some_prop = 'propname';
+@@ -1,7 +1,8 @@
+ var some_prop = 'propname';
 -const object = { o: some_prop };
--const non_global_console = console;
++const object = { r: some_prop };
+ const non_global_console = console;
 -non_global_console.log(object);
 -Object.defineProperty(object, 'o', { value: 3 });
 -Object.defineProperty(non_global_console, 'e', { value: 3 });
 -Object.defineProperty(console, 'e', { value: 3 });
-+const e = { r: 'propname' };
-+const t = console;
 +// .log gets preserved because of jsprops
-+t.n(e);
-+Object.e(e, 'some_prop', { t: 3 });
-+Object.e(t, 'lag', { t: 3 });
++non_global_console.n(object);
++Object.e(object, 'some_prop', { t: 3 });
++Object.e(non_global_console, 'lag', { t: 3 });
 +Object.e(console, 'lag', { t: 3 });
 
 ```
 
 ```js
 // oxc, second pass
-const e = { s: 'propname' };
-const t = console;
+var some_prop = 'propname';
+const object = { s: some_prop };
+const non_global_console = console;
 // .log gets preserved because of jsprops
-t.o(e);
-Object.i(e, 'some_prop', { a: 3 });
-Object.i(t, 'lag', { a: 3 });
+non_global_console.o(object);
+Object.i(object, 'some_prop', { a: 3 });
+Object.i(non_global_console, 'lag', { a: 3 });
 Object.i(console, 'lag', { a: 3 });
 
 ```
@@ -1192,17 +1142,15 @@ function f2() {
 --- reference
 +++ oxc
 @@ -1,22 +1,22 @@
--var a = {};
--a.a = 1;
-+var e = {};
-+e.a = 1;
+ var a = {};
+ a.a = 1;
  function f1() {
 -	a['foo'] = 'bar';
 -	a.color = 'red';
 -	a.r = 2;
-+	e.foo = 'bar';
-+	e.r = 'red';
-+	e.n = 2;
++	a.foo = 'bar';
++	a.r = 'red';
++	a.n = 2;
  	x = {
 -		bar: 10,
 -		b: 7
@@ -1210,13 +1158,13 @@ function f2() {
 +		e: 7
  	};
 -	a.b = 9;
-+	e.e = 9;
++	a.e = 9;
  }
  function f2() {
 -	a.foo = 'bar';
 -	a['color'] = 'red';
-+	e.i = 'bar';
-+	e.color = 'red';
++	a.i = 'bar';
++	a.color = 'red';
  	x = {
 -		bar: 10,
 -		b: 7
@@ -1225,35 +1173,35 @@ function f2() {
  	};
 -	a.b = 9;
 -	a.r = 3;
-+	e.e = 9;
-+	e.n = 3;
++	a.e = 9;
++	a.n = 3;
  }
 
 ```
 
 ```js
 // oxc, second pass
-var e = {};
-e.l = 1;
+var a = {};
+a.l = 1;
 function f1() {
-	e.d = 'bar';
-	e.p = 'red';
-	e.s = 2;
+	a.d = 'bar';
+	a.p = 'red';
+	a.s = 2;
 	x = {
 		c: 10,
 		o: 7
 	};
-	e.o = 9;
+	a.o = 9;
 }
 function f2() {
-	e.f = 'bar';
-	e.u = 'red';
+	a.f = 'bar';
+	a.u = 'red';
 	x = {
 		c: 10,
 		o: 7
 	};
-	e.o = 9;
-	e.s = 3;
+	a.o = 9;
+	a.s = 3;
 }
 
 ```

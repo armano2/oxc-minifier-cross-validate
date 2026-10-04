@@ -1,6 +1,6 @@
 # uglify / whitespace — Output longer after whitespace removal
 
-Fixtures: 17
+Fixtures: 18
 
 [← uglify](README.md) · [← all families](../README.md)
 
@@ -21,28 +21,42 @@ console.log(Number(-1148098955808013229n));
 
 ```
 
-## `uglify/hoist_vars/issue_4487_2`
+## `uglify/drop-unused/issue_1583`
 
-- tags: `join vars`, `remove unused`, `keep function names`, `2 iterations`
+- tags: `join vars`, `remove unused`, `2 iterations`
 
 ```js
-var a = function f() {
-	var f = console.log(typeof f);
-};
-var b = a();
+function m(t) {
+	(function(e) {
+		t = e();
+	})(function() {
+		return (function(a) {
+			return a;
+		})(function(a) {});
+	});
+}
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,4 +1,3 @@
--function a() {
-+(function f() {
- 	var f = console.log(typeof f);
--}
--a();
-+})();
+@@ -1,9 +1,9 @@
+ function m(t) {
+ 	(function(e) {
+-		(function() {
+-			return (function(a) {
+-				return function(a) {};
+-			})();
+-		})();
+-	})();
++		t = e();
++	})(function() {
++		return (function(a) {
++			return a;
++		})(function(a) {});
++	});
+ }
 
 ```
 
@@ -242,6 +256,47 @@ L: for (var a = 2; --a;) for (var b = 0; console.log(b); --b) break L;
 -	if (console.log(b)) break L;
 -}
 +L: for (var a = 2; --a;) for (var b = 0; console.log(b); --b) break L;
+
+```
+
+## `uglify/reduce_vars/issue_2449`
+
+- tags: `join vars`, `remove unused`, `10 iterations`
+
+```js
+var a = 'PASS';
+function f() {
+	return a;
+}
+function g() {
+	return f();
+}
+(function() {
+	var a = 'FAIL';
+	if (a == a) console.log(g());
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,11 @@
+ var a = 'PASS';
++function f() {
++	return a;
++}
+ function g() {
+-	return function() {
+-		return a;
+-	}();
++	return f();
+ }
+ (function() {
+ 	var a = 'FAIL';
+-	if (a == a) console.log(g());
++	a == a && console.log(g());
+ })();
 
 ```
 

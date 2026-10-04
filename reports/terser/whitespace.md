@@ -1,6 +1,6 @@
 # terser / whitespace — Output longer after whitespace removal
 
-Fixtures: 10
+Fixtures: 9
 
 [← terser](README.md) · [← all families](../README.md)
 
@@ -206,47 +206,6 @@ p();
  }
  p();
  p();
-
-```
-
-## `terser/reduce_vars/issue_2449`
-
-- tags: `join vars`, `remove unused`, `10 iterations`
-
-```js
-var a = 'PASS';
-function f() {
-	return a;
-}
-function g() {
-	return f();
-}
-(function() {
-	var a = 'FAIL';
-	if (a == a) console.log(g());
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,10 @@
-+function f() {
-+	return 'PASS';
-+}
-+function g() {
-+	return f();
-+}
- (function() {
- 	var a = 'FAIL';
--	if (a == a) console.log(function() {
--		return function() {
--			return 'PASS';
--		}();
--	}());
-+	a == a && console.log(g());
- })();
 
 ```
 

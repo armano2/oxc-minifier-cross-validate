@@ -1,6 +1,6 @@
 # swc / differs — Output differs at equal length
 
-Fixtures: 39
+Fixtures: 42
 
 [← swc](README.md) · [← all families](../README.md)
 
@@ -328,27 +328,6 @@ out.constructOuterFunctionAfterEval = constructOuterFunctionAfterEval;
 
 ```
 
-## `swc/issues/12182/noinline`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-
-```js
-const logger = { log: (value) => console.log(value) };
-/*#__NOINLINE__*/ logger.log('variable noinline');
-const directResult = (/*#__NOINLINE__*/ { log: (value) => console.log(value) }).log('direct noinline');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1 @@
--const logger = { log: (value) => console.log(value) };
--/*#__NOINLINE__*/ logger.log('variable noinline'), { log: (value) => console.log(value) }.log('direct noinline');
-+/*#__NOINLINE__*/ ({ log: (value) => console.log(value) }).log('variable noinline'), (/*#__NOINLINE__*/ { log: (value) => console.log(value) }).log('direct noinline');
-
-```
-
 ## `swc/issues/12184/computed-members`
 
 
@@ -536,25 +515,6 @@ while (rerenderQueue.length > 0) {
 
 ```
 
-## `swc/issues/2779/1`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-
-```js
-const e = Math.random();
-console.log(e === -1 / 0);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--console.log(-1 / 0 === Math.random());
-+console.log(Math.random() === -1 / 0);
-
-```
-
 ## `swc/issues/3173/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -582,6 +542,51 @@ export const IndexPage = (value) => {
 
 ```
 
+## `swc/issues/4386/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+
+```js
+var application;
+(() => {
+	var __webpack_require__ = {};
+	(() => {
+		__webpack_require__.d = (exports, definition) => {};
+	})();
+	(() => {
+		__webpack_require__.o = (obj, prop) => {};
+	})();
+	(() => {
+		__webpack_require__.r = (exports) => {};
+	})();
+	var __webpack_exports__ = {};
+	__webpack_require__.r(__webpack_exports__);
+	__webpack_require__.d(__webpack_exports__, { 'bootstrap': () => bootstrap });
+	function bootstrap() {
+		alert();
+	}
+	application = __webpack_exports__;
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -3,8 +3,9 @@
+ 	var __webpack_require__ = {};
+ 	__webpack_require__.d = (exports, definition) => {}, __webpack_require__.o = (obj, prop) => {}, __webpack_require__.r = (exports) => {};
+ 	var __webpack_exports__ = {};
++	__webpack_require__.r(__webpack_exports__), __webpack_require__.d(__webpack_exports__, { bootstrap: () => bootstrap });
+ 	function bootstrap() {
+ 		alert();
+ 	}
+-	__webpack_require__.r(__webpack_exports__), __webpack_require__.d(__webpack_exports__, { bootstrap: () => bootstrap }), application = __webpack_exports__;
++	application = __webpack_exports__;
+ })();
+
+```
+
 ## `swc/issues/4845`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -597,67 +602,6 @@ console.log(a + ((b ? 'c' : 'd') + 1));
 @@ -1 +1 @@
 -console.log(a + (b ? 'c' : 'd') + '1');
 +console.log(a + ((b ? 'c' : 'd') + 1));
-
-```
-
-## `swc/issues/6344/1`
-
-- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`
-
-```js
-function a() {}
-var te = function() {
-	function n(e) {}
-	var t = null;
-	return { init: function(e) {
-		return t = new n(e);
-	} };
-}();
-var he = function() {
-	function n() {
-		a();
-	}
-	;
-	var t = null;
-	return { init: function(e) {
-		return t;
-	} };
-}();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,17 +1,15 @@
--function n() {}
--var t = function() {
--	function n(n) {}
--	var t = null;
--	return { init: function(u) {
--		return t = new n(u);
-+function a() {}
-+var e = function() {
-+	function n(e) {}
-+	var e = null;
-+	return { init: function(t) {
-+		return e = new n(t);
- 	} };
- }();
--var u = function() {
--	function t() {
--		n();
--	}
--	var u = null;
--	return { init: function(n) {
--		return u;
-+var t = function() {
-+	function n() {}
-+	var e = null;
-+	return { init: function(e) {
-+		return null;
- 	} };
- }();
 
 ```
 
@@ -952,6 +896,35 @@ string_create.prototype = StringSchema.prototype;
 
 ```
 
+## `swc/projects/angular/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+
+```js
+function isUndefined(value) {
+	return 'undefined' == typeof value;
+}
+function isDefined(value) {
+	return 'undefined' != typeof value;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+ function isUndefined(value) {
+-	return void 0 === value;
++	return value === void 0;
+ }
+ function isDefined(value) {
+-	return void 0 !== value;
++	return value !== void 0;
+ }
+
+```
+
 ## `swc/projects/backbone/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -1022,6 +995,32 @@ for (; list && firingIndex < firingLength; firingIndex++) {
 
 ```
 
+## `swc/projects/mootools/3`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+
+```js
+function foo() {
+	this.$chk = function(obj) {
+		return !!(obj || obj === 0);
+	};
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ function foo() {
+ 	this.$chk = function(obj) {
+-		return !!(obj || 0 === obj);
++		return !!(obj || obj === 0);
+ 	};
+ }
+
+```
+
 ## `swc/projects/mootools/4`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -1051,6 +1050,52 @@ export const obj = { flatten: function() {
  	}
  	return array;
  } };
+
+```
+
+## `swc/projects/react/15`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+
+```js
+function validateFragmentProps(fragment) {
+	{
+		var keys = Object.keys(fragment.props);
+		for (var i = 0; i < keys.length; i++) {
+			var key = keys[i];
+			if (key !== 'children' && key !== 'key') {
+				setCurrentlyValidatingElement$1(fragment);
+				error('Invalid prop `%s` supplied to `React.Fragment`. ' + 'React.Fragment can only have `key` and `children` props.', key);
+				setCurrentlyValidatingElement$1(null);
+				break;
+			}
+		}
+		if (fragment.ref !== null) {
+			setCurrentlyValidatingElement$1(fragment);
+			error('Invalid attribute `ref` supplied to `React.Fragment`.');
+			setCurrentlyValidatingElement$1(null);
+		}
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,10 @@
+ function validateFragmentProps(fragment) {
+ 	for (var keys = Object.keys(fragment.props), i = 0; i < keys.length; i++) {
+ 		var key = keys[i];
+-		if ('children' !== key && 'key' !== key) {
++		if (key !== 'children' && key !== 'key') {
+ 			setCurrentlyValidatingElement$1(fragment), error('Invalid prop `%s` supplied to `React.Fragment`. React.Fragment can only have `key` and `children` props.', key), setCurrentlyValidatingElement$1(null);
+ 			break;
+ 		}
+ 	}
+-	null !== fragment.ref && (setCurrentlyValidatingElement$1(fragment), error('Invalid attribute `ref` supplied to `React.Fragment`.'), setCurrentlyValidatingElement$1(null));
++	fragment.ref !== null && (setCurrentlyValidatingElement$1(fragment), error('Invalid attribute `ref` supplied to `React.Fragment`.'), setCurrentlyValidatingElement$1(null));
+ }
 
 ```
 
@@ -1251,6 +1296,48 @@ export const E = { test: function(cat, name, args) {
 -	return feature && (result = feature.result, Y.Lang.isUndefined(result) && ((ua = feature.ua) && (result = Y.UA[ua]), (test = feature.test) && (!ua || result) && (result = test.apply(Y, args)), feature.result = result)), result;
 +	return feature && (result = feature.result, Y.Lang.isUndefined(result) && (ua = feature.ua, ua && (result = Y.UA[ua]), test = feature.test, test && (!ua || result) && (result = test.apply(Y, args)), feature.result = result)), result;
  } };
+
+```
+
+## `swc/simple/disable-char-freq/1`
+
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
+
+```js
+var foo;
+var bar = 2;
+var baz;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-var a, b, c = 2;
++var e, t = 2, n;
+
+```
+
+## `swc/simple/order/fn/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+
+```js
+function foo() {}
+console.log('foo');
+function bar() {}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ function foo() {}
++console.log('foo');
+ function bar() {}
+-console.log('foo');
 
 ```
 

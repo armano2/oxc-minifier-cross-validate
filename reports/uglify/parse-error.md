@@ -1,6 +1,6 @@
 # uglify / parse-error — failed to parse
 
-Fixtures: 23
+Fixtures: 24
 
 [← uglify](README.md) · [← all families](../README.md)
 
@@ -75,7 +75,7 @@ console.log((-4 ** 3) ** 2);
 
 ## `uglify/exports/defaults`
 
-- note: Cannot use export statement outside a module
+- note: A module cannot have multiple default exports.
 
 ```js
 export default 42;
@@ -90,7 +90,7 @@ export default async function f({ c }, ...[ d ]) {};
 ## `uglify/exports/drop_unused`
 
 - tags: `remove unused`
-- note: Cannot use export statement outside a module
+- note: A module cannot have multiple default exports.
 
 ```js
 export default 42;
@@ -107,7 +107,7 @@ function h() {}
 ## `uglify/exports/hoist_exports_2`
 
 - tags: `join vars`, `remove unused`
-- note: Cannot use export statement outside a module
+- note: A module cannot have multiple default exports.
 
 ```js
 const a = 42;
@@ -125,7 +125,7 @@ export default async function g(x, ...{ [ccc]: y }) {
 ## `uglify/exports/keep_return_values`
 
 - tags: `join vars`
-- note: Cannot use export statement outside a module
+- note: A module cannot have multiple default exports.
 
 ```js
 export default function() {
@@ -139,7 +139,7 @@ export default function f() {
 
 ## `uglify/exports/mangle`
 
-- note: Cannot use export statement outside a module
+- note: A module cannot have multiple default exports.
 
 ```js
 const a = 42;
@@ -156,7 +156,7 @@ export default async function g(x, ...{ [c]: y }) {
 
 ## `uglify/exports/mangle_rename`
 
-- note: Cannot use export statement outside a module
+- note: A module cannot have multiple default exports.
 
 ```js
 const a = 42;
@@ -173,7 +173,7 @@ export default async function g(x, ...{ [c]: y }) {
 
 ## `uglify/exports/non_identifiers`
 
-- note: Cannot use export statement outside a module
+- note: Duplicated export '42'
 
 ```js
 export * as "42" from 'foo';
@@ -251,6 +251,15 @@ var async = [ "PASS", 42 ];
 async.p = "FAIL";
 for (async of (null, async))
     console.log(async);
+
+```
+
+## `uglify/loops/for_await_of_regexp`
+
+- note: `for await` loops are only allowed within async functions and at the top levels of modules
+
+```js
+for await (var a of /foo/);
 
 ```
 

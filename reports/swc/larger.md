@@ -1,6 +1,6 @@
 # swc / larger — Output longer than expected (possible missing optimization)
 
-Fixtures: 330
+Fixtures: 367
 
 [← swc](README.md) · [← all families](../README.md)
 
@@ -454,6 +454,34 @@ export function f(i, e, cmp) {
 
 ```
 
+## `swc/issues/8923`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 58 vs reference 57 (no whitespaces: +1, formatted: +2)
+
+```js
+'use strict';
+const k = (() => {
+	let x = '';
+	x *= x-- / x;
+	return x;
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ 'use strict';
+ const k = (() => {
+ 	let x = '';
+-	return x * (x-- / x);
++	return x *= x-- / x, x;
+ })();
+
+```
+
 ## `swc/issues/unused-let-initialization`
 
 - tags: `remove unused`
@@ -481,6 +509,59 @@ console.log(JSON.stringify(test(() => undefined, { value: 2 })));
  	return [localCountry, value];
  }
  console.log(JSON.stringify(test(() => 'CN', { value: 1 })));
+
+```
+
+## `swc/projects/angular/5`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 453 vs reference 452 (no whitespaces: +1, formatted: +10)
+
+```js
+function forEach(obj, iterator, context) {
+	var key;
+	if (obj) {
+		if (isFunction(obj)) {
+			for (key in obj) {
+				if (key != 'prototype' && key != 'length' && key != 'name' && obj.hasOwnProperty(key)) {
+					iterator.call(context, obj[key], key);
+				}
+			}
+		} else if (obj.forEach && obj.forEach !== forEach) {
+			obj.forEach(iterator, context);
+		} else if (isArrayLike(obj)) {
+			for (key = 0; key < obj.length; key++) iterator.call(context, obj[key], key);
+		} else {
+			for (key in obj) {
+				if (obj.hasOwnProperty(key)) {
+					iterator.call(context, obj[key], key);
+				}
+			}
+		}
+	}
+	return obj;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,10 @@
+ function forEach(obj, iterator, context) {
+ 	var key;
+-	if (obj) if (isFunction(obj)) for (key in obj) 'prototype' != key && 'length' != key && 'name' != key && obj.hasOwnProperty(key) && iterator.call(context, obj[key], key);
+-	else if (obj.forEach && obj.forEach !== forEach) obj.forEach(iterator, context);
+-	else if (isArrayLike(obj)) for (key = 0; key < obj.length; key++) iterator.call(context, obj[key], key);
+-	else for (key in obj) obj.hasOwnProperty(key) && iterator.call(context, obj[key], key);
++	if (obj) {
++		if (isFunction(obj)) for (key in obj) key != 'prototype' && key != 'length' && key != 'name' && obj.hasOwnProperty(key) && iterator.call(context, obj[key], key);
++		else if (obj.forEach && obj.forEach !== forEach) obj.forEach(iterator, context);
++		else if (isArrayLike(obj)) for (key = 0; key < obj.length; key++) iterator.call(context, obj[key], key);
++		else for (key in obj) obj.hasOwnProperty(key) && iterator.call(context, obj[key], key);
++	}
+ 	return obj;
+ }
 
 ```
 
@@ -1157,6 +1238,34 @@ export default used;
 
 ```
 
+## `swc/issues/8924`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 59 vs reference 57 (no whitespaces: +2, formatted: +3)
+
+```js
+'use strict';
+const k = (() => {
+	let x = 1;
+	x **= undefined;
+	return x;
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ 'use strict';
+ const k = (() => {
+ 	let x = 1;
+-	return x **= void 0;
++	return x **= void 0, x;
+ })();
+
+```
+
 ## `swc/issues/8974`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -1552,6 +1661,69 @@ export function init1() {
 
 ```
 
+## `swc/issues/6344/1`
+
+- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`
+- size: oxc 190 vs reference 187 (no whitespaces: +3, formatted: +3)
+
+```js
+function a() {}
+var te = function() {
+	function n(e) {}
+	var t = null;
+	return { init: function(e) {
+		return t = new n(e);
+	} };
+}();
+var he = function() {
+	function n() {
+		a();
+	}
+	;
+	var t = null;
+	return { init: function(e) {
+		return t;
+	} };
+}();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,17 +1,17 @@
+-function n() {}
+-var t = function() {
+-	function n(n) {}
+-	var t = null;
+-	return { init: function(u) {
+-		return t = new n(u);
++function a() {}
++var e = function() {
++	function n(e) {}
++	var e = null;
++	return { init: function(t) {
++		return e = new n(t);
+ 	} };
+ }();
+-var u = function() {
+-	function t() {
+-		n();
++var t = function() {
++	function n() {
++		a();
+ 	}
+-	var u = null;
+-	return { init: function(n) {
+-		return u;
++	var e = null;
++	return { init: function(e) {
++		return null;
+ 	} };
+ }();
+
+```
+
 ## `swc/issues/8626`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -1834,105 +2006,6 @@ for (let a of [0]) a = 1, console.log(a);
 @@ -1 +1 @@
 -for (let a of [0]) console.log(1);
 +for (let a of [0]) a = 1, console.log(a);
-
-```
-
-## `swc/issues/12182/receiver-sensitive`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 715 vs reference 711 (no whitespaces: +4, formatted: +2)
-
-```js
-const receiver = {
-	value: 'variable receiver',
-	read: function() {
-		return this.value;
-	}
-};
-console.log(receiver.read());
-console.log({
-	value: 'direct receiver',
-	read: function() {
-		return this.value;
-	}
-}.read());
-function read() {
-	return this.value;
-}
-const shorthandReceiver = {
-	value: 'shorthand receiver',
-	read
-};
-console.log(shorthandReceiver.read());
-function readExplicit() {
-	return this.value;
-}
-const explicitReceiver = {
-	value: 'explicit receiver',
-	read: readExplicit
-};
-console.log(explicitReceiver.read());
-console.log({
-	value: 'direct identifier receiver',
-	read: readExplicit
-}.read());
-const parameterReceiver = {
-	value: 'parameter receiver',
-	read: function(value = this.value) {
-		return value;
-	}
-};
-console.log(parameterReceiver.read());
-console.log({
-	value: 'direct parameter receiver',
-	read: function(value = this.value) {
-		return value;
-	}
-}.read());
-const capturedReceiver = {
-	value: 'captured receiver',
-	read: function() {
-		return (() => this.value)();
-	}
-};
-console.log(capturedReceiver.read());
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,3 @@
--function readExplicit() {
--	return this.value;
--}
- console.log({
- 	value: 'variable receiver',
- 	read: function() {
-@@ -11,12 +8,18 @@
- 	read: function() {
- 		return this.value;
- 	}
--}.read()), console.log({
-+}.read());
-+function read() {
-+	return this.value;
-+}
-+console.log({
- 	value: 'shorthand receiver',
--	read: function() {
--		return this.value;
--	}
--}.read()), console.log({
-+	read
-+}.read());
-+function readExplicit() {
-+	return this.value;
-+}
-+console.log({
- 	value: 'explicit receiver',
- 	read: readExplicit
- }.read()), console.log({
 
 ```
 
@@ -2635,54 +2708,6 @@ export function bitwise3(a, b) {
 
 ```
 
-## `swc/issues/10816`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 133 vs reference 127 (no whitespaces: +6, formatted: +10)
-
-```js
-class A {
-	fromArrow() {
-		console.log('hello');
-	}
-	foobar() {
-		const callMe = () => this.fromArrow();
-		function B() {
-			callMe();
-		}
-		return B;
-	}
-}
-const instance = new A();
-const fn = instance.foobar();
-fn();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,11 +1,13 @@
--new class {
-+class A {
- 	fromArrow() {
- 		console.log('hello');
- 	}
- 	foobar() {
- 		let callMe = () => this.fromArrow();
--		return function() {
-+		function B() {
- 			callMe();
--		};
-+		}
-+		return B;
- 	}
--}().foobar()();
-+}
-+new A().foobar()();
-
-```
-
 ## `swc/issues/11512-exhaustive/fn-multi-use-default-unused`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
@@ -2765,22 +2790,34 @@ switch (1) {
 
 ```
 
-## `swc/issues/5680`
+## `swc/issues/6175/1`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
-- size: oxc 30 vs reference 24 (no whitespaces: +6, formatted: +11)
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 79 vs reference 73 (no whitespaces: +6, formatted: +8)
 
 ```js
-const totalCount = (a ? a.length : 0) + (b ? b.length : 0);
+let o = { f() {
+	assert.ok(this !== o);
+} };
+(1, o.f)``;
+(true ? o.f : false)``;
+(true && o.f)``;
+let a;
+(a = o.f)``;
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1 +1 @@
--a && a.length, b && b.length;
-+(a ? a.length : 0) + (b ? b.length : 0);
+@@ -1,4 +1,6 @@
+ let o = { f() {
+ 	assert.ok(this !== o);
+ } };
+-(0, o.f)``, (0, o.f)``, (0, o.f)``, (0, o.f)``;
++(0, o.f)``, (0, o.f)``, (0, o.f)``;
++let a;
++(a = o.f)``;
 
 ```
 
@@ -3495,6 +3532,103 @@ console.log(argumentsDefault(1, 2), evalDefault(1, 2), superDefault.m(), argumen
 
 ```
 
+## `swc/issues/12204/observable-iterables`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 587 vs reference 579 (no whitespaces: +8, formatted: +22)
+
+```js
+function* setGenerator() {
+	console.log('set generator');
+	yield 1;
+}
+new Set(setGenerator());
+function* mapGenerator() {
+	console.log('map generator');
+	yield ['key', 'value'];
+}
+new Map(mapGenerator());
+const setIterator = { [Symbol.iterator]() {
+	console.log('set iterator');
+	let first = true;
+	return { next() {
+		console.log('set next');
+		if (first) {
+			first = false;
+			return {
+				done: false,
+				value: 1
+			};
+		}
+		return { done: true };
+	} };
+} };
+new Set(setIterator);
+const mapIterator = { [Symbol.iterator]() {
+	console.log('map iterator');
+	let first = true;
+	return { next() {
+		console.log('map next');
+		if (first) {
+			first = false;
+			return {
+				done: false,
+				value: ['key', 'value']
+			};
+		}
+		return { done: true };
+	} };
+} };
+new Map(mapIterator);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,25 +1,30 @@
+ function* setGenerator() {
+ 	console.log('set generator'), yield 1;
+ }
++new Set(setGenerator());
+ function* mapGenerator() {
+ 	console.log('map generator'), yield ['key', 'value'];
+ }
+-new Set(setGenerator()), new Map(mapGenerator());
++new Map(mapGenerator());
+ const setIterator = { [Symbol.iterator]() {
+ 	console.log('set iterator');
+ 	let first = !0;
+-	return { next: () => (console.log('set next'), first) ? (first = !1, {
+-		done: !1,
+-		value: 1
+-	}) : { done: !0 } };
++	return { next() {
++		return console.log('set next'), first ? (first = !1, {
++			done: !1,
++			value: 1
++		}) : { done: !0 };
++	} };
+ } };
+ new Set(setIterator);
+ const mapIterator = { [Symbol.iterator]() {
+ 	console.log('map iterator');
+ 	let first = !0;
+-	return { next: () => (console.log('map next'), first) ? (first = !1, {
+-		done: !1,
+-		value: ['key', 'value']
+-	}) : { done: !0 } };
++	return { next() {
++		return console.log('map next'), first ? (first = !1, {
++			done: !1,
++			value: ['key', 'value']
++		}) : { done: !0 };
++	} };
+ } };
+ new Map(mapIterator);
+
+```
+
 ## `swc/issues/12212/safe-unused-rest`
 
 - tags: `remove unused`
@@ -3564,55 +3698,6 @@ g(a);
 -g(z());
 +var a = z();
 +g(a);
-
-```
-
-## `swc/issues/6422/1`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 271 vs reference 263 (no whitespaces: +8, formatted: +14)
-
-```js
-let getter_effect = 'FAIL';
-let setter_effect = 'FAIL';
-let proto = {
-	get foo() {
-		getter_effect = 'PASS';
-	},
-	set bar(value) {
-		setter_effect = 'PASS';
-	}
-};
-let obj1 = { __proto__: proto };
-let obj2 = { __proto__: proto };
-let unused = obj1.foo;
-obj2.bar = 0;
-assert.strictEqual(getter_effect, 'PASS');
-assert.strictEqual(setter_effect, 'PASS');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,14 +1,9 @@
--let getter_effect = 'FAIL';
--let setter_effect = 'FAIL';
--let proto = {
-+let getter_effect = 'FAIL', setter_effect = 'FAIL', proto = {
- 	get foo() {
- 		getter_effect = 'PASS';
- 	},
- 	set bar(value) {
- 		setter_effect = 'PASS';
- 	}
--};
--({ __proto__: proto }).foo;
--({ __proto__: proto }).bar = 0;
--assert.strictEqual(getter_effect, 'PASS');
--assert.strictEqual(setter_effect, 'PASS');
-+}, obj1 = { __proto__: proto }, obj2 = { __proto__: proto };
-+obj1.foo, obj2.bar = 0, assert.strictEqual(getter_effect, 'PASS'), assert.strictEqual(setter_effect, 'PASS');
 
 ```
 
@@ -3970,6 +4055,25 @@ console.log([1, ...[2, 3]]);
 
 ```
 
+## `swc/issues/vercel/001`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 34 vs reference 25 (no whitespaces: +9, formatted: +11)
+
+```js
+const re = new RegExp('^/(?!_next).*$');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-RegExp('^/(?!_next).*$');
++const re = RegExp('^/(?!_next).*$');
+
+```
+
 ## `swc/member_expr/undetermined_prop`
 
 - tags: `drop debugger`, `join vars`, `sequences`
@@ -3986,6 +4090,27 @@ console.log([1, ...[2, 3]]);
 @@ -1 +1 @@
 -undetermined();
 +({ a: 1 })[undetermined()];
+
+```
+
+## `swc/issues/11105`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 58 vs reference 48 (no whitespaces: +10, formatted: +12)
+
+```js
+var __proto__ = [];
+console.log({ __proto__ } instanceof Array);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,2 @@
+-console.log({ ['__proto__']: [] } instanceof Array);
++var __proto__ = [];
++console.log({ __proto__ } instanceof Array);
 
 ```
 
@@ -4014,6 +4139,48 @@ console.log(typeof Symbol('unshadowed'));
  console.log(call((value) => value));
 -console.log(typeof Symbol());
 +console.log(typeof Symbol('unshadowed'));
+
+```
+
+## `swc/issues/2779/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 44 vs reference 34 (no whitespaces: +10, formatted: +13)
+
+```js
+const e = Math.random();
+console.log(e === -1 / 0);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,2 @@
+-console.log(-1 / 0 === Math.random());
++const e = Math.random();
++console.log(e === -1 / 0);
+
+```
+
+## `swc/issues/2779/2`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 45 vs reference 35 (no whitespaces: +10, formatted: +13)
+
+```js
+const t = Math.random();
+console.log(1 / t == -1 / 0);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,2 @@
+-console.log(1 / Math.random() == -1 / 0);
++const t = Math.random();
++console.log(1 / t == -1 / 0);
 
 ```
 
@@ -4059,6 +4226,37 @@ export default (name) => {
  	// }
 -});
 +};
+
+```
+
+## `swc/issues/9500`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 71 vs reference 61 (no whitespaces: +10, formatted: +13)
+
+```js
+let foo = 1;
+const obj = { get 1() {
+	// same with get "1"()
+	foo = 2;
+	return 40;
+} };
+obj['1'];
+console.log(foo);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,5 @@
+ let foo = 1;
+-({ get 1() {
++const obj = { get 1() {
+ 	return foo = 2, 40;
+-} })['1'], console.log(foo);
++} };
++obj[1], console.log(foo);
 
 ```
 
@@ -4433,6 +4631,71 @@ switch (a()) {
 
 ```
 
+## `swc/issues/11368`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 668 vs reference 657 (no whitespaces: +11, formatted: +15)
+
+```js
+/**
+* SWC Compress Bug - Playground Reproduction
+* ==========================================
+*
+*
+* Steps:
+* 1. Run the output → logs "BUG: expected A, got B"
+* 2. Disable compress and run again → logs "OK: got A"
+*
+* Bug: When SWC's compress is enabled, a class property that calls
+* a function which returns a closure will have that closure capture
+* values from the LAST instance instead of its own.
+*/
+const wrap = (cb) => () => cb();
+class Base {
+	constructor(props) {
+		this.props = props;
+	}
+}
+class C extends Base {
+	fn = wrap(this.props.cb);
+}
+// Test
+const a = new C({ cb: () => 'A' });
+const b = new C({ cb: () => 'B' });
+const result = a.fn();
+console.log(result === 'A' ? 'OK: got A' : 'BUG: expected A, got ' + result);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -10,16 +10,16 @@
+ * Bug: When SWC's compress is enabled, a class property that calls
+ * a function which returns a closure will have that closure capture
+ * values from the LAST instance instead of its own.
+-*/ class Base {
++*/
++const wrap = (cb) => () => cb();
++class Base {
+ 	constructor(props) {
+ 		this.props = props;
+ 	}
+ }
+ class C extends Base {
+-	fn = ((cb) => () => cb())(this.props.cb);
++	fn = wrap(this.props.cb);
+ }
+ // Test
+-const a = new C({ cb: () => 'A' });
+-new C({ cb: () => 'B' });
+-const result = a.fn();
+-console.log('A' === result ? 'OK: got A' : 'BUG: expected A, got ' + result);
++const a = new C({ cb: () => 'A' }), b = new C({ cb: () => 'B' }), result = a.fn();
++console.log(result === 'A' ? 'OK: got A' : 'BUG: expected A, got ' + result);
+
+```
+
 ## `swc/issues/12184/optional-chains`
 
 - size: oxc 250 vs reference 239 (no whitespaces: +11, formatted: +11)
@@ -4519,55 +4782,26 @@ console.log(strictArguments(1, 3), missingArguments(), mappedArguments(1, 3), re
 
 ```
 
-## `swc/issues/4386/2`
+## `swc/issues/3629/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 324 vs reference 313 (no whitespaces: +11, formatted: +22)
+- size: oxc 47 vs reference 36 (no whitespaces: +11, formatted: +14)
 
 ```js
-var application;
-(() => {
-	var __webpack_require__ = {};
-	(() => {
-		__webpack_require__.d = (exports, definition) => {};
-	})();
-	(() => {
-		__webpack_require__.o = (obj, prop) => {};
-	})();
-	(() => {
-		__webpack_require__.r = (exports) => {};
-	})();
-	var __webpack_exports__ = {};
-	__webpack_require__.r(__webpack_exports__);
-	__webpack_require__.d(__webpack_exports__, { 'bootstrap': () => bootstrap });
-	function bootstrap() {
-		alert();
-	}
-	application = __webpack_exports__;
-})();
+const a = 'a' === 'a';
+if (a) {
+	console.log('Hey!');
+}
+console.log(a);
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,7 +1,9 @@
--var __webpack_require__ = {};
--__webpack_require__.d = (exports, definition) => {}, __webpack_require__.o = (obj, prop) => {}, __webpack_require__.r = (exports) => {};
--var __webpack_exports__ = {};
--function bootstrap() {
--	alert();
--}
--__webpack_require__.r(__webpack_exports__), __webpack_require__.d(__webpack_exports__, { bootstrap: () => bootstrap });
-+(() => {
-+	var __webpack_require__ = {};
-+	__webpack_require__.d = (exports, definition) => {}, __webpack_require__.o = (obj, prop) => {}, __webpack_require__.r = (exports) => {};
-+	var __webpack_exports__ = {};
-+	__webpack_require__.r(__webpack_exports__), __webpack_require__.d(__webpack_exports__, { bootstrap: () => bootstrap });
-+	function bootstrap() {
-+		alert();
-+	}
-+})();
+@@ -1 +1,2 @@
++const a = !0;
+ console.log('Hey!'), console.log(!0);
 
 ```
 
@@ -4767,6 +5001,48 @@ const iterable = { [Symbol.iterator]() {
 
 ```
 
+## `swc/issues/12373/2`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 139 vs reference 127 (no whitespaces: +12, formatted: +15)
+
+```js
+// A plain binding is not a pattern: dropping the unused binding and the
+// annotated initializer never runs user code.
+const a = x();
+log(b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,4 @@
+ // A plain binding is not a pattern: dropping the unused binding and the
+ // annotated initializer never runs user code.
++const a = x();
+ log(b);
+
+```
+
+## `swc/issues/7641/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 12 vs reference 0 (no whitespaces: +12, formatted: +17)
+
+```js
+let a = () => a;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -0,0 +1 @@
++let a = () => a;
+
+```
+
 ## `swc/issues/9610-side-effects`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
@@ -4875,6 +5151,41 @@ export default function createWidgetsManager(onWidgetsUpdate) {
 +			return widgets;
 +		}
  	};
+ }
+
+```
+
+## `swc/projects/react/11`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 238 vs reference 226 (no whitespaces: +12, formatted: +15)
+
+```js
+function setCurrentlyValidatingElement$1(element) {
+	{
+		if (element) {
+			var owner = element._owner;
+			var stack = describeUnknownElementTypeFrameInDEV(element.type, element._source, owner ? owner.type : null);
+			setExtraStackFrame(stack);
+		} else {
+			setExtraStackFrame(null);
+		}
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+ function setCurrentlyValidatingElement$1(element) {
+ 	if (element) {
+-		var owner = element._owner;
+-		setExtraStackFrame(describeUnknownElementTypeFrameInDEV(element.type, element._source, owner ? owner.type : null));
++		var owner = element._owner, stack = describeUnknownElementTypeFrameInDEV(element.type, element._source, owner ? owner.type : null);
++		setExtraStackFrame(stack);
+ 	} else setExtraStackFrame(null);
  }
 
 ```
@@ -5337,6 +5648,97 @@ console.log(regexCheck('Foo'));
 
 ```
 
+## `swc/pr/6169/2`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 90 vs reference 76 (no whitespaces: +14, formatted: +19)
+
+```js
+var ref = [, { toUpperCase() {
+	console.log(this);
+} }], key = ref[0], value = ref[1];
+value.toUpperCase();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ var ref = [, { toUpperCase() {
+ 	console.log(this);
+-} }];
+-(ref[0], ref[1]).toUpperCase();
++} }], key = ref[0], value = ref[1];
++value.toUpperCase();
+
+```
+
+## `swc/projects/underscore/16`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 585 vs reference 571 (no whitespaces: +14, formatted: +18)
+
+```js
+function foo() {
+	// Add the first object to the stack of traversed objects.
+	aStack.push(a);
+	bStack.push(b);
+	var size = 0, result = true;
+	// Recursively compare objects and arrays.
+	if (className == '[object Array]') {
+		// Compare array lengths to determine if a deep comparison is necessary.
+		size = a.length;
+		result = size == b.length;
+		if (result) {
+			// Deep compare the contents, ignoring non-numeric properties.
+			while (size--) {
+				if (!(result = eq(a[size], b[size], aStack, bStack))) break;
+			}
+		}
+	} else {
+		// Deep compare objects.
+		for (var key in a) {
+			if (_.has(a, key)) {
+				// Count the expected number of properties.
+				size++;
+				// Deep compare each member.
+				if (!(result = _.has(b, key) && eq(a[key], b[key], aStack, bStack))) break;
+			}
+		}
+		// Ensure that both objects contain the same number of properties.
+		if (result) {
+			for (key in b) {
+				if (_.has(b, key) && !size--) break;
+			}
+			result = !size;
+		}
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,11 @@
+ function foo() {
+-	// Add the first object to the stack of traversed objects.
+ 	aStack.push(a), bStack.push(b);
+ 	var size = 0, result = !0;
+ 	// Recursively compare objects and arrays.
+-	if ('[object Array]' == className) {
+-		if (result = (size = a.length) == b.length) for (; size-- && (result = eq(a[size], b[size], aStack, bStack)););
++	if (className == '[object Array]') {
++		if (size = a.length, result = size == b.length, result)
++ // Deep compare the contents, ignoring non-numeric properties.
++		for (; size-- && (result = eq(a[size], b[size], aStack, bStack)););
+ 	} else {
+ 		// Deep compare objects.
+ 		for (var key in a) if (_.has(a, key) && (size++, !(result = _.has(b, key) && eq(a[key], b[key], aStack, bStack)))) break;
+
+```
+
 ## `swc/issues/10328`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -5376,70 +5778,6 @@ g('b');
  		class A {}
  		console.log(A, A);
  	}
-
-```
-
-## `swc/issues/11368`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 672 vs reference 657 (no whitespaces: +15, formatted: +17)
-
-```js
-/**
-* SWC Compress Bug - Playground Reproduction
-* ==========================================
-*
-*
-* Steps:
-* 1. Run the output → logs "BUG: expected A, got B"
-* 2. Disable compress and run again → logs "OK: got A"
-*
-* Bug: When SWC's compress is enabled, a class property that calls
-* a function which returns a closure will have that closure capture
-* values from the LAST instance instead of its own.
-*/
-const wrap = (cb) => () => cb();
-class Base {
-	constructor(props) {
-		this.props = props;
-	}
-}
-class C extends Base {
-	fn = wrap(this.props.cb);
-}
-// Test
-const a = new C({ cb: () => 'A' });
-const b = new C({ cb: () => 'B' });
-const result = a.fn();
-console.log(result === 'A' ? 'OK: got A' : 'BUG: expected A, got ' + result);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -10,16 +10,18 @@
- * Bug: When SWC's compress is enabled, a class property that calls
- * a function which returns a closure will have that closure capture
- * values from the LAST instance instead of its own.
--*/ class Base {
-+*/
-+const wrap = (cb) => () => cb();
-+class Base {
- 	constructor(props) {
- 		this.props = props;
- 	}
- }
- class C extends Base {
--	fn = ((cb) => () => cb())(this.props.cb);
-+	fn = wrap(this.props.cb);
- }
- // Test
- const a = new C({ cb: () => 'A' });
- new C({ cb: () => 'B' });
- const result = a.fn();
--console.log('A' === result ? 'OK: got A' : 'BUG: expected A, got ' + result);
-+console.log(result === 'A' ? 'OK: got A' : 'BUG: expected A, got ' + result);
 
 ```
 
@@ -5582,6 +5920,109 @@ export function foo(arg) {
 +			call(data);
 +			break;
 +		}
+ 	}
+ }
+
+```
+
+## `swc/issues/6422/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 278 vs reference 263 (no whitespaces: +15, formatted: +23)
+
+```js
+let getter_effect = 'FAIL';
+let setter_effect = 'FAIL';
+let proto = {
+	get foo() {
+		getter_effect = 'PASS';
+	},
+	set bar(value) {
+		setter_effect = 'PASS';
+	}
+};
+let obj1 = { __proto__: proto };
+let obj2 = { __proto__: proto };
+let unused = obj1.foo;
+obj2.bar = 0;
+assert.strictEqual(getter_effect, 'PASS');
+assert.strictEqual(setter_effect, 'PASS');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,14 +1,9 @@
+-let getter_effect = 'FAIL';
+-let setter_effect = 'FAIL';
+-let proto = {
++let getter_effect = 'FAIL', setter_effect = 'FAIL', proto = {
+ 	get foo() {
+ 		getter_effect = 'PASS';
+ 	},
+ 	set bar(value) {
+ 		setter_effect = 'PASS';
+ 	}
+-};
+-({ __proto__: proto }).foo;
+-({ __proto__: proto }).bar = 0;
+-assert.strictEqual(getter_effect, 'PASS');
+-assert.strictEqual(setter_effect, 'PASS');
++}, obj1 = { __proto__: proto }, obj2 = { __proto__: proto }, unused = obj1.foo;
++obj2.bar = 0, assert.strictEqual(getter_effect, 'PASS'), assert.strictEqual(setter_effect, 'PASS');
+
+```
+
+## `swc/projects/react/16`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 329 vs reference 314 (no whitespaces: +15, formatted: +8)
+
+```js
+function advanceTimers(currentTime) {
+	// Check for tasks that are no longer delayed and add them to the queue.
+	var timer = peek(timerQueue);
+	while (timer !== null) {
+		if (timer.callback === null) {
+			// Timer was cancelled.
+			pop(timerQueue);
+		} else if (timer.startTime <= currentTime) {
+			// Timer fired. Transfer to the task queue.
+			pop(timerQueue);
+			timer.sortIndex = timer.expirationTime;
+			push(taskQueue, timer);
+		} else {
+			// Remaining timers are pending.
+			return;
+		}
+		timer = peek(timerQueue);
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,12 @@
+ function advanceTimers(currentTime) {
+-	for (var timer = peek(timerQueue); null !== timer;) {
+-		if (null === timer.callback) pop(timerQueue);
+-		else {
+-			if (!(timer.startTime <= currentTime)) return;
+-			// Timer fired. Transfer to the task queue.
+-			pop(timerQueue), timer.sortIndex = timer.expirationTime, push(taskQueue, timer);
+-		}
++	for (var timer = peek(timerQueue); timer !== null;) {
++		if (timer.callback === null)
++ // Timer was cancelled.
++		pop(timerQueue);
++		else if (timer.startTime <= currentTime) pop(timerQueue), timer.sortIndex = timer.expirationTime, push(taskQueue, timer);
++		else
++ // Remaining timers are pending.
++		return;
+ 		timer = peek(timerQueue);
  	}
  }
 
@@ -5730,54 +6171,6 @@ export { Environment };
 +	return m`<table><thead><tr><th>Name ${42}</th><th>Value</th></tr></thead><tbody>${Object.keys(process.env).sort().map((key) => m`<tr key=${key}><td>${key}</td><td>${String(process.env[key])}</td></tr>`)}</tbody></table>`;
  }
  export { Environment };
-
-```
-
-## `swc/issues/11320`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 258 vs reference 242 (no whitespaces: +16, formatted: +32)
-
-```js
-// Empty class expression should be removed
-new class {}();
-// Class with only a method should also be removed (no side effects)
-new class {
-	foo() {}
-}();
-// Stored result should be removed if unused
-let x = new class {}();
-// Class with side effects in computed key should NOT be removed
-new class {
-	[console.log('side effect')]() {}
-}();
-// Class with property initializer with side effects should NOT be removed
-new class {
-	prop = console.log('side effect');
-}();
-// Class with static block should NOT be removed if static block has side effects
-new class {
-	static {
-		console.log('side effect');
-	}
-}();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,7 @@
--// Empty class expression should be removed
--// Class with side effects in computed key should NOT be removed
--new class {
-+// Class with static block should NOT be removed if static block has side effects
-+new class {}(), new class {
-+	foo() {}
-+}(), new class {}(), new class {
- 	[console.log('side effect')]() {}
- }(), new class {
- 	prop = console.log('side effect');
 
 ```
 
@@ -6005,36 +6398,6 @@ eval(foo);
 
 ```
 
-## `swc/issues/9176`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 47 vs reference 31 (no whitespaces: +16, formatted: +21)
-
-```js
-'use strict';
-const k = (function() {
-	switch (-0) {
-		case 0:
-			console.log('hi');
-			break;
-		default: throw 0;
-	}
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,4 @@
- 'use strict';
--console.log('hi');
-+(function() {
-+	console.log('hi');
-+})();
-
-```
-
 ## `swc/issues/9610`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
@@ -6201,6 +6564,35 @@ process.stdout.write(threw + '\n');
 +		return impl && (stack += impl() || ''), stack;
 +	};
 +})();
+
+```
+
+## `swc/issues/10466`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 210 vs reference 193 (no whitespaces: +17, formatted: +18)
+
+```js
+const G = { setPackageName({ packageName }) {
+	if ('string' == typeof packageName) this.packageName = packageName;
+	return this;
+} };
+var packageName;
+packageName = '@clerk/clerk-react', G.setPackageName({ packageName }), console.log(G.packageName);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,5 @@
+ const G = { setPackageName({ packageName }) {
+-	return 'string' == typeof packageName && (this.packageName = packageName), this;
++	return typeof packageName == 'string' && (this.packageName = packageName), this;
+ } };
+-G.setPackageName({ packageName: '@clerk/clerk-react' }), console.log(G.packageName);
++var packageName = '@clerk/clerk-react';
++G.setPackageName({ packageName }), console.log(G.packageName);
 
 ```
 
@@ -6556,60 +6948,6 @@ export default Infinity;
 
 ```
 
-## `swc/issues/8718/5`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 33 vs reference 15 (no whitespaces: +18, formatted: +26)
-
-```js
-let a = 0;
-function f() {
-	a = '123';
-	console.log(a);
-}
-console.log((a += 1, a += 2));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,2 @@
--console.log(3);
-+let a = 0;
-+console.log((a += 1, a += 2));
-
-```
-
-## `swc/issues/8718/6`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 33 vs reference 15 (no whitespaces: +18, formatted: +26)
-
-```js
-let a = 0;
-function g() {
-	a = '123';
-	console.log(a);
-}
-function f() {
-	// a = "123";
-	console.log(a);
-}
-console.log((a += 1, a += 2));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,2 @@
--console.log(3);
-+let a = 0;
-+console.log((a += 1, a += 2));
-
-```
-
 ## `swc/issues/8737`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -6670,37 +7008,6 @@ d(function() {
  	};
  	return function() {
  		return b;
-
-```
-
-## `swc/issues/8919`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 51 vs reference 33 (no whitespaces: +18, formatted: +26)
-
-```js
-'use strict';
-const k = (() => {
-	switch ('') {
-		default: var x;
-		case '': x;
-	}
-	return x;
-})();
-console.log(k);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,5 @@
- 'use strict';
--console.log(void 0);
-+console.log((() => {
-+	var x;
-+	return x;
-+})());
 
 ```
 
@@ -6937,6 +7244,43 @@ export const k = (() => {
 
 ```
 
+## `swc/issues/9741_collision_function`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 143 vs reference 124 (no whitespaces: +19, formatted: +25)
+
+```js
+function _Object_assign(a, b) {
+	console.log(this, Math.exp(a, b));
+}
+;
+_Object_assign(4, 2);
+const a = {};
+Object.assign(a, {});
+const b = {};
+Object.assign(b, {});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,8 @@
+-var _Object_assign = Object.assign;
+-!function() {
+-	console.log(this, Math.exp(4, 2));
+-}(), _Object_assign({}, {}), _Object_assign({}, {});
++function _Object_assign(a, b) {
++	console.log(this, Math.exp(a, b));
++}
++_Object_assign(4, 2);
++const a = {};
++Object.assign(a, {});
++const b = {};
++Object.assign(b, {});
+
+```
+
 ## `swc/issues/arguments-canonical-index`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
@@ -6977,6 +7321,30 @@ export const k = (() => {
 
 ```
 
+## `swc/issues/2614/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 91 vs reference 71 (no whitespaces: +20, formatted: +26)
+
+```js
+expose(() => export_default);
+var foo = require('70jDX');
+var Value;
+Value = foo.default;
+var export_default = Value;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+ expose(() => export_default);
+-var export_default = require('70jDX').default;
++var foo = require('70jDX'), Value = foo.default, export_default = Value;
+
+```
+
 ## `swc/issues/7331/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
@@ -7010,6 +7378,57 @@ export default function() {
 
 ```
 
+## `swc/issues/7568/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 413 vs reference 393 (no whitespaces: +20, formatted: +22)
+
+```js
+var specific_microfront;
+(function() {
+	'use strict';
+	var __webpack_modules__ = {};
+	function __webpack_require__(moduleId) {
+		var module = __webpack_module_cache__[moduleId] = {
+			id: moduleId,
+			loaded: false,
+			exports: {}
+		};
+		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+		module.loaded = true;
+		return module.exports;
+	}
+	var __webpack_exports__ = __webpack_require__('webpack/container/entry/specific_page');
+	specific_microfront = __webpack_exports__;
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,13 +1,14 @@
+ var specific_microfront;
+-!function() {
++(function() {
+ 	'use strict';
+ 	var __webpack_modules__ = {};
+-	specific_microfront = function __webpack_require__(moduleId) {
++	function __webpack_require__(moduleId) {
+ 		var module = __webpack_module_cache__[moduleId] = {
+ 			id: moduleId,
+ 			loaded: !1,
+ 			exports: {}
+ 		};
+ 		return __webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__), module.loaded = !0, module.exports;
+-	}('webpack/container/entry/specific_page');
+-}();
++	}
++	specific_microfront = __webpack_require__('webpack/container/entry/specific_page');
++})();
+
+```
+
 ## `swc/issues/8718/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -7029,27 +7448,6 @@ console.log((a += 1, a += 2));
 -console.log('12');
 +let a = 0;
 +a = '', console.log((a += 1, a += 2));
-
-```
-
-## `swc/pr/6169/1`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 44 vs reference 23 (no whitespaces: +21, formatted: +25)
-
-```js
-var ref = ['foo'], key = ref[0], value = ref[1];
-value.toUpperCase();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,2 @@
--(void 0).toUpperCase();
-+var ref = ['foo'];
-+ref[0], ref[1].toUpperCase();
 
 ```
 
@@ -7325,25 +7723,22 @@ export default function useMeow() {
 
 ```
 
-## `swc/issues/6492/2`
+## `swc/issues/5680`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 57 vs reference 34 (no whitespaces: +23, formatted: +29)
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
+- size: oxc 47 vs reference 24 (no whitespaces: +23, formatted: +30)
 
 ```js
-const obj = { key: 42 };
-const val = obj?.key.toString();
-console.log('val', val);
+const totalCount = (a ? a.length : 0) + (b ? b.length : 0);
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1 +1,2 @@
--console.log('val', 42 .toString());
-+const val = { key: 42 }.key.toString();
-+console.log('val', val);
+@@ -1 +1 @@
+-a && a.length, b && b.length;
++const totalCount = (a ? a.length : 0) + (b ? b.length : 0);
 
 ```
 
@@ -7602,69 +7997,33 @@ run('abcda', /a/g);
 
 ```
 
-## `swc/issues/6492/1`
+## `swc/issues/9176`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 46 vs reference 22 (no whitespaces: +24, formatted: +30)
+- size: oxc 55 vs reference 31 (no whitespaces: +24, formatted: +31)
 
 ```js
-const obj = { key: 42 };
-const val = obj?.[null || 'key'];
-console.log('val', val);
+'use strict';
+const k = (function() {
+	switch (-0) {
+		case 0:
+			console.log('hi');
+			break;
+		default: throw 0;
+	}
+})();
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1 +1,2 @@
--console.log('val', 42);
-+const val = { key: 42 }.key;
-+console.log('val', val);
-
-```
-
-## `swc/issues/6492/3`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 58 vs reference 34 (no whitespaces: +24, formatted: +30)
-
-```js
-const obj = { key: 42 };
-const val = obj?.key?.toString();
-console.log('val', val);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,2 @@
--console.log('val', 42 .toString());
-+const val = { key: 42 }.key?.toString();
-+console.log('val', val);
-
-```
-
-## `swc/issues/6492/4`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 58 vs reference 34 (no whitespaces: +24, formatted: +30)
-
-```js
-const obj = { key: 42 };
-const val = obj.key?.toString();
-console.log('val', val);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,2 @@
--console.log('val', 42 .toString());
-+const val = { key: 42 }.key?.toString();
-+console.log('val', val);
+@@ -1,2 +1,4 @@
+ 'use strict';
+-console.log('hi');
++const k = (function() {
++	console.log('hi');
++})();
 
 ```
 
@@ -8031,6 +8390,36 @@ console.log(formatter.format(amount));
 +withCurrency && (formatterOpt.style = 'currency');
 +const formatter = new Intl.NumberFormat('en', formatterOpt);
 +console.log(formatter.format(amount));
+
+```
+
+## `swc/issues/lit_comparisons`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 84 vs reference 58 (no whitespaces: +26, formatted: +50)
+
+```js
+const a = 3;
+const b = 4;
+const c = '3';
+const d = '4';
+const e = {};
+const f = {};
+const g = true;
+const h = false;
+const j = null;
+console.log(a === b, c === d, e === f, g === h, h === j);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+-const h = false;
+-console.log(false, false, {} == {}, false, false);
++const a = 3, b = 4, c = '3', d = '4', e = {}, f = {}, g = !0, h = !1, j = null;
++console.log(!1, !1, e === f, !1, !1);
 
 ```
 
@@ -8408,6 +8797,38 @@ new Map(null, console.log('map extra'));
 @@ -1 +1 @@
 -console.log('set first'), console.log('set extra'), console.log('map extra');
 +new Set(void console.log('set first'), console.log('set extra')), new Map(null, console.log('map extra'));
+
+```
+
+## `swc/issues/8919`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 61 vs reference 33 (no whitespaces: +28, formatted: +39)
+
+```js
+'use strict';
+const k = (() => {
+	switch ('') {
+		default: var x;
+		case '': x;
+	}
+	return x;
+})();
+console.log(k);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,6 @@
+ 'use strict';
+-console.log(void 0);
++const k = (() => {
++	var x;
++	return x;
++})();
++console.log(k);
 
 ```
 
@@ -8840,6 +9261,50 @@ export {};
 
 ```
 
+## `swc/issues/6492/2`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 66 vs reference 34 (no whitespaces: +32, formatted: +41)
+
+```js
+const obj = { key: 42 };
+const val = obj?.key.toString();
+console.log('val', val);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,2 @@
+-console.log('val', 42 .toString());
++const obj = { key: 42 }, val = obj?.key.toString();
++console.log('val', val);
+
+```
+
+## `swc/issues/6492/4`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 66 vs reference 34 (no whitespaces: +32, formatted: +41)
+
+```js
+const obj = { key: 42 };
+const val = obj.key?.toString();
+console.log('val', val);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,2 @@
+-console.log('val', 42 .toString());
++const obj = { key: 42 }, val = obj.key?.toString();
++console.log('val', val);
+
+```
+
 ## `swc/issues/7984`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -8882,6 +9347,33 @@ getInitialProps = (code) => {
  		statusCode,
  		message
  	};
+
+```
+
+## `swc/issues/9628`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 49 vs reference 17 (no whitespaces: +32, formatted: +37)
+
+```js
+const getString = () => {
+	switch ('apple') {
+		case 'apple': return '1';
+		case 'banana': return '2';
+	}
+	return '3';
+};
+console.log(getString());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,2 @@
+-console.log('1');
++const getString = () => '1';
++console.log(getString());
 
 ```
 
@@ -8956,6 +9448,130 @@ function sideEffect() {
  }
 -requireObject(null), sideEffect();
 +({} = (sideEffect(), {})), {} = [], {} = 0, {} = !1, {} = '';
+
+```
+
+## `swc/issues/6492/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 55 vs reference 22 (no whitespaces: +33, formatted: +42)
+
+```js
+const obj = { key: 42 };
+const val = obj?.[null || 'key'];
+console.log('val', val);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,2 @@
+-console.log('val', 42);
++const obj = { key: 42 }, val = obj?.key;
++console.log('val', val);
+
+```
+
+## `swc/issues/6492/3`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 67 vs reference 34 (no whitespaces: +33, formatted: +42)
+
+```js
+const obj = { key: 42 };
+const val = obj?.key?.toString();
+console.log('val', val);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,2 @@
+-console.log('val', 42 .toString());
++const obj = { key: 42 }, val = obj?.key?.toString();
++console.log('val', val);
+
+```
+
+## `swc/issues/8844`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 48 vs reference 15 (no whitespaces: +33, formatted: +48)
+
+```js
+const k = (() => {
+	let x;
+	switch (x) {
+		case x?.x?.():
+		default:
+	}
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,6 @@
+-let x;
+-x?.x?.();
++const k = (() => {
++	let x;
++	switch (x) {
++		case void 0:
++	}
++})();
+
+```
+
+## `swc/issues/10816`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 161 vs reference 127 (no whitespaces: +34, formatted: +46)
+
+```js
+class A {
+	fromArrow() {
+		console.log('hello');
+	}
+	foobar() {
+		const callMe = () => this.fromArrow();
+		function B() {
+			callMe();
+		}
+		return B;
+	}
+}
+const instance = new A();
+const fn = instance.foobar();
+fn();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,14 @@
+-new class {
++class A {
+ 	fromArrow() {
+ 		console.log('hello');
+ 	}
+ 	foobar() {
+ 		let callMe = () => this.fromArrow();
+-		return function() {
++		function B() {
+ 			callMe();
+-		};
++		}
++		return B;
+ 	}
+-}().foobar()();
++}
++const instance = new A(), fn = instance.foobar();
++fn();
 
 ```
 
@@ -9262,6 +9878,74 @@ console.log(typeof __swc_delete_12190);
  }
 -console.log(deleteLocal()), console.log(!1), __swc_delete_12190 = 1, console.log(delete __swc_delete_12190), console.log(typeof __swc_delete_12190);
 +console.log(deleteLocal()), console.log(delete undefined), __swc_delete_12190 = 1, console.log(delete __swc_delete_12190), console.log(typeof __swc_delete_12190);
+
+```
+
+## `swc/pr/6169/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 60 vs reference 23 (no whitespaces: +37, formatted: +46)
+
+```js
+var ref = ['foo'], key = ref[0], value = ref[1];
+value.toUpperCase();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,2 @@
+-(void 0).toUpperCase();
++var ref = ['foo'], key = ref[0], value = ref[1];
++value.toUpperCase();
+
+```
+
+## `swc/issues/12182/noinline`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 188 vs reference 150 (no whitespaces: +38, formatted: +41)
+
+```js
+const logger = { log: (value) => console.log(value) };
+/*#__NOINLINE__*/ logger.log('variable noinline');
+const directResult = (/*#__NOINLINE__*/ { log: (value) => console.log(value) }).log('direct noinline');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,3 @@
+ const logger = { log: (value) => console.log(value) };
+-/*#__NOINLINE__*/ logger.log('variable noinline'), { log: (value) => console.log(value) }.log('direct noinline');
++/*#__NOINLINE__*/ logger.log('variable noinline');
++const directResult = (/*#__NOINLINE__*/ { log: (value) => console.log(value) }).log('direct noinline');
+
+```
+
+## `swc/issues/8567`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 58 vs reference 20 (no whitespaces: +38, formatted: +43)
+
+```js
+const templatePath = () => {
+	const undefined = 'lol1';
+	return undefined;
+};
+console.log(templatePath());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,2 @@
+-console.log('lol1');
++const templatePath = () => 'lol1';
++console.log(templatePath());
 
 ```
 
@@ -9885,6 +10569,35 @@ badFunction();
 
 ```
 
+## `swc/issues/9741_threshold`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 197 vs reference 152 (no whitespaces: +45, formatted: +48)
+
+```js
+// This should NOT be hoisted since Object.assign is only used once
+const a = {};
+Object.assign(a, {});
+// JSON.parse is used twice, so it should be hoisted
+const x = JSON.parse('{}');
+const y = JSON.parse('{}');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,5 @@
+ // This should NOT be hoisted since Object.assign is only used once
+-var _JSON_parse = JSON.parse;
+-Object.assign({}, {}), _JSON_parse('{}'), _JSON_parse('{}');
++const a = {};
++Object.assign(a, {});
++// JSON.parse is used twice, so it should be hoisted
++const x = JSON.parse('{}'), y = JSON.parse('{}');
+
+```
+
 ## `swc/issues/next-97517`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
@@ -10024,6 +10737,36 @@ export default About;
  }
 -;
 +export default About;
+
+```
+
+## `swc/issues/2214/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 46 vs reference 0 (no whitespaces: +46, formatted: +68)
+
+```js
+function f(a, b) {
+	if (a) {
+		if (b) return;
+		foo();
+	}
+	bar();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -0,0 +1,7 @@
++function f(a, b) {
++	if (a) {
++		if (b) return;
++		foo();
++	}
++	bar();
++}
 
 ```
 
@@ -10230,6 +10973,73 @@ f({
 +		c: foo2()
 +	}
 +}.invalid);
+
+```
+
+## `swc/projects/react/13`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 577 vs reference 528 (no whitespaces: +49, formatted: +51)
+
+```js
+function validateChildKeys(node, parentType) {
+	if (typeof node !== 'object') {
+		return;
+	}
+	if (Array.isArray(node)) {
+		for (var i = 0; i < node.length; i++) {
+			var child = node[i];
+			if (isValidElement(child)) {
+				validateExplicitKey(child, parentType);
+			}
+		}
+	} else if (isValidElement(node)) {
+		// This element was passed in a valid location.
+		if (node._store) {
+			node._store.validated = true;
+		}
+	} else if (node) {
+		var iteratorFn = getIteratorFn(node);
+		if (typeof iteratorFn === 'function') {
+			// Entry iterators used to provide implicit keys,
+			// but now we print a separate warning for them later.
+			if (iteratorFn !== node.entries) {
+				var iterator = iteratorFn.call(node);
+				var step;
+				while (!(step = iterator.next()).done) {
+					if (isValidElement(step.value)) {
+						validateExplicitKey(step.value, parentType);
+					}
+				}
+			}
+		}
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,13 +1,15 @@
+ function validateChildKeys(node, parentType) {
+-	if ('object' == typeof node) {
++	if (typeof node == 'object') {
+ 		if (Array.isArray(node)) for (var i = 0; i < node.length; i++) {
+ 			var child = node[i];
+ 			isValidElement(child) && validateExplicitKey(child, parentType);
+ 		}
+-		else if (isValidElement(node)) node._store && (node._store.validated = !0);
++		else if (isValidElement(node))
++ // This element was passed in a valid location.
++		node._store && (node._store.validated = !0);
+ 		else if (node) {
+ 			var iteratorFn = getIteratorFn(node);
+-			if ('function' == typeof iteratorFn && iteratorFn !== node.entries) for (var step, iterator = iteratorFn.call(node); !(step = iterator.next()).done;) isValidElement(step.value) && validateExplicitKey(step.value, parentType);
++			if (typeof iteratorFn == 'function' && iteratorFn !== node.entries) for (var iterator = iteratorFn.call(node), step; !(step = iterator.next()).done;) isValidElement(step.value) && validateExplicitKey(step.value, parentType);
+ 		}
+ 	}
+ }
 
 ```
 
@@ -10444,6 +11254,34 @@ module.exports = isKey;
 +	return !!(value == null || isSymbol(value));
 +}
 +module.exports = isKey;
+
+```
+
+## `swc/issues/8718/5`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 69 vs reference 15 (no whitespaces: +54, formatted: +71)
+
+```js
+let a = 0;
+function f() {
+	a = '123';
+	console.log(a);
+}
+console.log((a += 1, a += 2));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,5 @@
+-console.log(3);
++let a = 0;
++function f() {
++	a = '123', console.log(a);
++}
++console.log((a += 1, a += 2));
 
 ```
 
@@ -10734,28 +11572,6 @@ console.log(new $eb2fd35624c84372$var$A().tagName);
 
 ```
 
-## `swc/issues/10178`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 84 vs reference 27 (no whitespaces: +57, formatted: +63)
-
-```js
-//// [indexerWithTuple.ts]
-var strNumTuple = ['foo', 10], numTupleTuple = [10, ['bar', 20]], unionTuple1 = [10, 'foo'], unionTuple2 = [!0, 'foo'];
-strNumTuple[0], strNumTuple['0'];
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,3 @@
- //// [indexerWithTuple.ts]
-+var strNumTuple = ['foo', 10];
-+strNumTuple[0], strNumTuple[0];
-
-```
-
 ## `swc/issues/12199/template`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -10829,6 +11645,60 @@ console.log([
  }
  console.log([
  	templateLeading('x'),
+
+```
+
+## `swc/issues/4386/2`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 371 vs reference 313 (no whitespaces: +58, formatted: +75)
+
+```js
+var application;
+(() => {
+	var __webpack_require__ = {};
+	(() => {
+		__webpack_require__.d = (exports, definition) => {};
+	})();
+	(() => {
+		__webpack_require__.o = (obj, prop) => {};
+	})();
+	(() => {
+		__webpack_require__.r = (exports) => {};
+	})();
+	var __webpack_exports__ = {};
+	__webpack_require__.r(__webpack_exports__);
+	__webpack_require__.d(__webpack_exports__, { 'bootstrap': () => bootstrap });
+	function bootstrap() {
+		alert();
+	}
+	application = __webpack_exports__;
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,11 @@
+-var __webpack_require__ = {};
+-__webpack_require__.d = (exports, definition) => {}, __webpack_require__.o = (obj, prop) => {}, __webpack_require__.r = (exports) => {};
+-var __webpack_exports__ = {};
+-function bootstrap() {
+-	alert();
+-}
+-__webpack_require__.r(__webpack_exports__), __webpack_require__.d(__webpack_exports__, { bootstrap: () => bootstrap });
++var application;
++(() => {
++	var __webpack_require__ = {};
++	__webpack_require__.d = (exports, definition) => {}, __webpack_require__.o = (obj, prop) => {}, __webpack_require__.r = (exports) => {};
++	var __webpack_exports__ = {};
++	__webpack_require__.r(__webpack_exports__), __webpack_require__.d(__webpack_exports__, { bootstrap: () => bootstrap });
++	function bootstrap() {
++		alert();
++	}
++	application = __webpack_exports__;
++})();
 
 ```
 
@@ -11241,40 +12111,6 @@ export { prerender };
 
 ```
 
-## `swc/issues/11303`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 96 vs reference 31 (no whitespaces: +65, formatted: +86)
-
-```js
-class X {
-	constructor() {}
-}
-class Y extends X {}
-const t = (a) => ((b) => {
-	if (a.foo()) throw Error();
-	return a;
-}), y = t(new Y());
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,8 @@
--class X {}
--new class extends X {}();
-+class X {
-+	constructor() {}
-+}
-+class Y extends X {}
-+((a) => ((b) => {
-+	if (a.foo()) throw Error();
-+	return a;
-+}))(new Y());
-
-```
-
 ## `swc/issues/9460/alternate-identifiers`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `pure getters`
@@ -11611,58 +12447,37 @@ export function foo() {
 
 ```
 
-## `swc/issues/7770/2`
+## `swc/issues/11303`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 221 vs reference 145 (no whitespaces: +76, formatted: +92)
+- size: oxc 106 vs reference 31 (no whitespaces: +75, formatted: +101)
 
 ```js
-const sWidth = 'asdasd';
-function absolute() {
-	return `
-    `;
+class X {
+	constructor() {}
 }
-function flex() {
-	return `
-    `;
-}
-exports.MainCSS = `
-.ThisshouldOnlyBeonTop {
-    ${absolute()}
-}
-.abcBlablaOne .asdsad {
-    ${flex()}
-}
-.aasdasdasd .asdsada {
-    we: ${sWidth} !important;
-}
-`;
+class Y extends X {}
+const t = (a) => ((b) => {
+	if (a.foo()) throw Error();
+	return a;
+}), y = t(new Y());
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -1,11 +1,15 @@
-+function absolute() {
-+	return '\n    ';
+@@ -1,2 +1,8 @@
+-class X {}
+-new class extends X {}();
++class X {
++	constructor() {}
 +}
-+function flex() {
-+	return '\n    ';
-+}
- exports.MainCSS = `
- .ThisshouldOnlyBeonTop {
--    
--    
-+    ${absolute()}
- }
- .abcBlablaOne .asdsad {
--    
--    
-+    ${flex()}
- }
- .aasdasdasd .asdsada {
-     we: asdasd !important;
++class Y extends X {}
++const t = (a) => ((b) => {
++	if (a.foo()) throw Error();
++	return a;
++}), y = t(new Y());
 
 ```
 
@@ -11802,6 +12617,51 @@ var y = constants.second;
 
 ```
 
+## `swc/issues/10859`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 570 vs reference 490 (no whitespaces: +80, formatted: +93)
+
+```js
+// Test cases for arrow function IIFE in sequence expressions (Issue #10859)
+// Case 1: Simple arrow IIFE in sequence expression
+console.log('start'), (() => {
+	console.log('middle');
+})(), console.log('end');
+// Case 2: Arrow IIFE returning value in sequence
+var x = (console.log('before'), (() => 42)(), console.log('after'));
+// Case 3: Multiple arrow IIFEs in sequence
+(() => {
+	console.log('first');
+})(), (() => {
+	console.log('second');
+})();
+// Case 4: Arrow IIFE with parameters in sequence
+var y = (console.log('setup'), ((param) => param + 1)(5), console.log('done'));
+// Case 5: Arrow IIFE expression (not block) in sequence
+var a = (console.log('expr'), (() => 42 + 8)(), console.log('result'));
+// Case 6: Arrow IIFE with simple expression body
+var b = (1, (() => 2 + 3)(), 4);
+// Case 7: Arrow IIFE with single parameter
+var c = (0, ((x) => x * 2)(10), 1);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -3,6 +3,7 @@
+ console.log('start'), console.log('middle'), console.log('end');
+ // Case 2: Arrow IIFE returning value in sequence
+ var x = (console.log('before'), console.log('after'));
++// Case 3: Multiple arrow IIFEs in sequence
+ console.log('first'), console.log('second');
+ // Case 4: Arrow IIFE with parameters in sequence
+-var y = (console.log('setup'), console.log('done')), a = (console.log('expr'), console.log('result')), b = 4, c = 1;
++var y = (console.log('setup'), ((param) => param + 1)(5), console.log('done')), a = (console.log('expr'), console.log('result')), b = 4, c = (((x) => x * 2)(10), 1);
+
+```
+
 ## `swc/issues/11977`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -11849,32 +12709,6 @@ var x = class extends d {};
 +var __require = ((x) => __turbopack_context__.z)(function(x) {})(ErrorType || {}), isRequestError = (error) => {
 +	let u = i.getKey ?? ((p, s) => 'x'), f = async () => {};
  }, x = class extends d {};
-
-```
-
-## `swc/simple/inline/1`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 96 vs reference 16 (no whitespaces: +80, formatted: +95)
-
-```js
-const A = 10, B = 5;
-function mod(dividend, divisor) {
-	return (dividend % divisor + divisor) % divisor;
-}
-console.log(mod(A, A + B));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,4 @@
--console.log(10);
-+function mod(dividend, divisor) {
-+	return (dividend % divisor + divisor) % divisor;
-+}
-+console.log(mod(10, 15));
 
 ```
 
@@ -12184,6 +13018,125 @@ console.log(window.x.f(0, 0));
 
 ```
 
+## `swc/simple/inline/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 111 vs reference 16 (no whitespaces: +95, formatted: +116)
+
+```js
+const A = 10, B = 5;
+function mod(dividend, divisor) {
+	return (dividend % divisor + divisor) % divisor;
+}
+console.log(mod(A, A + B));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,5 @@
+-console.log(10);
++const A = 10, B = 5;
++function mod(dividend, divisor) {
++	return (dividend % divisor + divisor) % divisor;
++}
++console.log(mod(10, 15));
+
+```
+
+## `swc/issues/8718/6`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 112 vs reference 15 (no whitespaces: +97, formatted: +120)
+
+```js
+let a = 0;
+function g() {
+	a = '123';
+	console.log(a);
+}
+function f() {
+	// a = "123";
+	console.log(a);
+}
+console.log((a += 1, a += 2));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,9 @@
+-console.log(3);
++let a = 0;
++function g() {
++	a = '123', console.log(a);
++}
++function f() {
++	// a = "123";
++	console.log(a);
++}
++console.log((a += 1, a += 2));
+
+```
+
+## `swc/issues/7770/2`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 243 vs reference 145 (no whitespaces: +98, formatted: +117)
+
+```js
+const sWidth = 'asdasd';
+function absolute() {
+	return `
+    `;
+}
+function flex() {
+	return `
+    `;
+}
+exports.MainCSS = `
+.ThisshouldOnlyBeonTop {
+    ${absolute()}
+}
+.abcBlablaOne .asdsad {
+    ${flex()}
+}
+.aasdasdasd .asdsada {
+    we: ${sWidth} !important;
+}
+`;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,16 @@
++const sWidth = 'asdasd';
++function absolute() {
++	return '\n    ';
++}
++function flex() {
++	return '\n    ';
++}
+ exports.MainCSS = `
+ .ThisshouldOnlyBeonTop {
+-    
+-    
++    ${absolute()}
+ }
+ .abcBlablaOne .asdsad {
+-    
+-    
++    ${flex()}
+ }
+ .aasdasdasd .asdsada {
+     we: asdasd !important;
+
+```
+
 ## `swc/issues/12311`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -12427,6 +13380,36 @@ export const styleLoader = () => {
 
 ```
 
+## `swc/issues/9741_global_objects`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 157 vs reference 51 (no whitespaces: +106, formatted: +156)
+
+```js
+// Map needs 5+ usages due to short name (3 chars)
+const a = new Map();
+const b = new Map();
+const c = new Map();
+const d = new Map();
+const e = new Map();
+// Set also needs 5+ usages
+const f = new Set();
+const g = new Set();
+const h = new Set();
+const i = new Set();
+const j = new Set();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,2 @@
+ // Map needs 5+ usages due to short name (3 chars)
++const a = new Map(), b = new Map(), c = new Map(), d = new Map(), e = new Map(), f = new Set(), g = new Set(), h = new Set(), i = new Set(), j = new Set();
+
+```
+
 ## `swc/issues/12224`
 
 - size: oxc 319 vs reference 210 (no whitespaces: +109, formatted: +109)
@@ -12451,6 +13434,50 @@ console.log(defaultFirst.length, defaultAfterPlain.length, restAfterPlain.length
  function arrayPattern([a], b) {}
 -console.log(0, 1, 1, 2, 2, 2);
 +console.log(defaultFirst.length, defaultAfterPlain.length, restAfterPlain.length, plain.length, objectPattern.length, arrayPattern.length);
+
+```
+
+## `swc/projects/react/12`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 350 vs reference 241 (no whitespaces: +109, formatted: +126)
+
+```js
+function getSourceInfoErrorAddendumForProps(elementProps) {
+	function getSourceInfoErrorAddendum(source) {
+		if (source !== undefined) {
+			var fileName = source.fileName.replace(/^.*[\\\/]/, '');
+			var lineNumber = source.lineNumber;
+			return '\n\nCheck your code at ' + fileName + ':' + lineNumber + '.';
+		}
+		return '';
+	}
+	if (elementProps !== null && elementProps !== undefined) {
+		return getSourceInfoErrorAddendum(elementProps.__source);
+	}
+	return '';
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,10 @@
+ function getSourceInfoErrorAddendumForProps(elementProps) {
+-	if (null != elementProps) {
+-		var source;
+-		return void 0 !== (source = elementProps.__source) ? '\n\nCheck your code at ' + source.fileName.replace(/^.*[\\\/]/, '') + ':' + source.lineNumber + '.' : '';
++	function getSourceInfoErrorAddendum(source) {
++		if (source !== void 0) {
++			var fileName = source.fileName.replace(/^.*[\\\/]/, ''), lineNumber = source.lineNumber;
++			return '\n\nCheck your code at ' + fileName + ':' + lineNumber + '.';
++		}
++		return '';
+ 	}
+-	return '';
++	return elementProps == null ? '' : getSourceInfoErrorAddendum(elementProps.__source);
+ }
 
 ```
 
@@ -12688,90 +13715,49 @@ console.log(NaN.toPrecision(-1));
 
 ```
 
-## `swc/no-side-effect`
+## `swc/projects/react/4`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 126 vs reference 0 (no whitespaces: +126, formatted: +151)
+- size: oxc 466 vs reference 338 (no whitespaces: +128, formatted: +129)
 
 ```js
-function fnA(args) {
-	// ...
-	const a = console.log('AAA');
-	console.log(a);
+function printWarning(level, format, args) {
+	// When changing this logic, you might want to also
+	// update consoleWithStackDev.www.js as well.
+	{
+		var ReactDebugCurrentFrame = ReactSharedInternals.ReactDebugCurrentFrame;
+		var stack = ReactDebugCurrentFrame.getStackAddendum();
+		if (stack !== '') {
+			format += '%s';
+			args = args.concat([stack]);
+		}
+		var argsWithFormat = args.map(function(item) {
+			return '' + item;
+		});
+		argsWithFormat.unshift('Warning: ' + format);
+		// breaks IE9: https://github.com/facebook/react/issues/13610
+		// eslint-disable-next-line react-internal/no-production-logging
+		Function.prototype.apply.call(console[level], console, argsWithFormat);
+	}
 }
-const fnB = (args) => {
-	// ...
-	const b = console.log('BBB');
-	console.log(b);
-};
-const fnC = (args) => {
-	// ...
-	const c = console.log('CCC');
-	console.log(c);
-};
-/**
-* Some jsdocs
-*
-* @__NO_SIDE_EFFECTS__
-*/
-const fnD = (args) => {
-	// ...
-	const d = console.log('DDD');
-	console.log(d);
-};
-fnA();
-fnA();
-fnA();
-fnA();
-fnA();
-fnA();
-fnA();
-fnA();
-fnA();
-fnA();
-fnB();
-fnB();
-fnB();
-fnB();
-fnB();
-fnB();
-fnB();
-fnB();
-fnB();
-fnB();
-fnC();
-fnC();
-fnC();
-fnC();
-fnC();
-fnC();
-fnC();
-fnC();
-fnC();
-fnC();
-fnD();
-fnD();
-fnD();
-fnD();
-fnD();
-fnD();
-fnD();
-fnD();
-fnD();
-fnD();
 
 ```
 
 ```diff
 --- reference
 +++ oxc
-@@ -0,0 +1,6 @@
-+const fnD = (args) => {
-+	// ...
-+	let d = console.log('DDD');
-+	console.log(d);
-+};
-+fnD(), fnD(), fnD(), fnD(), fnD(), fnD(), fnD(), fnD(), fnD(), fnD();
+@@ -1,8 +1,10 @@
+ function printWarning(level, format, args) {
+ 	var stack = ReactSharedInternals.ReactDebugCurrentFrame.getStackAddendum();
+-	'' !== stack && (format += '%s', args = args.concat([stack]));
++	stack !== '' && (format += '%s', args = args.concat([stack]));
+ 	var argsWithFormat = args.map(function(item) {
+ 		return '' + item;
+ 	});
++	// breaks IE9: https://github.com/facebook/react/issues/13610
++	// eslint-disable-next-line react-internal/no-production-logging
+ 	argsWithFormat.unshift('Warning: ' + format), Function.prototype.apply.call(console[level], console, argsWithFormat);
+ }
 
 ```
 
@@ -12852,6 +13838,28 @@ class KeepNonExpressionBlock {
 +		flag && effect();
 +	}
 +}
+
+```
+
+## `swc/issues/10178`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 160 vs reference 27 (no whitespaces: +133, formatted: +152)
+
+```js
+//// [indexerWithTuple.ts]
+var strNumTuple = ['foo', 10], numTupleTuple = [10, ['bar', 20]], unionTuple1 = [10, 'foo'], unionTuple2 = [!0, 'foo'];
+strNumTuple[0], strNumTuple['0'];
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,3 @@
+ //// [indexerWithTuple.ts]
++var strNumTuple = ['foo', 10], numTupleTuple = [10, ['bar', 20]], unionTuple1 = [10, 'foo'], unionTuple2 = [!0, 'foo'];
++strNumTuple[0], strNumTuple[0];
 
 ```
 
@@ -12938,6 +13946,56 @@ export {};
 +const counter1 = new Counter(), counter2 = new Counter();
  console.log(counter1.add(1)), console.log(counter2.add(1)), console.log(Counter.helper(1)), console.log(Counter.method()(1));
  export {};
+
+```
+
+## `swc/issues/11320`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 380 vs reference 242 (no whitespaces: +138, formatted: +154)
+
+```js
+// Empty class expression should be removed
+new class {}();
+// Class with only a method should also be removed (no side effects)
+new class {
+	foo() {}
+}();
+// Stored result should be removed if unused
+let x = new class {}();
+// Class with side effects in computed key should NOT be removed
+new class {
+	[console.log('side effect')]() {}
+}();
+// Class with property initializer with side effects should NOT be removed
+new class {
+	prop = console.log('side effect');
+}();
+// Class with static block should NOT be removed if static block has side effects
+new class {
+	static {
+		console.log('side effect');
+	}
+}();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,10 @@
+-// Empty class expression should be removed
+-// Class with side effects in computed key should NOT be removed
++// Class with only a method should also be removed (no side effects)
++new class {}(), new class {
++	foo() {}
++}();
++// Stored result should be removed if unused
++let x = new class {}();
++// Class with static block should NOT be removed if static block has side effects
+ new class {
+ 	[console.log('side effect')]() {}
+ }(), new class {
 
 ```
 
@@ -13419,6 +14477,140 @@ console.log(1e-101.toPrecision(3), (-1e-101).toPrecision(3), 6e-101.toPrecision(
 
 ```
 
+## `swc/issues/12182/receiver-sensitive`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 903 vs reference 711 (no whitespaces: +192, formatted: +205)
+
+```js
+const receiver = {
+	value: 'variable receiver',
+	read: function() {
+		return this.value;
+	}
+};
+console.log(receiver.read());
+console.log({
+	value: 'direct receiver',
+	read: function() {
+		return this.value;
+	}
+}.read());
+function read() {
+	return this.value;
+}
+const shorthandReceiver = {
+	value: 'shorthand receiver',
+	read
+};
+console.log(shorthandReceiver.read());
+function readExplicit() {
+	return this.value;
+}
+const explicitReceiver = {
+	value: 'explicit receiver',
+	read: readExplicit
+};
+console.log(explicitReceiver.read());
+console.log({
+	value: 'direct identifier receiver',
+	read: readExplicit
+}.read());
+const parameterReceiver = {
+	value: 'parameter receiver',
+	read: function(value = this.value) {
+		return value;
+	}
+};
+console.log(parameterReceiver.read());
+console.log({
+	value: 'direct parameter receiver',
+	read: function(value = this.value) {
+		return value;
+	}
+}.read());
+const capturedReceiver = {
+	value: 'captured receiver',
+	read: function() {
+		return (() => this.value)();
+	}
+};
+console.log(capturedReceiver.read());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,40 +1,50 @@
+-function readExplicit() {
+-	return this.value;
+-}
+-console.log({
++const receiver = {
+ 	value: 'variable receiver',
+ 	read: function() {
+ 		return this.value;
+ 	}
+-}.read()), console.log({
++};
++console.log(receiver.read()), console.log({
+ 	value: 'direct receiver',
+ 	read: function() {
+ 		return this.value;
+ 	}
+-}.read()), console.log({
++}.read());
++function read() {
++	return this.value;
++}
++const shorthandReceiver = {
+ 	value: 'shorthand receiver',
+-	read: function() {
+-		return this.value;
+-	}
+-}.read()), console.log({
++	read
++};
++console.log(shorthandReceiver.read());
++function readExplicit() {
++	return this.value;
++}
++const explicitReceiver = {
+ 	value: 'explicit receiver',
+ 	read: readExplicit
+-}.read()), console.log({
++};
++console.log(explicitReceiver.read()), console.log({
+ 	value: 'direct identifier receiver',
+ 	read: readExplicit
+-}.read()), console.log({
++}.read());
++const parameterReceiver = {
+ 	value: 'parameter receiver',
+ 	read: function(value = this.value) {
+ 		return value;
+ 	}
+-}.read()), console.log({
++};
++console.log(parameterReceiver.read()), console.log({
+ 	value: 'direct parameter receiver',
+ 	read: function(value = this.value) {
+ 		return value;
+ 	}
+-}.read()), console.log({
++}.read());
++const capturedReceiver = {
+ 	value: 'captured receiver',
+ 	read: function() {
+ 		return this.value;
+ 	}
+-}.read());
++};
++console.log(capturedReceiver.read());
+
+```
+
 ## `swc/pr/11814_class_effect_order`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -13559,7 +14751,7 @@ try {
 ## `swc/issues/drop-console-value-refs`
 
 - tags: `drop console`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 915 vs reference 705 (no whitespaces: +210, formatted: +192)
+- size: oxc 930 vs reference 705 (no whitespaces: +225, formatted: +210)
 
 ```js
 const err = console.error.bind(console);
@@ -13594,7 +14786,7 @@ process.stdout.write(typeof st + '\n');
 ```diff
 --- reference
 +++ oxc
-@@ -1,22 +1,16 @@
+@@ -1,22 +1,18 @@
 -const err = (function() {}).bind();
 +const err = console.error.bind(console);
  err('boom');
@@ -13607,8 +14799,9 @@ process.stdout.write(typeof st + '\n');
 +const cap = console.error.capture('custom property, value position');
  process.stdout.write(typeof cap + '\n');
 -const cap2 = void 0;
--process.stdout.write(typeof cap2 + '\n');
--const r = void 0;
++const cap2 = console.error.capture?.('custom property, optional call');
+ process.stdout.write(typeof cap2 + '\n');
+ const r = void 0;
 -process.stdout.write(typeof r + '\n');
 -process.stdout.write(typeof err + '\n');
 -const ob = (console?.error && function() {})?.bind();
@@ -13620,20 +14813,58 @@ process.stdout.write(typeof st + '\n');
 -const dbg = (console.debug && function() {})?.bind() || null;
 -process.stdout.write((null !== dbg) + '\n');
 -const st = void 0;
-+const cap2 = console.error.capture?.('custom property, optional call');
-+process.stdout.write(typeof cap2 + '\n'), process.stdout.write('undefined\n'), process.stdout.write(typeof err + '\n');
++process.stdout.write('undefined\n'), process.stdout.write(typeof err + '\n');
 +const ob = console?.error?.bind(console);
 +ob('boom optional'), process.stdout.write(typeof ob + '\n');
 +const pb = console?.error.bind(console);
 +pb('early optional'), process.stdout.write(typeof pb + '\n');
-+const dbg = c
++const dbg = console.debug?.bind(console) || null;
++proc
 ... [truncated]
+```
+
+## `swc/issues/2072/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 234 vs reference 0 (no whitespaces: +234, formatted: +278)
+
+```js
+function cost(oldItem, newItem) {
+	if (newItem.val === oldItem.val) {
+		return 0;
+	}
+	if (typeof oldItem.val === 'object' && typeof newItem.val === 'object') {
+		if (oldItem.key === undefined || newItem.key === undefined) {
+			return 1;
+		}
+		if (oldItem.key === newItem.key) {
+			return 0;
+		}
+	}
+	return 1;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -0,0 +1,8 @@
++function cost(oldItem, newItem) {
++	if (newItem.val === oldItem.val) return 0;
++	if (typeof oldItem.val == 'object' && typeof newItem.val == 'object') {
++		if (oldItem.key === void 0 || newItem.key === void 0) return 1;
++		if (oldItem.key === newItem.key) return 0;
++	}
++	return 1;
++}
+
 ```
 
 ## `swc/issues/8813`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 528 vs reference 310 (no whitespaces: +218, formatted: +345)
+- size: oxc 549 vs reference 310 (no whitespaces: +239, formatted: +376)
 
 ```js
 const k1 = (() => {
@@ -13729,32 +14960,32 @@ console.log(c);
 -	case z = 'PASS 5':
 -}
 -console.log(y2, z), console.log('PASS');
-+(() => {
++const k1 = (() => {
 +	let x = 'asdf';
 +	switch (x) {
 +		case x:
 +	}
 +	console.log('PASS 1');
-+})(), (() => {
++})(), k2 = (() => {
 +	let x = 'asdf';
 +	switch (x) {
 +		case x:
 +	}
 +	console.log('PASS 2');
-+})(), (() => {
++})(), k3 = (() => {
 +	let x = 'asdf', y = 'FAIL';
 +	switch (x) {
 +		case y = 'PASS 3', x:
 +	}
 +	console.log(y);
-+})(), (() => {
++})(), k4 = (() => {
 +	let x = 'asdf', y = 'FAIL';
 +	switch (x) {
 +		case y = 'PASS 4':
 +		case x:
 +	}
 +	console.log(y);
-+})(), (() => {
++})(), k5 = (() => {
 +	let x = 'asdf', y = 'FAIL', z = 'FAIL';
 +	switch (x) {
 +		case y = 'PASS 5':
@@ -13852,6 +15083,193 @@ skipsLaterTest(1);
 +	}
 +}
 +skipsLaterTest(1);
+
+```
+
+## `swc/issues/react/hooks/2`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 298 vs reference 0 (no whitespaces: +298, formatted: +345)
+
+```js
+function useProjectBranches(projectId, opts) {
+	var token = (0, authenticate.LP)();
+	var ref = (0, use_team.ZP)(), team = ref.team;
+	var teamId = team === null || team === void 0 ? void 0 : team.id;
+	return (0, index_esm.ZP)(projectId ? ''.concat(api_endpoints.Ms, '/git-branches').concat((0, qs.c)({
+		projectId,
+		teamId
+	})) : '', function(endpoint) {
+		return (0, fetch_api.Z)(endpoint, token, { throwOnHTTPError: true });
+	}, opts);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -0,0 +1,9 @@
++function useProjectBranches(projectId, opts) {
++	var token = (0, authenticate.LP)(), teamId = (0, use_team.ZP)().team?.id;
++	return (0, index_esm.ZP)(projectId ? `${api_endpoints.Ms}/git-branches${(0, qs.c)({
++		projectId,
++		teamId
++	})}` : '', function(endpoint) {
++		return (0, fetch_api.Z)(endpoint, token, { throwOnHTTPError: !0 });
++	}, opts);
++}
+
+```
+
+## `swc/no-side-effect`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 313 vs reference 0 (no whitespaces: +313, formatted: +378)
+
+```js
+function fnA(args) {
+	// ...
+	const a = console.log('AAA');
+	console.log(a);
+}
+const fnB = (args) => {
+	// ...
+	const b = console.log('BBB');
+	console.log(b);
+};
+const fnC = (args) => {
+	// ...
+	const c = console.log('CCC');
+	console.log(c);
+};
+/**
+* Some jsdocs
+*
+* @__NO_SIDE_EFFECTS__
+*/
+const fnD = (args) => {
+	// ...
+	const d = console.log('DDD');
+	console.log(d);
+};
+fnA();
+fnA();
+fnA();
+fnA();
+fnA();
+fnA();
+fnA();
+fnA();
+fnA();
+fnA();
+fnB();
+fnB();
+fnB();
+fnB();
+fnB();
+fnB();
+fnB();
+fnB();
+fnB();
+fnB();
+fnC();
+fnC();
+fnC();
+fnC();
+fnC();
+fnC();
+fnC();
+fnC();
+fnC();
+fnC();
+fnD();
+fnD();
+fnD();
+fnD();
+fnD();
+fnD();
+fnD();
+fnD();
+fnD();
+fnD();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -0,0 +1,19 @@
++function fnA(args) {
++	// ...
++	let a = console.log('AAA');
++	console.log(a);
++}
++const fnB = (args) => {
++	// ...
++	let b = console.log('BBB');
++	console.log(b);
++}, fnC = (args) => {
++	// ...
++	let c = console.log('CCC');
++	console.log(c);
++}, fnD = (args) => {
++	// ...
++	let d = console.log('DDD');
++	console.log(d);
++};
++fnD(), fnD(), fnD(), fnD(), fnD(), fnD(), fnD(), fnD(), fnD(), fnD();
+
+```
+
+## `swc/issues/2605/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 341 vs reference 17 (no whitespaces: +324, formatted: +371)
+
+```js
+var a = function(state) {
+	return $6aPrw.atTheBeginningOfBlock(state) && $6aPrw.atTheEndOfBlock(state);
+};
+function b() {
+	findDeleteRange(state);
+}
+function findDeleteRange(state) {
+	if (!a(state) || $0204f19a3843e92f$export$7abbbf8335ec653(state)) {
+		return state;
+	} else {
+		return $04186525b01d7539$var$range();
+	}
+}
+function Foo() {
+	this.x = Foo;
+	this.insertFile = function() {
+		b();
+	};
+}
+console.log(cls);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,15 @@
++var a = function(state) {
++	return $6aPrw.atTheBeginningOfBlock(state) && $6aPrw.atTheEndOfBlock(state);
++};
++function b() {
++	findDeleteRange(state);
++}
++function findDeleteRange(state) {
++	return !a(state) || $0204f19a3843e92f$export$7abbbf8335ec653(state) ? state : $04186525b01d7539$var$range();
++}
++function Foo() {
++	this.x = Foo, this.insertFile = function() {
++		b();
++	};
++}
+ console.log(cls);
 
 ```
 

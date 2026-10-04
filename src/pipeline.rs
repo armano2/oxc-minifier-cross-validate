@@ -7,10 +7,6 @@ use oxc::{
     span::SourceType,
 };
 
-pub const fn source_type_for(is_module: bool) -> SourceType {
-    if is_module { SourceType::mjs() } else { SourceType::cjs() }
-}
-
 /// Parse + codegen without compression, so both sides are compared in the same
 /// normalized form.
 pub fn print_normalized(source_text: &str, source_type: SourceType) -> Result<String, String> {

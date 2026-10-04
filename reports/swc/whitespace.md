@@ -4,32 +4,6 @@ Fixtures: 4
 
 [← swc](README.md) · [← all families](../README.md)
 
-## `swc/issues/10466`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-
-```js
-const G = { setPackageName({ packageName }) {
-	if ('string' == typeof packageName) this.packageName = packageName;
-	return this;
-} };
-var packageName;
-packageName = '@clerk/clerk-react', G.setPackageName({ packageName }), console.log(G.packageName);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
- const G = { setPackageName({ packageName }) {
--	return 'string' == typeof packageName && (this.packageName = packageName), this;
-+	return typeof packageName == 'string' && (this.packageName = packageName), this;
- } };
- G.setPackageName({ packageName: '@clerk/clerk-react' }), console.log(G.packageName);
-
-```
-
 ## `swc/issues/11512-exhaustive/iife-default-reassigned`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `1 iteration`
@@ -85,6 +59,31 @@ export function iifeDefaultReassigned(value) {
 -}();
 +	a.b = 1, a = null;
 +})();
+
+```
+
+## `swc/projects/mootools/2`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+
+```js
+var Hash = this.Hash = new Type('Hash', function(object) {
+	if (typeOf(object) == 'hash') object = Object.clone(object.getClean());
+	for (var key in object) this[key] = object[key];
+	return this;
+});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ var Hash = this.Hash = new Type('Hash', function(object) {
+-	for (var key in 'hash' == typeOf(object) && (object = Object.clone(object.getClean())), object) this[key] = object[key];
++	for (var key in typeOf(object) == 'hash' && (object = Object.clone(object.getClean())), object) this[key] = object[key];
+ 	return this;
+ });
 
 ```
 

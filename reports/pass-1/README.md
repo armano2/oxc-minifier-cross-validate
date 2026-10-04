@@ -8,13 +8,13 @@ Fixtures run: 19
 
 | smaller | not-idempotent | panic | larger | whitespace | differs | parse-error | config-error | pass | total |
 |---|---|---|---|---|---|---|---|---|---|
-| 2 | 0 | 0 | 9 | 1 | 2 | 0 | 0 | 5 | 19 |
+| 2 | 0 | 0 | 10 | 1 | 2 | 0 | 0 | 4 | 19 |
 
 ## Reports
 
 | kind | fixtures | file |
 |---|---:|---|
 | smaller | 2 | [smaller.md](smaller.md) |
-| larger | 9 | [larger.md](larger.md) |
+| larger | 10 | [larger.md](larger.md) |
 | whitespace | 1 | [whitespace.md](whitespace.md) |
 | differs | 2 | [differs.md](differs.md) |

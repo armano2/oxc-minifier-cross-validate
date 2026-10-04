@@ -7,11 +7,12 @@ use oxc::{
         CompressOptions, CompressOptionsKeepNames, CompressOptionsUnused, MangleOptions,
         ManglePropertiesOptions, MinifierOptions, PropertyReadSideEffects,
     },
+    span::SourceType,
 };
 
 pub struct MappedOptions {
     pub options: MinifierOptions,
-    pub is_module: bool,
+    pub source_type: SourceType,
     pub is_ie8: bool,
     pub unsupported_keys: Vec<String>,
     pub errors: Vec<String>,
@@ -72,7 +73,10 @@ pub fn load(root: &Path, dir: &Path) -> MappedOptions {
 
     let mangle_config = resolve(root, dir, "mangle.json", &mut errors);
 
-    let is_module = config.get("is_module").and_then(Value::as_bool).is_some_and(|e| e);
+    let source_type =
+        config.get("module").and_then(Value::as_bool).map_or_else(SourceType::unambiguous, |v| {
+            if v { SourceType::mjs() } else { SourceType::cjs() }
+        });
     let is_ie8 =
         config.contains_key("ie8") | config.contains_key("ie") | config.contains_key("webkit");
 
@@ -82,7 +86,7 @@ pub fn load(root: &Path, dir: &Path) -> MappedOptions {
         compress: Some(map_compress(&config, &mut unsupported_keys)),
     };
 
-    MappedOptions { options, is_module, is_ie8, unsupported_keys, errors }
+    MappedOptions { options, source_type, is_ie8, unsupported_keys, errors }
 }
 
 fn map_mangle(

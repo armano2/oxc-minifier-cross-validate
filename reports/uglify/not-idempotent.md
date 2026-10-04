@@ -1,22 +1,20 @@
 # uglify / not-idempotent — Not idempotent (re-compressing changes the output)
 
-Fixtures: 6
+Fixtures: 4
 
 [← uglify](README.md) · [← all families](../README.md)
 
-## `uglify/classes/retain_declaration`
+## `uglify/drop-unused/drop_duplicated_var_catch`
 
+- tags: `remove unused`
 
 ```js
-'use strict';
-var a = 'FAIL';
-try {
-	console.log(function() {
-		return a;
-		class a {}
-	}());
-} catch (e) {
-	console.log('PASS');
+function f() {
+	try {
+		x();
+	} catch (a) {
+		var a, a;
+	}
 }
 
 ```
@@ -24,29 +22,24 @@ try {
 ```diff
 --- reference
 +++ oxc
-@@ -3,8 +3,7 @@
- try {
- 	console.log(function() {
- 		return a;
--		class a {}
- 	}());
--} catch (e) {
-+} catch {
- 	console.log('PASS');
+@@ -1,7 +1,5 @@
+ function f() {
+ 	try {
+ 		x();
+-	} catch (a) {
+-		var a;
+-	}
++	} catch (a) {}
  }
 
 ```
 
 ```js
 // oxc, second pass
-'use strict';
-var a = 'FAIL';
-try {
-	console.log(function() {
-		return 'FAIL';
-	}());
-} catch {
-	console.log('PASS');
+function f() {
+	try {
+		x();
+	} catch {}
 }
 
 ```
@@ -99,49 +92,6 @@ var a = 1;
 	} catch {}
 })();
 console.log(a);
-
-```
-
-## `uglify/drop-unused/issue_3746`
-
-- tags: `remove unused`
-
-```js
-try {
-	A;
-} catch (e) {
-	var e;
-}
-(function f(a) {
-	e = a;
-})();
-console.log('PASS');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,9 +1,4 @@
- try {
- 	A;
--} catch (e) {
--	var e;
--}
--(function(a) {
--	e = a;
--})();
-+} catch (e) {}
- console.log('PASS');
-
-```
-
-```js
-// oxc, second pass
-try {
-	A;
-} catch {}
-console.log('PASS');
 
 ```
 
@@ -235,42 +185,6 @@ console.log('PASS');
 	}
 	console.log(a);
 })();
-
-```
-
-## `uglify/side_effects/issue_3983_2`
-
-- tags: `join vars`, `remove unused`, `2 iterations`
-
-```js
-var a = 'PASS';
-function f() {
-	g && g();
-}
-f();
-function g() {
-	0 ? a : 0;
-}
-var b = a;
-console.log(a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,4 @@
--console.log('PASS');
-+var a = 'PASS';
-+function f() {}
-+function g() {}
-+console.log(a);
-
-```
-
-```js
-// oxc, second pass
-console.log('PASS');
 
 ```
 

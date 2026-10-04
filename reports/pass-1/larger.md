@@ -1,6 +1,6 @@
 # pass-1 / larger — Output longer than expected (possible missing optimization)
 
-Fixtures: 9
+Fixtures: 10
 
 [← pass-1](README.md) · [← all families](../README.md)
 
@@ -142,6 +142,28 @@ export function MultiPoint(point) {
 -	for (var i = 0; i < 10; i++) return 0 === distance(point);
 +	for (var point1, i = 0; i < 10; i++) return point1 = point, distance(point1) === 0;
  }
+
+```
+
+## `pass-1/issue-6788/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
+- size: oxc 41 vs reference 19 (no whitespaces: +22, formatted: +28)
+
+```js
+const foo = { ...null && {} };
+const bar = { ...null };
+console.log(foo, bar);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,2 @@
+-console.log({}, {});
++const foo = {}, bar = {};
++console.log(foo, bar);
 
 ```
 

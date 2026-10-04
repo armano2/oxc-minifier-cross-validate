@@ -13,7 +13,7 @@ use crate::{
     config,
     fixture::Fixture,
     outcome::{Kind, Outcome},
-    pipeline::{compress, print_minified, print_normalized, source_type_for},
+    pipeline::{compress, print_minified, print_normalized},
     tags,
 };
 
@@ -122,22 +122,14 @@ pub fn run_fixture(root: &Path, fixture: &Fixture) -> Result<Outcome, Skip> {
 
     // Prefer script, fall back to module: terser fixtures are mostly scripts but
     // some use import/export.
-    let mut source_type = source_type_for(config.is_module);
-    let mut compressed = run_compress(&input, source_type);
-    if !config.is_module && !matches!(compressed, Ok(Ok(_))) {
-        let module = SourceType::mjs();
-        let retry = run_compress(&input, module);
-        if matches!(retry, Ok(Ok(_))) {
-            source_type = module;
-            compressed = retry;
-        }
-    }
+    let compressed = run_compress(&input, config.source_type);
 
     // Print the input through the same parse + codegen pipeline so that input,
     // expected and actual differ only in content, never in formatting.
-    outcome.input = panic::catch_unwind(AssertUnwindSafe(|| print_normalized(&input, source_type)))
-        .unwrap_or_else(|_| Ok(input.clone()))
-        .unwrap_or(input);
+    outcome.input =
+        panic::catch_unwind(AssertUnwindSafe(|| print_normalized(&input, config.source_type)))
+            .unwrap_or_else(|_| Ok(input.clone()))
+            .unwrap_or(input);
 
     outcome.actual = match compressed {
         Ok(Ok(actual)) => actual,
@@ -154,7 +146,7 @@ pub fn run_fixture(root: &Path, fixture: &Fixture) -> Result<Outcome, Skip> {
     };
 
     outcome.expected = match panic::catch_unwind(AssertUnwindSafe(|| {
-        print_normalized(&expected_source, source_type)
+        print_normalized(&expected_source, config.source_type)
     })) {
         Ok(Ok(expected)) => expected,
         Ok(Err(err)) => {
@@ -170,15 +162,15 @@ pub fn run_fixture(root: &Path, fixture: &Fixture) -> Result<Outcome, Skip> {
     };
 
     // Idempotency is reported independently of the comparison result.
-    outcome.idempotency = match run_compress(&outcome.actual, source_type) {
+    outcome.idempotency = match run_compress(&outcome.actual, config.source_type) {
         Ok(Ok(second)) if second != outcome.actual => Some(second),
         Ok(Ok(_)) => None,
         Ok(Err(err)) => Some(format!("<reparse failed: {err}>")),
         Err(payload) => Some(format!("<panicked: {}>", panic_message(&payload))),
     };
 
-    outcome.actual_size = minified_size(&outcome.actual, source_type);
-    outcome.expected_size = minified_size(&outcome.expected, source_type);
+    outcome.actual_size = minified_size(&outcome.actual, config.source_type);
+    outcome.expected_size = minified_size(&outcome.expected, config.source_type);
 
     outcome.kind = Kind::classify(
         &outcome.actual,
