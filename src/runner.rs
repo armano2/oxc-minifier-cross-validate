@@ -83,7 +83,7 @@ pub fn run_fixture(root: &Path, fixture: &Fixture) -> Result<Outcome, Skip> {
     if config.is_ie8 {
         return Err(Skip::Ie8);
     }
-    let tags = tags::from_options(&config.options);
+    let tags = tags::from_options(&config.options, config.source_type);
 
     let mut outcome = Outcome {
         relative: fixture.relative.clone(),

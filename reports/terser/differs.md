@@ -1024,7 +1024,7 @@ console.log(JSON.stringify([
 
 ## `terser/harmony/module_enabled`
 
-- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `join vars`, `remove unused`
+- tags: `type:module`, `mangle`, `mangle top level`, `keep function names`, `keep class names`, `join vars`, `remove unused`
 
 ```js
 let apple = 10, b = 20;

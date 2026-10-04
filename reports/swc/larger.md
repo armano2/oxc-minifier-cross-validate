@@ -1556,6 +1556,7 @@ out.assignedClass = new AssignedClass(1, 2, 3, 4);
 
 ## `swc/issues/12307`
 
+- tags: `type:cjs`
 - size: oxc 912 vs reference 909 (no whitespaces: +3, formatted: +3)
 
 ```js
@@ -2037,7 +2038,7 @@ console.log(signedShift(4, 1).join(','));
 
 ## `swc/issues/12200/1`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- tags: `type:cjs`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 67 vs reference 63 (no whitespaces: +4, formatted: +9)
 
 ```js
@@ -2381,6 +2382,7 @@ branch(0);
 
 ## `swc/issues/12223/nested-function-control`
 
+- tags: `type:cjs`
 - size: oxc 117 vs reference 112 (no whitespaces: +5, formatted: +17)
 
 ```js
@@ -2432,7 +2434,7 @@ console.log(f());
 
 ## `swc/issues/12296`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- tags: `type:cjs`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 504 vs reference 499 (no whitespaces: +5, formatted: +8)
 
 ```js
@@ -2849,7 +2851,7 @@ expect(f(3)).toBe(3);
 
 ## `swc/issues/12191/iterator-errors`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
+- tags: `type:cjs`, `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 356 vs reference 349 (no whitespaces: +7, formatted: +27)
 
 ```js
@@ -2922,7 +2924,7 @@ try {
 
 ## `swc/issues/12195/nested-spread`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- tags: `type:cjs`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 146 vs reference 139 (no whitespaces: +7, formatted: +14)
 
 ```js
@@ -2952,7 +2954,7 @@ console.log('A'.toLowerCase(Math.max(...iterable)));
 
 ## `swc/issues/12195/spread`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- tags: `type:cjs`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 165 vs reference 158 (no whitespaces: +7, formatted: +14)
 
 ```js
@@ -2982,6 +2984,7 @@ console.log('A'.toLowerCase(...iterable), 'b'.toUpperCase(...iterable));
 
 ## `swc/issues/12221`
 
+- tags: `type:cjs`
 - size: oxc 338 vs reference 331 (no whitespaces: +7, formatted: +7)
 
 ```js
@@ -3025,7 +3028,7 @@ try {
 
 ## `swc/issues/12221/default`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- tags: `type:cjs`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 269 vs reference 262 (no whitespaces: +7, formatted: +7)
 
 ```js
@@ -3065,6 +3068,7 @@ try {
 
 ## `swc/issues/12223/catch-return-no-finalizer-control`
 
+- tags: `type:cjs`
 - size: oxc 68 vs reference 61 (no whitespaces: +7, formatted: +12)
 
 ```js
@@ -3631,7 +3635,7 @@ new Map(mapIterator);
 
 ## `swc/issues/12212/safe-unused-rest`
 
-- tags: `remove unused`
+- tags: `type:cjs`, `remove unused`
 - size: oxc 47 vs reference 39 (no whitespaces: +8, formatted: +8)
 
 ```js
@@ -3909,7 +3913,7 @@ foo = { v: 0 .toFixed() };
 
 ## `swc/issues/do-while-false-terminal-jump/module-suspension`
 
-- tags: `1 iteration`
+- tags: `type:module`, `1 iteration`
 - size: oxc 416 vs reference 407 (no whitespaces: +9, formatted: -1)
 
 ```js
@@ -4732,6 +4736,7 @@ console.log(CONFIG?.a?.b);
 
 ## `swc/issues/12209`
 
+- tags: `type:cjs`
 - size: oxc 391 vs reference 380 (no whitespaces: +11, formatted: +11)
 
 ```js
@@ -4949,7 +4954,7 @@ console.log(callback());
 
 ## `swc/issues/12191/empty-pattern-iterator`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
+- tags: `type:cjs`, `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 185 vs reference 173 (no whitespaces: +12, formatted: +35)
 
 ```js
@@ -5328,7 +5333,7 @@ export default Files;
 
 ## `swc/reduced/3`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- tags: `type:module`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 194 vs reference 181 (no whitespaces: +13, formatted: +21)
 
 ```js
@@ -6242,7 +6247,7 @@ out.destructured = new (function({ value }) {
 
 ## `swc/issues/12219/iife_rest_control_primitive`
 
-- tags: `join vars`
+- tags: `type:cjs`, `join vars`
 - size: oxc 51 vs reference 35 (no whitespaces: +16, formatted: +18)
 
 ```js
@@ -6704,7 +6709,7 @@ out.conditional = new Zero(1, condition ? effect('yes') : 2, 3);
 
 ## `swc/issues/12200/2`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- tags: `type:cjs`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 162 vs reference 145 (no whitespaces: +17, formatted: +33)
 
 ```js
@@ -7013,7 +7018,7 @@ d(function() {
 
 ## `swc/issues/9460/partial-used-default`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `pure getters`
+- tags: `type:module`, `drop debugger`, `join vars`, `sequences`, `remove unused`, `pure getters`
 - size: oxc 70 vs reference 52 (no whitespaces: +18, formatted: +21)
 
 ```js
@@ -7034,7 +7039,7 @@ console.log(retained);
 
 ## `swc/issues/9460/report`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `pure getters`
+- tags: `type:module`, `drop debugger`, `join vars`, `sequences`, `remove unused`, `pure getters`
 - size: oxc 18 vs reference 0 (no whitespaces: +18, formatted: +27)
 
 ```js
@@ -8145,7 +8150,7 @@ export default function MyComp() {
 
 ## `swc/object-factory-inline-cost/single-use`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
+- tags: `type:module`, `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 164 vs reference 140 (no whitespaces: +24, formatted: +36)
 
 ```js
@@ -9379,7 +9384,7 @@ console.log(getString());
 
 ## `swc/issues/12192`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- tags: `type:cjs`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 508 vs reference 475 (no whitespaces: +33, formatted: +48)
 
 ```js
@@ -9851,7 +9856,7 @@ foo(1);
 
 ## `swc/issues/12190`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- tags: `type:cjs`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 211 vs reference 174 (no whitespaces: +37, formatted: +40)
 
 ```js
@@ -10287,6 +10292,7 @@ identifier(true);
 
 ## `swc/issues/12222`
 
+- tags: `type:cjs`
 - size: oxc 378 vs reference 336 (no whitespaces: +42, formatted: +51)
 
 ```js
@@ -11771,7 +11777,7 @@ export const obj = { each: function(obj, callback, args) {
 
 ## `swc/object-factory-inline-cost/scalar`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
+- tags: `type:module`, `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 148 vs reference 89 (no whitespaces: +59, formatted: +63)
 
 ```js
@@ -12113,7 +12119,7 @@ export { prerender };
 
 ## `swc/issues/9460/alternate-identifiers`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `pure getters`
+- tags: `type:module`, `drop debugger`, `join vars`, `sequences`, `remove unused`, `pure getters`
 - size: oxc 66 vs reference 0 (no whitespaces: +66, formatted: +87)
 
 ```js
@@ -13412,6 +13418,7 @@ const j = new Set();
 
 ## `swc/issues/12224`
 
+- tags: `type:cjs`
 - size: oxc 319 vs reference 210 (no whitespaces: +109, formatted: +109)
 
 ```js
@@ -13483,7 +13490,7 @@ function getSourceInfoErrorAddendumForProps(elementProps) {
 
 ## `swc/issues/12177`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- tags: `type:module`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 526 vs reference 413 (no whitespaces: +113, formatted: +126)
 
 ```js
@@ -13624,7 +13631,7 @@ try {
 
 ## `swc/issues/9460/safe-initializers`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `pure getters`
+- tags: `type:module`, `drop debugger`, `join vars`, `sequences`, `remove unused`, `pure getters`
 - size: oxc 123 vs reference 0 (no whitespaces: +123, formatted: +155)
 
 ```js

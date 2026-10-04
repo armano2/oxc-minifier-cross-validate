@@ -5846,6 +5846,7 @@ class named extends function base() {} {}
 
 ## `terser/harmony/module_enables_strict_mode`
 
+- tags: `type:module`
 - size: oxc 18 vs reference 23 (no whitespaces: -5, formatted: -7)
 
 ```js
@@ -9948,7 +9949,7 @@ console.log(a);
 
 ## `terser/export/name_cache_do_not_mangle_export_class_name`
 
-- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
+- tags: `type:module`, `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 58 vs reference 70 (no whitespaces: -12, formatted: -12)
 
 ```js
@@ -9972,7 +9973,7 @@ console.log(add, add, sub, sub);
 
 ## `terser/export/name_cache_do_not_mangle_export_function_name`
 
-- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
+- tags: `type:module`, `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 114 vs reference 126 (no whitespaces: -12, formatted: -12)
 
 ```js
@@ -10094,7 +10095,7 @@ var bar = `\``;
 
 ## `terser/export/name_cache_mangle_export_default_class`
 
-- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
+- tags: `type:module`, `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 107 vs reference 120 (no whitespaces: -13, formatted: -12)
 
 ```js
@@ -10615,7 +10616,7 @@ for (let i = 0; i < 3; i++) {
 
 ## `terser/export/name_cache_import_star_as_name_from_module`
 
-- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
+- tags: `type:module`, `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 106 vs reference 121 (no whitespaces: -15, formatted: -15)
 
 ```js
@@ -10950,7 +10951,7 @@ a = condition + 3 && null;
 
 ## `terser/export/name_cache_do_not_mangle_export_from_names`
 
-- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
+- tags: `type:module`, `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 112 vs reference 128 (no whitespaces: -16, formatted: -16)
 
 ```js
@@ -11317,7 +11318,7 @@ console.log((function x() {
 
 ## `terser/export/name_cache_do_not_mangle_export_destructuring_name`
 
-- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
+- tags: `type:module`, `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 74 vs reference 92 (no whitespaces: -18, formatted: -18)
 
 ```js
@@ -13305,7 +13306,7 @@ class C {}
 
 ## `terser/export/name_cache_mangle_local_import_and_export_aliases`
 
-- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
+- tags: `type:module`, `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 102 vs reference 159 (no whitespaces: -57, formatted: -57)
 
 ```js

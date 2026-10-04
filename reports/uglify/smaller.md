@@ -26565,7 +26565,7 @@ try {
 
 ## `uglify/varify/forin_const_3`
 
-- tags: `join vars`
+- tags: `type:module`, `join vars`
 - size: oxc 75 vs reference 88 (no whitespaces: -13, formatted: -14)
 
 ```js
@@ -28943,7 +28943,7 @@ f();
 
 ## `uglify/let/issue_5756_3`
 
-- tags: `join vars`, `remove unused`
+- tags: `type:module`, `join vars`, `remove unused`
 - size: oxc 64 vs reference 83 (no whitespaces: -19, formatted: -22)
 
 ```js

@@ -362,7 +362,7 @@ optional({ false: 'optional' });
 
 ## `swc/issues/12191/binding-control`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
+- tags: `type:cjs`, `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
 
 ```js
 function* values() {
@@ -398,7 +398,7 @@ console.log(value);
 
 ## `swc/issues/12218/literal-spread`
 
-- tags: `remove unused`
+- tags: `type:cjs`, `remove unused`
 
 ```js
 (function(a, b, c) {
@@ -420,7 +420,7 @@ console.log(value);
 
 ## `swc/issues/12218/no-spread`
 
-- tags: `remove unused`
+- tags: `type:cjs`, `remove unused`
 
 ```js
 (function(a, b, c) {
@@ -442,7 +442,7 @@ console.log(value);
 
 ## `swc/issues/12303`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- tags: `type:cjs`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 
 ```js
 function* spreadGenerator(name) {

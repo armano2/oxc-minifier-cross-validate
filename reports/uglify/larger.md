@@ -5223,7 +5223,7 @@ console.log(a);
 
 ## `uglify/functions/module_inline`
 
-- tags: `join vars`
+- tags: `type:module`, `join vars`
 - size: oxc 51 vs reference 49 (no whitespaces: +2, formatted: +2)
 
 ```js
@@ -27795,6 +27795,7 @@ switch (void 0) {
 
 ## `uglify/arrows/func_to_arrow`
 
+- tags: `type:module`
 - size: oxc 58 vs reference 45 (no whitespaces: +13, formatted: +16)
 
 ```js
@@ -27817,7 +27818,7 @@ console.log(function(a, b, c) {
 
 ## `uglify/arrows/func_to_arrow_var`
 
-- tags: `join vars`, `remove unused`
+- tags: `type:module`, `join vars`, `remove unused`
 - size: oxc 58 vs reference 45 (no whitespaces: +13, formatted: +16)
 
 ```js
@@ -28887,6 +28888,7 @@ console.log(a, b);
 
 ## `uglify/yields/func_to_arrow_var`
 
+- tags: `type:module`
 - size: oxc 57 vs reference 44 (no whitespaces: +13, formatted: +17)
 
 ```js
@@ -31191,6 +31193,7 @@ console.log(String.raw`\u0${0}b${5}`);
 
 ## `uglify/yields/func_to_arrow_arg`
 
+- tags: `type:module`
 - size: oxc 51 vs reference 36 (no whitespaces: +15, formatted: +16)
 
 ```js
@@ -37197,7 +37200,7 @@ console.log(a[0], a.length);
 
 ## `uglify/awaits/async_to_arrow`
 
-- tags: `join vars`, `remove unused`
+- tags: `type:module`, `join vars`, `remove unused`
 - size: oxc 92 vs reference 70 (no whitespaces: +22, formatted: +23)
 
 ```js

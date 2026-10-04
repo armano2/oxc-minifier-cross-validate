@@ -332,7 +332,7 @@ export class Class2 extends Class1 {
 
 ## `swc/issues/9460/strict-mode`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `pure getters`
+- tags: `type:module`, `drop debugger`, `join vars`, `sequences`, `remove unused`, `pure getters`
 - size: oxc 251 vs reference 253 (no whitespaces: -2, formatted: -2)
 
 ```js
@@ -477,6 +477,7 @@ var newClass = function() {
 
 ## `swc/issues/12223/catch-return-assignment`
 
+- tags: `type:cjs`
 - size: oxc 91 vs reference 94 (no whitespaces: -3, formatted: -4)
 
 ```js
@@ -511,6 +512,7 @@ console.log(f());
 
 ## `swc/issues/12223/catch-throw-assignment`
 
+- tags: `type:cjs`
 - size: oxc 105 vs reference 108 (no whitespaces: -3, formatted: -4)
 
 ```js
@@ -926,6 +928,7 @@ console.log(events.join(','));
 
 ## `swc/issues/12229`
 
+- tags: `type:cjs`
 - size: oxc 145 vs reference 150 (no whitespaces: -5, formatted: +0)
 
 ```js
@@ -1522,6 +1525,7 @@ console.log((null?.veryLongProperty, obj)?.x);
 
 ## `swc/issues/12229/no-return`
 
+- tags: `type:cjs`
 - size: oxc 111 vs reference 119 (no whitespaces: -8, formatted: -5)
 
 ```js
@@ -1613,7 +1617,7 @@ console.log(duplicateReturn(true));
 
 ## `swc/issues/12306`
 
-- tags: `remove unused`, `keep function names`
+- tags: `type:cjs`, `remove unused`, `keep function names`
 - size: oxc 47 vs reference 55 (no whitespaces: -8, formatted: -11)
 
 ```js
@@ -1639,7 +1643,7 @@ console.log(f.name === 'g');
 
 ## `swc/issues/12306/keep-fnames-false`
 
-- tags: `remove unused`
+- tags: `type:cjs`, `remove unused`
 - size: oxc 45 vs reference 53 (no whitespaces: -8, formatted: -11)
 
 ```js
@@ -2321,7 +2325,7 @@ export function bar() {
 
 ## `swc/issues/12226`
 
-- tags: `sequences`
+- tags: `type:cjs`, `sequences`
 - size: oxc 357 vs reference 369 (no whitespaces: -12, formatted: -11)
 
 ```js
@@ -2751,7 +2755,7 @@ console.log(alternateBranch(true));
 
 ## `swc/reduced/1`
 
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- tags: `type:module`, `drop debugger`, `join vars`, `sequences`, `remove unused`
 - size: oxc 222 vs reference 237 (no whitespaces: -15, formatted: -20)
 
 ```js
@@ -3474,7 +3478,7 @@ use((function(__unused_webpack_module, exports, __webpack_require__) {
 
 ## `swc/issues/12218/dynamic-spread`
 
-- tags: `remove unused`
+- tags: `type:cjs`, `remove unused`
 - size: oxc 319 vs reference 343 (no whitespaces: -24, formatted: -26)
 
 ```js
@@ -3766,7 +3770,7 @@ class WorksClass {
 
 ## `swc/issues/12218/leading-argument`
 
-- tags: `remove unused`
+- tags: `type:cjs`, `remove unused`
 - size: oxc 58 vs reference 89 (no whitespaces: -31, formatted: -34)
 
 ```js
@@ -4319,7 +4323,7 @@ console.log(a, b, c);
 
 ## `swc/issues/do-while-false-terminal-jump/repeated-directive`
 
-- tags: `1 iteration`
+- tags: `type:cjs`, `1 iteration`
 - size: oxc 80 vs reference 122 (no whitespaces: -42, formatted: -61)
 
 ```js
@@ -5496,7 +5500,7 @@ console.log(switchParent(1));
 
 ## `swc/issues/do-while-false-terminal-jump/condition-exceptions`
 
-- tags: `1 iteration`
+- tags: `type:cjs`, `1 iteration`
 - size: oxc 289 vs reference 447 (no whitespaces: -158, formatted: -250)
 
 ```js

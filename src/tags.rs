@@ -1,7 +1,21 @@
 use oxc::minifier::{CompressOptionsUnused, MinifierOptions, PropertyReadSideEffects};
+use oxc::span::{ModuleKind, SourceType};
 
-pub fn from_options(options: &MinifierOptions) -> Vec<String> {
+pub fn from_options(options: &MinifierOptions, source_type: SourceType) -> Vec<String> {
     let mut tags = Vec::new();
+    match source_type.module_kind() {
+        ModuleKind::Script => {
+            tags.push("type:script".to_string());
+        }
+        ModuleKind::Module => {
+            tags.push("type:module".to_string());
+        }
+        ModuleKind::CommonJS => {
+            tags.push("type:cjs".to_string());
+        }
+        ModuleKind::Unambiguous => {}
+    }
+
     if let Some(mangle) = &options.mangle {
         tags.push("mangle".to_string());
         if mangle.top_level == Some(true) {

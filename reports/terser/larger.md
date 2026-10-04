@@ -4234,7 +4234,7 @@ var b = {};
 
 ## `terser/destructuring/export_function_containing_destructuring_decl`
 
-- tags: `remove unused`, `pure getters`
+- tags: `type:module`, `remove unused`, `pure getters`
 - size: oxc 54 vs reference 50 (no whitespaces: +4, formatted: +6)
 
 ```js
@@ -11099,7 +11099,7 @@ console.log(y() && false && x());
 
 ## `terser/destructuring/export_unreferenced_declarations_2`
 
-- tags: `remove unused`, `pure getters`
+- tags: `type:module`, `remove unused`, `pure getters`
 - size: oxc 95 vs reference 83 (no whitespaces: +12, formatted: +17)
 
 ```js
@@ -15002,7 +15002,7 @@ console.log(c);
 
 ## `terser/export/module_mangle_export_default_class`
 
-- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
+- tags: `type:module`, `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 103 vs reference 85 (no whitespaces: +18, formatted: +20)
 
 ```js
@@ -16003,7 +16003,7 @@ console.log(Number.POSITIVE_INFINITY);
 
 ## `terser/export/name_cache_mangle_export_default_function`
 
-- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
+- tags: `type:module`, `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 125 vs reference 105 (no whitespaces: +20, formatted: +26)
 
 ```js
@@ -20138,7 +20138,7 @@ console.log(typeof o.n, o.n == o.n, o.n === o.n, o.n != o.n, o.n !== o.n);
 
 ## `terser/export/module_mangle_export_default_function`
 
-- tags: `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
+- tags: `type:module`, `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`, `3 iterations`
 - size: oxc 125 vs reference 93 (no whitespaces: +32, formatted: +38)
 
 ```js

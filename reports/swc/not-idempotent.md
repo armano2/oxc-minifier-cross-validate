@@ -6,6 +6,7 @@ Fixtures: 3
 
 ## `swc/issues/12214`
 
+- tags: `type:cjs`
 
 ```js
 const __proto__ = 0;
