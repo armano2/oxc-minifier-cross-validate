@@ -1,6 +1,6 @@
 # swc / larger — Output longer than expected (possible missing optimization)
 
-Fixtures: 367
+Fixtures: 365
 
 [← swc](README.md) · [← all families](../README.md)
 
@@ -2979,90 +2979,6 @@ console.log('A'.toLowerCase(...iterable), 'b'.toUpperCase(...iterable));
 +	} };
 +} };
  console.log('A'.toLowerCase(...iterable), 'b'.toUpperCase(...iterable));
-
-```
-
-## `swc/issues/12221`
-
-- tags: `type:cjs`
-- size: oxc 338 vs reference 331 (no whitespaces: +7, formatted: +7)
-
-```js
-function* shadowed(undefined) {
-	yield undefined;
-}
-function* local(value) {
-	yield value;
-}
-function* global() {
-	yield undefined;
-}
-function* delegated(undefined) {
-	yield* undefined;
-}
-console.log(shadowed(7).next().value);
-console.log(local(7).next().value);
-console.log(global().next().value);
-try {
-	console.log(delegated([7]).next().value);
-} catch (e) {
-	console.log(e.name);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -5,7 +5,7 @@
- 	yield value;
- }
- function* global() {
--	yield;
-+	yield void 0;
- }
- function* delegated(undefined) {
- 	yield* undefined;
-
-```
-
-## `swc/issues/12221/default`
-
-- tags: `type:cjs`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 269 vs reference 262 (no whitespaces: +7, formatted: +7)
-
-```js
-function* shadowed(undefined) {
-	yield undefined;
-}
-function* global() {
-	yield undefined;
-}
-function* delegated(undefined) {
-	yield* undefined;
-}
-console.log(shadowed(7).next().value);
-console.log(global().next().value);
-try {
-	console.log(delegated([7]).next().value);
-} catch (e) {
-	console.log(e.name);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -2,7 +2,7 @@
- 	yield undefined;
- }
- function* global() {
--	yield;
-+	yield void 0;
- }
- function* delegated(undefined) {
- 	yield* undefined;
 
 ```
 

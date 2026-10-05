@@ -1,6 +1,6 @@
 # terser / larger — Output longer than expected (possible missing optimization)
 
-Fixtures: 989
+Fixtures: 988
 
 [← terser](README.md) · [← all families](../README.md)
 
@@ -8329,41 +8329,6 @@ console.log((function long_name(long_name) {
 +console.log((function(long_name) {
 +	return typeof long_name;
 +})());
-
-```
-
-## `terser/yield/yield_optimize_expression`
-
-- size: oxc 99 vs reference 92 (no whitespaces: +7, formatted: +7)
-
-```js
-function* f1() {
-	yield;
-}
-function* f2() {
-	yield undefined;
-}
-function* f3() {
-	yield null;
-}
-function* f4() {
-	yield* undefined;
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -2,7 +2,7 @@
- 	yield;
- }
- function* f2() {
--	yield;
-+	yield void 0;
- }
- function* f3() {
- 	yield null;
 
 ```
 
