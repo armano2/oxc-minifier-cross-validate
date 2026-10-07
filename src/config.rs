@@ -214,6 +214,7 @@ fn map_compress(
                 options.join_vars = options.join_vars || enabled;
             }
             "sequences" => options.sequences = enabled,
+            "conditionals" => options.sequences = options.sequences || enabled,
             "keep_fnames" => options.keep_names.function = enabled,
             "keep_classnames" => options.keep_names.class = enabled,
             "unused" => {
@@ -247,8 +248,8 @@ fn map_compress(
             }
             "dead_code" | "switches" | "typeofs" | "if_return" | "booleans" | "side_effects"
             | "comparisons" | "loops" | "templates" | "arrows" | "varify" | "yields"
-            | "conditionals" | "spreads" | "objects" | "defaults" | "module" | "toplevel"
-            | "global_defs" | "webkit" | "ie" | "ie8" => {}
+            | "spreads" | "objects" | "defaults" | "module" | "toplevel" | "global_defs"
+            | "webkit" | "ie" | "ie8" => {}
             _ => unsupported_keys.push(key.clone()),
         }
     }

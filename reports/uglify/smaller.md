@@ -1,6 +1,6 @@
 # uglify / smaller — Output shorter than expected (possible over-optimization / bug)
 
-Fixtures: 1087
+Fixtures: 1099
 
 [← uglify](README.md) · [← all families](../README.md)
 
@@ -482,57 +482,9 @@ f3(null, true);
 
 ```
 
-## `uglify/conditionals/angularjs_chain`
-
-- tags: `2 iterations`
-- size: oxc 217 vs reference 218 (no whitespaces: -1, formatted: -6)
-
-```js
-function nonComputedMember(left, right, context, create) {
-	var lhs = left();
-	if (create && create !== 1) {
-		if (lhs && lhs[right] == null) {
-			lhs[right] = {};
-		}
-	}
-	var value = lhs != null ? lhs[right] : undefined;
-	if (context) {
-		return {
-			context: lhs,
-			name: right,
-			value
-		};
-	} else {
-		return value;
-	}
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,10 +1,11 @@
- function nonComputedMember(left, right, context, create) {
- 	var lhs = left();
--	create && 1 !== create && lhs && null == lhs[right] && (lhs[right] = {});
--	var value = null != lhs ? lhs[right] : void 0;
--	return context ? {
-+	create && create !== 1 && lhs && lhs[right] == null && (lhs[right] = {});
-+	var value = lhs?.[right];
-+	if (context) return {
- 		context: lhs,
- 		name: right,
- 		value
--	} : value;
-+	};
-+	else return value;
- }
-
-```
-
 ## `uglify/conditionals/cond_6`
 
+- tags: `sequences`
 - size: oxc 102 vs reference 103 (no whitespaces: -1, formatted: +3)
 
 ```js
@@ -554,25 +506,26 @@ x ? a : y ? a : a;
 ```diff
 --- reference
 +++ oxc
-@@ -3,10 +3,10 @@
- x ? y ? a : b : c;
- x ? (y, a) : b;
- x && y ? a : b;
+@@ -1,12 +1 @@
+-x ? a : b;
+-x, a;
+-x ? y ? a : b : c;
+-x ? (y, a) : b;
+-x && y ? a : b;
 -!x || y ? a : b;
-+x ? y ? a : b : a;
- x && y, a;
- x ? a : y ? b : c;
- x || y ? a : b;
- x ? a : (y, b);
+-x && y, a;
+-x ? a : y ? b : c;
+-x || y ? a : b;
+-x ? a : (y, b);
 -!x && y ? b : a;
 -!x && y, a;
-+x ? a : y ? b : a;
-+x || y, a;
++x ? a : b, x, a, x ? y ? a : b : c, x ? (y, a) : b, x && y ? a : b, x ? y ? a : b : a, x && y, a, x ? a : y ? b : c, x || y ? a : b, x ? a : (y, b), x ? a : y ? b : a, x || y, a;
 
 ```
 
 ## `uglify/conditionals/issue_5232_2`
 
+- tags: `sequences`
 - size: oxc 61 vs reference 62 (no whitespaces: -1, formatted: +5)
 
 ```js
@@ -603,7 +556,8 @@ console.log(function() {
 
 ## `uglify/conditionals/no_evaluate`
 
-- size: oxc 33 vs reference 34 (no whitespaces: -1, formatted: -1)
+- tags: `sequences`
+- size: oxc 33 vs reference 34 (no whitespaces: -1, formatted: -4)
 
 ```js
 function f(b) {
@@ -618,14 +572,13 @@ function f(b) {
 ```diff
 --- reference
 +++ oxc
-@@ -1,6 +1,6 @@
+@@ -1,6 +1,3 @@
  function f(b) {
- 	a = !0;
+-	a = !0;
 -	a = ~1;
- 	a = -2;
+-	a = -2;
 -	a = +3;
-+	a = -2;
-+	a = 3;
++	a = !0, a = -2, a = -2, a = 3;
  }
 
 ```
@@ -1589,6 +1542,32 @@ console.log(function() {
 
 ```
 
+## `uglify/labels/labels_7`
+
+- tags: `sequences`
+- size: oxc 18 vs reference 19 (no whitespaces: -1, formatted: -5)
+
+```js
+while (foo) {
+	x();
+	y();
+	continue;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1 @@
+-while (foo) {
+-	x();
+-	y();
+-}
++for (; foo;) x(), y();
+
+```
+
 ## `uglify/let/if_return_1`
 
 - size: oxc 106 vs reference 107 (no whitespaces: -1, formatted: -2)
@@ -2522,7 +2501,7 @@ a.next('FAIL');
 
 ## `uglify/arguments/issue_4410_2`
 
-- tags: `join vars`
+- tags: `join vars`, `sequences`
 - size: oxc 66 vs reference 68 (no whitespaces: -2, formatted: -2)
 
 ```js
@@ -3235,6 +3214,7 @@ f(0);
 
 ## `uglify/conditionals/cond_12`
 
+- tags: `sequences`
 - size: oxc 36 vs reference 38 (no whitespaces: -2, formatted: +2)
 
 ```js
@@ -3248,18 +3228,79 @@ x ? a : y || a;
 ```diff
 --- reference
 +++ oxc
-@@ -1,4 +1,4 @@
+@@ -1,4 +1 @@
 -(!x || y) && a;
-+x ? y && a : a;
- x && y || a;
- (x || y) && a;
+-x && y || a;
+-(x || y) && a;
 -!x && y || a;
-+x ? a : y || a;
++x ? y && a : a, x && y || a, (x || y) && a, x ? a : y || a;
+
+```
+
+## `uglify/conditionals/cond_7`
+
+- tags: `sequences`
+- size: oxc 129 vs reference 131 (no whitespaces: -2, formatted: -3)
+
+```js
+var x, y, z, a, b;
+// compress these
+if (y) {
+	x = 1 + 1;
+} else {
+	x = 2;
+}
+if (y) {
+	x = 1 + 1;
+} else if (z) {
+	x = 2;
+} else {
+	x = 3 - 1;
+}
+x = y ? 'foo' : 'fo' + 'o';
+x = y ? 'foo' : y ? 'foo' : 'fo' + 'o';
+// Compress conditions that have side effects
+if (condition()) {
+	x = 10 + 10;
+} else {
+	x = 20;
+}
+if (z) {
+	x = 'fuji';
+} else if (condition()) {
+	x = 'fu' + 'ji';
+} else {
+	x = 'fuji';
+}
+x = condition() ? 'foobar' : 'foo' + 'bar';
+// don't compress these
+x = y ? a : b;
+x = y ? 'foo' : 'fo';
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,2 @@
+-var x, y, z, a, b;
+-x = 2;
+-x = 2;
+-x = 'foo';
+-x = 'foo';
+-x = (condition(), 20);
+-x = (z || condition(), 'fuji');
+-x = (condition(), 'foobar');
+-x = y ? a : b;
+-x = y ? 'foo' : 'fo';
++var x = 2, y, z, a, b;
++x = 2, x = 'foo', x = 'foo', x = (condition(), 20), x = (z || condition(), 'fuji'), x = (condition(), 'foobar'), x = y ? a : b, x = y ? 'foo' : 'fo';
 
 ```
 
 ## `uglify/conditionals/cond_7_1`
 
+- tags: `sequences`
 - size: oxc 12 vs reference 14 (no whitespaces: -2, formatted: -3)
 
 ```js
@@ -3285,6 +3326,7 @@ if (y) {
 
 ## `uglify/conditionals/condition_matches_alternative`
 
+- tags: `sequences`
 - size: oxc 150 vs reference 152 (no whitespaces: -2, formatted: +0)
 
 ```js
@@ -3956,7 +3998,7 @@ log(a);
 
 ## `uglify/destructured/join_vars`
 
-- tags: `join vars`
+- tags: `join vars`, `sequences`
 - size: oxc 33 vs reference 35 (no whitespaces: -2, formatted: -3)
 
 ```js
@@ -4054,7 +4096,7 @@ console.log(a);
 
 ## `uglify/evaluate/issue_3937`
 
-- tags: `join vars`
+- tags: `join vars`, `sequences`
 - size: oxc 44 vs reference 46 (no whitespaces: -2, formatted: -3)
 
 ```js
@@ -4067,11 +4109,11 @@ console.log(a, b);
 ```diff
 --- reference
 +++ oxc
-@@ -1,3 +1,3 @@
+@@ -1,3 +1,2 @@
  var a = 123;
 -(a++ + (b = a))[b], 0, b;
-+(a++ + (b = a))[b], b;
- console.log(a, b);
+-console.log(a, b);
++(a++ + (b = a))[b], b, console.log(a, b);
 
 ```
 
@@ -4102,7 +4144,7 @@ console.log(typeof a);
 
 ## `uglify/evaluate/issue_4119_1`
 
-- tags: `join vars`
+- tags: `join vars`, `sequences`
 - size: oxc 66 vs reference 68 (no whitespaces: -2, formatted: -3)
 
 ```js
@@ -4120,18 +4162,19 @@ if (+b + 1) {
 ```diff
 --- reference
 +++ oxc
-@@ -1,4 +1,3 @@
+@@ -1,4 +1,2 @@
 -var a, b;
 -b = a = [];
+-a[0] += 0;
+-+b + 1 ? console.log('FAIL') : console.log('PASS');
 +var a, b = a = [];
- a[0] += 0;
- +b + 1 ? console.log('FAIL') : console.log('PASS');
++a[0] += 0, +b + 1 ? console.log('FAIL') : console.log('PASS');
 
 ```
 
 ## `uglify/evaluate/issue_4119_3`
 
-- tags: `join vars`
+- tags: `join vars`, `sequences`
 - size: oxc 59 vs reference 61 (no whitespaces: -2, formatted: -3)
 
 ```js
@@ -4145,12 +4188,13 @@ console.log(b.p ? 'FAIL' : 'PASS');
 ```diff
 --- reference
 +++ oxc
-@@ -1,4 +1,3 @@
+@@ -1,4 +1,2 @@
 -var a, b;
 -b = a = { p: 42 };
+-delete a.p;
+-console.log(b.p ? 'FAIL' : 'PASS');
 +var a, b = a = { p: 42 };
- delete a.p;
- console.log(b.p ? 'FAIL' : 'PASS');
++delete a.p, console.log(b.p ? 'FAIL' : 'PASS');
 
 ```
 
@@ -4275,7 +4319,7 @@ b = 'bar';
 
 ## `uglify/functions/issue_5173_2`
 
-- tags: `join vars`, `remove unused`
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 45 vs reference 47 (no whitespaces: -2, formatted: -5)
 
 ```js
@@ -4872,6 +4916,7 @@ while (a) {
 
 ## `uglify/issue-637/wrongly_optimized`
 
+- tags: `sequences`
 - size: oxc 35 vs reference 37 (no whitespaces: -2, formatted: -3)
 
 ```js
@@ -4898,6 +4943,7 @@ if (func() || true) {
 
 ## `uglify/issue-640/cond_5`
 
+- tags: `sequences`
 - size: oxc 125 vs reference 127 (no whitespaces: -2, formatted: -2)
 
 ```js
@@ -4921,11 +4967,10 @@ if (some_condition()) {
 ```diff
 --- reference
 +++ oxc
-@@ -1,2 +1,2 @@
+@@ -1,2 +1 @@
 -(some_condition() && some_other_condition() ? do_something : alternate)();
 -if (some_condition() && some_other_condition()) do_something();
-+some_condition() && some_other_condition() ? do_something() : alternate();
-+some_condition() && some_other_condition() && do_something();
++some_condition() && some_other_condition() ? do_something() : alternate(), some_condition() && some_other_condition() && do_something();
 
 ```
 
@@ -5029,6 +5074,7 @@ if ((function() {
 
 ## `uglify/issue-640/wrongly_optimized`
 
+- tags: `sequences`
 - size: oxc 35 vs reference 37 (no whitespaces: -2, formatted: -3)
 
 ```js
@@ -6367,7 +6413,7 @@ pure(3 ? 4 : 5);
 
 ## `uglify/pure_getters/issue_2062`
 
-- tags: `join vars`, `pure getters`
+- tags: `join vars`, `sequences`, `pure getters`
 - size: oxc 42 vs reference 44 (no whitespaces: -2, formatted: +0)
 
 ```js
@@ -6384,11 +6430,11 @@ console.log(a);
 ```diff
 --- reference
 +++ oxc
-@@ -1,3 +1,3 @@
+@@ -1,3 +1,2 @@
  var a = 1;
 -a || (a++, a--), a++, a--;
-+a || a++ + a--, a++ + a--;
- console.log(a);
+-console.log(a);
++a || a++ + a--, a++ + a--, console.log(a);
 
 ```
 
@@ -7022,6 +7068,84 @@ for (var i = 0; i < a.length; i++) {
  	setTimeout(function() {
  		console.log(z);
  	}, 0);
+
+```
+
+## `uglify/yields/issue_5679_1`
+
+- tags: `sequences`
+- size: oxc 88 vs reference 90 (no whitespaces: -2, formatted: -5)
+
+```js
+var a = 'FAIL';
+async function* f(b) {
+	try {
+		if (b) return;
+		else return;
+	} finally {
+		a = 'PASS';
+	}
+}
+f().next();
+console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,9 @@
+ var a = 'FAIL';
+ async function* f(b) {
+ 	try {
+-		b;
+ 		return;
+ 	} finally {
+ 		a = 'PASS';
+ 	}
+ }
+-f().next();
+-console.log(a);
++f().next(), console.log(a);
+
+```
+
+## `uglify/yields/issue_5679_4`
+
+- tags: `sequences`
+- size: oxc 99 vs reference 101 (no whitespaces: -2, formatted: -3)
+
+```js
+var a = 'PASS';
+async function* f(b) {
+	try {
+		if (b) return undefined;
+		else return undefined;
+	} finally {
+		a = 'FAIL';
+	}
+}
+f(null).next();
+console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,9 @@
+ var a = 'PASS';
+ async function* f(b) {
+ 	try {
+-		return b, void 0;
++		return void 0;
+ 	} finally {
+ 		a = 'FAIL';
+ 	}
+ }
+-f(null).next();
+-console.log(a);
++f(null).next(), console.log(a);
 
 ```
 
@@ -8515,8 +8639,85 @@ log(a);
 
 ```
 
+## `uglify/conditionals/cond_8`
+
+- tags: `sequences`
+- size: oxc 276 vs reference 279 (no whitespaces: -3, formatted: -6)
+
+```js
+var a;
+// compress these
+a = condition ? true : false;
+a = !condition ? true : false;
+a = condition() ? true : false;
+a = condition ? !0 : !1;
+a = !condition ? !null : !2;
+a = condition() ? !0 : !-3.5;
+if (condition) {
+	a = true;
+} else {
+	a = false;
+}
+if (condition) {
+	a = !0;
+} else {
+	a = !1;
+}
+a = condition ? false : true;
+a = !condition ? false : true;
+a = condition() ? false : true;
+a = condition ? !3 : !0;
+a = !condition ? !2 : !0;
+a = condition() ? !1 : !0;
+if (condition) {
+	a = false;
+} else {
+	a = true;
+}
+if (condition) {
+	a = !1;
+} else {
+	a = !0;
+}
+// don't compress these
+a = condition ? 1 : false;
+a = !condition ? true : 0;
+a = condition ? 1 : 0;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,20 +1,2 @@
+-var a;
+-a = !!condition;
+-a = !condition;
+-a = !!condition();
+-a = !!condition;
+-a = !condition;
+-a = !!condition();
+-a = !!condition;
+-a = !!condition;
+-a = !condition;
+-a = !!condition;
+-a = !condition();
+-a = !condition;
+-a = !!condition;
+-a = !condition();
+-a = !condition;
+-a = !condition;
+-a = !!condition && 1;
+-a = !condition || 0;
+-a = condition ? 1 : 0;
++var a = !!condition;
++a = !condition, a = !!condition(), a = !!condition, a = !condition, a = !!condition(), a = !!condition, a = !!condition, a = !condition, a = !!condition, a = !condition(), a = !condition, a = !!condition, a = !condition(), a = !condition, a = !condition, a = condition ? 1 : !1, a = !condition || 0, a = +!!condition;
+
+```
+
 ## `uglify/conditionals/cond_8b`
 
+- tags: `sequences`
 - size: oxc 276 vs reference 279 (no whitespaces: -3, formatted: -6)
 
 ```js
@@ -8563,67 +8764,35 @@ a = condition ? 1 : 0;
 ```diff
 --- reference
 +++ oxc
-@@ -1,5 +1,4 @@
+@@ -1,20 +1,2 @@
 -var a;
 -a = !!condition;
-+var a = !!condition;
- a = !condition;
- a = !!condition();
- a = !!condition;
-@@ -15,6 +14,6 @@
- a = !condition();
- a = !condition;
- a = !condition;
+-a = !condition;
+-a = !!condition();
+-a = !!condition;
+-a = !condition;
+-a = !!condition();
+-a = !!condition;
+-a = !!condition;
+-a = !condition;
+-a = !!condition;
+-a = !condition();
+-a = !condition;
+-a = !!condition;
+-a = !condition();
+-a = !condition;
+-a = !condition;
 -a = !!condition && 1;
-+a = condition ? 1 : !1;
- a = !condition || 0;
+-a = !condition || 0;
 -a = condition ? 1 : 0;
-+a = +!!condition;
-
-```
-
-## `uglify/conditionals/issue_3668_2`
-
-- size: oxc 107 vs reference 110 (no whitespaces: -3, formatted: -6)
-
-```js
-function f() {
-	try {
-		var undefined = typeof f;
-		if (!f) return undefined;
-		return;
-	} catch (e) {
-		return 'FAIL';
-	}
-	FAIL;
-}
-console.log(f());
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,10 +1,10 @@
- function f() {
- 	try {
- 		var undefined = typeof f;
--		return f ? void 0 : undefined;
--	} catch (e) {
-+		if (!f) return undefined;
-+		return;
-+	} catch {
- 		return 'FAIL';
- 	}
--	FAIL;
- }
- console.log(f());
++var a = !!condition;
++a = !condition, a = !!condition(), a = !!condition, a = !condition, a = !!condition(), a = !!condition, a = !!condition, a = !condition, a = !!condition, a = !condition(), a = !condition, a = !!condition, a = !condition(), a = !condition, a = !condition, a = condition ? 1 : !1, a = !condition || 0, a = +!!condition;
 
 ```
 
 ## `uglify/conditionals/issue_5334_1`
 
-- tags: `join vars`, `remove unused`
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 78 vs reference 81 (no whitespaces: -3, formatted: -4)
 
 ```js
@@ -8651,6 +8820,7 @@ f();
 
 ## `uglify/conditionals/issue_5544_1`
 
+- tags: `sequences`
 - size: oxc 116 vs reference 119 (no whitespaces: -3, formatted: -3)
 
 ```js
@@ -8683,7 +8853,7 @@ else switch (false) {
 
 ## `uglify/conditionals/issue_5666_1`
 
-- tags: `join vars`, `remove unused`
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 56 vs reference 59 (no whitespaces: -3, formatted: -5)
 
 ```js
@@ -8699,20 +8869,21 @@ console.log(a);
 ```diff
 --- reference
 +++ oxc
-@@ -1,6 +1,6 @@
+@@ -1,6 +1,5 @@
  var a;
  (function() {
  	var b = a;
 -	a = (a ? 0 : b++, b);
+-})();
+-console.log(a);
 +	a || b++, a = b;
- })();
- console.log(a);
++})(), console.log(a);
 
 ```
 
 ## `uglify/conditionals/issue_5666_2`
 
-- tags: `join vars`, `remove unused`
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 62 vs reference 65 (no whitespaces: -3, formatted: -5)
 
 ```js
@@ -8728,14 +8899,15 @@ console.log(a);
 ```diff
 --- reference
 +++ oxc
-@@ -1,6 +1,6 @@
+@@ -1,6 +1,5 @@
  var a = 'foo';
  (function() {
  	var b = a;
 -	a = (a ? b++ : 0, b);
+-})();
+-console.log(a);
 +	a && b++, a = b;
- })();
- console.log(a);
++})(), console.log(a);
 
 ```
 
@@ -8936,6 +9108,7 @@ try {
 
 ## `uglify/default-values/flatten_if`
 
+- tags: `sequences`
 - size: oxc 59 vs reference 62 (no whitespaces: -3, formatted: -3)
 
 ```js
@@ -8985,7 +9158,7 @@ log(a, b);
 
 ## `uglify/default-values/issue_4483`
 
-- tags: `join vars`
+- tags: `join vars`, `sequences`
 - size: oxc 54 vs reference 57 (no whitespaces: -3, formatted: -2)
 
 ```js
@@ -10460,6 +10633,33 @@ function f() {
 
 ```
 
+## `uglify/issue-22/return_with_no_value_in_if_body`
+
+- tags: `sequences`
+- size: oxc 35 vs reference 38 (no whitespaces: -3, formatted: -5)
+
+```js
+function foo(bar) {
+	if (bar) {
+		return;
+	} else {
+		return 1;
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ function foo(bar) {
+-	return bar ? void 0 : 1;
++	if (!bar) return 1;
+ }
+
+```
+
 ## `uglify/issue-3768/call_arg_1`
 
 - size: oxc 94 vs reference 97 (no whitespaces: -3, formatted: -3)
@@ -11158,6 +11358,7 @@ if (function() {
 
 ## `uglify/nullish/conditional_assignment_2`
 
+- tags: `sequences`
 - size: oxc 49 vs reference 52 (no whitespaces: -3, formatted: -3)
 
 ```js
@@ -11178,7 +11379,7 @@ a = 'PASS', b ?? (a = 'FAIL'), console.log(a);
 
 ## `uglify/nullish/conditional_assignment_3`
 
-- tags: `join vars`
+- tags: `join vars`, `sequences`
 - size: oxc 49 vs reference 52 (no whitespaces: -3, formatted: -3)
 
 ```js
@@ -12456,6 +12657,31 @@ switch (2) {
 
 ```
 
+## `uglify/switches/issue_2535`
+
+- tags: `sequences`
+- size: oxc 12 vs reference 15 (no whitespaces: -3, formatted: -4)
+
+```js
+switch (w(), 42) {
+	case 13: x();
+	case 42: y();
+	default: z();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1 @@
+-w(), 42;
+-y();
+-z();
++w(), y(), z();
+
+```
+
 ## `uglify/switches/issue_5543_1`
 
 - size: oxc 129 vs reference 132 (no whitespaces: -3, formatted: -3)
@@ -12615,47 +12841,6 @@ console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
 @@ -1 +1 @@
 -console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
 +console.log(`\ud801\udc37\ud801𐐷42\u{10437}`);
-
-```
-
-## `uglify/typeof/reassign_do`
-
-- tags: `join vars`, `2 iterations`
-- size: oxc 119 vs reference 122 (no whitespaces: -3, formatted: -9)
-
-```js
-A = console;
-(function() {
-	if ('undefined' == typeof A) return;
-	var a = A, i = 2;
-	do {
-		console.log(void 0 === A, void 0 === a);
-		A = void 0;
-	} while (--i);
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,10 +1,9 @@
- A = console;
- (function() {
--	if ('undefined' != typeof A) {
--		var a = A, i = 2;
--		do {
--			console.log(void 0 === A, (a, false));
--			A = void 0;
--		} while (--i);
--	}
-+	if (typeof A > 'u') return;
-+	var a = A, i = 2;
-+	do {
-+		console.log(A === void 0, a === void 0);
-+		A = void 0;
-+	} while (--i);
- })();
 
 ```
 
@@ -12825,6 +13010,39 @@ A = 1;
 
 ```
 
+## `uglify/booleans/issue_4374`
+
+- tags: `join vars`, `sequences`, `remove unused`
+- size: oxc 59 vs reference 63 (no whitespaces: -4, formatted: -9)
+
+```js
+(function() {
+	console.log(f());
+	function f(a) {
+		if (null) return 0;
+		if (a) return 1;
+		return 0;
+	}
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,6 @@
+ (function() {
+-	console.log(function(a) {
+-		return !null && a ? 1 : 0;
+-	}());
++	console.log(f());
++	function f(a) {
++		return +!!a;
++	}
+ })();
+
+```
+
 ## `uglify/classes/keep_field_reference_4`
 
 - tags: `join vars`, `remove unused`
@@ -12931,8 +13149,8 @@ console.log(a, b);
 
 ## `uglify/collapse_vars/issue_2313_1`
 
-- tags: `join vars`
-- size: oxc 111 vs reference 115 (no whitespaces: -4, formatted: -4)
+- tags: `join vars`, `sequences`
+- size: oxc 111 vs reference 115 (no whitespaces: -4, formatted: -8)
 
 ```js
 var a = 0, b = 0;
@@ -12956,13 +13174,25 @@ foo.d();
 ```diff
 --- reference
 +++ oxc
-@@ -1,5 +1,4 @@
+@@ -1,15 +1,12 @@
 -var a = 0, b = 0;
 -var foo = {
 +var a = 0, b = 0, foo = {
  	get c() {
- 		a++;
- 		return 42;
+-		a++;
+-		return 42;
++		return a++, 42;
+ 	},
+ 	set c(c) {
+ 		b++;
+ 	},
+ 	d: function() {
+-		this.c++;
+-		this.c && console.log(a, b);
++		this.c++, this.c && console.log(a, b);
+ 	}
+ };
+ foo.d();
 
 ```
 
@@ -13513,7 +13743,7 @@ console.log(a, b);
 
 ## `uglify/const/issue_4216`
 
-- tags: `join vars`
+- tags: `join vars`, `sequences`
 - size: oxc 38 vs reference 42 (no whitespaces: -4, formatted: -3)
 
 ```js
@@ -15031,6 +15261,7 @@ console.log(b);
 
 ## `uglify/negate-iife/negate_iife_3`
 
+- tags: `sequences`
 - size: oxc 57 vs reference 61 (no whitespaces: -4, formatted: -4)
 
 ```js
@@ -15054,6 +15285,7 @@ console.log(b);
 
 ## `uglify/negate-iife/negate_iife_3_off`
 
+- tags: `sequences`
 - size: oxc 57 vs reference 61 (no whitespaces: -4, formatted: -4)
 
 ```js
@@ -15077,6 +15309,7 @@ console.log(b);
 
 ## `uglify/negate-iife/negate_iife_3_side_effects`
 
+- tags: `sequences`
 - size: oxc 57 vs reference 61 (no whitespaces: -4, formatted: -4)
 
 ```js
@@ -15571,7 +15804,7 @@ new RegExp('[\udc42-\udcaa\udd74-\udd96\ude45-\ude4f\udea3-\udecc]');
 
 ## `uglify/varify/scope_adjustment_const`
 
-- tags: `join vars`, `remove unused`
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 37 vs reference 41 (no whitespaces: -4, formatted: -7)
 
 ```js
@@ -15594,7 +15827,7 @@ for (var k in [42]) console.log(function f() {
 
 ## `uglify/varify/scope_adjustment_let`
 
-- tags: `join vars`, `remove unused`
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 50 vs reference 54 (no whitespaces: -4, formatted: -7)
 
 ```js
@@ -15978,6 +16211,7 @@ console.log(b);
 
 ## `uglify/conditionals/cond_seq_assign_3`
 
+- tags: `sequences`
 - size: oxc 34 vs reference 39 (no whitespaces: -5, formatted: -6)
 
 ```js
@@ -15991,16 +16225,17 @@ console.log(c);
 ```diff
 --- reference
 +++ oxc
-@@ -1,3 +1,3 @@
+@@ -1,3 +1,2 @@
  var c = 0;
 -this, c = 1 + c, c += 1;
-+c = 1 + c, c += 1;
- console.log(c);
+-console.log(c);
++c = 1 + c, c += 1, console.log(c);
 
 ```
 
 ## `uglify/conditionals/condition_matches_consequent`
 
+- tags: `sequences`
 - size: oxc 124 vs reference 129 (no whitespaces: -5, formatted: -5)
 
 ```js
@@ -16030,6 +16265,7 @@ console.log(foo(3, null), foo(0, 7), foo(true, false), bar());
 
 ## `uglify/conditionals/to_and_or`
 
+- tags: `sequences`
 - size: oxc 152 vs reference 157 (no whitespaces: -5, formatted: -5)
 
 ```js
@@ -16421,6 +16657,49 @@ export default (42, 'PASS');
 
 ```
 
+## `uglify/functions/issue_2783`
+
+- tags: `join vars`, `sequences`, `remove unused`
+- size: oxc 112 vs reference 117 (no whitespaces: -5, formatted: -7)
+
+```js
+(function() {
+	return g;
+	function f(a) {
+		var b = a.b;
+		if (b) return b;
+		return a;
+	}
+	function g(o, i) {
+		while (i--) {
+			console.log(f(o));
+		}
+	}
+})()({ b: 'PASS' }, 1);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,9 @@
+ (function() {
+-	return function(o, i) {
+-		while (i--) console.log(f(o));
+-	};
++	return g;
+ 	function f(a) {
+-		var b = a.b;
+-		return b || a;
++		return a.b || a;
++	}
++	function g(o, i) {
++		for (; i--;) console.log(f(o));
+ 	}
+ })()({ b: 'PASS' }, 1);
+
+```
+
 ## `uglify/ie/issue_3473`
 
 - size: oxc 75 vs reference 80 (no whitespaces: -5, formatted: -6)
@@ -16758,6 +17037,37 @@ function x() {
 
 ```
 
+## `uglify/if_return/issue_5584_1`
+
+- tags: `sequences`
+- size: oxc 69 vs reference 74 (no whitespaces: -5, formatted: -7)
+
+```js
+function f(a) {
+	switch (a) {
+		case 42:
+			if (!console.log('PASS')) return;
+			return FAIL;
+	}
+}
+f(42);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,4 @@
+ function f(a) {
+-	switch (a) {
+-		case 42: if (console.log('PASS')) return FAIL;
+-	}
++	if (a === 42) return console.log('PASS') ? FAIL : void 0;
+ }
+ f(42);
+
+```
+
 ## `uglify/if_return/issue_5592_2`
 
 - size: oxc 103 vs reference 108 (no whitespaces: -5, formatted: -7)
@@ -16798,6 +17108,7 @@ L: {
 
 ## `uglify/issue-640/negate_iife_3`
 
+- tags: `sequences`
 - size: oxc 57 vs reference 62 (no whitespaces: -5, formatted: -5)
 
 ```js
@@ -16820,6 +17131,7 @@ L: {
 
 ## `uglify/issue-640/negate_iife_3_off`
 
+- tags: `sequences`
 - size: oxc 57 vs reference 62 (no whitespaces: -5, formatted: -5)
 
 ```js
@@ -17736,6 +18048,7 @@ console.log('PASS');
 
 ## `uglify/transform/if_else_empty`
 
+- tags: `sequences`
 - size: oxc 2 vs reference 7 (no whitespaces: -5, formatted: -6)
 
 ```js
@@ -18218,6 +18531,7 @@ b.c !== b.c;
 
 ## `uglify/conditionals/issue_5546_3`
 
+- tags: `sequences`
 - size: oxc 86 vs reference 92 (no whitespaces: -6, formatted: -8)
 
 ```js
@@ -19371,7 +19685,7 @@ if (typeof bar);
 
 ## `uglify/typeof/reassign_iife`
 
-- tags: `2 iterations`
+- tags: `sequences`, `2 iterations`
 - size: oxc 109 vs reference 115 (no whitespaces: -6, formatted: -5)
 
 ```js
@@ -19386,10 +19700,10 @@ else (function() {
 ```diff
 --- reference
 +++ oxc
-@@ -1,4 +1,4 @@
- A = console;
+@@ -1,4 +1,3 @@
+-A = console;
 -'undefined' == typeof A ? console.log('FAIL 1') : function() {
-+typeof A > 'u' ? console.log('FAIL 1') : (function() {
++A = console, typeof A > 'u' ? console.log('FAIL 1') : (function() {
  	A = void 0;
 -}(console.log((A, false) ? 'FAIL 2' : 'PASS'));
 +})(console.log(A === void 0 ? 'FAIL 2' : 'PASS'));
@@ -19595,7 +19909,7 @@ console.log(a);
 
 ## `uglify/collapse_vars/issue_3976`
 
-- tags: `join vars`, `remove unused`
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 53 vs reference 60 (no whitespaces: -7, formatted: -8)
 
 ```js
@@ -20942,6 +21256,49 @@ console.log('' + 1, '' + '1', '' + 1 + 2, '' + 1 + '2', '' + '1' + 2, '' + '1' +
 
 ```
 
+## `uglify/conditionals/ifs_5`
+
+- tags: `sequences`
+- size: oxc 75 vs reference 83 (no whitespaces: -8, formatted: -22)
+
+```js
+function f() {
+	if (foo) return;
+	bar();
+	baz();
+}
+function g() {
+	if (foo) return;
+	if (bar) return;
+	if (baz) return;
+	if (baa) return;
+	a();
+	b();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,12 +1,6 @@
+ function f() {
+-	if (!foo) {
+-		bar();
+-		baz();
+-	}
++	foo || (bar(), baz());
+ }
+ function g() {
+-	if (!(foo || bar || baz || baa)) {
+-		a();
+-		b();
+-	}
++	foo || bar || baz || baa || (a(), b());
+ }
+
+```
+
 ## `uglify/const/issue_4305_2`
 
 - tags: `join vars`, `remove unused`
@@ -21826,9 +22183,49 @@ console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
 
 ```
 
+## `uglify/typeof/reassign_do`
+
+- tags: `join vars`, `sequences`, `2 iterations`
+- size: oxc 114 vs reference 122 (no whitespaces: -8, formatted: -14)
+
+```js
+A = console;
+(function() {
+	if ('undefined' == typeof A) return;
+	var a = A, i = 2;
+	do {
+		console.log(void 0 === A, void 0 === a);
+		A = void 0;
+	} while (--i);
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,8 @@
+-A = console;
+-(function() {
+-	if ('undefined' != typeof A) {
++A = console, (function() {
++	if (typeof A < 'u') {
+ 		var a = A, i = 2;
+-		do {
+-			console.log(void 0 === A, (a, false));
+-			A = void 0;
+-		} while (--i);
++		do
++			console.log(A === void 0, a === void 0), A = void 0;
++		while (--i);
+ 	}
+ })();
+
+```
+
 ## `uglify/typeof/reassign_for`
 
-- tags: `join vars`, `2 iterations`
+- tags: `join vars`, `sequences`, `2 iterations`
 - size: oxc 94 vs reference 102 (no whitespaces: -8, formatted: -7)
 
 ```js
@@ -21842,66 +22239,6 @@ if (A = console, 'undefined' != typeof A) for (var a = A, i = 0; i < 2; i++) con
 @@ -1 +1 @@
 -if (A = console, 'undefined' != typeof A) for (var a = A, i = 0; i < 2; i++) console.log(void 0 === A, (a, false)), A = void 0;
 +if (A = console, typeof A < 'u') for (var a = A, i = 0; i < 2; i++) console.log(A === void 0, a === void 0), A = void 0;
-
-```
-
-## `uglify/typeof/reassign_for_in`
-
-- tags: `join vars`, `2 iterations`
-- size: oxc 109 vs reference 117 (no whitespaces: -8, formatted: -7)
-
-```js
-(A = console) && 'undefined' != typeof A && function(a) {
-	for (var k in [a = A, 42]) {
-		console.log(void 0 === A, void 0 === a);
-		A = void 0;
-	}
-}();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,6 @@
--(A = console) && 'undefined' != typeof A && function(a) {
-+(A = console) && typeof A < 'u' && function(a) {
- 	for (var k in [a = A, 42]) {
--		console.log(void 0 === A, (a, false));
-+		console.log(A === void 0, a === void 0);
- 		A = void 0;
- 	}
- }();
-
-```
-
-## `uglify/typeof/reassign_property`
-
-- tags: `2 iterations`
-- size: oxc 104 vs reference 112 (no whitespaces: -8, formatted: -7)
-
-```js
-A = console;
-if ('undefined' == typeof A) console.log('FAIL 1');
-else {
-	A.p = void 0;
-	console.log(void 0 === A ? 'FAIL 2' : 'PASS');
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,6 @@
- A = console;
--if ('undefined' == typeof A) console.log('FAIL 1');
-+if (typeof A > 'u') console.log('FAIL 1');
- else {
- 	A.p = void 0;
--	console.log((A, false) ? 'FAIL 2' : 'PASS');
-+	console.log(A === void 0 ? 'FAIL 2' : 'PASS');
- }
 
 ```
 
@@ -22645,7 +22982,7 @@ try {
 
 ## `uglify/functions/issue_5173_1`
 
-- tags: `join vars`
+- tags: `join vars`, `sequences`
 - size: oxc 45 vs reference 54 (no whitespaces: -9, formatted: -13)
 
 ```js
@@ -22884,6 +23221,7 @@ console.log(f());
 
 ## `uglify/let/if_dead_branch`
 
+- tags: `sequences`
 - size: oxc 56 vs reference 65 (no whitespaces: -9, formatted: -19)
 
 ```js
@@ -23349,101 +23687,6 @@ bar\nbaz`);
 
 ```
 
-## `uglify/typeof/reassign`
-
-- tags: `2 iterations`
-- size: oxc 110 vs reference 119 (no whitespaces: -9, formatted: -8)
-
-```js
-A = console;
-if ('undefined' == typeof A) console.log('FAIL 1');
-else {
-	A = void 0;
-	while (console.log(void 0 === A ? 'PASS' : 'FAIL 2'));
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,6 @@
- A = console;
--if ('undefined' == typeof A) console.log('FAIL 1');
-+if (typeof A > 'u') console.log('FAIL 1');
- else {
- 	A = void 0;
--	while (console.log(void 0 === A ? 'PASS' : 'FAIL 2'));
-+	for (; console.log(A === void 0 ? 'PASS' : 'FAIL 2'););
- }
-
-```
-
-## `uglify/typeof/reassign_call`
-
-- tags: `2 iterations`
-- size: oxc 127 vs reference 136 (no whitespaces: -9, formatted: -8)
-
-```js
-A = console;
-function f() {
-	A = void 0;
-}
-if ('undefined' == typeof A) console.log('FAIL 1');
-else {
-	f();
-	while (console.log(void 0 === A ? 'PASS' : 'FAIL 2'));
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -2,8 +2,8 @@
- function f() {
- 	A = void 0;
- }
--if ('undefined' == typeof A) console.log('FAIL 1');
-+if (typeof A > 'u') console.log('FAIL 1');
- else {
- 	f();
--	while (console.log(void 0 === A ? 'PASS' : 'FAIL 2'));
-+	for (; console.log(A === void 0 ? 'PASS' : 'FAIL 2'););
- }
-
-```
-
-## `uglify/typeof/reassign_conditional`
-
-- tags: `2 iterations`
-- size: oxc 112 vs reference 121 (no whitespaces: -9, formatted: -8)
-
-```js
-A = console;
-if ('undefined' == typeof A) console.log('FAIL 1');
-else {
-	A &&= void 0;
-	while (console.log(void 0 === A ? 'PASS' : 'FAIL 2'));
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,6 @@
- A = console;
--if ('undefined' == typeof A) console.log('FAIL 1');
-+if (typeof A > 'u') console.log('FAIL 1');
- else {
- 	A &&= void 0;
--	while (console.log(void 0 === A ? 'PASS' : 'FAIL 2'));
-+	for (; console.log(A === void 0 ? 'PASS' : 'FAIL 2'););
- }
-
-```
-
 ## `uglify/yields/empty_yield`
 
 - size: oxc 193 vs reference 202 (no whitespaces: -9, formatted: -11)
@@ -23478,6 +23721,7 @@ console.log(a.next('FAIL 4').done);
 
 ## `uglify/arrows/negate`
 
+- tags: `sequences`
 - size: oxc 29 vs reference 39 (no whitespaces: -10, formatted: -16)
 
 ```js
@@ -23776,6 +24020,7 @@ console.log(a);
 
 ## `uglify/conditionals/cond_8c`
 
+- tags: `sequences`
 - size: oxc 276 vs reference 286 (no whitespaces: -10, formatted: -15)
 
 ```js
@@ -23822,28 +24067,29 @@ a = condition ? 1 : 0;
 ```diff
 --- reference
 +++ oxc
-@@ -1,10 +1,9 @@
+@@ -1,20 +1,2 @@
 -var a;
 -a = !!condition;
-+var a = !!condition;
- a = !condition;
- a = !!condition();
- a = !!condition;
- a = !condition;
+-a = !condition;
+-a = !!condition();
+-a = !!condition;
+-a = !condition;
 -a = !!condition() || !-3.5;
-+a = !!condition();
- a = !!condition;
- a = !!condition;
- a = !condition;
-@@ -15,6 +14,6 @@
- a = !condition();
- a = !condition;
- a = !condition;
+-a = !!condition;
+-a = !!condition;
+-a = !condition;
+-a = !!condition;
+-a = !condition();
+-a = !condition;
+-a = !!condition;
+-a = !condition();
+-a = !condition;
+-a = !condition;
 -a = !!condition && 1;
-+a = condition ? 1 : !1;
- a = !condition || 0;
+-a = !condition || 0;
 -a = condition ? 1 : 0;
-+a = +!!condition;
++var a = !!condition;
++a = !condition, a = !!condition(), a = !!condition, a = !condition, a = !!condition(), a = !!condition, a = !!condition, a = !condition, a = !!condition, a = !condition(), a = !condition, a = !!condition, a = !condition(), a = !condition, a = !condition, a = condition ? 1 : !1, a = !condition || 0, a = +!!condition;
 
 ```
 
@@ -24480,6 +24726,36 @@ console.log(`P${`A${'S'}`}S`);
 
 ```
 
+## `uglify/typeof/reassign_for_in`
+
+- tags: `join vars`, `sequences`, `2 iterations`
+- size: oxc 107 vs reference 117 (no whitespaces: -10, formatted: -16)
+
+```js
+(A = console) && 'undefined' != typeof A && function(a) {
+	for (var k in [a = A, 42]) {
+		console.log(void 0 === A, void 0 === a);
+		A = void 0;
+	}
+}();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,3 @@
+-(A = console) && 'undefined' != typeof A && function(a) {
+-	for (var k in [a = A, 42]) {
+-		console.log(void 0 === A, (a, false));
+-		A = void 0;
+-	}
++(A = console) && typeof A < 'u' && function(a) {
++	for (var k in [a = A, 42]) console.log(A === void 0, a === void 0), A = void 0;
+ }();
+
+```
+
 ## `uglify/arrows/for_parentheses_init`
 
 - size: oxc 23 vs reference 34 (no whitespaces: -11, formatted: -15)
@@ -24522,6 +24798,7 @@ for ((a) => {
 
 ## `uglify/classes/conditional_parentheses`
 
+- tags: `sequences`
 - size: oxc 33 vs reference 44 (no whitespaces: -11, formatted: -14)
 
 ```js
@@ -25163,6 +25440,101 @@ var a = function() {
 -{
 -	const b = a;
 -}
+
+```
+
+## `uglify/typeof/reassign`
+
+- tags: `sequences`, `2 iterations`
+- size: oxc 108 vs reference 119 (no whitespaces: -11, formatted: -16)
+
+```js
+A = console;
+if ('undefined' == typeof A) console.log('FAIL 1');
+else {
+	A = void 0;
+	while (console.log(void 0 === A ? 'PASS' : 'FAIL 2'));
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,2 @@
+-A = console;
+-if ('undefined' == typeof A) console.log('FAIL 1');
+-else {
+-	A = void 0;
+-	while (console.log(void 0 === A ? 'PASS' : 'FAIL 2'));
+-}
++if (A = console, typeof A > 'u') console.log('FAIL 1');
++else for (A = void 0; console.log(A === void 0 ? 'PASS' : 'FAIL 2'););
+
+```
+
+## `uglify/typeof/reassign_call`
+
+- tags: `sequences`, `2 iterations`
+- size: oxc 125 vs reference 136 (no whitespaces: -11, formatted: -16)
+
+```js
+A = console;
+function f() {
+	A = void 0;
+}
+if ('undefined' == typeof A) console.log('FAIL 1');
+else {
+	f();
+	while (console.log(void 0 === A ? 'PASS' : 'FAIL 2'));
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,8 +2,5 @@
+ function f() {
+ 	A = void 0;
+ }
+-if ('undefined' == typeof A) console.log('FAIL 1');
+-else {
+-	f();
+-	while (console.log(void 0 === A ? 'PASS' : 'FAIL 2'));
+-}
++if (typeof A > 'u') console.log('FAIL 1');
++else for (f(); console.log(A === void 0 ? 'PASS' : 'FAIL 2'););
+
+```
+
+## `uglify/typeof/reassign_conditional`
+
+- tags: `sequences`, `2 iterations`
+- size: oxc 110 vs reference 121 (no whitespaces: -11, formatted: -16)
+
+```js
+A = console;
+if ('undefined' == typeof A) console.log('FAIL 1');
+else {
+	A &&= void 0;
+	while (console.log(void 0 === A ? 'PASS' : 'FAIL 2'));
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,2 @@
+-A = console;
+-if ('undefined' == typeof A) console.log('FAIL 1');
+-else {
+-	A &&= void 0;
+-	while (console.log(void 0 === A ? 'PASS' : 'FAIL 2'));
+-}
++if (A = console, typeof A > 'u') console.log('FAIL 1');
++else for (A &&= void 0; console.log(A === void 0 ? 'PASS' : 'FAIL 2'););
 
 ```
 
@@ -26456,7 +26828,7 @@ bar() || 'bar';
 
 ## `uglify/reduce_vars/issue_1670_1`
 
-- tags: `join vars`, `remove unused`
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 60 vs reference 73 (no whitespaces: -13, formatted: -13)
 
 ```js
@@ -27172,6 +27544,35 @@ console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
 
 ```
 
+## `uglify/typeof/reassign_property`
+
+- tags: `sequences`, `2 iterations`
+- size: oxc 98 vs reference 112 (no whitespaces: -14, formatted: -18)
+
+```js
+A = console;
+if ('undefined' == typeof A) console.log('FAIL 1');
+else {
+	A.p = void 0;
+	console.log(void 0 === A ? 'FAIL 2' : 'PASS');
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1 @@
+-A = console;
+-if ('undefined' == typeof A) console.log('FAIL 1');
+-else {
+-	A.p = void 0;
+-	console.log((A, false) ? 'FAIL 2' : 'PASS');
+-}
++A = console, typeof A > 'u' ? console.log('FAIL 1') : (A.p = void 0, console.log(A === void 0 ? 'FAIL 2' : 'PASS'));
+
+```
+
 ## `uglify/arrows/body_conditional`
 
 - size: oxc 20 vs reference 35 (no whitespaces: -15, formatted: -23)
@@ -27192,6 +27593,7 @@ console.log(((a) => {}) ? 'PASS' : 'FAIL');
 
 ## `uglify/booleans/issue_5041_1`
 
+- tags: `sequences`
 - size: oxc 51 vs reference 66 (no whitespaces: -15, formatted: -15)
 
 ```js
@@ -27215,6 +27617,7 @@ if (a) {
 
 ## `uglify/booleans/issue_5041_2`
 
+- tags: `sequences`
 - size: oxc 46 vs reference 61 (no whitespaces: -15, formatted: -15)
 
 ```js
@@ -27254,8 +27657,52 @@ console.log(Math.acos(42) !== 'foo'.charCodeAt(4));
 
 ```
 
+## `uglify/conditionals/angularjs_chain`
+
+- tags: `sequences`, `2 iterations`
+- size: oxc 203 vs reference 218 (no whitespaces: -15, formatted: -21)
+
+```js
+function nonComputedMember(left, right, context, create) {
+	var lhs = left();
+	if (create && create !== 1) {
+		if (lhs && lhs[right] == null) {
+			lhs[right] = {};
+		}
+	}
+	var value = lhs != null ? lhs[right] : undefined;
+	if (context) {
+		return {
+			context: lhs,
+			name: right,
+			value
+		};
+	} else {
+		return value;
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+ function nonComputedMember(left, right, context, create) {
+ 	var lhs = left();
+-	create && 1 !== create && lhs && null == lhs[right] && (lhs[right] = {});
+-	var value = null != lhs ? lhs[right] : void 0;
++	create && create !== 1 && lhs && lhs[right] == null && (lhs[right] = {});
++	var value = lhs?.[right];
+ 	return context ? {
+ 		context: lhs,
+ 		name: right,
+
+```
+
 ## `uglify/conditionals/issue_3808_1`
 
+- tags: `sequences`
 - size: oxc 28 vs reference 43 (no whitespaces: -15, formatted: -22)
 
 ```js
@@ -27278,6 +27725,7 @@ console.log(a);
 
 ## `uglify/conditionals/issue_3808_2`
 
+- tags: `sequences`
 - size: oxc 35 vs reference 50 (no whitespaces: -15, formatted: -21)
 
 ```js
@@ -28188,6 +28636,7 @@ f(NaN, 'foo');
 
 ## `uglify/conditionals/issue_1154`
 
+- tags: `sequences`
 - size: oxc 305 vs reference 323 (no whitespaces: -18, formatted: -22)
 
 ```js
@@ -28258,6 +28707,7 @@ function g6() {
 
 ## `uglify/const/if_dead_branch`
 
+- tags: `sequences`
 - size: oxc 43 vs reference 61 (no whitespaces: -18, formatted: -30)
 
 ```js
@@ -28496,6 +28946,7 @@ f('PASS');
 
 ## `uglify/yields/issue_4623`
 
+- tags: `sequences`
 - size: oxc 29 vs reference 47 (no whitespaces: -18, formatted: -24)
 
 ```js
@@ -28547,6 +28998,7 @@ console.log('moo');
 
 ## `uglify/conditionals/alternative_sequence_2`
 
+- tags: `sequences`
 - size: oxc 151 vs reference 170 (no whitespaces: -19, formatted: -18)
 
 ```js
@@ -28563,7 +29015,7 @@ console.log(f(true, true, 4));
 ```diff
 --- reference
 +++ oxc
-@@ -1,7 +1,7 @@
+@@ -1,7 +1,4 @@
  function f(x, y, a) {
 -	return !x && (console.log('seq'), y) || a;
 +	return x ? a : (console.log('seq'), y || a);
@@ -28572,15 +29024,13 @@ console.log(f(true, true, 4));
 -console.log(f(false, true, 2));
 -console.log(f(true, false, 3));
 -console.log(f(true, true, 4));
-+console.log(f(!1, !1, 1));
-+console.log(f(!1, !0, 2));
-+console.log(f(!0, !1, 3));
-+console.log(f(!0, !0, 4));
++console.log(f(!1, !1, 1)), console.log(f(!1, !0, 2)), console.log(f(!0, !1, 3)), console.log(f(!0, !0, 4));
 
 ```
 
 ## `uglify/conditionals/alternative_sequence_3`
 
+- tags: `sequences`
 - size: oxc 166 vs reference 185 (no whitespaces: -19, formatted: -17)
 
 ```js
@@ -28597,7 +29047,7 @@ console.log(f(true, true, 4, -4));
 ```diff
 --- reference
 +++ oxc
-@@ -1,7 +1,7 @@
+@@ -1,7 +1,4 @@
  function f(x, y, a, b) {
 -	return x || (console.log('seq'), y) ? a : b;
 +	return x ? a : (console.log('seq'), y ? a : b);
@@ -28606,15 +29056,13 @@ console.log(f(true, true, 4, -4));
 -console.log(f(false, true, 2, -2));
 -console.log(f(true, false, 3, -3));
 -console.log(f(true, true, 4, -4));
-+console.log(f(!1, !1, 1, -1));
-+console.log(f(!1, !0, 2, -2));
-+console.log(f(!0, !1, 3, -3));
-+console.log(f(!0, !0, 4, -4));
++console.log(f(!1, !1, 1, -1)), console.log(f(!1, !0, 2, -2)), console.log(f(!0, !1, 3, -3)), console.log(f(!0, !0, 4, -4));
 
 ```
 
 ## `uglify/conditionals/alternative_sequence_4`
 
+- tags: `sequences`
 - size: oxc 166 vs reference 185 (no whitespaces: -19, formatted: -18)
 
 ```js
@@ -28631,7 +29079,7 @@ console.log(f(true, true, 4, -4));
 ```diff
 --- reference
 +++ oxc
-@@ -1,7 +1,7 @@
+@@ -1,7 +1,4 @@
  function f(x, y, a, b) {
 -	return !x && (console.log('seq'), y) ? a : b;
 +	return x ? b : (console.log('seq'), y ? a : b);
@@ -28640,15 +29088,13 @@ console.log(f(true, true, 4, -4));
 -console.log(f(false, true, 2, -2));
 -console.log(f(true, false, 3, -3));
 -console.log(f(true, true, 4, -4));
-+console.log(f(!1, !1, 1, -1));
-+console.log(f(!1, !0, 2, -2));
-+console.log(f(!0, !1, 3, -3));
-+console.log(f(!0, !0, 4, -4));
++console.log(f(!1, !1, 1, -1)), console.log(f(!1, !0, 2, -2)), console.log(f(!0, !1, 3, -3)), console.log(f(!0, !0, 4, -4));
 
 ```
 
 ## `uglify/conditionals/consequent_sequence_2`
 
+- tags: `sequences`
 - size: oxc 151 vs reference 170 (no whitespaces: -19, formatted: -17)
 
 ```js
@@ -28665,7 +29111,7 @@ console.log(f(true, true, 4));
 ```diff
 --- reference
 +++ oxc
-@@ -1,7 +1,7 @@
+@@ -1,7 +1,4 @@
  function f(x, y, a) {
 -	return x && (console.log('seq'), y) || a;
 +	return x ? (console.log('seq'), y || a) : a;
@@ -28674,15 +29120,13 @@ console.log(f(true, true, 4));
 -console.log(f(false, true, 2));
 -console.log(f(true, false, 3));
 -console.log(f(true, true, 4));
-+console.log(f(!1, !1, 1));
-+console.log(f(!1, !0, 2));
-+console.log(f(!0, !1, 3));
-+console.log(f(!0, !0, 4));
++console.log(f(!1, !1, 1)), console.log(f(!1, !0, 2)), console.log(f(!0, !1, 3)), console.log(f(!0, !0, 4));
 
 ```
 
 ## `uglify/conditionals/consequent_sequence_3`
 
+- tags: `sequences`
 - size: oxc 166 vs reference 185 (no whitespaces: -19, formatted: -17)
 
 ```js
@@ -28699,7 +29143,7 @@ console.log(f(true, true, 4, -4));
 ```diff
 --- reference
 +++ oxc
-@@ -1,7 +1,7 @@
+@@ -1,7 +1,4 @@
  function f(x, y, a, b) {
 -	return x && (console.log('seq'), y) ? a : b;
 +	return x ? (console.log('seq'), y ? a : b) : b;
@@ -28708,15 +29152,13 @@ console.log(f(true, true, 4, -4));
 -console.log(f(false, true, 2, -2));
 -console.log(f(true, false, 3, -3));
 -console.log(f(true, true, 4, -4));
-+console.log(f(!1, !1, 1, -1));
-+console.log(f(!1, !0, 2, -2));
-+console.log(f(!0, !1, 3, -3));
-+console.log(f(!0, !0, 4, -4));
++console.log(f(!1, !1, 1, -1)), console.log(f(!1, !0, 2, -2)), console.log(f(!0, !1, 3, -3)), console.log(f(!0, !0, 4, -4));
 
 ```
 
 ## `uglify/conditionals/consequent_sequence_4`
 
+- tags: `sequences`
 - size: oxc 166 vs reference 185 (no whitespaces: -19, formatted: -18)
 
 ```js
@@ -28733,7 +29175,7 @@ console.log(f(true, true, 4, -4));
 ```diff
 --- reference
 +++ oxc
-@@ -1,7 +1,7 @@
+@@ -1,7 +1,4 @@
  function f(x, y, a, b) {
 -	return !x || (console.log('seq'), y) ? a : b;
 +	return x ? (console.log('seq'), y ? a : b) : a;
@@ -28742,10 +29184,7 @@ console.log(f(true, true, 4, -4));
 -console.log(f(false, true, 2, -2));
 -console.log(f(true, false, 3, -3));
 -console.log(f(true, true, 4, -4));
-+console.log(f(!1, !1, 1, -1));
-+console.log(f(!1, !0, 2, -2));
-+console.log(f(!0, !1, 3, -3));
-+console.log(f(!0, !0, 4, -4));
++console.log(f(!1, !1, 1, -1)), console.log(f(!1, !0, 2, -2)), console.log(f(!0, !1, 3, -3)), console.log(f(!0, !0, 4, -4));
 
 ```
 
@@ -29051,6 +29490,7 @@ console.log(c);
 
 ## `uglify/conditionals/alternative_sequence_1`
 
+- tags: `sequences`
 - size: oxc 151 vs reference 171 (no whitespaces: -20, formatted: -19)
 
 ```js
@@ -29067,7 +29507,7 @@ console.log(f(true, true, 4));
 ```diff
 --- reference
 +++ oxc
-@@ -1,7 +1,7 @@
+@@ -1,7 +1,4 @@
  function f(x, y, a) {
 -	return (x || (console.log('seq'), y)) && a;
 +	return x ? a : (console.log('seq'), y && a);
@@ -29076,10 +29516,7 @@ console.log(f(true, true, 4));
 -console.log(f(false, true, 2));
 -console.log(f(true, false, 3));
 -console.log(f(true, true, 4));
-+console.log(f(!1, !1, 1));
-+console.log(f(!1, !0, 2));
-+console.log(f(!0, !1, 3));
-+console.log(f(!0, !0, 4));
++console.log(f(!1, !1, 1)), console.log(f(!1, !0, 2)), console.log(f(!0, !1, 3)), console.log(f(!0, !0, 4));
 
 ```
 
@@ -29219,6 +29656,7 @@ function f() {
 
 ## `uglify/conditionals/consequent_sequence_1`
 
+- tags: `sequences`
 - size: oxc 151 vs reference 172 (no whitespaces: -21, formatted: -20)
 
 ```js
@@ -29235,7 +29673,7 @@ console.log(f(true, true, 4));
 ```diff
 --- reference
 +++ oxc
-@@ -1,7 +1,7 @@
+@@ -1,7 +1,4 @@
  function f(x, y, a) {
 -	return (!x || (console.log('seq'), y)) && a;
 +	return x ? (console.log('seq'), y && a) : a;
@@ -29244,10 +29682,7 @@ console.log(f(true, true, 4));
 -console.log(f(false, true, 2));
 -console.log(f(true, false, 3));
 -console.log(f(true, true, 4));
-+console.log(f(!1, !1, 1));
-+console.log(f(!1, !0, 2));
-+console.log(f(!0, !1, 3));
-+console.log(f(!0, !0, 4));
++console.log(f(!1, !1, 1)), console.log(f(!1, !0, 2)), console.log(f(!0, !1, 3)), console.log(f(!0, !0, 4));
 
 ```
 
@@ -29771,6 +30206,42 @@ function sample() {
 
 ```
 
+## `uglify/conditionals/issue_3668_1`
+
+- tags: `sequences`
+- size: oxc 79 vs reference 103 (no whitespaces: -24, formatted: -28)
+
+```js
+function f() {
+	try {
+		var undefined = typeof f;
+		if (!f) return undefined;
+		return;
+	} catch (e) {
+		return 'FAIL';
+	}
+}
+console.log(f());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,7 @@
+ function f() {
+ 	try {
+-		var undefined = typeof f;
+-		if (!f) return undefined;
+-	} catch (e) {
++		return f ? void 0 : typeof f;
++	} catch {
+ 		return 'FAIL';
+ 	}
+ }
+
+```
+
 ## `uglify/const/dead_block_after_return`
 
 - size: oxc 32 vs reference 56 (no whitespaces: -24, formatted: -35)
@@ -30215,7 +30686,7 @@ f(42, true);
 
 ## `uglify/typeof/issue_3817`
 
-- tags: `2 iterations`
+- tags: `sequences`, `2 iterations`
 - size: oxc 73 vs reference 99 (no whitespaces: -26, formatted: -31)
 
 ```js
@@ -30268,6 +30739,7 @@ f('PASS');
 
 ## `uglify/yields/issue_5710`
 
+- tags: `sequences`
 - size: oxc 86 vs reference 112 (no whitespaces: -26, formatted: -47)
 
 ```js
@@ -30694,37 +31166,6 @@ console.log(c);
 
 ```
 
-## `uglify/yields/issue_5684`
-
-- size: oxc 72 vs reference 101 (no whitespaces: -29, formatted: -39)
-
-```js
-(async function* () {
-	switch (42) {
-		default:
-			if (console.log('PASS')) return;
-			return null;
-		case false:
-	}
-})().next();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,4 @@
- (async function* () {
--	switch (42) {
--		default: return console.log('PASS') ? void 0 : null;
--		case false:
--	}
-+	if (console.log('PASS')) return;
-+	return null;
- })().next();
-
-```
-
 ## `uglify/if_return/issue_5649`
 
 - size: oxc 71 vs reference 101 (no whitespaces: -30, formatted: -34)
@@ -30776,6 +31217,45 @@ for ((function() {
 -for (function() {
 -	'foo' in {};
 -}; 0;);
+
+```
+
+## `uglify/conditionals/issue_3668_2`
+
+- tags: `sequences`
+- size: oxc 79 vs reference 110 (no whitespaces: -31, formatted: -40)
+
+```js
+function f() {
+	try {
+		var undefined = typeof f;
+		if (!f) return undefined;
+		return;
+	} catch (e) {
+		return 'FAIL';
+	}
+	FAIL;
+}
+console.log(f());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,8 @@
+ function f() {
+ 	try {
+-		var undefined = typeof f;
+-		return f ? void 0 : undefined;
+-	} catch (e) {
++		return f ? void 0 : typeof f;
++	} catch {
+ 		return 'FAIL';
+ 	}
+-	FAIL;
+ }
+ console.log(f());
 
 ```
 
@@ -31235,6 +31715,37 @@ let a = 42;
 -	console.log('PASS');
 -}
  let a = 42;
+
+```
+
+## `uglify/yields/issue_5684`
+
+- tags: `sequences`
+- size: oxc 66 vs reference 101 (no whitespaces: -35, formatted: -47)
+
+```js
+(async function* () {
+	switch (42) {
+		default:
+			if (console.log('PASS')) return;
+			return null;
+		case false:
+	}
+})().next();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,3 @@
+ (async function* () {
+-	switch (42) {
+-		default: return console.log('PASS') ? void 0 : null;
+-		case false:
+-	}
++	if (!console.log('PASS')) return null;
+ })().next();
 
 ```
 
@@ -32266,6 +32777,7 @@ console.log([
 
 ## `uglify/conditionals/issue_5546_2`
 
+- tags: `sequences`
 - size: oxc 29 vs reference 78 (no whitespaces: -49, formatted: -69)
 
 ```js
@@ -32418,6 +32930,7 @@ a !== undefined && a !== null;
 
 ## `uglify/comparisons/issue_2857_5`
 
+- tags: `sequences`
 - size: oxc 112 vs reference 166 (no whitespaces: -54, formatted: -70)
 
 ```js
@@ -32435,7 +32948,7 @@ p || a !== undefined && a !== null;
 ```diff
 --- reference
 +++ oxc
-@@ -1,8 +1,8 @@
+@@ -1,8 +1 @@
 -p || null == a;
 -p || void 0 === a || null !== a;
 -p || void 0 !== a || null === a;
@@ -32444,19 +32957,13 @@ p || a !== undefined && a !== null;
 -p || void 0 === a && null !== a;
 -p || void 0 !== a && null === a;
 -p || null != a;
-+p || a;
-+p || a === void 0 || a;
-+p || a !== void 0 || a;
-+p || a !== void 0 || a;
-+p || a === void 0 && a;
-+p || a === void 0 && a;
-+p || a !== void 0 && a;
-+p || a;
++p || a, p || a === void 0 || a, p || a !== void 0 || a, p || a !== void 0 || a, p || a === void 0 && a, p || a === void 0 && a, p || a !== void 0 && a, p || a;
 
 ```
 
 ## `uglify/comparisons/issue_2857_6`
 
+- tags: `sequences`
 - size: oxc 124 vs reference 179 (no whitespaces: -55, formatted: -71)
 
 ```js
@@ -32474,7 +32981,7 @@ p && a !== undefined && a !== null;
 ```diff
 --- reference
 +++ oxc
-@@ -1,8 +1,8 @@
+@@ -1,8 +1 @@
 -p && void 0 === a || null === a;
 -p && void 0 === a || null !== a;
 -p && void 0 !== a || null === a;
@@ -32483,14 +32990,7 @@ p && a !== undefined && a !== null;
 -p && void 0 === a && null !== a;
 -p && void 0 !== a && null === a;
 -p && null != a;
-+p && a === void 0 || a;
-+p && a === void 0 || a;
-+p && a !== void 0 || a;
-+p && a !== void 0 || a;
-+p && a === void 0 && a;
-+p && a === void 0 && a;
-+p && a !== void 0 && a;
-+p && a;
++p && a === void 0 || a, p && a === void 0 || a, p && a !== void 0 || a, p && a !== void 0 || a, p && a === void 0 && a, p && a === void 0 && a, p && a !== void 0 && a, p && a;
 
 ```
 
@@ -32649,6 +33149,7 @@ console.log(function foo() {
 
 ## `uglify/negate-iife/issue_1288`
 
+- tags: `sequences`
 - size: oxc 28 vs reference 88 (no whitespaces: -60, formatted: -73)
 
 ```js
@@ -32671,18 +33172,16 @@ else (function(z) {
 ```diff
 --- reference
 +++ oxc
-@@ -1,7 +1,5 @@
+@@ -1,7 +1,3 @@
 -w || !function f() {}();
 -x || !function() {
-+w;
-+x || (function() {
++w, x || (function() {
  	x = {};
 -}();
 -y ? !function() {}() : !function(z) {
 -	return z;
 -}(0);
-+})();
-+y;
++})(), y;
 
 ```
 
@@ -32706,6 +33205,7 @@ console.log(1 + 2 + (3 + 4 + 5), 1 + 2 + (3 + 4 + '5'), 1 + 2 + (3 + '4' + 5), 1
 
 ## `uglify/conditionals/issue_5546_1`
 
+- tags: `sequences`
 - size: oxc 35 vs reference 96 (no whitespaces: -61, formatted: -82)
 
 ```js
@@ -33904,7 +34404,8 @@ typeof function g() {}();
 
 ## `uglify/switches/constant_switch_5`
 
-- size: oxc 38 vs reference 229 (no whitespaces: -191, formatted: -190)
+- tags: `sequences`
+- size: oxc 38 vs reference 229 (no whitespaces: -191, formatted: -192)
 
 ```js
 switch (1) {
@@ -33922,14 +34423,15 @@ switch (1) {
 ```diff
 --- reference
 +++ oxc
-@@ -1,10 +1,6 @@
+@@ -1,10 +1,5 @@
 -// the break inside the if ruins our job
 -// we can still get rid of irrelevant cases.
  switch (1) {
 -	default:
+-		x();
+-		if (foo) break;
 +	case 1:
- 		x();
- 		if (foo) break;
++		if (x(), foo) break;
  		y();
  }
 -// XXX: we could optimize this better by inventing an outer

@@ -1,6 +1,6 @@
 # uglify / whitespace — Output longer after whitespace removal
 
-Fixtures: 18
+Fixtures: 20
 
 [← uglify](README.md) · [← all families](../README.md)
 
@@ -105,6 +105,85 @@ console.log(function foo() {
 
 ```
 
+## `uglify/issue-1034/non_hoisted_function_after_return`
+
+- tags: `join vars`, `sequences`, `remove unused`
+
+```js
+function foo(x) {
+	if (x) {
+		return bar();
+		not_called1();
+	} else {
+		return baz();
+		not_called2();
+	}
+	function bar() {
+		return 7;
+	}
+	return not_reached;
+	function UnusedFunction() {}
+	function baz() {
+		return 8;
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ function foo(x) {
+-	return (x ? bar : baz)();
++	return x ? bar() : baz();
+ 	function bar() {
+ 		return 7;
+ 	}
+
+```
+
+## `uglify/issue-1034/non_hoisted_function_after_return_strict`
+
+- tags: `join vars`, `sequences`, `remove unused`
+
+```js
+'use strict';
+function foo(x) {
+	if (x) {
+		return bar();
+		not_called1();
+	} else {
+		return baz();
+		not_called2();
+	}
+	function bar() {
+		return 7;
+	}
+	return not_reached;
+	function UnusedFunction() {}
+	function baz() {
+		return 8;
+	}
+}
+console.log(foo(0), foo(1));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+ 'use strict';
+ function foo(x) {
+-	return (x ? bar : baz)();
++	return x ? bar() : baz();
+ 	function bar() {
+ 		return 7;
+ 	}
+
+```
+
 ## `uglify/issue-269/issue_269_1`
 
 
@@ -188,6 +267,7 @@ console.log(function(a) {
 
 ## `uglify/let/issue_4691`
 
+- tags: `sequences`
 
 ```js
 'use strict';

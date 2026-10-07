@@ -1,6 +1,6 @@
 # terser / larger — Output longer than expected (possible missing optimization)
 
-Fixtures: 988
+Fixtures: 979
 
 [← terser](README.md) · [← all families](../README.md)
 
@@ -164,62 +164,6 @@ var f = '\0' + 360 + '\0' + 8 + '\0';
 
 ```
 
-## `terser/conditionals/issue_2994`
-
-- size: oxc 265 vs reference 264 (no whitespaces: +1, formatted: +12)
-
-```js
-function f(condition1, condition2, condition3) {
-	if (condition1) {
-		if (condition2) {
-			return aValue;
-		} else {
-			const variable1 = 'something';
-			if (condition3) {
-				const variable2 = 'else';
-				return anotherValue;
-			} else {
-				return undefined;
-			}
-		}
-	}
-}
-let aValue = 2, anotherValue = 3;
-for (let i = 0; i < 8; ++i) {
-	console.log(f(i & 4, i & 2, i & 1));
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,13 +1,14 @@
- function f(condition1, condition2, condition3) {
--	if (condition1) if (condition2) return aValue;
--	else {
--		const variable1 = 'something';
--		if (!condition3) return;
--		{
--			const variable2 = 'else';
--			return anotherValue;
-+	if (condition1) {
-+		if (condition2) return aValue;
-+		else {
-+			let variable1 = 'something';
-+			if (condition3) {
-+				let variable2 = 'else';
-+				return anotherValue;
-+			} else return;
- 		}
- 	}
- }
- let aValue = 2, anotherValue = 3;
--for (let i = 0; i < 8; ++i) console.log(f(4 & i, 2 & i, 1 & i));
-+for (let i = 0; i < 8; ++i) console.log(f(i & 4, i & 2, i & 1));
-
-```
-
 ## `terser/dead_code/dead_code_2_should_warn`
 
 - size: oxc 47 vs reference 46 (no whitespaces: +1, formatted: +3)
@@ -260,7 +204,7 @@ f();
 
 ## `terser/dead_code/dead_code_const_declaration`
 
-- tags: `join vars`
+- tags: `join vars`, `sequences`
 - size: oxc 43 vs reference 42 (no whitespaces: +1, formatted: +2)
 
 ```js
@@ -597,36 +541,6 @@ var z = {};
 -var x = {};
 -var y = [];
 +var x = {}, y = [], z = {};
-
-```
-
-## `terser/if_return/if_if_return_return`
-
-- size: oxc 47 vs reference 46 (no whitespaces: +1, formatted: +9)
-
-```js
-function f(a, b) {
-	if (a) {
-		if (b) return b;
-		return;
-	}
-	g();
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,7 @@
- function f(a, b) {
--	if (a) return b || (0, void 0);
-+	if (a) {
-+		if (b) return b;
-+		return;
-+	}
- 	g();
- }
 
 ```
 
@@ -1770,6 +1684,7 @@ console.log((function(b) {
 
 ## `terser/conditionals/cond_7`
 
+- tags: `sequences`
 - size: oxc 129 vs reference 127 (no whitespaces: +2, formatted: +1)
 
 ```js
@@ -1809,25 +1724,25 @@ x = y ? 'foo' : 'fo';
 ```diff
 --- reference
 +++ oxc
-@@ -1,10 +1,9 @@
+@@ -1,10 +1,2 @@
 -var x, y, z, a, b;
 -x = 2;
-+var x = 2, y, z, a, b;
- x = 2;
- x = 'foo';
- x = 'foo';
+-x = 2;
+-x = 'foo';
+-x = 'foo';
 -condition(), x = 20;
 -z || condition(), x = 'fuji';
-+x = (condition(), 20);
-+x = (z || condition(), 'fuji');
- x = (condition(), 'foobar');
- x = y ? a : b;
- x = y ? 'foo' : 'fo';
+-x = (condition(), 'foobar');
+-x = y ? a : b;
+-x = y ? 'foo' : 'fo';
++var x = 2, y, z, a, b;
++x = 2, x = 'foo', x = 'foo', x = (condition(), 20), x = (z || condition(), 'fuji'), x = (condition(), 'foobar'), x = y ? a : b, x = y ? 'foo' : 'fo';
 
 ```
 
 ## `terser/conditionals/issue_1645_1`
 
+- tags: `sequences`
 - size: oxc 61 vs reference 59 (no whitespaces: +2, formatted: +3)
 
 ```js
@@ -1840,11 +1755,11 @@ console.log(a, b);
 ```diff
 --- reference
 +++ oxc
-@@ -1,3 +1,3 @@
+@@ -1,3 +1,2 @@
  var a = 100, b = 10;
 -(b = a) ? (a++, b += a, b += a) : b ^= a;
-+(b = a) ? (a++ + (b += a), b += a) : b ^= a;
- console.log(a, b);
+-console.log(a, b);
++(b = a) ? (a++ + (b += a), b += a) : b ^= a, console.log(a, b);
 
 ```
 
@@ -2786,6 +2701,84 @@ function f(b) {
 
 ```
 
+## `terser/pure_getters/issue_2313_3`
+
+- tags: `join vars`, `sequences`
+- size: oxc 117 vs reference 115 (no whitespaces: +2, formatted: -3)
+
+```js
+function x() {
+	console.log(1);
+	return { y: function() {
+		console.log(2);
+		return { z: 0 };
+	} };
+}
+x().y().z++;
+if (x().y().z) {
+	console.log(3);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,6 @@
+ function x() {
+-	console.log(1);
+-	return { y: function() {
+-		console.log(2);
+-		return { z: 0 };
++	return console.log(1), { y: function() {
++		return console.log(2), { z: 0 };
+ 	} };
+ }
+-x().y().z++;
+-x().y().z && console.log(3);
++x().y().z++, x().y().z && console.log(3);
+
+```
+
+## `terser/pure_getters/issue_2313_4`
+
+- tags: `join vars`, `sequences`, `pure getters`
+- size: oxc 117 vs reference 115 (no whitespaces: +2, formatted: -3)
+
+```js
+function x() {
+	console.log(1);
+	return { y: function() {
+		console.log(2);
+		return { z: 0 };
+	} };
+}
+x().y().z++;
+if (x().y().z) {
+	console.log(3);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,6 @@
+ function x() {
+-	console.log(1);
+-	return { y: function() {
+-		console.log(2);
+-		return { z: 0 };
++	return console.log(1), { y: function() {
++		return console.log(2), { z: 0 };
+ 	} };
+ }
+-x().y().z++;
+-x().y().z && console.log(3);
++x().y().z++, x().y().z && console.log(3);
+
+```
+
 ## `terser/pure_getters/issue_2313_6`
 
 - tags: `pure getters`
@@ -3380,7 +3373,7 @@ of: foo();
 
 ## `terser/issue_1466/different_variable_in_multiple_forIn`
 
-- tags: `join vars`
+- tags: `join vars`, `sequences`
 - size: oxc 115 vs reference 112 (no whitespaces: +3, formatted: +1)
 
 ```js
@@ -4412,7 +4405,7 @@ foo({
 
 ## `terser/destructuring/unused_destructuring_multipass`
 
-- tags: `remove unused`, `pure getters`, `2 iterations`
+- tags: `sequences`, `remove unused`, `pure getters`, `2 iterations`
 - size: oxc 42 vs reference 38 (no whitespaces: +4, formatted: +6)
 
 ```js
@@ -5371,6 +5364,7 @@ console.log(f != f, o === o);
 
 ## `terser/dead_code/dead_code_block_decls_die`
 
+- tags: `sequences`
 - size: oxc 38 vs reference 33 (no whitespaces: +5, formatted: +7)
 
 ```js
@@ -5396,6 +5390,7 @@ console.log(foo, bar, Baz);
 
 ## `terser/dead_code/issue_2383_1`
 
+- tags: `sequences`
 - size: oxc 13 vs reference 8 (no whitespaces: +5, formatted: +7)
 
 ```js
@@ -5416,6 +5411,7 @@ if (0) {
 
 ## `terser/dead_code/issue_2383_2`
 
+- tags: `sequences`
 - size: oxc 38 vs reference 33 (no whitespaces: +5, formatted: +7)
 
 ```js
@@ -5442,6 +5438,7 @@ console.log(x, q, w, z);
 
 ## `terser/dead_code/issue_2383_3`
 
+- tags: `sequences`
 - size: oxc 54 vs reference 49 (no whitespaces: +5, formatted: +7)
 
 ```js
@@ -6199,6 +6196,62 @@ outer();
 
 ```
 
+## `terser/collapse_vars/collapse_vars_regexp`
+
+- tags: `join vars`, `sequences`, `remove unused`
+- size: oxc 292 vs reference 286 (no whitespaces: +6, formatted: +10)
+
+```js
+function f1() {
+	var k = 9;
+	var rx = /[A-Z]+/;
+	return [rx, k];
+}
+function f2() {
+	var rx = /ab*/g;
+	return function(s) {
+		return rx.exec(s);
+	};
+}
+(function() {
+	var result;
+	var s = 'acdabcdeabbb';
+	var rx = /ab*/g;
+	while (result = rx.exec(s)) {
+		console.log(result[0]);
+	}
+})();
+(function() {
+	var result;
+	var s = 'acdabcdeabbb';
+	var rx = f2();
+	while (result = rx(s)) {
+		console.log(result[0]);
+	}
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -8,10 +8,7 @@
+ 	};
+ }
+ (function() {
+-	var result, rx = /ab*/g;
+-	while (result = rx.exec('acdabcdeabbb')) console.log(result[0]);
+-})();
+-(function() {
+-	var result, rx = f2();
+-	while (result = rx('acdabcdeabbb')) console.log(result[0]);
++	for (var result, s = 'acdabcdeabbb', rx = /ab*/g; result = rx.exec(s);) console.log(result[0]);
++})(), (function() {
++	for (var result, s = 'acdabcdeabbb', rx = f2(); result = rx(s);) console.log(result[0]);
+ })();
+
+```
+
 ## `terser/collapse_vars/toplevel_single_reference`
 
 - tags: `join vars`, `remove unused`
@@ -6648,7 +6701,7 @@ function f3(a, eval, c, d, e) {
 
 ## `terser/nullish/nullish_coalescing_boolean_context`
 
-- tags: `join vars`
+- tags: `join vars`, `sequences`
 - size: oxc 45 vs reference 39 (no whitespaces: +6, formatted: +8)
 
 ```js
@@ -6667,11 +6720,11 @@ if (4 + 4 ?? unknown) {
 ```diff
 --- reference
 +++ oxc
-@@ -1,3 +1,3 @@
- unknown && pass();
+@@ -1,3 +1 @@
 -unknown && pass();
-+(unknown ?? !1) && pass();
- pass();
+-unknown && pass();
+-pass();
++unknown && pass(), (unknown ?? !1) && pass(), pass();
 
 ```
 
@@ -6920,7 +6973,7 @@ else console.log('PASS');
 
 ## `terser/pure_getters/set_immutable_5`
 
-- tags: `join vars`, `remove unused`
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 77 vs reference 71 (no whitespaces: +6, formatted: +9)
 
 ```js
@@ -6935,13 +6988,12 @@ else console.log('PASS');
 ```diff
 --- reference
 +++ oxc
-@@ -1,3 +1,4 @@
+@@ -1,3 +1,3 @@
  'use strict';
 -1 .foo += '';
 -1 .foo ? console.log('FAIL') : console.log('PASS');
 +var a = 1;
-+a.foo += '';
-+a.foo ? console.log('FAIL') : console.log('PASS');
++a.foo += '', a.foo ? console.log('FAIL') : console.log('PASS');
 
 ```
 
@@ -7458,7 +7510,7 @@ console.log(new RegExp('^https://'));
 
 ## `terser/sequences/issue_2062`
 
-- tags: `join vars`
+- tags: `join vars`, `sequences`
 - size: oxc 51 vs reference 45 (no whitespaces: +6, formatted: +12)
 
 ```js
@@ -7475,11 +7527,11 @@ console.log(a);
 ```diff
 --- reference
 +++ oxc
-@@ -1,3 +1,3 @@
+@@ -1,3 +1,2 @@
  var a = 1;
 -a++, a--, a++, a--, a.var;
-+a || a++ + a--, a++ + a--, a && a.var;
- console.log(a);
+-console.log(a);
++a || a++ + a--, a++ + a--, a && a.var, console.log(a);
 
 ```
 
@@ -7508,7 +7560,7 @@ console.log(foo, bar);
 
 ## `terser/sequences/side_effects_cascade_3`
 
-- tags: `join vars`
+- tags: `join vars`, `sequences`
 - size: oxc 56 vs reference 50 (no whitespaces: +6, formatted: +8)
 
 ```js
@@ -7918,7 +7970,7 @@ for (var i = 1; i <= 4; ++i) {
 
 ## `terser/issue_1466/same_variable_in_multiple_forIn`
 
-- tags: `join vars`
+- tags: `join vars`, `sequences`
 - size: oxc 119 vs reference 112 (no whitespaces: +7, formatted: +5)
 
 ```js
@@ -8505,63 +8557,6 @@ function f3(x, y) {
 
 ```
 
-## `terser/collapse_vars/collapse_vars_regexp`
-
-- tags: `join vars`, `remove unused`
-- size: oxc 294 vs reference 286 (no whitespaces: +8, formatted: +16)
-
-```js
-function f1() {
-	var k = 9;
-	var rx = /[A-Z]+/;
-	return [rx, k];
-}
-function f2() {
-	var rx = /ab*/g;
-	return function(s) {
-		return rx.exec(s);
-	};
-}
-(function() {
-	var result;
-	var s = 'acdabcdeabbb';
-	var rx = /ab*/g;
-	while (result = rx.exec(s)) {
-		console.log(result[0]);
-	}
-})();
-(function() {
-	var result;
-	var s = 'acdabcdeabbb';
-	var rx = f2();
-	while (result = rx(s)) {
-		console.log(result[0]);
-	}
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -8,10 +8,10 @@
- 	};
- }
- (function() {
--	var result, rx = /ab*/g;
--	while (result = rx.exec('acdabcdeabbb')) console.log(result[0]);
-+	var result, s = 'acdabcdeabbb', rx = /ab*/g;
-+	for (; result = rx.exec(s);) console.log(result[0]);
- })();
- (function() {
--	var result, rx = f2();
--	while (result = rx('acdabcdeabbb')) console.log(result[0]);
-+	var result, s = 'acdabcdeabbb', rx = f2();
-+	for (; result = rx(s);) console.log(result[0]);
- })();
-
-```
-
 ## `terser/collapse_vars/issue_2436_13`
 
 - tags: `join vars`, `remove unused`, `2 iterations`
@@ -8836,33 +8831,6 @@ x = DEBUG;
 
 ```
 
-## `terser/issue_22/return_with_no_value_in_if_body`
-
-- size: oxc 46 vs reference 38 (no whitespaces: +8, formatted: +8)
-
-```js
-function foo(bar) {
-	if (bar) {
-		return;
-	} else {
-		return 1;
-	}
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,4 @@
- function foo(bar) {
--	return bar ? void 0 : 1;
-+	if (bar) return;
-+	else return 1;
- }
-
-```
-
 ## `terser/issue_t120/issue_t120_4`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -8891,7 +8859,8 @@ for (var x = 1, t = (o) => {
 
 ## `terser/labels/labels_10`
 
-- size: oxc 33 vs reference 25 (no whitespaces: +8, formatted: +10)
+- tags: `sequences`
+- size: oxc 33 vs reference 25 (no whitespaces: +8, formatted: +9)
 
 ```js
 out: while (foo) {
@@ -8907,12 +8876,13 @@ out: while (foo) {
 ```diff
 --- reference
 +++ oxc
-@@ -1,5 +1,5 @@
+@@ -1,5 +1,4 @@
 -while (foo) {
-+out: for (; foo;) {
- 	x();
- 	y();
+-	x();
+-	y();
 -	break;
++out: for (; foo;) {
++	x(), y();
 +	break out;
  }
 
@@ -9262,6 +9232,7 @@ function f3(y) {
 
 ## `terser/conditionals/ifs_6`
 
+- tags: `sequences`
 - size: oxc 83 vs reference 74 (no whitespaces: +9, formatted: +10)
 
 ```js
@@ -9287,13 +9258,13 @@ if (foo) {
 ```diff
 --- reference
 +++ oxc
-@@ -1,4 +1,3 @@
+@@ -1,4 +1,2 @@
 -var x, y;
 -x = foo || bar || baz || boo ? 20 : 10;
 -x[foo] = y ? 10 : 20;
+-foo ? x[bar] = 10 : x[bar] = 20;
 +var x = !foo && !bar && !baz && !boo ? 10 : 20, y;
-+y ? x[foo] = 10 : x[foo] = 20;
- foo ? x[bar] = 10 : x[bar] = 20;
++y ? x[foo] = 10 : x[foo] = 20, foo ? x[bar] = 10 : x[bar] = 20;
 
 ```
 
@@ -10108,6 +10079,7 @@ console.log(new Baz(1, 'PASS', 3).second());
 
 ## `terser/issue_1588/safe_undefined`
 
+- tags: `sequences`
 - size: oxc 96 vs reference 86 (no whitespaces: +10, formatted: +8)
 
 ```js
@@ -10486,7 +10458,7 @@ var bar = (function(a, b) {
 
 ## `terser/issue_1443/keep_fnames`
 
-- tags: `mangle`, `keep function names`, `keep class names`
+- tags: `mangle`, `keep function names`, `keep class names`, `sequences`
 - size: oxc 86 vs reference 75 (no whitespaces: +11, formatted: +10)
 
 ```js
@@ -10985,6 +10957,7 @@ console.log((function(c) {
 
 ## `terser/conditionals/cond_2`
 
+- tags: `sequences`
 - size: oxc 83 vs reference 71 (no whitespaces: +12, formatted: +12)
 
 ```js
@@ -11011,6 +10984,7 @@ function foo(x, FooBar, some_condition) {
 
 ## `terser/conditionals/issue_2535_2`
 
+- tags: `sequences`
 - size: oxc 411 vs reference 399 (no whitespaces: +12, formatted: +20)
 
 ```js
@@ -11040,25 +11014,27 @@ console.log(y() && false && x());
 ```diff
 --- reference
 +++ oxc
-@@ -6,14 +6,14 @@
- console.log(y() || !0);
- console.log((x(), y()));
- console.log((y(), x()));
+@@ -2,19 +2,4 @@
+ function y() {
+ 	return 'foo';
+ }
+-console.log(x() || !0);
+-console.log(y() || !0);
+-console.log((x(), y()));
+-console.log((y(), x()));
 -console.log(!!x() || y());
 -console.log(!!y() || x());
-+console.log(x() && !0 || y());
-+console.log(y() && !0 || x());
- console.log(x() && y());
- console.log(y() && x());
- console.log(x() || y());
- console.log(y() || x());
+-console.log(x() && y());
+-console.log(y() && x());
+-console.log(x() || y());
+-console.log(y() || x());
 -console.log(!!x() && y());
 -console.log(!!y() && x());
-+console.log((x() || !1) && y());
-+console.log((y() || !1) && x());
- console.log((x(), y()));
- console.log((y(), x()));
- console.log(x() && !1);
+-console.log((x(), y()));
+-console.log((y(), x()));
+-console.log(x() && !1);
+-console.log(y() && !1);
++console.log(x() || !0), console.log(y() || !0), console.log((x(), y())), console.log((y(), x())), console.log(x() && !0 || y()), console.log(y() && !0 || x()), console.log(x() && y()), console.log(y() && x()), console.log(x() || y()), console.log(y() || x()), console.log((x() || !1) && y()), console.log((y() || !1) && x()), console.log((x(), y())), console.log((y(), x())), console.log(x() && !1), console.log(y() && !1);
 
 ```
 
@@ -11638,30 +11614,6 @@ for (var t = (o) => {
 +	var i = +o;
 +	return console.log(i + i) && 0;
 +}; t(1););
-
-```
-
-## `terser/labels/labels_3`
-
-- size: oxc 52 vs reference 40 (no whitespaces: +12, formatted: +18)
-
-```js
-for (var i = 0; i < 5; ++i) {
-	if (i < 3) continue;
-	console.log(i);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,4 @@
--for (var i = 0; i < 5; ++i) i < 3 || console.log(i);
-+for (var i = 0; i < 5; ++i) {
-+	if (i < 3) continue;
-+	console.log(i);
-+}
 
 ```
 
@@ -12340,6 +12292,7 @@ console.log((function(c) {
 
 ## `terser/transform/label_if_break`
 
+- tags: `sequences`
 - size: oxc 13 vs reference 0 (no whitespaces: +13, formatted: +21)
 
 ```js
@@ -12465,7 +12418,8 @@ console.log((function(c) {
 
 ## `terser/conditionals/cond_9`
 
-- size: oxc 199 vs reference 185 (no whitespaces: +14, formatted: +18)
+- tags: `sequences`
+- size: oxc 199 vs reference 185 (no whitespaces: +14, formatted: +8)
 
 ```js
 function f(x, y) {
@@ -12487,17 +12441,21 @@ function f(x, y) {
 ```diff
 --- reference
 +++ oxc
-@@ -3,8 +3,8 @@
- 	(y || x)();
- 	x ? y(a, b) : y(d, b, c);
- 	y(a, b, c);
+@@ -1,13 +1,3 @@
+ function f(x, y) {
+-	g() ? x(1) : x(2);
+-	(y || x)();
+-	x ? y(a, b) : y(d, b, c);
+-	y(a, b, c);
 -	y(a, b, x ? c : f);
 -	y(a, x ? b : e, c);
-+	x ? y(a, b, c) : y(a, b, f);
-+	x ? y(a, b, c) : y(a, e, c);
- 	x ? y(a, b, c) : y(a, e, f);
- 	y(x ? a : d, b, c);
- 	x ? y(a, b, c) : y(d, b, f);
+-	x ? y(a, b, c) : y(a, e, f);
+-	y(x ? a : d, b, c);
+-	x ? y(a, b, c) : y(d, b, f);
+-	x ? y(a, b, c) : y(d, e, c);
+-	x ? y(a, b, c) : y(d, e, f);
++	g() ? x(1) : x(2), (y || x)(), x ? y(a, b) : y(d, b, c), y(a, b, c), x ? y(a, b, c) : y(a, b, f), x ? y(a, b, c) : y(a, e, c), x ? y(a, b, c) : y(a, e, f), y(x ? a : d, b, c), x ? y(a, b, c) : y(d, b, f), x ? y(a, b, c) : y(d, e, c), x ? y(a, b, c) : y(d, e, f);
+ }
 
 ```
 
@@ -12759,7 +12717,7 @@ function b(anArg) {
 
 ## `terser/issue_281/issue_1288_side_effects`
 
-- tags: `join vars`, `remove unused`
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 28 vs reference 14 (no whitespaces: +14, formatted: +19)
 
 ```js
@@ -12782,13 +12740,13 @@ else (function(z) {
 ```diff
 --- reference
 +++ oxc
-@@ -1,3 +1,5 @@
- w;
+@@ -1,3 +1,3 @@
+-w;
 -x || (x = {});
-+x || (function() {
+-y;
++w, x || (function() {
 +	x = {};
-+})();
- y;
++})(), y;
 
 ```
 
@@ -13044,89 +13002,6 @@ console.log(5 % 3);
 +++ oxc
 @@ -0,0 +1 @@
 +console.log(2);
-
-```
-
-## `terser/issue_1034/non_hoisted_function_after_return`
-
-- tags: `join vars`, `remove unused`
-- size: oxc 101 vs reference 86 (no whitespaces: +15, formatted: +15)
-
-```js
-function foo(x) {
-	if (x) {
-		return bar();
-		not_called1();
-	} else {
-		return baz();
-		not_called2();
-	}
-	function bar() {
-		return 7;
-	}
-	return not_reached;
-	function UnusedFunction() {}
-	function baz() {
-		return 8;
-	}
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,6 @@
- function foo(x) {
--	return x ? bar() : baz();
-+	if (x) return bar();
-+	else return baz();
- 	function bar() {
- 		return 7;
- 	}
-
-```
-
-## `terser/issue_1034/non_hoisted_function_after_return_strict`
-
-- tags: `join vars`, `remove unused`
-- size: oxc 141 vs reference 126 (no whitespaces: +15, formatted: +15)
-
-```js
-'use strict';
-function foo(x) {
-	if (x) {
-		return bar();
-		not_called1();
-	} else {
-		return baz();
-		not_called2();
-	}
-	function bar() {
-		return 7;
-	}
-	return not_reached;
-	function UnusedFunction() {}
-	function baz() {
-		return 8;
-	}
-}
-console.log(foo(0), foo(1));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,7 @@
- 'use strict';
- function foo(x) {
--	return x ? bar() : baz();
-+	if (x) return bar();
-+	else return baz();
- 	function bar() {
- 		return 7;
- 	}
 
 ```
 
@@ -14597,6 +14472,7 @@ function foo() {
 
 ## `terser/labels/labels_1`
 
+- tags: `sequences`
 - size: oxc 41 vs reference 24 (no whitespaces: +17, formatted: +24)
 
 ```js
@@ -14621,7 +14497,8 @@ out: {
 
 ## `terser/labels/labels_9`
 
-- size: oxc 36 vs reference 19 (no whitespaces: +17, formatted: +21)
+- tags: `sequences`
+- size: oxc 36 vs reference 19 (no whitespaces: +17, formatted: +20)
 
 ```js
 out: while (foo) {
@@ -14637,11 +14514,12 @@ out: while (foo) {
 ```diff
 --- reference
 +++ oxc
-@@ -1,4 +1,5 @@
+@@ -1,4 +1,4 @@
 -while (foo) {
+-	x();
+-	y();
 +out: for (; foo;) {
- 	x();
- 	y();
++	x(), y();
 +	continue out;
  }
 
@@ -14705,7 +14583,7 @@ const foo = { [console.log('PASS')]: 42 };
 
 ## `terser/pure_getters/set_immutable_6`
 
-- tags: `join vars`, `remove unused`
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 64 vs reference 47 (no whitespaces: +17, formatted: +23)
 
 ```js
@@ -14719,11 +14597,10 @@ else console.log('PASS');
 ```diff
 --- reference
 +++ oxc
-@@ -1 +1,3 @@
+@@ -1 +1,2 @@
 -1 .foo ? console.log('FAIL') : console.log('PASS');
 +var a = 1;
-+a.foo += '';
-+a.foo ? console.log('FAIL') : console.log('PASS');
++a.foo += '', a.foo ? console.log('FAIL') : console.log('PASS');
 
 ```
 
@@ -14865,8 +14742,8 @@ log(foo);
 
 ## `terser/drop_unused/var_catch_toplevel`
 
-- tags: `join vars`, `remove unused`, `2 iterations`
-- size: oxc 63 vs reference 45 (no whitespaces: +18, formatted: +26)
+- tags: `join vars`, `sequences`, `remove unused`, `2 iterations`
+- size: oxc 63 vs reference 45 (no whitespaces: +18, formatted: +24)
 
 ```js
 function f() {
@@ -14886,15 +14763,15 @@ f();
 ```diff
 --- reference
 +++ oxc
-@@ -1,9 +1,11 @@
+@@ -1,9 +1,10 @@
 -!(function() {
 -	0;
 +function f() {
 +	a--;
  	try {
 -		0;
-+		a++;
- 		x();
+-		x();
++		a++, x();
  	} catch (a) {
 -		var a;
 +		if (a) var a;
@@ -15120,6 +14997,7 @@ console.log(a, b);
 
 ## `terser/issue_281/negate_iife_3`
 
+- tags: `sequences`
 - size: oxc 57 vs reference 39 (no whitespaces: +18, formatted: +23)
 
 ```js
@@ -15142,6 +15020,7 @@ console.log(a, b);
 
 ## `terser/issue_281/negate_iife_3_off`
 
+- tags: `sequences`
 - size: oxc 57 vs reference 39 (no whitespaces: +18, formatted: +23)
 
 ```js
@@ -15613,6 +15492,7 @@ console.log(o.p.name, o.p === o.p, new o.p(o.x).value, new o.p(o.y).value);
 
 ## `terser/issue_1443/unsafe_undefined`
 
+- tags: `sequences`
 - size: oxc 69 vs reference 50 (no whitespaces: +19, formatted: +18)
 
 ```js
@@ -15642,6 +15522,7 @@ function f(undefined) {
 
 ## `terser/issue_1588/unsafe_undefined`
 
+- tags: `sequences`
 - size: oxc 95 vs reference 76 (no whitespaces: +19, formatted: +18)
 
 ```js
@@ -15673,6 +15554,7 @@ console.log((function(undefined) {
 
 ## `terser/labels/labels_2`
 
+- tags: `sequences`
 - size: oxc 62 vs reference 43 (no whitespaces: +19, formatted: +22)
 
 ```js
@@ -16139,160 +16021,6 @@ console.log(a);
 
 ```
 
-## `terser/issue_1034/non_hoisted_function_after_return_2a`
-
-- tags: `join vars`, `remove unused`, `2 iterations`
-- size: oxc 82 vs reference 62 (no whitespaces: +20, formatted: +20)
-
-```js
-function foo(x) {
-	if (x) {
-		return bar(1);
-		var a = not_called(1);
-	} else {
-		return bar(2);
-		var b = not_called(2);
-	}
-	var c = bar(3);
-	function bar(x) {
-		return 7 - x;
-	}
-	function nope() {}
-	return b || c;
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,6 @@
- function foo(x) {
--	return bar(x ? 1 : 2);
-+	if (x) return bar(1);
-+	else return bar(2);
- 	function bar(x) {
- 		return 7 - x;
- 	}
-
-```
-
-## `terser/issue_1034/non_hoisted_function_after_return_2a_strict`
-
-- tags: `join vars`, `remove unused`, `2 iterations`
-- size: oxc 122 vs reference 102 (no whitespaces: +20, formatted: +20)
-
-```js
-'use strict';
-function foo(x) {
-	if (x) {
-		return bar(1);
-		var a = not_called(1);
-	} else {
-		return bar(2);
-		var b = not_called(2);
-	}
-	var c = bar(3);
-	function bar(x) {
-		return 7 - x;
-	}
-	function nope() {}
-	return b || c;
-}
-console.log(foo(0), foo(1));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,7 @@
- 'use strict';
- function foo(x) {
--	return bar(x ? 1 : 2);
-+	if (x) return bar(1);
-+	else return bar(2);
- 	function bar(x) {
- 		return 7 - x;
- 	}
-
-```
-
-## `terser/issue_1034/non_hoisted_function_after_return_2b`
-
-- tags: `join vars`, `remove unused`
-- size: oxc 82 vs reference 62 (no whitespaces: +20, formatted: +20)
-
-```js
-function foo(x) {
-	if (x) {
-		return bar(1);
-	} else {
-		return bar(2);
-		var b;
-	}
-	var c = bar(3);
-	function bar(x) {
-		return 7 - x;
-	}
-	return b || c;
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,6 @@
- function foo(x) {
--	return bar(x ? 1 : 2);
-+	if (x) return bar(1);
-+	else return bar(2);
- 	function bar(x) {
- 		return 7 - x;
- 	}
-
-```
-
-## `terser/issue_1034/non_hoisted_function_after_return_2b_strict`
-
-- tags: `join vars`, `remove unused`
-- size: oxc 122 vs reference 102 (no whitespaces: +20, formatted: +20)
-
-```js
-'use strict';
-function foo(x) {
-	if (x) {
-		return bar(1);
-	} else {
-		return bar(2);
-		var b;
-	}
-	var c = bar(3);
-	function bar(x) {
-		return 7 - x;
-	}
-	return b || c;
-}
-console.log(foo(0), foo(1));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,7 @@
- 'use strict';
- function foo(x) {
--	return bar(x ? 1 : 2);
-+	if (x) return bar(1);
-+	else return bar(2);
- 	function bar(x) {
- 		return 7 - x;
- 	}
-
-```
-
 ## `terser/issue_281/ref_scope`
 
 - tags: `join vars`, `remove unused`
@@ -16329,6 +16057,7 @@ console.log((function() {
 
 ## `terser/labels/labels_4`
 
+- tags: `sequences`
 - size: oxc 60 vs reference 40 (no whitespaces: +20, formatted: +27)
 
 ```js
@@ -17167,6 +16896,7 @@ function p2() {
 
 ## `terser/negate_iife/negate_iife_3_evaluate`
 
+- tags: `sequences`
 - size: oxc 40 vs reference 18 (no whitespaces: +22, formatted: +28)
 
 ```js
@@ -17189,6 +16919,7 @@ function p2() {
 
 ## `terser/negate_iife/negate_iife_3_off_evaluate`
 
+- tags: `sequences`
 - size: oxc 40 vs reference 18 (no whitespaces: +22, formatted: +28)
 
 ```js
@@ -18414,6 +18145,7 @@ function withStyles() {
 
 ## `terser/switch/issue_1679`
 
+- tags: `sequences`
 - size: oxc 136 vs reference 110 (no whitespaces: +26, formatted: +50)
 
 ```js
@@ -18439,7 +18171,7 @@ console.log(a, b);
 ```diff
 --- reference
 +++ oxc
-@@ -2,8 +2,13 @@
+@@ -2,10 +2,14 @@
  function f() {
  	switch (--b) {
  		default:
@@ -18455,6 +18187,9 @@ console.log(a, b);
  		case a++:
  	}
  }
+-f();
+-console.log(a, b);
++f(), console.log(a, b);
 
 ```
 
@@ -19019,7 +18754,7 @@ var foo = {};
 
 ## `terser/conditionals/issue_2560`
 
-- tags: `join vars`, `remove unused`
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 146 vs reference 118 (no whitespaces: +28, formatted: +34)
 
 ```js
@@ -19047,7 +18782,7 @@ bar();
 ```diff
 --- reference
 +++ oxc
-@@ -1,8 +1,11 @@
+@@ -1,11 +1,13 @@
  function log(x) {
  	console.log(x);
  }
@@ -19060,6 +18795,10 @@ bar();
  }
  var x = function() {
  	console.log('init');
+ };
+-bar();
+-bar();
++bar(), bar();
 
 ```
 
@@ -19439,7 +19178,7 @@ for (;;) f();
 
 ## `terser/global_defs/issue_2167`
 
-- tags: `2 iterations`
+- tags: `sequences`, `2 iterations`
 - size: oxc 38 vs reference 9 (no whitespaces: +29, formatted: +32)
 
 ```js
@@ -19453,9 +19192,9 @@ doWork();
 ```diff
 --- reference
 +++ oxc
-@@ -1 +1,2 @@
-+isDevMode() && greetOverlord();
- doWork();
+@@ -1 +1 @@
+-doWork();
++isDevMode() && greetOverlord(), doWork();
 
 ```
 
@@ -20387,6 +20126,7 @@ console.log(sum);
 
 ## `terser/typeof/typeof_in_boolean_context`
 
+- tags: `sequences`
 - size: oxc 143 vs reference 111 (no whitespaces: +32, formatted: +39)
 
 ```js
@@ -20406,7 +20146,7 @@ if (typeof (1 + foo()));
 ```diff
 --- reference
 +++ oxc
-@@ -1,10 +1,10 @@
+@@ -1,10 +1,9 @@
  function f1(x) {
 -	return 'yes';
 +	return typeof x ? 'yes' : 'no';
@@ -20415,61 +20155,13 @@ if (typeof (1 + foo()));
 -	return g(), 'Yes';
 +	return typeof g() ? 'Yes' : 'No';
  }
- foo();
- console.log(1);
+-foo();
+-console.log(1);
 -var a = (console.log(2), !1);
 -foo();
++foo(), console.log(1);
 +var a = !typeof console.log(2);
 +1 + foo();
-
-```
-
-## `terser/conditionals/ifs_5`
-
-- size: oxc 116 vs reference 83 (no whitespaces: +33, formatted: +31)
-
-```js
-function f() {
-	if (foo) return;
-	bar();
-	baz();
-}
-function g() {
-	if (foo) return;
-	if (bar) return;
-	if (baz) return;
-	if (baa) return;
-	a();
-	b();
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,12 +1,13 @@
- function f() {
--	if (!foo) {
--		bar();
--		baz();
--	}
-+	if (foo) return;
-+	bar();
-+	baz();
- }
- function g() {
--	if (!(foo || bar || baz || baa)) {
--		a();
--		b();
--	}
-+	if (foo) return;
-+	if (bar) return;
-+	if (baz) return;
-+	if (baa) return;
-+	a();
-+	b();
- }
 
 ```
 
@@ -20557,6 +20249,7 @@ foo();
 
 ## `terser/arrow/issue_485_crashing_1530`
 
+- tags: `sequences`
 - size: oxc 34 vs reference 0 (no whitespaces: +34, formatted: +42)
 
 ```js
@@ -20870,6 +20563,7 @@ console.log(c);
 
 ## `terser/functions/issue_485_crashing_1530`
 
+- tags: `sequences`
 - size: oxc 34 vs reference 0 (no whitespaces: +34, formatted: +42)
 
 ```js
@@ -21051,8 +20745,8 @@ z();
 
 ## `terser/reduce_vars/passes`
 
-- tags: `join vars`, `remove unused`, `2 iterations`
-- size: oxc 109 vs reference 75 (no whitespaces: +34, formatted: +62)
+- tags: `join vars`, `sequences`, `remove unused`, `2 iterations`
+- size: oxc 109 vs reference 75 (no whitespaces: +34, formatted: +58)
 
 ```js
 function f() {
@@ -21073,7 +20767,7 @@ function f() {
 ```diff
 --- reference
 +++ oxc
-@@ -1,7 +1,8 @@
+@@ -1,7 +1,4 @@
  function f() {
 -	3;
 -	console.log(4);
@@ -21081,11 +20775,7 @@ function f() {
 -	console.log(4);
 -	console.log(7);
 +	var a = 1, b = 2, c = 3;
-+	a ? b = c : c = b;
-+	console.log(a + b);
-+	console.log(b + c);
-+	console.log(a + c);
-+	console.log(a + b + c);
++	a ? b = c : c = b, console.log(a + b), console.log(b + c), console.log(a + c), console.log(a + b + c);
  }
 
 ```
@@ -22057,8 +21747,8 @@ var obj = { o: { a: 1 } };
 
 ## `terser/dead_code/try_catch_finally`
 
-- tags: `2 iterations`
-- size: oxc 105 vs reference 68 (no whitespaces: +37, formatted: +60)
+- tags: `sequences`, `2 iterations`
+- size: oxc 105 vs reference 68 (no whitespaces: +37, formatted: +58)
 
 ```js
 var a = 1;
@@ -22082,7 +21772,7 @@ try {
 ```diff
 --- reference
 +++ oxc
-@@ -1,7 +1,12 @@
+@@ -1,7 +1,11 @@
  var a = 1;
 -!function() {
 -	var a;
@@ -22094,8 +21784,7 @@ try {
 +	try {} catch (a) {
 +		var a;
 +	} finally {
-+		a = 3;
-+		console.log('PASS');
++		a = 3, console.log('PASS');
 +	}
 +})();
 +try {
@@ -22919,7 +22608,7 @@ console.log(id((x) => x + 1)(1), id(((x) => x + 1)(2)));
 
 ## `terser/reduce_vars/issue_1670_1`
 
-- tags: `join vars`, `remove unused`
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 60 vs reference 20 (no whitespaces: +40, formatted: +53)
 
 ```js
@@ -22949,7 +22638,7 @@ console.log(id((x) => x + 1)(1), id(((x) => x + 1)(2)));
 
 ## `terser/reduce_vars/issue_1670_2`
 
-- tags: `join vars`, `remove unused`, `2 iterations`
+- tags: `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 60 vs reference 20 (no whitespaces: +40, formatted: +53)
 
 ```js
@@ -22979,7 +22668,7 @@ console.log(id((x) => x + 1)(1), id(((x) => x + 1)(2)));
 
 ## `terser/reduce_vars/issue_1670_3`
 
-- tags: `join vars`, `remove unused`
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 60 vs reference 20 (no whitespaces: +40, formatted: +53)
 
 ```js
@@ -23009,7 +22698,7 @@ console.log(id((x) => x + 1)(1), id(((x) => x + 1)(2)));
 
 ## `terser/reduce_vars/issue_1670_4`
 
-- tags: `join vars`, `remove unused`, `2 iterations`
+- tags: `join vars`, `sequences`, `remove unused`, `2 iterations`
 - size: oxc 60 vs reference 20 (no whitespaces: +40, formatted: +53)
 
 ```js
@@ -23395,7 +23084,7 @@ for (var a = console.log, s = 1; s <= 3;) {
 
 ## `terser/async/async_inline`
 
-- tags: `join vars`, `remove unused`
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 310 vs reference 267 (no whitespaces: +43, formatted: +50)
 
 ```js
@@ -23428,23 +23117,26 @@ async_top();
 ```diff
 --- reference
 +++ oxc
-@@ -1,9 +1,9 @@
+@@ -1,19 +1,21 @@
 -!(async function() {
 -	await 3;
 -})();
 -!(async function(x) {
 -	await console.log(4);
+-})();
 +(async function() {
 +	return await 3;
- })();
-+(async function(x) {
++})(), (async function(x) {
 +	await console.log(x);
 +})(4);
  function invoke(x, y) {
  	return x(y);
  }
-@@ -13,7 +13,11 @@
- invoke(async function(x) {
+ invoke(async function() {
+ 	return await 1;
+-});
+-invoke(async function(x) {
++}), invoke(async function(x) {
  	await console.log(x);
  }, 2);
 -console.log('top');
@@ -23609,8 +23301,8 @@ console.log(id(inc(1)), id(inc)(2));
 
 ## `terser/issue_1275/string_plus_optimization`
 
-- tags: `join vars`, `remove unused`
-- size: oxc 272 vs reference 229 (no whitespaces: +43, formatted: +60)
+- tags: `join vars`, `sequences`, `remove unused`
+- size: oxc 272 vs reference 229 (no whitespaces: +43, formatted: +57)
 
 ```js
 function foo(anything) {
@@ -23634,7 +23326,7 @@ foo();
 ```diff
 --- reference
 +++ oxc
-@@ -3,12 +3,12 @@
+@@ -3,13 +3,10 @@
  		throw 'nope';
  	}
  	try {
@@ -23645,11 +23337,11 @@ foo();
  	}
 -	console.log('yes');
 -	console.log('Yes');
-+	console.log('0' + anything ? 'yes' : 'no');
-+	console.log(anything + '0' ? 'Yes' : 'No');
- 	console.log('' + anything);
- 	console.log(anything + '');
+-	console.log('' + anything);
+-	console.log(anything + '');
++	console.log('0' + anything ? 'yes' : 'no'), console.log(anything + '0' ? 'Yes' : 'No'), console.log('' + anything), console.log(anything + '');
  }
+ foo();
 
 ```
 
@@ -24763,7 +24455,7 @@ console.log(obj.bar());
 
 ## `terser/dead_code/dead_code_const_annotation`
 
-- tags: `join vars`
+- tags: `join vars`, `sequences`
 - size: oxc 98 vs reference 48 (no whitespaces: +50, formatted: +59)
 
 ```js
@@ -24945,6 +24637,47 @@ console.log(b = 3);
  function g() {}
 +function h() {}
  console.log(b = 3);
+
+```
+
+## `terser/functions/issue_2783`
+
+- tags: `join vars`, `sequences`, `remove unused`
+- size: oxc 112 vs reference 61 (no whitespaces: +51, formatted: +69)
+
+```js
+(function() {
+	return g;
+	function f(a) {
+		var b = a.b;
+		if (b) return b;
+		return a;
+	}
+	function g(o, i) {
+		while (i--) {
+			console.log(f(o));
+		}
+	}
+})()({ b: 'PASS' }, 1);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,9 @@
+-(function(o, i) {
+-	while (i--) console.log(o.b || o);
+-})({ b: 'PASS' }, 1);
++(function() {
++	return g;
++	function f(a) {
++		return a.b || a;
++	}
++	function g(o, i) {
++		for (; i--;) console.log(f(o));
++	}
++})()({ b: 'PASS' }, 1);
 
 ```
 
@@ -25629,6 +25362,7 @@ switch (foo) {
 
 ## `terser/conditionals/ifs_3_should_warn`
 
+- tags: `sequences`
 - size: oxc 90 vs reference 34 (no whitespaces: +56, formatted: +85)
 
 ```js
@@ -25741,7 +25475,7 @@ console.log({
 
 ## `terser/issue_281/safe_undefined`
 
-- tags: `remove unused`
+- tags: `sequences`, `remove unused`
 - size: oxc 96 vs reference 40 (no whitespaces: +56, formatted: +66)
 
 ```js
@@ -26408,6 +26142,7 @@ shouldBePure();
 
 ## `terser/conditionals/delete_conditional_1`
 
+- tags: `sequences`
 - size: oxc 159 vs reference 96 (no whitespaces: +63, formatted: +68)
 
 ```js
@@ -26423,24 +26158,20 @@ console.log(delete (1 ? 0 / 0 : x));
 ```diff
 --- reference
 +++ oxc
-@@ -1,6 +1,6 @@
+@@ -1,6 +1 @@
 -console.log(!0);
 -console.log(!0);
 -console.log(!0);
 -console.log(!0);
 -console.log(!0);
 -console.log(!0);
-+console.log(delete void 0);
-+console.log(delete void 0);
-+console.log(delete (0, Infinity));
-+console.log(delete (1 / 0));
-+console.log(delete NaN);
-+console.log(delete NaN);
++console.log(delete void 0), console.log(delete void 0), console.log(delete (0, Infinity)), console.log(delete (1 / 0)), console.log(delete NaN), console.log(delete NaN);
 
 ```
 
 ## `terser/conditionals/delete_conditional_2`
 
+- tags: `sequences`
 - size: oxc 159 vs reference 96 (no whitespaces: +63, formatted: +68)
 
 ```js
@@ -26456,19 +26187,14 @@ console.log(delete (0 ? x : 0 / 0));
 ```diff
 --- reference
 +++ oxc
-@@ -1,6 +1,6 @@
+@@ -1,6 +1 @@
 -console.log(!0);
 -console.log(!0);
 -console.log(!0);
 -console.log(!0);
 -console.log(!0);
 -console.log(!0);
-+console.log(delete void 0);
-+console.log(delete void 0);
-+console.log(delete (0, Infinity));
-+console.log(delete (1 / 0));
-+console.log(delete NaN);
-+console.log(delete NaN);
++console.log(delete void 0), console.log(delete void 0), console.log(delete (0, Infinity)), console.log(delete (1 / 0)), console.log(delete NaN), console.log(delete NaN);
 
 ```
 
@@ -27172,49 +26898,6 @@ console.log('just-make-sure-it-is-compilable') && (a++, b++);
 
 ```
 
-## `terser/functions/issue_2783`
-
-- tags: `join vars`, `remove unused`
-- size: oxc 131 vs reference 61 (no whitespaces: +70, formatted: +96)
-
-```js
-(function() {
-	return g;
-	function f(a) {
-		var b = a.b;
-		if (b) return b;
-		return a;
-	}
-	function g(o, i) {
-		while (i--) {
-			console.log(f(o));
-		}
-	}
-})()({ b: 'PASS' }, 1);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,11 @@
--(function(o, i) {
--	while (i--) console.log(o.b || o);
--})({ b: 'PASS' }, 1);
-+(function() {
-+	return g;
-+	function f(a) {
-+		var b = a.b;
-+		if (b) return b;
-+		return a;
-+	}
-+	function g(o, i) {
-+		for (; i--;) console.log(f(o));
-+	}
-+})()({ b: 'PASS' }, 1);
-
-```
-
 ## `terser/hoist_props/issue_2519`
 
 - tags: `join vars`, `remove unused`
@@ -27444,8 +27127,8 @@ class Sub extends Base {}
 
 ## `terser/reduce_vars/modified`
 
-- tags: `join vars`, `remove unused`
-- size: oxc 562 vs reference 491 (no whitespaces: +71, formatted: +132)
+- tags: `join vars`, `sequences`, `remove unused`
+- size: oxc 562 vs reference 491 (no whitespaces: +71, formatted: +114)
 
 ```js
 function f0() {
@@ -27500,24 +27183,22 @@ f0(), f1(), f2(), f3(), f4(), f5();
 ```diff
 --- reference
 +++ oxc
-@@ -1,37 +1,38 @@
+@@ -1,41 +1,24 @@
  function f0() {
 -	var b = 2;
-+	var a = 1, b = 2;
- 	b++;
+-	b++;
 -	console.log(2);
 -	console.log(4);
-+	console.log(a + 1);
-+	console.log(b + 1);
++	var a = 1, b = 2;
++	b++, console.log(a + 1), console.log(b + 1);
  }
  function f1() {
 -	var b = 2;
+-	--b;
+-	console.log(2);
+-	console.log(2);
 +	var a = 1, b = 2;
- 	--b;
--	console.log(2);
--	console.log(2);
-+	console.log(a + 1);
-+	console.log(b + 1);
++	--b, console.log(a + 1), console.log(b + 1);
  }
  function f2() {
 -	3;
@@ -27526,11 +27207,7 @@ f0(), f1(), f2(), f3(), f4(), f5();
 -	console.log(4);
 -	console.log(7);
 +	var a = 1, b = 2, c = 3;
-+	b = c;
-+	console.log(a + b);
-+	console.log(b + c);
-+	console.log(a + c);
-+	console.log(a + b + c);
++	b = c, console.log(a + b), console.log(b + c), console.log(a + c), console.log(a + b + c);
  }
  function f3() {
 -	var b = 2;
@@ -27540,27 +27217,25 @@ f0(), f1(), f2(), f3(), f4(), f5();
 -	console.log(4);
 -	console.log(10);
 +	var a = 1, b = 2, c = 3;
-+	b *= c;
-+	console.log(a + b);
-+	console.log(b + c);
-+	console.log(a + c);
-+	console.log(a + b + c);
++	b *= c, console.log(a + b), console.log(b + c), console.log(a + c), console.log(a + b + c);
  }
  function f4() {
 -	var b = 2, c = 3;
 -	b = c;
 -	console.log(1 + b);
-+	var a = 1, b = 2, c = 3;
-+	a ? b = c : c = b;
-+	console.log(a + b);
- 	console.log(b + c);
+-	console.log(b + c);
 -	console.log(1 + c);
 -	console.log(1 + b + c);
-+	console.log(a + c);
-+	console.log(a + b + c);
++	var a = 1, b = 2, c = 3;
++	a ? b = c : c = b, console.log(a + b), console.log(b + c), console.log(a + c), console.log(a + b + c);
  }
  function f5(a) {
- 	B = a;
+-	B = a;
+-	console.log(typeof A ? 'yes' : 'no');
+-	console.log(typeof B ? 'yes' : 'no');
++	B = a, console.log(typeof A ? 'yes' : 'no'), console.log(typeof B ? 'yes' : 'no');
+ }
+ f0(), f1(), f2(), f3(), f4(), f5();
 
 ```
 
@@ -29335,7 +29010,8 @@ foo();
 
 ## `terser/dead_code/dead_code_constant_boolean_should_warn_more_strict`
 
-- size: oxc 137 vs reference 46 (no whitespaces: +91, formatted: +121)
+- tags: `sequences`
+- size: oxc 137 vs reference 46 (no whitespaces: +91, formatted: +120)
 
 ```js
 'use strict';
@@ -29355,7 +29031,7 @@ bar();
 ```diff
 --- reference
 +++ oxc
-@@ -1,5 +1,11 @@
+@@ -1,5 +1,10 @@
  'use strict';
 -var foo;
 -var x = 10, y;
@@ -29365,8 +29041,7 @@ bar();
 +	var foo;
 +}
 +for (var x = 10, y; x && (y || x) && !typeof x; ++x) {
-+	asdf();
-+	foo();
++	asdf(), foo();
 +	var moo;
 +}
  bar();
@@ -30467,7 +30142,8 @@ for (j(); k(); l()) break;
 
 ## `terser/dead_code/dead_code_constant_boolean_should_warn_more`
 
-- size: oxc 146 vs reference 37 (no whitespaces: +109, formatted: +142)
+- tags: `sequences`
+- size: oxc 146 vs reference 37 (no whitespaces: +109, formatted: +141)
 
 ```js
 while (!(foo && bar || x + '0')) {
@@ -30487,7 +30163,7 @@ bar();
 ```diff
 --- reference
 +++ oxc
-@@ -1,4 +1,11 @@
+@@ -1,4 +1,10 @@
 -var foo, bar;
 -var x = 10, y;
 -var moo;
@@ -30497,8 +30173,7 @@ bar();
 +	function bar() {}
 +}
 +for (var x = 10, y; x && (y || x) && !typeof x; ++x) {
-+	asdf();
-+	foo();
++	asdf(), foo();
 +	var moo;
 +}
  bar();
@@ -31510,7 +31185,7 @@ console.log({
 
 ## `terser/issue_1261/pure_function_calls`
 
-- tags: `join vars`, `remove unused`
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 238 vs reference 103 (no whitespaces: +135, formatted: +163)
 
 ```js
@@ -31537,7 +31212,7 @@ a.b(), c.d.e(), f.g();
 ```diff
 --- reference
 +++ oxc
-@@ -1,7 +1,17 @@
+@@ -1,7 +1,15 @@
 +(function() {
 +	console.log('iife0');
 +})();
@@ -31554,9 +31229,7 @@ a.b(), c.d.e(), f.g();
 +		function iife2() {}
 +		return iife2;
 +	})();
-+})();
-+bar(), baz(), quux();
-+a.b(), c.d.e(), f.g();
++})(), bar(), baz(), quux(), a.b(), c.d.e(), f.g();
 
 ```
 
@@ -32349,6 +32022,120 @@ console.log((function(same_name) {
 
 ```
 
+## `terser/functions/iifes_returning_constants_keep_fargs_false`
+
+- tags: `join vars`, `sequences`, `remove unused`
+- size: oxc 282 vs reference 112 (no whitespaces: +170, formatted: +221)
+
+```js
+(function() {
+	return -1.23;
+})();
+console.log((function foo() {
+	return 'okay';
+})());
+console.log((function foo(x, y, z) {
+	return 123;
+})());
+console.log((function(x, y, z) {
+	return z;
+})());
+console.log((function(x, y, z) {
+	if (x) return y;
+	return z;
+})(1, 2, 3));
+console.log((function(x, y) {
+	return x * y;
+})(2, 3));
+console.log((function(x, y) {
+	return x * y;
+})(2, 3, a(), b()));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,13 @@
+-console.log('okay');
+-console.log(123);
+-console.log(void 0);
+-console.log(2);
+-console.log(6);
+-console.log((a(), b(), 6));
++console.log((function() {
++	return 'okay';
++})()), console.log((function(x, y, z) {
++	return 123;
++})()), console.log((function(x, y, z) {
++	return z;
++})()), console.log((function(x, y, z) {
++	return x ? y : z;
++})(1, 2, 3)), console.log((function(x, y) {
++	return x * y;
++})(2, 3)), console.log((function(x, y) {
++	return x * y;
++})(2, 3, a(), b()));
+
+```
+
+## `terser/functions/iifes_returning_constants_keep_fargs_true`
+
+- tags: `join vars`, `sequences`, `remove unused`
+- size: oxc 282 vs reference 112 (no whitespaces: +170, formatted: +221)
+
+```js
+(function() {
+	return -1.23;
+})();
+console.log((function foo() {
+	return 'okay';
+})());
+console.log((function foo(x, y, z) {
+	return 123;
+})());
+console.log((function(x, y, z) {
+	return z;
+})());
+console.log((function(x, y, z) {
+	if (x) return y;
+	return z;
+})(1, 2, 3));
+console.log((function(x, y) {
+	return x * y;
+})(2, 3));
+console.log((function(x, y) {
+	return x * y;
+})(2, 3, a(), b()));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,13 @@
+-console.log('okay');
+-console.log(123);
+-console.log(void 0);
+-console.log(2);
+-console.log(6);
+-console.log((a(), b(), 6));
++console.log((function() {
++	return 'okay';
++})()), console.log((function(x, y, z) {
++	return 123;
++})()), console.log((function(x, y, z) {
++	return z;
++})()), console.log((function(x, y, z) {
++	return x ? y : z;
++})(1, 2, 3)), console.log((function(x, y) {
++	return x * y;
++})(2, 3)), console.log((function(x, y) {
++	return x * y;
++})(2, 3, a(), b()));
+
+```
+
 ## `terser/drop_unused/issue_2105_2`
 
 - tags: `join vars`, `remove unused`, `3 iterations`
@@ -32621,132 +32408,6 @@ console.log(c('a'));
 +})(function() {
 +	return console.log('foo'), 'foo';
 +});
-
-```
-
-## `terser/functions/iifes_returning_constants_keep_fargs_false`
-
-- tags: `join vars`, `remove unused`
-- size: oxc 292 vs reference 112 (no whitespaces: +180, formatted: +231)
-
-```js
-(function() {
-	return -1.23;
-})();
-console.log((function foo() {
-	return 'okay';
-})());
-console.log((function foo(x, y, z) {
-	return 123;
-})());
-console.log((function(x, y, z) {
-	return z;
-})());
-console.log((function(x, y, z) {
-	if (x) return y;
-	return z;
-})(1, 2, 3));
-console.log((function(x, y) {
-	return x * y;
-})(2, 3));
-console.log((function(x, y) {
-	return x * y;
-})(2, 3, a(), b()));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,19 @@
--console.log('okay');
--console.log(123);
--console.log(void 0);
--console.log(2);
--console.log(6);
--console.log((a(), b(), 6));
-+console.log((function() {
-+	return 'okay';
-+})());
-+console.log((function(x, y, z) {
-+	return 123;
-+})());
-+console.log((function(x, y, z) {
-+	return z;
-+})());
-+console.log((function(x, y, z) {
-+	if (x) return y;
-+	return z;
-+})(1, 2, 3));
-+console.log((function(x, y) {
-+	return x * y;
-+})(2, 3));
-+console.log((function(x, y) {
-+	return x * y;
-+})(2, 3, a(), b()));
-
-```
-
-## `terser/functions/iifes_returning_constants_keep_fargs_true`
-
-- tags: `join vars`, `remove unused`
-- size: oxc 292 vs reference 112 (no whitespaces: +180, formatted: +231)
-
-```js
-(function() {
-	return -1.23;
-})();
-console.log((function foo() {
-	return 'okay';
-})());
-console.log((function foo(x, y, z) {
-	return 123;
-})());
-console.log((function(x, y, z) {
-	return z;
-})());
-console.log((function(x, y, z) {
-	if (x) return y;
-	return z;
-})(1, 2, 3));
-console.log((function(x, y) {
-	return x * y;
-})(2, 3));
-console.log((function(x, y) {
-	return x * y;
-})(2, 3, a(), b()));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,19 @@
--console.log('okay');
--console.log(123);
--console.log(void 0);
--console.log(2);
--console.log(6);
--console.log((a(), b(), 6));
-+console.log((function() {
-+	return 'okay';
-+})());
-+console.log((function(x, y, z) {
-+	return 123;
-+})());
-+console.log((function(x, y, z) {
-+	return z;
-+})());
-+console.log((function(x, y, z) {
-+	if (x) return y;
-+	return z;
-+})(1, 2, 3));
-+console.log((function(x, y) {
-+	return x * y;
-+})(2, 3));
-+console.log((function(x, y) {
-+	return x * y;
-+})(2, 3, a(), b()));
 
 ```
 
@@ -33864,8 +33525,8 @@ console.log(foo());
 
 ## `terser/issue_1261/pure_function_calls_toplevel`
 
-- tags: `join vars`, `remove unused`
-- size: oxc 339 vs reference 25 (no whitespaces: +314, formatted: +371)
+- tags: `join vars`, `sequences`, `remove unused`
+- size: oxc 339 vs reference 25 (no whitespaces: +314, formatted: +370)
 
 ```js
 (function() {
@@ -33896,7 +33557,7 @@ a.b(), c.d.e(), f.g();
 ```diff
 --- reference
 +++ oxc
-@@ -1,2 +1,22 @@
+@@ -1,2 +1,20 @@
 -baz(), quux();
 -a.b(), f.g();
 +(function() {
@@ -33916,11 +33577,9 @@ a.b(), c.d.e(), f.g();
 +})();
 +var MyClass = (function() {
 +	function MyClass() {}
-+	MyClass.prototype.method = function() {};
-+	return MyClass;
++	return MyClass.prototype.method = function() {}, MyClass;
 +})();
-+bar(), baz(), quux();
-+a.b(), c.d.e(), f.g();
++bar(), baz(), quux(), a.b(), c.d.e(), f.g();
 
 ```
 

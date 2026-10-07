@@ -1,8 +1,35 @@
 # swc / differs — Output differs at equal length
 
-Fixtures: 42
+Fixtures: 52
 
 [← swc](README.md) · [← all families](../README.md)
+
+## `swc/collapse-vars/cascade-statement/conditionals`
+
+- tags: `join vars`, `sequences`
+
+```js
+function branch(value) {
+	if (value) return value;
+	else console.log('else');
+}
+console.log(branch(1));
+branch(0);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,5 +2,4 @@
+ 	if (value) return value;
+ 	console.log('else');
+ }
+-console.log(branch(1));
+-branch(0);
++console.log(branch(1)), branch(0);
+
+```
 
 ## `swc/issues/10250`
 
@@ -1338,6 +1365,202 @@ function bar() {}
 +console.log('foo');
  function bar() {}
 -console.log('foo');
+
+```
+
+## `swc/terser/issue-2435-1/1`
+
+- tags: `sequences`, `2 iterations`
+
+```js
+if (true || x()) y();
+if (true && x()) y();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-y();
+-x() && y();
++y(), x() && y();
+
+```
+
+## `swc/terser/issue-2435-1/2`
+
+- tags: `sequences`, `2 iterations`
+
+```js
+if (x() || true) y();
+if (x() && true) y();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-x(), y();
+-x() && y();
++x(), y(), x() && y();
+
+```
+
+## `swc/terser/issue-2435-1/4`
+
+- tags: `sequences`, `3 iterations`
+
+```js
+if (x() || false) y();
+if (x() && false) y();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-x() && y();
+-x();
++x() && y(), x();
+
+```
+
+## `swc/terser/issue-2535-2/1`
+
+- tags: `sequences`
+
+```js
+console.log(x() || true || y());
+console.log(y() || true || x());
+console.log((x() || true) && y());
+console.log((y() || true) && x());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1 @@
+-console.log(x() || !0);
+-console.log(y() || !0);
+-console.log((x(), y()));
+-console.log((y(), x()));
++console.log(x() || !0), console.log(y() || !0), console.log((x(), y())), console.log((y(), x()));
+
+```
+
+## `swc/terser/issue-2535-2/2`
+
+- tags: `sequences`
+
+```js
+console.log(x() && true || y());
+console.log(y() && true || x());
+console.log(x() && true && y());
+console.log(y() && true && x());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1 @@
+-console.log(x() && !0 || y());
+-console.log(y() && !0 || x());
+-console.log(x() && y());
+-console.log(y() && x());
++console.log(x() && !0 || y()), console.log(y() && !0 || x()), console.log(x() && y()), console.log(y() && x());
+
+```
+
+## `swc/terser/issue-2535-2/2-1`
+
+- tags: `sequences`
+
+```js
+console.log(x() && true || y());
+console.log(y() && true || x());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-console.log(x() && !0 || y());
+-console.log(y() && !0 || x());
++console.log(x() && !0 || y()), console.log(y() && !0 || x());
+
+```
+
+## `swc/terser/issue-2535-2/3`
+
+- tags: `sequences`
+
+```js
+console.log(x() || false || y());
+console.log(y() || false || x());
+console.log((x() || false) && y());
+console.log((y() || false) && x());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1 @@
+-console.log(x() || y());
+-console.log(y() || x());
+-console.log((x() || !1) && y());
+-console.log((y() || !1) && x());
++console.log(x() || y()), console.log(y() || x()), console.log((x() || !1) && y()), console.log((y() || !1) && x());
+
+```
+
+## `swc/terser/issue-2535-2/3-1`
+
+- tags: `sequences`
+
+```js
+console.log((x() || false) && y());
+console.log((y() || false) && x());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-console.log((x() || !1) && y());
+-console.log((y() || !1) && x());
++console.log((x() || !1) && y()), console.log((y() || !1) && x());
+
+```
+
+## `swc/terser/issue-2535-2/4`
+
+- tags: `sequences`
+
+```js
+console.log(x() && false || y());
+console.log(y() && false || x());
+console.log(x() && false && y());
+console.log(y() && false && x());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1 @@
+-console.log((x(), y()));
+-console.log((y(), x()));
+-console.log(x() && !1);
+-console.log(y() && !1);
++console.log((x(), y())), console.log((y(), x())), console.log(x() && !1), console.log(y() && !1);
 
 ```
 

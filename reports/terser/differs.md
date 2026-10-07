@@ -1,6 +1,6 @@
 # terser / differs — Output differs at equal length
 
-Fixtures: 83
+Fixtures: 97
 
 [← terser](README.md) · [← all families](../README.md)
 
@@ -396,8 +396,103 @@ var result4 = obj1 > obj2;
 
 ```
 
+## `terser/conditionals/cond_1`
+
+- tags: `sequences`
+
+```js
+function foo(do_something, some_condition) {
+	if (some_condition) {
+		do_something(x);
+	} else {
+		do_something(y);
+	}
+	if (some_condition) {
+		side_effects(x);
+	} else {
+		side_effects(y);
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,3 @@
+ function foo(do_something, some_condition) {
+-	do_something(some_condition ? x : y);
+-	some_condition ? side_effects(x) : side_effects(y);
++	do_something(some_condition ? x : y), some_condition ? side_effects(x) : side_effects(y);
+ }
+
+```
+
+## `terser/conditionals/cond_4`
+
+- tags: `sequences`
+
+```js
+var do_something;
+if (some_condition()) {
+	do_something();
+} else {
+	do_something();
+}
+if (some_condition()) {
+	side_effects();
+} else {
+	side_effects();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,2 @@
+ var do_something;
+-some_condition(), do_something();
+-some_condition(), side_effects();
++some_condition(), do_something(), some_condition(), side_effects();
+
+```
+
+## `terser/conditionals/cond_5`
+
+- tags: `sequences`
+
+```js
+if (some_condition()) {
+	if (some_other_condition()) {
+		do_something();
+	} else {
+		alternate();
+	}
+} else {
+	alternate();
+}
+if (some_condition()) {
+	if (some_other_condition()) {
+		do_something();
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-some_condition() && some_other_condition() ? do_something() : alternate();
+-some_condition() && some_other_condition() && do_something();
++some_condition() && some_other_condition() ? do_something() : alternate(), some_condition() && some_other_condition() && do_something();
+
+```
+
 ## `terser/conditionals/cond_7_1`
 
+- tags: `sequences`
 
 ```js
 var x;
@@ -416,6 +511,265 @@ if (y) {
 -var x;
 -y, x = 2;
 +var x = (y, 2);
+
+```
+
+## `terser/conditionals/ifs_1`
+
+- tags: `sequences`
+
+```js
+if (foo) bar();
+if (!foo);
+else bar();
+if (foo);
+else bar();
+if (foo);
+else;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1 @@
+-foo && bar();
+-foo && bar();
+-foo || bar();
+-foo;
++foo && bar(), foo && bar(), foo || bar(), foo;
+
+```
+
+## `terser/conditionals/ifs_2`
+
+- tags: `sequences`
+
+```js
+if (foo) {
+	x();
+} else if (bar) {
+	y();
+} else if (baz) {
+	z();
+}
+if (foo) {
+	x();
+} else if (bar) {
+	y();
+} else if (baz) {
+	z();
+} else {
+	t();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-foo ? x() : bar ? y() : baz && z();
+-foo ? x() : bar ? y() : baz ? z() : t();
++foo ? x() : bar ? y() : baz && z(), foo ? x() : bar ? y() : baz ? z() : t();
+
+```
+
+## `terser/conditionals/ifs_same_consequent`
+
+- tags: `sequences`
+
+```js
+if (foo) {
+	x();
+} else if (bar) {
+	x();
+} else if (baz) {
+	x();
+}
+if (foo) {
+	x();
+} else if (bar) {
+	x();
+} else if (baz) {
+	x();
+} else {
+	x();
+}
+if (foo) {
+	x();
+} else if (bar) {
+	x();
+} else if (baz) {
+	x();
+} else {
+	y();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1 @@
+-(foo || bar || baz) && x();
+-foo || bar || baz, x();
+-foo || bar || baz ? x() : y();
++(foo || bar || baz) && x(), foo || bar || baz, x(), foo || bar || baz ? x() : y();
+
+```
+
+## `terser/conditionals/issue_1645_2`
+
+- tags: `sequences`
+
+```js
+var a = 0;
+function f() {
+	return a++;
+}
+f() ? a += 2 : a += 4;
+console.log(a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,5 +2,4 @@
+ function f() {
+ 	return a++;
+ }
+-f() ? a += 2 : a += 4;
+-console.log(a);
++f() ? a += 2 : a += 4, console.log(a);
+
+```
+
+## `terser/conditionals/issue_2535_1`
+
+- tags: `sequences`, `2 iterations`
+
+```js
+if (true || x()) y();
+if (true && x()) y();
+if (x() || true) y();
+if (x() && true) y();
+if (false || x()) y();
+if (false && x()) y();
+if (x() || false) y();
+if (x() && false) y();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1 @@
+-y();
+-x() && y();
+-x(), y();
+-x() && y();
+-x() && y();
+-x() && y();
+-x();
++y(), x() && y(), x(), y(), x() && y(), x() && y(), x() && y(), x();
+
+```
+
+## `terser/conditionals/no_evaluate`
+
+- tags: `sequences`
+
+```js
+function f(b) {
+	a = b ? !0 : !0;
+	a = b ? ~1 : ~1;
+	a = b ? -2 : -2;
+	a = b ? +3 : +3;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,3 @@
+ function f(b) {
+-	a = !0;
+-	a = -2;
+-	a = -2;
+-	a = 3;
++	a = !0, a = -2, a = -2, a = 3;
+ }
+
+```
+
+## `terser/conditionals/trivial_boolean_ternary_expressions`
+
+- tags: `sequences`
+
+```js
+f('foo' in m ? true : false);
+f('foo' in m ? false : true);
+f(g ? true : false);
+f(foo() ? true : false);
+f('bar' ? true : false);
+f(5 ? true : false);
+f(5.7 ? true : false);
+f(x - y ? true : false);
+f(x == y ? true : false);
+f(x === y ? !0 : !1);
+f(x < y ? !0 : false);
+f(x <= y ? true : false);
+f(x > y ? true : !1);
+f(x >= y ? !0 : !1);
+f(g ? false : true);
+f(foo() ? false : true);
+f('bar' ? false : true);
+f(5 ? false : true);
+f(5.7 ? false : true);
+f(x - y ? false : true);
+f(x == y ? !1 : !0);
+f(x === y ? false : true);
+f(x < y ? false : true);
+f(x <= y ? false : !0);
+f(x > y ? !1 : true);
+f(x >= y ? !1 : !0);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,26 +1 @@
+-f('foo' in m);
+-f(!('foo' in m));
+-f(!!g);
+-f(!!foo());
+-f(!0);
+-f(!0);
+-f(!0);
+-f(!!(x - y));
+-f(x == y);
+-f(x === y);
+-f(x < y);
+-f(x <= y);
+-f(x > y);
+-f(x >= y);
+-f(!g);
+-f(!foo());
+-f(!1);
+-f(!1);
+-f(!1);
+-f(!(x - y));
+-f(x != y);
+-f(x !== y);
+-f(!(x < y));
+-f(!(x <= y));
+-f(!(x > y));
+-f(!(x >= y));
++f('foo' in m), f(!('foo' in m)), f(!!g), f(!!foo()), f(!0), f(!0), f(!0), f(!!(x - y)), f(x == y), f(x === y), f(x < y), f(x <= y), f(x > y), f(x >= y), f(!g), f(!foo()), f(!1), f(!1), f(!1), f(!(x - y)), f(x != y), f(x !== y), f(!(x < y)), f(!(x <= y)), f(!(x > y)), f(!(x >= y));
 
 ```
 
@@ -768,6 +1122,38 @@ console.log([
  	a
 -][0] + 1, 2, 3, 0 / 0, '1,21', 5, (void 0)[1] + 1);
 +][0] + 1, 2, 3, NaN, '1,21', 5, (void 0)[1] + 1);
+
+```
+
+## `terser/expansions/avoid_spread_in_ternary`
+
+- tags: `sequences`
+
+```js
+function print(...x) {
+	console.log(...x);
+}
+var a = [1, 2], b = [3, 4], m = Math;
+if (m) print(a);
+else print(b);
+if (m) print(...a);
+else print(b);
+if (m.no_such_property) print(a);
+else print(...b);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,6 +2,4 @@
+ 	console.log(...x);
+ }
+ var a = [1, 2], b = [3, 4], m = Math;
+-print(m ? a : b);
+-m ? print(...a) : print(b);
+-m.no_such_property ? print(a) : print(...b);
++print(m ? a : b), m ? print(...a) : print(b), m.no_such_property ? print(a) : print(...b);
 
 ```
 
@@ -1655,7 +2041,7 @@ var h = 'undefined' == typeof i.j;
 
 ## `terser/issue_1466/more_variable_in_multiple_for`
 
-- tags: `join vars`
+- tags: `join vars`, `sequences`
 
 ```js
 for (let a = 9, i = 0; i < 20; i += a) {
@@ -1950,6 +2336,86 @@ function a(b) {
 
 ```
 
+## `terser/issue_640/cond_5`
+
+- tags: `sequences`
+
+```js
+if (some_condition()) {
+	if (some_other_condition()) {
+		do_something();
+	} else {
+		alternate();
+	}
+} else {
+	alternate();
+}
+if (some_condition()) {
+	if (some_other_condition()) {
+		do_something();
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+-some_condition() && some_other_condition() ? do_something() : alternate();
+-some_condition() && some_other_condition() && do_something();
++some_condition() && some_other_condition() ? do_something() : alternate(), some_condition() && some_other_condition() && do_something();
+
+```
+
+## `terser/issue_973/this_binding_conditionals`
+
+- tags: `sequences`
+
+```js
+(1 && a)();
+(0 || a)();
+(0 || 1 && a)();
+(1 ? a : 0)();
+(1 && a.b)();
+(0 || a.b)();
+(0 || 1 && a.b)();
+(1 ? a.b : 0)();
+(1 && a[b])();
+(0 || a[b])();
+(0 || 1 && a[b])();
+(1 ? a[b] : 0)();
+(1 && eval)();
+(0 || eval)();
+(0 || 1 && eval)();
+(1 ? eval : 0)();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,16 +1 @@
+-a();
+-a();
+-a();
+-a();
+-(0, a.b)();
+-(0, a.b)();
+-(0, a.b)();
+-(0, a.b)();
+-(0, a[b])();
+-(0, a[b])();
+-(0, a[b])();
+-(0, a[b])();
+-(0, eval)();
+-(0, eval)();
+-(0, eval)();
+-(0, eval)();
++a(), a(), a(), a(), (0, a.b)(), (0, a.b)(), (0, a.b)(), (0, a.b)(), (0, a[b])(), (0, a[b])(), (0, a[b])(), (0, a[b])(), (0, eval)(), (0, eval)(), (0, eval)(), (0, eval)();
+
+```
+
 ## `terser/keep_names/drop_classnames`
 
 - tags: `mangle`, `keep function names`
@@ -2000,6 +2466,7 @@ function foo() {
 
 ## `terser/labels/labels_5`
 
+- tags: `sequences`
 
 ```js
 while (foo) {
@@ -2031,32 +2498,9 @@ out: while (foo) {
 
 ```
 
-## `terser/labels/labels_7`
-
-
-```js
-while (foo) {
-	x();
-	y();
-	continue;
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
--while (foo) {
-+for (; foo;) {
- 	x();
- 	y();
- }
-
-```
-
 ## `terser/labels/labels_8`
 
+- tags: `sequences`
 
 ```js
 while (foo) {
@@ -2070,12 +2514,14 @@ while (foo) {
 ```diff
 --- reference
 +++ oxc
-@@ -1,4 +1,4 @@
+@@ -1,5 +1,4 @@
 -while (foo) {
+-	x();
+-	y();
 +for (; foo;) {
- 	x();
- 	y();
++	x(), y();
  	break;
+ }
 
 ```
 
@@ -2184,6 +2630,41 @@ console.log(c);
  for (; i--;) console.log(i);
 -console.log(c);
 +console.log(5);
+
+```
+
+## `terser/negate_iife/issue_1288_side_effects`
+
+- tags: `sequences`
+
+```js
+if (w);
+else {
+	(function f() {})();
+}
+if (!x) {
+	(function() {
+		x = {};
+	})();
+}
+if (y) (function() {})();
+else (function(z) {
+	return z;
+})(0);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,3 @@
+-w;
+-x || (function() {
++w, x || (function() {
+ 	x = {};
+-})();
+-y;
++})(), y;
 
 ```
 
@@ -2412,6 +2893,57 @@ console.log(acd);
 +	e: !0
  };
  console.log(acd);
+
+```
+
+## `terser/pure_getters/issue_2313_7`
+
+- tags: `join vars`, `sequences`, `pure getters`
+
+```js
+var a = 0, b = 0;
+class foo {
+	get c() {
+		a++;
+		return 42;
+	}
+	set c(c) {
+		b++;
+	}
+}
+class bar extends foo {
+	d() {
+		super.c++;
+		if (super.c) console.log(a, b);
+	}
+}
+new bar().d();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,7 @@
+ var a = 0, b = 0;
+ class foo {
+ 	get c() {
+-		a++;
+-		return 42;
++		return a++, 42;
+ 	}
+ 	set c(c) {
+ 		b++;
+@@ -10,8 +9,7 @@
+ }
+ class bar extends foo {
+ 	d() {
+-		super.c++;
+-		super.c && console.log(a, b);
++		super.c++, super.c && console.log(a, b);
+ 	}
+ }
+ new bar().d();
 
 ```
 

@@ -1266,7 +1266,7 @@ f3({ r: () => {} });
 
 ## `terser/properties/methods_keep_quoted_from_dead_code`
 
-- tags: `mangle`, `keep function names`, `keep class names`, `mangle properties`, `join vars`
+- tags: `mangle`, `keep function names`, `keep class names`, `mangle properties`, `join vars`, `sequences`
 
 ```js
 class C {
@@ -1287,7 +1287,7 @@ f3({ Quoted: () => {} });
 ```diff
 --- reference
 +++ oxc
-@@ -1,11 +1,11 @@
+@@ -1,11 +1,9 @@
  class C {
 -	Quoted() {}
 -	o() {}
@@ -1298,14 +1298,13 @@ f3({ Quoted: () => {} });
 -	Quoted() {},
 -	o() {},
 -	Prop: 3
+-});
+-f2({ Quoted() {} });
+-f3({ Quoted() {} });
 +	e() {},
 +	t() {},
 +	n: 3
- });
--f2({ Quoted() {} });
--f3({ Quoted() {} });
-+f2({ e: function() {} });
-+f3({ e: () => {} });
++}), f2({ e: function() {} }), f3({ e: () => {} });
 
 ```
 
@@ -1319,9 +1318,7 @@ f1({
 	r() {},
 	i() {},
 	a: 3
-});
-f2({ r: function() {} });
-f3({ r: () => {} });
+}), f2({ r: function() {} }), f3({ r: () => {} });
 
 ```
 

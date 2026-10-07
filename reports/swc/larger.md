@@ -1,6 +1,6 @@
 # swc / larger — Output longer than expected (possible missing optimization)
 
-Fixtures: 365
+Fixtures: 364
 
 [← swc](README.md) · [← all families](../README.md)
 
@@ -2319,35 +2319,6 @@ export const exported = { toQueryString: function(object, base) {
 +		value != null && queryString.push(result);
  	}), queryString.join('&');
  } };
-
-```
-
-## `swc/collapse-vars/cascade-statement/conditionals`
-
-- tags: `join vars`
-- size: oxc 103 vs reference 98 (no whitespaces: +5, formatted: +5)
-
-```js
-function branch(value) {
-	if (value) return value;
-	else console.log('else');
-}
-console.log(branch(1));
-branch(0);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,6 @@
- function branch(value) {
- 	if (value) return value;
--	console.log('else');
-+	else console.log('else');
- }
- console.log(branch(1));
- branch(0);
 
 ```
 

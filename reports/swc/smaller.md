@@ -926,55 +926,6 @@ console.log(events.join(','));
 
 ```
 
-## `swc/issues/12229`
-
-- tags: `type:cjs`
-- size: oxc 145 vs reference 150 (no whitespaces: -5, formatted: +0)
-
-```js
-function f(a, b, c, d) {
-	if (a) return;
-	if (b) return;
-	if (c) {
-		while (log()) {}
-	}
-	if (d) {
-		while (log()) {}
-	}
-}
-var n = 0;
-function log() {
-	console.log(++n);
-	return false;
-}
-f(false, false, true, true);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,11 +1,12 @@
- function f(a, b, c, d) {
--	if (a || b) return;
--	if (c) while (log());
--	if (d) while (log());
-+	if (a) return;
-+	if (b) return;
-+	if (c) for (; log(););
-+	if (d) for (; log(););
- }
- var n = 0;
- function log() {
- 	console.log(++n);
--	return false;
-+	return !1;
- }
--f(false, false, true, true);
-+f(!1, !1, !0, !0);
-
-```
-
 ## `swc/projects/backbone/16`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -1377,6 +1328,50 @@ console.log([
 
 ```
 
+## `swc/issues/12229/no-return`
+
+- tags: `type:cjs`, `sequences`
+- size: oxc 112 vs reference 119 (no whitespaces: -7, formatted: -6)
+
+```js
+function f(c, d) {
+	if (c) {
+		while (log()) {}
+	}
+	if (d) {
+		while (log()) {}
+	}
+}
+var n = 0;
+function log() {
+	console.log(++n);
+	return false;
+}
+f(true, true);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,9 @@
+ function f(c, d) {
+-	if (c) while (log());
+-	if (d) while (log());
++	if (c) for (; log(););
++	if (d) for (; log(););
+ }
+ var n = 0;
+ function log() {
+-	console.log(++n);
+-	return false;
++	return console.log(++n), !1;
+ }
+-f(true, true);
++f(!0, !0);
+
+```
+
 ## `swc/issues/4249`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -1520,50 +1515,6 @@ console.log((null?.veryLongProperty, obj)?.x);
  const obj = {}, func = () => {}, get = (value) => value;
 -console.log(obj?.[void 0]), console.log(func?.(void 0)), console.log(((value) => value)(void 0)?.x), console.log(((value) => value)(void 0)?.x.y), console.log(void 0), console.log(void 0), console.log(obj?.x);
 +console.log(obj?.[void 0]), console.log(func?.(void 0)), console.log(get(void 0)?.x), console.log(get(void 0)?.x.y), console.log({ value: void 0 }.value), console.log(void 0), console.log(obj?.x);
-
-```
-
-## `swc/issues/12229/no-return`
-
-- tags: `type:cjs`
-- size: oxc 111 vs reference 119 (no whitespaces: -8, formatted: -5)
-
-```js
-function f(c, d) {
-	if (c) {
-		while (log()) {}
-	}
-	if (d) {
-		while (log()) {}
-	}
-}
-var n = 0;
-function log() {
-	console.log(++n);
-	return false;
-}
-f(true, true);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,10 +1,10 @@
- function f(c, d) {
--	if (c) while (log());
--	if (d) while (log());
-+	if (c) for (; log(););
-+	if (d) for (; log(););
- }
- var n = 0;
- function log() {
- 	console.log(++n);
--	return false;
-+	return !1;
- }
--f(true, true);
-+f(!0, !0);
 
 ```
 
@@ -2825,6 +2776,55 @@ var A, B, A1;
 
 ```
 
+## `swc/issues/12229`
+
+- tags: `type:cjs`, `sequences`
+- size: oxc 134 vs reference 150 (no whitespaces: -16, formatted: -11)
+
+```js
+function f(a, b, c, d) {
+	if (a) return;
+	if (b) return;
+	if (c) {
+		while (log()) {}
+	}
+	if (d) {
+		while (log()) {}
+	}
+}
+var n = 0;
+function log() {
+	console.log(++n);
+	return false;
+}
+f(false, false, true, true);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,11 @@
+ function f(a, b, c, d) {
+-	if (a || b) return;
+-	if (c) while (log());
+-	if (d) while (log());
++	if (!a && !b) {
++		if (c) for (; log(););
++		if (d) for (; log(););
++	}
+ }
+ var n = 0;
+ function log() {
+-	console.log(++n);
+-	return false;
++	return console.log(++n), !1;
+ }
+-f(false, false, true, true);
++f(!1, !1, !0, !0);
+
+```
+
 ## `swc/issues/do-while-false-terminal-jump/completion/assignment-break`
 
 - tags: `1 iteration`
@@ -3142,7 +3142,7 @@ assert.strictEqual(result, 3);
 
 ## `swc/issues/do-while-false-terminal-jump/completion/conditional-parent`
 
-- tags: `1 iteration`
+- tags: `sequences`, `1 iteration`
 - size: oxc 52 vs reference 71 (no whitespaces: -19, formatted: -26)
 
 ```js

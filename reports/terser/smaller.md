@@ -1,6 +1,6 @@
 # terser / smaller — Output shorter than expected (possible over-optimization / bug)
 
-Fixtures: 421
+Fixtures: 426
 
 [← terser](README.md) · [← all families](../README.md)
 
@@ -447,6 +447,32 @@ f();
 +	g();
 +}
 +f();
+
+```
+
+## `terser/labels/labels_7`
+
+- tags: `sequences`
+- size: oxc 18 vs reference 19 (no whitespaces: -1, formatted: -5)
+
+```js
+while (foo) {
+	x();
+	y();
+	continue;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1 @@
+-while (foo) {
+-	x();
+-	y();
+-}
++for (; foo;) x(), y();
 
 ```
 
@@ -1813,6 +1839,7 @@ console.log(c);
 
 ## `terser/conditionals/cond_8`
 
+- tags: `sequences`
 - size: oxc 276 vs reference 278 (no whitespaces: -2, formatted: -1)
 
 ```js
@@ -1858,26 +1885,35 @@ a = condition ? 1 : 0;
 ```diff
 --- reference
 +++ oxc
-@@ -1,5 +1,4 @@
+@@ -1,20 +1,2 @@
 -var a;
 -a = !!condition;
-+var a = !!condition;
- a = !condition;
- a = !!condition();
- a = !!condition;
-@@ -15,6 +14,6 @@
- a = !condition();
- a = !condition;
- a = !condition;
+-a = !condition;
+-a = !!condition();
+-a = !!condition;
+-a = !condition;
+-a = !!condition();
+-a = !!condition;
+-a = !!condition;
+-a = !condition;
+-a = !!condition;
+-a = !condition();
+-a = !condition;
+-a = !!condition;
+-a = !condition();
+-a = !condition;
+-a = !condition;
 -a = !!condition && 1;
-+a = condition ? 1 : !1;
- a = !condition || 0;
- a = +!!condition;
+-a = !condition || 0;
+-a = +!!condition;
++var a = !!condition;
++a = !condition, a = !!condition(), a = !!condition, a = !condition, a = !!condition(), a = !!condition, a = !!condition, a = !condition, a = !!condition, a = !condition(), a = !condition, a = !!condition, a = !condition(), a = !condition, a = !condition, a = condition ? 1 : !1, a = !condition || 0, a = +!!condition;
 
 ```
 
 ## `terser/conditionals/cond_8b`
 
+- tags: `sequences`
 - size: oxc 276 vs reference 278 (no whitespaces: -2, formatted: -1)
 
 ```js
@@ -1923,26 +1959,35 @@ a = condition ? 1 : 0;
 ```diff
 --- reference
 +++ oxc
-@@ -1,5 +1,4 @@
+@@ -1,20 +1,2 @@
 -var a;
 -a = !!condition;
-+var a = !!condition;
- a = !condition;
- a = !!condition();
- a = !!condition;
-@@ -15,6 +14,6 @@
- a = !condition();
- a = !condition;
- a = !condition;
+-a = !condition;
+-a = !!condition();
+-a = !!condition;
+-a = !condition;
+-a = !!condition();
+-a = !!condition;
+-a = !!condition;
+-a = !condition;
+-a = !!condition;
+-a = !condition();
+-a = !condition;
+-a = !!condition;
+-a = !condition();
+-a = !condition;
+-a = !condition;
 -a = !!condition && 1;
-+a = condition ? 1 : !1;
- a = !condition || 0;
- a = +!!condition;
+-a = !condition || 0;
+-a = +!!condition;
++var a = !!condition;
++a = !condition, a = !!condition(), a = !!condition, a = !condition, a = !!condition(), a = !!condition, a = !!condition, a = !condition, a = !!condition, a = !condition(), a = !condition, a = !!condition, a = !condition(), a = !condition, a = !condition, a = condition ? 1 : !1, a = !condition || 0, a = +!!condition;
 
 ```
 
 ## `terser/conditionals/cond_8c`
 
+- tags: `sequences`
 - size: oxc 276 vs reference 278 (no whitespaces: -2, formatted: -1)
 
 ```js
@@ -1988,21 +2033,29 @@ a = condition ? 1 : 0;
 ```diff
 --- reference
 +++ oxc
-@@ -1,5 +1,4 @@
+@@ -1,20 +1,2 @@
 -var a;
 -a = !!condition;
-+var a = !!condition;
- a = !condition;
- a = !!condition();
- a = !!condition;
-@@ -15,6 +14,6 @@
- a = !condition();
- a = !condition;
- a = !condition;
+-a = !condition;
+-a = !!condition();
+-a = !!condition;
+-a = !condition;
+-a = !!condition();
+-a = !!condition;
+-a = !!condition;
+-a = !condition;
+-a = !!condition;
+-a = !condition();
+-a = !condition;
+-a = !!condition;
+-a = !condition();
+-a = !condition;
+-a = !condition;
 -a = !!condition && 1;
-+a = condition ? 1 : !1;
- a = !condition || 0;
- a = +!!condition;
+-a = !condition || 0;
+-a = +!!condition;
++var a = !!condition;
++a = !condition, a = !!condition(), a = !!condition, a = !condition, a = !!condition(), a = !!condition, a = !!condition, a = !condition, a = !!condition, a = !condition(), a = !condition, a = !!condition, a = !condition(), a = !condition, a = !condition, a = condition ? 1 : !1, a = !condition || 0, a = +!!condition;
 
 ```
 
@@ -3648,7 +3701,7 @@ console.log(b);
 
 ## `terser/issue_1466/same_variable_in_multiple_forOf`
 
-- tags: `join vars`, `remove unused`
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 106 vs reference 109 (no whitespaces: -3, formatted: -8)
 
 ```js
@@ -3867,8 +3920,36 @@ function f() {
 
 ```
 
+## `terser/issue_22/return_with_no_value_in_if_body`
+
+- tags: `sequences`
+- size: oxc 35 vs reference 38 (no whitespaces: -3, formatted: -5)
+
+```js
+function foo(bar) {
+	if (bar) {
+		return;
+	} else {
+		return 1;
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ function foo(bar) {
+-	return bar ? void 0 : 1;
++	if (!bar) return 1;
+ }
+
+```
+
 ## `terser/issue_637/wrongly_optimized`
 
+- tags: `sequences`
 - size: oxc 35 vs reference 38 (no whitespaces: -3, formatted: -5)
 
 ```js
@@ -4432,8 +4513,8 @@ const regular_number = 1 * 10;
 
 ## `terser/collapse_vars/issue_2313_1`
 
-- tags: `join vars`
-- size: oxc 111 vs reference 115 (no whitespaces: -4, formatted: -4)
+- tags: `join vars`, `sequences`
+- size: oxc 111 vs reference 115 (no whitespaces: -4, formatted: -8)
 
 ```js
 var a = 0, b = 0;
@@ -4457,13 +4538,25 @@ foo.d();
 ```diff
 --- reference
 +++ oxc
-@@ -1,5 +1,4 @@
+@@ -1,15 +1,12 @@
 -var a = 0, b = 0;
 -var foo = {
 +var a = 0, b = 0, foo = {
  	get c() {
- 		a++;
- 		return 42;
+-		a++;
+-		return 42;
++		return a++, 42;
+ 	},
+ 	set c(c) {
+ 		b++;
+ 	},
+ 	d: function() {
+-		this.c++;
+-		this.c && console.log(a, b);
++		this.c++, this.c && console.log(a, b);
+ 	}
+ };
+ foo.d();
 
 ```
 
@@ -5074,6 +5167,34 @@ console.log(a, obj.a);
 
 ```
 
+## `terser/if_return/if_if_return_return`
+
+- tags: `sequences`
+- size: oxc 42 vs reference 46 (no whitespaces: -4, formatted: -5)
+
+```js
+function f(a, b) {
+	if (a) {
+		if (b) return b;
+		return;
+	}
+	g();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ function f(a, b) {
+-	if (a) return b || (0, void 0);
++	if (a) return b || void 0;
+ 	g();
+ }
+
+```
+
 ## `terser/if_return/if_return_same_value`
 
 - tags: `sequences`
@@ -5124,6 +5245,7 @@ function h() {
 
 ## `terser/issue_640/negate_iife_3`
 
+- tags: `sequences`
 - size: oxc 57 vs reference 61 (no whitespaces: -4, formatted: -4)
 
 ```js
@@ -5696,6 +5818,7 @@ f(true, 2);
 
 ## `terser/conditionals/condition_symbol_matches_consequent`
 
+- tags: `sequences`
 - size: oxc 124 vs reference 129 (no whitespaces: -5, formatted: -5)
 
 ```js
@@ -5725,6 +5848,7 @@ console.log(foo(3, null), foo(0, 7), foo(true, false), bar());
 
 ## `terser/conditionals/to_and_or`
 
+- tags: `sequences`
 - size: oxc 152 vs reference 157 (no whitespaces: -5, formatted: -5)
 
 ```js
@@ -5869,6 +5993,7 @@ if (1) {
 
 ## `terser/issue_640/negate_iife_3_off`
 
+- tags: `sequences`
 - size: oxc 57 vs reference 62 (no whitespaces: -5, formatted: -5)
 
 ```js
@@ -6798,6 +6923,7 @@ if ((function() {
 
 ## `terser/negate_iife/negate_iife_3`
 
+- tags: `sequences`
 - size: oxc 57 vs reference 63 (no whitespaces: -6, formatted: -6)
 
 ```js
@@ -6821,6 +6947,7 @@ if ((function() {
 
 ## `terser/negate_iife/negate_iife_3_off`
 
+- tags: `sequences`
 - size: oxc 57 vs reference 63 (no whitespaces: -6, formatted: -6)
 
 ```js
@@ -6844,6 +6971,7 @@ if ((function() {
 
 ## `terser/negate_iife/negate_iife_3_side_effects`
 
+- tags: `sequences`
 - size: oxc 57 vs reference 63 (no whitespaces: -6, formatted: -6)
 
 ```js
@@ -7083,8 +7211,8 @@ a['1_1'] = 'foo';
 
 ## `terser/reduce_vars/reduce_vars`
 
-- tags: `join vars`, `remove unused`
-- size: oxc 218 vs reference 224 (no whitespaces: -6, formatted: -7)
+- tags: `join vars`, `sequences`, `remove unused`
+- size: oxc 218 vs reference 224 (no whitespaces: -6, formatted: -10)
 
 ```js
 var A = 1;
@@ -7119,12 +7247,30 @@ console.log(A + 1);
 ```diff
 --- reference
 +++ oxc
-@@ -13,5 +13,4 @@
- 	console.log(a - 5);
- 	eval('console.log(a);');
- })(eval);
+@@ -1,17 +1,10 @@
+ var A = 1;
+ (function() {
+-	console.log(-3);
+-	console.log(A - 5);
+-})();
+-(function f1() {
++	console.log(-3), console.log(A - 5);
++})(), (function f1() {
+ 	var a = 2;
+-	console.log(a - 5);
+-	eval('console.log(a);');
+-})();
+-(function f2(eval) {
++	console.log(a - 5), eval('console.log(a);');
++})(), (function f2(eval) {
+ 	var a = 2;
+-	console.log(a - 5);
+-	eval('console.log(a);');
+-})(eval);
 -'yes';
- console.log(A + 1);
+-console.log(A + 1);
++	console.log(a - 5), eval('console.log(a);');
++})(eval), console.log(A + 1);
 
 ```
 
@@ -7357,7 +7503,7 @@ function f() {
 
 ## `terser/issue_1466/different_variable_in_multiple_forOf`
 
-- tags: `join vars`, `remove unused`
+- tags: `join vars`, `sequences`, `remove unused`
 - size: oxc 102 vs reference 109 (no whitespaces: -7, formatted: -12)
 
 ```js
@@ -7999,6 +8145,106 @@ console.log(b);
 +	})(2), d = --b + a;
 +} catch {}
  console.log(b);
+
+```
+
+## `terser/conditionals/ifs_5`
+
+- tags: `sequences`
+- size: oxc 75 vs reference 83 (no whitespaces: -8, formatted: -22)
+
+```js
+function f() {
+	if (foo) return;
+	bar();
+	baz();
+}
+function g() {
+	if (foo) return;
+	if (bar) return;
+	if (baz) return;
+	if (baa) return;
+	a();
+	b();
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,12 +1,6 @@
+ function f() {
+-	if (!foo) {
+-		bar();
+-		baz();
+-	}
++	foo || (bar(), baz());
+ }
+ function g() {
+-	if (!(foo || bar || baz || baa)) {
+-		a();
+-		b();
+-	}
++	foo || bar || baz || baa || (a(), b());
+ }
+
+```
+
+## `terser/conditionals/issue_2994`
+
+- tags: `sequences`
+- size: oxc 256 vs reference 264 (no whitespaces: -8, formatted: +5)
+
+```js
+function f(condition1, condition2, condition3) {
+	if (condition1) {
+		if (condition2) {
+			return aValue;
+		} else {
+			const variable1 = 'something';
+			if (condition3) {
+				const variable2 = 'else';
+				return anotherValue;
+			} else {
+				return undefined;
+			}
+		}
+	}
+}
+let aValue = 2, anotherValue = 3;
+for (let i = 0; i < 8; ++i) {
+	console.log(f(i & 4, i & 2, i & 1));
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,13 +1,15 @@
+ function f(condition1, condition2, condition3) {
+-	if (condition1) if (condition2) return aValue;
+-	else {
+-		const variable1 = 'something';
+-		if (!condition3) return;
++	if (condition1) {
++		if (condition2) return aValue;
+ 		{
+-			const variable2 = 'else';
+-			return anotherValue;
++			let variable1 = 'something';
++			if (condition3) {
++				let variable2 = 'else';
++				return anotherValue;
++			}
++			return;
+ 		}
+ 	}
+ }
+ let aValue = 2, anotherValue = 3;
+-for (let i = 0; i < 8; ++i) console.log(f(4 & i, 2 & i, 1 & i));
++for (let i = 0; i < 8; ++i) console.log(f(i & 4, i & 2, i & 1));
 
 ```
 
@@ -10536,84 +10782,6 @@ function f() {
 
 ```
 
-## `terser/issue_1466/different_variable_in_multiple_for_loop`
-
-- tags: `join vars`, `remove unused`
-- size: oxc 96 vs reference 110 (no whitespaces: -14, formatted: -23)
-
-```js
-for (let i = 0; i < 3; i++) {
-	let a = 100;
-	console.log(i, a);
-	for (let j = 0; j < 2; j++) {
-		console.log(j, a);
-		let c = 2;
-		console.log(c);
-	}
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,9 +1,7 @@
--for (let o = 0; o < 3; o++) {
--	let l = 100;
--	console.log(o, l);
--	for (let o = 0; o < 2; o++) {
--		console.log(o, l);
--		let e = 2;
--		console.log(e);
-+for (let i = 0; i < 3; i++) {
-+	console.log(i, 100);
-+	for (let j = 0; j < 2; j++) {
-+		console.log(j, 100);
-+		console.log(2);
- 	}
- }
-
-```
-
-## `terser/issue_1466/same_variable_in_multiple_for_loop`
-
-- tags: `join vars`, `remove unused`
-- size: oxc 96 vs reference 110 (no whitespaces: -14, formatted: -23)
-
-```js
-for (let i = 0; i < 3; i++) {
-	let a = 100;
-	console.log(i, a);
-	for (let i = 0; i < 2; i++) {
-		console.log(i, a);
-		let c = 2;
-		console.log(c);
-	}
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,9 +1,7 @@
--for (let o = 0; o < 3; o++) {
--	let l = 100;
--	console.log(o, l);
--	for (let o = 0; o < 2; o++) {
--		console.log(o, l);
--		let e = 2;
--		console.log(e);
-+for (let i = 0; i < 3; i++) {
-+	console.log(i, 100);
-+	for (let i = 0; i < 2; i++) {
-+		console.log(i, 100);
-+		console.log(2);
- 	}
- }
-
-```
-
 ## `terser/export/name_cache_import_star_as_name_from_module`
 
 - tags: `type:module`, `mangle`, `mangle top level`, `keep function names`, `keep class names`, `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -11023,6 +11191,80 @@ foo(bar() + 'Foo' + (10 + parseInt('10')));
 
 ```
 
+## `terser/issue_1466/different_variable_in_multiple_for_loop`
+
+- tags: `join vars`, `sequences`, `remove unused`
+- size: oxc 94 vs reference 110 (no whitespaces: -16, formatted: -32)
+
+```js
+for (let i = 0; i < 3; i++) {
+	let a = 100;
+	console.log(i, a);
+	for (let j = 0; j < 2; j++) {
+		console.log(j, a);
+		let c = 2;
+		console.log(c);
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,4 @@
+-for (let o = 0; o < 3; o++) {
+-	let l = 100;
+-	console.log(o, l);
+-	for (let o = 0; o < 2; o++) {
+-		console.log(o, l);
+-		let e = 2;
+-		console.log(e);
+-	}
++for (let i = 0; i < 3; i++) {
++	console.log(i, 100);
++	for (let j = 0; j < 2; j++) console.log(j, 100), console.log(2);
+ }
+
+```
+
+## `terser/issue_1466/same_variable_in_multiple_for_loop`
+
+- tags: `join vars`, `sequences`, `remove unused`
+- size: oxc 94 vs reference 110 (no whitespaces: -16, formatted: -32)
+
+```js
+for (let i = 0; i < 3; i++) {
+	let a = 100;
+	console.log(i, a);
+	for (let i = 0; i < 2; i++) {
+		console.log(i, a);
+		let c = 2;
+		console.log(c);
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,4 @@
+-for (let o = 0; o < 3; o++) {
+-	let l = 100;
+-	console.log(o, l);
+-	for (let o = 0; o < 2; o++) {
+-		console.log(o, l);
+-		let e = 2;
+-		console.log(e);
+-	}
++for (let i = 0; i < 3; i++) {
++	console.log(i, 100);
++	for (let i = 0; i < 2; i++) console.log(i, 100), console.log(2);
+ }
+
+```
+
 ## `terser/transform/condition_evaluate`
 
 - size: oxc 8 vs reference 24 (no whitespaces: -16, formatted: -21)
@@ -11211,6 +11453,7 @@ console.log(Array('foo'));
 
 ## `terser/conditionals/issue_1154`
 
+- tags: `sequences`
 - size: oxc 305 vs reference 323 (no whitespaces: -18, formatted: -22)
 
 ```js
@@ -13045,6 +13288,7 @@ async () => {
 
 ## `terser/nullish/conditional_to_nullish_coalescing_2`
 
+- tags: `sequences`
 - size: oxc 226 vs reference 269 (no whitespaces: -43, formatted: -57)
 
 ```js
@@ -13064,20 +13308,18 @@ foo === undefined || foo === null ? bar : foo;
 ```diff
 --- reference
 +++ oxc
-@@ -1,9 +1,9 @@
+@@ -1,10 +1,2 @@
  const foo = id('something');
- console.log('negative cases');
+-console.log('negative cases');
 -null === foo || null === foo ? bar : foo;
 -void 0 === foo || void 0 === foo ? bar : foo;
 -null === foo || void 0 === foo ? foo : bar;
 -null === some_global || void 0 === some_global ? bar : some_global;
-+(foo === null || foo === null) && bar;
-+(foo === void 0 || foo === void 0) && bar;
-+foo == null || bar;
-+some_global == null ? bar : some_global;
- console.log('positive cases');
- foo ?? bar;
- foo ?? bar;
+-console.log('positive cases');
+-foo ?? bar;
+-foo ?? bar;
+-foo ?? bar;
++console.log('negative cases'), (foo === null || foo === null) && bar, (foo === void 0 || foo === void 0) && bar, foo == null || bar, some_global == null ? bar : some_global, console.log('positive cases'), foo ?? bar, foo ?? bar, foo ?? bar;
 
 ```
 
@@ -13538,6 +13780,7 @@ switch (b) {
 
 ## `terser/negate_iife/issue_1288`
 
+- tags: `sequences`
 - size: oxc 28 vs reference 96 (no whitespaces: -68, formatted: -81)
 
 ```js
@@ -13560,17 +13803,16 @@ else (function(z) {
 ```diff
 --- reference
 +++ oxc
-@@ -1,7 +1,5 @@
+@@ -1,7 +1,3 @@
 -w || !(function f() {})();
 -x || !(function() {
-+w;
-+x || (function() {
++w, x || (function() {
  	x = {};
- })();
+-})();
 -y ? !(function() {})() : !(function(z) {
 -	return z;
 -})(0);
-+y;
++})(), y;
 
 ```
 
