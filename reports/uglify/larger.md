@@ -56961,15 +56961,15 @@ function f5(y) {
  function f1(y) {
 +	// The constant do-while condition `c` will not be replaced.
  	var c = 9;
- 	do	;
--while (77 === c);
-+while (c === 77);
+ 	do;
+-	while (77 === c);
++	while (c === 77);
  }
  function f2(y) {
 +	// The non-constant do-while condition `c` will not be replaced.
  	var c = 5 - y;
- 	do	;
- while (c);
+ 	do;
+ 	while (c);
  }
  function f3(y) {
 +	// The constant `x` will be replaced in the do loop body.
@@ -57057,15 +57057,15 @@ function f5(y) {
  function f1(y) {
 +	// The constant do-while condition `c` will be not replaced.
  	var c = 9;
- 	do	;
--while (77 === c);
-+while (c === 77);
+ 	do;
+-	while (77 === c);
++	while (c === 77);
  }
  function f2(y) {
 +	// The non-constant do-while condition `c` will not be replaced.
  	var c = 5 - y;
- 	do	;
- while (c);
+ 	do;
+ 	while (c);
  }
  function f3(y) {
 +	// The constant `x` will be replaced in the do loop body.

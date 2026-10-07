@@ -25661,8 +25661,8 @@ try {
 -		continue;
 -	} while ([A]);
 -} catch (e) {
-+	do	;
-+while ([A]);
++	do;
++	while ([A]);
 +} catch {
  	console.log('PASS');
  }

@@ -1618,14 +1618,14 @@ function f5(y) {
  function f1(y) {
  	var c = 9;
 -	do {} while (77 === c);
-+	do	;
-+while (c === 77);
++	do;
++	while (c === 77);
  }
  function f2(y) {
  	var c = 5 - y;
 -	do {} while (c);
-+	do	;
-+while (c);
++	do;
++	while (c);
  }
  function f3(y) {
  	function fn(n) {
@@ -7833,14 +7833,14 @@ function f5(y) {
  function f1(y) {
  	var c = 9;
 -	do {} while (77 === c);
-+	do	;
-+while (c === 77);
++	do;
++	while (c === 77);
  }
  function f2(y) {
  	var c = 5 - y;
 -	do {} while (c);
-+	do	;
-+while (c);
++	do;
++	while (c);
  }
  function f3(y) {
  	function fn(n) {

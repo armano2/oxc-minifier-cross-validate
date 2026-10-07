@@ -4355,8 +4355,8 @@ console.log(f());
 -				(function() {});
 -				break;
 -			} while (false);
-+			do			;
-+while (0);
++			do;
++			while (0);
  		}
 -	} });
 -	'use strict';
@@ -4790,8 +4790,8 @@ console.log(nestedFunction());
 -		break;
 -	} while (false);
 -	return void 0 === this;
-+	do	;
-+while (0);
++	do;
++	while (0);
 +	return this === void 0;
  }
  function mixedDirectiveProbe() {
@@ -5053,8 +5053,8 @@ console.log(enclosingBlockBreak());
 -	while (false);
 -	'use strict';
 -	return void 0 === this;
-+	do	;
-+while (0);
++	do;
++	while (0);
 +	return this === void 0;
  }
  function nestedStringContinue() {
@@ -5063,8 +5063,8 @@ console.log(enclosingBlockBreak());
 -	while (false);
 -	'use strict';
 -	return void 0 === this;
-+	do	;
-+while (0);
++	do;
++	while (0);
 +	return this === void 0;
  }
  function enclosingBlockBreak() {
@@ -5073,8 +5073,8 @@ console.log(enclosingBlockBreak());
 -	while (false);
 -	'use strict';
 -	return void 0 === this;
-+	do	;
-+while (0);
++	do;
++	while (0);
 +	return this === void 0;
  }
  console.log(directBreak());
@@ -5402,8 +5402,8 @@ console.log(switchParent(1));
 -				(function() {});
 -				break;
 -			} while (false);
-+			do			;
-+while (0);
++			do;
++			while (0);
  		}
 -	} });
 -	'use strict';
@@ -5425,12 +5425,12 @@ console.log(switchParent(1));
 -			(function() {});
 -			break;
 -		} while (false);
-+		case 1: do		;
-+while (0);
-+		case 2: do		;
-+while (0);
-+		case 3: do		;
-+while (0);
++		case 1: do;
++		while (0);
++		case 2: do;
++		while (0);
++		case 3: do;
++		while (0);
  	}
 -	'use strict';
 -	return void 0 === this;
