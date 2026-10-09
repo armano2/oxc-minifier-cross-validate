@@ -1,6 +1,6 @@
 # terser / larger — Output longer than expected (possible missing optimization)
 
-Fixtures: 979
+Fixtures: 978
 
 [← terser](README.md) · [← all families](../README.md)
 
@@ -1952,35 +1952,6 @@ var a;
 -for (var i = 0; i < 2; i++) void 0, a = {}, console.log(a);
 +for (var i = 0; i < 2; i++) a = void 0, a = {}, console.log(a);
  var a;
-
-```
-
-## `terser/drop_unused/issue_3192`
-
-- tags: `remove unused`
-- size: oxc 125 vs reference 123 (no whitespaces: +2, formatted: +4)
-
-```js
-(function(a) {
-	console.log(a = 'foo', arguments[0]);
-})('bar');
-(function(a) {
-	'use strict';
-	console.log(a = 'foo', arguments[0]);
-})('bar');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -3,5 +3,5 @@
- })('bar');
- (function(a) {
- 	'use strict';
--	console.log('foo', arguments[0]);
-+	console.log(a = 'foo', arguments[0]);
- })('bar');
 
 ```
 
@@ -22113,6 +22084,27 @@ export { _setToString };
 
 ```
 
+## `terser/identity/inline_identity_inline_function`
+
+- tags: `join vars`, `remove unused`, `3 iterations`
+- size: oxc 55 vs reference 17 (no whitespaces: +38, formatted: +55)
+
+```js
+const id = (x) => x;
+console.log(id((x) => x + 1)(1), id(((x) => x + 1)(2)));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,2 @@
+-console.log(2, 3);
++const id = (x) => x;
++console.log(id((x) => x + 1)(1), id(((x) => 3)(2)));
+
+```
+
 ## `terser/collapse_vars/collapse_vars_misc1`
 
 - tags: `join vars`, `sequences`, `remove unused`
@@ -22582,27 +22574,6 @@ console.log(b = 3);
 +function g() {}
 +function h() {}
 +console.log(b = 3);
-
-```
-
-## `terser/identity/inline_identity_inline_function`
-
-- tags: `join vars`, `remove unused`, `3 iterations`
-- size: oxc 57 vs reference 17 (no whitespaces: +40, formatted: +59)
-
-```js
-const id = (x) => x;
-console.log(id((x) => x + 1)(1), id(((x) => x + 1)(2)));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,2 @@
--console.log(2, 3);
-+const id = (x) => x;
-+console.log(id((x) => x + 1)(1), id(((x) => x + 1)(2)));
 
 ```
 

@@ -1,6 +1,6 @@
 # uglify / larger — Output longer than expected (possible missing optimization)
 
-Fixtures: 1738
+Fixtures: 1737
 
 [← uglify](README.md) · [← all families](../README.md)
 
@@ -83,6 +83,25 @@ console.log(((a) => a++)(console));
 @@ -1 +1 @@
 -console.log(((a) => +a)(console));
 +console.log(((a) => a++)(console));
+
+```
+
+## `uglify/arrows/reduce_iife_1`
+
+- tags: `join vars`, `remove unused`
+- size: oxc 25 vs reference 24 (no whitespaces: +1, formatted: +3)
+
+```js
+((a) => console.log(a + a))(21);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-(() => console.log(42))();
++((a) => console.log(42))(21);
 
 ```
 
@@ -992,6 +1011,31 @@ function f() {
 
 ```
 
+## `uglify/drop-unused/issue_3192_2`
+
+- tags: `remove unused`
+- size: oxc 67 vs reference 66 (no whitespaces: +1, formatted: +1)
+
+```js
+'use strict';
+(function(a) {
+	console.log(a = 'foo', arguments[0]);
+})('bar');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ 'use strict';
+-(function() {
++(function(a) {
+ 	console.log('foo', arguments[0]);
+ })('bar');
+
+```
+
 ## `uglify/drop-unused/issue_5271`
 
 - tags: `join vars`, `remove unused`
@@ -1564,6 +1608,37 @@ console.log(o[void 0]);
 +var o = {};
 +o[void 0] = 1;
  console.log(o[void 0]);
+
+```
+
+## `uglify/keep_fargs/issue_3192`
+
+- tags: `remove unused`
+- size: oxc 123 vs reference 122 (no whitespaces: +1, formatted: +1)
+
+```js
+(function(a) {
+	console.log(a = 'foo', arguments[0]);
+})('bar');
+(function(a) {
+	'use strict';
+	console.log(a = 'foo', arguments[0]);
+})('bar');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+ (function(a) {
+ 	console.log(a = 'foo', arguments[0]);
+ })('bar');
+-(function() {
++(function(a) {
+ 	'use strict';
+ 	console.log('foo', arguments[0]);
+ })('bar');
 
 ```
 
@@ -2919,25 +2994,6 @@ f();
 +	return Math.ceil(a);
 +}(Math.random()));
  f();
-
-```
-
-## `uglify/arrows/reduce_iife_1`
-
-- tags: `join vars`, `remove unused`
-- size: oxc 26 vs reference 24 (no whitespaces: +2, formatted: +6)
-
-```js
-((a) => console.log(a + a))(21);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--(() => console.log(42))();
-+((a) => console.log(a + a))(21);
 
 ```
 
@@ -4854,35 +4910,6 @@ console.log(a);
  	}
  }
  f();
-
-```
-
-## `uglify/drop-unused/issue_3192_1`
-
-- tags: `remove unused`
-- size: oxc 125 vs reference 123 (no whitespaces: +2, formatted: +4)
-
-```js
-(function(a) {
-	console.log(a = 'foo', arguments[0]);
-})('bar');
-(function(a) {
-	'use strict';
-	console.log(a = 'foo', arguments[0]);
-})('bar');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -3,5 +3,5 @@
- })('bar');
- (function(a) {
- 	'use strict';
--	console.log('foo', arguments[0]);
-+	console.log(a = 'foo', arguments[0]);
- })('bar');
 
 ```
 
@@ -8219,32 +8246,6 @@ console.log(a);
 
 ```
 
-## `uglify/drop-unused/issue_3192_2`
-
-- tags: `remove unused`
-- size: oxc 69 vs reference 66 (no whitespaces: +3, formatted: +5)
-
-```js
-'use strict';
-(function(a) {
-	console.log(a = 'foo', arguments[0]);
-})('bar');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
- 'use strict';
--(function() {
--	console.log('foo', arguments[0]);
-+(function(a) {
-+	console.log(a = 'foo', arguments[0]);
- })('bar');
-
-```
-
 ## `uglify/drop-unused/issue_3598`
 
 - tags: `join vars`, `remove unused`
@@ -9159,38 +9160,6 @@ console.log(a);
  	function f2() {
  		a++;
  	}
-
-```
-
-## `uglify/keep_fargs/issue_3192`
-
-- tags: `remove unused`
-- size: oxc 125 vs reference 122 (no whitespaces: +3, formatted: +5)
-
-```js
-(function(a) {
-	console.log(a = 'foo', arguments[0]);
-})('bar');
-(function(a) {
-	'use strict';
-	console.log(a = 'foo', arguments[0]);
-})('bar');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
- (function(a) {
- 	console.log(a = 'foo', arguments[0]);
- })('bar');
--(function() {
-+(function(a) {
- 	'use strict';
--	console.log('foo', arguments[0]);
-+	console.log(a = 'foo', arguments[0]);
- })('bar');
 
 ```
 
@@ -24700,6 +24669,53 @@ console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
 
 ```
 
+## `uglify/arrows/func_to_arrow`
+
+- tags: `type:module`
+- size: oxc 56 vs reference 45 (no whitespaces: +11, formatted: +9)
+
+```js
+console.log(function(a, b, c) {
+	return b + a + c + c;
+}('A', 'P', 'S'));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,3 @@
+-console.log(((a, b, c) => b + a + c + c)('A', 'P', 'S'));
++console.log(function(a, b, c) {
++	return 'PASS';
++}('A', 'P', 'S'));
+
+```
+
+## `uglify/arrows/func_to_arrow_var`
+
+- tags: `type:module`, `join vars`, `remove unused`
+- size: oxc 56 vs reference 45 (no whitespaces: +11, formatted: +9)
+
+```js
+var f = function(a, b, c) {
+	return b + a + c + c;
+};
+console.log(f('A', 'P', 'S'));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,3 @@
+-console.log(((a, b, c) => b + a + c + c)('A', 'P', 'S'));
++console.log(function(a, b, c) {
++	return 'PASS';
++}('A', 'P', 'S'));
+
+```
+
 ## `uglify/awaits/inline_block`
 
 - size: oxc 148 vs reference 137 (no whitespaces: +11, formatted: +18)
@@ -27806,53 +27822,6 @@ switch (void 0) {
 +	case void 0:
 +	case 42: console.log('FAIL');
  }
-
-```
-
-## `uglify/arrows/func_to_arrow`
-
-- tags: `type:module`
-- size: oxc 58 vs reference 45 (no whitespaces: +13, formatted: +16)
-
-```js
-console.log(function(a, b, c) {
-	return b + a + c + c;
-}('A', 'P', 'S'));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,3 @@
--console.log(((a, b, c) => b + a + c + c)('A', 'P', 'S'));
-+console.log(function(a, b, c) {
-+	return b + a + c + c;
-+}('A', 'P', 'S'));
-
-```
-
-## `uglify/arrows/func_to_arrow_var`
-
-- tags: `type:module`, `join vars`, `remove unused`
-- size: oxc 58 vs reference 45 (no whitespaces: +13, formatted: +16)
-
-```js
-var f = function(a, b, c) {
-	return b + a + c + c;
-};
-console.log(f('A', 'P', 'S'));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,3 @@
--console.log(((a, b, c) => b + a + c + c)('A', 'P', 'S'));
-+console.log(function(a, b, c) {
-+	return b + a + c + c;
-+}('A', 'P', 'S'));
 
 ```
 
@@ -35076,6 +35045,35 @@ a = f(new function() {
 
 ```
 
+## `uglify/awaits/async_to_arrow`
+
+- tags: `type:module`, `join vars`, `remove unused`
+- size: oxc 90 vs reference 70 (no whitespaces: +20, formatted: +16)
+
+```js
+(async function() {
+	var f = async function(a, b, c) {
+		return b + a + c + c;
+	};
+	console.log(await f('A', 'P', 'S'));
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,5 @@
+-(async () => {
+-	console.log(await (async (a, b, c) => b + a + c + c)('A', 'P', 'S'));
++(async function() {
++	console.log(await async function(a, b, c) {
++		return 'PASS';
++	}('A', 'P', 'S'));
+ })();
+
+```
+
 ## `uglify/awaits/await_void_2`
 
 - tags: `sequences`
@@ -36887,35 +36885,6 @@ console.log(a[0], a.length);
 -console.log(1, 2);
 +var a = [1, 2];
 +console.log(a[0], a.length);
-
-```
-
-## `uglify/awaits/async_to_arrow`
-
-- tags: `type:module`, `join vars`, `remove unused`
-- size: oxc 92 vs reference 70 (no whitespaces: +22, formatted: +23)
-
-```js
-(async function() {
-	var f = async function(a, b, c) {
-		return b + a + c + c;
-	};
-	console.log(await f('A', 'P', 'S'));
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,5 @@
--(async () => {
--	console.log(await (async (a, b, c) => b + a + c + c)('A', 'P', 'S'));
-+(async function() {
-+	console.log(await async function(a, b, c) {
-+		return b + a + c + c;
-+	}('A', 'P', 'S'));
- })();
 
 ```
 

@@ -10255,6 +10255,50 @@ console.log(new C(1, 2, 3), new C(4, 5, 6));
 
 ```
 
+## `swc/issues/10859`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 535 vs reference 490 (no whitespaces: +45, formatted: +44)
+
+```js
+// Test cases for arrow function IIFE in sequence expressions (Issue #10859)
+// Case 1: Simple arrow IIFE in sequence expression
+console.log('start'), (() => {
+	console.log('middle');
+})(), console.log('end');
+// Case 2: Arrow IIFE returning value in sequence
+var x = (console.log('before'), (() => 42)(), console.log('after'));
+// Case 3: Multiple arrow IIFEs in sequence
+(() => {
+	console.log('first');
+})(), (() => {
+	console.log('second');
+})();
+// Case 4: Arrow IIFE with parameters in sequence
+var y = (console.log('setup'), ((param) => param + 1)(5), console.log('done'));
+// Case 5: Arrow IIFE expression (not block) in sequence
+var a = (console.log('expr'), (() => 42 + 8)(), console.log('result'));
+// Case 6: Arrow IIFE with simple expression body
+var b = (1, (() => 2 + 3)(), 4);
+// Case 7: Arrow IIFE with single parameter
+var c = (0, ((x) => x * 2)(10), 1);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -3,6 +3,7 @@
+ console.log('start'), console.log('middle'), console.log('end');
+ // Case 2: Arrow IIFE returning value in sequence
+ var x = (console.log('before'), console.log('after'));
++// Case 3: Multiple arrow IIFEs in sequence
+ console.log('first'), console.log('second');
+ // Case 4: Arrow IIFE with parameters in sequence
+ var y = (console.log('setup'), console.log('done')), a = (console.log('expr'), console.log('result')), b = 4, c = 1;
+
+```
+
 ## `swc/issues/6279/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -12507,51 +12551,6 @@ var y = constants.second;
 +	return x === constants.first || x === constants.second;
  }
 +constants.second;
-
-```
-
-## `swc/issues/10859`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 570 vs reference 490 (no whitespaces: +80, formatted: +93)
-
-```js
-// Test cases for arrow function IIFE in sequence expressions (Issue #10859)
-// Case 1: Simple arrow IIFE in sequence expression
-console.log('start'), (() => {
-	console.log('middle');
-})(), console.log('end');
-// Case 2: Arrow IIFE returning value in sequence
-var x = (console.log('before'), (() => 42)(), console.log('after'));
-// Case 3: Multiple arrow IIFEs in sequence
-(() => {
-	console.log('first');
-})(), (() => {
-	console.log('second');
-})();
-// Case 4: Arrow IIFE with parameters in sequence
-var y = (console.log('setup'), ((param) => param + 1)(5), console.log('done'));
-// Case 5: Arrow IIFE expression (not block) in sequence
-var a = (console.log('expr'), (() => 42 + 8)(), console.log('result'));
-// Case 6: Arrow IIFE with simple expression body
-var b = (1, (() => 2 + 3)(), 4);
-// Case 7: Arrow IIFE with single parameter
-var c = (0, ((x) => x * 2)(10), 1);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -3,6 +3,7 @@
- console.log('start'), console.log('middle'), console.log('end');
- // Case 2: Arrow IIFE returning value in sequence
- var x = (console.log('before'), console.log('after'));
-+// Case 3: Multiple arrow IIFEs in sequence
- console.log('first'), console.log('second');
- // Case 4: Arrow IIFE with parameters in sequence
--var y = (console.log('setup'), console.log('done')), a = (console.log('expr'), console.log('result')), b = 4, c = 1;
-+var y = (console.log('setup'), ((param) => param + 1)(5), console.log('done')), a = (console.log('expr'), console.log('result')), b = 4, c = (((x) => x * 2)(10), 1);
 
 ```
 
