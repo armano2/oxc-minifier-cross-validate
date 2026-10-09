@@ -25975,6 +25975,72 @@ console.log(a);
 
 ```
 
+## `terser/evaluate/delete_expr_1`
+
+- size: oxc 157 vs reference 96 (no whitespaces: +61, formatted: +64)
+
+```js
+console.log(delete undefined);
+console.log(delete void 0);
+console.log(delete Infinity);
+console.log(delete (1 / 0));
+console.log(delete NaN);
+console.log(delete (0 / 0));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+-console.log(!1);
+-console.log(!0);
+-console.log(!1);
+-console.log(!0);
+-console.log(!1);
+-console.log(!0);
++console.log(delete undefined);
++console.log(delete void 0);
++console.log(delete Infinity);
++console.log(delete (1 / 0));
++console.log(delete NaN);
++console.log(delete 0);
+
+```
+
+## `terser/evaluate/delete_expr_2`
+
+- size: oxc 157 vs reference 96 (no whitespaces: +61, formatted: +64)
+
+```js
+console.log(delete undefined);
+console.log(delete void 0);
+console.log(delete Infinity);
+console.log(delete (1 / 0));
+console.log(delete NaN);
+console.log(delete (0 / 0));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+-console.log(!1);
+-console.log(!0);
+-console.log(!1);
+-console.log(!0);
+-console.log(!1);
+-console.log(!0);
++console.log(delete undefined);
++console.log(delete void 0);
++console.log(delete Infinity);
++console.log(delete (1 / 0));
++console.log(delete NaN);
++console.log(delete 0);
+
+```
+
 ## `terser/functions/issue_2657`
 
 - tags: `join vars`, `sequences`, `remove unused`, `2 iterations`
@@ -26229,72 +26295,6 @@ console.log(delete (false || 0 / 0));
 +console.log(delete void 0);
 +console.log(delete void 0);
 +console.log(delete (0, Infinity));
-+console.log(delete (1 / 0));
-+console.log(delete NaN);
-+console.log(delete NaN);
-
-```
-
-## `terser/evaluate/delete_expr_1`
-
-- size: oxc 159 vs reference 96 (no whitespaces: +63, formatted: +66)
-
-```js
-console.log(delete undefined);
-console.log(delete void 0);
-console.log(delete Infinity);
-console.log(delete (1 / 0));
-console.log(delete NaN);
-console.log(delete (0 / 0));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,6 @@
--console.log(!1);
--console.log(!0);
--console.log(!1);
--console.log(!0);
--console.log(!1);
--console.log(!0);
-+console.log(delete undefined);
-+console.log(delete void 0);
-+console.log(delete Infinity);
-+console.log(delete (1 / 0));
-+console.log(delete NaN);
-+console.log(delete NaN);
-
-```
-
-## `terser/evaluate/delete_expr_2`
-
-- size: oxc 159 vs reference 96 (no whitespaces: +63, formatted: +66)
-
-```js
-console.log(delete undefined);
-console.log(delete void 0);
-console.log(delete Infinity);
-console.log(delete (1 / 0));
-console.log(delete NaN);
-console.log(delete (0 / 0));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,6 @@
--console.log(!1);
--console.log(!0);
--console.log(!1);
--console.log(!0);
--console.log(!1);
--console.log(!0);
-+console.log(delete undefined);
-+console.log(delete void 0);
-+console.log(delete Infinity);
 +console.log(delete (1 / 0));
 +console.log(delete NaN);
 +console.log(delete NaN);

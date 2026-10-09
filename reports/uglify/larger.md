@@ -13568,6 +13568,66 @@ function f() {
 
 ```
 
+## `uglify/evaluate/delete_expr_1`
+
+- size: oxc 157 vs reference 152 (no whitespaces: +5, formatted: +1)
+
+```js
+console.log(delete undefined);
+console.log(delete void 0);
+console.log(delete Infinity);
+console.log(delete (1 / 0));
+console.log(delete NaN);
+console.log(delete (0 / 0));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+ console.log(delete undefined);
+-console.log((void 0, !0));
++console.log(delete void 0);
+ console.log(delete Infinity);
+-console.log((1 / 0, !0));
++console.log(delete (1 / 0));
+ console.log(delete NaN);
+-console.log((0 / 0, !0));
++console.log(delete 0);
+
+```
+
+## `uglify/evaluate/delete_expr_2`
+
+- size: oxc 157 vs reference 152 (no whitespaces: +5, formatted: +1)
+
+```js
+console.log(delete undefined);
+console.log(delete void 0);
+console.log(delete Infinity);
+console.log(delete (1 / 0));
+console.log(delete NaN);
+console.log(delete (0 / 0));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+ console.log(delete undefined);
+-console.log((void 0, !0));
++console.log(delete void 0);
+ console.log(delete Infinity);
+-console.log((1 / 0, !0));
++console.log(delete (1 / 0));
+ console.log(delete NaN);
+-console.log((0 / 0, !0));
++console.log(delete 0);
+
+```
+
 ## `uglify/evaluate/issue_4035`
 
 - tags: `join vars`
@@ -18364,66 +18424,6 @@ for (var a = 0;;);
 @@ -1 +1 @@
 -for (;;);
 +for (var a = 0;;);
-
-```
-
-## `uglify/evaluate/delete_expr_1`
-
-- size: oxc 159 vs reference 152 (no whitespaces: +7, formatted: +3)
-
-```js
-console.log(delete undefined);
-console.log(delete void 0);
-console.log(delete Infinity);
-console.log(delete (1 / 0));
-console.log(delete NaN);
-console.log(delete (0 / 0));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,6 @@
- console.log(delete undefined);
--console.log((void 0, !0));
-+console.log(delete void 0);
- console.log(delete Infinity);
--console.log((1 / 0, !0));
-+console.log(delete (1 / 0));
-+console.log(delete NaN);
- console.log(delete NaN);
--console.log((0 / 0, !0));
-
-```
-
-## `uglify/evaluate/delete_expr_2`
-
-- size: oxc 159 vs reference 152 (no whitespaces: +7, formatted: +3)
-
-```js
-console.log(delete undefined);
-console.log(delete void 0);
-console.log(delete Infinity);
-console.log(delete (1 / 0));
-console.log(delete NaN);
-console.log(delete (0 / 0));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,6 @@
- console.log(delete undefined);
--console.log((void 0, !0));
-+console.log(delete void 0);
- console.log(delete Infinity);
--console.log((1 / 0, !0));
-+console.log(delete (1 / 0));
-+console.log(delete NaN);
- console.log(delete NaN);
--console.log((0 / 0, !0));
 
 ```
 
