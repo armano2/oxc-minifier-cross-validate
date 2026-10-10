@@ -1,6 +1,6 @@
 # uglify / differs — Output differs at equal length
 
-Fixtures: 232
+Fixtures: 233
 
 [← uglify](README.md) · [← all families](../README.md)
 
@@ -1437,6 +1437,62 @@ if (some_condition()) {
 
 ```
 
+## `uglify/conditionals/delete_conditional_1`
+
+- tags: `sequences`
+
+```js
+console.log(delete (1 ? undefined : x));
+console.log(delete (1 ? void 0 : x));
+console.log(delete (1 ? Infinity : x));
+console.log(delete (1 ? 1 / 0 : x));
+console.log(delete (1 ? NaN : x));
+console.log(delete (1 ? 0 / 0 : x));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1 @@
+-console.log(!0);
+-console.log(!0);
+-console.log(!0);
+-console.log(!0);
+-console.log(!0);
+-console.log(!0);
++console.log(!0), console.log(!0), console.log(!0), console.log(!0), console.log(!0), console.log(!0);
+
+```
+
+## `uglify/conditionals/delete_conditional_2`
+
+- tags: `sequences`
+
+```js
+console.log(delete (0 ? x : undefined));
+console.log(delete (0 ? x : void 0));
+console.log(delete (0 ? x : Infinity));
+console.log(delete (0 ? x : 1 / 0));
+console.log(delete (0 ? x : NaN));
+console.log(delete (0 ? x : 0 / 0));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1 @@
+-console.log(!0);
+-console.log(!0);
+-console.log(!0);
+-console.log(!0);
+-console.log(!0);
+-console.log(!0);
++console.log(!0), console.log(!0), console.log(!0), console.log(!0), console.log(!0), console.log(!0);
+
+```
+
 ## `uglify/conditionals/ifs_1`
 
 - tags: `sequences`
@@ -1670,27 +1726,6 @@ console.log(function(a) {
 -		const a = ++b;
 +		let a = b;
  	}
- }());
-
-```
-
-## `uglify/dead-code/issue_3406`
-
-
-```js
-console.log(function f(a) {
-	return delete (f = a);
-}());
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1,3 @@
- console.log(function f(a) {
--	return delete (0, a);
-+	return delete (f = a);
  }());
 
 ```

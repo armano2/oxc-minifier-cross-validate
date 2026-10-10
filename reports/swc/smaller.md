@@ -1,6 +1,6 @@
 # swc / smaller — Output shorter than expected (possible over-optimization / bug)
 
-Fixtures: 123
+Fixtures: 124
 
 [← swc](README.md) · [← all families](../README.md)
 
@@ -2597,6 +2597,32 @@ on: function(name, callback, context) {
  		callback,
  		context,
  		ctx: context || this
+
+```
+
+## `swc/issues/12189`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 234 vs reference 248 (no whitespaces: -14, formatted: -17)
+
+```js
+console.log(delete (console.log('binary') + 1));
+console.log(delete !console.log('unary'));
+console.log(delete (console.log('conditional') ? 1 : 2));
+console.log(delete console.log('call'));
+console.log(delete !0);
+console.log(delete (1 + 2));
+console.log(delete (false ? 1 : 2));
+console.log(delete undefined, delete NaN, delete Infinity);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-console.log(delete (console.log('binary') + 1)), console.log(delete !console.log('unary')), console.log(delete (console.log('conditional') ? 1 : 2)), console.log(delete console.log('call')), console.log(!0), console.log(!0), console.log(!0), console.log(!1, !1, !1);
++console.log((console.log('binary') + 1, !0)), console.log((console.log('unary'), !0)), console.log((console.log('conditional'), !0)), console.log((console.log('call'), !0)), console.log(!0), console.log(!0), console.log(!0), console.log(!1, !1, !1);
 
 ```
 

@@ -1,6 +1,6 @@
 # swc / larger — Output longer than expected (possible missing optimization)
 
-Fixtures: 364
+Fixtures: 363
 
 [← swc](README.md) · [← all families](../README.md)
 
@@ -7615,6 +7615,37 @@ export default function useMeow() {
 
 ```
 
+## `swc/issues/12190`
+
+- tags: `type:cjs`, `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 197 vs reference 174 (no whitespaces: +23, formatted: +26)
+
+```js
+function deleteLocal() {
+	var local = 1;
+	return delete local;
+}
+console.log(deleteLocal());
+console.log(delete undefined);
+__swc_delete_12190 = 1;
+console.log(delete __swc_delete_12190);
+console.log(typeof __swc_delete_12190);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,5 @@
+ function deleteLocal() {
+-	return !1;
++	var local = 1;
++	return delete local;
+ }
+ console.log(deleteLocal()), console.log(!1), __swc_delete_12190 = 1, console.log(delete __swc_delete_12190), console.log(typeof __swc_delete_12190);
+
+```
+
 ## `swc/issues/5680`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
@@ -9741,38 +9772,6 @@ foo(1);
 
 ```
 
-## `swc/issues/12190`
-
-- tags: `type:cjs`, `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 211 vs reference 174 (no whitespaces: +37, formatted: +40)
-
-```js
-function deleteLocal() {
-	var local = 1;
-	return delete local;
-}
-console.log(deleteLocal());
-console.log(delete undefined);
-__swc_delete_12190 = 1;
-console.log(delete __swc_delete_12190);
-console.log(typeof __swc_delete_12190);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,5 @@
- function deleteLocal() {
--	return !1;
-+	var local = 1;
-+	return delete local;
- }
--console.log(deleteLocal()), console.log(!1), __swc_delete_12190 = 1, console.log(delete __swc_delete_12190), console.log(typeof __swc_delete_12190);
-+console.log(deleteLocal()), console.log(delete undefined), __swc_delete_12190 = 1, console.log(delete __swc_delete_12190), console.log(typeof __swc_delete_12190);
-
-```
-
 ## `swc/pr/6169/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -11059,32 +11058,6 @@ export const environment = environmentResolver();
 -export const environment = 'staging';
 +const environmentResolver = () => 'staging';
 +export const environment = environmentResolver();
-
-```
-
-## `swc/issues/12189`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 301 vs reference 248 (no whitespaces: +53, formatted: +54)
-
-```js
-console.log(delete (console.log('binary') + 1));
-console.log(delete !console.log('unary'));
-console.log(delete (console.log('conditional') ? 1 : 2));
-console.log(delete console.log('call'));
-console.log(delete !0);
-console.log(delete (1 + 2));
-console.log(delete (false ? 1 : 2));
-console.log(delete undefined, delete NaN, delete Infinity);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--console.log(delete (console.log('binary') + 1)), console.log(delete !console.log('unary')), console.log(delete (console.log('conditional') ? 1 : 2)), console.log(delete console.log('call')), console.log(!0), console.log(!0), console.log(!0), console.log(!1, !1, !1);
-+console.log(delete (console.log('binary') + 1)), console.log(delete !console.log('unary')), console.log(delete (console.log('conditional') ? 1 : 2)), console.log(delete console.log('call')), console.log(delete !0), console.log(delete 3), console.log(delete 2), console.log(delete undefined, delete NaN, delete Infinity);
 
 ```
 

@@ -1,6 +1,6 @@
 # terser / differs — Output differs at equal length
 
-Fixtures: 97
+Fixtures: 101
 
 [← terser](README.md) · [← all families](../README.md)
 
@@ -511,6 +511,62 @@ if (y) {
 -var x;
 -y, x = 2;
 +var x = (y, 2);
+
+```
+
+## `terser/conditionals/delete_conditional_1`
+
+- tags: `sequences`
+
+```js
+console.log(delete (1 ? undefined : x));
+console.log(delete (1 ? void 0 : x));
+console.log(delete (1 ? Infinity : x));
+console.log(delete (1 ? 1 / 0 : x));
+console.log(delete (1 ? NaN : x));
+console.log(delete (1 ? 0 / 0 : x));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1 @@
+-console.log(!0);
+-console.log(!0);
+-console.log(!0);
+-console.log(!0);
+-console.log(!0);
+-console.log(!0);
++console.log(!0), console.log(!0), console.log(!0), console.log(!0), console.log(!0), console.log(!0);
+
+```
+
+## `terser/conditionals/delete_conditional_2`
+
+- tags: `sequences`
+
+```js
+console.log(delete (0 ? x : undefined));
+console.log(delete (0 ? x : void 0));
+console.log(delete (0 ? x : Infinity));
+console.log(delete (0 ? x : 1 / 0));
+console.log(delete (0 ? x : NaN));
+console.log(delete (0 ? x : 0 / 0));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1 @@
+-console.log(!0);
+-console.log(!0);
+-console.log(!0);
+-console.log(!0);
+-console.log(!0);
+-console.log(!0);
++console.log(!0), console.log(!0), console.log(!0), console.log(!0), console.log(!0), console.log(!0);
 
 ```
 
@@ -3011,6 +3067,56 @@ function f() {
 +	else if (code == 18) var bitsLength = 7, bitsOffset = 11, what = len = 0;
  	var repeatLength = this.getBits(bitsLength) + bitsOffset;
  }
+
+```
+
+## `terser/sequences/delete_seq_4`
+
+- tags: `sequences`
+
+```js
+function f() {}
+console.log(delete (f(), undefined));
+console.log(delete (f(), void 0));
+console.log(delete (f(), Infinity));
+console.log(delete (f(), 1 / 0));
+console.log(delete (f(), NaN));
+console.log(delete (f(), 0 / 0));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+ function f() {}
+-console.log((f(), !0)), console.log((f(), !0)), console.log((f(), !1)), console.log((f(), !1)), console.log((f(), !0)), console.log((f(), !0));
++console.log((f(), !0)), console.log((f(), !0)), console.log((f(), !0)), console.log((f(), !0)), console.log((f(), !0)), console.log((f(), !0));
+
+```
+
+## `terser/sequences/delete_seq_5`
+
+- tags: `sequences`
+
+```js
+function f() {}
+console.log(delete (f(), undefined));
+console.log(delete (f(), void 0));
+console.log(delete (f(), Infinity));
+console.log(delete (f(), 1 / 0));
+console.log(delete (f(), NaN));
+console.log(delete (f(), 0 / 0));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+ function f() {}
+-console.log((f(), !0)), console.log((f(), !0)), console.log((f(), !1)), console.log((f(), !1)), console.log((f(), !0)), console.log((f(), !0));
++console.log((f(), !0)), console.log((f(), !0)), console.log((f(), !0)), console.log((f(), !0)), console.log((f(), !0)), console.log((f(), !0));
 
 ```
 

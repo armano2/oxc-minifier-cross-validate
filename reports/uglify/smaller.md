@@ -1,6 +1,6 @@
 # uglify / smaller — Output shorter than expected (possible over-optimization / bug)
 
-Fixtures: 1099
+Fixtures: 1111
 
 [← uglify](README.md) · [← all families](../README.md)
 
@@ -994,27 +994,6 @@ b && 0[a++], console.log(a);
 +		b-- && console.log('PASS');
 +	} catch {}
 +})(1);
-
-```
-
-## `uglify/evaluate/issue_5362_1`
-
-- tags: `join vars`
-- size: oxc 37 vs reference 38 (no whitespaces: -1, formatted: -1)
-
-```js
-var a = -console;
-console.log(delete +a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,2 @@
- var a = -console;
--console.log((+a, true));
-+console.log(delete +a);
 
 ```
 
@@ -4247,6 +4226,27 @@ console.log('foo' in {
 
 ```
 
+## `uglify/evaluate/issue_5362_1`
+
+- tags: `join vars`
+- size: oxc 36 vs reference 38 (no whitespaces: -2, formatted: -2)
+
+```js
+var a = -console;
+console.log(delete +a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+ var a = -console;
+-console.log((+a, true));
++console.log((+a, !0));
+
+```
+
 ## `uglify/evaluate/truthy_loops`
 
 - size: oxc 30 vs reference 32 (no whitespaces: -2, formatted: -13)
@@ -6632,6 +6632,36 @@ console.log(function f(a) {
 
 ```
 
+## `uglify/reduce_vars/issue_4568`
+
+- tags: `join vars`, `sequences`, `remove unused`, `2 iterations`
+- size: oxc 84 vs reference 86 (no whitespaces: -2, formatted: +1)
+
+```js
+(function(a) {
+	a && console.log('FAIL');
+	if (1) do {
+		if (!console.log('PASS')) break;
+	} while (1);
+})(!(0 !== delete NaN));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,6 @@
+ (function(a) {
+-	for (a && console.log('FAIL'), 1; console.log('PASS');) 1;
+-})(!(0 !== delete NaN));
++	a && console.log('FAIL');
++	do
++		if (!console.log('PASS')) break;
++	while (1);
++})(!1);
+
+```
+
 ## `uglify/reduce_vars/unary_delete`
 
 - tags: `join vars`, `remove unused`
@@ -7594,24 +7624,6 @@ console.log('PASS');
 -	a();
  }
  console.log('PASS');
-
-```
-
-## `uglify/booleans/de_morgan_1c`
-
-- size: oxc 24 vs reference 27 (no whitespaces: -3, formatted: -5)
-
-```js
-console.log(delete (NaN && NaN));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--console.log(delete (0, NaN));
-+console.log(delete NaN);
 
 ```
 
@@ -9077,32 +9089,6 @@ console.log(a);
 -} catch (e) {}
 +} catch {}
  console.log(a);
-
-```
-
-## `uglify/dead-code/issue_4051`
-
-- size: oxc 42 vs reference 45 (no whitespaces: -3, formatted: -4)
-
-```js
-try {
-	delete (A = A);
-} catch (e) {
-	console.log('PASS');
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,5 @@
- try {
- 	delete (A = A);
--} catch (e) {
-+} catch {
- 	console.log('PASS');
- }
 
 ```
 
@@ -16528,6 +16514,28 @@ console.log(a);
 
 ```
 
+## `uglify/dead-code/issue_3406`
+
+- size: oxc 44 vs reference 49 (no whitespaces: -5, formatted: -4)
+
+```js
+console.log(function f(a) {
+	return delete (f = a);
+}());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ console.log(function f(a) {
+-	return delete (0, a);
++	return f = a, !0;
+ }());
+
+```
+
 ## `uglify/destructured/funarg_reduce_vars_4`
 
 - tags: `join vars`
@@ -21392,6 +21400,34 @@ f(['PASS']);
 
 ```
 
+## `uglify/destructured/issue_4436_NaN`
+
+- tags: `remove unused`
+- size: oxc 70 vs reference 78 (no whitespaces: -8, formatted: -8)
+
+```js
+console.log(function({ [delete NaN]: a }) {
+	var NaN;
+	return a;
+}({
+	true: 'FAIL',
+	false: 'PASS'
+}));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+-console.log(function({ [delete NaN]: a }) {
++console.log(function({ [!1]: a }) {
+ 	return a;
+ }({
+ 	true: 'FAIL',
+
+```
+
 ## `uglify/destructured/issue_5017`
 
 - tags: `join vars`
@@ -24304,6 +24340,45 @@ for (var i = 0; i < 2; i++) (function f([a]) {
 
 ```
 
+## `uglify/evaluate/issue_4035`
+
+- tags: `join vars`
+- size: oxc 144 vs reference 154 (no whitespaces: -10, formatted: -10)
+
+```js
+var a = 0;
+(function() {
+	var b = --a;
+	console.log(delete (0 + b));
+	console.log(delete (1 * b));
+	console.log(delete (b + 0));
+	console.log(delete (b - 0));
+	console.log(delete (b / 1));
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,9 @@
+ var a = 0;
+ (function() {
+ 	var b = --a;
+-	console.log((0 + b, true));
+-	console.log((1 * b, true));
+-	console.log((0 + b, true));
+-	console.log((b - 0, true));
+-	console.log((b / 1, true));
++	console.log((0 + b, !0));
++	console.log((1 * b, !0));
++	console.log((b + 0, !0));
++	console.log((b - 0, !0));
++	console.log((b / 1, !0));
+ })();
+
+```
+
 ## `uglify/evaluate/issue_5940`
 
 - tags: `sequences`, `remove unused`
@@ -24796,6 +24871,24 @@ for ((a) => {
 
 ```
 
+## `uglify/booleans/de_morgan_1c`
+
+- size: oxc 16 vs reference 27 (no whitespaces: -11, formatted: -13)
+
+```js
+console.log(delete (NaN && NaN));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-console.log(delete (0, NaN));
++console.log(!0);
+
+```
+
 ## `uglify/classes/conditional_parentheses`
 
 - tags: `sequences`
@@ -24943,6 +25036,26 @@ console.log(read([129]));
  		e += 7;
  	}
  }
+
+```
+
+## `uglify/collapse_vars/issue_4040`
+
+- tags: `join vars`
+- size: oxc 31 vs reference 42 (no whitespaces: -11, formatted: -12)
+
+```js
+var a = console.log('PASS') && a.p;
+delete NaN;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1 @@
+ var a = console.log('PASS') && a.p;
+-delete NaN;
 
 ```
 
@@ -25221,6 +25334,33 @@ console.log(typeof a);
 -}
 +console.log(typeof console);
  console.log(typeof a);
+
+```
+
+## `uglify/dead-code/issue_4051`
+
+- size: oxc 34 vs reference 45 (no whitespaces: -11, formatted: -13)
+
+```js
+try {
+	delete (A = A);
+} catch (e) {
+	console.log('PASS');
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ try {
+-	delete (A = A);
+-} catch (e) {
++	A = A;
++} catch {
+ 	console.log('PASS');
+ }
 
 ```
 
@@ -26671,6 +26811,34 @@ a ? console.log('FAIL') : console.log('PASS');
 
 ```
 
+## `uglify/destructured/issue_4436_Infinity`
+
+- tags: `remove unused`
+- size: oxc 70 vs reference 83 (no whitespaces: -13, formatted: -13)
+
+```js
+console.log(function({ [delete Infinity]: a }) {
+	var Infinity;
+	return a;
+}({
+	true: 'FAIL',
+	false: 'PASS'
+}));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+-console.log(function({ [delete Infinity]: a }) {
++console.log(function({ [!1]: a }) {
+ 	return a;
+ }({
+ 	true: 'FAIL',
+
+```
+
 ## `uglify/if_return/if_return_6`
 
 - tags: `sequences`, `remove unused`
@@ -27167,6 +27335,34 @@ try {
 +} catch {
  	console.log('PASS');
  }
+
+```
+
+## `uglify/destructured/issue_4436_undefined`
+
+- tags: `remove unused`
+- size: oxc 70 vs reference 84 (no whitespaces: -14, formatted: -14)
+
+```js
+console.log(function({ [delete undefined]: a }) {
+	var undefined;
+	return a;
+}({
+	true: 'FAIL',
+	false: 'PASS'
+}));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+-console.log(function({ [delete undefined]: a }) {
++console.log(function({ [!1]: a }) {
+ 	return a;
+ }({
+ 	true: 'FAIL',
 
 ```
 
@@ -27766,6 +27962,28 @@ console.log(b('1'), b(2), b(b(b('ABCDEFGHIJK'))));
  }
 -console.log('111', 6, b(b('ABCDEFGHIJKABCDEFGHIJKABCDEFGHIJK')));
 +console.log(b('1'), b(2), b(b(b('ABCDEFGHIJK'))));
+
+```
+
+## `uglify/functions/new_target_delete`
+
+- size: oxc 32 vs reference 47 (no whitespaces: -15, formatted: -15)
+
+```js
+new function() {
+	console.log(delete new.target);
+}();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+ new function() {
+-	console.log(delete new.target);
++	console.log(!0);
+ }();
 
 ```
 
@@ -32775,6 +32993,32 @@ console.log([
 
 ```
 
+## `uglify/sequences/delete_seq_4`
+
+- tags: `sequences`
+- size: oxc 146 vs reference 194 (no whitespaces: -48, formatted: -56)
+
+```js
+function f() {}
+console.log(delete (f(), undefined));
+console.log(delete (f(), void 0));
+console.log(delete (f(), Infinity));
+console.log(delete (f(), 1 / 0));
+console.log(delete (f(), NaN));
+console.log(delete (f(), 0 / 0));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+ function f() {}
+-console.log(delete void f()), console.log(delete void f()), console.log((f(), delete (1 / 0))), console.log((f(), delete (1 / 0))), console.log(delete (f(), NaN)), console.log((f(), delete (0 / 0)));
++console.log((f(), !0)), console.log((f(), !0)), console.log((f(), !0)), console.log((f(), !0)), console.log((f(), !0)), console.log((f(), !0));
+
+```
+
 ## `uglify/conditionals/issue_5546_2`
 
 - tags: `sequences`
@@ -32825,6 +33069,32 @@ console.log('<!--HTML-->comment in<!--string literal-->'.length);
 @@ -1 +1 @@
 -console.log('<!--HTML-->comment in<!--string literal-->'.length);
 +console.log(42);
+
+```
+
+## `uglify/sequences/delete_seq_5`
+
+- tags: `sequences`
+- size: oxc 146 vs reference 197 (no whitespaces: -51, formatted: -57)
+
+```js
+function f() {}
+console.log(delete (f(), undefined));
+console.log(delete (f(), void 0));
+console.log(delete (f(), Infinity));
+console.log(delete (f(), 1 / 0));
+console.log(delete (f(), NaN));
+console.log(delete (f(), 0 / 0));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+ function f() {}
+-console.log(delete void f()), console.log(delete void f()), console.log(delete (f(), Infinity)), console.log((f(), delete (1 / 0))), console.log(delete (f(), NaN)), console.log((f(), delete (0 / 0)));
++console.log((f(), !0)), console.log((f(), !0)), console.log((f(), !0)), console.log((f(), !0)), console.log((f(), !0)), console.log((f(), !0));
 
 ```
 
@@ -32991,6 +33261,72 @@ p && a !== undefined && a !== null;
 -p && void 0 !== a && null === a;
 -p && null != a;
 +p && a === void 0 || a, p && a === void 0 || a, p && a !== void 0 || a, p && a !== void 0 || a, p && a === void 0 && a, p && a === void 0 && a, p && a !== void 0 && a, p && a;
+
+```
+
+## `uglify/evaluate/delete_expr_1`
+
+- size: oxc 96 vs reference 152 (no whitespaces: -56, formatted: -63)
+
+```js
+console.log(delete undefined);
+console.log(delete void 0);
+console.log(delete Infinity);
+console.log(delete (1 / 0));
+console.log(delete NaN);
+console.log(delete (0 / 0));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+-console.log(delete undefined);
+-console.log((void 0, !0));
+-console.log(delete Infinity);
+-console.log((1 / 0, !0));
+-console.log(delete NaN);
+-console.log((0 / 0, !0));
++console.log(!1);
++console.log(!0);
++console.log(!1);
++console.log(!0);
++console.log(!1);
++console.log(!0);
+
+```
+
+## `uglify/evaluate/delete_expr_2`
+
+- size: oxc 96 vs reference 152 (no whitespaces: -56, formatted: -63)
+
+```js
+console.log(delete undefined);
+console.log(delete void 0);
+console.log(delete Infinity);
+console.log(delete (1 / 0));
+console.log(delete NaN);
+console.log(delete (0 / 0));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+-console.log(delete undefined);
+-console.log((void 0, !0));
+-console.log(delete Infinity);
+-console.log((1 / 0, !0));
+-console.log(delete NaN);
+-console.log((0 / 0, !0));
++console.log(!1);
++console.log(!0);
++console.log(!1);
++console.log(!0);
++console.log(!1);
++console.log(!0);
 
 ```
 

@@ -8,7 +8,7 @@ Fixtures run: 2133
 
 | smaller | not-idempotent | panic | larger | whitespace | differs | parse-error | config-error | pass | total |
 |---|---|---|---|---|---|---|---|---|---|
-| 426 | 28 | 0 | 978 | 9 | 97 | 9 | 0 | 586 | 2133 |
+| 426 | 28 | 0 | 966 | 9 | 101 | 9 | 0 | 594 | 2133 |
 
 ## Reports
 
@@ -16,7 +16,7 @@ Fixtures run: 2133
 |---|---:|---|
 | smaller | 426 | [smaller.md](smaller.md) |
 | not-idempotent | 27 | [not-idempotent.md](not-idempotent.md) |
-| larger | 978 | [larger.md](larger.md) |
+| larger | 966 | [larger.md](larger.md) |
 | whitespace | 9 | [whitespace.md](whitespace.md) |
-| differs | 97 | [differs.md](differs.md) |
+| differs | 101 | [differs.md](differs.md) |
 | parse-error | 9 | [parse-error.md](parse-error.md) |
