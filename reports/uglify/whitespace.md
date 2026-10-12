@@ -1,6 +1,6 @@
 # uglify / whitespace — Output longer after whitespace removal
 
-Fixtures: 20
+Fixtures: 19
 
 [← uglify](README.md) · [← all families](../README.md)
 
@@ -431,47 +431,6 @@ function g() {
  	qux(4);
 -}();
 +})();
-
-```
-
-## `uglify/reduce_vars/redefine_farg_1`
-
-- tags: `join vars`, `remove unused`
-
-```js
-function f(a) {
-	var a;
-	return typeof a;
-}
-function g(a) {
-	var a = 42;
-	return typeof a;
-}
-function h(a, b) {
-	var a = b;
-	return typeof a;
-}
-console.log(f([]), g([]), h([]));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,11 +1,11 @@
- function f(a) {
-+	var a;
- 	return typeof a;
- }
- function g(a) {
- 	return 'number';
- }
- function h(a, b) {
--	a = b;
--	return typeof a;
-+	return typeof b;
- }
- console.log(f([]), g([]), h([]));
 
 ```
 

@@ -8,9 +8,9 @@ Fixtures run: 6949
 |---|---|---|---|---|---|---|---|---|---|---|
 | pass-1 | 2 | 0 | 0 | 10 | 1 | 2 | 0 | 0 | 4 | 19 |
 | swc | 124 | 3 | 1 | 363 | 4 | 52 | 2 | 0 | 139 | 688 |
-| terser | 426 | 28 | 0 | 966 | 9 | 101 | 9 | 0 | 594 | 2133 |
-| uglify | 1111 | 4 | 1 | 1721 | 20 | 233 | 24 | 0 | 995 | 4109 |
-| **all** | 1663 | 35 | 2 | 3060 | 34 | 388 | 35 | 0 | 1732 | 6949 |
+| terser | 427 | 28 | 0 | 966 | 9 | 101 | 9 | 0 | 593 | 2133 |
+| uglify | 1104 | 4 | 1 | 1727 | 19 | 235 | 24 | 0 | 995 | 4109 |
+| **all** | 1657 | 35 | 2 | 3066 | 33 | 390 | 35 | 0 | 1731 | 6949 |
 
 ## Families
 
@@ -36,16 +36,16 @@ Fixtures run: 6949
 | swc | whitespace | 4 | [swc/whitespace.md](swc/whitespace.md) |
 | swc | differs | 52 | [swc/differs.md](swc/differs.md) |
 | swc | parse-error | 2 | [swc/parse-error.md](swc/parse-error.md) |
-| terser | smaller | 426 | [terser/smaller.md](terser/smaller.md) |
+| terser | smaller | 427 | [terser/smaller.md](terser/smaller.md) |
 | terser | not-idempotent | 27 | [terser/not-idempotent.md](terser/not-idempotent.md) |
 | terser | larger | 966 | [terser/larger.md](terser/larger.md) |
 | terser | whitespace | 9 | [terser/whitespace.md](terser/whitespace.md) |
 | terser | differs | 101 | [terser/differs.md](terser/differs.md) |
 | terser | parse-error | 9 | [terser/parse-error.md](terser/parse-error.md) |
-| uglify | smaller | 1111 | [uglify/smaller.md](uglify/smaller.md) |
+| uglify | smaller | 1104 | [uglify/smaller.md](uglify/smaller.md) |
 | uglify | not-idempotent | 4 | [uglify/not-idempotent.md](uglify/not-idempotent.md) |
 | uglify | panic | 1 | [uglify/panic.md](uglify/panic.md) |
-| uglify | larger | 1721 | [uglify/larger.md](uglify/larger.md) |
-| uglify | whitespace | 20 | [uglify/whitespace.md](uglify/whitespace.md) |
-| uglify | differs | 233 | [uglify/differs.md](uglify/differs.md) |
+| uglify | larger | 1727 | [uglify/larger.md](uglify/larger.md) |
+| uglify | whitespace | 19 | [uglify/whitespace.md](uglify/whitespace.md) |
+| uglify | differs | 235 | [uglify/differs.md](uglify/differs.md) |
 | uglify | parse-error | 24 | [uglify/parse-error.md](uglify/parse-error.md) |

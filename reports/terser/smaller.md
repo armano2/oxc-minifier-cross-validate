@@ -1,6 +1,6 @@
 # terser / smaller — Output shorter than expected (possible over-optimization / bug)
 
-Fixtures: 426
+Fixtures: 427
 
 [← terser](README.md) · [← all families](../README.md)
 
@@ -9513,6 +9513,29 @@ with(obj) {}
 -with(x = 5, obj);
 +x = 5, y, x = 5;
 +with(obj) {}
+
+```
+
+## `terser/typeof/issue_2728_1`
+
+- tags: `join vars`
+- size: oxc 46 vs reference 56 (no whitespaces: -10, formatted: -10)
+
+```js
+(function arguments() {
+	console.log(typeof arguments);
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-(function arguments() {
++(function() {
+ 	console.log(typeof arguments);
+ })();
 
 ```
 

@@ -1,6 +1,6 @@
 # uglify / larger — Output longer than expected (possible missing optimization)
 
-Fixtures: 1721
+Fixtures: 1727
 
 [← uglify](README.md) · [← all families](../README.md)
 
@@ -11410,6 +11410,88 @@ console.log(typeof a);
 
 ```
 
+## `uglify/drop-unused/issue_4464_1`
+
+- tags: `join vars`, `remove unused`
+- size: oxc 80 vs reference 76 (no whitespaces: +4, formatted: +4)
+
+```js
+function f(a) {
+	var a = function() {};
+	return [arguments, a];
+}
+console.log(typeof f()[1]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ function f(a) {
+-	a = function() {};
++	var a = function() {};
+ 	return [arguments, a];
+ }
+ console.log(typeof f()[1]);
+
+```
+
+## `uglify/drop-unused/issue_4464_2`
+
+- tags: `join vars`, `remove unused`
+- size: oxc 85 vs reference 81 (no whitespaces: +4, formatted: +4)
+
+```js
+function f(a) {
+	var a = function() {};
+	return [arguments, a];
+}
+console.log(typeof f(42)[0][0]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ function f(a) {
+-	a = function() {};
++	var a = function() {};
+ 	return [arguments, a];
+ }
+ console.log(typeof f(42)[0][0]);
+
+```
+
+## `uglify/drop-unused/issue_4464_3`
+
+- tags: `join vars`, `remove unused`
+- size: oxc 105 vs reference 101 (no whitespaces: +4, formatted: +4)
+
+```js
+(function a(a) {
+	var a = function() {};
+	return [arguments[0], a];
+})(42).forEach(function(b) {
+	console.log(typeof b);
+});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ (function(a) {
+-	a = function() {};
++	var a = function() {};
+ 	return [arguments[0], a];
+ })(42).forEach(function(b) {
+ 	console.log(typeof b);
+
+```
+
 ## `uglify/evaluate/issue_5558`
 
 - tags: `join vars`, `sequences`
@@ -15629,39 +15711,6 @@ console.log(a === b, b === c, c === a);
 
 ```
 
-## `uglify/collapse_vars/collapse_vars_arguments_1`
-
-- tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 64 vs reference 58 (no whitespaces: +6, formatted: +9)
-
-```js
-var outer = function() {
-	// Do not replace `arguments` but do replace the constant `k` before it.
-	var k = 7, arguments = 5, inner = function() {
-		console.log(arguments);
-	};
-	inner(k, 1);
-};
-outer();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,6 @@
--(function() {
-+var outer = function() {
- 	(function() {
--		console.log(arguments);
-+		console.log(5);
- 	})(7, 1);
--})();
-+};
-+outer();
-
-```
-
 ## `uglify/collapse_vars/issue_5309_2`
 
 - tags: `join vars`
@@ -16481,6 +16530,42 @@ for (var a = 0; a < 2; a++) {
 +	};
 +	f.g();
  })();
+
+```
+
+## `uglify/functions/issue_3771`
+
+- tags: `join vars`, `remove unused`
+- size: oxc 62 vs reference 56 (no whitespaces: +6, formatted: +9)
+
+```js
+try {
+	function f(a) {
+		var a = f(1234);
+	}
+	f();
+} catch (e) {
+	console.log('PASS');
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,8 @@
+ try {
+-	(function f(a) {
+-		f();
+-	})();
+-} catch (e) {
++	function f(a) {
++		var a = f(1234);
++	}
++	f();
++} catch {
+ 	console.log('PASS');
+ }
 
 ```
 
@@ -18007,54 +18092,6 @@ console.log(function(a) {
 +		return a = [this];
  	}() ? 'PASS' : 'FAIL';
  }());
-
-```
-
-## `uglify/collapse_vars/issue_2506`
-
-- tags: `join vars`, `remove unused`, `2 iterations`
-- size: oxc 136 vs reference 129 (no whitespaces: +7, formatted: +11)
-
-```js
-var c = 0;
-function f0(bar) {
-	function f1(Infinity_2) {
-		function f13(NaN) {
-			if (false <= NaN & this >> 1 >= 0) {
-				c++;
-			}
-		}
-		var b_2 = f13(NaN, c++);
-	}
-	var bar = f1(-3, -1);
-}
-f0(false);
-console.log(c);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,10 +1,12 @@
- var c = 0;
- function f0(bar) {
--	(function(Infinity_2) {
--		(function(NaN) {
--			if (false <= 0 / 0 & this >> 1 >= 0) c++;
--		})(0, c++);
--	})();
-+	function f1(Infinity_2) {
-+		function f13(NaN) {
-+			!1 <= NaN & this >> 1 >= 0 && c++;
-+		}
-+		f13(NaN, c++);
-+	}
-+	f1(-3, -1);
- }
--f0(false);
-+f0(!1);
- console.log(c);
 
 ```
 
@@ -26895,81 +26932,6 @@ do {
 
 ```
 
-## `uglify/functions/issue_3364`
-
-- tags: `join vars`, `remove unused`
-- size: oxc 271 vs reference 259 (no whitespaces: +12, formatted: +13)
-
-```js
-var s = 2, a = 100, b = 10, c = 0;
-function f(p, e, r) {
-	try {
-		for (var i = 1; i-- > 0;) var a = function(x) {
-			function g(y) {
-				y && y[a++];
-			}
-			var x = g(--s >= 0 && f(c++));
-			for (var j = 1; --j > 0;);
-		}();
-	} catch (e) {
-		try {
-			return;
-		} catch (z) {
-			for (var k = 1; --k > 0;) {
-				for (var l = 1; l > 0; --l) {
-					var n = function() {};
-					for (var k in n) var o = (n, k);
-				}
-			}
-		}
-	}
-}
-var r = f();
-console.log(c);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,21 +1,20 @@
--var s = 2, c = 0;
--(function n(r, o, a) {
-+var s = 2, a = 100, b = 10, c = 0;
-+function f(p, e, r) {
- 	try {
--		for (var f = 1; f-- > 0;) var t = function(r) {
--			(function(r) {
--				r && r[t++];
--			})(--s >= 0 && n(c++));
--			for (var o = 1; --o > 0;);
-+		for (var i = 1; i-- > 0;) var a = function(x) {
-+			function g(y) {
-+				y && y[a++];
-+			}
-+			g(--s >= 0 && f(c++));
-+			for (var j = 1; --j > 0;);
- 		}();
--	} catch (o) {
-+	} catch {
- 		try {
- 			return;
--		} catch (r) {
--			for (var v = 1; --v > 0;) for (var i = 1; i > 0; --i) {
--				function u() {}
--				for (var v in u);
--			}
-+		} catch {
-+			for (var k = 1; --k > 0;) for (var l = 1; l > 0; --l) for (var k in function() {}) var o = k;
- 		}
- 	}
--})();
-+}
-+var r = f();
- console.log(c);
-
-```
-
 ## `uglify/global_defs/issue_1801`
 
 - size: oxc 28 vs reference 16 (no whitespaces: +12, formatted: +12)
@@ -28904,6 +28866,38 @@ class A {
 
 ```
 
+## `uglify/collapse_vars/collapse_vars_arguments_1`
+
+- tags: `join vars`, `sequences`, `remove unused`
+- size: oxc 72 vs reference 58 (no whitespaces: +14, formatted: +17)
+
+```js
+var outer = function() {
+	// Do not replace `arguments` but do replace the constant `k` before it.
+	var k = 7, arguments = 5, inner = function() {
+		console.log(arguments);
+	};
+	inner(k, 1);
+};
+outer();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,6 @@
+-(function() {
++var outer = function() {
+ 	(function() {
+ 		console.log(arguments);
+ 	})(7, 1);
+-})();
++};
++outer();
+
+```
+
 ## `uglify/const/issue_4202`
 
 - size: oxc 70 vs reference 56 (no whitespaces: +14, formatted: +24)
@@ -30141,6 +30135,54 @@ console.log(f([[1, 2], [3, 4]]));
  	return 'FAIL';
  }
  console.log(f([[1, 2], [3, 4]]));
+
+```
+
+## `uglify/collapse_vars/issue_2506`
+
+- tags: `join vars`, `remove unused`, `2 iterations`
+- size: oxc 144 vs reference 129 (no whitespaces: +15, formatted: +21)
+
+```js
+var c = 0;
+function f0(bar) {
+	function f1(Infinity_2) {
+		function f13(NaN) {
+			if (false <= NaN & this >> 1 >= 0) {
+				c++;
+			}
+		}
+		var b_2 = f13(NaN, c++);
+	}
+	var bar = f1(-3, -1);
+}
+f0(false);
+console.log(c);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,12 @@
+ var c = 0;
+ function f0(bar) {
+-	(function(Infinity_2) {
+-		(function(NaN) {
+-			if (false <= 0 / 0 & this >> 1 >= 0) c++;
+-		})(0, c++);
+-	})();
++	function f1(Infinity_2) {
++		function f13(NaN) {
++			!1 <= NaN & this >> 1 >= 0 && c++;
++		}
++		f13(NaN, c++);
++	}
++	var bar = f1(-3, -1);
+ }
+-f0(false);
++f0(!1);
+ console.log(c);
 
 ```
 
@@ -33480,6 +33522,81 @@ console.log(a);
 
 ```
 
+## `uglify/functions/issue_3364`
+
+- tags: `join vars`, `remove unused`
+- size: oxc 277 vs reference 259 (no whitespaces: +18, formatted: +21)
+
+```js
+var s = 2, a = 100, b = 10, c = 0;
+function f(p, e, r) {
+	try {
+		for (var i = 1; i-- > 0;) var a = function(x) {
+			function g(y) {
+				y && y[a++];
+			}
+			var x = g(--s >= 0 && f(c++));
+			for (var j = 1; --j > 0;);
+		}();
+	} catch (e) {
+		try {
+			return;
+		} catch (z) {
+			for (var k = 1; --k > 0;) {
+				for (var l = 1; l > 0; --l) {
+					var n = function() {};
+					for (var k in n) var o = (n, k);
+				}
+			}
+		}
+	}
+}
+var r = f();
+console.log(c);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,21 +1,20 @@
+-var s = 2, c = 0;
+-(function n(r, o, a) {
++var s = 2, a = 100, b = 10, c = 0;
++function f(p, e, r) {
+ 	try {
+-		for (var f = 1; f-- > 0;) var t = function(r) {
+-			(function(r) {
+-				r && r[t++];
+-			})(--s >= 0 && n(c++));
+-			for (var o = 1; --o > 0;);
++		for (var i = 1; i-- > 0;) var a = function(x) {
++			function g(y) {
++				y && y[a++];
++			}
++			var x = g(--s >= 0 && f(c++));
++			for (var j = 1; --j > 0;);
+ 		}();
+-	} catch (o) {
++	} catch {
+ 		try {
+ 			return;
+-		} catch (r) {
+-			for (var v = 1; --v > 0;) for (var i = 1; i > 0; --i) {
+-				function u() {}
+-				for (var v in u);
+-			}
++		} catch {
++			for (var k = 1; --k > 0;) for (var l = 1; l > 0; --l) for (var k in function() {}) var o = k;
+ 		}
+ 	}
+-})();
++}
++var r = f();
+ console.log(c);
+
+```
+
 ## `uglify/functions/issue_4265`
 
 - tags: `sequences`
@@ -33716,81 +33833,6 @@ console.log(function() {
 +	a[0] = 'moz';
  	return a;
  }().join());
-
-```
-
-## `uglify/keep_fargs/issue_3364`
-
-- tags: `join vars`, `remove unused`
-- size: oxc 271 vs reference 253 (no whitespaces: +18, formatted: +21)
-
-```js
-var s = 2, a = 100, b = 10, c = 0;
-function f(p, e, r) {
-	try {
-		for (var i = 1; i-- > 0;) var a = function(x) {
-			function g(y) {
-				y && y[a++];
-			}
-			var x = g(--s >= 0 && f(c++));
-			for (var j = 1; --j > 0;);
-		}();
-	} catch (e) {
-		try {
-			return;
-		} catch (z) {
-			for (var k = 1; --k > 0;) {
-				for (var l = 1; l > 0; --l) {
-					var n = function() {};
-					for (var k in n) var o = (n, k);
-				}
-			}
-		}
-	}
-}
-var r = f();
-console.log(c);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,21 +1,20 @@
--var s = 2, c = 0;
--(function o() {
-+var s = 2, a = 100, b = 10, c = 0;
-+function f(p, e, r) {
- 	try {
--		for (var r = 1; r-- > 0;) var n = function() {
--			(function(r) {
--				r && r[n++];
--			})(--s >= 0 && o(c++));
--			for (var r = 1; --r > 0;);
-+		for (var i = 1; i-- > 0;) var a = function(x) {
-+			function g(y) {
-+				y && y[a++];
-+			}
-+			g(--s >= 0 && f(c++));
-+			for (var j = 1; --j > 0;);
- 		}();
--	} catch (r) {
-+	} catch {
- 		try {
- 			return;
--		} catch (r) {
--			for (var a = 1; --a > 0;) for (var f = 1; f > 0; --f) {
--				function t() {}
--				for (var a in t);
--			}
-+		} catch {
-+			for (var k = 1; --k > 0;) for (var l = 1; l > 0; --l) for (var k in function() {}) var o = k;
- 		}
- 	}
--})();
-+}
-+var r = f();
- console.log(c);
 
 ```
 
@@ -35761,6 +35803,50 @@ a = [
 
 ```
 
+## `uglify/reduce_vars/redefine_farg_1`
+
+- tags: `join vars`, `remove unused`
+- size: oxc 146 vs reference 126 (no whitespaces: +20, formatted: +25)
+
+```js
+function f(a) {
+	var a;
+	return typeof a;
+}
+function g(a) {
+	var a = 42;
+	return typeof a;
+}
+function h(a, b) {
+	var a = b;
+	return typeof a;
+}
+console.log(f([]), g([]), h([]));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,13 @@
+ function f(a) {
++	var a;
+ 	return typeof a;
+ }
+ function g(a) {
+-	return 'number';
++	var a = 42;
++	return typeof a;
+ }
+ function h(a, b) {
+-	a = b;
++	var a = b;
+ 	return typeof a;
+ }
+ console.log(f([]), g([]), h([]));
+
+```
+
 ## `uglify/reduce_vars/unsafe_evaluate_equality_1`
 
 - tags: `join vars`, `remove unused`
@@ -37390,54 +37476,6 @@ function p2() {
 
 ```
 
-## `uglify/keep_fargs/issue_2506`
-
-- tags: `join vars`, `remove unused`, `2 iterations`
-- size: oxc 136 vs reference 114 (no whitespaces: +22, formatted: +27)
-
-```js
-var c = 0;
-function f0(bar) {
-	function f1(Infinity_2) {
-		function f13(NaN) {
-			if (false <= NaN & this >> 1 >= 0) {
-				c++;
-			}
-		}
-		var b_2 = f13(NaN, c++);
-	}
-	var bar = f1(-3, -1);
-}
-f0(false);
-console.log(c);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,10 +1,12 @@
- var c = 0;
- function f0(bar) {
--	(function() {
--		(function() {
--			if (false <= 0 / 0 & this >> 1 >= 0) c++;
--		})(c++);
--	})();
-+	function f1(Infinity_2) {
-+		function f13(NaN) {
-+			!1 <= NaN & this >> 1 >= 0 && c++;
-+		}
-+		f13(NaN, c++);
-+	}
-+	f1(-3, -1);
- }
--f0(false);
-+f0(!1);
- console.log(c);
-
-```
-
 ## `uglify/loops/issue_2740_4`
 
 - tags: `remove unused`, `2 iterations`
@@ -38654,6 +38692,31 @@ try {
 
 ```
 
+## `uglify/drop-unused/issue_4413`
+
+- tags: `join vars`, `remove unused`
+- size: oxc 87 vs reference 63 (no whitespaces: +24, formatted: +28)
+
+```js
+console.log(function f(arguments) {
+	var arguments = function() {};
+	return arguments.length;
+}());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,4 @@
+ console.log(function(arguments) {
+-	return function() {}.length;
++	var arguments = function() {};
++	return arguments.length;
+ }());
+
+```
+
 ## `uglify/drop-unused/var_catch_toplevel`
 
 - tags: `join vars`, `sequences`, `remove unused`, `2 iterations`
@@ -39260,6 +39323,81 @@ new (function(a) {
 +	}
 +	f();
 +})();
+
+```
+
+## `uglify/keep_fargs/issue_3364`
+
+- tags: `join vars`, `remove unused`
+- size: oxc 277 vs reference 253 (no whitespaces: +24, formatted: +29)
+
+```js
+var s = 2, a = 100, b = 10, c = 0;
+function f(p, e, r) {
+	try {
+		for (var i = 1; i-- > 0;) var a = function(x) {
+			function g(y) {
+				y && y[a++];
+			}
+			var x = g(--s >= 0 && f(c++));
+			for (var j = 1; --j > 0;);
+		}();
+	} catch (e) {
+		try {
+			return;
+		} catch (z) {
+			for (var k = 1; --k > 0;) {
+				for (var l = 1; l > 0; --l) {
+					var n = function() {};
+					for (var k in n) var o = (n, k);
+				}
+			}
+		}
+	}
+}
+var r = f();
+console.log(c);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,21 +1,20 @@
+-var s = 2, c = 0;
+-(function o() {
++var s = 2, a = 100, b = 10, c = 0;
++function f(p, e, r) {
+ 	try {
+-		for (var r = 1; r-- > 0;) var n = function() {
+-			(function(r) {
+-				r && r[n++];
+-			})(--s >= 0 && o(c++));
+-			for (var r = 1; --r > 0;);
++		for (var i = 1; i-- > 0;) var a = function(x) {
++			function g(y) {
++				y && y[a++];
++			}
++			var x = g(--s >= 0 && f(c++));
++			for (var j = 1; --j > 0;);
+ 		}();
+-	} catch (r) {
++	} catch {
+ 		try {
+ 			return;
+-		} catch (r) {
+-			for (var a = 1; --a > 0;) for (var f = 1; f > 0; --f) {
+-				function t() {}
+-				for (var a in t);
+-			}
++		} catch {
++			for (var k = 1; --k > 0;) for (var l = 1; l > 0; --l) for (var k in function() {}) var o = k;
+ 		}
+ 	}
+-})();
++}
++var r = f();
+ console.log(c);
 
 ```
 
@@ -42412,6 +42550,54 @@ f(42);
 +		console.log('test');
 +	};
 +})()()()()();
+
+```
+
+## `uglify/keep_fargs/issue_2506`
+
+- tags: `join vars`, `remove unused`, `2 iterations`
+- size: oxc 144 vs reference 114 (no whitespaces: +30, formatted: +37)
+
+```js
+var c = 0;
+function f0(bar) {
+	function f1(Infinity_2) {
+		function f13(NaN) {
+			if (false <= NaN & this >> 1 >= 0) {
+				c++;
+			}
+		}
+		var b_2 = f13(NaN, c++);
+	}
+	var bar = f1(-3, -1);
+}
+f0(false);
+console.log(c);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,12 @@
+ var c = 0;
+ function f0(bar) {
+-	(function() {
+-		(function() {
+-			if (false <= 0 / 0 & this >> 1 >= 0) c++;
+-		})(c++);
+-	})();
++	function f1(Infinity_2) {
++		function f13(NaN) {
++			!1 <= NaN & this >> 1 >= 0 && c++;
++		}
++		f13(NaN, c++);
++	}
++	var bar = f1(-3, -1);
+ }
+-f0(false);
++f0(!1);
+ console.log(c);
 
 ```
 
@@ -51084,49 +51270,6 @@ console.log(o.foo, o.bar + o.bar, o.foo * o.bar * o.baz);
 
 ```
 
-## `uglify/reduce_vars/redefine_farg_2`
-
-- tags: `join vars`, `remove unused`
-- size: oxc 128 vs reference 68 (no whitespaces: +60, formatted: +71)
-
-```js
-function f(a) {
-	var a;
-	return typeof a;
-}
-function g(a) {
-	var a = 42;
-	return typeof a;
-}
-function h(a, b) {
-	var a = b;
-	return typeof a;
-}
-console.log(f([]), g([]), h([]));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,11 @@
--console.log(typeof [], 'number', function(a, b) {
--	a = b;
-+function f(a) {
-+	var a;
- 	return typeof a;
--}());
-+}
-+function g(a) {
-+	return 'number';
-+}
-+function h(a, b) {
-+	return typeof b;
-+}
-+console.log(f([]), g([]), h([]));
-
-```
-
 ## `uglify/pure_funcs/arithmetic`
 
 - tags: `pure functions`
@@ -52659,6 +52802,51 @@ console.log(function() {
 
 ```
 
+## `uglify/reduce_vars/redefine_farg_2`
+
+- tags: `join vars`, `remove unused`
+- size: oxc 146 vs reference 68 (no whitespaces: +78, formatted: +96)
+
+```js
+function f(a) {
+	var a;
+	return typeof a;
+}
+function g(a) {
+	var a = 42;
+	return typeof a;
+}
+function h(a, b) {
+	var a = b;
+	return typeof a;
+}
+console.log(f([]), g([]), h([]));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,13 @@
+-console.log(typeof [], 'number', function(a, b) {
+-	a = b;
++function f(a) {
++	var a;
+ 	return typeof a;
+-}());
++}
++function g(a) {
++	var a = 42;
++	return typeof a;
++}
++function h(a, b) {
++	var a = b;
++	return typeof a;
++}
++console.log(f([]), g([]), h([]));
+
+```
+
 ## `uglify/functions/issue_2531_2`
 
 - tags: `join vars`, `remove unused`, `2 iterations`
@@ -53485,47 +53673,6 @@ console.log(function f() {
 
 ```
 
-## `uglify/reduce_vars/redefine_farg_3`
-
-- tags: `join vars`, `sequences`, `remove unused`, `3 iterations`
-- size: oxc 128 vs reference 43 (no whitespaces: +85, formatted: +106)
-
-```js
-function f(a) {
-	var a;
-	return typeof a;
-}
-function g(a) {
-	var a = 42;
-	return typeof a;
-}
-function h(a, b) {
-	var a = b;
-	return typeof a;
-}
-console.log(f([]), g([]), h([]));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,11 @@
--console.log(typeof [], 'number', 'undefined');
-+function f(a) {
-+	var a;
-+	return typeof a;
-+}
-+function g(a) {
-+	return 'number';
-+}
-+function h(a, b) {
-+	return typeof b;
-+}
-+console.log(f([]), g([]), h([]));
-
-```
-
 ## `uglify/functions/issue_2084`
 
 - tags: `join vars`, `sequences`, `remove unused`, `2 iterations`
@@ -53850,6 +53997,49 @@ console.log(a, b);
 +	for (var brake146670 = 5; ((b = a) ? !a : !~a && (b += a)) && --brake146670 > 0;);
 +}
 +f22464(), console.log(a, b);
+
+```
+
+## `uglify/reduce_vars/redefine_farg_3`
+
+- tags: `join vars`, `sequences`, `remove unused`, `3 iterations`
+- size: oxc 146 vs reference 43 (no whitespaces: +103, formatted: +131)
+
+```js
+function f(a) {
+	var a;
+	return typeof a;
+}
+function g(a) {
+	var a = 42;
+	return typeof a;
+}
+function h(a, b) {
+	var a = b;
+	return typeof a;
+}
+console.log(f([]), g([]), h([]));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,13 @@
+-console.log(typeof [], 'number', 'undefined');
++function f(a) {
++	var a;
++	return typeof a;
++}
++function g(a) {
++	var a = 42;
++	return typeof a;
++}
++function h(a, b) {
++	var a = b;
++	return typeof a;
++}
++console.log(f([]), g([]), h([]));
 
 ```
 

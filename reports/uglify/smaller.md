@@ -1,6 +1,6 @@
 # uglify / smaller — Output shorter than expected (possible over-optimization / bug)
 
-Fixtures: 1111
+Fixtures: 1104
 
 [← uglify](README.md) · [← all families](../README.md)
 
@@ -3468,6 +3468,36 @@ var a = function(b) {
 
 ```
 
+## `uglify/const/issue_4305_2`
+
+- tags: `join vars`, `remove unused`
+- size: oxc 68 vs reference 70 (no whitespaces: -2, formatted: -1)
+
+```js
+(function(a) {
+	const a = function() {
+		while (console.log('aaaaa'));
+	};
+	a();
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,6 @@
+ (function(a) {
+-	const a = function() {
+-		while (console.log('aaaaa'));
++	let a = function() {
++		for (; console.log('aaaaa'););
+ 	};
+ 	a();
+ })();
+
+```
+
 ## `uglify/const/issue_4689`
 
 - tags: `sequences`
@@ -3727,6 +3757,64 @@ console.log(o);
 +	let a = 'FAIL';
  }
  console.log(o);
+
+```
+
+## `uglify/const/merge_vars_3`
+
+- tags: `join vars`
+- size: oxc 75 vs reference 77 (no whitespaces: -2, formatted: -2)
+
+```js
+{
+	const a = 0;
+	var b = console;
+	console.log(typeof b);
+}
+var a = 1;
+console.log(typeof a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ {
+-	const a = 0;
++	let a = 0;
+ 	var b = console;
+ 	console.log(typeof b);
+ }
+
+```
+
+## `uglify/const/merge_vars_4`
+
+- tags: `join vars`
+- size: oxc 75 vs reference 77 (no whitespaces: -2, formatted: -2)
+
+```js
+var a = 1;
+console.log(typeof a);
+{
+	var b = console;
+	console.log(typeof b);
+	const a = 0;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -3,5 +3,5 @@
+ {
+ 	var b = console;
+ 	console.log(typeof b);
+-	const a = 0;
++	let a = 0;
+ }
 
 ```
 
@@ -11139,6 +11227,41 @@ f('FAIL');
 
 ```
 
+## `uglify/merge_vars/issue_4130`
+
+- tags: `join vars`
+- size: oxc 107 vs reference 110 (no whitespaces: -3, formatted: -3)
+
+```js
+var a = 2;
+while (a) try {
+	console.log(a);
+} catch (e) {
+	var b = 0;
+} finally {
+	b && console.log('FAIL');
+	var c = --a;
+	for (var k in c) c;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+ var a = 2;
+-while (a) try {
++for (; a;) try {
+ 	console.log(a);
+-} catch (e) {
++} catch {
+ 	var b = 0;
+ } finally {
+ 	b && console.log('FAIL');
+
+```
+
 ## `uglify/merge_vars/issue_4759`
 
 - tags: `join vars`
@@ -13430,6 +13553,34 @@ log(a, b, c, d);
 
 ```
 
+## `uglify/collapse_vars/issue_4586_1`
+
+- tags: `join vars`
+- size: oxc 79 vs reference 83 (no whitespaces: -4, formatted: -4)
+
+```js
+var a = 42;
+(function f(b) {
+	var b = a;
+	if (b === arguments[0]) console.log('PASS');
+})(console);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ var a = 42;
+-(function f(b) {
++(function(b) {
+ 	var b = a;
+-	if (b === arguments[0]) console.log('PASS');
++	b === arguments[0] && console.log('PASS');
+ })(console);
+
+```
+
 ## `uglify/collapse_vars/issue_4586_2`
 
 - tags: `join vars`
@@ -14101,89 +14252,6 @@ console.log(b);
 +	b &&= 0;
  })(b *= a);
  console.log(b);
-
-```
-
-## `uglify/drop-unused/issue_4464_1`
-
-- tags: `join vars`, `remove unused`
-- size: oxc 72 vs reference 76 (no whitespaces: -4, formatted: -8)
-
-```js
-function f(a) {
-	var a = function() {};
-	return [arguments, a];
-}
-console.log(typeof f()[1]);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,4 @@
- function f(a) {
--	a = function() {};
--	return [arguments, a];
-+	return [arguments, function() {}];
- }
- console.log(typeof f()[1]);
-
-```
-
-## `uglify/drop-unused/issue_4464_2`
-
-- tags: `join vars`, `remove unused`
-- size: oxc 77 vs reference 81 (no whitespaces: -4, formatted: -8)
-
-```js
-function f(a) {
-	var a = function() {};
-	return [arguments, a];
-}
-console.log(typeof f(42)[0][0]);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,4 @@
- function f(a) {
--	a = function() {};
--	return [arguments, a];
-+	return [arguments, function() {}];
- }
- console.log(typeof f(42)[0][0]);
-
-```
-
-## `uglify/drop-unused/issue_4464_3`
-
-- tags: `join vars`, `remove unused`
-- size: oxc 97 vs reference 101 (no whitespaces: -4, formatted: -8)
-
-```js
-(function a(a) {
-	var a = function() {};
-	return [arguments[0], a];
-})(42).forEach(function(b) {
-	console.log(typeof b);
-});
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,5 @@
- (function(a) {
--	a = function() {};
--	return [arguments[0], a];
-+	return [arguments[0], function() {}];
- })(42).forEach(function(b) {
- 	console.log(typeof b);
- });
 
 ```
 
@@ -19869,6 +19937,38 @@ console.log(a.next('FAIL 3').done);
 
 ```
 
+## `uglify/assignments/issue_4876`
+
+- tags: `join vars`
+- size: oxc 54 vs reference 61 (no whitespaces: -7, formatted: -9)
+
+```js
+try {
+	var a = null;
+	var b = a &&= 42;
+	b.p;
+} catch (e) {
+	console.log('PASS');
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,6 @@
+ try {
+-	var a = null;
+-	var b = a &&= 42;
++	var a = null, b = a &&= 42;
+ 	b.p;
+-} catch (e) {
++} catch {
+ 	console.log('PASS');
+ }
+
+```
+
 ## `uglify/collapse_vars/issue_2954_2`
 
 - tags: `join vars`
@@ -21307,37 +21407,6 @@ function g() {
 
 ```
 
-## `uglify/const/issue_4305_2`
-
-- tags: `join vars`, `remove unused`
-- size: oxc 62 vs reference 70 (no whitespaces: -8, formatted: -11)
-
-```js
-(function(a) {
-	const a = function() {
-		while (console.log('aaaaa'));
-	};
-	a();
-})();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,5 @@
- (function(a) {
--	const a = function() {
--		while (console.log('aaaaa'));
--	};
--	a();
-+	(function() {
-+		for (; console.log('aaaaa'););
-+	})();
- })();
-
-```
-
 ## `uglify/destructured/funarg_computed_key_scope_1`
 
 - size: oxc 58 vs reference 66 (no whitespaces: -8, formatted: -12)
@@ -21850,144 +21919,6 @@ do {
 
 ```
 
-## `uglify/let/merge_vars_3`
-
-- tags: `join vars`
-- size: oxc 80 vs reference 88 (no whitespaces: -8, formatted: -12)
-
-```js
-'use strict';
-{
-	let a = 0;
-	var b = console;
-	console.log(typeof b);
-}
-var a = 1;
-console.log(typeof a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,7 @@
- 'use strict';
- {
- 	let a = 0;
--	var b = console;
--	console.log(typeof b);
-+	console.log(typeof console);
- }
--var b = 1;
--console.log(typeof b);
-+var a = 1;
-+console.log(typeof a);
-
-```
-
-## `uglify/let/merge_vars_4`
-
-- tags: `join vars`
-- size: oxc 80 vs reference 88 (no whitespaces: -8, formatted: -12)
-
-```js
-'use strict';
-var a = 1;
-console.log(typeof a);
-{
-	var b = console;
-	console.log(typeof b);
-	let a = 0;
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -2,7 +2,6 @@
- var a = 1;
- console.log(typeof a);
- {
--	var b = console;
--	console.log(typeof b);
-+	console.log(typeof console);
- 	let a = 0;
- }
-
-```
-
-## `uglify/merge_vars/issue_4115`
-
-- tags: `join vars`
-- size: oxc 69 vs reference 77 (no whitespaces: -8, formatted: -12)
-
-```js
-L: {
-	var o = typeof console;
-	for (var k in o) break L;
-	var a = 0;
-}
-console.log(typeof a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,5 @@
- L: {
--	var o = typeof console;
--	for (var k in o) break L;
-+	for (var k in typeof console) break L;
- 	var a = 0;
- }
- console.log(typeof a);
-
-```
-
-## `uglify/merge_vars/segment`
-
-- tags: `join vars`
-- size: oxc 119 vs reference 127 (no whitespaces: -8, formatted: -12)
-
-```js
-var a = 'foo';
-console.log(a);
-for (var c, i = 0; i < 1; i++) {
-	var b = 'bar';
-	console.log(b);
-	c = 'baz';
-	console.log(c);
-}
-var d = 'moo';
-console.log(d);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,10 +1,9 @@
- var a = 'foo';
- console.log(a);
--for (var b, i = 0; i < 1; i++) {
--	var b = 'bar';
--	console.log(b);
--	b = 'baz';
--	console.log(b);
-+for (var c, i = 0; i < 1; i++) {
-+	console.log('bar');
-+	c = 'baz';
-+	console.log(c);
- }
--var a = 'moo';
--console.log(a);
-+var d = 'moo';
-+console.log(d);
-
-```
-
 ## `uglify/properties/issue_4831_1`
 
 - size: oxc 50 vs reference 58 (no whitespaces: -8, formatted: -6)
@@ -22483,38 +22414,6 @@ for (; console.log(42); (a) => a in a);
 @@ -1 +1 @@
 -for (; console.log(42); (a) => a in a);
 +for (; console.log(42););
-
-```
-
-## `uglify/assignments/issue_4876`
-
-- tags: `join vars`
-- size: oxc 52 vs reference 61 (no whitespaces: -9, formatted: -14)
-
-```js
-try {
-	var a = null;
-	var b = a &&= 42;
-	b.p;
-} catch (e) {
-	console.log('PASS');
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,6 @@
- try {
- 	var a = null;
--	var b = a &&= 42;
--	b.p;
--} catch (e) {
-+	(a &&= 42).p;
-+} catch {
- 	console.log('PASS');
- }
 
 ```
 
@@ -24165,39 +24064,6 @@ console.log(typeof a);
 
 ```
 
-## `uglify/const/issue_4220`
-
-- tags: `join vars`, `sequences`
-- size: oxc 68 vs reference 78 (no whitespaces: -10, formatted: -15)
-
-```js
-if (console) {
-	var o = console;
-	for (var k in o);
-} else {
-	const a = 0;
-}
-console.log(typeof a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,5 @@
--if (console) {
--	var o;
--	for (var k in console);
--} else {
--	const a = 0;
-+if (console) for (var k in console);
-+else {
-+	let a = 0;
- }
- console.log(typeof a);
-
-```
-
 ## `uglify/const/loop_block_1`
 
 - size: oxc 51 vs reference 61 (no whitespaces: -10, formatted: -18)
@@ -24221,70 +24087,6 @@ do {
 +do
 +	console.log(typeof console.log);
 +while (!console);
-
-```
-
-## `uglify/const/merge_vars_3`
-
-- tags: `join vars`
-- size: oxc 67 vs reference 77 (no whitespaces: -10, formatted: -14)
-
-```js
-{
-	const a = 0;
-	var b = console;
-	console.log(typeof b);
-}
-var a = 1;
-console.log(typeof a);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,6 @@
- {
--	const a = 0;
--	var b = console;
--	console.log(typeof b);
-+	let a = 0;
-+	console.log(typeof console);
- }
- var a = 1;
- console.log(typeof a);
-
-```
-
-## `uglify/const/merge_vars_4`
-
-- tags: `join vars`
-- size: oxc 67 vs reference 77 (no whitespaces: -10, formatted: -14)
-
-```js
-var a = 1;
-console.log(typeof a);
-{
-	var b = console;
-	console.log(typeof b);
-	const a = 0;
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,6 @@
- var a = 1;
- console.log(typeof a);
- {
--	var b = console;
--	console.log(typeof b);
--	const a = 0;
-+	console.log(typeof console);
-+	let a = 0;
- }
 
 ```
 
@@ -24775,6 +24577,29 @@ console.log(`P${`A${'S'}`}S`);
 @@ -1 +1 @@
 -console.log(`P${`A${'S'}`}S`);
 +console.log('PASS');
+
+```
+
+## `uglify/typeof/issue_2728_1`
+
+- tags: `join vars`
+- size: oxc 46 vs reference 56 (no whitespaces: -10, formatted: -10)
+
+```js
+(function arguments() {
+	console.log(typeof arguments);
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1,3 @@
+-(function arguments() {
++(function() {
+ 	console.log(typeof arguments);
+ })();
 
 ```
 
@@ -25803,34 +25628,6 @@ console.log(a);
 
 ```
 
-## `uglify/collapse_vars/issue_4586_1`
-
-- tags: `join vars`
-- size: oxc 71 vs reference 83 (no whitespaces: -12, formatted: -16)
-
-```js
-var a = 42;
-(function f(b) {
-	var b = a;
-	if (b === arguments[0]) console.log('PASS');
-})(console);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,4 @@
- var a = 42;
--(function f(b) {
--	var b = a;
--	if (b === arguments[0]) console.log('PASS');
-+(function(b) {
-+	a === arguments[0] && console.log('PASS');
- })(console);
-
-```
-
 ## `uglify/collapse_vars/return_4`
 
 - tags: `join vars`
@@ -26254,45 +26051,6 @@ f(42, true);
  f(42, null);
 -f(42, true);
 +f(42, !0);
-
-```
-
-## `uglify/merge_vars/issue_4130`
-
-- tags: `join vars`
-- size: oxc 98 vs reference 110 (no whitespaces: -12, formatted: -15)
-
-```js
-var a = 2;
-while (a) try {
-	console.log(a);
-} catch (e) {
-	var b = 0;
-} finally {
-	b && console.log('FAIL');
-	var c = --a;
-	for (var k in c) c;
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,10 +1,9 @@
- var a = 2;
--while (a) try {
-+for (; a;) try {
- 	console.log(a);
--} catch (e) {
-+} catch {
- 	var b = 0;
- } finally {
- 	b && console.log('FAIL');
--	var c = --a;
--	for (var k in c);
-+	for (var k in --a);
- }
 
 ```
 

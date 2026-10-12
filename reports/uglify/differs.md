@@ -1,6 +1,6 @@
 # uglify / differs — Output differs at equal length
 
-Fixtures: 233
+Fixtures: 235
 
 [← uglify](README.md) · [← all families](../README.md)
 
@@ -1700,6 +1700,38 @@ f(x >= y ? !1 : !0);
 
 ```
 
+## `uglify/const/issue_4220`
+
+- tags: `join vars`, `sequences`
+
+```js
+if (console) {
+	var o = console;
+	for (var k in o);
+} else {
+	const a = 0;
+}
+console.log(typeof a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+ if (console) {
+-	var o;
+-	for (var k in console);
++	var o = console;
++	for (var k in o);
+ } else {
+-	const a = 0;
++	let a = 0;
+ }
+ console.log(typeof a);
+
+```
+
 ## `uglify/const/issue_5656`
 
 - tags: `join vars`
@@ -2536,41 +2568,6 @@ console.log(a);
 +		b <<= this || 1, b.a = 'FAIL';
  	})();
  })(), console.log(a);
-
-```
-
-## `uglify/functions/issue_3771`
-
-- tags: `join vars`, `remove unused`
-
-```js
-try {
-	function f(a) {
-		var a = f(1234);
-	}
-	f();
-} catch (e) {
-	console.log('PASS');
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,8 @@
- try {
--	(function f(a) {
--		f();
--	})();
--} catch (e) {
-+	function f(a) {
-+		f(1234);
-+	}
-+	f();
-+} catch {
- 	console.log('PASS');
- }
 
 ```
 
@@ -3998,6 +3995,36 @@ console.log(function(n) {
 
 ```
 
+## `uglify/let/merge_vars_3`
+
+- tags: `join vars`
+
+```js
+'use strict';
+{
+	let a = 0;
+	var b = console;
+	console.log(typeof b);
+}
+var a = 1;
+console.log(typeof a);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -4,5 +4,5 @@
+ 	var b = console;
+ 	console.log(typeof b);
+ }
+-var b = 1;
+-console.log(typeof b);
++var a = 1;
++console.log(typeof a);
+
+```
+
 ## `uglify/let/retain_block_2_mangle`
 
 
@@ -4873,6 +4900,46 @@ console.log(d);
 +	console.log(c);
  }
  f('baz');
+-var a = 'moo';
+-console.log(a);
++var d = 'moo';
++console.log(d);
+
+```
+
+## `uglify/merge_vars/segment`
+
+- tags: `join vars`
+
+```js
+var a = 'foo';
+console.log(a);
+for (var c, i = 0; i < 1; i++) {
+	var b = 'bar';
+	console.log(b);
+	c = 'baz';
+	console.log(c);
+}
+var d = 'moo';
+console.log(d);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,10 @@
+ var a = 'foo';
+ console.log(a);
+-for (var b, i = 0; i < 1; i++) {
++for (var c, i = 0; i < 1; i++) {
+ 	var b = 'bar';
+ 	console.log(b);
+-	b = 'baz';
+-	console.log(b);
++	c = 'baz';
++	console.log(c);
+ }
 -var a = 'moo';
 -console.log(a);
 +var d = 'moo';

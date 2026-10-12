@@ -3976,49 +3976,6 @@ console.log(sum);
 
 ```
 
-## `terser/reduce_vars/redefine_farg_1`
-
-- tags: `join vars`, `remove unused`
-- size: oxc 128 vs reference 125 (no whitespaces: +3, formatted: +1)
-
-```js
-function f(a) {
-	var a;
-	return typeof a;
-}
-function g(a) {
-	var a = 42;
-	return typeof a;
-}
-function h(a, b) {
-	var a = b;
-	return typeof a;
-}
-console.log(f([]), g([]), h([]));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,11 +1,11 @@
- function f(a) {
-+	var a;
- 	return typeof a;
- }
--function g() {
-+function g(a) {
- 	return 'number';
- }
- function h(a, b) {
--	a = b;
--	return typeof a;
-+	return typeof b;
- }
- console.log(f([]), g([]), h([]));
-
-```
-
 ## `terser/assignment/op_equals_right_global_var`
 
 - size: oxc 173 vs reference 169 (no whitespaces: +4, formatted: +12)
@@ -6135,38 +6092,6 @@ console.log(obj.gen('pass').next().value);
 
 ```
 
-## `terser/collapse_vars/collapse_vars_arguments`
-
-- tags: `join vars`, `sequences`, `remove unused`
-- size: oxc 64 vs reference 58 (no whitespaces: +6, formatted: +9)
-
-```js
-var outer = function() {
-	var k = 7, arguments = 5, inner = function() {
-		console.log(arguments);
-	};
-	inner(k, 1);
-};
-outer();
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,6 @@
--(function() {
-+var outer = function() {
- 	(function() {
--		console.log(arguments);
-+		console.log(5);
- 	})(7, 1);
--})();
-+};
-+outer();
-
-```
-
 ## `terser/collapse_vars/collapse_vars_regexp`
 
 - tags: `join vars`, `sequences`, `remove unused`
@@ -7699,54 +7624,6 @@ console.log(g());
 +	return b = a + t, b;
  }
  console.log(g());
-
-```
-
-## `terser/collapse_vars/issue_2506`
-
-- tags: `join vars`, `remove unused`, `2 iterations`
-- size: oxc 136 vs reference 129 (no whitespaces: +7, formatted: +11)
-
-```js
-var c = 0;
-function f0(bar) {
-	function f1(Infinity_2) {
-		function f13(NaN) {
-			if (false <= NaN & this >> 1 >= 0) {
-				c++;
-			}
-		}
-		var b_2 = f13(NaN, c++);
-	}
-	var bar = f1(-3, -1);
-}
-f0(false);
-console.log(c);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,10 +1,12 @@
- var c = 0;
- function f0(bar) {
--	(function(Infinity_2) {
--		(function(NaN) {
--			if (false <= 0 / 0 & this >> 1 >= 0) c++;
--		})(0, c++);
--	})();
-+	function f1(Infinity_2) {
-+		function f13(NaN) {
-+			!1 <= NaN & this >> 1 >= 0 && c++;
-+		}
-+		f13(NaN, c++);
-+	}
-+	f1(-3, -1);
- }
--f0(false);
-+f0(!1);
- console.log(c);
 
 ```
 
@@ -12334,6 +12211,37 @@ console.log(f0(), f1(), f2());
 
 ```
 
+## `terser/collapse_vars/collapse_vars_arguments`
+
+- tags: `join vars`, `sequences`, `remove unused`
+- size: oxc 72 vs reference 58 (no whitespaces: +14, formatted: +17)
+
+```js
+var outer = function() {
+	var k = 7, arguments = 5, inner = function() {
+		console.log(arguments);
+	};
+	inner(k, 1);
+};
+outer();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,6 @@
+-(function() {
++var outer = function() {
+ 	(function() {
+ 		console.log(arguments);
+ 	})(7, 1);
+-})();
++};
++outer();
+
+```
+
 ## `terser/collapse_vars/issue_2436_8`
 
 - tags: `join vars`, `remove unused`
@@ -12936,6 +12844,54 @@ function g(undefined) {
 +	if (c) return d;
 +	e();
  }
+
+```
+
+## `terser/collapse_vars/issue_2506`
+
+- tags: `join vars`, `remove unused`, `2 iterations`
+- size: oxc 144 vs reference 129 (no whitespaces: +15, formatted: +21)
+
+```js
+var c = 0;
+function f0(bar) {
+	function f1(Infinity_2) {
+		function f13(NaN) {
+			if (false <= NaN & this >> 1 >= 0) {
+				c++;
+			}
+		}
+		var b_2 = f13(NaN, c++);
+	}
+	var bar = f1(-3, -1);
+}
+f0(false);
+console.log(c);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,12 @@
+ var c = 0;
+ function f0(bar) {
+-	(function(Infinity_2) {
+-		(function(NaN) {
+-			if (false <= 0 / 0 & this >> 1 >= 0) c++;
+-		})(0, c++);
+-	})();
++	function f1(Infinity_2) {
++		function f13(NaN) {
++			!1 <= NaN & this >> 1 >= 0 && c++;
++		}
++		f13(NaN, c++);
++	}
++	var bar = f1(-3, -1);
+ }
+-f0(false);
++f0(!1);
+ console.log(c);
 
 ```
 
@@ -16430,6 +16386,51 @@ function foo() {
 
 ```
 
+## `terser/reduce_vars/redefine_farg_1`
+
+- tags: `join vars`, `remove unused`
+- size: oxc 146 vs reference 125 (no whitespaces: +21, formatted: +26)
+
+```js
+function f(a) {
+	var a;
+	return typeof a;
+}
+function g(a) {
+	var a = 42;
+	return typeof a;
+}
+function h(a, b) {
+	var a = b;
+	return typeof a;
+}
+console.log(f([]), g([]), h([]));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,13 @@
+ function f(a) {
++	var a;
+ 	return typeof a;
+ }
+-function g() {
+-	return 'number';
++function g(a) {
++	var a = 42;
++	return typeof a;
+ }
+ function h(a, b) {
+-	a = b;
++	var a = b;
+ 	return typeof a;
+ }
+ console.log(f([]), g([]), h([]));
+
+```
+
 ## `terser/reduce_vars/toplevel_on_loops_1`
 
 - tags: `join vars`, `remove unused`
@@ -18786,58 +18787,6 @@ bar();
 -bar();
 -bar();
 +bar(), bar();
-
-```
-
-## `terser/dead_code/dead_code_const_annotation_complex_scope`
-
-- tags: `join vars`, `sequences`
-- size: oxc 160 vs reference 132 (no whitespaces: +28, formatted: +35)
-
-```js
-var unused_var;
-/** @const */ var test = 'test';
-// @const
-var CONST_FOO_ANN = false;
-var unused_var_2;
-if (CONST_FOO_ANN) {
-	console.log('unreachable');
-	var moo;
-	function bar() {}
-}
-if (test === 'test') {
-	var beef = 'good';
-	/** @const */ var meat = 'beef';
-	var pork = 'bad';
-	if (meat === 'pork') {
-		console.log('also unreachable');
-	} else if (pork === 'good') {
-		console.log('reached, not const');
-	}
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,9 +1,7 @@
--var unused_var;
--var test = 'test';
--var CONST_FOO_ANN = !1;
--var unused_var_2;
--var moo;
--var bar;
--var beef = 'good';
--var meat = 'beef';
--var pork = 'bad';
-+var unused_var, test = 'test', CONST_FOO_ANN = !1, unused_var_2;
-+if (CONST_FOO_ANN) {
-+	console.log('unreachable');
-+	var moo;
-+	function bar() {}
-+}
-+if (test === 'test') var beef = 'good';
 
 ```
 
@@ -23009,30 +22958,6 @@ Math.abs(y);
 
 ```
 
-## `terser/reduce_vars/issue_741_reference_cycle`
-
-- size: oxc 42 vs reference 0 (no whitespaces: +42, formatted: +59)
-
-```js
-for (var a = console.log, s = 1; s <= 3;) {
-	var c = s;
-	a(c);
-	s++;
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -0,0 +1,4 @@
-+for (var a = console.log, s = 1; s <= 3;) {
-+	a(s);
-+	s++;
-+}
-
-```
-
 ## `terser/async/async_inline`
 
 - tags: `join vars`, `sequences`, `remove unused`
@@ -24515,6 +24440,31 @@ function f(a) {
 +	};
 +	return a() + b() + c();
  }
+
+```
+
+## `terser/reduce_vars/issue_741_reference_cycle`
+
+- size: oxc 50 vs reference 0 (no whitespaces: +50, formatted: +71)
+
+```js
+for (var a = console.log, s = 1; s <= 3;) {
+	var c = s;
+	a(c);
+	s++;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -0,0 +1,5 @@
++for (var a = console.log, s = 1; s <= 3;) {
++	var c = s;
++	a(c);
++	s++;
++}
 
 ```
 
@@ -28244,88 +28194,6 @@ console.log(a);
 
 ```
 
-## `terser/reduce_vars/redefine_farg_2`
-
-- tags: `join vars`, `remove unused`
-- size: oxc 128 vs reference 43 (no whitespaces: +85, formatted: +107)
-
-```js
-function f(a) {
-	var a;
-	return typeof a;
-}
-function g(a) {
-	var a = 42;
-	return typeof a;
-}
-function h(a, b) {
-	var a = b;
-	return typeof a;
-}
-console.log(f([]), g([]), h([]));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,11 @@
--console.log('object', 'number', 'undefined');
-+function f(a) {
-+	var a;
-+	return typeof a;
-+}
-+function g(a) {
-+	return 'number';
-+}
-+function h(a, b) {
-+	return typeof b;
-+}
-+console.log(f([]), g([]), h([]));
-
-```
-
-## `terser/reduce_vars/redefine_farg_3`
-
-- tags: `join vars`, `sequences`, `remove unused`, `3 iterations`
-- size: oxc 128 vs reference 43 (no whitespaces: +85, formatted: +107)
-
-```js
-function f(a) {
-	var a;
-	return typeof a;
-}
-function g(a) {
-	var a = 42;
-	return typeof a;
-}
-function h(a, b) {
-	var a = b;
-	return typeof a;
-}
-console.log(f([]), g([]), h([]));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,11 @@
--console.log('object', 'number', 'undefined');
-+function f(a) {
-+	var a;
-+	return typeof a;
-+}
-+function g(a) {
-+	return 'number';
-+}
-+function h(a, b) {
-+	return typeof b;
-+}
-+console.log(f([]), g([]), h([]));
-
-```
-
 ## `terser/drop_unused/unused_class_with_static_props_side_effects_2`
 
 - size: oxc 86 vs reference 0 (no whitespaces: +86, formatted: +106)
@@ -29362,6 +29230,92 @@ console.log(a, b);
 +	for (var brake146670 = 5; ((b = a) ? !a : !~a && (b += a)) && --brake146670 > 0;);
 +}
 +f22464(), console.log(a, b);
+
+```
+
+## `terser/reduce_vars/redefine_farg_2`
+
+- tags: `join vars`, `remove unused`
+- size: oxc 146 vs reference 43 (no whitespaces: +103, formatted: +132)
+
+```js
+function f(a) {
+	var a;
+	return typeof a;
+}
+function g(a) {
+	var a = 42;
+	return typeof a;
+}
+function h(a, b) {
+	var a = b;
+	return typeof a;
+}
+console.log(f([]), g([]), h([]));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,13 @@
+-console.log('object', 'number', 'undefined');
++function f(a) {
++	var a;
++	return typeof a;
++}
++function g(a) {
++	var a = 42;
++	return typeof a;
++}
++function h(a, b) {
++	var a = b;
++	return typeof a;
++}
++console.log(f([]), g([]), h([]));
+
+```
+
+## `terser/reduce_vars/redefine_farg_3`
+
+- tags: `join vars`, `sequences`, `remove unused`, `3 iterations`
+- size: oxc 146 vs reference 43 (no whitespaces: +103, formatted: +132)
+
+```js
+function f(a) {
+	var a;
+	return typeof a;
+}
+function g(a) {
+	var a = 42;
+	return typeof a;
+}
+function h(a, b) {
+	var a = b;
+	return typeof a;
+}
+console.log(f([]), g([]), h([]));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1,13 @@
+-console.log('object', 'number', 'undefined');
++function f(a) {
++	var a;
++	return typeof a;
++}
++function g(a) {
++	var a = 42;
++	return typeof a;
++}
++function h(a, b) {
++	var a = b;
++	return typeof a;
++}
++console.log(f([]), g([]), h([]));
 
 ```
 
@@ -31165,6 +31119,61 @@ a.b(), c.d.e(), f.g();
 +	var a = [bar(), bar()];
 +	console.log(a[0][0] === a[1][0], a[0][0]());
 +})();
+
+```
+
+## `terser/dead_code/dead_code_const_annotation_complex_scope`
+
+- tags: `join vars`, `sequences`
+- size: oxc 279 vs reference 132 (no whitespaces: +147, formatted: +176)
+
+```js
+var unused_var;
+/** @const */ var test = 'test';
+// @const
+var CONST_FOO_ANN = false;
+var unused_var_2;
+if (CONST_FOO_ANN) {
+	console.log('unreachable');
+	var moo;
+	function bar() {}
+}
+if (test === 'test') {
+	var beef = 'good';
+	/** @const */ var meat = 'beef';
+	var pork = 'bad';
+	if (meat === 'pork') {
+		console.log('also unreachable');
+	} else if (pork === 'good') {
+		console.log('reached, not const');
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,10 @@
+-var unused_var;
+-var test = 'test';
+-var CONST_FOO_ANN = !1;
+-var unused_var_2;
+-var moo;
+-var bar;
+-var beef = 'good';
+-var meat = 'beef';
+-var pork = 'bad';
++var unused_var, test = 'test', CONST_FOO_ANN = !1, unused_var_2;
++if (CONST_FOO_ANN) {
++	console.log('unreachable');
++	var moo;
++	function bar() {}
++}
++if (test === 'test') {
++	var beef = 'good', meat = 'beef', pork = 'bad';
++	meat === 'pork' ? console.log('also unreachable') : pork === 'good' && console.log('reached, not const');
++}
 
 ```
 
