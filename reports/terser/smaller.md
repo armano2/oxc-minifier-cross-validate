@@ -12832,8 +12832,8 @@ function e() {
 	]];
 	var y = { h: 1 };
 	var [b, ...c] = a;
-	var [ ...[e, f]] = x;
-	var [ ...{ g: h }] = y;
+	var [...[e, f]] = x;
+	var [...{ g: h }] = y;
 	f(b, c, e, f, g);
 }
 
@@ -12872,9 +12872,9 @@ function e() {
  	]];
  	var y = { h: 1 };
  	var [b, ...c] = a;
--	var [ ...[e, f1]] = x;
-+	var [ ...[e, f]] = x;
- 	var [ ...{ g: h }] = y;
+-	var [...[e, f1]] = x;
++	var [...[e, f]] = x;
+ 	var [...{ g: h }] = y;
 -	f1(b, c, e, f1, g);
 +	f(b, c, e, f, g);
  }
@@ -14098,19 +14098,19 @@ n.x(1).y(2).z(3);
 
 ## `terser/parameters/destructuring_arguments_2`
 
-- size: oxc 96 vs reference 218 (no whitespaces: -122, formatted: -145)
+- size: oxc 96 vs reference 218 (no whitespaces: -122, formatted: -144)
 
 ```js
 (function([]) {});
 (function({}) {});
 (function([, , , , ,]) {});
 (function([a, { b: c }]) {});
-(function([ ...args]) {});
+(function([...args]) {});
 (function({ x }) {});
 class a {
 	*method({ [thrower()]: x } = {}) {}
 }
-(function(a, b, c, d, [{ e: [ ...f] }]) {})(1, 2, 3, 4, [{ e: [
+(function(a, b, c, d, [{ e: [...f] }]) {})(1, 2, 3, 4, [{ e: [
 	1,
 	2,
 	3
@@ -14126,7 +14126,7 @@ class a {
 -(function({}) {});
 -(function([, , , , ,]) {});
 -(function([a, { b: c }]) {});
--(function([ ...args]) {});
+-(function([...args]) {});
 -(function({ x }) {});
  class a {
  	*method({ [thrower()]: x } = {}) {}

@@ -15061,10 +15061,10 @@ console.log(A + 1);
 
 ## `uglify/rests/drop_rest_array`
 
-- size: oxc 36 vs reference 31 (no whitespaces: +5, formatted: +6)
+- size: oxc 36 vs reference 31 (no whitespaces: +5, formatted: +5)
 
 ```js
-var [ ...[a]] = ['PASS'];
+var [...[a]] = ['PASS'];
 console.log(a);
 
 ```
@@ -15074,7 +15074,7 @@ console.log(a);
 +++ oxc
 @@ -1,2 +1,2 @@
 -var [a] = ['PASS'];
-+var [ ...[a]] = ['PASS'];
++var [...[a]] = ['PASS'];
  console.log(a);
 
 ```
@@ -15107,10 +15107,10 @@ console.log(f('PASS'), f(42));
 ## `uglify/rests/issue_4562`
 
 - tags: `join vars`
-- size: oxc 36 vs reference 31 (no whitespaces: +5, formatted: +6)
+- size: oxc 36 vs reference 31 (no whitespaces: +5, formatted: +5)
 
 ```js
-console.log((([ ...[a]]) => a)('foo'));
+console.log((([...[a]]) => a)('foo'));
 
 ```
 
@@ -15119,16 +15119,16 @@ console.log((([ ...[a]]) => a)('foo'));
 +++ oxc
 @@ -1 +1 @@
 -console.log((([a]) => a)('foo'));
-+console.log((([ ...[a]]) => a)('foo'));
++console.log((([...[a]]) => a)('foo'));
 
 ```
 
 ## `uglify/rests/keep_rest_array`
 
-- size: oxc 46 vs reference 41 (no whitespaces: +5, formatted: +6)
+- size: oxc 46 vs reference 41 (no whitespaces: +5, formatted: +5)
 
 ```js
-var [ ...[ ...a]] = 'PASS';
+var [...[...a]] = 'PASS';
 console.log(a.join(''));
 
 ```
@@ -15137,8 +15137,8 @@ console.log(a.join(''));
 --- reference
 +++ oxc
 @@ -1,2 +1,2 @@
--var [ ...a] = 'PASS';
-+var [ ...[ ...a]] = 'PASS';
+-var [...a] = 'PASS';
++var [...[...a]] = 'PASS';
  console.log(a.join(''));
 
 ```
@@ -15146,10 +15146,10 @@ console.log(a.join(''));
 ## `uglify/rests/keep_rest_arrow`
 
 - tags: `join vars`
-- size: oxc 47 vs reference 42 (no whitespaces: +5, formatted: +6)
+- size: oxc 47 vs reference 42 (no whitespaces: +5, formatted: +5)
 
 ```js
-console.log(((...[ ...a]) => a.join(''))('PASS'));
+console.log(((...[...a]) => a.join(''))('PASS'));
 
 ```
 
@@ -15158,17 +15158,17 @@ console.log(((...[ ...a]) => a.join(''))('PASS'));
 +++ oxc
 @@ -1 +1 @@
 -console.log(((...a) => a.join(''))('PASS'));
-+console.log(((...[ ...a]) => a.join(''))('PASS'));
++console.log(((...[...a]) => a.join(''))('PASS'));
 
 ```
 
 ## `uglify/rests/keep_rest_lambda_1`
 
 - tags: `join vars`
-- size: oxc 71 vs reference 66 (no whitespaces: +5, formatted: +6)
+- size: oxc 71 vs reference 66 (no whitespaces: +5, formatted: +5)
 
 ```js
-function f(...[ ...a]) {
+function f(...[...a]) {
 	return a.join('');
 }
 console.log(f('PASS'), f([42]));
@@ -15180,7 +15180,7 @@ console.log(f('PASS'), f([42]));
 +++ oxc
 @@ -1,4 +1,4 @@
 -function f(...a) {
-+function f(...[ ...a]) {
++function f(...[...a]) {
  	return a.join('');
  }
  console.log(f('PASS'), f([42]));
@@ -23062,7 +23062,7 @@ console.log(typeof function([, ...a]) {
 ## `uglify/rests/retain_destructured_array`
 
 - tags: `remove unused`
-- size: oxc 60 vs reference 51 (no whitespaces: +9, formatted: +15)
+- size: oxc 60 vs reference 51 (no whitespaces: +9, formatted: +16)
 
 ```js
 var [a, ...b] = [
@@ -23078,7 +23078,7 @@ console.log.apply(console, b);
 --- reference
 +++ oxc
 @@ -1,2 +1,6 @@
--var [ ...b] = ['PASS', 42];
+-var [...b] = ['PASS', 42];
 +var [a, ...b] = [
 +	'FAIL',
 +	'PASS',
@@ -27546,10 +27546,10 @@ console.log('PASS');
 ## `uglify/rests/reduce_destructured_array`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 37 vs reference 25 (no whitespaces: +12, formatted: +17)
+- size: oxc 37 vs reference 25 (no whitespaces: +12, formatted: +16)
 
 ```js
-var [ ...a] = ['PASS'];
+var [...a] = ['PASS'];
 console.log(a[0]);
 
 ```
@@ -27559,7 +27559,7 @@ console.log(a[0]);
 +++ oxc
 @@ -1 +1,2 @@
 -console.log(['PASS'][0]);
-+var [ ...a] = ['PASS'];
++var [...a] = ['PASS'];
 +console.log(a[0]);
 
 ```
@@ -34004,7 +34004,7 @@ while (x);
 - size: oxc 66 vs reference 48 (no whitespaces: +18, formatted: +26)
 
 ```js
-console.log(function([ ...a]) {
+console.log(function([...a]) {
 	switch (a) {
 		case a: return 'PASS';
 	}
@@ -34016,7 +34016,7 @@ console.log(function([ ...a]) {
 --- reference
 +++ oxc
 @@ -1,3 +1,5 @@
- console.log(function([ ...a]) {
+ console.log(function([...a]) {
 -	return 'PASS';
 +	switch (a) {
 +		case a: return 'PASS';
@@ -46240,10 +46240,10 @@ try {
 ## `uglify/rests/issue_5108`
 
 - tags: `join vars`, `remove unused`
-- size: oxc 59 vs reference 20 (no whitespaces: +39, formatted: +46)
+- size: oxc 59 vs reference 20 (no whitespaces: +39, formatted: +45)
 
 ```js
-console.log(function([ ...[a]]) {
+console.log(function([...[a]]) {
 	return a;
 }(['PASS', 'FAIL']));
 
@@ -46254,7 +46254,7 @@ console.log(function([ ...[a]]) {
 +++ oxc
 @@ -1 +1,3 @@
 -console.log('PASS');
-+console.log(function([ ...[a]]) {
++console.log(function([...[a]]) {
 +	return a;
 +}(['PASS', 'FAIL']));
 

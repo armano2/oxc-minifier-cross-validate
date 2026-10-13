@@ -6040,7 +6040,7 @@ console.log(a, b);
 - tags: `join vars`
 
 ```js
-(function([ ...a]) {
+(function([...a]) {
 	var b = a.length;
 	console.log(b);
 })([]);
@@ -6051,7 +6051,7 @@ console.log(a, b);
 --- reference
 +++ oxc
 @@ -1,4 +1,4 @@
- (function([ ...a]) {
+ (function([...a]) {
 -	var a = a.length;
 -	console.log(a);
 +	var b = a.length;
