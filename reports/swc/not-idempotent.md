@@ -1,6 +1,6 @@
 # swc / not-idempotent — Not idempotent (re-compressing changes the output)
 
-Fixtures: 3
+Fixtures: 2
 
 [← swc](README.md) · [← all families](../README.md)
 
@@ -58,78 +58,6 @@ console.log(Object.keys({
 ```js
 // oxc, second pass
 <reparse failed: Expected `:` but found `}`>
-```
-
-## `swc/projects/jquery/4`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-
-```js
-export const obj = { parseXML: function(data) {
-	var xml, tmp;
-	if (!data || typeof data !== 'string') {
-		return null;
-	}
-	try {
-		if (window.DOMParser) {
-			// Standard
-			tmp = new DOMParser();
-			xml = tmp.parseFromString(data, 'text/xml');
-		} else {
-			// IE
-			xml = new ActiveXObject('Microsoft.XMLDOM');
-			xml.async = 'false';
-			xml.loadXML(data);
-		}
-	} catch (e) {
-		xml = undefined;
-	}
-	if (!xml || !xml.documentElement || xml.getElementsByTagName('parsererror').length) {
-		jQuery.error('Invalid XML: ' + data);
-	}
-	return xml;
-} };
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,11 +1,12 @@
- export const obj = { parseXML: function(data) {
--	var xml;
--	if (!data || 'string' != typeof data) return null;
-+	var xml, tmp;
-+	if (!data || typeof data != 'string') return null;
- 	try {
--		window.DOMParser ? xml = new DOMParser().parseFromString(data, 'text/xml') : // IE
--		((xml = new ActiveXObject('Microsoft.XMLDOM')).async = 'false', xml.loadXML(data));
--	} catch (e) {
-+		window.DOMParser ? (tmp = new DOMParser(), xml = tmp.parseFromString(data, 'text/xml')) : 
-+		// IE
-+		(xml = new ActiveXObject('Microsoft.XMLDOM'), xml.async = 'false', xml.loadXML(data));
-+	} catch {
- 		xml = void 0;
- 	}
--	return xml && xml.documentElement && !xml.getElementsByTagName('parsererror').length || jQuery.error('Invalid XML: ' + data), xml;
-+	return (!xml || !xml.documentElement || xml.getElementsByTagName('parsererror').length) && jQuery.error('Invalid XML: ' + data), xml;
- } };
-
-```
-
-```js
-// oxc, second pass
-export const obj = { parseXML: function(data) {
-	var xml, tmp;
-	if (!data || typeof data != 'string') return null;
-	try {
-		window.DOMParser ? (tmp = new DOMParser(), xml = tmp.parseFromString(data, 'text/xml')) : (xml = new ActiveXObject('Microsoft.XMLDOM'), xml.async = 'false', xml.loadXML(data));
-	} catch {
-		xml = void 0;
-	}
-	return (!xml || !xml.documentElement || xml.getElementsByTagName('parsererror').length) && jQuery.error('Invalid XML: ' + data), xml;
-} };
-
 ```
 
 ## `swc/projects/next/extra/if_return/.3`

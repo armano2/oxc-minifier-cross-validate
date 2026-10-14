@@ -8,16 +8,15 @@ Fixtures run: 688
 
 | smaller | not-idempotent | panic | larger | whitespace | differs | parse-error | config-error | pass | total |
 |---|---|---|---|---|---|---|---|---|---|
-| 124 | 3 | 1 | 363 | 4 | 52 | 2 | 0 | 139 | 688 |
+| 124 | 2 | 0 | 365 | 4 | 52 | 2 | 0 | 139 | 688 |
 
 ## Reports
 
 | kind | fixtures | file |
 |---|---:|---|
 | smaller | 124 | [smaller.md](smaller.md) |
-| not-idempotent | 3 | [not-idempotent.md](not-idempotent.md) |
-| panic | 1 | [panic.md](panic.md) |
-| larger | 363 | [larger.md](larger.md) |
+| not-idempotent | 2 | [not-idempotent.md](not-idempotent.md) |
+| larger | 365 | [larger.md](larger.md) |
 | whitespace | 4 | [whitespace.md](whitespace.md) |
 | differs | 52 | [differs.md](differs.md) |
 | parse-error | 2 | [parse-error.md](parse-error.md) |

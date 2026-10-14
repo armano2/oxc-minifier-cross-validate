@@ -5667,6 +5667,26 @@ a()`9`;
 
 ```
 
+## `terser/template_string/tagged_template_with_comment`
+
+- size: oxc 60 vs reference 64 (no whitespaces: -4, formatted: -5)
+
+```js
+console.log(String.raw`\u`);
+console.log((() => String.raw)()`\x`);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,2 +1,2 @@
+ console.log(String.raw`\u`);
+-console.log((() => String.raw)()`\x`);
++console.log((0, String.raw)`\x`);
+
+```
+
 ## `terser/big_int/big_int_negative`
 
 - size: oxc 0 vs reference 5 (no whitespaces: -5, formatted: -6)
@@ -8672,26 +8692,6 @@ var d = {
  };
  var d = {
  	get: 'foo',
-
-```
-
-## `terser/template_string/tagged_template_with_comment`
-
-- size: oxc 56 vs reference 64 (no whitespaces: -8, formatted: -10)
-
-```js
-console.log(String.raw`\u`);
-console.log((() => String.raw)()`\x`);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,2 +1,2 @@
- console.log(String.raw`\u`);
--console.log((() => String.raw)()`\x`);
-+console.log(String.raw`\x`);
 
 ```
 

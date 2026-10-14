@@ -1,6 +1,6 @@
 # uglify / smaller — Output shorter than expected (possible over-optimization / bug)
 
-Fixtures: 1104
+Fixtures: 1103
 
 [← uglify](README.md) · [← all families](../README.md)
 
@@ -6359,37 +6359,6 @@ console.log({
 +	0: 'FAIL 2',
 +	0: 'PASS'
  }[0]);
-
-```
-
-## `uglify/optional-chains/call_parentheses`
-
-- size: oxc 151 vs reference 153 (no whitespaces: -2, formatted: -3)
-
-```js
-(function(o) {
-	console.log(o.f('FAIL'), o.f('FAIL'), (0, o.f)(42));
-	console.log(o?.f('FAIL'), (o?.f)('FAIL'), (0, o?.f)(42));
-})({
-	a: 'PASS',
-	f(b) {
-		return this.a || b;
-	}
-});
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,6 +1,6 @@
- (function(o) {
- 	console.log(o.f('FAIL'), o.f('FAIL'), (0, o.f)(42));
--	console.log(o?.f('FAIL'), (o?.f)('FAIL'), (0, o?.f)(42));
-+	console.log(o?.f('FAIL'), (o?.f)('FAIL'), (o?.f)(42));
- })({
- 	a: 'PASS',
- 	f(b) {
 
 ```
 

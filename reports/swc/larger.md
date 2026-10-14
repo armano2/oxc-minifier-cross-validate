@@ -1,6 +1,6 @@
 # swc / larger — Output longer than expected (possible missing optimization)
 
-Fixtures: 363
+Fixtures: 365
 
 [← swc](README.md) · [← all families](../README.md)
 
@@ -3153,6 +3153,62 @@ export function getInsertStringLength(a, e, t, i) {
  		return (isAllowedCharacter(a, i, e) || e === o) && i++, i < r.length;
  	}), i - s;
  }
+
+```
+
+## `swc/projects/jquery/4`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 402 vs reference 395 (no whitespaces: +7, formatted: +12)
+
+```js
+export const obj = { parseXML: function(data) {
+	var xml, tmp;
+	if (!data || typeof data !== 'string') {
+		return null;
+	}
+	try {
+		if (window.DOMParser) {
+			// Standard
+			tmp = new DOMParser();
+			xml = tmp.parseFromString(data, 'text/xml');
+		} else {
+			// IE
+			xml = new ActiveXObject('Microsoft.XMLDOM');
+			xml.async = 'false';
+			xml.loadXML(data);
+		}
+	} catch (e) {
+		xml = undefined;
+	}
+	if (!xml || !xml.documentElement || xml.getElementsByTagName('parsererror').length) {
+		jQuery.error('Invalid XML: ' + data);
+	}
+	return xml;
+} };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,11 +1,10 @@
+ export const obj = { parseXML: function(data) {
+-	var xml;
+-	if (!data || 'string' != typeof data) return null;
++	var xml, tmp;
++	if (!data || typeof data != 'string') return null;
+ 	try {
+-		window.DOMParser ? xml = new DOMParser().parseFromString(data, 'text/xml') : // IE
+-		((xml = new ActiveXObject('Microsoft.XMLDOM')).async = 'false', xml.loadXML(data));
+-	} catch (e) {
++		window.DOMParser ? (tmp = new DOMParser(), xml = tmp.parseFromString(data, 'text/xml')) : (xml = new ActiveXObject('Microsoft.XMLDOM'), xml.async = 'false', xml.loadXML(data));
++	} catch {
+ 		xml = void 0;
+ 	}
+-	return xml && xml.documentElement && !xml.getElementsByTagName('parsererror').length || jQuery.error('Invalid XML: ' + data), xml;
++	return (!xml || !xml.documentElement || xml.getElementsByTagName('parsererror').length) && jQuery.error('Invalid XML: ' + data), xml;
+ } };
 
 ```
 
@@ -11479,6 +11535,46 @@ console.log(new $eb2fd35624c84372$var$A().tagName);
 +	}, _classThis;
 +})();
 +console.log(new $eb2fd35624c84372$var$A().tagName);
+
+```
+
+## `swc/issues/string-index-utf16`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
+- size: oxc 150 vs reference 94 (no whitespaces: +56, formatted: +62)
+
+```js
+console.log([
+	'é'['0'] === 'é',
+	'é'['1'] === undefined,
+	'😀'['0'] === '\ud83d',
+	'😀'['1'] === '\ude00',
+	'😀'['2'] === undefined,
+	'\ud800'['0'] === '\ud800',
+	'\ud800'['1'] === undefined
+].join(','));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,9 @@
+ console.log([
+ 	!0,
+-	!0,
+-	'\ud83d' == '\ud83d',
+-	'\ude00' == '\ude00',
+-	!0,
+-	'\ud800' == '\ud800',
+-	!0
++	'é'[1] === void 0,
++	'😀'[0] === '\ud83d',
++	'😀'[1] === '\ude00',
++	'😀'[2] === void 0,
++	'\ud800'[0] === '\ud800',
++	'\ud800'[1] === void 0
+ ].join(','));
 
 ```
 
