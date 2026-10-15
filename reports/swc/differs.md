@@ -1,6 +1,6 @@
 # swc / differs — Output differs at equal length
 
-Fixtures: 52
+Fixtures: 53
 
 [← swc](README.md) · [← all families](../README.md)
 
@@ -969,6 +969,30 @@ if (!_ && typeof require !== 'undefined') _ = require('underscore');
  var _ = root._;
 -!_ && 'u' > typeof require && (_ = require('underscore'));
 +!_ && typeof require < 'u' && (_ = require('underscore'));
+
+```
+
+## `swc/projects/backbone/11`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+
+```js
+export const obj = { navigate: function(fragment, options) {
+	if (!History.started) return false;
+	if (!options || options === true) options = { trigger: !!options };
+} };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,4 +1,4 @@
+ export const obj = { navigate: function(fragment, options) {
+ 	if (!History.started) return !1;
+-	options && !0 !== options || (options = { trigger: !!options });
++	options && options !== !0 || (options = { trigger: !!options });
+ } };
 
 ```
 

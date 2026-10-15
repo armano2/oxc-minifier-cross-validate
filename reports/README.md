@@ -7,10 +7,10 @@ Fixtures run: 6949
 | family | smaller | not-idempotent | panic | larger | whitespace | differs | parse-error | config-error | pass | total |
 |---|---|---|---|---|---|---|---|---|---|---|
 | pass-1 | 2 | 0 | 0 | 10 | 1 | 2 | 0 | 0 | 4 | 19 |
-| swc | 124 | 2 | 0 | 365 | 4 | 52 | 2 | 0 | 139 | 688 |
+| swc | 124 | 2 | 0 | 363 | 4 | 53 | 2 | 0 | 140 | 688 |
 | terser | 427 | 28 | 0 | 966 | 9 | 101 | 9 | 0 | 593 | 2133 |
 | uglify | 1103 | 4 | 1 | 1727 | 19 | 235 | 24 | 0 | 996 | 4109 |
-| **all** | 1656 | 34 | 1 | 3068 | 33 | 390 | 35 | 0 | 1732 | 6949 |
+| **all** | 1656 | 34 | 1 | 3066 | 33 | 391 | 35 | 0 | 1733 | 6949 |
 
 ## Families
 
@@ -31,9 +31,9 @@ Fixtures run: 6949
 | pass-1 | differs | 2 | [pass-1/differs.md](pass-1/differs.md) |
 | swc | smaller | 124 | [swc/smaller.md](swc/smaller.md) |
 | swc | not-idempotent | 2 | [swc/not-idempotent.md](swc/not-idempotent.md) |
-| swc | larger | 365 | [swc/larger.md](swc/larger.md) |
+| swc | larger | 363 | [swc/larger.md](swc/larger.md) |
 | swc | whitespace | 4 | [swc/whitespace.md](swc/whitespace.md) |
-| swc | differs | 52 | [swc/differs.md](swc/differs.md) |
+| swc | differs | 53 | [swc/differs.md](swc/differs.md) |
 | swc | parse-error | 2 | [swc/parse-error.md](swc/parse-error.md) |
 | terser | smaller | 427 | [terser/smaller.md](terser/smaller.md) |
 | terser | not-idempotent | 27 | [terser/not-idempotent.md](terser/not-idempotent.md) |

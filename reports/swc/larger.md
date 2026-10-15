@@ -1,6 +1,6 @@
 # swc / larger — Output longer than expected (possible missing optimization)
 
-Fixtures: 365
+Fixtures: 363
 
 [← swc](README.md) · [← all families](../README.md)
 
@@ -1804,52 +1804,6 @@ console.log(c);
 
 ```
 
-## `swc/projects/backbone/11`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 141 vs reference 138 (no whitespaces: +3, formatted: +3)
-
-```js
-export const obj = { navigate: function(fragment, options) {
-	if (!History.started) return false;
-	if (!options || options === true) options = { trigger: !!options };
-} };
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,4 @@
- export const obj = { navigate: function(fragment, options) {
- 	if (!History.started) return !1;
--	options && !0 !== options || (options = { trigger: !!options });
-+	(!options || options === !0) && (options = { trigger: !!options });
- } };
-
-```
-
-## `swc/projects/backbone/3`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 47 vs reference 44 (no whitespaces: +3, formatted: +3)
-
-```js
-if (!name && !callback && !context) {
-	console.log('foo');
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--name || callback || context || console.log('foo');
-+!name && !callback && !context && console.log('foo');
-
-```
-
 ## `swc/issues/11108`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -2614,6 +2568,60 @@ export function treeSubTree(tree, pathObj) {
 
 ```
 
+## `swc/projects/jquery/4`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 400 vs reference 395 (no whitespaces: +5, formatted: +9)
+
+```js
+export const obj = { parseXML: function(data) {
+	var xml, tmp;
+	if (!data || typeof data !== 'string') {
+		return null;
+	}
+	try {
+		if (window.DOMParser) {
+			// Standard
+			tmp = new DOMParser();
+			xml = tmp.parseFromString(data, 'text/xml');
+		} else {
+			// IE
+			xml = new ActiveXObject('Microsoft.XMLDOM');
+			xml.async = 'false';
+			xml.loadXML(data);
+		}
+	} catch (e) {
+		xml = undefined;
+	}
+	if (!xml || !xml.documentElement || xml.getElementsByTagName('parsererror').length) {
+		jQuery.error('Invalid XML: ' + data);
+	}
+	return xml;
+} };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,9 @@
+ export const obj = { parseXML: function(data) {
+-	var xml;
+-	if (!data || 'string' != typeof data) return null;
++	var xml, tmp;
++	if (!data || typeof data != 'string') return null;
+ 	try {
+-		window.DOMParser ? xml = new DOMParser().parseFromString(data, 'text/xml') : // IE
+-		((xml = new ActiveXObject('Microsoft.XMLDOM')).async = 'false', xml.loadXML(data));
+-	} catch (e) {
++		window.DOMParser ? (tmp = new DOMParser(), xml = tmp.parseFromString(data, 'text/xml')) : (xml = new ActiveXObject('Microsoft.XMLDOM'), xml.async = 'false', xml.loadXML(data));
++	} catch {
+ 		xml = void 0;
+ 	}
+ 	return xml && xml.documentElement && !xml.getElementsByTagName('parsererror').length || jQuery.error('Invalid XML: ' + data), xml;
+
+```
+
 ## `swc/projects/yui/10`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -3153,62 +3161,6 @@ export function getInsertStringLength(a, e, t, i) {
  		return (isAllowedCharacter(a, i, e) || e === o) && i++, i < r.length;
  	}), i - s;
  }
-
-```
-
-## `swc/projects/jquery/4`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 402 vs reference 395 (no whitespaces: +7, formatted: +12)
-
-```js
-export const obj = { parseXML: function(data) {
-	var xml, tmp;
-	if (!data || typeof data !== 'string') {
-		return null;
-	}
-	try {
-		if (window.DOMParser) {
-			// Standard
-			tmp = new DOMParser();
-			xml = tmp.parseFromString(data, 'text/xml');
-		} else {
-			// IE
-			xml = new ActiveXObject('Microsoft.XMLDOM');
-			xml.async = 'false';
-			xml.loadXML(data);
-		}
-	} catch (e) {
-		xml = undefined;
-	}
-	if (!xml || !xml.documentElement || xml.getElementsByTagName('parsererror').length) {
-		jQuery.error('Invalid XML: ' + data);
-	}
-	return xml;
-} };
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,11 +1,10 @@
- export const obj = { parseXML: function(data) {
--	var xml;
--	if (!data || 'string' != typeof data) return null;
-+	var xml, tmp;
-+	if (!data || typeof data != 'string') return null;
- 	try {
--		window.DOMParser ? xml = new DOMParser().parseFromString(data, 'text/xml') : // IE
--		((xml = new ActiveXObject('Microsoft.XMLDOM')).async = 'false', xml.loadXML(data));
--	} catch (e) {
-+		window.DOMParser ? (tmp = new DOMParser(), xml = tmp.parseFromString(data, 'text/xml')) : (xml = new ActiveXObject('Microsoft.XMLDOM'), xml.async = 'false', xml.loadXML(data));
-+	} catch {
- 		xml = void 0;
- 	}
--	return xml && xml.documentElement && !xml.getElementsByTagName('parsererror').length || jQuery.error('Invalid XML: ' + data), xml;
-+	return (!xml || !xml.documentElement || xml.getElementsByTagName('parsererror').length) && jQuery.error('Invalid XML: ' + data), xml;
- } };
 
 ```
 
