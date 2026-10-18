@@ -1,6 +1,6 @@
 # terser / smaller — Output shorter than expected (possible over-optimization / bug)
 
-Fixtures: 427
+Fixtures: 428
 
 [← terser](README.md) · [← all families](../README.md)
 
@@ -4767,6 +4767,26 @@ console.log(c);
  a[b++] = function() {
  	return 42;
  };
+
+```
+
+## `terser/debugger/drop_debugger`
+
+- tags: `drop debugger`
+- size: oxc 4 vs reference 8 (no whitespaces: -4, formatted: -5)
+
+```js
+debugger;
+if (foo) debugger;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-if (foo);
++foo;
 
 ```
 

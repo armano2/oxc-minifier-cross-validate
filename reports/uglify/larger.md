@@ -1,6 +1,6 @@
 # uglify / larger — Output longer than expected (possible missing optimization)
 
-Fixtures: 1727
+Fixtures: 1723
 
 [← uglify](README.md) · [← all families](../README.md)
 
@@ -19962,26 +19962,6 @@ console.log(delete (42 .p = Infinity));
 
 ```
 
-## `uglify/debugger/drop_debugger`
-
-- tags: `drop debugger`
-- size: oxc 16 vs reference 8 (no whitespaces: +8, formatted: +9)
-
-```js
-debugger;
-if (foo) debugger;
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--if (foo);
-+if (foo) debugger;
-
-```
-
 ## `uglify/default-values/issue_4502_4`
 
 - size: oxc 61 vs reference 53 (no whitespaces: +8, formatted: +7)
@@ -34300,34 +34280,6 @@ console.log(typeof function() {}.valueOf());
 
 ```
 
-## `uglify/evaluate/unsafe_string`
-
-- size: oxc 65 vs reference 46 (no whitespaces: +19, formatted: +30)
-
-```js
-console.log('1234' + 1, '1234'[0] + 1, '1234'[6 - 5] + 1, ('12' + '34')[0] + 1, ('12' + '34')[6 - 5] + 1, [
-	1,
-	2,
-	3,
-	4
-].join('')[0] + 1);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,6 @@
--console.log('12341', '11', '21', '11', '21', '11');
-+console.log('12341', '11', '21', '11', '21', [
-+	1,
-+	2,
-+	3,
-+	4
-+].join('')[0] + 1);
-
-```
-
 ## `uglify/functions/class_iife`
 
 - tags: `sequences`
@@ -35752,54 +35704,6 @@ console.log((0 - (console && 0)) / 1);
 +console.log(0 - (console && 0) - 0);
 +console.log((0 - (console && 0)) * 1);
 +console.log((0 - (console && 0)) / 1);
-
-```
-
-## `uglify/properties/evaluate_array_length`
-
-- size: oxc 70 vs reference 50 (no whitespaces: +20, formatted: +27)
-
-```js
-a = [
-	1,
-	2,
-	3
-].length;
-a = [
-	1,
-	2,
-	3
-].join()['len' + 'gth'];
-a = [
-	1,
-	2,
-	b
-].length;
-a = [
-	1,
-	2,
-	3
-].join(b).length;
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,12 @@
- a = 3;
--a = 5;
- a = [
- 	1,
- 	2,
-+	3
-+].join().length;
-+a = [
-+	1,
-+	2,
- 	b
- ].length;
- a = [
 
 ```
 
@@ -39892,34 +39796,6 @@ console.log(a);
 +	}();
  })();
  console.log(a);
-
-```
-
-## `uglify/evaluate/unsafe_charAt`
-
-- size: oxc 72 vs reference 46 (no whitespaces: +26, formatted: +37)
-
-```js
-console.log('1234' + 1, '1234'.charAt(0) + 1, '1234'.charAt(6 - 5) + 1, ('12' + '34').charAt(0) + 1, ('12' + '34').charAt(6 - 5) + 1, [
-	1,
-	2,
-	3,
-	4
-].join('').charAt(0) + 1);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,6 @@
--console.log('12341', '11', '21', '11', '21', '11');
-+console.log('12341', '11', '21', '11', '21', [
-+	1,
-+	2,
-+	3,
-+	4
-+].join('').charAt(0) + 1);
 
 ```
 
@@ -49795,6 +49671,131 @@ baz('PASS');
 
 ```
 
+## `uglify/arrays/constant_join_2`
+
+- size: oxc 381 vs reference 327 (no whitespaces: +54, formatted: +86)
+
+```js
+var a = [
+	'foo',
+	'bar',
+	boo(),
+	'baz',
+	'x',
+	'y'
+].join('');
+var b = [
+	'foo',
+	'bar',
+	boo(),
+	'baz',
+	'x',
+	'y'
+].join('-');
+var c = [
+	'foo',
+	'bar',
+	boo(),
+	'baz',
+	'x',
+	'y'
+].join('really-long-separator');
+var d = [
+	'foo',
+	'bar',
+	boo(),
+	[
+		'foo',
+		1,
+		2,
+		3,
+		'bar'
+	].join('+'),
+	'baz',
+	'x',
+	'y'
+].join('-');
+var e = [
+	'foo',
+	'bar',
+	boo(),
+	[
+		'foo',
+		1,
+		2,
+		3,
+		'bar'
+	].join('+'),
+	'baz',
+	'x',
+	'y'
+].join('really-long-separator');
+var f = [
+	'str',
+	'str' + variable,
+	'foo',
+	'bar',
+	'moo' + foo
+].join('');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,18 @@
+-var a = 'foobar' + boo() + 'bazxy';
++var a = [
++	'foo',
++	'bar',
++	boo(),
++	'baz',
++	'x',
++	'y'
++].join('');
+ var b = [
+-	'foo-bar',
++	'foo',
++	'bar',
+ 	boo(),
+-	'baz-x-y'
++	'baz',
++	'x',
++	'y'
+ ].join('-');
+ var c = [
+ 	'foo',
+@@ -13,9 +23,13 @@
+ 	'y'
+ ].join('really-long-separator');
+ var d = [
+-	'foo-bar',
++	'foo',
++	'bar',
+ 	boo(),
+-	'foo+1+2+3+bar-baz-x-y'
++	'foo+1+2+3+bar',
++	'baz',
++	'x',
++	'y'
+ ].join('-');
+ var e = [
+ 	'foo',
+@@ -26,4 +40,10 @@
+ 	'x',
+ 	'y'
+ ].join('really-long-separator');
+-var f = 'strstr' + variable + 'foobarmoo' + foo;
++var f = [
++	'str',
++	'str' + variable,
++	'foo',
++	'bar',
++	'moo' + foo
++].join('');
+
+```
+
 ## `uglify/destructured/issue_5087_2`
 
 - tags: `join vars`, `sequences`, `remove unused`, `2 iterations`
@@ -53032,147 +53033,6 @@ if (CONFIG.DEBUG[0]) console.debug('foo');
 
 ```
 
-## `uglify/arrays/constant_join_2`
-
-- size: oxc 409 vs reference 327 (no whitespaces: +82, formatted: +148)
-
-```js
-var a = [
-	'foo',
-	'bar',
-	boo(),
-	'baz',
-	'x',
-	'y'
-].join('');
-var b = [
-	'foo',
-	'bar',
-	boo(),
-	'baz',
-	'x',
-	'y'
-].join('-');
-var c = [
-	'foo',
-	'bar',
-	boo(),
-	'baz',
-	'x',
-	'y'
-].join('really-long-separator');
-var d = [
-	'foo',
-	'bar',
-	boo(),
-	[
-		'foo',
-		1,
-		2,
-		3,
-		'bar'
-	].join('+'),
-	'baz',
-	'x',
-	'y'
-].join('-');
-var e = [
-	'foo',
-	'bar',
-	boo(),
-	[
-		'foo',
-		1,
-		2,
-		3,
-		'bar'
-	].join('+'),
-	'baz',
-	'x',
-	'y'
-].join('really-long-separator');
-var f = [
-	'str',
-	'str' + variable,
-	'foo',
-	'bar',
-	'moo' + foo
-].join('');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,18 @@
--var a = 'foobar' + boo() + 'bazxy';
-+var a = [
-+	'foo',
-+	'bar',
-+	boo(),
-+	'baz',
-+	'x',
-+	'y'
-+].join('');
- var b = [
--	'foo-bar',
-+	'foo',
-+	'bar',
- 	boo(),
--	'baz-x-y'
-+	'baz',
-+	'x',
-+	'y'
- ].join('-');
- var c = [
- 	'foo',
-@@ -13,17 +23,39 @@
- 	'y'
- ].join('really-long-separator');
- var d = [
--	'foo-bar',
-+	'foo',
-+	'bar',
- 	boo(),
--	'foo+1+2+3+bar-baz-x-y'
-+	[
-+		'foo',
-+		1,
-+		2,
-+		3,
-+		'bar'
-+	].join('+'),
-+	'baz',
-+	'x',
-+	'y'
- ].join('-');
- var e = [
- 	'foo',
- 	'bar',
- 	boo(),
--	'foo+1+2+3+bar',
-+	[
-+		'foo',
-+		1,
-+		2,
-+		3,
-+		'bar'
-+	].join('+'),
- 	'baz',
- 	'x',
- 	'y'
- ].join('really-long-separator');
--var f = 'strstr' + variable + 'foobarmoo' + foo;
-+var f = [
-+	'str',
-+	'str' + variable,
-+	'foo',
-+	'bar',
-+	'moo' + foo
-+].join('');
-
-```
-
 ## `uglify/functions/substitute`
 
 - tags: `join vars`
@@ -53901,6 +53761,98 @@ for (var c in o) console.log(o[c].test('\\'), o[c].test(c));
 
 ```
 
+## `uglify/arrays/constant_join_3`
+
+- size: oxc 352 vs reference 254 (no whitespaces: +98, formatted: +112)
+
+```js
+var foo, bar, baz;
+var a = [null].join();
+var b = [,].join();
+var c = [
+	,
+	1,
+	,
+	3
+].join();
+var d = [foo].join();
+var e = [
+	foo,
+	null,
+	undefined,
+	bar
+].join('-');
+var f = [foo, bar].join('');
+var g = [
+	null,
+	'foo',
+	null,
+	bar + 'baz'
+].join('');
+var h = [
+	null,
+	'foo',
+	null,
+	bar + 'baz'
+].join('-');
+var i = [
+	'foo' + bar,
+	null,
+	baz + 'moo'
+].join('');
+var j = [foo + 'bar', baz].join('');
+var k = [foo, 'bar' + baz].join('');
+var l = [foo, bar + 'baz'].join('');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,16 +2,31 @@
+ var a = '';
+ var b = '';
+ var c = ',1,,3';
+-var d = '' + foo;
++var d = [foo].join();
+ var e = [
+ 	foo,
+-	'-',
++	null,
++	void 0,
+ 	bar
+ ].join('-');
+-var f = '' + foo + bar;
+-var g = 'foo' + bar + 'baz';
+-var h = ['-foo-', bar + 'baz'].join('-');
+-var i = 'foo' + bar + baz + 'moo';
+-var j = foo + 'bar' + baz;
+-var k = foo + 'bar' + baz;
+-var l = foo + (bar + 'baz');
++var f = [foo, bar].join('');
++var g = [
++	null,
++	'foo',
++	null,
++	bar + 'baz'
++].join('');
++var h = [
++	null,
++	'foo',
++	null,
++	bar + 'baz'
++].join('-');
++var i = [
++	'foo' + bar,
++	null,
++	baz + 'moo'
++].join('');
++var j = [foo + 'bar', baz].join('');
++var k = [foo, 'bar' + baz].join('');
++var l = [foo, bar + 'baz'].join('');
+
+```
+
 ## `uglify/evaluate/unsafe_escaped`
 
 - tags: `join vars`, `remove unused`, `3 iterations`
@@ -54136,6 +54088,204 @@ console.log(f().toString(16));
 +	return b |= a[0], b <<= 8, b |= a[1], b <<= 8, b |= a[2], b <<= 8, b |= a[3], b;
 +}
 +console.log(f().toString(16));
+
+```
+
+## `uglify/arrays/constant_join_1`
+
+- size: oxc 582 vs reference 474 (no whitespaces: +108, formatted: +175)
+
+```js
+var a = [
+	'foo',
+	'bar',
+	'baz'
+].join('');
+var a1 = [
+	'foo',
+	'bar',
+	'baz'
+].join();
+var a2 = [
+	'foo',
+	'bar',
+	'baz'
+].join(null);
+var a3 = [
+	'foo',
+	'bar',
+	'baz'
+].join(void 0);
+var a4 = [
+	'foo',
+	,
+	'baz'
+].join();
+var a5 = [
+	'foo',
+	null,
+	'baz'
+].join();
+var a6 = [
+	'foo',
+	void 0,
+	'baz'
+].join();
+var b = [
+	'foo',
+	1,
+	2,
+	3,
+	'bar'
+].join('');
+var c = [
+	boo(),
+	'foo',
+	1,
+	2,
+	3,
+	'bar',
+	bar()
+].join('');
+var c1 = [
+	boo(),
+	bar(),
+	'foo',
+	1,
+	2,
+	3,
+	'bar',
+	bar()
+].join('');
+var c2 = [
+	1,
+	2,
+	'foo',
+	'bar',
+	baz()
+].join('');
+var c3 = [
+	boo() + bar() + 'foo',
+	1,
+	2,
+	3,
+	'bar',
+	bar() + 'foo'
+].join('');
+var c4 = [
+	1,
+	2,
+	null,
+	undefined,
+	'foo',
+	'bar',
+	baz()
+].join('');
+var c5 = [
+	boo() + bar() + 'foo',
+	1,
+	2,
+	3,
+	'bar',
+	bar() + 'foo'
+].join();
+var c6 = [
+	1,
+	2,
+	null,
+	undefined,
+	'foo',
+	'bar',
+	baz()
+].join();
+var d = [
+	'foo',
+	1 + 2 + 'bar',
+	'baz'
+].join('-');
+var e = [].join(foo + bar);
+var f = [].join('');
+var g = [].join('foo');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -6,11 +6,49 @@
+ var a5 = 'foo,,baz';
+ var a6 = 'foo,,baz';
+ var b = 'foo123bar';
+-var c = boo() + 'foo123bar' + bar();
+-var c1 = '' + boo() + bar() + 'foo123bar' + bar();
+-var c2 = '12foobar' + baz();
+-var c3 = boo() + bar() + 'foo123bar' + bar() + 'foo';
+-var c4 = '12foobar' + baz();
++var c = [
++	boo(),
++	'foo',
++	1,
++	2,
++	3,
++	'bar',
++	bar()
++].join('');
++var c1 = [
++	boo(),
++	bar(),
++	'foo',
++	1,
++	2,
++	3,
++	'bar',
++	bar()
++].join('');
++var c2 = [
++	1,
++	2,
++	'foo',
++	'bar',
++	baz()
++].join('');
++var c3 = [
++	boo() + bar() + 'foo',
++	1,
++	2,
++	3,
++	'bar',
++	bar() + 'foo'
++].join('');
++var c4 = [
++	1,
++	2,
++	null,
++	void 0,
++	'foo',
++	'bar',
++	baz()
++].join('');
+ var c5 = [
+ 	boo() + bar() + 'foo',
+ 	1,
+@@ -19,8 +57,16 @@
+ 	'bar',
+ 	bar() + 'foo'
+ ].join();
+-var c6 = ['1,2,,,foo,bar', baz()].join();
++var c6 = [
++	1,
++	2,
++	null,
++	void 0,
++	'foo',
++	'bar',
++	baz()
++].join();
+ var d = 'foo-3bar-baz';
+-var e = (foo, bar, '');
++var e = [].join(foo + bar);
+ var f = '';
+ var g = '';
 
 ```
 
@@ -54487,107 +54637,6 @@ def(function(hb) {
  ].forEach(function(test) {
  	console.log(test[1].test('\\'), test[1].test(test[0]));
  });
-
-```
-
-## `uglify/arrays/constant_join_3`
-
-- size: oxc 378 vs reference 254 (no whitespaces: +124, formatted: +147)
-
-```js
-var foo, bar, baz;
-var a = [null].join();
-var b = [,].join();
-var c = [
-	,
-	1,
-	,
-	3
-].join();
-var d = [foo].join();
-var e = [
-	foo,
-	null,
-	undefined,
-	bar
-].join('-');
-var f = [foo, bar].join('');
-var g = [
-	null,
-	'foo',
-	null,
-	bar + 'baz'
-].join('');
-var h = [
-	null,
-	'foo',
-	null,
-	bar + 'baz'
-].join('-');
-var i = [
-	'foo' + bar,
-	null,
-	baz + 'moo'
-].join('');
-var j = [foo + 'bar', baz].join('');
-var k = [foo, 'bar' + baz].join('');
-var l = [foo, bar + 'baz'].join('');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,17 +1,37 @@
- var foo, bar, baz;
--var a = '';
--var b = '';
--var c = ',1,,3';
--var d = '' + foo;
-+var a = [null].join();
-+var b = [,].join();
-+var c = [
-+	,
-+	1,
-+	,
-+	3
-+].join();
-+var d = [foo].join();
- var e = [
- 	foo,
--	'-',
-+	null,
-+	void 0,
- 	bar
- ].join('-');
--var f = '' + foo + bar;
--var g = 'foo' + bar + 'baz';
--var h = ['-foo-', bar + 'baz'].join('-');
--var i = 'foo' + bar + baz + 'moo';
--var j = foo + 'bar' + baz;
--var k = foo + 'bar' + baz;
--var l = foo + (bar + 'baz');
-+var f = [foo, bar].join('');
-+var g = [
-+	null,
-+	'foo',
-+	null,
-+	bar + 'baz'
-+].join('');
-+var h = [
-+	null,
-+	'foo',
-+	null,
-+	bar + 'baz'
-+].join('-');
-+var i = [
-+	'foo' + bar,
-+	null,
-+	baz + 'moo'
-+].join('');
-+var j = [foo + 'bar', baz].join('');
-+var k = [foo, 'bar' + baz].join('');
-+var l = [foo, bar + 'baz'].join('');
 
 ```
 
@@ -56194,256 +56243,6 @@ function f5(y) {
 +	while (--y);
  }
 
-```
-
-## `uglify/arrays/constant_join_1`
-
-- size: oxc 739 vs reference 474 (no whitespaces: +265, formatted: +399)
-
-```js
-var a = [
-	'foo',
-	'bar',
-	'baz'
-].join('');
-var a1 = [
-	'foo',
-	'bar',
-	'baz'
-].join();
-var a2 = [
-	'foo',
-	'bar',
-	'baz'
-].join(null);
-var a3 = [
-	'foo',
-	'bar',
-	'baz'
-].join(void 0);
-var a4 = [
-	'foo',
-	,
-	'baz'
-].join();
-var a5 = [
-	'foo',
-	null,
-	'baz'
-].join();
-var a6 = [
-	'foo',
-	void 0,
-	'baz'
-].join();
-var b = [
-	'foo',
-	1,
-	2,
-	3,
-	'bar'
-].join('');
-var c = [
-	boo(),
-	'foo',
-	1,
-	2,
-	3,
-	'bar',
-	bar()
-].join('');
-var c1 = [
-	boo(),
-	bar(),
-	'foo',
-	1,
-	2,
-	3,
-	'bar',
-	bar()
-].join('');
-var c2 = [
-	1,
-	2,
-	'foo',
-	'bar',
-	baz()
-].join('');
-var c3 = [
-	boo() + bar() + 'foo',
-	1,
-	2,
-	3,
-	'bar',
-	bar() + 'foo'
-].join('');
-var c4 = [
-	1,
-	2,
-	null,
-	undefined,
-	'foo',
-	'bar',
-	baz()
-].join('');
-var c5 = [
-	boo() + bar() + 'foo',
-	1,
-	2,
-	3,
-	'bar',
-	bar() + 'foo'
-].join();
-var c6 = [
-	1,
-	2,
-	null,
-	undefined,
-	'foo',
-	'bar',
-	baz()
-].join();
-var d = [
-	'foo',
-	1 + 2 + 'bar',
-	'baz'
-].join('-');
-var e = [].join(foo + bar);
-var f = [].join('');
-var g = [].join('foo');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,16 +1,88 @@
--var a = 'foobarbaz';
--var a1 = 'foo,bar,baz';
--var a2 = 'foonullbarnullbaz';
--var a3 = 'foo,bar,baz';
--var a4 = 'foo,,baz';
--var a5 = 'foo,,baz';
--var a6 = 'foo,,baz';
--var b = 'foo123bar';
--var c = boo() + 'foo123bar' + bar();
--var c1 = '' + boo() + bar() + 'foo123bar' + bar();
--var c2 = '12foobar' + baz();
--var c3 = boo() + bar() + 'foo123bar' + bar() + 'foo';
--var c4 = '12foobar' + baz();
-+var a = [
-+	'foo',
-+	'bar',
-+	'baz'
-+].join('');
-+var a1 = [
-+	'foo',
-+	'bar',
-+	'baz'
-+].join();
-+var a2 = [
-+	'foo',
-+	'bar',
-+	'baz'
-+].join(null);
-+var a3 = [
-+	'foo',
-+	'bar',
-+	'baz'
-+].join(void 0);
-+var a4 = [
-+	'foo',
-+	,
-+	'baz'
-+].join();
-+var a5 = [
-+	'foo',
-+	null,
-+	'baz'
-+].join();
-+var a6 = [
-+	'foo',
-+	void 0,
-+	'baz'
-+].join();
-+var b = [
-+	'foo',
-+	1,
-+	2,
-+	3,
-+	'bar'
-+].join('');
-+var c = [
-+	boo(),
-+	'foo',
-+	1,
-+	2,
-+	3,
-+	'bar',
-+	bar()
-+].join('');
-+var c1 = [
-+	boo(),
-+	bar(),
-+	'foo',
-+	1,
-+	2,
-+	3,
-+	'bar',
-+	bar()
-+].join('');
-+var c2 = [
-+	1,
-+	2,
-+	'foo',
-+	'bar',
-+	baz()
-+].join('');
-+var c3 = [
-+	boo() + bar() + 'foo',
-+	1,
-+	2,
-+	3,
-+	'bar',
-+	bar() + 'foo'
-+].join('');
-+var c4 = [
-+	1,
-+	2,
-+	null,
-+	void 0,
-+	'foo',
-+	'bar',
-+	baz()
-+].join('');
- var c5 = [
- 	boo() + bar() + 'foo',
- 	1,
-@@ -19,8 +91,20 @@
- 	'bar',
- 	bar() + 'foo'
- ].join();
--var c6 = ['1,2,,,foo,bar', baz()].join();
--var d = 'foo-3bar-baz';
--var e = (foo, bar, '');
--var f = '';
--var g = '';
-+var c6 = [
-+	1,
-+	2,
-+	null,
-+	void 0,
-+	'foo',
-+	'bar',
-+	baz()
-+].join();
-+var d = [
-+	'foo',
-+	'3bar',
-+	'baz'
-+].join('-');
-+var e = [].join(foo + bar
-... [truncated]
 ```
 
 ## `uglify/issue-5614/record_update`

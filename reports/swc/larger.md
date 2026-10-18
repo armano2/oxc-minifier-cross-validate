@@ -1,6 +1,6 @@
 # swc / larger — Output longer than expected (possible missing optimization)
 
-Fixtures: 363
+Fixtures: 362
 
 [← swc](README.md) · [← all families](../README.md)
 
@@ -5090,38 +5090,6 @@ function setCurrentlyValidatingElement$1(element) {
 
 ```
 
-## `swc/issues/11545`
-
-- size: oxc 206 vs reference 193 (no whitespaces: +13, formatted: +14)
-
-```js
-function joinArrayWithUndefined(bool) {
-	return ['abc', bool ? undefined : 'def'].join('');
-}
-console.log(joinArrayWithUndefined(true));
-console.log(joinArrayWithUndefined(false));
-const x = ['abc', undefined].join('');
-console.log(x);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
- function joinArrayWithUndefined(bool) {
- 	return ['abc', bool ? void 0 : 'def'].join('');
- }
--console.log(joinArrayWithUndefined(true));
--console.log(joinArrayWithUndefined(false));
--const x = 'abc';
-+console.log(joinArrayWithUndefined(!0));
-+console.log(joinArrayWithUndefined(!1));
-+const x = ['abc', void 0].join('');
- console.log(x);
-
-```
-
 ## `swc/issues/12213/distinct`
 
 - size: oxc 36 vs reference 23 (no whitespaces: +13, formatted: +19)
@@ -7620,6 +7588,118 @@ export default function useMeow() {
 -		else await doSomething();
  	} };
  }
+
+```
+
+## `swc/issues/10936`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 872 vs reference 849 (no whitespaces: +23, formatted: +29)
+
+```js
+const variable = {};
+const params = [
+	'OrderNumber=',
+	variable.data?.orderNumber,
+	'|AuditNo=',
+	variable.data?.auditNo,
+	'|JournalType=',
+	transactionTypeCode[variable.data.transactionType],
+	'|IsPreview=0'
+].join('');
+console.log(params);
+// Additional test cases
+export const test1 = [
+	1,
+	null,
+	2
+].join('');
+export const test2 = [
+	1,
+	undefined,
+	2
+].join('');
+export const test3 = [
+	1,
+	variable?.notExist,
+	2
+].join('');
+export const test4 = [
+	1,
+	variable.data?.value,
+	2
+].join('');
+export const test5 = [
+	1,
+	obj?.a?.b?.c,
+	2
+].join('');
+// Function calls can return null/undefined
+export const test6 = [
+	1,
+	someFunction(),
+	2
+].join('');
+export const test7 = [
+	1,
+	obj.method(),
+	2
+].join('');
+// Identifiers can be null/undefined  
+export const test8 = [
+	1,
+	unknownVar,
+	2
+].join('');
+// Other expressions that can be null/undefined
+export const test9 = [
+	1,
+	condition ? null : 'x',
+	2
+].join('');
+export const test10 = [
+	1,
+	await promise,
+	2
+].join('');
+export const test11 = [
+	1,
+	new Constructor(),
+	2
+].join('');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,4 @@
+-let variable = {};
+-console.log([
++const variable = {}, params = [
+ 	'OrderNumber=',
+ 	variable.data?.orderNumber,
+ 	'|AuditNo=',
+@@ -7,7 +6,8 @@
+ 	'|JournalType=',
+ 	transactionTypeCode[variable.data.transactionType],
+ 	'|IsPreview=0'
+-].join(''));
++].join('');
++console.log(params);
+ // Additional test cases
+ export const test1 = '12';
+ export const test2 = '12';
+@@ -54,4 +54,8 @@
+ 	await promise,
+ 	2
+ ].join('');
+-export const test11 = '1' + new Constructor() + '2';
++export const test11 = [
++	1,
++	new Constructor(),
++	2
++].join('');
 
 ```
 
@@ -11266,131 +11346,6 @@ switch (1) {
 +		break;
 +	case 2: console.log(333);
 +}
-
-```
-
-## `swc/issues/10936`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 904 vs reference 849 (no whitespaces: +55, formatted: +75)
-
-```js
-const variable = {};
-const params = [
-	'OrderNumber=',
-	variable.data?.orderNumber,
-	'|AuditNo=',
-	variable.data?.auditNo,
-	'|JournalType=',
-	transactionTypeCode[variable.data.transactionType],
-	'|IsPreview=0'
-].join('');
-console.log(params);
-// Additional test cases
-export const test1 = [
-	1,
-	null,
-	2
-].join('');
-export const test2 = [
-	1,
-	undefined,
-	2
-].join('');
-export const test3 = [
-	1,
-	variable?.notExist,
-	2
-].join('');
-export const test4 = [
-	1,
-	variable.data?.value,
-	2
-].join('');
-export const test5 = [
-	1,
-	obj?.a?.b?.c,
-	2
-].join('');
-// Function calls can return null/undefined
-export const test6 = [
-	1,
-	someFunction(),
-	2
-].join('');
-export const test7 = [
-	1,
-	obj.method(),
-	2
-].join('');
-// Identifiers can be null/undefined  
-export const test8 = [
-	1,
-	unknownVar,
-	2
-].join('');
-// Other expressions that can be null/undefined
-export const test9 = [
-	1,
-	condition ? null : 'x',
-	2
-].join('');
-export const test10 = [
-	1,
-	await promise,
-	2
-].join('');
-export const test11 = [
-	1,
-	new Constructor(),
-	2
-].join('');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +1,4 @@
--let variable = {};
--console.log([
-+const variable = {}, params = [
- 	'OrderNumber=',
- 	variable.data?.orderNumber,
- 	'|AuditNo=',
-@@ -7,10 +6,19 @@
- 	'|JournalType=',
- 	transactionTypeCode[variable.data.transactionType],
- 	'|IsPreview=0'
--].join(''));
-+].join('');
-+console.log(params);
- // Additional test cases
--export const test1 = '12';
--export const test2 = '12';
-+export const test1 = [
-+	1,
-+	null,
-+	2
-+].join('');
-+export const test2 = [
-+	1,
-+	void 0,
-+	2
-+].join('');
- export const test3 = [
- 	1,
- 	variable?.notExist,
-@@ -54,4 +62,8 @@
- 	await promise,
- 	2
- ].join('');
--export const test11 = '1' + new Constructor() + '2';
-+export const test11 = [
-+	1,
-+	new Constructor(),
-+	2
-+].join('');
 
 ```
 

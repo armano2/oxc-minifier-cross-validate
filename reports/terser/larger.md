@@ -1,6 +1,6 @@
 # terser / larger — Output longer than expected (possible missing optimization)
 
-Fixtures: 966
+Fixtures: 961
 
 [← terser](README.md) · [← all families](../README.md)
 
@@ -8473,26 +8473,6 @@ function f(x, y) {
 
 ```
 
-## `terser/debugger/drop_debugger`
-
-- tags: `drop debugger`
-- size: oxc 16 vs reference 8 (no whitespaces: +8, formatted: +9)
-
-```js
-debugger;
-if (foo) debugger;
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--if (foo);
-+if (foo) debugger;
-
-```
-
 ## `terser/destructuring/issue_t111_4`
 
 - tags: `remove unused`
@@ -9773,42 +9753,6 @@ console.log(o + 1, o.a + 1, o.b + 1, o.a.b + 1);
 +		console.log.apply(console, arguments), console.log(x);
 +	})(4);
  })(3, 2, 1);
-
-```
-
-## `terser/harmony/issue_2345`
-
-- tags: `remove unused`
-- size: oxc 75 vs reference 65 (no whitespaces: +10, formatted: +17)
-
-```js
-console.log([...[
-	3,
-	2,
-	1
-]].join('-'));
-var a = [
-	3,
-	2,
-	1
-];
-console.log([...a].join('-'));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,4 +1,8 @@
--console.log('3-2-1');
-+console.log([
-+	3,
-+	2,
-+	1
-+].join('-'));
- var a = [
- 	3,
- 	2,
 
 ```
 
@@ -15231,34 +15175,6 @@ console.log(typeof function() {}.valueOf());
 
 ```
 
-## `terser/evaluate/unsafe_string`
-
-- size: oxc 65 vs reference 46 (no whitespaces: +19, formatted: +30)
-
-```js
-console.log('1234' + 1, '1234'[0] + 1, '1234'[6 - 5] + 1, ('12' + '34')[0] + 1, ('12' + '34')[6 - 5] + 1, [
-	1,
-	2,
-	3,
-	4
-].join('')[0] + 1);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,6 @@
--console.log('12341', '11', '21', '11', '21', '11');
-+console.log('12341', '11', '21', '11', '21', [
-+	1,
-+	2,
-+	3,
-+	4
-+].join('')[0] + 1);
-
-```
-
 ## `terser/functions/issue_1841_1`
 
 - tags: `join vars`, `remove unused`
@@ -16042,54 +15958,6 @@ out: for (var i = 0; i < 5; ++i) {
 +(function() {
 +	return {};
 +})().x = 10;
-
-```
-
-## `terser/properties/evaluate_array_length`
-
-- size: oxc 70 vs reference 50 (no whitespaces: +20, formatted: +27)
-
-```js
-a = [
-	1,
-	2,
-	3
-].length;
-a = [
-	1,
-	2,
-	3
-].join()['len' + 'gth'];
-a = [
-	1,
-	2,
-	b
-].length;
-a = [
-	1,
-	2,
-	3
-].join(b).length;
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,12 @@
- a = 3;
--a = 5;
- a = [
- 	1,
- 	2,
-+	3
-+].join().length;
-+a = [
-+	1,
-+	2,
- 	b
- ].length;
- a = [
 
 ```
 
@@ -17664,34 +17532,6 @@ console.log(f(), f(), g(), g());
 +	return 3;
 +}
 +console.log(f(), f(), g(), g());
-
-```
-
-## `terser/evaluate/unsafe_charAt`
-
-- size: oxc 72 vs reference 46 (no whitespaces: +26, formatted: +37)
-
-```js
-console.log('1234' + 1, '1234'.charAt(0) + 1, '1234'.charAt(6 - 5) + 1, ('12' + '34').charAt(0) + 1, ('12' + '34').charAt(6 - 5) + 1, [
-	1,
-	2,
-	3,
-	4
-].join('').charAt(0) + 1);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1,6 @@
--console.log('12341', '11', '21', '11', '21', '11');
-+console.log('12341', '11', '21', '11', '21', [
-+	1,
-+	2,
-+	3,
-+	4
-+].join('').charAt(0) + 1);
 
 ```
 
@@ -25001,6 +24841,131 @@ baz('PASS');
 
 ```
 
+## `terser/arrays/constant_join_2`
+
+- size: oxc 381 vs reference 327 (no whitespaces: +54, formatted: +86)
+
+```js
+var a = [
+	'foo',
+	'bar',
+	boo(),
+	'baz',
+	'x',
+	'y'
+].join('');
+var b = [
+	'foo',
+	'bar',
+	boo(),
+	'baz',
+	'x',
+	'y'
+].join('-');
+var c = [
+	'foo',
+	'bar',
+	boo(),
+	'baz',
+	'x',
+	'y'
+].join('really-long-separator');
+var d = [
+	'foo',
+	'bar',
+	boo(),
+	[
+		'foo',
+		1,
+		2,
+		3,
+		'bar'
+	].join('+'),
+	'baz',
+	'x',
+	'y'
+].join('-');
+var e = [
+	'foo',
+	'bar',
+	boo(),
+	[
+		'foo',
+		1,
+		2,
+		3,
+		'bar'
+	].join('+'),
+	'baz',
+	'x',
+	'y'
+].join('really-long-separator');
+var f = [
+	'str',
+	'str' + variable,
+	'foo',
+	'bar',
+	'moo' + foo
+].join('');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,18 @@
+-var a = 'foobar' + boo() + 'bazxy';
++var a = [
++	'foo',
++	'bar',
++	boo(),
++	'baz',
++	'x',
++	'y'
++].join('');
+ var b = [
+-	'foo-bar',
++	'foo',
++	'bar',
+ 	boo(),
+-	'baz-x-y'
++	'baz',
++	'x',
++	'y'
+ ].join('-');
+ var c = [
+ 	'foo',
+@@ -13,9 +23,13 @@
+ 	'y'
+ ].join('really-long-separator');
+ var d = [
+-	'foo-bar',
++	'foo',
++	'bar',
+ 	boo(),
+-	'foo+1+2+3+bar-baz-x-y'
++	'foo+1+2+3+bar',
++	'baz',
++	'x',
++	'y'
+ ].join('-');
+ var e = [
+ 	'foo',
+@@ -26,4 +40,10 @@
+ 	'x',
+ 	'y'
+ ].join('really-long-separator');
+-var f = 'strstr' + variable + 'foobarmoo' + foo;
++var f = [
++	'str',
++	'str' + variable,
++	'foo',
++	'bar',
++	'moo' + foo
++].join('');
+
+```
+
 ## `terser/drop_unused/issue_t161_top_retain_10`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
@@ -27861,147 +27826,6 @@ console.log(x);
 
 ```
 
-## `terser/arrays/constant_join_2`
-
-- size: oxc 409 vs reference 327 (no whitespaces: +82, formatted: +148)
-
-```js
-var a = [
-	'foo',
-	'bar',
-	boo(),
-	'baz',
-	'x',
-	'y'
-].join('');
-var b = [
-	'foo',
-	'bar',
-	boo(),
-	'baz',
-	'x',
-	'y'
-].join('-');
-var c = [
-	'foo',
-	'bar',
-	boo(),
-	'baz',
-	'x',
-	'y'
-].join('really-long-separator');
-var d = [
-	'foo',
-	'bar',
-	boo(),
-	[
-		'foo',
-		1,
-		2,
-		3,
-		'bar'
-	].join('+'),
-	'baz',
-	'x',
-	'y'
-].join('-');
-var e = [
-	'foo',
-	'bar',
-	boo(),
-	[
-		'foo',
-		1,
-		2,
-		3,
-		'bar'
-	].join('+'),
-	'baz',
-	'x',
-	'y'
-].join('really-long-separator');
-var f = [
-	'str',
-	'str' + variable,
-	'foo',
-	'bar',
-	'moo' + foo
-].join('');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,8 +1,18 @@
--var a = 'foobar' + boo() + 'bazxy';
-+var a = [
-+	'foo',
-+	'bar',
-+	boo(),
-+	'baz',
-+	'x',
-+	'y'
-+].join('');
- var b = [
--	'foo-bar',
-+	'foo',
-+	'bar',
- 	boo(),
--	'baz-x-y'
-+	'baz',
-+	'x',
-+	'y'
- ].join('-');
- var c = [
- 	'foo',
-@@ -13,17 +23,39 @@
- 	'y'
- ].join('really-long-separator');
- var d = [
--	'foo-bar',
-+	'foo',
-+	'bar',
- 	boo(),
--	'foo+1+2+3+bar-baz-x-y'
-+	[
-+		'foo',
-+		1,
-+		2,
-+		3,
-+		'bar'
-+	].join('+'),
-+	'baz',
-+	'x',
-+	'y'
- ].join('-');
- var e = [
- 	'foo',
- 	'bar',
- 	boo(),
--	'foo+1+2+3+bar',
-+	[
-+		'foo',
-+		1,
-+		2,
-+		3,
-+		'bar'
-+	].join('+'),
- 	'baz',
- 	'x',
- 	'y'
- ].join('really-long-separator');
--var f = 'strstr' + variable + 'foobarmoo' + foo;
-+var f = [
-+	'str',
-+	'str' + variable,
-+	'foo',
-+	'bar',
-+	'moo' + foo
-+].join('');
-
-```
-
 ## `terser/collapse_vars/collapse_rhs_number`
 
 - tags: `join vars`
@@ -28837,6 +28661,97 @@ printTest();
 
 ```
 
+## `terser/arrays/constant_join_3`
+
+- size: oxc 336 vs reference 238 (no whitespaces: +98, formatted: +112)
+
+```js
+var a = [null].join();
+var b = [,].join();
+var c = [
+	,
+	1,
+	,
+	3
+].join();
+var d = [foo].join();
+var e = [
+	foo,
+	null,
+	undefined,
+	bar
+].join('-');
+var f = [foo, bar].join('');
+var g = [
+	null,
+	'foo',
+	null,
+	bar + 'baz'
+].join('');
+var h = [
+	null,
+	'foo',
+	null,
+	bar + 'baz'
+].join('-');
+var i = [
+	'foo' + bar,
+	null,
+	baz + 'moo'
+].join('');
+var j = [foo + 'bar', baz].join('');
+var k = [foo, 'bar' + baz].join('');
+var l = [foo, bar + 'baz'].join('');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,16 +1,31 @@
+ var a = '';
+ var b = '';
+ var c = ',1,,3';
+-var d = '' + foo;
++var d = [foo].join();
+ var e = [
+ 	foo,
+-	'-',
++	null,
++	void 0,
+ 	bar
+ ].join('-');
+-var f = '' + foo + bar;
+-var g = 'foo' + bar + 'baz';
+-var h = ['-foo-', bar + 'baz'].join('-');
+-var i = 'foo' + bar + baz + 'moo';
+-var j = foo + 'bar' + baz;
+-var k = foo + 'bar' + baz;
+-var l = foo + (bar + 'baz');
++var f = [foo, bar].join('');
++var g = [
++	null,
++	'foo',
++	null,
++	bar + 'baz'
++].join('');
++var h = [
++	null,
++	'foo',
++	null,
++	bar + 'baz'
++].join('-');
++var i = [
++	'foo' + bar,
++	null,
++	baz + 'moo'
++].join('');
++var j = [foo + 'bar', baz].join('');
++var k = [foo, 'bar' + baz].join('');
++var l = [foo, bar + 'baz'].join('');
+
+```
+
 ## `terser/drop_unused/unused_class_which_extends_might_throw`
 
 - size: oxc 98 vs reference 0 (no whitespaces: +98, formatted: +122)
@@ -29316,6 +29231,202 @@ console.log(f([]), g([]), h([]));
 +	return typeof a;
 +}
 +console.log(f([]), g([]), h([]));
+
+```
+
+## `terser/arrays/constant_join`
+
+- size: oxc 582 vs reference 478 (no whitespaces: +104, formatted: +171)
+
+```js
+var a = [
+	'foo',
+	'bar',
+	'baz'
+].join('');
+var a1 = [
+	'foo',
+	'bar',
+	'baz'
+].join();
+var a2 = [
+	'foo',
+	'bar',
+	'baz'
+].join(null);
+var a3 = [
+	'foo',
+	'bar',
+	'baz'
+].join(void 0);
+var a4 = [
+	'foo',
+	,
+	'baz'
+].join();
+var a5 = [
+	'foo',
+	null,
+	'baz'
+].join();
+var a6 = [
+	'foo',
+	void 0,
+	'baz'
+].join();
+var b = [
+	'foo',
+	1,
+	2,
+	3,
+	'bar'
+].join('');
+var c = [
+	boo(),
+	'foo',
+	1,
+	2,
+	3,
+	'bar',
+	bar()
+].join('');
+var c1 = [
+	boo(),
+	bar(),
+	'foo',
+	1,
+	2,
+	3,
+	'bar',
+	bar()
+].join('');
+var c2 = [
+	1,
+	2,
+	'foo',
+	'bar',
+	baz()
+].join('');
+var c3 = [
+	boo() + bar() + 'foo',
+	1,
+	2,
+	3,
+	'bar',
+	bar() + 'foo'
+].join('');
+var c4 = [
+	1,
+	2,
+	null,
+	undefined,
+	'foo',
+	'bar',
+	baz()
+].join('');
+var c5 = [
+	boo() + bar() + 'foo',
+	1,
+	2,
+	3,
+	'bar',
+	bar() + 'foo'
+].join();
+var c6 = [
+	1,
+	2,
+	null,
+	undefined,
+	'foo',
+	'bar',
+	baz()
+].join();
+var d = [
+	'foo',
+	1 + 2 + 'bar',
+	'baz'
+].join('-');
+var e = [].join(foo + bar);
+var f = [].join('');
+var g = [].join('foo');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -6,11 +6,49 @@
+ var a5 = 'foo,,baz';
+ var a6 = 'foo,,baz';
+ var b = 'foo123bar';
+-var c = boo() + 'foo123bar' + bar();
+-var c1 = '' + boo() + bar() + 'foo123bar' + bar();
+-var c2 = '12foobar' + baz();
+-var c3 = boo() + bar() + 'foo123bar' + bar() + 'foo';
+-var c4 = '12foobar' + baz();
++var c = [
++	boo(),
++	'foo',
++	1,
++	2,
++	3,
++	'bar',
++	bar()
++].join('');
++var c1 = [
++	boo(),
++	bar(),
++	'foo',
++	1,
++	2,
++	3,
++	'bar',
++	bar()
++].join('');
++var c2 = [
++	1,
++	2,
++	'foo',
++	'bar',
++	baz()
++].join('');
++var c3 = [
++	boo() + bar() + 'foo',
++	1,
++	2,
++	3,
++	'bar',
++	bar() + 'foo'
++].join('');
++var c4 = [
++	1,
++	2,
++	null,
++	void 0,
++	'foo',
++	'bar',
++	baz()
++].join('');
+ var c5 = [
+ 	boo() + bar() + 'foo',
+ 	1,
+@@ -19,7 +57,15 @@
+ 	'bar',
+ 	bar() + 'foo'
+ ].join();
+-var c6 = ['1,2,,,foo,bar', baz()].join();
++var c6 = [
++	1,
++	2,
++	null,
++	void 0,
++	'foo',
++	'bar',
++	baz()
++].join();
+ var d = 'foo-3bar-baz';
+ var e = [].join(foo + bar);
+ var f = '';
 
 ```
 
@@ -30322,105 +30433,6 @@ console.log(x);
 +class X extends (x += 'SS', Array) {}
 +global.something = [new X(), new Y()];
 +console.log(x);
-
-```
-
-## `terser/arrays/constant_join_3`
-
-- size: oxc 362 vs reference 238 (no whitespaces: +124, formatted: +147)
-
-```js
-var a = [null].join();
-var b = [,].join();
-var c = [
-	,
-	1,
-	,
-	3
-].join();
-var d = [foo].join();
-var e = [
-	foo,
-	null,
-	undefined,
-	bar
-].join('-');
-var f = [foo, bar].join('');
-var g = [
-	null,
-	'foo',
-	null,
-	bar + 'baz'
-].join('');
-var h = [
-	null,
-	'foo',
-	null,
-	bar + 'baz'
-].join('-');
-var i = [
-	'foo' + bar,
-	null,
-	baz + 'moo'
-].join('');
-var j = [foo + 'bar', baz].join('');
-var k = [foo, 'bar' + baz].join('');
-var l = [foo, bar + 'baz'].join('');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,16 +1,36 @@
--var a = '';
--var b = '';
--var c = ',1,,3';
--var d = '' + foo;
-+var a = [null].join();
-+var b = [,].join();
-+var c = [
-+	,
-+	1,
-+	,
-+	3
-+].join();
-+var d = [foo].join();
- var e = [
- 	foo,
--	'-',
-+	null,
-+	void 0,
- 	bar
- ].join('-');
--var f = '' + foo + bar;
--var g = 'foo' + bar + 'baz';
--var h = ['-foo-', bar + 'baz'].join('-');
--var i = 'foo' + bar + baz + 'moo';
--var j = foo + 'bar' + baz;
--var k = foo + 'bar' + baz;
--var l = foo + (bar + 'baz');
-+var f = [foo, bar].join('');
-+var g = [
-+	null,
-+	'foo',
-+	null,
-+	bar + 'baz'
-+].join('');
-+var h = [
-+	null,
-+	'foo',
-+	null,
-+	bar + 'baz'
-+].join('-');
-+var i = [
-+	'foo' + bar,
-+	null,
-+	baz + 'moo'
-+].join('');
-+var j = [foo + 'bar', baz].join('');
-+var k = [foo, 'bar' + baz].join('');
-+var l = [foo, bar + 'baz'].join('');
 
 ```
 
@@ -32659,257 +32671,6 @@ console.log(typeof (function() {
 +	return (0, eval)('this');
 +})());
 
-```
-
-## `terser/arrays/constant_join`
-
-- size: oxc 739 vs reference 478 (no whitespaces: +261, formatted: +395)
-
-```js
-var a = [
-	'foo',
-	'bar',
-	'baz'
-].join('');
-var a1 = [
-	'foo',
-	'bar',
-	'baz'
-].join();
-var a2 = [
-	'foo',
-	'bar',
-	'baz'
-].join(null);
-var a3 = [
-	'foo',
-	'bar',
-	'baz'
-].join(void 0);
-var a4 = [
-	'foo',
-	,
-	'baz'
-].join();
-var a5 = [
-	'foo',
-	null,
-	'baz'
-].join();
-var a6 = [
-	'foo',
-	void 0,
-	'baz'
-].join();
-var b = [
-	'foo',
-	1,
-	2,
-	3,
-	'bar'
-].join('');
-var c = [
-	boo(),
-	'foo',
-	1,
-	2,
-	3,
-	'bar',
-	bar()
-].join('');
-var c1 = [
-	boo(),
-	bar(),
-	'foo',
-	1,
-	2,
-	3,
-	'bar',
-	bar()
-].join('');
-var c2 = [
-	1,
-	2,
-	'foo',
-	'bar',
-	baz()
-].join('');
-var c3 = [
-	boo() + bar() + 'foo',
-	1,
-	2,
-	3,
-	'bar',
-	bar() + 'foo'
-].join('');
-var c4 = [
-	1,
-	2,
-	null,
-	undefined,
-	'foo',
-	'bar',
-	baz()
-].join('');
-var c5 = [
-	boo() + bar() + 'foo',
-	1,
-	2,
-	3,
-	'bar',
-	bar() + 'foo'
-].join();
-var c6 = [
-	1,
-	2,
-	null,
-	undefined,
-	'foo',
-	'bar',
-	baz()
-].join();
-var d = [
-	'foo',
-	1 + 2 + 'bar',
-	'baz'
-].join('-');
-var e = [].join(foo + bar);
-var f = [].join('');
-var g = [].join('foo');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,16 +1,88 @@
--var a = 'foobarbaz';
--var a1 = 'foo,bar,baz';
--var a2 = 'foonullbarnullbaz';
--var a3 = 'foo,bar,baz';
--var a4 = 'foo,,baz';
--var a5 = 'foo,,baz';
--var a6 = 'foo,,baz';
--var b = 'foo123bar';
--var c = boo() + 'foo123bar' + bar();
--var c1 = '' + boo() + bar() + 'foo123bar' + bar();
--var c2 = '12foobar' + baz();
--var c3 = boo() + bar() + 'foo123bar' + bar() + 'foo';
--var c4 = '12foobar' + baz();
-+var a = [
-+	'foo',
-+	'bar',
-+	'baz'
-+].join('');
-+var a1 = [
-+	'foo',
-+	'bar',
-+	'baz'
-+].join();
-+var a2 = [
-+	'foo',
-+	'bar',
-+	'baz'
-+].join(null);
-+var a3 = [
-+	'foo',
-+	'bar',
-+	'baz'
-+].join(void 0);
-+var a4 = [
-+	'foo',
-+	,
-+	'baz'
-+].join();
-+var a5 = [
-+	'foo',
-+	null,
-+	'baz'
-+].join();
-+var a6 = [
-+	'foo',
-+	void 0,
-+	'baz'
-+].join();
-+var b = [
-+	'foo',
-+	1,
-+	2,
-+	3,
-+	'bar'
-+].join('');
-+var c = [
-+	boo(),
-+	'foo',
-+	1,
-+	2,
-+	3,
-+	'bar',
-+	bar()
-+].join('');
-+var c1 = [
-+	boo(),
-+	bar(),
-+	'foo',
-+	1,
-+	2,
-+	3,
-+	'bar',
-+	bar()
-+].join('');
-+var c2 = [
-+	1,
-+	2,
-+	'foo',
-+	'bar',
-+	baz()
-+].join('');
-+var c3 = [
-+	boo() + bar() + 'foo',
-+	1,
-+	2,
-+	3,
-+	'bar',
-+	bar() + 'foo'
-+].join('');
-+var c4 = [
-+	1,
-+	2,
-+	null,
-+	void 0,
-+	'foo',
-+	'bar',
-+	baz()
-+].join('');
- var c5 = [
- 	boo() + bar() + 'foo',
- 	1,
-@@ -19,8 +91,20 @@
- 	'bar',
- 	bar() + 'foo'
- ].join();
--var c6 = ['1,2,,,foo,bar', baz()].join();
--var d = 'foo-3bar-baz';
-+var c6 = [
-+	1,
-+	2,
-+	null,
-+	void 0,
-+	'foo',
-+	'bar',
-+	baz()
-+].join();
-+var d = [
-+	'foo',
-+	'3bar',
-+	'baz'
-+].join('-');
- var e = [].join(foo + bar);
--var f = '';
--var g = '';
-+var f = [].join('');
-
-... [truncated]
 ```
 
 ## `terser/evaluate/number_method_call`

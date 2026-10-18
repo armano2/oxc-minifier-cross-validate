@@ -1,6 +1,6 @@
 # uglify / smaller — Output shorter than expected (possible over-optimization / bug)
 
-Fixtures: 1103
+Fixtures: 1104
 
 [← uglify](README.md) · [← all families](../README.md)
 
@@ -13954,6 +13954,26 @@ console.log(function(a, b, c) {
 +		let e = 42;
  	}
  }('PASS'));
+
+```
+
+## `uglify/debugger/drop_debugger`
+
+- tags: `drop debugger`
+- size: oxc 4 vs reference 8 (no whitespaces: -4, formatted: -5)
+
+```js
+debugger;
+if (foo) debugger;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-if (foo);
++foo;
 
 ```
 

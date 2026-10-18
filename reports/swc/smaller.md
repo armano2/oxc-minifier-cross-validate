@@ -1,8 +1,40 @@
 # swc / smaller — Output shorter than expected (possible over-optimization / bug)
 
-Fixtures: 124
+Fixtures: 125
 
 [← swc](README.md) · [← all families](../README.md)
+
+## `swc/issues/11545`
+
+- size: oxc 192 vs reference 193 (no whitespaces: -1, formatted: -1)
+
+```js
+function joinArrayWithUndefined(bool) {
+	return ['abc', bool ? undefined : 'def'].join('');
+}
+console.log(joinArrayWithUndefined(true));
+console.log(joinArrayWithUndefined(false));
+const x = ['abc', undefined].join('');
+console.log(x);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,7 +1,7 @@
+ function joinArrayWithUndefined(bool) {
+ 	return ['abc', bool ? void 0 : 'def'].join('');
+ }
+-console.log(joinArrayWithUndefined(true));
+-console.log(joinArrayWithUndefined(false));
++console.log(joinArrayWithUndefined(!0));
++console.log(joinArrayWithUndefined(!1));
+ const x = 'abc';
+-console.log(x);
++console.log('abc');
+
+```
 
 ## `swc/pr/11381`
 
