@@ -2,7 +2,7 @@
 name = "reports"
 version = "0.1.0"
 edition = "2024"
-rust-version = "1.99.0"
+rust-version = "1.99.1"
 publish = false
 
 [[bin]]
@@ -19,10 +19,12 @@ nursery = { level = "warn", priority = -1 }
 
 # The conformance harness catches panics from individual fixtures.
 [profile.dev]
+debug = false
+strip = "symbols"
 panic = "unwind"
 opt-level = 2
 codegen-units = 256
-lto = "fat"
+lto = "thin"
 debug-assertions = true
 overflow-checks = true
 
