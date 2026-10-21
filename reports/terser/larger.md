@@ -1,6 +1,6 @@
 # terser / larger — Output longer than expected (possible missing optimization)
 
-Fixtures: 961
+Fixtures: 959
 
 [← terser](README.md) · [← all families](../README.md)
 
@@ -14505,42 +14505,6 @@ switch (a) {
 +	default: console.log('FAIL');
 +	case 0:
 +}
-
-```
-
-## `terser/unicode/issue_2242_3`
-
-- size: oxc 53 vs reference 36 (no whitespaces: +17, formatted: +23)
-
-```js
-console.log('\ud83d' + '\ude00', '\ud83d' + '@' + '\ude00');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--console.log('😀', '\ud83d@\ude00');
-+console.log('\ud83d' + '\ude00', '\ud83d' + '@' + '\ude00');
-
-```
-
-## `terser/unicode/issue_2242_4`
-
-- size: oxc 53 vs reference 36 (no whitespaces: +17, formatted: +23)
-
-```js
-console.log('\ud83d' + '\ude00', '\ud83d' + '@' + '\ude00');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--console.log('😀', '\ud83d@\ude00');
-+console.log('\ud83d' + '\ude00', '\ud83d' + '@' + '\ude00');
 
 ```
 

@@ -1,6 +1,6 @@
 # uglify / larger — Output longer than expected (possible missing optimization)
 
-Fixtures: 1723
+Fixtures: 1720
 
 [← uglify](README.md) · [← all families](../README.md)
 
@@ -24449,42 +24449,6 @@ switch (foo) {
 
 ```
 
-## `uglify/templates/unicode_templates`
-
-- size: oxc 49 vs reference 39 (no whitespaces: +10, formatted: +10)
-
-```js
-console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--console.log(`𐐷\ud801𐐷${42}𐐷`);
-+console.log(`\ud801\udc37\ud801𐐷42\u{10437}`);
-
-```
-
-## `uglify/templates/unicode_templates_ecma`
-
-- size: oxc 49 vs reference 39 (no whitespaces: +10, formatted: +10)
-
-```js
-console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--console.log(`𐐷\ud801𐐷${42}𐐷`);
-+console.log(`\ud801\udc37\ud801𐐷42\u{10437}`);
-
-```
-
 ## `uglify/arguments/issue_4410_1`
 
 - tags: `join vars`, `sequences`
@@ -32906,24 +32870,6 @@ try {
 +} catch {
  	console.log('FAIL');
  }
-
-```
-
-## `uglify/unicode/issue_2242_4`
-
-- size: oxc 53 vs reference 36 (no whitespaces: +17, formatted: +23)
-
-```js
-console.log('\ud83d' + '\ude00', '\ud83d' + '@' + '\ude00');
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--console.log('😀', '\ud83d@\ude00');
-+console.log('\ud83d' + '\ude00', '\ud83d' + '@' + '\ude00');
 
 ```
 

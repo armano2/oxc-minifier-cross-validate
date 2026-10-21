@@ -1,6 +1,6 @@
 # uglify / smaller — Output shorter than expected (possible over-optimization / bug)
 
-Fixtures: 1104
+Fixtures: 1107
 
 [← uglify](README.md) · [← all families](../README.md)
 
@@ -12886,27 +12886,9 @@ try {
 
 ```
 
-## `uglify/templates/unicode`
+## `uglify/templates/unicode_templates`
 
-- size: oxc 49 vs reference 52 (no whitespaces: -3, formatted: -3)
-
-```js
-console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
-+console.log(`\ud801\udc37\ud801𐐷42\u{10437}`);
-
-```
-
-## `uglify/templates/unicode_ecma`
-
-- size: oxc 49 vs reference 52 (no whitespaces: -3, formatted: -3)
+- size: oxc 36 vs reference 39 (no whitespaces: -3, formatted: -3)
 
 ```js
 console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
@@ -12917,8 +12899,26 @@ console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
 --- reference
 +++ oxc
 @@ -1 +1 @@
--console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
-+console.log(`\ud801\udc37\ud801𐐷42\u{10437}`);
+-console.log(`𐐷\ud801𐐷${42}𐐷`);
++console.log('𐐷\ud801𐐷42𐐷');
+
+```
+
+## `uglify/templates/unicode_templates_ecma`
+
+- size: oxc 36 vs reference 39 (no whitespaces: -3, formatted: -3)
+
+```js
+console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-console.log(`𐐷\ud801𐐷${42}𐐷`);
++console.log('𐐷\ud801𐐷42𐐷');
 
 ```
 
@@ -18074,24 +18074,6 @@ switch (42) {
 
 ```
 
-## `uglify/templates/ascii_only_templates_ecma`
-
-- size: oxc 49 vs reference 54 (no whitespaces: -5, formatted: -5)
-
-```js
-console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--console.log(`\u{10437}\ud801\u{10437}${42}\u{10437}`);
-+console.log(`\ud801\udc37\ud801𐐷42\u{10437}`);
-
-```
-
 ## `uglify/templates/issue_5878`
 
 - size: oxc 20 vs reference 25 (no whitespaces: -5, formatted: -6)
@@ -22121,24 +22103,6 @@ console.log(b);
 
 ```
 
-## `uglify/templates/ascii_only_ecma`
-
-- size: oxc 49 vs reference 57 (no whitespaces: -8, formatted: -8)
-
-```js
-console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--console.log(`\ud801\udc37\ud801\u{10437}${42}\u{10437}`);
-+console.log(`\ud801\udc37\ud801𐐷42\u{10437}`);
-
-```
-
 ## `uglify/typeof/reassign_do`
 
 - tags: `join vars`, `sequences`, `2 iterations`
@@ -25351,24 +25315,6 @@ f(1);
 
 ```
 
-## `uglify/templates/ascii_only`
-
-- size: oxc 49 vs reference 60 (no whitespaces: -11, formatted: -11)
-
-```js
-console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--console.log(`\ud801\udc37\ud801\ud801\udc37${42}\u{10437}`);
-+console.log(`\ud801\udc37\ud801𐐷42\u{10437}`);
-
-```
-
 ## `uglify/templates/issue_5199`
 
 - tags: `join vars`, `remove unused`
@@ -27469,24 +27415,6 @@ x = { baz: 'ban' };
 
 ```
 
-## `uglify/templates/ascii_only_templates`
-
-- size: oxc 49 vs reference 63 (no whitespaces: -14, formatted: -14)
-
-```js
-console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--console.log(`\ud801\udc37\ud801\ud801\udc37${42}\ud801\udc37`);
-+console.log(`\ud801\udc37\ud801𐐷42\u{10437}`);
-
-```
-
 ## `uglify/typeof/reassign_property`
 
 - tags: `sequences`, `2 iterations`
@@ -28247,6 +28175,42 @@ console.log(function() {
 
 ```
 
+## `uglify/templates/unicode`
+
+- size: oxc 36 vs reference 52 (no whitespaces: -16, formatted: -16)
+
+```js
+console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
++console.log('𐐷\ud801𐐷42𐐷');
+
+```
+
+## `uglify/templates/unicode_ecma`
+
+- size: oxc 36 vs reference 52 (no whitespaces: -16, formatted: -16)
+
+```js
+console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
++console.log('𐐷\ud801𐐷42𐐷');
+
+```
+
 ## `uglify/transform/condition_evaluate`
 
 - size: oxc 8 vs reference 24 (no whitespaces: -16, formatted: -21)
@@ -28538,6 +28502,24 @@ console.log(function() {
 
 ```
 
+## `uglify/unicode/issue_2242_3`
+
+- size: oxc 36 vs reference 53 (no whitespaces: -17, formatted: -23)
+
+```js
+console.log('\ud83d' + '\ude00', '\ud83d' + '@' + '\ude00');
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-console.log('\ud83d' + '\ude00', '\ud83d' + '@' + '\ude00');
++console.log('😀', '\ud83d@\ude00');
+
+```
+
 ## `uglify/awaits/issue_4454_2`
 
 - tags: `join vars`
@@ -28820,6 +28802,24 @@ console.log(a);
 -	a();
 -}
  console.log(a);
+
+```
+
+## `uglify/templates/ascii_only_templates_ecma`
+
+- size: oxc 36 vs reference 54 (no whitespaces: -18, formatted: -18)
+
+```js
+console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-console.log(`\u{10437}\ud801\u{10437}${42}\u{10437}`);
++console.log('𐐷\ud801𐐷42𐐷');
 
 ```
 
@@ -29787,6 +29787,24 @@ console.log(function(a) {
 
 ```
 
+## `uglify/templates/ascii_only_ecma`
+
+- size: oxc 36 vs reference 57 (no whitespaces: -21, formatted: -21)
+
+```js
+console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-console.log(`\ud801\udc37\ud801\u{10437}${42}\u{10437}`);
++console.log('𐐷\ud801𐐷42𐐷');
+
+```
+
 ## `uglify/const/issue_4191`
 
 - tags: `join vars`, `remove unused`
@@ -30370,6 +30388,24 @@ console.log(42 + /foo/ instanceof Object);
 
 ```
 
+## `uglify/templates/ascii_only`
+
+- size: oxc 36 vs reference 60 (no whitespaces: -24, formatted: -24)
+
+```js
+console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-console.log(`\ud801\udc37\ud801\ud801\udc37${42}\u{10437}`);
++console.log('𐐷\ud801𐐷42𐐷');
+
+```
+
 ## `uglify/join_vars/issue_3789_2`
 
 - tags: `join vars`
@@ -30809,6 +30845,24 @@ console.log(function() {
 -	}
 +	return 'PASS';
  }());
+
+```
+
+## `uglify/templates/ascii_only_templates`
+
+- size: oxc 36 vs reference 63 (no whitespaces: -27, formatted: -27)
+
+```js
+console.log(`\ud801\udc37\ud801𐐷${42}\u{10437}`);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-console.log(`\ud801\udc37\ud801\ud801\udc37${42}\ud801\udc37`);
++console.log('𐐷\ud801𐐷42𐐷');
 
 ```
 
