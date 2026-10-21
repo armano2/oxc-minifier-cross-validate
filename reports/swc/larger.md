@@ -3131,6 +3131,95 @@ export function createTypeChecker(host) {
 
 ```
 
+## `swc/member_expr/string`
+
+- tags: `drop debugger`, `join vars`, `sequences`
+- size: oxc 778 vs reference 771 (no whitespaces: +7, formatted: +11)
+
+```js
+// Invalid
+''[0];
+''[1];
+''[-1];
+''.invalid;
+''['invalid'];
+''[[]];
+''[0 + []];
+// Object symbols
+''.constructor;
+''.__proto__;
+''.__defineGetter__;
+''.__defineSetter__;
+''.__lookupGetter__;
+''.__lookupSetter__;
+''.hasOwnProperty;
+''.isPrototypeOf;
+''.propertyIsEnumerable;
+''.toLocaleString;
+''.toString;
+''.valueOf;
+// String symbols
+''.length;
+''.anchor;
+''.at;
+''.big;
+''.blink;
+''.bold;
+''.charAt;
+''.charCodeAt;
+''.codePointAt;
+''.concat;
+''.endsWith;
+''.fixed;
+''.fontcolor;
+''.fontsize;
+''.includes;
+''.indexOf;
+''.isWellFormed;
+''.italics;
+''.lastIndexOf;
+''.link;
+''.localeCompare;
+''.match;
+''.matchAll;
+''.normalize;
+''.padEnd;
+''.padStart;
+''.repeat;
+''.replace;
+''.replaceAll;
+''.search;
+''.slice;
+''.small;
+''.split;
+''.startsWith;
+''.strike;
+''.sub;
+''.substr;
+''.substring;
+''.sup;
+''.toLocaleLowerCase;
+''.toLocaleUpperCase;
+''.toLowerCase;
+''.toUpperCase;
+''.toWellFormed;
+''.trim;
+''.trimEnd;
+''.trimStart;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,3 +1 @@
+-// Invalid
+-// Object symbols
+-''.constructor, ''.__proto__, ''.__defineGetter__, ''.__defineSetter__, ''.__lookupGetter__, ''.__lookupSetter__, ''.hasOwnProperty, ''.isPrototypeOf, ''.propertyIsEnumerable, ''.toLocaleString, ''.toString, ''.valueOf, ''.anchor, ''.at, ''.big, ''.blink, ''.bold, ''.charAt, ''.charCodeAt, ''.codePointAt, ''.concat, ''.endsWith, ''.fixed, ''.fontcolor, ''.fontsize, ''.includes, ''.indexOf, ''.isWellFormed, ''.italics, ''.lastIndexOf, ''.link, ''.localeCompare, ''.match, ''.matchAll, ''.normalize, ''.padEnd, ''.padStart, ''.repeat, ''.replace, ''.replaceAll, ''.search, ''.slice, ''.small, ''.split, ''.startsWith, ''.strike, ''.sub, ''.substr, ''.substring, ''.sup, ''.toLocaleLowerCase, ''.toLocaleUpperCase, ''.toLowerCase, ''.toUpperCase, ''.toWellFormed, ''.trim, ''.trimEnd, ''.trimStart;
++''[-1], ''.invalid, ''.invalid, ''[[]], ''.constructor, ''.__proto__, ''.__defineGetter__, ''.__defineSetter__, ''.__lookupGetter__, ''.__lookupSetter__, ''.hasOwnProperty, ''.isPrototypeOf, ''.propertyIsEnumerable, ''.toLocaleString, ''.toString, ''.valueOf, ''.anchor, ''.at, ''.big, ''.blink, ''.bold, ''.charAt, ''.charCodeAt, ''.codePointAt, ''.concat, ''.endsWith, ''.fixed, ''.fontcolor, ''.fontsize, ''.includes, ''.indexOf, ''.isWellFormed, ''.italics, ''.lastIndexOf, ''.link, ''.localeCompare, ''.match, ''.matchAll, ''.normalize, ''.padEnd, ''.padStart, ''.repeat, ''.replace, ''.replaceAll, ''.search, ''.slice, ''.small, ''.split, ''.startsWith, ''.strike, ''.sub, ''.substr, ''.substring, ''.sup, ''.toLocaleLowerCas
+... [truncated]
+```
+
 ## `swc/next/feedback-1/reduced/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -8251,95 +8340,6 @@ if (true) {
 +if (1) console.log(b);
 +else var b;
 
-```
-
-## `swc/member_expr/string`
-
-- tags: `drop debugger`, `join vars`, `sequences`
-- size: oxc 796 vs reference 771 (no whitespaces: +25, formatted: +32)
-
-```js
-// Invalid
-''[0];
-''[1];
-''[-1];
-''.invalid;
-''['invalid'];
-''[[]];
-''[0 + []];
-// Object symbols
-''.constructor;
-''.__proto__;
-''.__defineGetter__;
-''.__defineSetter__;
-''.__lookupGetter__;
-''.__lookupSetter__;
-''.hasOwnProperty;
-''.isPrototypeOf;
-''.propertyIsEnumerable;
-''.toLocaleString;
-''.toString;
-''.valueOf;
-// String symbols
-''.length;
-''.anchor;
-''.at;
-''.big;
-''.blink;
-''.bold;
-''.charAt;
-''.charCodeAt;
-''.codePointAt;
-''.concat;
-''.endsWith;
-''.fixed;
-''.fontcolor;
-''.fontsize;
-''.includes;
-''.indexOf;
-''.isWellFormed;
-''.italics;
-''.lastIndexOf;
-''.link;
-''.localeCompare;
-''.match;
-''.matchAll;
-''.normalize;
-''.padEnd;
-''.padStart;
-''.repeat;
-''.replace;
-''.replaceAll;
-''.search;
-''.slice;
-''.small;
-''.split;
-''.startsWith;
-''.strike;
-''.sub;
-''.substr;
-''.substring;
-''.sup;
-''.toLocaleLowerCase;
-''.toLocaleUpperCase;
-''.toLowerCase;
-''.toUpperCase;
-''.toWellFormed;
-''.trim;
-''.trimEnd;
-''.trimStart;
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,3 +1 @@
--// Invalid
--// Object symbols
--''.constructor, ''.__proto__, ''.__defineGetter__, ''.__defineSetter__, ''.__lookupGetter__, ''.__lookupSetter__, ''.hasOwnProperty, ''.isPrototypeOf, ''.propertyIsEnumerable, ''.toLocaleString, ''.toString, ''.valueOf, ''.anchor, ''.at, ''.big, ''.blink, ''.bold, ''.charAt, ''.charCodeAt, ''.codePointAt, ''.concat, ''.endsWith, ''.fixed, ''.fontcolor, ''.fontsize, ''.includes, ''.indexOf, ''.isWellFormed, ''.italics, ''.lastIndexOf, ''.link, ''.localeCompare, ''.match, ''.matchAll, ''.normalize, ''.padEnd, ''.padStart, ''.repeat, ''.replace, ''.replaceAll, ''.search, ''.slice, ''.small, ''.split, ''.startsWith, ''.strike, ''.sub, ''.substr, ''.substring, ''.sup, ''.toLocaleLowerCase, ''.toLocaleUpperCase, ''.toLowerCase, ''.toUpperCase, ''.toWellFormed, ''.trim, ''.trimEnd, ''.trimStart;
-+''[0], ''[1], ''[-1], ''.invalid, ''.invalid, ''[[]], ''[0], ''.constructor, ''.__proto__, ''.__defineGetter__, ''.__defineSetter__, ''.__lookupGetter__, ''.__lookupSetter__, ''.hasOwnProperty, ''.isPrototypeOf, ''.propertyIsEnumerable, ''.toLocaleString, ''.toString, ''.valueOf, ''.anchor, ''.at, ''.big, ''.blink, ''.bold, ''.charAt, ''.charCodeAt, ''.codePointAt, ''.concat, ''.endsWith, ''.fixed, ''.fontcolor, ''.fontsize, ''.includes, ''.indexOf, ''.isWellFormed, ''.italics, ''.lastIndexOf, ''.link, ''.localeCompare, ''.match, ''.matchAll, ''.normalize, ''.padEnd, ''.padStart, ''.repeat, ''.replace, ''.replaceAll, ''.search, ''.slice, ''.small, ''.split, ''.startsWith, ''.strike, ''.sub, ''.substr, ''.substring, ''.sup
-... [truncated]
 ```
 
 ## `swc/projects/wmr/archive-1/chunks/alias-outside.6e8773c7`

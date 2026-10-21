@@ -1,6 +1,6 @@
 # swc / smaller — Output shorter than expected (possible over-optimization / bug)
 
-Fixtures: 125
+Fixtures: 126
 
 [← swc](README.md) · [← all families](../README.md)
 
@@ -4423,6 +4423,41 @@ console.log(f());
 +	return this === void 0;
  }
  console.log(f());
+
+```
+
+## `swc/issues/string-index-utf16`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
+- size: oxc 50 vs reference 94 (no whitespaces: -44, formatted: -65)
+
+```js
+console.log([
+	'é'['0'] === 'é',
+	'é'['1'] === undefined,
+	'😀'['0'] === '\ud83d',
+	'😀'['1'] === '\ude00',
+	'😀'['2'] === undefined,
+	'\ud800'['0'] === '\ud800',
+	'\ud800'['1'] === undefined
+].join(','));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1 @@
+-console.log([
+-	!0,
+-	!0,
+-	'\ud83d' == '\ud83d',
+-	'\ude00' == '\ude00',
+-	!0,
+-	'\ud800' == '\ud800',
+-	!0
+-].join(','));
++console.log('true,true,true,true,true,true,true');
 
 ```
 

@@ -22198,24 +22198,6 @@ console.log(d(0, 3), d(1, 64), d(4, 7), d(7, 7));
 
 ```
 
-## `uglify/evaluate/issue_3387_2`
-
-- size: oxc 26 vs reference 17 (no whitespaces: +9, formatted: +13)
-
-```js
-console.log(1 + (2 + '3'[4]));
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--console.log(NaN);
-+console.log(1 + (2 + '3'[4]));
-
-```
-
 ## `uglify/evaluate/recursive_function_1`
 
 - tags: `join vars`, `remove unused`
@@ -24415,6 +24397,34 @@ console.log(function(a, ...b) {
  	return b[0];
 -}(['PASS']));
 +}('FAIL', 'PASS'));
+
+```
+
+## `uglify/rests/issue_4544_1`
+
+- tags: `keep function names`
+- size: oxc 56 vs reference 46 (no whitespaces: +10, formatted: +8)
+
+```js
+try {
+	(function f(...[{}]) {})();
+} catch (e) {
+	console.log('PASS');
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,5 @@
+ try {
+-	[...[{}]] = [];
+-} catch (e) {
++	(function f(...[{}]) {})();
++} catch {
+ 	console.log('PASS');
+ }
 
 ```
 

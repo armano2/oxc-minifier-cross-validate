@@ -22868,6 +22868,24 @@ try {
 
 ```
 
+## `uglify/evaluate/issue_3387_1`
+
+- size: oxc 17 vs reference 26 (no whitespaces: -9, formatted: -13)
+
+```js
+console.log(1 + (2 + '3'[4]));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-console.log(1 + (2 + '3'[4]));
++console.log(NaN);
+
+```
+
 ## `uglify/functions/issue_5173_1`
 
 - tags: `join vars`, `sequences`
@@ -32626,32 +32644,6 @@ function f() {
 +	a = console;
 +	a.log('PASS');
  })();
-
-```
-
-## `uglify/rests/issue_4544_1`
-
-- tags: `keep function names`
-- size: oxc 0 vs reference 46 (no whitespaces: -46, formatted: -61)
-
-```js
-try {
-	(function f(...[{}]) {})();
-} catch (e) {
-	console.log('PASS');
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,5 +0,0 @@
--try {
--	[...[{}]] = [];
--} catch (e) {
--	console.log('PASS');
--}
 
 ```
 
