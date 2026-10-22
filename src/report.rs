@@ -4,7 +4,7 @@ use similar::TextDiff;
 
 use crate::{Kind, Outcome};
 
-pub const MAX_SNIPPET_BYTES: usize = 1600;
+pub const MAX_SNIPPET_BYTES: usize = 3000;
 
 fn diff_snippet(expected: &str, actual: &str) -> String {
     let diff = TextDiff::from_lines(expected, actual);

@@ -1,6 +1,6 @@
 # terser / larger — Output longer than expected (possible missing optimization)
 
-Fixtures: 959
+Fixtures: 960
 
 [← terser](README.md) · [← all families](../README.md)
 
@@ -28933,6 +28933,212 @@ module.exports = (function(constructor) {
 +		})(input.key) };
 +	};
 +});
+
+```
+
+## `terser/collapse_vars/collapse_vars_side_effects_2`
+
+- tags: `join vars`, `sequences`, `remove unused`
+- size: oxc 1349 vs reference 1249 (no whitespaces: +100, formatted: +169)
+
+```js
+function fn(x) {
+	return console.log(x), x;
+}
+function p1() {
+	var a = foo(), b = bar(), c = baz();
+	return a + b + c;
+}
+function p2() {
+	var a = foo(), c = bar(), b = baz();
+	return a + b + c;
+}
+function p3() {
+	var b = foo(), a = bar(), c = baz();
+	return a + b + c;
+}
+function p4() {
+	var b = foo(), c = bar(), a = baz();
+	return a + b + c;
+}
+function p5() {
+	var c = foo(), a = bar(), b = baz();
+	return a + b + c;
+}
+function p6() {
+	var c = foo(), b = bar(), a = baz();
+	return a + b + c;
+}
+function q1() {
+	var a = foo(), b = bar(), c = baz();
+	return fn(a + b + c);
+}
+function q2() {
+	var a = foo(), c = bar(), b = baz();
+	return fn(a + b + c);
+}
+function q3() {
+	var b = foo(), a = bar(), c = baz();
+	return fn(a + b + c);
+}
+function q4() {
+	var b = foo(), c = bar(), a = baz();
+	return fn(a + b + c);
+}
+function q5() {
+	var c = foo(), a = bar(), b = baz();
+	return fn(a + b + c);
+}
+function q6() {
+	var c = foo(), b = bar(), a = baz();
+	return fn(a + b + c);
+}
+function r1() {
+	var a = foo(), b = bar(), c = baz();
+	return fn(a) + fn(b) + fn(c);
+}
+function r2() {
+	var a = foo(), c = bar(), b = baz();
+	return fn(a) + fn(b) + fn(c);
+}
+function r3() {
+	var b = foo(), a = bar(), c = baz();
+	return fn(a) + fn(b) + fn(c);
+}
+function r4() {
+	var b = foo(), c = bar(), a = baz();
+	return fn(a) + fn(b) + fn(c);
+}
+function r5() {
+	var c = foo(), a = bar(), b = baz();
+	return fn(a) + fn(b) + fn(c);
+}
+function r6() {
+	var c = foo(), b = bar(), a = baz();
+	return fn(a) + fn(b) + fn(c);
+}
+function s1() {
+	var a = foo(), b = bar(), c = baz();
+	return g(a + b + c);
+}
+function s6() {
+	var c = foo(), b = bar(), a = baz();
+	return g(a + b + c);
+}
+function t1() {
+	var a = foo(), b = bar(), c = baz();
+	return g(a) + g(b) + g(c);
+}
+function t6() {
+	var c = foo(), b = bar(), a = baz();
+	return g(a) + g(b) + g(c);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,15 +2,16 @@
+ 	return console.log(x), x;
+ }
+ function p1() {
+-	return foo() + bar() + baz();
++	var a = foo(), b = bar(), c = baz();
++	return a + b + c;
+ }
+ function p2() {
+ 	var a = foo(), c = bar();
+ 	return a + baz() + c;
+ }
+ function p3() {
+-	var b = foo();
+-	return bar() + b + baz();
++	var b = foo(), a = bar(), c = baz();
++	return a + b + c;
+ }
+ function p4() {
+ 	var b = foo(), c = bar();
+@@ -25,27 +26,28 @@
+ 	return baz() + b + c;
+ }
+ function q1() {
+-	return fn(foo() + bar() + baz());
++	var a = foo(), b = bar(), c = baz();
++	return fn(a + b + c);
+ }
+ function q2() {
+-	var a = foo(), c = bar();
+-	return fn(a + baz() + c);
++	var a = foo(), c = bar(), b = baz();
++	return fn(a + b + c);
+ }
+ function q3() {
+-	var b = foo();
+-	return fn(bar() + b + baz());
++	var b = foo(), a = bar(), c = baz();
++	return fn(a + b + c);
+ }
+ function q4() {
+-	var b = foo(), c = bar();
+-	return fn(baz() + b + c);
++	var b = foo(), c = bar(), a = baz();
++	return fn(a + b + c);
+ }
+ function q5() {
+-	var c = foo();
+-	return fn(bar() + baz() + c);
++	var c = foo(), a = bar(), b = baz();
++	return fn(a + b + c);
+ }
+ function q6() {
+-	var c = foo(), b = bar();
+-	return fn(baz() + b + c);
++	var c = foo(), b = bar(), a = baz();
++	return fn(a + b + c);
+ }
+ function r1() {
+ 	var a = foo(), b = bar(), c = baz();
+@@ -60,29 +62,30 @@
+ 	return fn(a) + fn(b) + fn(c);
+ }
+ function r4() {
+-	var b = foo(), c = bar();
+-	return fn(baz()) + fn(b) + fn(c);
++	var b = foo(), c = bar(), a = baz();
++	return fn(a) + fn(b) + fn(c);
+ }
+ function r5() {
+ 	var c = foo(), a = bar(), b = baz();
+ 	return fn(a) + fn(b) + fn(c);
+ }
+ function r6() {
+-	var c = foo(), b = bar();
+-	return fn(baz()) + fn(b) + fn(c);
++	var c = foo(), b = bar(), a = baz();
++	return fn(a) + fn(b) + fn(c);
+ }
+ function s1() {
+-	return g(foo() + bar() + baz());
++	var a = foo(), b = bar(), c = baz();
++	return g(a + b + c);
+ }
+ function s6() {
+-	var c = foo(), b = bar();
+-	return g(baz() + b + c);
++	var c = foo(), b = bar(), a = baz();
++	return g(a + b + c);
+ }
+ function t1() {
+ 	var a = foo(), b = bar(), c = baz();
+ 	return g(a) + g(b) + g(c);
+ }
+ function t6() {
+-	var c = foo(), b = bar();
+-	return g(baz()) + g(b) + g(c);
++	var c = foo(), b = bar(), a = baz();
++	return g(a) + g(b) + g(c);
+ }
 
 ```
 

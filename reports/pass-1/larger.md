@@ -1,6 +1,6 @@
 # pass-1 / larger — Output longer than expected (possible missing optimization)
 
-Fixtures: 10
+Fixtures: 11
 
 [← pass-1](README.md) · [← all families](../README.md)
 
@@ -336,6 +336,91 @@ console.log('Greeting:', outer()());
 +	return inner('Hello');
 +}
 +console.log('Greeting:', outer()());
+
+```
+
+## `pass-1/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
+- size: oxc 1155 vs reference 132 (no whitespaces: +1023, formatted: +1155)
+
+```js
+var condString;
+var exprAny1;
+var exprBoolean1;
+var exprNumber1;
+var exprString1;
+var exprIsObject1;
+var exprAny2;
+var exprBoolean2;
+var exprNumber2;
+var exprString2;
+var exprIsObject2;
+condString ? exprAny1 : exprAny2;
+condString ? exprBoolean1 : exprBoolean2;
+condString ? exprNumber1 : exprNumber2;
+condString ? exprString1 : exprString2;
+condString ? exprIsObject1 : exprIsObject2;
+condString ? exprString1 : exprBoolean1;
+'' ? exprAny1 : exprAny2;
+'string' ? exprBoolean1 : exprBoolean2;
+'c' ? exprNumber1 : exprNumber2;
+'string' ? exprString1 : exprString2;
+'  ' ? exprIsObject1 : exprIsObject2;
+'hello ' ? exprString1 : exprBoolean1;
+function foo() {
+	return 'string';
+}
+var array = [
+	'1',
+	'2',
+	'3'
+];
+typeof condString ? exprAny1 : exprAny2;
+condString.toUpperCase ? exprBoolean1 : exprBoolean2;
+condString + 'string' ? exprNumber1 : exprNumber2;
+foo() ? exprString1 : exprString2;
+array[1] ? exprIsObject1 : exprIsObject2;
+foo() ? exprString1 : exprBoolean1;
+var resultIsAny1 = condString ? exprAny1 : exprAny2;
+var resultIsBoolean1 = condString ? exprBoolean1 : exprBoolean2;
+var resultIsNumber1 = condString ? exprNumber1 : exprNumber2;
+var resultIsString1 = condString ? exprString1 : exprString2;
+var resultIsObject1 = condString ? exprIsObject1 : exprIsObject2;
+var resultIsStringOrBoolean1 = condString ? exprString1 : exprBoolean1;
+var resultIsAny2 = '' ? exprAny1 : exprAny2;
+var resultIsBoolean2 = 'string' ? exprBoolean1 : exprBoolean2;
+var resultIsNumber2 = 'c' ? exprNumber1 : exprNumber2;
+var resultIsString2 = 'string' ? exprString1 : exprString2;
+var resultIsObject2 = '  ' ? exprIsObject1 : exprIsObject2;
+var resultIsStringOrBoolean2 = 'hello' ? exprString1 : exprBoolean1;
+var resultIsAny3 = typeof condString ? exprAny1 : exprAny2;
+var resultIsBoolean3 = condString.toUpperCase ? exprBoolean1 : exprBoolean2;
+var resultIsNumber3 = condString + 'string' ? exprNumber1 : exprNumber2;
+var resultIsString3 = foo() ? exprString1 : exprString2;
+var resultIsObject3 = array[1] ? exprIsObject1 : exprIsObject2;
+var resultIsStringOrBoolean3 = typeof condString ? exprString1 : exprBoolean1;
+var resultIsStringOrBoolean4 = condString.toUpperCase ? exprString1 : exprBoolean1;
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,5 +1,11 @@
+-var condString;
++var condString, exprAny1, exprBoolean1, exprNumber1, exprString1, exprIsObject1, exprAny2, exprBoolean2, exprNumber2, exprString2, exprIsObject2;
+ function foo() {
+ 	return 'string';
+ }
+-condString.toUpperCase, foo(), foo(), condString.toUpperCase, foo(), condString.toUpperCase;
++var array = [
++	'1',
++	'2',
++	'3'
++];
++condString.toUpperCase, condString + '', foo(), array[1], foo();
++var resultIsAny1 = condString ? exprAny1 : exprAny2, resultIsBoolean1 = condString ? exprBoolean1 : exprBoolean2, resultIsNumber1 = condString ? exprNumber1 : exprNumber2, resultIsString1 = condString ? exprString1 : exprString2, resultIsObject1 = condString ? exprIsObject1 : exprIsObject2, resultIsStringOrBoolean1 = condString ? exprString1 : exprBoolean1, resultIsAny2 = exprAny2, resultIsBoolean2 = exprBoolean1, resultIsNumber2 = exprNumber1, resultIsString2 = exprString1, resultIsObject2 = exprIsObject1, resultIsStringOrBoolean2 = exprString1, resultIsAny3 = typeof condString ? exprAny1 : exprAny2, resultIsBoolean3 = condString.toUpperCase ? exprBoolean1 : exprBoolean2, resultIsNumber3 = condString + 'string' ? exprNumber1 : exprNumber2, resultIsString3 = foo() ? exprString1 : exprString2, resultIsObject3 = array[1] ? exprIsObject1 : exprIsObject2, resultIsStringOrBoolean3 = typeof condString ? exprString1 : exprBoolean1, resultIsStringOrBoolean4 = condString.toUpperCase ? exprString1 : exprBoolean1;
 
 ```
 

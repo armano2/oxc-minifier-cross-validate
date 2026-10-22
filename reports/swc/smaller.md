@@ -1,6 +1,6 @@
 # swc / smaller — Output shorter than expected (possible over-optimization / bug)
 
-Fixtures: 126
+Fixtures: 138
 
 [← swc](README.md) · [← all families](../README.md)
 
@@ -751,6 +751,135 @@ export const E = { test: function(Y) {
 -	return !!node && !!node.style && ('MozTransition' in node.style || 'WebkitTransition' in node.style || 'transition' in node.style);
 +	return node && node.style ? 'MozTransition' in node.style || 'WebkitTransition' in node.style || 'transition' in node.style : !1;
  } };
+
+```
+
+## `swc/issues/11684/identifier-preserved`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 1842 vs reference 1846 (no whitespaces: -4, formatted: -4)
+
+```js
+function FunctionArguments() {
+	this.count = arguments.length;
+}
+out.FunctionArguments = FunctionArguments;
+out.functionArguments = new FunctionArguments(1, 2, 3);
+function FunctionLexicalArguments() {
+	this.count = (() => arguments.length)();
+}
+out.FunctionLexicalArguments = FunctionLexicalArguments;
+out.functionLexicalArguments = new FunctionLexicalArguments(1, 2, 3);
+function FunctionDefaultArguments(value = arguments[1]) {
+	this.value = value;
+}
+out.FunctionDefaultArguments = FunctionDefaultArguments;
+out.functionDefaultArguments = new FunctionDefaultArguments(undefined, 'fallback', 'extra');
+function FunctionEval() {
+	eval('this.count = arguments.length');
+}
+out.FunctionEval = FunctionEval;
+out.functionEval = new FunctionEval(1, 2, 3);
+function FunctionRest(...values) {
+	this.count = values.length;
+}
+out.FunctionRest = FunctionRest;
+out.functionRest = new FunctionRest(1, 2, 3);
+function FunctionSpread(value) {
+	this.value = value;
+}
+out.FunctionSpread = FunctionSpread;
+out.functionSpread = new FunctionSpread(...values, 1);
+class ClassArguments {
+	constructor() {
+		this.count = arguments.length;
+	}
+}
+out.ClassArguments = ClassArguments;
+out.classArguments = new ClassArguments(1, 2, 3);
+class ClassLexicalArguments {
+	constructor() {
+		this.count = (() => arguments.length)();
+	}
+}
+out.ClassLexicalArguments = ClassLexicalArguments;
+out.classLexicalArguments = new ClassLexicalArguments(1, 2, 3);
+class ClassDefaultArguments {
+	constructor(value = arguments[1]) {
+		this.value = value;
+	}
+}
+out.ClassDefaultArguments = ClassDefaultArguments;
+out.classDefaultArguments = new ClassDefaultArguments(undefined, 'fallback', 'extra');
+class ClassEval {
+	constructor() {
+		eval('this.count = arguments.length');
+	}
+}
+out.ClassEval = ClassEval;
+out.classEval = new ClassEval(1, 2, 3);
+class ClassRest {
+	constructor(...values) {
+		this.count = values.length;
+	}
+}
+out.ClassRest = ClassRest;
+out.classRest = new ClassRest(1, 2, 3);
+class ClassSpread {
+	constructor(value) {
+		this.value = value;
+	}
+}
+out.ClassSpread = ClassSpread;
+out.classSpread = new ClassSpread(...values, 1);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,22 +1,27 @@
+ function FunctionArguments() {
+ 	this.count = arguments.length;
+ }
++out.FunctionArguments = FunctionArguments, out.functionArguments = new FunctionArguments(1, 2, 3);
+ function FunctionLexicalArguments() {
+ 	this.count = arguments.length;
+ }
++out.FunctionLexicalArguments = FunctionLexicalArguments, out.functionLexicalArguments = new FunctionLexicalArguments(1, 2, 3);
+ function FunctionDefaultArguments(value = arguments[1]) {
+ 	this.value = value;
+ }
++out.FunctionDefaultArguments = FunctionDefaultArguments, out.functionDefaultArguments = new FunctionDefaultArguments(void 0, 'fallback', 'extra');
+ function FunctionEval() {
+ 	eval('this.count = arguments.length');
+ }
+-function FunctionRest(...values1) {
+-	this.count = values1.length;
++out.FunctionEval = FunctionEval, out.functionEval = new FunctionEval(1, 2, 3);
++function FunctionRest(...values) {
++	this.count = values.length;
+ }
++out.FunctionRest = FunctionRest, out.functionRest = new FunctionRest(1, 2, 3);
+ function FunctionSpread(value) {
+ 	this.value = value;
+ }
+-out.FunctionArguments = FunctionArguments, out.functionArguments = new FunctionArguments(1, 2, 3), out.FunctionLexicalArguments = FunctionLexicalArguments, out.functionLexicalArguments = new FunctionLexicalArguments(1, 2, 3), out.FunctionDefaultArguments = FunctionDefaultArguments, out.functionDefaultArguments = new FunctionDefaultArguments(void 0, 'fallback', 'extra'), out.FunctionEval = FunctionEval, out.functionEval = new FunctionEval(1, 2, 3), out.FunctionRest = FunctionRest, out.functionRest = new FunctionRest(1, 2, 3), out.FunctionSpread = FunctionSpread, out.functionSpread = new FunctionSpread(...values, 1);
++out.FunctionSpread = FunctionSpread, out.functionSpread = new FunctionSpread(...values, 1);
+ class ClassArguments {
+ 	constructor() {
+ 		this.count = arguments.length;
+@@ -42,8 +47,8 @@
+ }
+ out.ClassEval = ClassEval, out.classEval = new ClassEval(1, 2, 3);
+ class ClassRest {
+-	constructor(...values1) {
+-		this.count = values1.length;
++	constructor(...values) {
++		this.count = values.length;
+ 	}
+ }
+ out.ClassRest = ClassRest, out.classRest = new ClassRest(1, 2, 3);
 
 ```
 
@@ -1930,6 +2059,89 @@ do {
 
 ```
 
+## `swc/projects/backbone/14`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 1305 vs reference 1314 (no whitespaces: -9, formatted: -11)
+
+```js
+export const obj = { set: function(key, val, options) {
+	var attr, attrs, unset, changes, silent, changing, prev, current;
+	if (key == null) return this;
+	// Handle both `"key", value` and `{key: value}` -style arguments.
+	if (typeof key === 'object') {
+		attrs = key;
+		options = val;
+	} else {
+		(attrs = {})[key] = val;
+	}
+	options || (options = {});
+	// Run validation.
+	if (!this._validate(attrs, options)) return false;
+	// Extract attributes and options.
+	unset = options.unset;
+	silent = options.silent;
+	changes = [];
+	changing = this._changing;
+	this._changing = true;
+	if (!changing) {
+		this._previousAttributes = _.clone(this.attributes);
+		this.changed = {};
+	}
+	current = this.attributes, prev = this._previousAttributes;
+	// Check for changes of `id`.
+	if (this.idAttribute in attrs) this.id = attrs[this.idAttribute];
+	// For each `set` attribute, update or delete the current value.
+	for (attr in attrs) {
+		val = attrs[attr];
+		if (!_.isEqual(current[attr], val)) changes.push(attr);
+		if (!_.isEqual(prev[attr], val)) {
+			this.changed[attr] = val;
+		} else {
+			delete this.changed[attr];
+		}
+		unset ? delete current[attr] : current[attr] = val;
+	}
+	// Trigger all relevant attribute changes.
+	if (!silent) {
+		if (changes.length) this._pending = true;
+		for (var i = 0, l = changes.length; i < l; i++) {
+			this.trigger('change:' + changes[i], this, current[changes[i]], options);
+		}
+	}
+	// You might be wondering why there's a `while` loop here. Changes can
+	// be recursively nested within `"change"` events.
+	if (changing) return this;
+	if (!silent) {
+		while (this._pending) {
+			this._pending = false;
+			this.trigger('change', this, options);
+		}
+	}
+	this._pending = false;
+	this._changing = false;
+	return this;
+} };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,8 @@
+ export const obj = { set: function(key, val, options) {
+ 	var attr, attrs, unset, changes, silent, changing, prev, current;
+-	if (null == key) return this;
++	if (key == null) return this;
+ 	// Run validation.
+-	if ('object' == typeof key ? (attrs = key, options = val) : (attrs = {})[key] = val, options || (options = {}), !this._validate(attrs, options)) return !1;
++	if (typeof key == 'object' ? (attrs = key, options = val) : (attrs = {})[key] = val, options ||= {}, !this._validate(attrs, options)) return !1;
+ 	// For each `set` attribute, update or delete the current value.
+ 	for (attr in unset = options.unset, silent = options.silent, changes = [], changing = this._changing, this._changing = !0, changing || (this._previousAttributes = _.clone(this.attributes), this.changed = {}), current = this.attributes, prev = this._previousAttributes, this.idAttribute in attrs && (this.id = attrs[this.idAttribute]), attrs) val = attrs[attr], _.isEqual(current[attr], val) || changes.push(attr), _.isEqual(prev[attr], val) ? delete this.changed[attr] : this.changed[attr] = val, unset ? delete current[attr] : current[attr] = val;
+ 	// Trigger all relevant attribute changes.
+
+```
+
 ## `swc/issues/9741_multiple_methods`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -2257,6 +2469,121 @@ for (i = 0, l = names.length; i < l; i++) {
 -var names, i, l;
 -for (names = name ? [name] : _.keys(this._events), i = 0, l = names.length; i < l; i++) name = names[i];
 +for (var names = name ? [name] : _.keys(this._events), i = 0, l = names.length; i < l; i++) name = names[i];
+
+```
+
+## `swc/projects/next/extra/if_return/.4`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 1293 vs reference 1303 (no whitespaces: -10, formatted: +15)
+
+```js
+__webpack_require__.l = function(url, done, key, chunkId) {
+	/******/ if (inProgress[url]) {
+		inProgress[url].push(done);
+		return;
+	}
+	/******/ var script, needAttach;
+	/******/ if (key !== undefined) {
+		/******/ var scripts = document.getElementsByTagName('script');
+		/******/ for (var i = 0; i < scripts.length; i++) {
+			/******/ var s = scripts[i];
+			/******/ if (s.getAttribute('src') == url || s.getAttribute('data-webpack') == dataWebpackPrefix + key) {
+				script = s;
+				break;
+			}
+		}
+	}
+	/******/ if (!script) {
+		/******/ needAttach = true;
+		/******/ script = document.createElement('script');
+		/******/
+		/******/ script.charset = 'utf-8';
+		/******/ script.timeout = 120;
+		/******/ if (__webpack_require__.nc) {
+			/******/ script.setAttribute('nonce', __webpack_require__.nc);
+		}
+		/******/ script.setAttribute('data-webpack', dataWebpackPrefix + key);
+		/******/ script.src = url;
+	}
+	/******/ inProgress[url] = [done];
+	/******/ var onScriptComplete = function(prev, event) {
+		/******/ // avoid mem leaks in IE.
+		/******/ script.onerror = script.onload = null;
+		/******/ clearTimeout(timeout);
+		/******/ var doneFns = inProgress[url];
+		/******/ delete inProgress[url];
+		/******/ script.parentNode && script.parentNode.removeChild(script);
+		/******/ doneFns && doneFns.forEach(function(fn) {
+			return fn(event);
+		});
+		/******/ if (prev) return prev(event);
+		/******/
+	};
+	/******/ /******/ var timeout = setTimeout(onScriptComplete.bind(null, undefined, {
+		type: 'timeout',
+		target: script
+	}), 12e4);
+	/******/ script.onerror = onScriptComplete.bind(null, script.onerror);
+	/******/ script.onload = onScriptComplete.bind(null, script.onload);
+	/******/ needAttach && document.head.appendChild(script);
+	/******/
+};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,23 +1,28 @@
+ __webpack_require__.l = function(url, done, key, chunkId) {
+-	/******/ if (inProgress[url]) return void inProgress[url].push(done);
+-	/******/ if (void 0 !== key) /******/ for (var script, needAttach, scripts = document.getElementsByTagName('script'), i = 0; i < scripts.length; i++) {
+-		/******/ var s = scripts[i];
+-		/******/ if (s.getAttribute('src') == url || s.getAttribute('data-webpack') == dataWebpackPrefix + key) {
+-			script = s;
+-			break;
++	/******/ if (inProgress[url]) inProgress[url].push(done);
++	else {
++		/******/ var script, needAttach;
++		/******/ if (key !== void 0)
++ /******/ for (var scripts = document.getElementsByTagName('script'), i = 0; i < scripts.length; i++) {
++			/******/ var s = scripts[i];
++			/******/ if (s.getAttribute('src') == url || s.getAttribute('data-webpack') == dataWebpackPrefix + key) {
++				script = s;
++				break;
++			}
+ 		}
++		/******/ script || (needAttach = !0, script = document.createElement('script'), script.charset = 'utf-8', script.timeout = 120, __webpack_require__.nc && script.setAttribute('nonce', __webpack_require__.nc), script.setAttribute('data-webpack', dataWebpackPrefix + key), script.src = url), inProgress[url] = [done];
++		/******/ var onScriptComplete = function(prev, event) {
++			/******/ script.onerror = script.onload = null, clearTimeout(timeout);
++			/******/ var doneFns = inProgress[url];
++			/******/ if (delete inProgress[url], script.parentNode && script.parentNode.removeChild(script), doneFns && doneFns.forEach(function(fn) {
++				return fn(event);
++			}), prev) return prev(event);
++			/******/
++		}, timeout = setTimeout(onScriptComplete.bind(null, void 0, {
++			type: 'timeout',
++			target: script
++		}), 12e4);
++		/******/ script.onerror = onScriptComplete.bind(null, script.onerror), script.onload = onScriptComplete.bind(null, script.onload), needAttach && document.head.appendChild(script);
+ 	}
+-	script || (needAttach = !0, (script = document.createElement('script')).charset = 'utf-8', script.timeout = 120, __webpack_require__.nc && script.setAttribute('nonce', __webpack_require__.nc), script.setAttribute('data-webpack', dataWebpackPrefix + key), script.src = url), inProgress[url] = [done];
+-	/******/ var onScriptComplete = function(prev, event) {
+-		/******/ // avoid mem leaks in IE.
+-		/******/ script.onerror = script.onload = null, clearTimeout(timeout);
+-		/******/ var doneFns = inProgress[url];
+-		/******/ if (delete inProgress[url], script.parentNode && script.parentNode.removeChild(script), doneFns && doneFns.forEach(function(fn) {
+-			return fn(event);
+-		}), prev) return prev(event);
+-		/******/	}, timeout = setTimeout(onScriptComplete.bind(null, void 0, {
+-		type: 'timeout',
+-		target: script
+-	}), 12e4);
+-	/******/ script.onerror = onScriptComplete.bind(null, script.onerror), script.onload = onScriptComplete.bind(null, script.onload), needAttach && document.head.appendChild(script);
+-	/******/};
++	/******/
++};
 
 ```
 
@@ -2683,6 +3010,81 @@ export function f() {
 
 ```
 
+## `swc/projects/jquery/21`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 781 vs reference 795 (no whitespaces: -14, formatted: -13)
+
+```js
+jQuery.fn.load = function(url, params, callback) {
+	if (typeof url !== 'string' && _load) {
+		return _load.apply(this, arguments);
+	}
+	var selector, response, type, self = this, off = url.indexOf(' ');
+	if (off >= 0) {
+		selector = url.slice(off, url.length);
+		url = url.slice(0, off);
+	}
+	// If it's a function
+	if (jQuery.isFunction(params)) {
+		// We assume that it's the callback
+		callback = params;
+		params = undefined;
+	} else if (params && typeof params === 'object') {
+		type = 'POST';
+	}
+	// If we have elements to modify, make the request
+	if (self.length > 0) {
+		jQuery.ajax({
+			url,
+			// if "type" variable is undefined, then "GET" method will be used
+			type,
+			dataType: 'html',
+			data: params
+		}).done(function(responseText) {
+			// Save response for use in complete callback
+			response = arguments;
+			self.html(selector ? jQuery('<div>').append(jQuery.parseHTML(responseText)).find(selector) : // Otherwise use the full result
+			responseText);
+		}).complete(callback && function(jqXHR, status) {
+			self.each(callback, response || [
+				jqXHR.responseText,
+				status,
+				jqXHR
+			]);
+		});
+	}
+	return this;
+};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,15 +1,15 @@
+ jQuery.fn.load = function(url, params, callback) {
+-	if ('string' != typeof url && _load) return _load.apply(this, arguments);
++	if (typeof url != 'string' && _load) return _load.apply(this, arguments);
+ 	var selector, response, type, self = this, off = url.indexOf(' ');
+-	return off >= 0 && (selector = url.slice(off, url.length), url = url.slice(0, off)), jQuery.isFunction(params) ? (callback = params, params = void 0) : params && 'object' == typeof params && (type = 'POST'), self.length > 0 && jQuery.ajax({
++	return off >= 0 && (selector = url.slice(off, url.length), url = url.slice(0, off)), jQuery.isFunction(params) ? (callback = params, params = void 0) : params && typeof params == 'object' && (type = 'POST'), self.length > 0 && jQuery.ajax({
+ 		url,
+ 		// if "type" variable is undefined, then "GET" method will be used
+ 		type,
+ 		dataType: 'html',
+ 		data: params
+ 	}).done(function(responseText) {
+-		// Save response for use in complete callback
+-		response = arguments, self.html(selector ? jQuery('<div>').append(jQuery.parseHTML(responseText)).find(selector) : responseText);
++		response = arguments, self.html(selector ? jQuery('<div>').append(jQuery.parseHTML(responseText)).find(selector) : // Otherwise use the full result
++		responseText);
+ 	}).complete(callback && function(jqXHR, status) {
+ 		self.each(callback, response || [
+ 			jqXHR.responseText,
+
+```
+
 ## `swc/issues/do-while-false-terminal-jump/completion/unused-prefix-continue`
 
 - tags: `remove unused`, `1 iteration`
@@ -2759,6 +3161,80 @@ console.log(alternateBranch(true));
 -console.log(alternateBranch(true));
 +console.log(alternateBranch(!1));
 +console.log(alternateBranch(!0));
+
+```
+
+## `swc/issues/react/hooks/3`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 941 vs reference 956 (no whitespaces: -15, formatted: -25)
+
+```js
+'use strict';
+__webpack_require__.d(__webpack_exports__, { Z: function() {
+	return EnvironmentsSelector;
+} });
+var router = __webpack_require__(86677);
+var index_esm = __webpack_require__(45205);
+var use_team = __webpack_require__(502);
+var fetch_api = __webpack_require__(78869);
+var authenticate = __webpack_require__(16966);
+var api_endpoints = __webpack_require__(96236);
+var qs = __webpack_require__(70326);
+function useProjectBranches(projectId, opts) {
+	var token = (0, authenticate.LP)();
+	var ref = (0, use_team.ZP)(), team = ref.team;
+	var teamId = team === null || team === void 0 ? void 0 : team.id;
+	return (0, index_esm.ZP)(projectId ? ''.concat(api_endpoints.Ms, '/git-branches').concat((0, qs.c)({
+		projectId,
+		teamId
+	})) : '', function(endpoint) {
+		return (0, fetch_api.Z)(endpoint, token, { throwOnHTTPError: true });
+	}, opts);
+}
+var use_project = __webpack_require__(76246);
+export function EnvironmentsSelector(param) {
+	var _query = (0, router.useRouter)().query, projectName = _query.project;
+	var ref = (0, use_project.useProject)(projectName), projectInfo = ref.data;
+	var ref1 = (0, use_team.ZP)(), teamSlug = ref1.teamSlug;
+	var projectId = projectInfo === null || projectInfo === void 0 ? void 0 : projectInfo.id;
+	var ref2 = useProjectBranches(projectId), branches = ref2.data;
+	return {};
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,14 +1,20 @@
+-'use strict';
+ __webpack_require__.d(__webpack_exports__, { Z: function() {
+ 	return EnvironmentsSelector;
+ } });
+-var router = __webpack_require__(86677), index_esm = __webpack_require__(45205), use_team = __webpack_require__(502), fetch_api = __webpack_require__(78869), authenticate = __webpack_require__(16966), api_endpoints = __webpack_require__(96236), qs = __webpack_require__(70326), use_project = __webpack_require__(76246);
+-export function EnvironmentsSelector(param) {
+-	var projectId, token, team, teamId, projectName = (0, router.useRouter)().query.project, projectInfo = (0, use_project.useProject)(projectName).data;
+-	return (0, use_team.ZP)().teamSlug, (projectId = null == projectInfo ? void 0 : projectInfo.id, token = (0, authenticate.LP)(), teamId = null == (team = (0, use_team.ZP)().team) ? void 0 : team.id, (0, index_esm.ZP)(projectId ? ''.concat(api_endpoints.Ms, '/git-branches').concat((0, qs.c)({
++var router = __webpack_require__(86677), index_esm = __webpack_require__(45205), use_team = __webpack_require__(502), fetch_api = __webpack_require__(78869), authenticate = __webpack_require__(16966), api_endpoints = __webpack_require__(96236), qs = __webpack_require__(70326);
++function useProjectBranches(projectId, opts) {
++	var token = (0, authenticate.LP)(), teamId = (0, use_team.ZP)().team?.id;
++	return (0, index_esm.ZP)(projectId ? `${api_endpoints.Ms}/git-branches${(0, qs.c)({
+ 		projectId,
+ 		teamId
+-	})) : '', function(endpoint) {
++	})}` : '', function(endpoint) {
+ 		return (0, fetch_api.Z)(endpoint, token, { throwOnHTTPError: !0 });
+-	}, void 0)).data, {};
++	}, opts);
++}
++var use_project = __webpack_require__(76246);
++export function EnvironmentsSelector(param) {
++	var projectName = (0, router.useRouter)().query.project, projectInfo = (0, use_project.useProject)(projectName).data;
++	(0, use_team.ZP)().teamSlug;
++	var projectId = projectInfo?.id;
++	return useProjectBranches(projectId).data, {};
+ }
 
 ```
 
@@ -3531,6 +4007,82 @@ use((function(__unused_webpack_module, exports, __webpack_require__) {
 -});
 +	}));
 +}));
+
+```
+
+## `swc/projects/yui/7`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 693 vs reference 716 (no whitespaces: -23, formatted: -22)
+
+```js
+export const E = { _sort: function() {
+	// create an indexed list
+	var s = YObject.keys(this.required), done = {}, p = 0, l, a, b, j, k, moved, doneKey;
+	// keep going until we make a pass without moving anything
+	for (;;) {
+		l = s.length;
+		moved = false;
+		// start the loop after items that are already sorted
+		for (j = p; j < l; j++) {
+			// check the next module on the list to see if its
+			// dependencies have been met
+			a = s[j];
+			// check everything below current item and move if we
+			// find a requirement for the current item
+			for (k = j + 1; k < l; k++) {
+				doneKey = a + s[k];
+				if (!done[doneKey] && this._requires(a, s[k])) {
+					// extract the dependency so we can move it up
+					b = s.splice(k, 1);
+					// insert the dependency above the item that
+					// requires it
+					s.splice(j, 0, b[0]);
+					// only swap two dependencies once to short circut
+					// circular dependencies
+					done[doneKey] = true;
+					// keep working
+					moved = true;
+					break;
+				}
+			}
+			// jump out of loop if we moved something
+			if (moved) {
+				break;
+			} else {
+				p++;
+			}
+		}
+		// when we make it here and moved is false, we are
+		// finished sorting
+		if (!moved) {
+			break;
+		}
+	}
+	this.sorted = s;
+} };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,12 +1,12 @@
+ export const E = { _sort: function() {
+ 	// keep going until we make a pass without moving anything
+-	for (var l, a, b, j, k, moved, doneKey, s = YObject.keys(this.required), done = {}, p = 0;;) {
++	for (var s = YObject.keys(this.required), done = {}, p = 0, l, a, b, j, k, moved, doneKey;;) {
+ 		// start the loop after items that are already sorted
+ 		for (l = s.length, moved = !1, j = p; j < l; j++) {
+ 			// check everything below current item and move if we
+ 			// find a requirement for the current item
+-			for (a = s[j], k = j + 1; k < l; k++) if (!done[doneKey = a + s[k]] && this._requires(a, s[k])) {
+-				// extract the dependency so we can move it up
++			for (a = s[j], k = j + 1; k < l; k++) if (doneKey = a + s[k], !done[doneKey] && this._requires(a, s[k])) {
++				// keep working
+ 				b = s.splice(k, 1), s.splice(j, 0, b[0]), done[doneKey] = !0, moved = !0;
+ 				break;
+ 			}
 
 ```
 
@@ -4501,6 +5053,153 @@ export function ItemsList() {
 
 ```
 
+## `swc/issues/murmur2/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 599 vs reference 648 (no whitespaces: -49, formatted: -47)
+
+```js
+export default function murmur2(str) {
+	// 'm' and 'r' are mixing constants generated offline.
+	// They're not really 'magic', they just happen to work well.
+	// const m = 0x5bd1e995;
+	// const r = 24;
+	// Initialize the hash
+	var h = 0;
+	var k, i = 0, len = str.length;
+	for (; len >= 4; ++i, len -= 4) {
+		k = str.charCodeAt(i) & 255 | (str.charCodeAt(++i) & 255) << 8 | (str.charCodeAt(++i) & 255) << 16 | (str.charCodeAt(++i) & 255) << 24;
+		k = (k & 65535) * 1540483477 + ((k >>> 16) * 59797 << 16);
+		k ^= k >>> 24;
+		h = (k & 65535) * 1540483477 + ((k >>> 16) * 59797 << 16) ^ (h & 65535) * 1540483477 + ((h >>> 16) * 59797 << 16);
+	}
+	switch (len) {
+		case 3: h ^= (str.charCodeAt(i + 2) & 255) << 16;
+		case 2: h ^= (str.charCodeAt(i + 1) & 255) << 8;
+		case 1:
+			h ^= str.charCodeAt(i) & 255;
+			h = (h & 65535) * 1540483477 + ((h >>> 16) * 59797 << 16);
+	}
+	// bytes are well-incorporated.
+	h ^= h >>> 13;
+	h = (h & 65535) * 1540483477 + ((h >>> 16) * 59797 << 16);
+	return ((h ^ h >>> 15) >>> 0).toString(36);
+}
+function isProcessableValue(value) {
+	return value != null && typeof value !== 'boolean';
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,10 +1,9 @@
+ export default function murmur2(str) {
+-	for (var k, h = 0, i = 0, len = str.length; len >= 4; ++i, len -= 4) k = (65535 & (k = 255 & str.charCodeAt(i) | (255 & str.charCodeAt(++i)) << 8 | (255 & str.charCodeAt(++i)) << 16 | (255 & str.charCodeAt(++i)) << 24)) * 1540483477 + ((k >>> 16) * 59797 << 16), k ^= k >>> 24, h = (65535 & k) * 1540483477 + ((k >>> 16) * 59797 << 16) ^ (65535 & h) * 1540483477 + ((h >>> 16) * 59797 << 16);
+-	// Handle the last few bytes of the input array
++	for (var h = 0, k, i = 0, len = str.length; len >= 4; ++i, len -= 4) k = str.charCodeAt(i) & 255 | (str.charCodeAt(++i) & 255) << 8 | (str.charCodeAt(++i) & 255) << 16 | (str.charCodeAt(++i) & 255) << 24, k = (k & 65535) * 1540483477 + ((k >>> 16) * 59797 << 16), k ^= k >>> 24, h = (k & 65535) * 1540483477 + ((k >>> 16) * 59797 << 16) ^ (h & 65535) * 1540483477 + ((h >>> 16) * 59797 << 16);
+ 	switch (len) {
+-		case 3: h ^= (255 & str.charCodeAt(i + 2)) << 16;
+-		case 2: h ^= (255 & str.charCodeAt(i + 1)) << 8;
+-		case 1: h ^= 255 & str.charCodeAt(i), h = (65535 & h) * 1540483477 + ((h >>> 16) * 59797 << 16);
++		case 3: h ^= (str.charCodeAt(i + 2) & 255) << 16;
++		case 2: h ^= (str.charCodeAt(i + 1) & 255) << 8;
++		case 1: h ^= str.charCodeAt(i) & 255, h = (h & 65535) * 1540483477 + ((h >>> 16) * 59797 << 16);
+ 	}
+-	return h ^= h >>> 13, (((h = (65535 & h) * 1540483477 + ((h >>> 16) * 59797 << 16)) ^ h >>> 15) >>> 0).toString(36);
++	return h ^= h >>> 13, h = (h & 65535) * 1540483477 + ((h >>> 16) * 59797 << 16), ((h ^ h >>> 15) >>> 0).toString(36);
+ }
+
+```
+
+## `swc/issues/d3-color/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 1291 vs reference 1341 (no whitespaces: -50, formatted: -30)
+
+```js
+import define, { extend } from './define.js';
+import { Color, rgbConvert, Rgb, darker, brighter } from './color.js';
+import { deg2rad, rad2deg } from './math.js';
+var A = -.14861, B = +1.78277, C = -.29227, D = -.90649, E = +1.97294, ED = E * D, EB = E * B, BC_DA = B * C - D * A;
+function cubehelixConvert(o) {
+	if (o instanceof Cubehelix) return new Cubehelix(o.h, o.s, o.l, o.opacity);
+	if (!(o instanceof Rgb)) o = rgbConvert(o);
+	var r = o.r / 255, g = o.g / 255, b = o.b / 255, l = (BC_DA * b + ED * r - EB * g) / (BC_DA + ED - EB), bl = b - l, k = (E * (g - l) - C * bl) / D, s = Math.sqrt(k * k + bl * bl) / (E * l * (1 - l)), h = s ? Math.atan2(k, bl) * rad2deg - 120 : NaN;
+	return new Cubehelix(h < 0 ? h + 360 : h, s, l, o.opacity);
+}
+export default function cubehelix(h, s, l, opacity) {
+	return arguments.length === 1 ? cubehelixConvert(h) : new Cubehelix(h, s, l, opacity == null ? 1 : opacity);
+}
+export function Cubehelix(h, s, l, opacity) {
+	this.h = +h;
+	this.s = +s;
+	this.l = +l;
+	this.opacity = +opacity;
+}
+define(Cubehelix, cubehelix, extend(Color, {
+	brighter: function(k) {
+		k = k == null ? brighter : Math.pow(brighter, k);
+		return new Cubehelix(this.h, this.s, this.l * k, this.opacity);
+	},
+	darker: function(k) {
+		k = k == null ? darker : Math.pow(darker, k);
+		return new Cubehelix(this.h, this.s, this.l * k, this.opacity);
+	},
+	rgb: function() {
+		var h = isNaN(this.h) ? 0 : (this.h + 120) * deg2rad, l = +this.l, a = isNaN(this.s) ? 0 : this.s * l * (1 - l), cosh = Math.cos(h), sinh = Math.sin(h);
+		return new Rgb(255 * (l + a * (A * cosh + B * sinh)), 255 * (l + a * (C * cosh + D * sinh)), 255 * (l + a * (E * cosh)), this.opacity);
+	}
+}));
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,27 +1,28 @@
+ import define, { extend } from './define.js';
+ import { Color, rgbConvert, Rgb, darker, brighter } from './color.js';
+ import { deg2rad, rad2deg } from './math.js';
+-var BC_DA = -1.78277 * .29227 - .1347134789;
++var A = -.14861, B = 1.78277, C = -.29227, D = -.90649, E = 1.97294, ED = E * D, EB = E * B, BC_DA = B * C - D * A;
++function cubehelixConvert(o) {
++	if (o instanceof Cubehelix) return new Cubehelix(o.h, o.s, o.l, o.opacity);
++	o instanceof Rgb || (o = rgbConvert(o));
++	var r = o.r / 255, g = o.g / 255, b = o.b / 255, l = (BC_DA * b + ED * r - EB * g) / (BC_DA + ED - EB), bl = b - l, k = (E * (g - l) - C * bl) / D, s = Math.sqrt(k * k + bl * bl) / (E * l * (1 - l)), h = s ? Math.atan2(k, bl) * rad2deg - 120 : NaN;
++	return new Cubehelix(h < 0 ? h + 360 : h, s, l, o.opacity);
++}
+ export default function cubehelix(h, s, l, opacity) {
+-	return 1 == arguments.length ? function(o) {
+-		if (o instanceof Cubehelix) return new Cubehelix(o.h, o.s, o.l, o.opacity);
+-		o instanceof Rgb || (o = rgbConvert(o));
+-		var r = o.r / 255, g = o.g / 255, b = o.b / 255, l = (BC_DA * b + -1.7884503806 * r - 3.5172982438 * g) / (BC_DA + -1.7884503806 - 3.5172982438), bl = b - l, k = -((1.97294 * (g - l) - -.29227 * bl) / .90649), s = Math.sqrt(k * k + bl * bl) / (1.97294 * l * (1 - l)), h = s ? Math.atan2(k, bl) * rad2deg - 120 : 0 / 0;
+-		return new Cubehelix(h < 0 ? h + 360 : h, s, l, o.opacity);
+-	}(h) : new Cubehelix(h, s, l, null == opacity ? 1 : opacity);
++	return arguments.length === 1 ? cubehelixConvert(h) : new Cubehelix(h, s, l, opacity ?? 1);
+ }
+ export function Cubehelix(h, s, l, opacity) {
+ 	this.h = +h, this.s = +s, this.l = +l, this.opacity = +opacity;
+ }
+ define(Cubehelix, cubehelix, extend(Color, {
+ 	brighter: function(k) {
+-		return k = null == k ? brighter : Math.pow(brighter, k), new Cubehelix(this.h, this.s, this.l * k, this.opacity);
++		return k = k == null ? brighter : brighter ** +k, new Cubehelix(this.h, this.s, this.l * k, this.opacity);
+ 	},
+ 	darker: function(k) {
+-		return k = null == k ? darker : Math.pow(darker, k), new Cubehelix(this.h, this.s, this.l * k, this.opacity);
++		return k = k == null ? darker : darker ** +k, new Cubehelix(this.h, this.s, this.l * k, this.opacity);
+ 	},
+ 	rgb: function() {
+ 		var h = isNaN(this.h) ? 0 : (this.h + 120) * deg2rad, l = +this.l, a = isNaN(this.s) ? 0 : this.s * l * (1 - l), cosh = Math.cos(h), sinh = Math.sin(h);
+-		return new Rgb(255 * (l + a * (-.14861 * cosh + 1.78277 * sinh)), 255 * (l + a * (-.29227 * cosh + -.90649 * sinh)), 255 * (l + 1.97294 * cosh * a), this.opacity);
++		return new Rgb(255 * (l + a * (A * cosh + B * sinh)), 255 * (l + a * (C * cosh + D * sinh)), 255 * (l + E * cosh * a), this.opacity);
+ 	}
+ }));
+
+```
+
 ## `swc/issues/do-while-false-terminal-jump/side-effects`
 
 - tags: `1 iteration`
@@ -5246,6 +5945,277 @@ export default A;
 
 ```
 
+## `swc/projects/yui/13`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 1068 vs reference 1146 (no whitespaces: -78, formatted: -92)
+
+```js
+export const E = { _getTransaction: function(urls, options) {
+	var requests = [], i, len, req, url;
+	if (!Lang.isArray(urls)) {
+		urls = [urls];
+	}
+	options = Y.merge(this.options, options);
+	// Clone the attributes object so we don't end up modifying it by ref.
+	options.attributes = Y.merge(this.options.attributes, options.attributes);
+	for (i = 0, len = urls.length; i < len; ++i) {
+		url = urls[i];
+		req = { attributes: {} };
+		// If `url` is a string, we create a URL object for it, then mix in
+		// global options and request-specific options. If it's an object
+		// with a "url" property, we assume it's a request object containing
+		// URL-specific options.
+		if (typeof url === 'string') {
+			req.url = url;
+		} else if (url.url) {
+			// URL-specific options override both global defaults and
+			// request-specific options.
+			Y.mix(req, url, false, null, 0, true);
+			url = url.url;
+		} else {
+			continue;
+		}
+		Y.mix(req, options, false, null, 0, true);
+		// If we didn't get an explicit type for this URL either in the
+		// request options or the URL-specific options, try to determine
+		// one from the file extension.
+		if (!req.type) {
+			if (this.REGEX_CSS.test(url)) {
+				req.type = 'css';
+			} else {
+				if (!this.REGEX_JS.test(url)) {}
+				req.type = 'js';
+			}
+		}
+		// Mix in type-specific default options, but don't overwrite any
+		// options that have already been set.
+		Y.mix(req, req.type === 'js' ? this.jsOptions : this.cssOptions, false, null, 0, true);
+		// Give the node an id attribute if it doesn't already have one.
+		req.attributes.id || (req.attributes.id = Y.guid());
+		// Backcompat for <3.5.0 behavior.
+		if (req.win) {
+			req.doc = req.win.document;
+		} else {
+			req.win = req.doc.defaultView || req.doc.parentWindow;
+		}
+		if (req.charset) {
+			req.attributes.charset = req.charset;
+		}
+		requests.push(req);
+	}
+	return new Transaction(requests, options);
+} };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,18 +1,14 @@
+ export const E = { _getTransaction: function(urls, options) {
+-	var i, len, req, url, requests = [];
+-	for (Lang.isArray(urls) || (urls = [urls]), (options = Y.merge(this.options, options)).attributes = Y.merge(this.options.attributes, options.attributes), i = 0, len = urls.length; i < len; ++i) {
++	var requests = [], i, len, req, url;
++	for (Lang.isArray(urls) || (urls = [urls]), options = Y.merge(this.options, options), options.attributes = Y.merge(this.options.attributes, options.attributes), i = 0, len = urls.length; i < len; ++i) {
+ 		// If `url` is a string, we create a URL object for it, then mix in
+ 		// global options and request-specific options. If it's an object
+ 		// with a "url" property, we assume it's a request object containing
+ 		// URL-specific options.
+-		if (url = urls[i], req = { attributes: {} }, 'string' == typeof url) req.url = url;
+-		else {
+-			if (!url.url) continue;
+-			// URL-specific options override both global defaults and
+-			// request-specific options.
+-			Y.mix(req, url, !1, null, 0, !0), url = url.url;
+-		}
+-		Y.mix(req, options, !1, null, 0, !0), req.type || (this.REGEX_CSS.test(url) ? req.type = 'css' : (this.REGEX_JS.test(url), req.type = 'js')), Y.mix(req, 'js' === req.type ? this.jsOptions : this.cssOptions, !1, null, 0, !0), req.attributes.id || (req.attributes.id = Y.guid()), req.win ? req.doc = req.win.document : req.win = req.doc.defaultView || req.doc.parentWindow, req.charset && (req.attributes.charset = req.charset), requests.push(req);
++		if (url = urls[i], req = { attributes: {} }, typeof url == 'string') req.url = url;
++		else if (url.url) Y.mix(req, url, !1, null, 0, !0), url = url.url;
++		else continue;
++		Y.mix(req, options, !1, null, 0, !0), req.type || (this.REGEX_CSS.test(url) ? req.type = 'css' : (this.REGEX_JS.test(url), req.type = 'js')), Y.mix(req, req.type === 'js' ? this.jsOptions : this.cssOptions, !1, null, 0, !0), req.attributes.id || (req.attributes.id = Y.guid()), req.win ? req.doc = req.win.document : req.win = req.doc.defaultView || req.doc.parentWindow, req.charset && (req.attributes.charset = req.charset), requests.push(req);
+ 	}
+ 	return new Transaction(requests, options);
+ } };
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/simple`
+
+- tags: `1 iteration`
+- size: oxc 906 vs reference 1008 (no whitespaces: -102, formatted: -165)
+
+```js
+function simpleJumps() {
+	var events = [];
+	do {
+		events.push('break');
+		break;
+	} while (false);
+	events.push('after break');
+	do {
+		events.push('continue');
+		continue;
+	} while (0);
+	events.push('after continue');
+	do {
+		;
+		events.push('debugger');
+		debugger;
+		continue;
+	} while (!1);
+	return events.join('|');
+}
+function outerFor() {
+	var events = [];
+	for (var i = 0; i < 2; i++) {
+		do {
+			events.push('break' + i);
+			break;
+		} while (false);
+		events.push('first tail' + i);
+		do {
+			events.push('continue' + i);
+			continue;
+		} while (void 0);
+		events.push('second tail' + i);
+	}
+	return events.join('|');
+}
+function outerSwitch(value) {
+	var events = [];
+	switch (value) {
+		case 1:
+			do {
+				events.push('break');
+				break;
+			} while (false);
+			events.push('switch tail');
+			do {
+				events.push('continue');
+				continue;
+			} while (false);
+			events.push('case tail');
+			break;
+		default: events.push('wrong case');
+	}
+	return events.join('|');
+}
+function jumpOnly() {
+	do
+		break;
+	while (false);
+	do
+		continue;
+	while (false);
+	do {
+		break;
+	} while (false);
+	do {
+		continue;
+	} while (false);
+	return 'after empty loops';
+}
+console.log(simpleJumps());
+console.log(outerFor());
+console.log(outerSwitch(1));
+console.log(jumpOnly());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,34 +1,29 @@
+ function simpleJumps() {
+ 	var events = [];
+-	do {
++	do
+ 		events.push('break');
+-		break;
+-	} while (false);
++	while (0);
+ 	events.push('after break');
+-	do {
++	do
+ 		events.push('continue');
+-		continue;
+-	} while (0);
++	while (0);
+ 	events.push('after continue');
+ 	do {
+ 		events.push('debugger');
+ 		debugger;
+-		continue;
+-	} while (!1);
++	} while (0);
+ 	return events.join('|');
+ }
+ function outerFor() {
+ 	var events = [];
+ 	for (var i = 0; i < 2; i++) {
+-		do {
++		do
+ 			events.push('break' + i);
+-			break;
+-		} while (false);
++		while (0);
+ 		events.push('first tail' + i);
+-		do {
++		do
+ 			events.push('continue' + i);
+-			continue;
+-		} while (void 0);
++		while (void 0);
+ 		events.push('second tail' + i);
+ 	}
+ 	return events.join('|');
+@@ -37,15 +32,13 @@
+ 	var events = [];
+ 	switch (value) {
+ 		case 1:
+-			do {
++			do
+ 				events.push('break');
+-				break;
+-			} while (false);
++			while (0);
+ 			events.push('switch tail');
+-			do {
++			do
+ 				events.push('continue');
+-				continue;
+-			} while (false);
++			while (0);
+ 			events.push('case tail');
+ 			break;
+ 		default: events.push('wrong case');
+@@ -55,16 +48,14 @@
+ function jumpOnly() {
+ 	do
+ 		break;
+-	while (false);
++	while (0);
+ 	do
+ 		continue;
+-	while (false);
+-	do {
+-		break;
+-	} while (false);
+-	do {
+-		continue;
+-	} while (false);
++	while (0);
++	do;
++	while (0);
++	do;
++	while (0);
+ 	return 'after empty loops';
+ }
+ console.log(simpleJumps());
+
+```
+
 ## `swc/issues/3256/2`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -5535,6 +6505,87 @@ console.log(switchParent(1));
 
 ```
 
+## `swc/issues/3126/1`
+
+- tags: `join vars`, `sequences`, `remove unused`
+- size: oxc 746 vs reference 882 (no whitespaces: -136, formatted: -154)
+
+```js
+/******/ (() => {
+	/******/ var __webpack_modules__ = { 
+	/***/ 746: /***/ (__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) => {
+		// originally from react
+		const G = Object.prototype.hasOwnProperty;
+		// MY ACTUAL CODE
+		const baselinePx = 4;
+		const faderWidth = baselinePx * 12;
+		const faderHeight = baselinePx * 60;
+		const trackWidth = faderWidth / 3;
+		const trackHeight = faderHeight - faderWidth;
+		const trackMargin = (faderWidth - trackWidth) / 2;
+		// END MY ACTUAL CODE
+		/***/
+	} };
+	/************************************************************************/
+	/******/
+	/******/ // expose the modules object (__webpack_modules__)
+	/******/ __webpack_require__.m = __webpack_modules__;
+	/******/
+	/************************************************************************/
+	/******/ /* webpack/runtime/chunk loaded */
+	/******/ (() => {
+		/******/ __webpack_require__.O = (result, chunkIds, fn, priority) => {
+			/******/ for (var j = 0; j < chunkIds.length; j++) {
+				/******/ Object.keys(__webpack_require__.O).every((key) => __webpack_require__.O[key](chunkIds[j]));
+			}
+			/******/
+		};
+		/******/
+	})();
+	/******/ var __webpack_exports__ = __webpack_require__.O(undefined, [532], () => __webpack_require__(746));
+	/******/ __webpack_exports__ = __webpack_require__.O(__webpack_exports__);
+	/******/
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,17 +1,18 @@
+ /******/ (() => {
+ 	/******/ var __webpack_modules__ = { 
+-	/***/ 746: /***/ () => {
+-		// originally from react
+-		Object.prototype.hasOwnProperty;
++	/***/ 746: /***/ (__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) => {
+ 		// END MY ACTUAL CODE
+-		/***/	} };
+-	/************************************************************************/ /******/ /******/ // expose the modules object (__webpack_modules__)
+-	/******/ __webpack_require__.m = __webpack_modules__;
+-	/******/ /************************************************************************/ /******/ /* webpack/runtime/chunk loaded */ /******/ (() => {
+-		/******/ __webpack_require__.O = (result, chunkIds) => {
+-			/******/ for (var j = 0; j < chunkIds.length; j++) /******/ Object.keys(__webpack_require__.O).every((key) => __webpack_require__.O[key](chunkIds[j]));
+-			/******/		};
+-		/******/	})();
++		/***/
++	} };
++	/******/
++	/************************************************************************/
++	/******/ /* webpack/runtime/chunk loaded */
++	/******/ __webpack_require__.m = __webpack_modules__, __webpack_require__.O = (result, chunkIds, fn, priority) => {
++		/******/ for (var j = 0; j < chunkIds.length; j++)
++ /******/ Object.keys(__webpack_require__.O).every((key) => __webpack_require__.O[key](chunkIds[j]));
++		/******/
++	};
+ 	/******/ var __webpack_exports__ = __webpack_require__.O(void 0, [532], () => __webpack_require__(746));
+ 	/******/ __webpack_exports__ = __webpack_require__.O(__webpack_exports__);
+-	/******/})();
++	/******/
++})();
+
+```
+
 ## `swc/issues/7683/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -5702,6 +6753,185 @@ console.log('after');
 -});
 +while (void 0);
  console.log('after');
+
+```
+
+## `swc/issues/do-while-false-terminal-jump/rejected`
+
+- tags: `1 iteration`
+- size: oxc 968 vs reference 1145 (no whitespaces: -177, formatted: -246)
+
+```js
+function conditional(stop) {
+	var events = [];
+	do {
+		if (stop) break;
+		events.push('work');
+		continue;
+	} while (false);
+	events.push('tail');
+	return events.join('|');
+}
+function unreachableTail() {
+	var events = [];
+	do {
+		events.push('body');
+		break;
+		events.push('unreachable');
+	} while (false);
+	events.push('tail');
+	return events.join('|');
+}
+function nestedTargets() {
+	var events = [];
+	do {
+		switch (1) {
+			case 1:
+				events.push('switch');
+				break;
+		}
+		for (var i = 0; i < 2; i++) {
+			events.push('inner' + i);
+			if (i === 0) continue;
+			break;
+		}
+		events.push('outer body');
+		break;
+	} while (false);
+	do {
+		switch (1) {
+			case 1:
+				events.push('switch continue');
+				continue;
+		}
+		events.push('unreachable');
+	} while (false);
+	events.push('tail');
+	return events.join('|');
+}
+function finallyOverrides() {
+	var events = [];
+	do {
+		try {
+			events.push('try');
+			break;
+		} finally {
+			events.push('finally');
+			continue;
+		}
+		events.push('unreachable');
+	} while (events.push('condition'), false);
+	events.push('tail');
+	return events.join('|');
+}
+function declarationPrefix() {
+	do {
+		var value = 'local';
+		console.log(value);
+		break;
+	} while (false);
+	return value;
+}
+console.log(conditional(true));
+console.log(conditional(false));
+console.log(unreachableTail());
+console.log(nestedTargets());
+console.log(finallyOverrides());
+console.log(declarationPrefix());
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -3,50 +3,38 @@
+ 	do {
+ 		if (stop) break;
+ 		events.push('work');
+-		continue;
+-	} while (false);
++	} while (0);
+ 	events.push('tail');
+ 	return events.join('|');
+ }
+ function unreachableTail() {
+ 	var events = [];
+-	do {
++	do
+ 		events.push('body');
+-		break;
+-		events.push('unreachable');
+-	} while (false);
++	while (0);
+ 	events.push('tail');
+ 	return events.join('|');
+ }
+ function nestedTargets() {
+ 	var events = [];
+ 	do {
+-		switch (1) {
+-			case 1:
+-				events.push('switch');
+-				break;
+-		}
++		events.push('switch');
+ 		for (var i = 0; i < 2; i++) {
+ 			events.push('inner' + i);
+-			if (0 !== i) break;
++			if (i === 0) continue;
++			break;
+ 		}
+ 		events.push('outer body');
+-		break;
+-	} while (false);
+-	do {
+-		switch (1) {
+-			case 1:
+-				events.push('switch continue');
+-				continue;
+-		}
+-		events.push('unreachable');
+-	} while (false);
++	} while (0);
++	do
++		events.push('switch continue');
++	while (0);
+ 	events.push('tail');
+ 	return events.join('|');
+ }
+ function finallyOverrides() {
+ 	var events = [];
+-	do {
++	do
+ 		try {
+ 			events.push('try');
+ 			break;
+@@ -54,8 +42,7 @@
+ 			events.push('finally');
+ 			continue;
+ 		}
+-		events.push('unreachable');
+-	} while (events.push('condition'), false);
++	while (events.push('condition'), 0);
+ 	events.push('tail');
+ 	return events.join('|');
+ }
+@@ -63,12 +50,11 @@
+ 	do {
+ 		var value = 'local';
+ 		console.log(value);
+-		break;
+-	} while (false);
++	} while (0);
+ 	return value;
+ }
+-console.log(conditional(true));
+-console.log(conditional(false));
++console.log(conditional(!0));
++console.log(conditional(!1));
+ console.log(unreachableTail());
+ console.log(nestedTargets());
+ console.log(finallyOverrides());
 
 ```
 

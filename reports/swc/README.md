@@ -1,6 +1,6 @@
 # swc — oxc_minifier cross validation
 
-Fixtures run: 688
+Fixtures run: 731
 
 [← all families](../README.md)
 
@@ -8,15 +8,15 @@ Fixtures run: 688
 
 | smaller | not-idempotent | panic | larger | whitespace | differs | parse-error | config-error | pass | total |
 |---|---|---|---|---|---|---|---|---|---|
-| 126 | 2 | 0 | 361 | 4 | 53 | 2 | 0 | 140 | 688 |
+| 138 | 4 | 0 | 387 | 4 | 54 | 2 | 0 | 142 | 731 |
 
 ## Reports
 
 | kind | fixtures | file |
 |---|---:|---|
-| smaller | 126 | [smaller.md](smaller.md) |
-| not-idempotent | 2 | [not-idempotent.md](not-idempotent.md) |
-| larger | 361 | [larger.md](larger.md) |
+| smaller | 138 | [smaller.md](smaller.md) |
+| not-idempotent | 4 | [not-idempotent.md](not-idempotent.md) |
+| larger | 387 | [larger.md](larger.md) |
 | whitespace | 4 | [whitespace.md](whitespace.md) |
-| differs | 53 | [differs.md](differs.md) |
+| differs | 54 | [differs.md](differs.md) |
 | parse-error | 2 | [parse-error.md](parse-error.md) |

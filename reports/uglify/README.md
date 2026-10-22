@@ -1,6 +1,6 @@
 # uglify — oxc_minifier cross validation
 
-Fixtures run: 4109
+Fixtures run: 4111
 
 [← all families](../README.md)
 
@@ -8,7 +8,7 @@ Fixtures run: 4109
 
 | smaller | not-idempotent | panic | larger | whitespace | differs | parse-error | config-error | pass | total |
 |---|---|---|---|---|---|---|---|---|---|
-| 1107 | 4 | 1 | 1720 | 19 | 235 | 24 | 0 | 999 | 4109 |
+| 1107 | 4 | 1 | 1721 | 19 | 235 | 25 | 0 | 999 | 4111 |
 
 ## Reports
 
@@ -17,7 +17,7 @@ Fixtures run: 4109
 | smaller | 1107 | [smaller.md](smaller.md) |
 | not-idempotent | 4 | [not-idempotent.md](not-idempotent.md) |
 | panic | 1 | [panic.md](panic.md) |
-| larger | 1720 | [larger.md](larger.md) |
+| larger | 1721 | [larger.md](larger.md) |
 | whitespace | 19 | [whitespace.md](whitespace.md) |
 | differs | 235 | [differs.md](differs.md) |
-| parse-error | 24 | [parse-error.md](parse-error.md) |
+| parse-error | 25 | [parse-error.md](parse-error.md) |

@@ -1,6 +1,6 @@
 # swc / larger — Output longer than expected (possible missing optimization)
 
-Fixtures: 361
+Fixtures: 387
 
 [← swc](README.md) · [← all families](../README.md)
 
@@ -583,6 +583,90 @@ if (!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.
 @@ -1 +1 @@
 -!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.push(context.createTextNode(rleadingWhitespace.exec(elem)[0])), jQuery.support.tbody || console.log('Foo');
 +!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.push(context.createTextNode(rleadingWhitespace.exec(elem)[0])), !jQuery.support.tbody && console.log('Foo');
+
+```
+
+## `swc/projects/next/archive-1/411.0fbee7df8bd8b42967ec`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 788 vs reference 787 (no whitespaces: +1, formatted: +1)
+
+```js
+'use strict';
+(self['webpackChunk_N_E'] = self['webpackChunk_N_E'] || []).push([[411], { 
+/***/ 8411: /***/ function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+	__webpack_require__.r(__webpack_exports__);
+	/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4512);
+	/* harmony import */ var styled_jsx_style__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(266);
+	/* harmony default export */ __webpack_exports__['default'] = function() {
+		return (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)('div', {
+			id: 'dynamic-component',
+			className: 'jsx-3028949577',
+			children: ['Dynamic Component', (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(styled_jsx_style__WEBPACK_IMPORTED_MODULE_1__.default, {
+				id: '3028949577',
+				children: ['div.jsx-3028949577{font-size:100px;}']
+			})]
+		});
+	};
+	/***/
+} }]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -13,4 +13,5 @@
+ 			})]
+ 		});
+ 	};
+-	/***/} }]);
++	/***/
++} }]);
+
+```
+
+## `swc/projects/next/archive-1/808.7518829f34ebf3ce0082`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 818 vs reference 817 (no whitespaces: +1, formatted: +1)
+
+```js
+'use strict';
+(self['webpackChunk_N_E'] = self['webpackChunk_N_E'] || []).push([[808], { 
+/***/ 2808: /***/ function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+	__webpack_require__.r(__webpack_exports__);
+	/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4512);
+	/* harmony import */ var next_dynamic__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4652);
+	var Nested2 = (0, next_dynamic__WEBPACK_IMPORTED_MODULE_1__.default)(function() {
+		return __webpack_require__.e(
+			/* import() */
+			383
+		).then(__webpack_require__.bind(__webpack_require__, 1383));
+	}, { loadableGenerated: {
+		webpack: function webpack() {
+			return [1383];
+		},
+		modules: ['../components/nested1.js -> ' + './nested2']
+	} });
+	/* harmony default export */ __webpack_exports__['default'] = function() {
+		return (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)('div', { children: ['Nested 1', (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(Nested2, {})] });
+	};
+	/***/
+} }]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -16,4 +16,5 @@
+ 	/* harmony default export */ __webpack_exports__.default = function() {
+ 		return (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)('div', { children: ['Nested 1', (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(Nested2, {})] });
+ 	};
+-	/***/} }]);
++	/***/
++} }]);
 
 ```
 
@@ -2125,6 +2209,67 @@ export const obj = { _routeToRegExp: function(route) {
  		return optional ? match : '([^/]+)';
 -	}).replace(splatParam, '(.*?)')) + '$');
 +	}).replace(splatParam, '(.*?)'), RegExp('^' + route + '$');
+ } };
+
+```
+
+## `swc/projects/backbone/19`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 882 vs reference 878 (no whitespaces: +4, formatted: -6)
+
+```js
+export const obj = { navigate: function(fragment, options) {
+	if (!History.started) return false;
+	if (!options || options === true) options = { trigger: !!options };
+	var url = this.root + (fragment = this.getFragment(fragment || ''));
+	// Strip the fragment of the query and hash for matching.
+	fragment = fragment.replace(pathStripper, '');
+	if (this.fragment === fragment) return;
+	this.fragment = fragment;
+	// Don't include a trailing slash on the root.
+	if (fragment === '' && url !== '/') url = url.slice(0, -1);
+	// If pushState is available, we use it to set the fragment as a real URL.
+	if (this._hasPushState) {
+		this.history[options.replace ? 'replaceState' : 'pushState']({}, document.title, url);
+	} else if (this._wantsHashChange) {
+		this._updateHash(this.location, fragment, options.replace);
+		if (this.iframe && fragment !== this.getFragment(this.getHash(this.iframe))) {
+			// Opening and closing the iframe tricks IE7 and earlier to push a
+			// history entry on hash-tag change.  When replace is true, we don't
+			// want this.
+			if (!options.replace) this.iframe.document.open().close();
+			this._updateHash(this.iframe.location, fragment, options.replace);
+		}
+	} else {
+		return this.location.assign(url);
+	}
+	if (options.trigger) return this.loadUrl(fragment);
+} };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,14 +1,12 @@
+ export const obj = { navigate: function(fragment, options) {
+ 	if (!History.started) return !1;
+-	options && !0 !== options || (options = { trigger: !!options });
++	options && options !== !0 || (options = { trigger: !!options });
+ 	var url = this.root + (fragment = this.getFragment(fragment || ''));
+ 	if (fragment = fragment.replace(pathStripper, ''), this.fragment !== fragment) {
+ 		// If pushState is available, we use it to set the fragment as a real URL.
+-		if (this.fragment = fragment, '' === fragment && '/' !== url && (url = url.slice(0, -1)), this._hasPushState) this.history[options.replace ? 'replaceState' : 'pushState']({}, document.title, url);
+-		else {
+-			if (!this._wantsHashChange) return this.location.assign(url);
+-			this._updateHash(this.location, fragment, options.replace), this.iframe && fragment !== this.getFragment(this.getHash(this.iframe)) && (options.replace || this.iframe.document.open().close(), this._updateHash(this.iframe.location, fragment, options.replace));
+-		}
++		if (this.fragment = fragment, fragment === '' && url !== '/' && (url = url.slice(0, -1)), this._hasPushState) this.history[options.replace ? 'replaceState' : 'pushState']({}, document.title, url);
++		else if (this._wantsHashChange) this._updateHash(this.location, fragment, options.replace), this.iframe && fragment !== this.getFragment(this.getHash(this.iframe)) && (options.replace || this.iframe.document.open().close(), this._updateHash(this.iframe.location, fragment, options.replace));
++		else return this.location.assign(url);
+ 		if (options.trigger) return this.loadUrl(fragment);
+ 	}
  } };
 
 ```
@@ -4085,6 +4230,112 @@ const re = new RegExp('^/(?!_next).*$');
 @@ -1 +1 @@
 -undetermined();
 +({ a: 1 })[undetermined()];
+
+```
+
+## `swc/projects/yui/3`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 1002 vs reference 993 (no whitespaces: +9, formatted: +13)
+
+```js
+Y.Loader.prototype._rollup = function() {
+	var i, j, m, s, r = this.required, roll, info = this.moduleInfo, rolled, c, smod;
+	// find and cache rollup modules
+	if (this.dirty || !this.rollups) {
+		this.rollups = {};
+		for (i in info) {
+			if (info.hasOwnProperty(i)) {
+				m = this.getModule(i);
+				// if (m && m.rollup && m.supersedes) {
+				if (m && m.rollup) {
+					this.rollups[i] = m;
+				}
+			}
+		}
+	}
+	// make as many passes as needed to pick up rollup rollups
+	for (;;) {
+		rolled = false;
+		// go through the rollup candidates
+		for (i in this.rollups) {
+			if (this.rollups.hasOwnProperty(i)) {
+				// there can be only one, unless forced
+				if (!r[i] && (!this.loaded[i] || this.forceMap[i])) {
+					m = this.getModule(i);
+					s = m.supersedes || [];
+					roll = false;
+					// @TODO remove continue
+					if (!m.rollup) {
+						continue;
+					}
+					c = 0;
+					// check the threshold
+					for (j = 0; j < s.length; j++) {
+						smod = info[s[j]];
+						// if the superseded module is loaded, we can't
+						// load the rollup unless it has been forced.
+						if (this.loaded[s[j]] && !this.forceMap[s[j]]) {
+							roll = false;
+							break;
+						} else if (r[s[j]] && m.type === smod.type) {
+							c++;
+							roll = c >= m.rollup;
+							if (roll) {
+								break;
+							}
+						}
+					}
+					if (roll) {
+						// add the rollup
+						r[i] = true;
+						rolled = true;
+						// expand the rollup's dependencies
+						this.getRequires(m);
+					}
+				}
+			}
+		}
+		// if we made it here w/o rolling up something, we are done
+		if (!rolled) {
+			break;
+		}
+	}
+};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,22 +1,22 @@
+ Y.Loader.prototype._rollup = function() {
+-	var i, j, m, s, roll, rolled, c, smod, r = this.required, info = this.moduleInfo;
++	var i, j, m, s, r = this.required, roll, info = this.moduleInfo, rolled, c, smod;
+ 	// find and cache rollup modules
+-	if (this.dirty || !this.rollups) for (i in this.rollups = {}, info) info.hasOwnProperty(i) && (m = this.getModule(i)) && m.rollup && (this.rollups[i] = m);
++	if (this.dirty || !this.rollups) for (i in this.rollups = {}, info) info.hasOwnProperty(i) && (m = this.getModule(i), m && m.rollup && (this.rollups[i] = m));
+ 	// make as many passes as needed to pick up rollup rollups
+ 	for (;;) {
+ 		// go through the rollup candidates
+ 		for (i in rolled = !1, this.rollups) if (this.rollups.hasOwnProperty(i) && !r[i] && (!this.loaded[i] || this.forceMap[i])) {
+ 			// @TODO remove continue
+-			if (s = (m = this.getModule(i)).supersedes || [], roll = !1, !m.rollup) continue;
++			if (m = this.getModule(i), s = m.supersedes || [], roll = !1, !m.rollup) continue;
+ 			// check the threshold
+-			for (j = 0, c = 0; j < s.length; j++) {
++			for (c = 0, j = 0; j < s.length; j++) {
+ 				// if the superseded module is loaded, we can't
+ 				// load the rollup unless it has been forced.
+ 				if (smod = info[s[j]], this.loaded[s[j]] && !this.forceMap[s[j]]) {
+ 					roll = !1;
+ 					break;
+ 				}
+-				if (r[s[j]] && m.type === smod.type && (roll = ++c >= m.rollup)) break;
++				if (r[s[j]] && m.type === smod.type && (c++, roll = c >= m.rollup, roll)) break;
+ 			}
+ 			roll && (r[i] = !0, rolled = !0, this.getRequires(m));
+ 		}
 
 ```
 
@@ -10922,6 +11173,190 @@ export {};
 
 ```
 
+## `swc/issues/8880/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 1714 vs reference 1667 (no whitespaces: +47, formatted: +117)
+
+```js
+export function a(module, exports, farmRequire, farmDynamicRequire) {
+	'use strict';
+	Object.defineProperty(exports, '__esModule', { value: true });
+	const _interop_require_default = farmRequire('@swc/helpers/_/_interop_require_default');
+	const _typeof = _interop_require_default._(farmRequire('8178b9bd'));
+	const _dep734fea04 = farmRequire('92648bed');
+	const _dayjs = _interop_require_default._(farmRequire('d0dc4dad'));
+	farmRequire('15d5169f');
+	var zhCn = (0, _dep734fea04.c)(function(module, exports) {
+		!function(e, _) {
+			module.exports = _(_dayjs.default);
+		}(_dep734fea04.a, function(e) {
+			'use strict';
+			function _(e) {
+				return e && 'object' == (0, _typeof.default)(e) && 'default' in e ? e : { default: e };
+			}
+			var t = _(e), d = {
+				name: 'zh-cn',
+				weekdays: '星期日_星期一_星期二_星期三_星期四_星期五_星期六'.split('_'),
+				weekdaysShort: '周日_周一_周二_周三_周四_周五_周六'.split('_'),
+				weekdaysMin: '日_一_二_三_四_五_六'.split('_'),
+				months: '一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月'.split('_'),
+				monthsShort: '1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月'.split('_'),
+				ordinal: function ordinal(e, _) {
+					return 'W' === _ ? e + '周' : e + '日';
+				},
+				weekStart: 1,
+				yearStart: 4,
+				formats: {
+					LT: 'HH:mm',
+					LTS: 'HH:mm:ss',
+					L: 'YYYY/MM/DD',
+					LL: 'YYYY年M月D日',
+					LLL: 'YYYY年M月D日Ah点mm分',
+					LLLL: 'YYYY年M月D日ddddAh点mm分',
+					l: 'YYYY/M/D',
+					ll: 'YYYY年M月D日',
+					lll: 'YYYY年M月D日 HH:mm',
+					llll: 'YYYY年M月D日dddd HH:mm'
+				},
+				relativeTime: {
+					future: '%s内',
+					past: '%s前',
+					s: '几秒',
+					m: '1 分钟',
+					mm: '%d 分钟',
+					h: '1 小时',
+					hh: '%d 小时',
+					d: '1 天',
+					dd: '%d 天',
+					M: '1 个月',
+					MM: '%d 个月',
+					y: '1 年',
+					yy: '%d 年'
+				},
+				meridiem: function meridiem(e, _) {
+					var t = 100 * e + _;
+					return t < 600 ? '凌晨' : t < 900 ? '早上' : t < 1100 ? '上午' : t < 1300 ? '中午' : t < 1800 ? '下午' : '晚上';
+				}
+			};
+			return t.default.locale(d, null, !0), d;
+		});
+	});
+	return zhCn;
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,52 +1,58 @@
+ export function a(module, exports, farmRequire, farmDynamicRequire) {
+-	'use strict';
+ 	Object.defineProperty(exports, '__esModule', { value: !0 });
+ 	let _interop_require_default = farmRequire('@swc/helpers/_/_interop_require_default'), _typeof = _interop_require_default._(farmRequire('8178b9bd')), _dep734fea04 = farmRequire('92648bed'), _dayjs = _interop_require_default._(farmRequire('d0dc4dad'));
+ 	return farmRequire('15d5169f'), (0, _dep734fea04.c)(function(module, exports) {
+-		var e, t, d;
+-		_dep734fea04.a, t = (e = _dayjs.default) && 'object' == (0, _typeof.default)(e) && 'default' in e ? e : { default: e }, d = {
+-			name: 'zh-cn',
+-			weekdays: '星期日_星期一_星期二_星期三_星期四_星期五_星期六'.split('_'),
+-			weekdaysShort: '周日_周一_周二_周三_周四_周五_周六'.split('_'),
+-			weekdaysMin: '日_一_二_三_四_五_六'.split('_'),
+-			months: '一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月'.split('_'),
+-			monthsShort: '1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月'.split('_'),
+-			ordinal: function(e, _) {
+-				return 'W' === _ ? e + '周' : e + '日';
+-			},
+-			weekStart: 1,
+-			yearStart: 4,
+-			formats: {
+-				LT: 'HH:mm',
+-				LTS: 'HH:mm:ss',
+-				L: 'YYYY/MM/DD',
+-				LL: 'YYYY年M月D日',
+-				LLL: 'YYYY年M月D日Ah点mm分',
+-				LLLL: 'YYYY年M月D日ddddAh点mm分',
+-				l: 'YYYY/M/D',
+-				ll: 'YYYY年M月D日',
+-				lll: 'YYYY年M月D日 HH:mm',
+-				llll: 'YYYY年M月D日dddd HH:mm'
+-			},
+-			relativeTime: {
+-				future: '%s内',
+-				past: '%s前',
+-				s: '几秒',
+-				m: '1 分钟',
+-				mm: '%d 分钟',
+-				h: '1 小时',
+-				hh: '%d 小时',
+-				d: '1 天',
+-				dd: '%d 天',
+-				M: '1 个月',
+-				MM: '%d 个月',
+-				y: '1 年',
+-				yy: '%d 年'
+-			},
+-			meridiem: function(e, _) {
+-				var t = 100 * e + _;
+-				return t < 600 ? '凌晨' : t < 900 ? '早上' : t < 1100 ? '上午' : t < 1300 ? '中午' : t < 1800 ? '下午' : '晚上';
++		(function(e, _) {
++			module.exports = _(_dayjs.default);
++		})(_dep734fea04.a, function(e) {
++			function _(e) {
++				return e && (0, _typeof.default)(e) == 'object' && 'default' in e ? e : { default: e };
+ 			}
+-		}, t.default.locale(d, null, !0), module.exports = d;
++			var t = _(e), d = {
++				name: 'zh-cn',
++				weekdays: '星期日_星期一_星期二_星期三_星期四_星期五_星期六'.split('_'),
++				weekdaysShort: '周日_周一_周二_周三_周四_周五_周六'.split('_'),
++				weekdaysMin: '日_一_二_三_四_五_六'.split('_'),
++				months: '一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月'.split('_'),
++				monthsShort: '1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月'.split('_'),
++				ordinal: function(e, _) {
++					return _ === 'W' ? e + '周' : e + '日';
++				},
++				weekStart: 1,
++				yearStart: 4,
++				formats: {
++					LT: 'HH:mm',
++					LTS: 'HH:mm:ss',
++					L: 'YYYY/MM/DD',
++					LL: 'YYYY年M月D日',
++					LLL: 'YYYY年M月D日Ah点mm分',
++					LLLL: 'YYYY年M月D日ddddAh点mm分',
++					l: 'YYYY/M/D',
++					ll: 'YYYY年M月D日',
++					lll: 'YYYY年M月D日 HH:mm',
++					llll: 'YYYY年M月D日dddd HH:mm'
++				},
++				relativeTime: {
++					future: '%s内',
++					past: '%s前',
++					s: '几秒',
++					m: '1 分钟',
++					mm: '%d 分钟',
++					h: '1 小时',
++					hh: '%d 小时',
++					d: '1 天',
++					dd: '%d 天',
++					M: '1 个月',
++					MM: '%d 个月',
++					y: '1 年',
++					yy: '%d 年'
++				},
++				meridiem: function(e, _) {
++					var t = 100 * e + _;
++					return t < 600 ? '凌晨' : t < 900 ? '早上' : t < 1100 ? '上午' : t < 1300 ? '中午' : t < 1800 ? '下午' : '晚上';
++				}
++			};
++			return t.default.locale(d, null, !0), d;
++		});
+ 	});
+ }
+
+```
+
 ## `swc/issues/10425`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `2 iterations`
@@ -11116,6 +11551,80 @@ dist_index_es_P('aa');
 -for (var r = 0, o = 0; o < t.length; o++) r += 1;
 -console.log(r);
 +dist_index_es_P('aa');
+
+```
+
+## `swc/reduced/2`
+
+- tags: `type:module`, `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 1133 vs reference 1083 (no whitespaces: +50, formatted: +59)
+
+```js
+export const def = { code(cxt) {
+	const { gen, schema, parentSchema, data, it } = cxt;
+	if (it.opts.removeAdditional === 'all' && parentSchema.additionalProperties === undefined) {
+		additionalProperties_1.default.code(new validate_1.KeywordCxt(it, additionalProperties_1.default, 'additionalProperties'));
+	}
+	const allProps = (0, code_1.allSchemaProperties)(schema);
+	for (const prop of allProps) {
+		it.definedProperties.add(prop);
+	}
+	if (it.opts.unevaluated && allProps.length && it.props !== true) {
+		it.props = util_1.mergeEvaluated.props(gen, (0, util_1.toHash)(allProps), it.props);
+	}
+	const properties = allProps.filter((p) => !(0, util_1.alwaysValidSchema)(it, schema[p]));
+	if (properties.length === 0) return;
+	const valid = gen.name('valid');
+	for (const prop of properties) {
+		if (hasDefault(prop)) {
+			applyPropertySchema(prop);
+		} else {
+			gen.if((0, code_1.propertyInData)(gen, data, prop, it.opts.ownProperties));
+			applyPropertySchema(prop);
+			if (!it.allErrors) gen.else().var(valid, true);
+			gen.endIf();
+		}
+		cxt.it.definedProperties.add(prop);
+		cxt.ok(valid);
+	}
+	function hasDefault(prop) {
+		return it.opts.useDefaults && !it.compositeRule && schema[prop].default !== undefined;
+	}
+	function applyPropertySchema(prop) {
+		cxt.subschema({
+			keyword: 'properties',
+			schemaProp: prop,
+			dataProp: prop
+		}, valid);
+	}
+} };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,13 +1,16 @@
+ export const def = { code(cxt) {
+ 	let { gen, schema, parentSchema, data, it } = cxt;
+-	'all' === it.opts.removeAdditional && void 0 === parentSchema.additionalProperties && additionalProperties_1.default.code(new validate_1.KeywordCxt(it, additionalProperties_1.default, 'additionalProperties'));
++	it.opts.removeAdditional === 'all' && parentSchema.additionalProperties === void 0 && additionalProperties_1.default.code(new validate_1.KeywordCxt(it, additionalProperties_1.default, 'additionalProperties'));
+ 	let allProps = (0, code_1.allSchemaProperties)(schema);
+ 	for (let prop of allProps) it.definedProperties.add(prop);
+-	it.opts.unevaluated && allProps.length && !0 !== it.props && (it.props = util_1.mergeEvaluated.props(gen, (0, util_1.toHash)(allProps), it.props));
++	it.opts.unevaluated && allProps.length && it.props !== !0 && (it.props = util_1.mergeEvaluated.props(gen, (0, util_1.toHash)(allProps), it.props));
+ 	let properties = allProps.filter((p) => !(0, util_1.alwaysValidSchema)(it, schema[p]));
+-	if (0 === properties.length) return;
++	if (properties.length === 0) return;
+ 	let valid = gen.name('valid');
+-	for (let prop of properties) it.opts.useDefaults && !it.compositeRule && void 0 !== schema[prop].default ? applyPropertySchema(prop) : (gen.if((0, code_1.propertyInData)(gen, data, prop, it.opts.ownProperties)), applyPropertySchema(prop), it.allErrors || gen.else().var(valid, !0), gen.endIf()), cxt.it.definedProperties.add(prop), cxt.ok(valid);
++	for (let prop of properties) hasDefault(prop) ? applyPropertySchema(prop) : (gen.if((0, code_1.propertyInData)(gen, data, prop, it.opts.ownProperties)), applyPropertySchema(prop), it.allErrors || gen.else().var(valid, !0), gen.endIf()), cxt.it.definedProperties.add(prop), cxt.ok(valid);
++	function hasDefault(prop) {
++		return it.opts.useDefaults && !it.compositeRule && schema[prop].default !== void 0;
++	}
+ 	function applyPropertySchema(prop) {
+ 		cxt.subschema({
+ 			keyword: 'properties',
 
 ```
 
@@ -12033,6 +12542,117 @@ export const unknownError = ErrorResponse(520, 'Unknown error.');
 
 ```
 
+## `swc/issues/2044/full`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 1456 vs reference 1387 (no whitespaces: +69, formatted: +84)
+
+```js
+function createCommonjsModule(fn) {
+	var module = { exports: {} };
+	return fn(module, module.exports), module.exports;
+}
+const isFile = (config) => true;
+const pkgBrowserslist = {};
+const config = {};
+createCommonjsModule(function(module, exports) {
+	Object.defineProperty(exports, '__esModule', { value: true });
+});
+createCommonjsModule(function(module) {
+	module.exports = { findConfig: function findConfig(from) {
+		var resolved = function(dir) {
+			if (2) {
+				throw new Error('');
+			} else if (pkgBrowserslist) {
+				throw new Error('');
+			} else if (1) {
+				throw new Error('');
+			} else if (true) {
+				return module.exports.findConfig(null);
+			} else if (true) {
+				return module.exports.findConfig(null);
+			}
+		};
+		return resolved;
+	} };
+});
+createCommonjsModule(function(module, exports) {
+	Object.defineProperty(exports, '__esModule', { value: true });
+});
+createCommonjsModule(function(module, exports) {
+	function _interopRequireDefault(obj) {
+		return obj && obj.__esModule ? obj : { default: obj };
+	}
+	_interopRequireDefault();
+	var _node = _interopRequireDefault();
+});
+createCommonjsModule(function(module, exports) {
+	exports.default = null;
+	module.exports = exports.default;
+});
+createCommonjsModule(function(module, exports) {
+	exports.default = void 0;
+});
+var namespace$1 = createCommonjsModule(function(module, exports) {
+	exports.default = void 0;
+	function _interopRequireDefault(obj) {
+		return obj && obj.__esModule ? obj : { default: obj };
+	}
+	module.exports = exports.default;
+});
+createCommonjsModule(function(module, exports) {
+	exports.default = void 0;
+	module.exports = exports.default;
+});
+createCommonjsModule(function(module, exports) {
+	exports.default = void 0;
+	exports.default = String;
+});
+createCommonjsModule(function(module, exports) {
+	exports.default = void 0;
+	var Pseudo = null;
+	exports.default = String;
+});
+createCommonjsModule(function(module, exports) {
+	exports.__esModule = true;
+});
+createCommonjsModule(function(module, exports) {
+	exports.__esModule = true;
+});
+createCommonjsModule(function(module, exports) {
+	exports.__esModule = true;
+});
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -2,6 +2,7 @@
+ 	var module = { exports: {} };
+ 	return fn(module, module.exports), module.exports;
+ }
++const isFile = (config) => !0, pkgBrowserslist = {}, config = {};
+ createCommonjsModule(function(module, exports) {
+ 	Object.defineProperty(exports, '__esModule', { value: !0 });
+ }), createCommonjsModule(function(module) {
+@@ -21,9 +22,11 @@
+ 	exports.default = null, module.exports = exports.default;
+ }), createCommonjsModule(function(module, exports) {
+ 	exports.default = void 0;
+-}), createCommonjsModule(function(module, exports) {
++});
++var namespace$1 = createCommonjsModule(function(module, exports) {
+ 	exports.default = void 0, module.exports = exports.default;
+-}), createCommonjsModule(function(module, exports) {
++});
++createCommonjsModule(function(module, exports) {
+ 	exports.default = void 0, module.exports = exports.default;
+ }), createCommonjsModule(function(module, exports) {
+ 	exports.default = void 0, exports.default = String;
+
+```
+
 ## `swc/issues/2807/1`
 
 - tags: `drop console`, `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -12497,6 +13117,63 @@ var y = constants.second;
 
 ```
 
+## `swc/projects/jquery/16`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 927 vs reference 848 (no whitespaces: +79, formatted: +80)
+
+```js
+export const obj = { setOffset: function(elem, options, i) {
+	var position = jQuery.css(elem, 'position');
+	// set position first, in-case top/left are set even on static elem
+	if (position === 'static') {
+		elem.style.position = 'relative';
+	}
+	var curElem = jQuery(elem), curOffset = curElem.offset(), curCSSTop = jQuery.css(elem, 'top'), curCSSLeft = jQuery.css(elem, 'left'), calculatePosition = (position === 'absolute' || position === 'fixed') && jQuery.inArray('auto', [curCSSTop, curCSSLeft]) > -1, props = {}, curPosition = {}, curTop, curLeft;
+	// need to be able to calculate position if either top or left is auto and position is either absolute or fixed
+	if (calculatePosition) {
+		curPosition = curElem.position();
+		curTop = curPosition.top;
+		curLeft = curPosition.left;
+	} else {
+		curTop = parseFloat(curCSSTop) || 0;
+		curLeft = parseFloat(curCSSLeft) || 0;
+	}
+	if (jQuery.isFunction(options)) {
+		options = options.call(elem, i, curOffset);
+	}
+	if (options.top != null) {
+		props.top = options.top - curOffset.top + curTop;
+	}
+	if (options.left != null) {
+		props.left = options.left - curOffset.left + curLeft;
+	}
+	if ('using' in options) {
+		options.using.call(elem, props);
+	} else {
+		curElem.css(props);
+	}
+} };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,7 @@
+ export const obj = { setOffset: function(elem, options, i) {
+ 	var position = jQuery.css(elem, 'position');
+-	'static' === position && (elem.style.position = 'relative');
+-	var curTop, curLeft, curElem = jQuery(elem), curOffset = curElem.offset(), curCSSTop = jQuery.css(elem, 'top'), curCSSLeft = jQuery.css(elem, 'left'), calculatePosition = ('absolute' === position || 'fixed' === position) && jQuery.inArray('auto', [curCSSTop, curCSSLeft]) > -1, props = {}, curPosition = {};
+-	calculatePosition ? (curTop = (curPosition = curElem.position()).top, curLeft = curPosition.left) : (curTop = parseFloat(curCSSTop) || 0, curLeft = parseFloat(curCSSLeft) || 0), jQuery.isFunction(options) && (options = options.call(elem, i, curOffset)), null != options.top && (props.top = options.top - curOffset.top + curTop), null != options.left && (props.left = options.left - curOffset.left + curLeft), 'using' in options ? options.using.call(elem, props) : curElem.css(props);
++	// set position first, in-case top/left are set even on static elem
++	position === 'static' && (elem.style.position = 'relative');
++	var curElem = jQuery(elem), curOffset = curElem.offset(), curCSSTop = jQuery.css(elem, 'top'), curCSSLeft = jQuery.css(elem, 'left'), calculatePosition = (position === 'absolute' || position === 'fixed') && jQuery.inArray('auto', [curCSSTop, curCSSLeft]) > -1, props = {}, curPosition = {}, curTop, curLeft;
++	calculatePosition ? (curPosition = curElem.position(), curTop = curPosition.top, curLeft = curPosition.left) : (curTop = parseFloat(curCSSTop) || 0, curLeft = parseFloat(curCSSLeft) || 0), jQuery.isFunction(options) && (options = options.call(elem, i, curOffset)), options.top != null && (props.top = options.top - curOffset.top + curTop), options.left != null && (props.left = options.left - curOffset.left + curLeft), 'using' in options ? options.using.call(elem, props) : curElem.css(props);
+ } };
+
+```
+
 ## `swc/issues/11977`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -12600,6 +13277,930 @@ switch (1) {
 +		break;
 +	case console.log('later'), 2:
 +}
+
+```
+
+## `swc/projects/next/archive-1/pages/about-9ff906d607f52933d473`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 974 vs reference 887 (no whitespaces: +87, formatted: +101)
+
+```js
+(self['webpackChunk_N_E'] = self['webpackChunk_N_E'] || []).push([
+	[521],
+	{
+		/***/ 4426: /***/ function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+			'use strict';
+			__webpack_require__.r(__webpack_exports__);
+			/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4512);
+			/* harmony default export */ __webpack_exports__['default'] = function() {
+				return (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('div', {
+					className: 'about-page',
+					children: 'About Page'
+				});
+			};
+			/***/
+		},
+		/***/ 8484: /***/ function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+			(window.__NEXT_P = window.__NEXT_P || []).push(['/about', function() {
+				return __webpack_require__(4426);
+			}]);
+			/***/
+		}
+	},
+	function(__webpack_require__) {
+		/******/ var __webpack_exec__ = function(moduleId) {
+			return __webpack_require__(__webpack_require__.s = moduleId);
+		};
+		/******/ __webpack_require__.O(0, [
+			774,
+			888,
+			179
+		], function() {
+			return __webpack_exec__(8484);
+		});
+		/******/ var __webpack_exports__ = __webpack_require__.O();
+		/******/ _N_E = __webpack_exports__;
+		/******/
+	}
+]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -11,20 +11,26 @@
+ 					children: 'About Page'
+ 				});
+ 			};
+-			/***/		},
++			/***/
++		},
+ 		/***/ 8484: /***/ function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+ 			(window.__NEXT_P = window.__NEXT_P || []).push(['/about', function() {
+ 				return __webpack_require__(4426);
+ 			}]);
+-			/***/		}
++			/***/
++		}
+ 	},
+ 	function(__webpack_require__) {
++		/******/ var __webpack_exec__ = function(moduleId) {
++			return __webpack_require__(__webpack_require__.s = moduleId);
++		};
+ 		/******/ __webpack_require__.O(0, [
+ 			774,
+ 			888,
+ 			179
+ 		], function() {
+-			return __webpack_require__(__webpack_require__.s = 8484);
++			return __webpack_exec__(8484);
+ 		}), _N_E = __webpack_require__.O();
+-		/******/	}
++		/******/
++	}
+ ]);
+
+```
+
+## `swc/projects/next/archive-1/pages/hmr/about-f41723bb58a39accd7f5`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 1066 vs reference 979 (no whitespaces: +87, formatted: +101)
+
+```js
+(self['webpackChunk_N_E'] = self['webpackChunk_N_E'] || []).push([
+	[106],
+	{
+		/***/ 1962: /***/ function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+			'use strict';
+			__webpack_require__.r(__webpack_exports__);
+			/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4512);
+			/* harmony default export */ __webpack_exports__['default'] = function() {
+				return (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('div', {
+					className: 'hmr-about-page',
+					children: (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('p', { children: 'This is the about page.' })
+				});
+			};
+			/***/
+		},
+		/***/ 2856: /***/ function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+			(window.__NEXT_P = window.__NEXT_P || []).push(['/hmr/about', function() {
+				return __webpack_require__(1962);
+			}]);
+			/***/
+		}
+	},
+	function(__webpack_require__) {
+		/******/ var __webpack_exec__ = function(moduleId) {
+			return __webpack_require__(__webpack_require__.s = moduleId);
+		};
+		/******/ __webpack_require__.O(0, [
+			774,
+			888,
+			179
+		], function() {
+			return __webpack_exec__(2856);
+		});
+		/******/ var __webpack_exports__ = __webpack_require__.O();
+		/******/ _N_E = __webpack_exports__;
+		/******/
+	}
+]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -11,20 +11,26 @@
+ 					children: (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('p', { children: 'This is the about page.' })
+ 				});
+ 			};
+-			/***/		},
++			/***/
++		},
+ 		/***/ 2856: /***/ function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+ 			(window.__NEXT_P = window.__NEXT_P || []).push(['/hmr/about', function() {
+ 				return __webpack_require__(1962);
+ 			}]);
+-			/***/		}
++			/***/
++		}
+ 	},
+ 	function(__webpack_require__) {
++		/******/ var __webpack_exec__ = function(moduleId) {
++			return __webpack_require__(__webpack_require__.s = moduleId);
++		};
+ 		/******/ __webpack_require__.O(0, [
+ 			774,
+ 			888,
+ 			179
+ 		], function() {
+-			return __webpack_require__(__webpack_require__.s = 2856);
++			return __webpack_exec__(2856);
+ 		}), _N_E = __webpack_require__.O();
+-		/******/	}
++		/******/
++	}
+ ]);
+
+```
+
+## `swc/projects/next/archive-1/pages/hmr/about1-337f4553e7fa4c711971`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 1064 vs reference 977 (no whitespaces: +87, formatted: +101)
+
+```js
+(self['webpackChunk_N_E'] = self['webpackChunk_N_E'] || []).push([
+	[25],
+	{
+		/***/ 1107: /***/ function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+			'use strict';
+			__webpack_require__.r(__webpack_exports__);
+			/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4512);
+			/* harmony default export */ __webpack_exports__['default'] = function() {
+				return (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('div', {
+					className: 'hmr-about-page',
+					children: (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('p', { children: 'This is the about page.' })
+				});
+			};
+			/***/
+		},
+		/***/ 8e3: /***/ function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+			(window.__NEXT_P = window.__NEXT_P || []).push(['/hmr/about1', function() {
+				return __webpack_require__(1107);
+			}]);
+			/***/
+		}
+	},
+	function(__webpack_require__) {
+		/******/ var __webpack_exec__ = function(moduleId) {
+			return __webpack_require__(__webpack_require__.s = moduleId);
+		};
+		/******/ __webpack_require__.O(0, [
+			774,
+			888,
+			179
+		], function() {
+			return __webpack_exec__(8e3);
+		});
+		/******/ var __webpack_exports__ = __webpack_require__.O();
+		/******/ _N_E = __webpack_exports__;
+		/******/
+	}
+]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -11,20 +11,26 @@
+ 					children: (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('p', { children: 'This is the about page.' })
+ 				});
+ 			};
+-			/***/		},
++			/***/
++		},
+ 		/***/ 8e3: /***/ function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+ 			(window.__NEXT_P = window.__NEXT_P || []).push(['/hmr/about1', function() {
+ 				return __webpack_require__(1107);
+ 			}]);
+-			/***/		}
++			/***/
++		}
+ 	},
+ 	function(__webpack_require__) {
++		/******/ var __webpack_exec__ = function(moduleId) {
++			return __webpack_require__(__webpack_require__.s = moduleId);
++		};
+ 		/******/ __webpack_require__.O(0, [
+ 			774,
+ 			888,
+ 			179
+ 		], function() {
+-			return __webpack_require__(__webpack_require__.s = 8e3);
++			return __webpack_exec__(8e3);
+ 		}), _N_E = __webpack_require__.O();
+-		/******/	}
++		/******/
++	}
+ ]);
+
+```
+
+## `swc/projects/next/archive-1/pages/hmr/about2-071e285e01649f2eba6d`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 1065 vs reference 978 (no whitespaces: +87, formatted: +101)
+
+```js
+(self['webpackChunk_N_E'] = self['webpackChunk_N_E'] || []).push([
+	[119],
+	{
+		/***/ 388: /***/ function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+			'use strict';
+			__webpack_require__.r(__webpack_exports__);
+			/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4512);
+			/* harmony default export */ __webpack_exports__['default'] = function() {
+				return (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('div', {
+					className: 'hmr-about-page',
+					children: (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('p', { children: 'This is the about page.' })
+				});
+			};
+			/***/
+		},
+		/***/ 9354: /***/ function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+			(window.__NEXT_P = window.__NEXT_P || []).push(['/hmr/about2', function() {
+				return __webpack_require__(388);
+			}]);
+			/***/
+		}
+	},
+	function(__webpack_require__) {
+		/******/ var __webpack_exec__ = function(moduleId) {
+			return __webpack_require__(__webpack_require__.s = moduleId);
+		};
+		/******/ __webpack_require__.O(0, [
+			774,
+			888,
+			179
+		], function() {
+			return __webpack_exec__(9354);
+		});
+		/******/ var __webpack_exports__ = __webpack_require__.O();
+		/******/ _N_E = __webpack_exports__;
+		/******/
+	}
+]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -11,20 +11,26 @@
+ 					children: (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('p', { children: 'This is the about page.' })
+ 				});
+ 			};
+-			/***/		},
++			/***/
++		},
+ 		/***/ 9354: /***/ function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+ 			(window.__NEXT_P = window.__NEXT_P || []).push(['/hmr/about2', function() {
+ 				return __webpack_require__(388);
+ 			}]);
+-			/***/		}
++			/***/
++		}
+ 	},
+ 	function(__webpack_require__) {
++		/******/ var __webpack_exec__ = function(moduleId) {
++			return __webpack_require__(__webpack_require__.s = moduleId);
++		};
+ 		/******/ __webpack_require__.O(0, [
+ 			774,
+ 			888,
+ 			179
+ 		], function() {
+-			return __webpack_require__(__webpack_require__.s = 9354);
++			return __webpack_exec__(9354);
+ 		}), _N_E = __webpack_require__.O();
+-		/******/	}
++		/******/
++	}
+ ]);
+
+```
+
+## `swc/projects/next/archive-1/pages/hmr/about3-4799682b161140f8d8ca`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 1065 vs reference 978 (no whitespaces: +87, formatted: +101)
+
+```js
+(self['webpackChunk_N_E'] = self['webpackChunk_N_E'] || []).push([
+	[282],
+	{
+		/***/ 7407: /***/ function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+			'use strict';
+			__webpack_require__.r(__webpack_exports__);
+			/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4512);
+			/* harmony default export */ __webpack_exports__['default'] = function() {
+				return (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('div', {
+					className: 'hmr-about-page',
+					children: (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('p', { children: 'This is the about page.' })
+				});
+			};
+			/***/
+		},
+		/***/ 357: /***/ function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+			(window.__NEXT_P = window.__NEXT_P || []).push(['/hmr/about3', function() {
+				return __webpack_require__(7407);
+			}]);
+			/***/
+		}
+	},
+	function(__webpack_require__) {
+		/******/ var __webpack_exec__ = function(moduleId) {
+			return __webpack_require__(__webpack_require__.s = moduleId);
+		};
+		/******/ __webpack_require__.O(0, [
+			774,
+			888,
+			179
+		], function() {
+			return __webpack_exec__(357);
+		});
+		/******/ var __webpack_exports__ = __webpack_require__.O();
+		/******/ _N_E = __webpack_exports__;
+		/******/
+	}
+]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -11,20 +11,26 @@
+ 					children: (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('p', { children: 'This is the about page.' })
+ 				});
+ 			};
+-			/***/		},
++			/***/
++		},
+ 		/***/ 357: /***/ function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+ 			(window.__NEXT_P = window.__NEXT_P || []).push(['/hmr/about3', function() {
+ 				return __webpack_require__(7407);
+ 			}]);
+-			/***/		}
++			/***/
++		}
+ 	},
+ 	function(__webpack_require__) {
++		/******/ var __webpack_exec__ = function(moduleId) {
++			return __webpack_require__(__webpack_require__.s = moduleId);
++		};
+ 		/******/ __webpack_require__.O(0, [
+ 			774,
+ 			888,
+ 			179
+ 		], function() {
+-			return __webpack_require__(__webpack_require__.s = 357);
++			return __webpack_exec__(357);
+ 		}), _N_E = __webpack_require__.O();
+-		/******/	}
++		/******/
++	}
+ ]);
+
+```
+
+## `swc/projects/next/archive-1/pages/hmr/about4-5b76801c16eeaea0c007`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 1067 vs reference 980 (no whitespaces: +87, formatted: +101)
+
+```js
+(self['webpackChunk_N_E'] = self['webpackChunk_N_E'] || []).push([
+	[176],
+	{
+		/***/ 6787: /***/ function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+			'use strict';
+			__webpack_require__.r(__webpack_exports__);
+			/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4512);
+			/* harmony default export */ __webpack_exports__['default'] = function() {
+				return (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('div', {
+					className: 'hmr-about-page',
+					children: (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('p', { children: 'This is the about page.' })
+				});
+			};
+			/***/
+		},
+		/***/ 6055: /***/ function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+			(window.__NEXT_P = window.__NEXT_P || []).push(['/hmr/about4', function() {
+				return __webpack_require__(6787);
+			}]);
+			/***/
+		}
+	},
+	function(__webpack_require__) {
+		/******/ var __webpack_exec__ = function(moduleId) {
+			return __webpack_require__(__webpack_require__.s = moduleId);
+		};
+		/******/ __webpack_require__.O(0, [
+			774,
+			888,
+			179
+		], function() {
+			return __webpack_exec__(6055);
+		});
+		/******/ var __webpack_exports__ = __webpack_require__.O();
+		/******/ _N_E = __webpack_exports__;
+		/******/
+	}
+]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -11,20 +11,26 @@
+ 					children: (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('p', { children: 'This is the about page.' })
+ 				});
+ 			};
+-			/***/		},
++			/***/
++		},
+ 		/***/ 6055: /***/ function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+ 			(window.__NEXT_P = window.__NEXT_P || []).push(['/hmr/about4', function() {
+ 				return __webpack_require__(6787);
+ 			}]);
+-			/***/		}
++			/***/
++		}
+ 	},
+ 	function(__webpack_require__) {
++		/******/ var __webpack_exec__ = function(moduleId) {
++			return __webpack_require__(__webpack_require__.s = moduleId);
++		};
+ 		/******/ __webpack_require__.O(0, [
+ 			774,
+ 			888,
+ 			179
+ 		], function() {
+-			return __webpack_require__(__webpack_require__.s = 6055);
++			return __webpack_exec__(6055);
+ 		}), _N_E = __webpack_require__.O();
+-		/******/	}
++		/******/
++	}
+ ]);
+
+```
+
+## `swc/projects/next/archive-1/pages/hmr/about5-701a8a2644b1f6251651`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 1066 vs reference 979 (no whitespaces: +87, formatted: +101)
+
+```js
+(self['webpackChunk_N_E'] = self['webpackChunk_N_E'] || []).push([
+	[95],
+	{
+		/***/ 6298: /***/ function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+			'use strict';
+			__webpack_require__.r(__webpack_exports__);
+			/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4512);
+			/* harmony default export */ __webpack_exports__['default'] = function() {
+				return (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('div', {
+					className: 'hmr-about-page',
+					children: (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('p', { children: 'This is the about page.' })
+				});
+			};
+			/***/
+		},
+		/***/ 8758: /***/ function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+			(window.__NEXT_P = window.__NEXT_P || []).push(['/hmr/about5', function() {
+				return __webpack_require__(6298);
+			}]);
+			/***/
+		}
+	},
+	function(__webpack_require__) {
+		/******/ var __webpack_exec__ = function(moduleId) {
+			return __webpack_require__(__webpack_require__.s = moduleId);
+		};
+		/******/ __webpack_require__.O(0, [
+			774,
+			888,
+			179
+		], function() {
+			return __webpack_exec__(8758);
+		});
+		/******/ var __webpack_exports__ = __webpack_require__.O();
+		/******/ _N_E = __webpack_exports__;
+		/******/
+	}
+]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -11,20 +11,26 @@
+ 					children: (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('p', { children: 'This is the about page.' })
+ 				});
+ 			};
+-			/***/		},
++			/***/
++		},
+ 		/***/ 8758: /***/ function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+ 			(window.__NEXT_P = window.__NEXT_P || []).push(['/hmr/about5', function() {
+ 				return __webpack_require__(6298);
+ 			}]);
+-			/***/		}
++			/***/
++		}
+ 	},
+ 	function(__webpack_require__) {
++		/******/ var __webpack_exec__ = function(moduleId) {
++			return __webpack_require__(__webpack_require__.s = moduleId);
++		};
+ 		/******/ __webpack_require__.O(0, [
+ 			774,
+ 			888,
+ 			179
+ 		], function() {
+-			return __webpack_require__(__webpack_require__.s = 8758);
++			return __webpack_exec__(8758);
+ 		}), _N_E = __webpack_require__.O();
+-		/******/	}
++		/******/
++	}
+ ]);
+
+```
+
+## `swc/projects/next/archive-1/pages/hmr/about6-25feb06f767ae1c20330`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 1067 vs reference 980 (no whitespaces: +87, formatted: +101)
+
+```js
+(self['webpackChunk_N_E'] = self['webpackChunk_N_E'] || []).push([
+	[472],
+	{
+		/***/ 9249: /***/ function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+			'use strict';
+			__webpack_require__.r(__webpack_exports__);
+			/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4512);
+			/* harmony default export */ __webpack_exports__['default'] = function() {
+				return (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('div', {
+					className: 'hmr-about-page',
+					children: (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('p', { children: 'This is the about page.' })
+				});
+			};
+			/***/
+		},
+		/***/ 5754: /***/ function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+			(window.__NEXT_P = window.__NEXT_P || []).push(['/hmr/about6', function() {
+				return __webpack_require__(9249);
+			}]);
+			/***/
+		}
+	},
+	function(__webpack_require__) {
+		/******/ var __webpack_exec__ = function(moduleId) {
+			return __webpack_require__(__webpack_require__.s = moduleId);
+		};
+		/******/ __webpack_require__.O(0, [
+			774,
+			888,
+			179
+		], function() {
+			return __webpack_exec__(5754);
+		});
+		/******/ var __webpack_exports__ = __webpack_require__.O();
+		/******/ _N_E = __webpack_exports__;
+		/******/
+	}
+]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -11,20 +11,26 @@
+ 					children: (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('p', { children: 'This is the about page.' })
+ 				});
+ 			};
+-			/***/		},
++			/***/
++		},
+ 		/***/ 5754: /***/ function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+ 			(window.__NEXT_P = window.__NEXT_P || []).push(['/hmr/about6', function() {
+ 				return __webpack_require__(9249);
+ 			}]);
+-			/***/		}
++			/***/
++		}
+ 	},
+ 	function(__webpack_require__) {
++		/******/ var __webpack_exec__ = function(moduleId) {
++			return __webpack_require__(__webpack_require__.s = moduleId);
++		};
+ 		/******/ __webpack_require__.O(0, [
+ 			774,
+ 			888,
+ 			179
+ 		], function() {
+-			return __webpack_require__(__webpack_require__.s = 5754);
++			return __webpack_exec__(5754);
+ 		}), _N_E = __webpack_require__.O();
+-		/******/	}
++		/******/
++	}
+ ]);
+
+```
+
+## `swc/projects/next/archive-1/pages/hmr/about7-9df961ea8fb5d2c5b7a2`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 1067 vs reference 980 (no whitespaces: +87, formatted: +101)
+
+```js
+(self['webpackChunk_N_E'] = self['webpackChunk_N_E'] || []).push([
+	[405],
+	{
+		/***/ 4208: /***/ function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+			'use strict';
+			__webpack_require__.r(__webpack_exports__);
+			/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4512);
+			/* harmony default export */ __webpack_exports__['default'] = function() {
+				return (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('div', {
+					className: 'hmr-about-page',
+					children: (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('p', { children: 'This is the about page.' })
+				});
+			};
+			/***/
+		},
+		/***/ 9037: /***/ function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+			(window.__NEXT_P = window.__NEXT_P || []).push(['/hmr/about7', function() {
+				return __webpack_require__(4208);
+			}]);
+			/***/
+		}
+	},
+	function(__webpack_require__) {
+		/******/ var __webpack_exec__ = function(moduleId) {
+			return __webpack_require__(__webpack_require__.s = moduleId);
+		};
+		/******/ __webpack_require__.O(0, [
+			774,
+			888,
+			179
+		], function() {
+			return __webpack_exec__(9037);
+		});
+		/******/ var __webpack_exports__ = __webpack_require__.O();
+		/******/ _N_E = __webpack_exports__;
+		/******/
+	}
+]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -11,20 +11,26 @@
+ 					children: (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('p', { children: 'This is the about page.' })
+ 				});
+ 			};
+-			/***/		},
++			/***/
++		},
+ 		/***/ 9037: /***/ function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+ 			(window.__NEXT_P = window.__NEXT_P || []).push(['/hmr/about7', function() {
+ 				return __webpack_require__(4208);
+ 			}]);
+-			/***/		}
++			/***/
++		}
+ 	},
+ 	function(__webpack_require__) {
++		/******/ var __webpack_exec__ = function(moduleId) {
++			return __webpack_require__(__webpack_require__.s = moduleId);
++		};
+ 		/******/ __webpack_require__.O(0, [
+ 			774,
+ 			888,
+ 			179
+ 		], function() {
+-			return __webpack_require__(__webpack_require__.s = 9037);
++			return __webpack_exec__(9037);
+ 		}), _N_E = __webpack_require__.O();
+-		/******/	}
++		/******/
++	}
+ ]);
+
+```
+
+## `swc/projects/next/archive-1/pages/hmr/contact-e0ce31ea2cdf538f0cad`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 1072 vs reference 985 (no whitespaces: +87, formatted: +101)
+
+```js
+(self['webpackChunk_N_E'] = self['webpackChunk_N_E'] || []).push([
+	[997],
+	{
+		/***/ 8897: /***/ function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+			'use strict';
+			__webpack_require__.r(__webpack_exports__);
+			/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4512);
+			/* harmony default export */ __webpack_exports__['default'] = function() {
+				return (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('div', {
+					className: 'hmr-contact-page',
+					children: (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('p', { children: 'This is the contact page.' })
+				});
+			};
+			/***/
+		},
+		/***/ 2574: /***/ function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+			(window.__NEXT_P = window.__NEXT_P || []).push(['/hmr/contact', function() {
+				return __webpack_require__(8897);
+			}]);
+			/***/
+		}
+	},
+	function(__webpack_require__) {
+		/******/ var __webpack_exec__ = function(moduleId) {
+			return __webpack_require__(__webpack_require__.s = moduleId);
+		};
+		/******/ __webpack_require__.O(0, [
+			774,
+			888,
+			179
+		], function() {
+			return __webpack_exec__(2574);
+		});
+		/******/ var __webpack_exports__ = __webpack_require__.O();
+		/******/ _N_E = __webpack_exports__;
+		/******/
+	}
+]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -11,20 +11,26 @@
+ 					children: (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('p', { children: 'This is the contact page.' })
+ 				});
+ 			};
+-			/***/		},
++			/***/
++		},
+ 		/***/ 2574: /***/ function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+ 			(window.__NEXT_P = window.__NEXT_P || []).push(['/hmr/contact', function() {
+ 				return __webpack_require__(8897);
+ 			}]);
+-			/***/		}
++			/***/
++		}
+ 	},
+ 	function(__webpack_require__) {
++		/******/ var __webpack_exec__ = function(moduleId) {
++			return __webpack_require__(__webpack_require__.s = moduleId);
++		};
+ 		/******/ __webpack_require__.O(0, [
+ 			774,
+ 			888,
+ 			179
+ 		], function() {
+-			return __webpack_require__(__webpack_require__.s = 2574);
++			return __webpack_exec__(2574);
+ 		}), _N_E = __webpack_require__.O();
+-		/******/	}
++		/******/
++	}
+ ]);
+
+```
+
+## `swc/projects/next/archive-1/pages/process-env-ea448cdafe7e87f74757`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 969 vs reference 882 (no whitespaces: +87, formatted: +101)
+
+```js
+(self['webpackChunk_N_E'] = self['webpackChunk_N_E'] || []).push([
+	[625],
+	{
+		/***/ 736: /***/ function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+			'use strict';
+			__webpack_require__.r(__webpack_exports__);
+			/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4512);
+			/* harmony default export */ __webpack_exports__['default'] = function() {
+				return (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)('div', {
+					id: 'node-env',
+					children: 'production'
+				});
+			};
+			/***/
+		},
+		/***/ 1220: /***/ function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+			(window.__NEXT_P = window.__NEXT_P || []).push(['/process-env', function() {
+				return __webpack_require__(736);
+			}]);
+			/***/
+		}
+	},
+	function(__webpack_require__) {
+		/******/ var __webpack_exec__ = function(moduleId) {
+			return __webpack_require__(__webpack_require__.s = moduleId);
+		};
+		/******/ __webpack_require__.O(0, [
+			774,
+			888,
+			179
+		], function() {
+			return __webpack_exec__(1220);
+		});
+		/******/ var __webpack_exports__ = __webpack_require__.O();
+		/******/ _N_E = __webpack_exports__;
+		/******/
+	}
+]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -11,20 +11,26 @@
+ 					children: 'production'
+ 				});
+ 			};
+-			/***/		},
++			/***/
++		},
+ 		/***/ 1220: /***/ function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+ 			(window.__NEXT_P = window.__NEXT_P || []).push(['/process-env', function() {
+ 				return __webpack_require__(736);
+ 			}]);
+-			/***/		}
++			/***/
++		}
+ 	},
+ 	function(__webpack_require__) {
++		/******/ var __webpack_exec__ = function(moduleId) {
++			return __webpack_require__(__webpack_require__.s = moduleId);
++		};
+ 		/******/ __webpack_require__.O(0, [
+ 			774,
+ 			888,
+ 			179
+ 		], function() {
+-			return __webpack_require__(__webpack_require__.s = 1220);
++			return __webpack_exec__(1220);
+ 		}), _N_E = __webpack_require__.O();
+-		/******/	}
++		/******/
++	}
+ ]);
 
 ```
 
@@ -13016,6 +14617,97 @@ f();
 
 ```
 
+## `swc/projects/react/10`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 1160 vs reference 1060 (no whitespaces: +100, formatted: +106)
+
+```js
+function describeUnknownElementTypeFrameInDEV(type, source, ownerFn) {
+	function shouldConstruct(Component) {
+		var prototype = Component.prototype;
+		return !!(prototype && prototype.isReactComponent);
+	}
+	if (type == null) {
+		return '';
+	}
+	if (typeof type === 'function') {
+		{
+			return describeNativeComponentFrame(type, shouldConstruct(type));
+		}
+	}
+	if (typeof type === 'string') {
+		return describeBuiltInComponentFrame(type);
+	}
+	switch (type) {
+		case exports.Suspense: return describeBuiltInComponentFrame('Suspense');
+		case REACT_SUSPENSE_LIST_TYPE: return describeBuiltInComponentFrame('SuspenseList');
+	}
+	if (typeof type === 'object') {
+		switch (type.$$typeof) {
+			case REACT_FORWARD_REF_TYPE: return describeFunctionComponentFrame(type.render);
+			case REACT_MEMO_TYPE:
+ // Memo may contain any component type so we recursively resolve it.
+			return describeUnknownElementTypeFrameInDEV(type.type, source, ownerFn);
+			case REACT_BLOCK_TYPE: return describeFunctionComponentFrame(type._render);
+			case REACT_LAZY_TYPE: {
+				var lazyComponent = type;
+				var payload = lazyComponent._payload;
+				var init = lazyComponent._init;
+				try {
+					// Lazy may contain any component type so we recursively resolve it.
+					return describeUnknownElementTypeFrameInDEV(init(payload), source, ownerFn);
+				} catch (x) {}
+			}
+		}
+	}
+	return '';
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,26 +1,27 @@
+ function describeUnknownElementTypeFrameInDEV(type, source, ownerFn) {
+-	if (null == type) return '';
+-	if ('function' == typeof type) {
+-		var prototype;
+-		return describeNativeComponentFrame(type, !!((prototype = type.prototype) && prototype.isReactComponent));
++	function shouldConstruct(Component) {
++		var prototype = Component.prototype;
++		return !!(prototype && prototype.isReactComponent);
+ 	}
+-	if ('string' == typeof type) return describeBuiltInComponentFrame(type);
++	if (type == null) return '';
++	if (typeof type == 'function') return describeNativeComponentFrame(type, shouldConstruct(type));
++	if (typeof type == 'string') return describeBuiltInComponentFrame(type);
+ 	switch (type) {
+ 		case exports.Suspense: return describeBuiltInComponentFrame('Suspense');
+ 		case REACT_SUSPENSE_LIST_TYPE: return describeBuiltInComponentFrame('SuspenseList');
+ 	}
+-	if ('object' == typeof type) switch (type.$$typeof) {
++	if (typeof type == 'object') switch (type.$$typeof) {
+ 		case REACT_FORWARD_REF_TYPE: return describeFunctionComponentFrame(type.render);
+ 		case REACT_MEMO_TYPE:
+  // Memo may contain any component type so we recursively resolve it.
+ 		return describeUnknownElementTypeFrameInDEV(type.type, source, ownerFn);
+ 		case REACT_BLOCK_TYPE: return describeFunctionComponentFrame(type._render);
+ 		case REACT_LAZY_TYPE:
+-			var payload = type._payload, init = type._init;
++			var lazyComponent = type, payload = lazyComponent._payload, init = lazyComponent._init;
+ 			try {
+ 				// Lazy may contain any component type so we recursively resolve it.
+ 				return describeUnknownElementTypeFrameInDEV(init(payload), source, ownerFn);
+-			} catch (x) {}
++			} catch {}
+ 	}
+ 	return '';
+ }
+
+```
+
 ## `swc/issues/do-while-false-terminal-jump/defaults-mangle`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
@@ -13245,6 +14937,83 @@ const j = new Set();
 
 ```
 
+## `swc/projects/jquery/2`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 848 vs reference 742 (no whitespaces: +106, formatted: +110)
+
+```js
+jQuery.extend = jQuery.fn.extend = function() {
+	var src, copyIsArray, copy, name, options, clone, target = arguments[0] || {}, i = 1, length = arguments.length, deep = false;
+	// Handle a deep copy situation
+	if (typeof target === 'boolean') {
+		deep = target;
+		target = arguments[1] || {};
+		// skip the boolean and the target
+		i = 2;
+	}
+	// Handle case when target is a string or something (possible in deep copy)
+	if (typeof target !== 'object' && !jQuery.isFunction(target)) {
+		target = {};
+	}
+	// extend jQuery itself if only one argument is passed
+	if (length === i) {
+		target = this;
+		--i;
+	}
+	for (; i < length; i++) {
+		// Only deal with non-null/undefined values
+		if ((options = arguments[i]) != null) {
+			// Extend the base object
+			for (name in options) {
+				src = target[name];
+				copy = options[name];
+				// Prevent never-ending loop
+				if (target === copy) {
+					continue;
+				}
+				// Recurse if we're merging plain objects or arrays
+				if (deep && copy && (jQuery.isPlainObject(copy) || (copyIsArray = jQuery.isArray(copy)))) {
+					if (copyIsArray) {
+						copyIsArray = false;
+						clone = src && jQuery.isArray(src) ? src : [];
+					} else {
+						clone = src && jQuery.isPlainObject(src) ? src : {};
+					}
+					// Never move original objects, clone them
+					target[name] = jQuery.extend(deep, clone, copy);
+				} else if (copy !== undefined) {
+					target[name] = copy;
+				}
+			}
+		}
+	}
+	// Return the modified object
+	return target;
+};
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,6 +1,12 @@
+ jQuery.extend = jQuery.fn.extend = function() {
+ 	var src, copyIsArray, copy, name, options, clone, target = arguments[0] || {}, i = 1, length = arguments.length, deep = !1;
+-	for ('boolean' == typeof target && (deep = target, target = arguments[1] || {}, i = 2), 'object' == typeof target || jQuery.isFunction(target) || (target = {}), length === i && (target = this, --i); i < length; i++) if (null != (options = arguments[i])) for (name in options) src = target[name], target !== (copy = options[name]) && (deep && copy && (jQuery.isPlainObject(copy) || (copyIsArray = jQuery.isArray(copy))) ? (copyIsArray ? (copyIsArray = !1, clone = src && jQuery.isArray(src) ? src : []) : clone = src && jQuery.isPlainObject(src) ? src : {}, target[name] = jQuery.extend(deep, clone, copy)) : void 0 !== copy && (target[name] = copy));
++	for (typeof target == 'boolean' && (deep = target, target = arguments[1] || {}, i = 2), typeof target != 'object' && !jQuery.isFunction(target) && (target = {}), length === i && (target = this, --i); i < length; i++)
++ // Only deal with non-null/undefined values
++	if ((options = arguments[i]) != null)
++ // Extend the base object
++	for (name in options)
++ // Prevent never-ending loop
++	src = target[name], copy = options[name], target !== copy && (deep && copy && (jQuery.isPlainObject(copy) || (copyIsArray = jQuery.isArray(copy))) ? (copyIsArray ? (copyIsArray = !1, clone = src && jQuery.isArray(src) ? src : []) : clone = src && jQuery.isPlainObject(src) ? src : {}, target[name] = jQuery.extend(deep, clone, copy)) : copy !== void 0 && (target[name] = copy));
+ 	// Return the modified object
+ 	return target;
+ };
+
+```
+
 ## `swc/issues/12224`
 
 - tags: `type:cjs`
@@ -13314,6 +15083,140 @@ function getSourceInfoErrorAddendumForProps(elementProps) {
 -	return '';
 +	return elementProps == null ? '' : getSourceInfoErrorAddendum(elementProps.__source);
  }
+
+```
+
+## `swc/issues/10473`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 1640 vs reference 1527 (no whitespaces: +113, formatted: +74)
+
+```js
+'use strict';
+function _typeof(e) {
+	return (_typeof = 'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator ? function(e) {
+		return typeof e;
+	} : function(e) {
+		return e && 'function' == typeof Symbol && e.constructor === Symbol && e !== Symbol.prototype ? 'symbol' : typeof e;
+	})(e);
+}
+function ownKeys(t, e) {
+	var o, r = Object.keys(t);
+	return Object.getOwnPropertySymbols && (o = Object.getOwnPropertySymbols(t), e && (o = o.filter(function(e) {
+		return Object.getOwnPropertyDescriptor(t, e).enumerable;
+	})), r.push.apply(r, o)), r;
+}
+function _objectSpread(t) {
+	for (var e = 1; e < arguments.length; e++) {
+		var o = null != arguments[e] ? arguments[e] : {};
+		e % 2 ? ownKeys(Object(o), !0).forEach(function(e) {
+			_defineProperty(t, e, o[e]);
+		}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(t, Object.getOwnPropertyDescriptors(o)) : ownKeys(Object(o)).forEach(function(e) {
+			Object.defineProperty(t, e, Object.getOwnPropertyDescriptor(o, e));
+		});
+	}
+	return t;
+}
+function _defineProperty(e, t, o) {
+	return (t = _toPropertyKey(t)) in e ? Object.defineProperty(e, t, {
+		value: o,
+		enumerable: !0,
+		configurable: !0,
+		writable: !0
+	}) : e[t] = o, e;
+}
+function _toPropertyKey(e) {
+	e = _toPrimitive(e, 'string');
+	return 'symbol' == _typeof(e) ? e : e + '';
+}
+function _toPrimitive(e, t) {
+	if ('object' != _typeof(e) || !e) return e;
+	var o = e[Symbol.toPrimitive];
+	if (void 0 === o) return ('string' === t ? String : Number)(e);
+	o = o.call(e, t || 'default');
+	if ('object' != _typeof(o)) return o;
+	throw new TypeError('@@toPrimitive must return a primitive value.');
+}
+var cmConfig = (cmConfig = {
+	isToutiao: 'Toutiao' === Math.random(),
+	appid: 'xxx',
+	version: '5.8.20'
+}).isToutiao ? _objectSpread(_objectSpread({}, cmConfig), { name: 'toutiao' }) : _objectSpread(_objectSpread({}, cmConfig), { name: 'douyin' }), config = exports.config = cmConfig;
+console.log(config);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,9 @@
+ 'use strict';
+ function _typeof(e) {
+-	return (_typeof = 'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator ? function(e) {
++	return (_typeof = typeof Symbol == 'function' && typeof Symbol.iterator == 'symbol' ? function(e) {
+ 		return typeof e;
+ 	} : function(e) {
+-		return e && 'function' == typeof Symbol && e.constructor === Symbol && e !== Symbol.prototype ? 'symbol' : typeof e;
++		return e && typeof Symbol == 'function' && e.constructor === Symbol && e !== Symbol.prototype ? 'symbol' : typeof e;
+ 	})(e);
+ }
+ function ownKeys(t, e) {
+@@ -14,32 +14,36 @@
+ }
+ function _objectSpread(t) {
+ 	for (var e = 1; e < arguments.length; e++) {
+-		var o = null != arguments[e] ? arguments[e] : {};
++		var o = arguments[e] == null ? {} : arguments[e];
+ 		e % 2 ? ownKeys(Object(o), !0).forEach(function(e) {
+-			!function(e, t, o) {
+-				var e1;
+-				(e1 = function(e, t) {
+-					if ('object' != _typeof(e) || !e) return e;
+-					var o = e[Symbol.toPrimitive];
+-					if (void 0 === o) return ('string' === t ? String : Number)(e);
+-					if (o = o.call(e, t || 'default'), 'object' != _typeof(o)) return o;
+-					throw TypeError('@@toPrimitive must return a primitive value.');
+-				}(e1 = t, 'string'), (t = 'symbol' == _typeof(e1) ? e1 : e1 + '') in e) ? Object.defineProperty(e, t, {
+-					value: o,
+-					enumerable: !0,
+-					configurable: !0,
+-					writable: !0
+-				}) : e[t] = o;
+-			}(t, e, o[e]);
++			_defineProperty(t, e, o[e]);
+ 		}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(t, Object.getOwnPropertyDescriptors(o)) : ownKeys(Object(o)).forEach(function(e) {
+ 			Object.defineProperty(t, e, Object.getOwnPropertyDescriptor(o, e));
+ 		});
+ 	}
+ 	return t;
+ }
++function _defineProperty(e, t, o) {
++	return (t = _toPropertyKey(t)) in e ? Object.defineProperty(e, t, {
++		value: o,
++		enumerable: !0,
++		configurable: !0,
++		writable: !0
++	}) : e[t] = o, e;
++}
++function _toPropertyKey(e) {
++	return e = _toPrimitive(e, 'string'), _typeof(e) == 'symbol' ? e : e + '';
++}
++function _toPrimitive(e, t) {
++	if (_typeof(e) != 'object' || !e) return e;
++	var o = e[Symbol.toPrimitive];
++	if (o === void 0) return (t === 'string' ? String : Number)(e);
++	if (o = o.call(e, t || 'default'), _typeof(o) != 'object') return o;
++	throw TypeError('@@toPrimitive must return a primitive value.');
++}
+ var cmConfig = (cmConfig = {
+-	isToutiao: 'Toutiao' === Math.random(),
++	isToutiao: Math.random() === 'Toutiao',
+ 	appid: 'xxx',
+ 	version: '5.8.20'
+-}).isToutiao ? _objectSpread(_objectSpread({}, cmConfig), { name: 'toutiao' }) : _objectSpread(_objectSpread({}, cmConfig), { name: 'douyin' });
+-console.log(exports.config = cmConfig);
++}).isToutiao ? _objectSpread(_objectSpread({}, cmConfig), { name: 'toutiao' }) : _objectSpread(_objectSpread({}, cmConfig), { name: 'douyin' }), config = exports.config = cmConfig;
++console.log(config);
 
 ```
 
@@ -14250,6 +16153,90 @@ logger.plain('plain function');
 
 ```
 
+## `swc/projects/react/9`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 834 vs reference 647 (no whitespaces: +187, formatted: +232)
+
+```js
+function lazyInitializer(payload) {
+	var Uninitialized = -1;
+	var Pending = 0;
+	var Resolved = 1;
+	var Rejected = 2;
+	if (payload._status === Uninitialized) {
+		var ctor = payload._result;
+		var thenable = ctor();
+		var pending = payload;
+		pending._status = Pending;
+		pending._result = thenable;
+		thenable.then(function(moduleObject) {
+			if (payload._status === Pending) {
+				var defaultExport = moduleObject.default;
+				{
+					if (defaultExport === undefined) {
+						error('lazy: Expected the result of a dynamic import() call. ' + 'Instead received: %s\n\nYour code should look like: \n  ' + 'const MyComponent = lazy(() => imp' + 'ort(\'./MyComponent\'))', moduleObject);
+					}
+				}
+				var resolved = payload;
+				resolved._status = Resolved;
+				resolved._result = defaultExport;
+			}
+		}, function(error) {
+			if (payload._status === Pending) {
+				// Transition to the next state.
+				var rejected = payload;
+				rejected._status = Rejected;
+				rejected._result = error;
+			}
+		});
+	}
+	if (payload._status === Resolved) {
+		return payload._result;
+	} else {
+		throw payload._result;
+	}
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,15 +1,22 @@
+ function lazyInitializer(payload) {
+-	if (-1 === payload._status) {
+-		var thenable = (0, payload._result)();
+-		payload._status = 0, payload._result = thenable, thenable.then(function(moduleObject) {
+-			if (0 === payload._status) {
++	var Uninitialized = -1, Pending = 0, Resolved = 1;
++	if (payload._status === Uninitialized) {
++		var ctor = payload._result, thenable = ctor(), pending = payload;
++		pending._status = Pending, pending._result = thenable, thenable.then(function(moduleObject) {
++			if (payload._status === Pending) {
+ 				var defaultExport = moduleObject.default;
+-				void 0 === defaultExport && error('lazy: Expected the result of a dynamic import() call. Instead received: %s\n\nYour code should look like: \n  const MyComponent = lazy(() => import(\'./MyComponent\'))', moduleObject), payload._status = 1, payload._result = defaultExport;
++				defaultExport === void 0 && error('lazy: Expected the result of a dynamic import() call. Instead received: %s\n\nYour code should look like: \n  const MyComponent = lazy(() => import(\'./MyComponent\'))', moduleObject);
++				var resolved = payload;
++				resolved._status = Resolved, resolved._result = defaultExport;
+ 			}
+-		}, function(error1) {
+-			0 === payload._status && (payload._status = 2, payload._result = error1);
++		}, function(error) {
++			if (payload._status === Pending) {
++				// Transition to the next state.
++				var rejected = payload;
++				rejected._status = 2, rejected._result = error;
++			}
+ 		});
+ 	}
+-	if (1 === payload._status) return payload._result;
++	if (payload._status === Resolved) return payload._result;
+ 	throw payload._result;
+ }
+
+```
+
 ## `swc/issues/12198`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -14661,6 +16648,101 @@ process.stdout.write(typeof st + '\n');
 
 ```
 
+## `swc/projects/jquery/23`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 1330 vs reference 1099 (no whitespaces: +231, formatted: +253)
+
+```js
+export const obj = { style: function(elem, name, value, extra) {
+	// Don't set styles on text and comment nodes
+	if (!elem || elem.nodeType === 3 || elem.nodeType === 8 || !elem.style) {
+		return;
+	}
+	// Make sure that we're working with the right name
+	var ret, type, hooks, origName = jQuery.camelCase(name), style = elem.style;
+	name = jQuery.cssProps[origName] || (jQuery.cssProps[origName] = vendorPropName(style, origName));
+	// gets hook for the prefixed version
+	// followed by the unprefixed version
+	hooks = jQuery.cssHooks[name] || jQuery.cssHooks[origName];
+	// Check if we're setting a value
+	if (value !== undefined) {
+		type = typeof value;
+		// convert relative number strings (+= or -=) to relative numbers. #7345
+		if (type === 'string' && (ret = rrelNum.exec(value))) {
+			value = (ret[1] + 1) * ret[2] + parseFloat(jQuery.css(elem, name));
+			// Fixes bug #9237
+			type = 'number';
+		}
+		// Make sure that NaN and null values aren't set. See: #7116
+		if (value == null || type === 'number' && isNaN(value)) {
+			return;
+		}
+		// If a number was passed in, add 'px' to the (except for certain CSS properties)
+		if (type === 'number' && !jQuery.cssNumber[origName]) {
+			value += 'px';
+		}
+		// Fixes #8908, it can be done more correctly by specifing setters in cssHooks,
+		// but it would mean to define eight (for every problematic property) identical functions
+		if (!jQuery.support.clearCloneStyle && value === '' && name.indexOf('background') === 0) {
+			style[name] = 'inherit';
+		}
+		// If a hook was provided, use that value, otherwise just set the specified value
+		if (!hooks || !('set' in hooks) || (value = hooks.set(elem, value, extra)) !== undefined) {
+			// Wrapped to prevent IE from throwing errors when 'invalid' values are provided
+			// Fixes bug #5509
+			try {
+				style[name] = value;
+			} catch (e) {}
+		}
+	} else {
+		// If a hook was provided get the non-computed value from there
+		if (hooks && 'get' in hooks && (ret = hooks.get(elem, false, extra)) !== undefined) {
+			return ret;
+		}
+		// Otherwise just get the value from the style object
+		return style[name];
+	}
+} };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,15 +1,21 @@
+ export const obj = { style: function(elem, name, value, extra) {
+ 	// Don't set styles on text and comment nodes
+-	if (elem && 3 !== elem.nodeType && 8 !== elem.nodeType && elem.style) {
++	if (elem && elem.nodeType !== 3 && elem.nodeType !== 8 && elem.style) {
+ 		// Make sure that we're working with the right name
+ 		var ret, type, hooks, origName = jQuery.camelCase(name), style = elem.style;
+ 		// Check if we're setting a value
+-		if (name = jQuery.cssProps[origName] || (jQuery.cssProps[origName] = vendorPropName(style, origName)), hooks = jQuery.cssHooks[name] || jQuery.cssHooks[origName], void 0 === value) return hooks && 'get' in hooks && void 0 !== (ret = hooks.get(elem, !1, extra)) ? ret : style[name];
+-		// Make sure that NaN and null values aren't set. See: #7116
+-		if ('string' == (type = typeof value) && (ret = rrelNum.exec(value)) && (value = (ret[1] + 1) * ret[2] + parseFloat(jQuery.css(elem, name)), type = 'number'), !(null == value || 'number' === type && isNaN(value)) && ('number' !== type || jQuery.cssNumber[origName] || (value += 'px'), jQuery.support.clearCloneStyle || '' !== value || 0 !== name.indexOf('background') || (style[name] = 'inherit'), !hooks || !('set' in hooks) || void 0 !== (value = hooks.set(elem, value, extra))))
+- // Fixes bug #5509
+-		try {
+-			style[name] = value;
+-		} catch (e) {}
++		if (name = jQuery.cssProps[origName] || (jQuery.cssProps[origName] = vendorPropName(style, origName)), hooks = jQuery.cssHooks[name] || jQuery.cssHooks[origName], value !== void 0) {
++			// Make sure that NaN and null values aren't set. See: #7116
++			if (type = typeof value, type === 'string' && (ret = rrelNum.exec(value)) && (value = (ret[1] + 1) * ret[2] + parseFloat(jQuery.css(elem, name)), type = 'number'), value == null || type === 'number' && isNaN(value)) return;
++			// If a hook was provided, use that value, otherwise just set the specified value
++			if (type === 'number' && !jQuery.cssNumber[origName] && (value += 'px'), !jQuery.support.clearCloneStyle && value === '' && name.indexOf('background') === 0 && (style[name] = 'inherit'), !hooks || !('set' in hooks) || (value = hooks.set(elem, value, extra)) !== void 0)
++ // Wrapped to prevent IE from throwing errors when 'invalid' values are provided
++			// Fixes bug #5509
++			try {
++				style[name] = value;
++			} catch {}
++		} else
++ // Otherwise just get the value from the style object
++		return hooks && 'get' in hooks && (ret = hooks.get(elem, !1, extra)) !== void 0 ? ret : style[name];
+ 	}
+ } };
+
+```
+
 ## `swc/issues/2072/1`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -14921,6 +17003,138 @@ skipsLaterTest(1);
 +	}
 +}
 +skipsLaterTest(1);
+
+```
+
+## `swc/issues/2011/actual`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 1099 vs reference 826 (no whitespaces: +273, formatted: +307)
+
+```js
+function _classCallCheck(instance, Constructor) {
+	if (!(instance instanceof Constructor)) {
+		throw new TypeError('Cannot call a class as a function');
+	}
+}
+function _defineProperties(target, props) {
+	for (var i = 0; i < props.length; i++) {
+		var descriptor = props[i];
+		descriptor.enumerable = descriptor.enumerable || false;
+		descriptor.configurable = true;
+		if ('value' in descriptor) descriptor.writable = true;
+		Object.defineProperty(target, descriptor.key, descriptor);
+	}
+}
+function _createClass(Constructor, protoProps, staticProps) {
+	if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+	if (staticProps) _defineProperties(Constructor, staticProps);
+	return Constructor;
+}
+function _defineProperty(obj, key, value) {
+	if (key in obj) {
+		Object.defineProperty(obj, key, {
+			value,
+			enumerable: true,
+			configurable: true,
+			writable: true
+		});
+	} else {
+		obj[key] = value;
+	}
+	return obj;
+}
+var ClassA = function ClassA() {
+	'use strict';
+	_classCallCheck(this, ClassA);
+};
+module.exports = (function() {
+	var ClassB = (function() {
+		'use strict';
+		function ClassB() {
+			_classCallCheck(this, ClassB);
+		}
+		_createClass(ClassB, [{
+			key: 'it',
+			value: function it() {
+				this.bb = new ClassB.MyA();
+			}
+		}]);
+		return ClassB;
+	})();
+	_defineProperty(ClassB, 'MyA', ClassA);
+	return ClassB;
+})();
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,30 +1,39 @@
+-var ClassB, obj, value;
+ function _classCallCheck(instance, Constructor) {
+ 	if (!(instance instanceof Constructor)) throw TypeError('Cannot call a class as a function');
+ }
+-module.exports = (obj = ClassB = function() {
+-	'use strict';
+-	var protoProps;
+-	function ClassB() {
+-		_classCallCheck(this, ClassB);
++function _defineProperties(target, props) {
++	for (var i = 0; i < props.length; i++) {
++		var descriptor = props[i];
++		descriptor.enumerable = descriptor.enumerable || !1, descriptor.configurable = !0, 'value' in descriptor && (descriptor.writable = !0), Object.defineProperty(target, descriptor.key, descriptor);
+ 	}
+-	return protoProps = [{
+-		key: 'it',
+-		value: function() {
+-			this.bb = new ClassB.MyA();
+-		}
+-	}], function(target, props) {
+-		for (var i = 0; i < props.length; i++) {
+-			var descriptor = props[i];
+-			descriptor.enumerable = descriptor.enumerable || !1, descriptor.configurable = !0, 'value' in descriptor && (descriptor.writable = !0), Object.defineProperty(target, descriptor.key, descriptor);
+-		}
+-	}(ClassB.prototype, protoProps), ClassB;
+-}(), value = function ClassA() {
++}
++function _createClass(Constructor, protoProps, staticProps) {
++	return protoProps && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), Constructor;
++}
++function _defineProperty(obj, key, value) {
++	return key in obj ? Object.defineProperty(obj, key, {
++		value,
++		enumerable: !0,
++		configurable: !0,
++		writable: !0
++	}) : obj[key] = value, obj;
++}
++var ClassA = function ClassA() {
+ 	'use strict';
+ 	_classCallCheck(this, ClassA);
+-}, 'MyA' in obj ? Object.defineProperty(obj, 'MyA', {
+-	value,
+-	enumerable: !0,
+-	configurable: !0,
+-	writable: !0
+-}) : obj.MyA = value, ClassB);
++};
++module.exports = (function() {
++	var ClassB = (function() {
++		'use strict';
++		function ClassB() {
++			_classCallCheck(this, ClassB);
++		}
++		return _createClass(ClassB, [{
++			key: 'it',
++			value: function() {
++				this.bb = new ClassB.MyA();
++			}
++		}]), ClassB;
++	})();
++	return _defineProperty(ClassB, 'MyA', ClassA), ClassB;
++})();
 
 ```
 
@@ -15294,6 +17508,108 @@ console.log([
 -	void 0
 +	'wrong'['01']
  ].map(String).join(','));
+
+```
+
+## `swc/next/outstatic/1`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`, `1 iteration`
+- size: oxc 770 vs reference 282 (no whitespaces: +488, formatted: +706)
+
+```js
+(self['webpackChunk_N_E'] = self['webpackChunk_N_E'] || []).push([[285], {
+	1973: (function(module) {
+		eval(module.code);
+	}),
+	1985: (function(__unused_webpack_module, exports, __webpack_require__) {
+		'use strict';
+		var t = 0, r = (e) => 'checkbox' === e.type;
+		var u = (e, t) => e.has(((e) => e.substring(0, e.search(/\.\d+(\.|$)/)) || e)(t)), d = () => {};
+		function H(e, t, r) {}
+		var ee = (e) => 'radio' === e.type;
+		function Me(e = {}) {
+			let t, n = { ...e }, y = {}, h = 0, p = {}, _ = {};
+			const E = 0, $ = async (e) => {
+				const r = e.target;
+				let s = r.name;
+				const a = 0;
+				if (a) {
+					let l, c;
+					const p = 0;
+					p ? (a._f.onBlur && a._f.onBlur(e), t && t(0)) : a._f.onChange && a._f.onChange(e);
+					const A = 0;
+					a._f.deps && E(s, c, l, A);
+				}
+			}, te = (e, t = {}) => {
+				let s = 0;
+				const a = 0;
+				return s ? a && H(h, e, t.disabled ? void 0 : 0) : 0, {
+					onChange: $,
+					onBlur: $,
+					ref: (a) => {
+						if (a) {
+							te(e, t), s = d(y, e);
+							const n = 0;
+							((e) => ee(e) || r(e))(n), s._f.refs;
+						} else s = d(y, e, {}), s._f && (s._f.mount = !1), (n.shouldUnregister || t.shouldUnregister) && (!u(_.array, e) || !p.action) && _.unMount.add(e);
+					}
+				};
+			};
+		}
+		exports.useForm = function(e = {}) {
+			const r = t.default.useRef();
+			r.current ? r.current.control._options = e : r.current = { ...Me(e) };
+		};
+	})
+}]);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,14 +1,31 @@
+-(self['webpackChunk_N_E'] = self['webpackChunk_N_E'] || []).push([[285], {
+-	1973: function(module) {
++(self.webpackChunk_N_E = self.webpackChunk_N_E || []).push([[285], {
++	1973: (function(module) {
+ 		eval(module.code);
+-	},
+-	1985: function(e, n, u) {
++	}),
++	1985: (function(__unused_webpack_module, exports, __webpack_require__) {
+ 		'use strict';
+-		n.useForm = function(e = {}) {
+-			let n = 0 .default.useRef();
+-			n.current ? n.current.control._options = e : n.current = { ...function(e = {}) {
+-				({ ...e });
+-			}(e) };
++		var t = 0, r = (e) => e.type === 'checkbox', u = (e, t) => e.has(((e) => e.substring(0, e.search(/\.\d+(\.|$)/)) || e)(t)), d = () => {}, ee = (e) => e.type === 'radio';
++		function Me(e = {}) {
++			let t, n = { ...e }, y = {}, h = 0, p = {}, _ = {}, E = 0, $ = async (e) => {
++				let s = e.target.name, a = 0;
++			}, te = (e, t = {}) => {
++				let s = 0, a = 0;
++				return {
++					onChange: $,
++					onBlur: $,
++					ref: (a) => {
++						if (a) {
++							s = void 0;
++							let n = 0;
++							((e) => ee(e) || r(e))(0), s._f.refs;
++						} else s = void 0, s._f && (s._f.mount = !1), !n.shouldUnregister && !t.shouldUnregister || u(_.array, e) && p.action || _.unMount.add(e);
++					}
++				};
++			};
++		}
++		exports.useForm = function(e = {}) {
++			let r = 0 .default.useRef();
++			r.current ? r.current.control._options = e : r.current = { ...Me(e) };
+ 		};
+-	}
++	})
+ }]);
 
 ```
 
