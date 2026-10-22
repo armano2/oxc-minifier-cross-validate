@@ -12407,8 +12407,10 @@ function no_asm_GeometricMean(stdlib, foreign, buffer) {
 -		return start |= 0, end |= 0, +exp(+logSum(start, end) / +(end - start | 0));
 +		return start |= 0, end |= 0, +exp(+logSum(start, end) / (end - start | 0));
  	}
--	var exp = s
-... [truncated]
+-	var exp = stdlib.Math.exp, log = stdlib.Math.log, values = new stdlib.Float64Array(buffer);
+ 	return { geometricMean };
+ }
+
 ```
 
 ## `terser/loops/in_parenthesis_2`

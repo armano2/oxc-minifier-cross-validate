@@ -3738,8 +3738,9 @@ console.log('hoist after break', hoistAfterBreak());
 -console.log('labeled break', labeledBreak());
 -console.log('unlabeled continue', unlabeledContinue());
 -console.log('labeled continue', labeledContinue());
--console.log('hoist after break', hoistAfterBreak(
-... [truncated]
+-console.log('hoist after break', hoistAfterBreak());
++console.log('unlabeled break', unlabeledBreak()), console.log('labeled break', labeledBreak()), console.log('unlabeled continue', unlabeledContinue()), console.log('labeled continue', labeledContinue()), console.log('hoist after break', hoistAfterBreak());
+
 ```
 
 ## `swc/issues/12182/callee-safety/nested-values`

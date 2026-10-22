@@ -54724,8 +54724,9 @@ function f5(n) {
 +typeof A != 'object' || typeof B != 'object' && (A, B);
 +typeof A == 'object' || typeof B == 'object' || (A, B);
 +typeof A == 'object' || typeof B != 'object' || (A, B);
-+typeof A != 'o
-... [truncated]
++typeof A != 'object' || typeof B == 'object' || (A, B);
++typeof A != 'object' || typeof B != 'object' || (A, B);
+
 ```
 
 ## `uglify/concat-strings/concat_1`
@@ -55594,8 +55595,13 @@ function no_asm_GeometricMean(stdlib, foreign, buffer) {
 +		for (p = start << 3, q = end << 3; (p | 0) < (q | 0); p = p + 8 | 0) sum += +log(values[p >> 3]);
  		return +sum;
  	}
- 	
-... [truncated]
+ 	function geometricMean(start, end) {
+ 		return start |= 0, end |= 0, +exp(+logSum(start, end) / (end - start | 0));
+ 	}
+-	var exp = stdlib.Math.exp, log = stdlib.Math.log, values = new stdlib.Float64Array(buffer);
+ 	return { geometricMean };
+ }
+
 ```
 
 ## `uglify/functions/cross_references_2`

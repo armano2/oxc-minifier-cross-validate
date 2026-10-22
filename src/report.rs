@@ -6,20 +6,9 @@ use crate::{Kind, Outcome};
 
 pub const MAX_SNIPPET_BYTES: usize = 1600;
 
-fn snippet(text: &str) -> String {
-    if text.len() <= MAX_SNIPPET_BYTES {
-        return text.to_string();
-    }
-    let mut end = MAX_SNIPPET_BYTES;
-    while !text.is_char_boundary(end) {
-        end -= 1;
-    }
-    format!("{}\n... [truncated]", &text[..end])
-}
-
 fn diff_snippet(expected: &str, actual: &str) -> String {
     let diff = TextDiff::from_lines(expected, actual);
-    snippet(&diff.unified_diff().header("reference", "oxc").to_string())
+    diff.unified_diff().header("reference", "oxc").to_string()
 }
 
 #[derive(Debug)]
@@ -221,13 +210,13 @@ fn write_outcome_markdown(out: &mut String, outcome: &Outcome, kind: Kind) {
         );
     }
     out.push('\n');
-    let _ = writeln!(out, "```js\n{}\n```\n", snippet(&outcome.input));
+    let _ = writeln!(out, "```js\n{}\n```\n", outcome.input);
     if !outcome.expected.is_empty() || !outcome.actual.is_empty() {
         let _ =
             writeln!(out, "```diff\n{}\n```\n", diff_snippet(&outcome.expected, &outcome.actual));
     }
     if let Some(second) = &outcome.idempotency {
-        let _ = writeln!(out, "```js\n// oxc, second pass\n{}\n```\n", snippet(second));
+        let _ = writeln!(out, "```js\n// oxc, second pass\n{}\n```\n", *second);
     }
 }
 

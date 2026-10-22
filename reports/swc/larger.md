@@ -1941,8 +1941,15 @@ out.constructAfterEval = constructAfterEval;
 +}), out.SameArity = SameArity, out.sameArity = new SameArity(1, 2, 3);
  function constructAfterEval() {
  	class EvalMutable {}
- 	ret
-... [truncated]
+ 	return eval('EvalMutable = ExternalClass'), new EvalMutable(1, 2, 3);
+ }
+-condition && (SameArity = class {
+-	constructor(value) {
+-		this.value = value;
+-	}
+-}), out.SameArity = SameArity, out.sameArity = new SameArity(1, 2, 3), out.constructAfterEval = constructAfterEval;
++out.constructAfterEval = constructAfterEval;
+
 ```
 
 ## `swc/issues/12118`
@@ -3216,8 +3223,8 @@ export function createTypeChecker(host) {
 -// Invalid
 -// Object symbols
 -''.constructor, ''.__proto__, ''.__defineGetter__, ''.__defineSetter__, ''.__lookupGetter__, ''.__lookupSetter__, ''.hasOwnProperty, ''.isPrototypeOf, ''.propertyIsEnumerable, ''.toLocaleString, ''.toString, ''.valueOf, ''.anchor, ''.at, ''.big, ''.blink, ''.bold, ''.charAt, ''.charCodeAt, ''.codePointAt, ''.concat, ''.endsWith, ''.fixed, ''.fontcolor, ''.fontsize, ''.includes, ''.indexOf, ''.isWellFormed, ''.italics, ''.lastIndexOf, ''.link, ''.localeCompare, ''.match, ''.matchAll, ''.normalize, ''.padEnd, ''.padStart, ''.repeat, ''.replace, ''.replaceAll, ''.search, ''.slice, ''.small, ''.split, ''.startsWith, ''.strike, ''.sub, ''.substr, ''.substring, ''.sup, ''.toLocaleLowerCase, ''.toLocaleUpperCase, ''.toLowerCase, ''.toUpperCase, ''.toWellFormed, ''.trim, ''.trimEnd, ''.trimStart;
-+''[-1], ''.invalid, ''.invalid, ''[[]], ''.constructor, ''.__proto__, ''.__defineGetter__, ''.__defineSetter__, ''.__lookupGetter__, ''.__lookupSetter__, ''.hasOwnProperty, ''.isPrototypeOf, ''.propertyIsEnumerable, ''.toLocaleString, ''.toString, ''.valueOf, ''.anchor, ''.at, ''.big, ''.blink, ''.bold, ''.charAt, ''.charCodeAt, ''.codePointAt, ''.concat, ''.endsWith, ''.fixed, ''.fontcolor, ''.fontsize, ''.includes, ''.indexOf, ''.isWellFormed, ''.italics, ''.lastIndexOf, ''.link, ''.localeCompare, ''.match, ''.matchAll, ''.normalize, ''.padEnd, ''.padStart, ''.repeat, ''.replace, ''.replaceAll, ''.search, ''.slice, ''.small, ''.split, ''.startsWith, ''.strike, ''.sub, ''.substr, ''.substring, ''.sup, ''.toLocaleLowerCas
-... [truncated]
++''[-1], ''.invalid, ''.invalid, ''[[]], ''.constructor, ''.__proto__, ''.__defineGetter__, ''.__defineSetter__, ''.__lookupGetter__, ''.__lookupSetter__, ''.hasOwnProperty, ''.isPrototypeOf, ''.propertyIsEnumerable, ''.toLocaleString, ''.toString, ''.valueOf, ''.anchor, ''.at, ''.big, ''.blink, ''.bold, ''.charAt, ''.charCodeAt, ''.codePointAt, ''.concat, ''.endsWith, ''.fixed, ''.fontcolor, ''.fontsize, ''.includes, ''.indexOf, ''.isWellFormed, ''.italics, ''.lastIndexOf, ''.link, ''.localeCompare, ''.match, ''.matchAll, ''.normalize, ''.padEnd, ''.padStart, ''.repeat, ''.replace, ''.replaceAll, ''.search, ''.slice, ''.small, ''.split, ''.startsWith, ''.strike, ''.sub, ''.substr, ''.substring, ''.sup, ''.toLocaleLowerCase, ''.toLocaleUpperCase, ''.toLowerCase, ''.toUpperCase, ''.toWellFormed, ''.trim, ''.trimEnd, ''.trimStart;
+
 ```
 
 ## `swc/next/feedback-1/reduced/1`
@@ -14648,8 +14655,10 @@ process.stdout.write(typeof st + '\n');
 +const pb = console?.error.bind(console);
 +pb('early optional'), process.stdout.write(typeof pb + '\n');
 +const dbg = console.debug?.bind(console) || null;
-+proc
-... [truncated]
++process.stdout.write((dbg !== null) + '\n');
++const st = console.state.valueOf();
+ process.stdout.write(typeof st + '\n');
+
 ```
 
 ## `swc/issues/2072/1`
