@@ -34,13 +34,16 @@ function f() {
 
 ```
 
-```js
-// oxc, second pass
-function f() {
-	try {
-		x();
-	} catch {}
-}
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -1,5 +1,5 @@
+ function f() {
+ 	try {
+ 		x();
+-	} catch (a) {}
++	} catch {}
+ }
 
 ```
 
@@ -82,16 +85,17 @@ console.log(a);
 
 ```
 
-```js
-// oxc, second pass
-var a = 1;
-(function a() {
-	a++;
-	try {
-		x();
-	} catch {}
-})();
-console.log(a);
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -3,6 +3,6 @@
+ 	a++;
+ 	try {
+ 		x();
+-	} catch (a) {}
++	} catch {}
+ })();
+ console.log(a);
 
 ```
 
@@ -128,16 +132,18 @@ console.log(a);
 
 ```
 
-```js
-// oxc, second pass
-(function(a) {
-	try {
-		throw 0;
-	} catch {
-		a = NaN;
-	}
-	console.log(a);
-})();
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -2,7 +2,7 @@
+ 	try {
+ 		throw 0;
+ 	} catch {
+-		a = 0 / 0;
++		a = NaN;
+ 	}
+ 	console.log(a);
+ })();
 
 ```
 
@@ -175,16 +181,18 @@ console.log(a);
 
 ```
 
-```js
-// oxc, second pass
-(function(a) {
-	try {
-		throw 0;
-	} catch {
-		a = Infinity;
-	}
-	console.log(a);
-})();
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -2,7 +2,7 @@
+ 	try {
+ 		throw 0;
+ 	} catch {
+-		a = 123456789 / 0;
++		a = Infinity;
+ 	}
+ 	console.log(a);
+ })();
 
 ```
 

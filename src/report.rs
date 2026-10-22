@@ -11,6 +11,11 @@ fn diff_snippet(expected: &str, actual: &str) -> String {
     diff.unified_diff().header("reference", "oxc").to_string()
 }
 
+fn diff_idempotency(expected: &str, actual: &str) -> String {
+    let diff = TextDiff::from_lines(expected, actual);
+    diff.unified_diff().header("1st-pass", "2nd-pass").to_string()
+}
+
 #[derive(Debug)]
 struct KindReport {
     kind: Kind,
@@ -209,14 +214,14 @@ fn write_outcome_markdown(out: &mut String, outcome: &Outcome, kind: Kind) {
             outcome.actual_size, outcome.expected_size, delta, delta_raw,
         );
     }
-    out.push('\n');
+    let _ = writeln!(out);
     let _ = writeln!(out, "```js\n{}\n```\n", outcome.input);
     if !outcome.expected.is_empty() || !outcome.actual.is_empty() {
-        let _ =
-            writeln!(out, "```diff\n{}\n```\n", diff_snippet(&outcome.expected, &outcome.actual));
+        let _ = writeln!(out, "```diff\n{}\n```", diff_snippet(&outcome.expected, &outcome.actual));
+        let _ = writeln!(out);
     }
     if let Some(second) = &outcome.idempotency {
-        let _ = writeln!(out, "```js\n// oxc, second pass\n{}\n```\n", *second);
+        let _ = writeln!(out, "```diff\n{}\n```\n", diff_idempotency(&outcome.actual, second));
     }
 }
 

@@ -37,15 +37,21 @@ class Foo {
 
 ```
 
-```js
-// oxc, second pass
-class Foo {
-	r = 'bar';
-	static i = 'zzz';
-	a() {
-		return this.r + Foo.i;
-	}
-}
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -1,7 +1,7 @@
+ class Foo {
+-	e = 'bar';
+-	static t = 'zzz';
+-	n() {
+-		return this.e + Foo.t;
++	r = 'bar';
++	static i = 'zzz';
++	a() {
++		return this.r + Foo.i;
+ 	}
+ }
 
 ```
 
@@ -82,15 +88,21 @@ class Foo {
 
 ```
 
-```js
-// oxc, second pass
-class Foo {
-	r = 'bar';
-	static i = 'zzz';
-	a() {
-		return this.r + Foo.i;
-	}
-}
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -1,7 +1,7 @@
+ class Foo {
+-	e = 'bar';
+-	static t = 'zzz';
+-	n() {
+-		return this.e + Foo.t;
++	r = 'bar';
++	static i = 'zzz';
++	a() {
++		return this.r + Foo.i;
+ 	}
+ }
 
 ```
 
@@ -129,16 +141,17 @@ console.log(a);
 
 ```
 
-```js
-// oxc, second pass
-var a = 1;
-(function a() {
-	a++;
-	try {
-		x();
-	} catch {}
-})();
-console.log(a);
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -3,6 +3,6 @@
+ 	a++;
+ 	try {
+ 		x();
+-	} catch (a) {}
++	} catch {}
+ })();
+ console.log(a);
 
 ```
 
@@ -175,16 +188,18 @@ console.log(a);
 
 ```
 
-```js
-// oxc, second pass
-(function(a) {
-	try {
-		throw 0;
-	} catch {
-		a = NaN;
-	}
-	console.log(a);
-})();
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -2,7 +2,7 @@
+ 	try {
+ 		throw 0;
+ 	} catch {
+-		a = 0 / 0;
++		a = NaN;
+ 	}
+ 	console.log(a);
+ })();
 
 ```
 
@@ -222,16 +237,18 @@ console.log(a);
 
 ```
 
-```js
-// oxc, second pass
-(function(a) {
-	try {
-		throw 0;
-	} catch {
-		a = Infinity;
-	}
-	console.log(a);
-})();
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -2,7 +2,7 @@
+ 	try {
+ 		throw 0;
+ 	} catch {
+-		a = 123456789 / 0;
++		a = Infinity;
+ 	}
+ 	console.log(a);
+ })();
 
 ```
 
@@ -261,12 +278,17 @@ console.log(x.foo, x['_$foo$_']);
 
 ```
 
-```js
-// oxc, second pass
-var x = {};
-x.n = 1;
-x.r = 2 * x.n;
-console.i(x.n, x.r);
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -1,4 +1,4 @@
+ var x = {};
+-x.e = 1;
+-x._$foo$_ = 2 * x.e;
+-console.t(x.e, x._$foo$_);
++x.n = 1;
++x.r = 2 * x.n;
++console.i(x.n, x.r);
 
 ```
 
@@ -296,12 +318,17 @@ console.log(x.foo, x['a']);
 
 ```
 
-```js
-// oxc, second pass
-var x = {};
-x.n = 1;
-x.r = 2 * x.n;
-console.i(x.n, x.r);
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -1,4 +1,4 @@
+ var x = {};
+-x.e = 1;
+-x.a = 2 * x.e;
+-console.t(x.e, x.a);
++x.n = 1;
++x.r = 2 * x.n;
++console.i(x.n, x.r);
 
 ```
 
@@ -331,12 +358,17 @@ console.log(x.foo, x['a']);
 
 ```
 
-```js
-// oxc, second pass
-var x = {};
-x.r = 1;
-x.i = 2 * x.r;
-console.a(x.r, x.i);
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -1,4 +1,4 @@
+ var x = {};
+-x.e = 1;
+-x.t = 2 * x.e;
+-console.n(x.e, x.t);
++x.r = 1;
++x.i = 2 * x.r;
++console.a(x.r, x.i);
 
 ```
 
@@ -374,16 +406,21 @@ console.log(obj[void 0], obj[undefined], obj['undefined'], obj[0 / 0], obj[NaN],
 
 ```
 
-```js
-// oxc, second pass
-var obj = {
-	i: 1,
-	NaN: 2,
-	Infinity: 3,
-	'-Infinity': 4,
-	o: 5
-};
-console.r(obj[void 0], obj[void 0], obj.s, obj[NaN], obj[NaN], obj.NaN, obj[1 / 0], obj[Infinity], obj.Infinity, obj[-1 / 0], obj[-Infinity], obj['-Infinity'], obj[null], obj.a);
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -1,8 +1,8 @@
+ var obj = {
+-	n: 1,
++	i: 1,
+ 	NaN: 2,
+ 	Infinity: 3,
+ 	'-Infinity': 4,
+-	t: 5
++	o: 5
+ };
+-console.e(obj[void 0], obj[void 0], obj.undefined, obj[NaN], obj[NaN], obj.NaN, obj[1 / 0], obj[Infinity], obj.Infinity, obj[-1 / 0], obj[-Infinity], obj['-Infinity'], obj[null], obj.null);
++console.r(obj[void 0], obj[void 0], obj.s, obj[NaN], obj[NaN], obj.NaN, obj[1 / 0], obj[Infinity], obj.Infinity, obj[-1 / 0], obj[-Infinity], obj['-Infinity'], obj[null], obj.a);
 
 ```
 
@@ -432,23 +469,28 @@ console.log(obj[1e42], obj['j'], obj['1e+42']);
 
 ```
 
-```js
-// oxc, second pass
-var obj = {
-	0: 0,
-	'-0': 1,
-	42: 2,
-	42: 3,
-	37: 4,
-	a: 5,
-	1e42: 6,
-	c: 7,
-	1e42: 8
-};
-console.r(obj[-0], obj[-''], obj['-0']);
-console.r(obj[42], obj[42]);
-console.r(obj[37], obj.s, obj[37], obj[37]);
-console.r(obj[1e42], obj.i, obj['1e+42']);
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -4,12 +4,12 @@
+ 	42: 2,
+ 	42: 3,
+ 	37: 4,
+-	n: 5,
++	a: 5,
+ 	1e42: 6,
+-	t: 7,
++	c: 7,
+ 	1e42: 8
+ };
+-console.e(obj[-0], obj[-''], obj['-0']);
+-console.e(obj[42], obj[42]);
+-console.e(obj[37], obj.o, obj[37], obj[37]);
+-console.e(obj[1e42], obj.j, obj['1e+42']);
++console.r(obj[-0], obj[-''], obj['-0']);
++console.r(obj[42], obj[42]);
++console.r(obj[37], obj.s, obj[37], obj[37]);
++console.r(obj[1e42], obj.i, obj['1e+42']);
 
 ```
 
@@ -527,34 +569,43 @@ console.log(c.propa, c['propc']);
 
 ```
 
-```js
-// oxc, second pass
-var a = {
-	a: 1,
-	get o() {
-		return 2;
-	},
-	propc: 3,
-	get propd() {
-		return 4;
-	}
-};
-var b = {
-	a: 5,
-	get o() {
-		return 6;
-	},
-	propc: 7,
-	get propd() {
-		return 8;
-	}
-};
-var c = {};
-Object.l(c, 'propa', { c: 9 });
-Object.l(c, 'propc', { c: 10 });
-console.s(a.a, a.o, a.propc, a.propc, a.propd, a.propd);
-console.s(b.u, b.d, b.propc, b.propc, b.propd, b.propd);
-console.s(c.a, c.propc);
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -1,6 +1,6 @@
+ var a = {
+-	e: 1,
+-	get n() {
++	a: 1,
++	get o() {
+ 		return 2;
+ 	},
+ 	propc: 3,
+@@ -9,8 +9,8 @@
+ 	}
+ };
+ var b = {
+-	e: 5,
+-	get n() {
++	a: 5,
++	get o() {
+ 		return 6;
+ 	},
+ 	propc: 7,
+@@ -19,8 +19,8 @@
+ 	}
+ };
+ var c = {};
+-Object.r(c, 'propa', { i: 9 });
+-Object.r(c, 'propc', { i: 10 });
+-console.t(a.e, a.n, a.propc, a.propc, a.propd, a.propd);
+-console.t(b.propa, b.propb, b.propc, b.propc, b.propd, b.propd);
+-console.t(c.e, c.propc);
++Object.l(c, 'propa', { c: 9 });
++Object.l(c, 'propc', { c: 10 });
++console.s(a.a, a.o, a.propc, a.propc, a.propd, a.propd);
++console.s(b.u, b.d, b.propc, b.propc, b.propd, b.propd);
++console.s(c.a, c.propc);
 
 ```
 
@@ -616,27 +667,33 @@ console.log(obj.null, obj.undefined, obj.Infinity, obj.NaN);
 
 ```
 
-```js
-// oxc, second pass
-'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
-'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB';
-'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC';
-const prop = Symbol('foo');
-const obj = {
-	[prop]: 'bar',
-	d: 1,
-	c: 2,
-	7: 'seven',
-	0: 'zero',
-	1: 'one',
-	u: 'Null',
-	l: 'Undefined',
-	Infinity: 'infinity',
-	NaN: 'nan',
-	s: 'Void'
-};
-console.o(obj[prop], obj.f, obj.c, obj[7], obj[0], obj[1], obj[null], obj[void 0], obj[1 / 0], obj[NaN], obj.s);
-console.o(obj.u, obj.l, obj.Infinity, obj.NaN);
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -4,16 +4,16 @@
+ const prop = Symbol('foo');
+ const obj = {
+ 	[prop]: 'bar',
+-	a: 1,
+-	n: 2,
++	d: 1,
++	c: 2,
+ 	7: 'seven',
+ 	0: 'zero',
+ 	1: 'one',
+-	t: 'Null',
+-	r: 'Undefined',
++	u: 'Null',
++	l: 'Undefined',
+ 	Infinity: 'infinity',
+ 	NaN: 'nan',
+-	i: 'Void'
++	s: 'Void'
+ };
+-console.e(obj[prop], obj.baz, obj.n, obj[7], obj[0], obj[1], obj[null], obj[void 0], obj[1 / 0], obj[NaN], obj.i);
+-console.e(obj.t, obj.r, obj.Infinity, obj.NaN);
++console.o(obj[prop], obj.f, obj.c, obj[7], obj[0], obj[1], obj[null], obj[void 0], obj[1 / 0], obj[NaN], obj.s);
++console.o(obj.u, obj.l, obj.Infinity, obj.NaN);
 
 ```
 
@@ -693,22 +750,30 @@ console.log(obj.null, obj.undefined, obj.Infinity, obj.NaN);
 
 ```
 
-```js
-// oxc, second pass
-const e = Symbol('foo'), t = {
-	[e]: 'bar',
-	d: 1,
-	c: 2,
-	7: 'seven',
-	0: 'zero',
-	1: 'one',
-	u: 'Null',
-	l: 'Undefined',
-	Infinity: 'infinity',
-	NaN: 'nan',
-	s: 'Void'
-};
-console.o(t[e], t.f, t.c, t[7], t[0], t[1], t[null], t[void 0], t[1 / 0], t[NaN], t.s), console.o(t.u, t.l, t.Infinity, t.NaN);
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -1,14 +1,14 @@
+ const e = Symbol('foo'), t = {
+ 	[e]: 'bar',
+-	a: 1,
+-	n: 2,
++	d: 1,
++	c: 2,
+ 	7: 'seven',
+ 	0: 'zero',
+ 	1: 'one',
+-	t: 'Null',
+-	r: 'Undefined',
++	u: 'Null',
++	l: 'Undefined',
+ 	Infinity: 'infinity',
+ 	NaN: 'nan',
+-	i: 'Void'
++	s: 'Void'
+ };
+-console.e(t[e], t.baz, t.n, t[7], t[0], t[1], t[null], t[void 0], t[1 / 0], t[NaN], t.i), console.e(t.t, t.r, t.Infinity, t.NaN);
++console.o(t[e], t.f, t.c, t[7], t[0], t[1], t[null], t[void 0], t[1 / 0], t[NaN], t.s), console.o(t.u, t.l, t.Infinity, t.NaN);
 
 ```
 
@@ -733,10 +798,13 @@ g.keep = g.change;
 
 ```
 
-```js
-// oxc, second pass
-var g = {};
-g.n = g.r;
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -1,2 +1,2 @@
+ var g = {};
+-g.e = g.t;
++g.n = g.r;
 
 ```
 
@@ -768,13 +836,18 @@ console.log(o.p);
 
 ```
 
-```js
-// oxc, second pass
-var o = { r: 'FAIL' };
-Object.a(o, 'p', { get: function() {
-	return 'PASS';
-} });
-console.i(o.r);
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -1,5 +1,5 @@
+-var o = { e: 'FAIL' };
+-Object.t(o, 'p', { get: function() {
++var o = { r: 'FAIL' };
++Object.a(o, 'p', { get: function() {
+ 	return 'PASS';
+ } });
+-console.n(o.e);
++console.i(o.r);
 
 ```
 
@@ -806,13 +879,18 @@ console.log(o.p);
 
 ```
 
-```js
-// oxc, second pass
-var o = { r: 'FAIL' };
-Object.a(o, { r: { get: function() {
-	return 'PASS';
-} } });
-console.i(o.r);
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -1,5 +1,5 @@
+-var o = { e: 'FAIL' };
+-Object.t(o, { e: { get: function() {
++var o = { r: 'FAIL' };
++Object.a(o, { r: { get: function() {
+ 	return 'PASS';
+ } } });
+-console.n(o.e);
++console.i(o.r);
 
 ```
 
@@ -839,11 +917,15 @@ x = { baz: 'ban' };
 
 ```
 
-```js
-// oxc, second pass
-var a = {};
-a.r = 'bar';
-x = { n: 'ban' };
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -1,3 +1,3 @@
+ var a = {};
+-a.t = 'bar';
+-x = { e: 'ban' };
++a.r = 'bar';
++x = { n: 'ban' };
 
 ```
 
@@ -870,11 +952,15 @@ x = { baz: 'ban' };
 
 ```
 
-```js
-// oxc, second pass
-var a = {};
-a.r = 'bar';
-x = { n: 'ban' };
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -1,3 +1,3 @@
+ var a = {};
+-a.t = 'bar';
+-x = { e: 'ban' };
++a.r = 'bar';
++x = { n: 'ban' };
 
 ```
 
@@ -950,30 +1036,45 @@ function f2() {
 
 ```
 
-```js
-// oxc, second pass
-var a = {};
-a.l = 1;
-function f1() {
-	a.d = 'bar';
-	a.p = 'red';
-	a.s = 2;
-	x = {
-		c: 10,
-		o: 7
-	};
-	a.o = 9;
-}
-function f2() {
-	a.f = 'bar';
-	a.u = 'red';
-	x = {
-		c: 10,
-		o: 7
-	};
-	a.o = 9;
-	a.s = 3;
-}
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -1,22 +1,22 @@
+ var a = {};
+-a.a = 1;
++a.l = 1;
+ function f1() {
+-	a.foo = 'bar';
+-	a.r = 'red';
+-	a.n = 2;
++	a.d = 'bar';
++	a.p = 'red';
++	a.s = 2;
+ 	x = {
+-		t: 10,
+-		e: 7
++		c: 10,
++		o: 7
+ 	};
+-	a.e = 9;
++	a.o = 9;
+ }
+ function f2() {
+-	a.i = 'bar';
+-	a.color = 'red';
++	a.f = 'bar';
++	a.u = 'red';
+ 	x = {
+-		t: 10,
+-		e: 7
++		c: 10,
++		o: 7
+ 	};
+-	a.e = 9;
+-	a.n = 3;
++	a.o = 9;
++	a.s = 3;
+ }
 
 ```
 
@@ -1013,16 +1114,23 @@ Object.defineProperty(console, 'lag', { value: 3 });
 
 ```
 
-```js
-// oxc, second pass
-var some_prop = 'propname';
-const object = { s: some_prop };
-const non_global_console = console;
-// .log gets preserved because of jsprops
-non_global_console.o(object);
-Object.i(object, 'some_prop', { a: 3 });
-Object.i(non_global_console, 'lag', { a: 3 });
-Object.i(console, 'lag', { a: 3 });
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -1,8 +1,8 @@
+ var some_prop = 'propname';
+-const object = { r: some_prop };
++const object = { s: some_prop };
+ const non_global_console = console;
+ // .log gets preserved because of jsprops
+-non_global_console.n(object);
+-Object.e(object, 'some_prop', { t: 3 });
+-Object.e(non_global_console, 'lag', { t: 3 });
+-Object.e(console, 'lag', { t: 3 });
++non_global_console.o(object);
++Object.i(object, 'some_prop', { a: 3 });
++Object.i(non_global_console, 'lag', { a: 3 });
++Object.i(console, 'lag', { a: 3 });
 
 ```
 
@@ -1064,16 +1172,25 @@ a['run']({
 
 ```
 
-```js
-// oxc, second pass
-a.i = 'bar';
-a.a = 'red';
-x = { s: 10 };
-a.o(x.s, a.i);
-a.o({
-	a: 'blue',
-	i: 'baz'
-});
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -1,8 +1,8 @@
+-a.e = 'bar';
+-a.n = 'red';
+-x = { t: 10 };
+-a.r(x.t, a.e);
+-a.r({
+-	n: 'blue',
+-	e: 'baz'
++a.i = 'bar';
++a.a = 'red';
++x = { s: 10 };
++a.o(x.s, a.i);
++a.o({
++	a: 'blue',
++	i: 'baz'
+ });
 
 ```
 
@@ -1100,11 +1217,15 @@ var Foo = { foo: function() {
 
 ```
 
-```js
-// oxc, second pass
-var e = { r: function() {
-	return Bar.n();
-} };
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -1,3 +1,3 @@
+-var e = { t: function() {
+-	return Bar.e();
++var e = { r: function() {
++	return Bar.n();
+ } };
 
 ```
 
@@ -1179,30 +1300,45 @@ function f2() {
 
 ```
 
-```js
-// oxc, second pass
-var a = {};
-a.l = 1;
-function f1() {
-	a.d = 'bar';
-	a.p = 'red';
-	a.s = 2;
-	x = {
-		c: 10,
-		o: 7
-	};
-	a.o = 9;
-}
-function f2() {
-	a.f = 'bar';
-	a.u = 'red';
-	x = {
-		c: 10,
-		o: 7
-	};
-	a.o = 9;
-	a.s = 3;
-}
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -1,22 +1,22 @@
+ var a = {};
+-a.a = 1;
++a.l = 1;
+ function f1() {
+-	a.foo = 'bar';
+-	a.r = 'red';
+-	a.n = 2;
++	a.d = 'bar';
++	a.p = 'red';
++	a.s = 2;
+ 	x = {
+-		t: 10,
+-		e: 7
++		c: 10,
++		o: 7
+ 	};
+-	a.e = 9;
++	a.o = 9;
+ }
+ function f2() {
+-	a.i = 'bar';
+-	a.color = 'red';
++	a.f = 'bar';
++	a.u = 'red';
+ 	x = {
+-		t: 10,
+-		e: 7
++		c: 10,
++		o: 7
+ 	};
+-	a.e = 9;
+-	a.n = 3;
++	a.o = 9;
++	a.s = 3;
+ }
 
 ```
 
@@ -1248,19 +1384,28 @@ f3({ Quoted: () => {} });
 
 ```
 
-```js
-// oxc, second pass
-class C {
-	r() {}
-	i() {}
-}
-f1({
-	r() {},
-	i() {},
-	a: 3
-});
-f2({ r: function() {} });
-f3({ r: () => {} });
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -1,11 +1,11 @@
+ class C {
+-	e() {}
+-	t() {}
++	r() {}
++	i() {}
+ }
+ f1({
+-	e() {},
+-	t() {},
+-	n: 3
++	r() {},
++	i() {},
++	a: 3
+ });
+-f2({ e: function() {} });
+-f3({ e: () => {} });
++f2({ r: function() {} });
++f3({ r: () => {} });
 
 ```
 
@@ -1308,17 +1453,25 @@ f3({ Quoted: () => {} });
 
 ```
 
-```js
-// oxc, second pass
-class C {
-	r() {}
-	i() {}
-}
-f1({
-	r() {},
-	i() {},
-	a: 3
-}), f2({ r: function() {} }), f3({ r: () => {} });
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -1,9 +1,9 @@
+ class C {
+-	e() {}
+-	t() {}
++	r() {}
++	i() {}
+ }
+ f1({
+-	e() {},
+-	t() {},
+-	n: 3
+-}), f2({ e: function() {} }), f3({ e: () => {} });
++	r() {},
++	i() {},
++	a: 3
++}), f2({ r: function() {} }), f3({ r: () => {} });
 
 ```
 
@@ -1366,19 +1519,28 @@ f3({ Quoted: () => {} });
 
 ```
 
-```js
-// oxc, second pass
-class C {
-	r() {}
-	i() {}
-}
-f1({
-	r() {},
-	i() {},
-	a: 3
-});
-f2({ r: function() {} });
-f3({ r: () => {} });
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -1,11 +1,11 @@
+ class C {
+-	e() {}
+-	t() {}
++	r() {}
++	i() {}
+ }
+ f1({
+-	e() {},
+-	t() {},
+-	n: 3
++	r() {},
++	i() {},
++	a: 3
+ });
+-f2({ e: function() {} });
+-f3({ e: () => {} });
++f2({ r: function() {} });
++f3({ r: () => {} });
 
 ```
 
@@ -1405,11 +1567,15 @@ var Foo = { foo: function() {
 
 ```
 
-```js
-// oxc, second pass
-var e = { r: function() {
-	return Bar.n();
-} };
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -1,3 +1,3 @@
+-var e = { t: function() {
+-	return Bar.e();
++var e = { r: function() {
++	return Bar.n();
+ } };
 
 ```
 

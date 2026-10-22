@@ -55,9 +55,29 @@ console.log(Object.keys({
 
 ```
 
-```js
-// oxc, second pass
-<reparse failed: Expected `:` but found `}`>
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -1,16 +1 @@
+-const __proto__ = 0;
+-console.log(Object.keys({
+-	__proto__: null,
+-	a: 1
+-}));
+-console.log(Object.keys({
+-	'__proto__': null,
+-	b: 2
+-}));
+-console.log(Object.keys({ 0 }));
+-console.log(Object.keys({ ['__proto__']: 1 }));
+-console.log(Object.keys({ __proto__() {} }));
+-console.log(Object.keys({
+-	a: 1,
+-	b: 2
+-}));
++<reparse failed: Expected `:` but found `}`>
+\ No newline at end of file
+
 ```
 
 ## `swc/projects/jquery/13`
@@ -163,28 +183,20 @@ function internalRemoveData(elem, name, pvt) {
 
 ```
 
-```js
-// oxc, second pass
-var jQuery = window.jQuery || {};
-function internalRemoveData(elem, name, pvt) {
-	if (jQuery.acceptData(elem)) {
-		var i, l, thisCache, isNode = elem.nodeType, cache = isNode ? jQuery.cache : elem, id = isNode ? elem[jQuery.expando] : jQuery.expando;
-		// If there is already no cache entry for this object, there is no
-		// purpose in continuing
-		if (cache[id]) {
-			if (name && (thisCache = pvt ? cache[id] : cache[id].data, thisCache)) {
-				for (jQuery.isArray(name) ? name = name.concat(jQuery.map(name, jQuery.camelCase)) : 
-				// try the string as a key before any manipulation
-				(name in thisCache) ? name = [name] : (name = jQuery.camelCase(name), name = (name in thisCache) ? [name] : name.split(' ')), i = 0, l = name.length; i < l; i++) delete thisCache[name[i]];
-				// If there is no data left in the cache, we want to continue
-				// and let the cache object itself get destroyed
-				if (!(pvt ? isEmptyDataObject : jQuery.isEmptyObject)(thisCache)) return;
-			}
-			// See jQuery.data for more information
-			!pvt && (delete cache[id].data, !isEmptyDataObject(cache[id])) || (isNode ? jQuery.cleanData([elem], !0) : jQuery.support.deleteExpando || cache != cache.window ? delete cache[id] : cache[id] = null);
-		}
-	}
-}
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -8,9 +8,7 @@
+ 			if (name && (thisCache = pvt ? cache[id] : cache[id].data, thisCache)) {
+ 				for (jQuery.isArray(name) ? name = name.concat(jQuery.map(name, jQuery.camelCase)) : 
+ 				// try the string as a key before any manipulation
+-				(name in thisCache) ? name = [name] : 
+-				// split the camel cased version by spaces unless a key with the spaces exists
+-				(name = jQuery.camelCase(name), name = (name in thisCache) ? [name] : name.split(' ')), i = 0, l = name.length; i < l; i++) delete thisCache[name[i]];
++				(name in thisCache) ? name = [name] : (name = jQuery.camelCase(name), name = (name in thisCache) ? [name] : name.split(' ')), i = 0, l = name.length; i < l; i++) delete thisCache[name[i]];
+ 				// If there is no data left in the cache, we want to continue
+ 				// and let the cache object itself get destroyed
+ 				if (!(pvt ? isEmptyDataObject : jQuery.isEmptyObject)(thisCache)) return;
 
 ```
 
@@ -244,23 +256,20 @@ export const obj = { position: function() {
 
 ```
 
-```js
-// oxc, second pass
-export const obj = { position: function() {
-	if (this[0]) {
-		var offsetParent, offset, parentOffset = {
-			top: 0,
-			left: 0
-		}, elem = this[0];
-		// Subtract parent offsets and element margins
-		// note: when an element has margin: auto the offsetLeft and marginLeft
-		// are the same in Safari causing offset.left to incorrectly be 0
-		return jQuery.css(elem, 'position') === 'fixed' ? offset = elem.getBoundingClientRect() : (offsetParent = this.offsetParent(), offset = this.offset(), jQuery.nodeName(offsetParent[0], 'html') || (parentOffset = offsetParent.offset()), parentOffset.top += jQuery.css(offsetParent[0], 'borderTopWidth', !0), parentOffset.left += jQuery.css(offsetParent[0], 'borderLeftWidth', !0)), {
-			top: offset.top - parentOffset.top - jQuery.css(elem, 'marginTop', !0),
-			left: offset.left - parentOffset.left - jQuery.css(elem, 'marginLeft', !0)
-		};
-	}
-} };
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -7,9 +7,7 @@
+ 		// Subtract parent offsets and element margins
+ 		// note: when an element has margin: auto the offsetLeft and marginLeft
+ 		// are the same in Safari causing offset.left to incorrectly be 0
+-		return jQuery.css(elem, 'position') === 'fixed' ? offset = elem.getBoundingClientRect() : 
+-		// Add offsetParent borders
+-		(offsetParent = this.offsetParent(), offset = this.offset(), jQuery.nodeName(offsetParent[0], 'html') || (parentOffset = offsetParent.offset()), parentOffset.top += jQuery.css(offsetParent[0], 'borderTopWidth', !0), parentOffset.left += jQuery.css(offsetParent[0], 'borderLeftWidth', !0)), {
++		return jQuery.css(elem, 'position') === 'fixed' ? offset = elem.getBoundingClientRect() : (offsetParent = this.offsetParent(), offset = this.offset(), jQuery.nodeName(offsetParent[0], 'html') || (parentOffset = offsetParent.offset()), parentOffset.top += jQuery.css(offsetParent[0], 'borderTopWidth', !0), parentOffset.left += jQuery.css(offsetParent[0], 'borderLeftWidth', !0)), {
+ 			top: offset.top - parentOffset.top - jQuery.css(elem, 'marginTop', !0),
+ 			left: offset.left - parentOffset.left - jQuery.css(elem, 'marginLeft', !0)
+ 		};
 
 ```
 
@@ -354,33 +363,19 @@ __webpack_require__.O = function(result, chunkIds, fn, priority) {
 
 ```
 
-```js
-// oxc, second pass
-__webpack_require__.O = function(result, chunkIds, fn, priority) {
-	/******/ if (chunkIds) {
-		/******/ priority ||= 0;
-		/******/ for (var i = deferred.length; i > 0 && deferred[i - 1][2] > priority; i--) deferred[i] = deferred[i - 1];
-		/******/ deferred[i] = [
-			chunkIds,
-			fn,
-			priority
-		];
-	} else {
-		/******/ for (var notFulfilled = Infinity, i = 0; i < deferred.length; i++) {
-			/******/ for (var chunkIds = deferred[i][0], fn = deferred[i][1], priority = deferred[i][2], fulfilled = !0, j = 0; j < chunkIds.length; j++)
- /******/ (priority & !1 || notFulfilled >= priority) && Object.keys(__webpack_require__.O).every(function(key) {
-				return __webpack_require__.O[key](chunkIds[j]);
-			}) ? chunkIds.splice(j--, 1) : (fulfilled = !1, priority < notFulfilled && (notFulfilled = priority));
-			/******/ if (fulfilled) {
-				/******/ deferred.splice(i--, 1);
-				/******/ var r = fn();
-				/******/ r !== void 0 && (result = r);
-			}
-		}
-		/******/ return result;
-	}
-	/******/
-};
+```diff
+--- 1st-pass
++++ 2nd-pass
+@@ -12,8 +12,7 @@
+ 			/******/ for (var chunkIds = deferred[i][0], fn = deferred[i][1], priority = deferred[i][2], fulfilled = !0, j = 0; j < chunkIds.length; j++)
+  /******/ (priority & !1 || notFulfilled >= priority) && Object.keys(__webpack_require__.O).every(function(key) {
+ 				return __webpack_require__.O[key](chunkIds[j]);
+-			}) ? chunkIds.splice(j--, 1) : 
+-			/******/ (fulfilled = !1, priority < notFulfilled && (notFulfilled = priority));
++			}) ? chunkIds.splice(j--, 1) : (fulfilled = !1, priority < notFulfilled && (notFulfilled = priority));
+ 			/******/ if (fulfilled) {
+ 				/******/ deferred.splice(i--, 1);
+ 				/******/ var r = fn();
 
 ```
 
