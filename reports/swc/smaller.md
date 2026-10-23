@@ -1,6 +1,6 @@
 # swc / smaller — Output shorter than expected (possible over-optimization / bug)
 
-Fixtures: 138
+Fixtures: 139
 
 [← swc](README.md) · [← all families](../README.md)
 
@@ -1991,6 +1991,45 @@ export const obj = { changedAttributes: function(diff) {
 +	for (var attr in diff) _.isEqual(old[attr], val = diff[attr]) || ((changed ||= {})[attr] = val);
  	return changed;
  } };
+
+```
+
+## `swc/issues/7412`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 161 vs reference 170 (no whitespaces: -9, formatted: -11)
+
+```js
+export function throttleTime(interval) {
+	let currentValue;
+	let timeout;
+	return (done) => (value) => {
+		currentValue = value;
+		if (timeout) {
+			return;
+		}
+		timeout = setTimeout(() => {
+			done(currentValue);
+		}, interval);
+	};
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,8 +1,8 @@
+ export function throttleTime(interval) {
+ 	let currentValue, timeout;
+ 	return (done) => (value) => {
+-		currentValue = value, timeout || (timeout = setTimeout(() => {
++		currentValue = value, timeout ||= setTimeout(() => {
+ 			done(currentValue);
+-		}, interval));
++		}, interval);
+ 	};
+ }
 
 ```
 

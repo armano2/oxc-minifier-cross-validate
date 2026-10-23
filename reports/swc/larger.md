@@ -1,6 +1,6 @@
 # swc / larger — Output longer than expected (possible missing optimization)
 
-Fixtures: 387
+Fixtures: 385
 
 [← swc](README.md) · [← all families](../README.md)
 
@@ -385,43 +385,6 @@ out.class = new class {
 
 ```
 
-## `swc/issues/7412`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 171 vs reference 170 (no whitespaces: +1, formatted: +1)
-
-```js
-export function throttleTime(interval) {
-	let currentValue;
-	let timeout;
-	return (done) => (value) => {
-		currentValue = value;
-		if (timeout) {
-			return;
-		}
-		timeout = setTimeout(() => {
-			done(currentValue);
-		}, interval);
-	};
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,7 +1,7 @@
- export function throttleTime(interval) {
- 	let currentValue, timeout;
- 	return (done) => (value) => {
--		currentValue = value, timeout || (timeout = setTimeout(() => {
-+		currentValue = value, !timeout && (timeout = setTimeout(() => {
- 			done(currentValue);
- 		}, interval));
- 	};
-
-```
-
 ## `swc/issues/7784/3`
 
 - tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -562,27 +525,6 @@ function forEach(obj, iterator, context) {
 +	}
  	return obj;
  }
-
-```
-
-## `swc/projects/jquery/27`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 177 vs reference 176 (no whitespaces: +1, formatted: +1)
-
-```js
-if (!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.push(context.createTextNode(rleadingWhitespace.exec(elem)[0])), !jQuery.support.tbody) {
-	console.log('Foo');
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.push(context.createTextNode(rleadingWhitespace.exec(elem)[0])), jQuery.support.tbody || console.log('Foo');
-+!jQuery.support.leadingWhitespace && rleadingWhitespace.test(elem) && nodes.push(context.createTextNode(rleadingWhitespace.exec(elem)[0])), !jQuery.support.tbody && console.log('Foo');
 
 ```
 
@@ -9646,6 +9588,56 @@ console.log(getString());
 
 ```
 
+## `swc/projects/jquery/3`
+
+- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
+- size: oxc 523 vs reference 491 (no whitespaces: +32, formatted: +32)
+
+```js
+export const obj = { ready: function(wait) {
+	// Abort if there are pending holds or we're already ready
+	if (wait === true ? --jQuery.readyWait : jQuery.isReady) {
+		return;
+	}
+	// Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).
+	if (!document.body) {
+		return setTimeout(jQuery.ready);
+	}
+	// Remember that the DOM is ready
+	jQuery.isReady = true;
+	// If a normal DOM Ready event fired, decrement, and wait if need be
+	if (wait !== true && --jQuery.readyWait > 0) {
+		return;
+	}
+	// If there are functions bound, to execute
+	readyList.resolveWith(document, [jQuery]);
+	// Trigger any bound ready events
+	if (jQuery.fn.trigger) {
+		jQuery(document).trigger('ready').off('ready');
+	}
+} };
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1,9 +1,9 @@
+ export const obj = { ready: function(wait) {
+ 	// Abort if there are pending holds or we're already ready
+-	if (!(!0 === wait ? --jQuery.readyWait : jQuery.isReady)) {
++	if (!(wait === !0 ? --jQuery.readyWait : jQuery.isReady)) {
+ 		// Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).
+ 		if (!document.body) return setTimeout(jQuery.ready);
+-		// Remember that the DOM is ready
+-		jQuery.isReady = !0, !(!0 !== wait && --jQuery.readyWait > 0) && (readyList.resolveWith(document, [jQuery]), jQuery.fn.trigger && jQuery(document).trigger('ready').off('ready'));
++		// If a normal DOM Ready event fired, decrement, and wait if need be
++		jQuery.isReady = !0, wait !== !0 && --jQuery.readyWait > 0 || (readyList.resolveWith(document, [jQuery]), jQuery.fn.trigger && jQuery(document).trigger('ready').off('ready'));
+ 	}
+ } };
+
+```
+
 ## `swc/issues/12192`
 
 - tags: `type:cjs`, `drop debugger`, `join vars`, `sequences`, `remove unused`
@@ -9946,56 +9938,6 @@ logTheNine();
 +	})(3, 9);
  }
  logTheNine();
-
-```
-
-## `swc/projects/jquery/3`
-
-- tags: `drop debugger`, `join vars`, `sequences`, `remove unused`
-- size: oxc 526 vs reference 491 (no whitespaces: +35, formatted: +35)
-
-```js
-export const obj = { ready: function(wait) {
-	// Abort if there are pending holds or we're already ready
-	if (wait === true ? --jQuery.readyWait : jQuery.isReady) {
-		return;
-	}
-	// Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).
-	if (!document.body) {
-		return setTimeout(jQuery.ready);
-	}
-	// Remember that the DOM is ready
-	jQuery.isReady = true;
-	// If a normal DOM Ready event fired, decrement, and wait if need be
-	if (wait !== true && --jQuery.readyWait > 0) {
-		return;
-	}
-	// If there are functions bound, to execute
-	readyList.resolveWith(document, [jQuery]);
-	// Trigger any bound ready events
-	if (jQuery.fn.trigger) {
-		jQuery(document).trigger('ready').off('ready');
-	}
-} };
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1,9 +1,9 @@
- export const obj = { ready: function(wait) {
- 	// Abort if there are pending holds or we're already ready
--	if (!(!0 === wait ? --jQuery.readyWait : jQuery.isReady)) {
-+	if (!(wait === !0 ? --jQuery.readyWait : jQuery.isReady)) {
- 		// Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).
- 		if (!document.body) return setTimeout(jQuery.ready);
--		// Remember that the DOM is ready
--		jQuery.isReady = !0, !(!0 !== wait && --jQuery.readyWait > 0) && (readyList.resolveWith(document, [jQuery]), jQuery.fn.trigger && jQuery(document).trigger('ready').off('ready'));
-+		// If a normal DOM Ready event fired, decrement, and wait if need be
-+		jQuery.isReady = !0, !(wait !== !0 && --jQuery.readyWait > 0) && (readyList.resolveWith(document, [jQuery]), jQuery.fn.trigger && jQuery(document).trigger('ready').off('ready'));
- 	}
- } };
 
 ```
 
