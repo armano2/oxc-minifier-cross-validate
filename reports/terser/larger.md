@@ -2490,46 +2490,6 @@ console.log(~x === 42, x % n === 42);
 
 ```
 
-## `terser/object/convert_computed_props_to_regular_ones`
-
-- size: oxc 140 vs reference 138 (no whitespaces: +2, formatted: +2)
-
-```js
-var o = {
-	['hi']: 0,
-	['A' + 1]: 1,
-	[/B/]: 2,
-	[100 + 23]: 3,
-	[1 + .5]: 4,
-	[Math.PI]: 5,
-	[undefined]: 6,
-	[true]: 7,
-	[false]: 8,
-	[null]: 9,
-	[Infinity]: 10,
-	[NaN]: 11
-};
-for (var k in o) {
-	console.log(k, o[k]);
-}
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -9,7 +9,7 @@
- 	[!0]: 7,
- 	[!1]: 8,
- 	[null]: 9,
--	Infinity: 10,
-+	[Infinity]: 10,
- 	NaN: 11
- };
- for (var k in o) console.log(k, o[k]);
-
-```
-
 ## `terser/properties/issue_2816`
 
 - tags: `join vars`
@@ -4962,6 +4922,47 @@ for (var i = 0; i < netmaskBits; ++i) {
 -for (var netmaskBinary = '', i = 0; i < netmaskBits; ++i) netmaskBinary += '1';
 +var netmaskBinary = '';
 +for (var i = 0; i < netmaskBits; ++i) netmaskBinary += '1';
+
+```
+
+## `terser/object/convert_computed_props_to_regular_ones`
+
+- size: oxc 142 vs reference 138 (no whitespaces: +4, formatted: +4)
+
+```js
+var o = {
+	['hi']: 0,
+	['A' + 1]: 1,
+	[/B/]: 2,
+	[100 + 23]: 3,
+	[1 + .5]: 4,
+	[Math.PI]: 5,
+	[undefined]: 6,
+	[true]: 7,
+	[false]: 8,
+	[null]: 9,
+	[Infinity]: 10,
+	[NaN]: 11
+};
+for (var k in o) {
+	console.log(k, o[k]);
+}
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -9,7 +9,7 @@
+ 	[!0]: 7,
+ 	[!1]: 8,
+ 	[null]: 9,
+-	Infinity: 10,
+-	NaN: 11
++	[Infinity]: 10,
++	[NaN]: 11
+ };
+ for (var k in o) console.log(k, o[k]);
 
 ```
 

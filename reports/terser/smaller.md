@@ -1,6 +1,6 @@
 # terser / smaller — Output shorter than expected (possible over-optimization / bug)
 
-Fixtures: 428
+Fixtures: 426
 
 [← terser](README.md) · [← all families](../README.md)
 
@@ -8374,42 +8374,6 @@ f({ x });
 +a, b;
 +a;
  f({ x });
-
-```
-
-## `terser/destructuring/issue_2044_ecma_5`
-
-- size: oxc 18 vs reference 26 (no whitespaces: -8, formatted: -22)
-
-```js
-({x: a = 1, y: y = 2 + b, z: z = 3 - c} = obj);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--({x: a = 1, y: y = 2 + b, z: z = 3 - c} = obj);
-+({x: a = 1, y, z} = obj);
-
-```
-
-## `terser/destructuring/issue_2044_ecma_5_beautify`
-
-- size: oxc 18 vs reference 26 (no whitespaces: -8, formatted: -22)
-
-```js
-({x: a = 1, y: y = 2 + b, z: z = 3 - c} = obj);
-
-```
-
-```diff
---- reference
-+++ oxc
-@@ -1 +1 @@
--({x: a = 1, y: y = 2 + b, z: z = 3 - c} = obj);
-+({x: a = 1, y, z} = obj);
 
 ```
 

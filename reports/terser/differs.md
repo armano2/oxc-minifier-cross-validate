@@ -1,6 +1,6 @@
 # terser / differs — Output differs at equal length
 
-Fixtures: 101
+Fixtures: 103
 
 [← terser](README.md) · [← all families](../README.md)
 
@@ -893,6 +893,40 @@ export { y };
 +(({ foo: e = 1, bar: t = 2 }, [n = 3, r = 4]) => {
 +	console.log(e, t, n, r);
  })({ bar: 5 }, [, 6]);
+
+```
+
+## `terser/destructuring/issue_2044_ecma_5`
+
+
+```js
+({x: a = 1, y: y = 2 + b, z: z = 3 - c} = obj);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-({x: a = 1, y: y = 2 + b, z: z = 3 - c} = obj);
++({x: a = 1, y = 2 + b, z = 3 - c} = obj);
+
+```
+
+## `terser/destructuring/issue_2044_ecma_5_beautify`
+
+
+```js
+({x: a = 1, y: y = 2 + b, z: z = 3 - c} = obj);
+
+```
+
+```diff
+--- reference
++++ oxc
+@@ -1 +1 @@
+-({x: a = 1, y: y = 2 + b, z: z = 3 - c} = obj);
++({x: a = 1, y = 2 + b, z = 3 - c} = obj);
 
 ```
 

@@ -8,9 +8,9 @@ Fixtures run: 6996
 |---|---|---|---|---|---|---|---|---|---|---|
 | pass-1 | 2 | 0 | 0 | 11 | 1 | 2 | 0 | 0 | 4 | 20 |
 | swc | 139 | 4 | 0 | 385 | 4 | 54 | 2 | 0 | 143 | 731 |
-| terser | 428 | 28 | 0 | 960 | 9 | 101 | 9 | 0 | 599 | 2134 |
+| terser | 426 | 28 | 0 | 960 | 9 | 103 | 9 | 0 | 599 | 2134 |
 | uglify | 1107 | 4 | 1 | 1721 | 19 | 235 | 25 | 0 | 999 | 4111 |
-| **all** | 1676 | 36 | 1 | 3077 | 33 | 392 | 36 | 0 | 1745 | 6996 |
+| **all** | 1674 | 36 | 1 | 3077 | 33 | 394 | 36 | 0 | 1745 | 6996 |
 
 ## Families
 
@@ -35,11 +35,11 @@ Fixtures run: 6996
 | swc | whitespace | 4 | [swc/whitespace.md](swc/whitespace.md) |
 | swc | differs | 54 | [swc/differs.md](swc/differs.md) |
 | swc | parse-error | 2 | [swc/parse-error.md](swc/parse-error.md) |
-| terser | smaller | 428 | [terser/smaller.md](terser/smaller.md) |
+| terser | smaller | 426 | [terser/smaller.md](terser/smaller.md) |
 | terser | not-idempotent | 27 | [terser/not-idempotent.md](terser/not-idempotent.md) |
 | terser | larger | 960 | [terser/larger.md](terser/larger.md) |
 | terser | whitespace | 9 | [terser/whitespace.md](terser/whitespace.md) |
-| terser | differs | 101 | [terser/differs.md](terser/differs.md) |
+| terser | differs | 103 | [terser/differs.md](terser/differs.md) |
 | terser | parse-error | 9 | [terser/parse-error.md](terser/parse-error.md) |
 | uglify | smaller | 1107 | [uglify/smaller.md](uglify/smaller.md) |
 | uglify | not-idempotent | 4 | [uglify/not-idempotent.md](uglify/not-idempotent.md) |
